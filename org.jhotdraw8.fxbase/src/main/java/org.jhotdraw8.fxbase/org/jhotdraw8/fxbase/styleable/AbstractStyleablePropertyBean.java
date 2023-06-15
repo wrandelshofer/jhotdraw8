@@ -38,7 +38,7 @@ public abstract class AbstractStyleablePropertyBean
         return new SimpleStyleableMap<Key<?>, Object>(createKeyMap()) {
             @Override
             @SuppressWarnings("unchecked")
-            protected void callObservers(StyleOrigin origin, @NonNull MapChangeListener.Change<Key<?>, Object> change) {
+            protected void callObservers(@NonNull StyleOrigin origin, MapChangeListener.@NonNull Change<Key<?>, Object> change) {
                 final Key<Object> key = (Key<Object>) change.getKey();
                 onPropertyChanged(key,
                         change.wasRemoved() ? change.getValueRemoved() : key.getDefaultValue(),

@@ -70,7 +70,7 @@ public class BezierFit {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull java.util.List<Point2D> digitizedPoints, double error) {
+    public static void fitBezierPath(@NonNull PathBuilder<?> builder, java.util.@NonNull List<Point2D> digitizedPoints, double error) {
         // Split into segments at corners
         ArrayList<ArrayList<Point2D>> segments;
         segments = splitAtCorners(digitizedPoints, 77 / 180d * Math.PI, error * error);
@@ -171,7 +171,7 @@ public class BezierFit {
      *                        0, this method only removes sequences of coincident points.
      * @return Digitized points with a minimal distance.
      */
-    public static @NonNull ArrayList<Point2D> removeClosePoints(@NonNull java.util.List<Point2D> digitizedPoints, double minDistance) {
+    public static @NonNull ArrayList<Point2D> removeClosePoints(java.util.@NonNull List<Point2D> digitizedPoints, double minDistance) {
         if (minDistance == 0) {
             return removeCoincidentPoints(digitizedPoints);
         } else {
@@ -208,7 +208,7 @@ public class BezierFit {
      * @param digitizedPoints Digitized points
      * @return Digitized points without subsequent duplicates.
      */
-    private static @NonNull ArrayList<Point2D> removeCoincidentPoints(@NonNull java.util.List<Point2D> digitizedPoints) {
+    private static @NonNull ArrayList<Point2D> removeCoincidentPoints(java.util.@NonNull List<Point2D> digitizedPoints) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
             Point2D prev = digitizedPoints.get(0);
@@ -237,7 +237,7 @@ public class BezierFit {
      * @return Segments of digitized points, each segment having less than
      * maximal angle between points.
      */
-    public static @NonNull ArrayList<ArrayList<Point2D>> splitAtCorners(@NonNull java.util.List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
+    public static @NonNull ArrayList<ArrayList<Point2D>> splitAtCorners(java.util.@NonNull List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
         IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
         ArrayList<ArrayList<Point2D>> segments = new ArrayList<>(cornerIndices.size() + 1);
 
@@ -263,7 +263,7 @@ public class BezierFit {
      *                        for corner detection
      * @return list of corner indices.
      */
-    public static @NonNull IntArrayList findCorners(@NonNull java.util.List<Point2D> digitizedPoints, double minAngle, double minDistance) {
+    public static @NonNull IntArrayList findCorners(java.util.@NonNull List<Point2D> digitizedPoints, double minAngle, double minDistance) {
         IntArrayList cornerIndices = new IntArrayList();
 
         double squaredDistance = minDistance * minDistance;
@@ -329,7 +329,7 @@ public class BezierFit {
      * @param weight          Weight of the current point
      * @return Digitized points with reduced noise.
      */
-    public static @NonNull ArrayList<Point2D> reduceNoise(@NonNull java.util.List<Point2D> digitizedPoints, double weight) {
+    public static @NonNull ArrayList<Point2D> reduceNoise(java.util.@NonNull List<Point2D> digitizedPoints, double weight) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
             Point2D prev = digitizedPoints.get(0);

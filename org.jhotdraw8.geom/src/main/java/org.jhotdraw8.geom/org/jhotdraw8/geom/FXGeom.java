@@ -21,10 +21,7 @@ import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.cos;
-import static java.lang.Math.sin;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 
 /**
  * This class provides utility functions for two dimensional geometry
@@ -401,7 +398,7 @@ public class FXGeom {
         return Δx * Δx + Δy * Δy;
     }
 
-    public static double distanceSq(@NonNull java.awt.geom.Point2D p, @NonNull java.awt.geom.Point2D q) {
+    public static double distanceSq(java.awt.geom.@NonNull Point2D p, java.awt.geom.@NonNull Point2D q) {
         double Δx = p.getX() - q.getX();
         double Δy = p.getY() - q.getY();
         return Δx * Δx + Δy * Δy;

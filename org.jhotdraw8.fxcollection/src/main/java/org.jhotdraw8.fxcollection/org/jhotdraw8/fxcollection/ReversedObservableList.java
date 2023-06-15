@@ -31,7 +31,7 @@ public class ReversedObservableList<E> extends TransformationList<E, E> {
     }
 
     @Override
-    protected void sourceChanged(@NonNull ListChangeListener.Change<? extends E> c) {
+    protected void sourceChanged(ListChangeListener.@NonNull Change<? extends E> c) {
         beginChange();
         while (c.next()) {
             if (c.wasPermutated()) {

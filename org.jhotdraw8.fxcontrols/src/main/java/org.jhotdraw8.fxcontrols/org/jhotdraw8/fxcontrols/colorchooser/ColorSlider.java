@@ -9,14 +9,7 @@ package org.jhotdraw8.fxcontrols.colorchooser;
  * Sample Skeleton for 'HueSaturationPane.fxml' Controller Class
  */
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
@@ -185,7 +178,7 @@ public class ColorSlider extends AbstractColorSlider {
             this.orientation = orientation;
         }
 
-        public void accept(@NonNull TileTask.Tile tile) {
+        public void accept(TileTask.@NonNull Tile tile) {
             if (orientation == Orientation.HORIZONTAL) {
                 fillHorizontal(tile);
             } else {
@@ -194,7 +187,7 @@ public class ColorSlider extends AbstractColorSlider {
         }
 
 
-        public void fillHorizontal(@NonNull TileTask.Tile tile) {
+        public void fillHorizontal(TileTask.@NonNull Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             IntBuffer b = pixelBuffer.getBuffer();
@@ -238,7 +231,7 @@ public class ColorSlider extends AbstractColorSlider {
         }
 
 
-        public void fillVertical(@NonNull TileTask.Tile tile) {
+        public void fillVertical(TileTask.@NonNull Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();

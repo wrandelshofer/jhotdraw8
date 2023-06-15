@@ -10,16 +10,7 @@ import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.AbstractList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.PrimitiveIterator;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
@@ -364,7 +355,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @return an iterator over the elements of this list
      */
     @Override
-    public @NonNull PrimitiveIterator.OfInt iterator() {
+    public PrimitiveIterator.@NonNull OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
             private int index = 0;
             private final int size = IntArrayList.this.size;
@@ -391,7 +382,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
      * @return a spliterator over the elements of this list
      */
     @Override
-    public @NonNull Spliterator.OfInt spliterator() {
+    public Spliterator.@NonNull OfInt spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 

@@ -33,7 +33,7 @@ public class TextEditingTool extends AbstractTool {
     private double defaultWidth = 100;
     private double defaultHeight = 100;
     private final @NonNull TextArea textArea = new TextArea();
-    private @Nullable TextEditableFigure.TextEditorData editorData;
+    private TextEditableFigure.@Nullable TextEditorData editorData;
 
     /**
      * The rubber band.
@@ -110,7 +110,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
 
-    private void startEditing(@NonNull TextEditableFigure.TextEditorData data, @NonNull DrawingView dv) {
+    private void startEditing(TextEditableFigure.@NonNull TextEditorData data, @NonNull DrawingView dv) {
         dv.getSelectedFigures().clear();
         dv.getEditor().setHandleType(HandleType.SELECT);
         dv.getSelectedFigures().add(data.figure);

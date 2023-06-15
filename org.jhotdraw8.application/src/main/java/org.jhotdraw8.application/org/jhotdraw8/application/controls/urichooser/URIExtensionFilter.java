@@ -20,7 +20,7 @@ public class URIExtensionFilter {
 
     private final DataFormat format;
 
-    private final @NonNull FileChooser.ExtensionFilter extensionFilter;
+    private final FileChooser.@NonNull ExtensionFilter extensionFilter;
 
     public URIExtensionFilter(@NonNull String description, String mimeType, String... extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
@@ -38,7 +38,7 @@ public class URIExtensionFilter {
         this.format = format;
     }
 
-    public @NonNull FileChooser.ExtensionFilter getFileChooserExtensionFilter() {
+    public FileChooser.@NonNull ExtensionFilter getFileChooserExtensionFilter() {
         return extensionFilter;
     }
 

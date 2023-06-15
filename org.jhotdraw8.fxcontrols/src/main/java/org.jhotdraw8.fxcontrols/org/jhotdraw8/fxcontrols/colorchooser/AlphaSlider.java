@@ -10,12 +10,7 @@ package org.jhotdraw8.fxcontrols.colorchooser;
  */
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
@@ -141,7 +136,7 @@ public class AlphaSlider extends AbstractColorSlider {
             this.alphaMax = alphaMax;
         }
 
-        public void accept(@NonNull TileTask.Tile tile) {
+        public void accept(TileTask.@NonNull Tile tile) {
             if (orientation == Orientation.HORIZONTAL) {
                 fillFineHorizontal(tile);
             } else {
@@ -150,7 +145,7 @@ public class AlphaSlider extends AbstractColorSlider {
         }
 
 
-        public void fillFineHorizontal(@NonNull TileTask.Tile tile) {
+        public void fillFineHorizontal(TileTask.@NonNull Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
@@ -192,7 +187,7 @@ public class AlphaSlider extends AbstractColorSlider {
         }
 
 
-        public void fillFineVertical(@NonNull TileTask.Tile tile) {
+        public void fillFineVertical(TileTask.@NonNull Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();

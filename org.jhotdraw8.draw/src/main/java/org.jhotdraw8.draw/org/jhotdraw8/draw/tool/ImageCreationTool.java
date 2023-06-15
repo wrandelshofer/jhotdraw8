@@ -26,11 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.AbstractMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 /**
@@ -99,7 +95,7 @@ public class ImageCreationTool extends CreationTool {
         return c;
     }
 
-    protected @Nullable Map.Entry<URI, Future<Dimension2D>> chooseFile() {
+    protected Map.@Nullable Entry<URI, Future<Dimension2D>> chooseFile() {
         if (uriChooser == null) {
             uriChooser = createURIChooser();
         }

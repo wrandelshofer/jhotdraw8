@@ -106,7 +106,7 @@ public class ReversedListTest {
         private final @NonNull StringBuilder buf = new StringBuilder();
 
         @Override
-        public void onChanged(@NonNull ListChangeListener.Change<? extends Character> c) {
+        public void onChanged(ListChangeListener.@NonNull Change<? extends Character> c) {
             while (c.next()) {
                 if (c.wasPermutated()) {
                     buf.append("perm(");

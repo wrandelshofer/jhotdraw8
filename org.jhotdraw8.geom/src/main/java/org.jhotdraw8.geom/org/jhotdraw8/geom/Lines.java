@@ -269,11 +269,11 @@ public class Lines {
         first[offsetFirst + 3] = y22;
     }
 
-    public static @NonNull Point2D.Double lerp(double x0, double y0, double x1, double y1, double t) {
+    public static Point2D.@NonNull Double lerp(double x0, double y0, double x1, double y1, double t) {
         return new Point2D.Double(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
-    public static @NonNull Point2D.Double lerp(double[] a, int offset, double t) {
+    public static Point2D.@NonNull Double lerp(double[] a, int offset, double t) {
         double x0 = a[offset], y0 = a[offset + 1], x1 = a[offset + 2], y1 = a[offset + 3];
         return new Point2D.Double(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
@@ -293,7 +293,7 @@ public class Lines {
      *              b. Values outside this range yield an extrapolation.
      * @return the interpolated or extrapolated value
      */
-    public static @NonNull Point2D.Double lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
+    public static Point2D.@NonNull Double lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 }

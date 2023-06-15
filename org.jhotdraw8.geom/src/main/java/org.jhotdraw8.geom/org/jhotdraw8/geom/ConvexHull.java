@@ -39,7 +39,7 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    public static Point2D.Double[] getConvexHull2D(@NonNull Point2D.Double[] points) {
+    public static Point2D.Double[] getConvexHull2D(Point2D.@NonNull Double[] points) {
         // Quickly return if no work is needed
         if (points.length < 3) {
             return points.clone();
@@ -92,7 +92,7 @@ public class ConvexHull {
      * @param p3 third point
      * @return true if right turn.
      */
-    public static boolean isRightTurn2D(@NonNull Point.Double p1, @NonNull Point.Double p2, @NonNull Point.Double p3) {
+    public static boolean isRightTurn2D(Point.@NonNull Double p1, Point.@NonNull Double p2, Point.@NonNull Double p3) {
         if (p1.equals(p2) || p2.equals(p3)) {
             // no right turn if points are at same location
             return false;

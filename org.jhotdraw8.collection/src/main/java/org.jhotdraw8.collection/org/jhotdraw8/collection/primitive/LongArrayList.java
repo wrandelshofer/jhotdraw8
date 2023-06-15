@@ -354,7 +354,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @return an iterator over the elements of this list
      */
     @Override
-    public @NonNull PrimitiveIterator.OfLong iterator() {
+    public PrimitiveIterator.@NonNull OfLong iterator() {
         return new PrimitiveIterator.OfLong() {
             private int index = 0;
             private final int size = LongArrayList.this.size;
@@ -381,7 +381,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @return a spliterator over the elements of this list
      */
     @Override
-    public @NonNull Spliterator.OfLong spliterator() {
+    public Spliterator.@NonNull OfLong spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 

@@ -19,11 +19,7 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.figure.AnchorableFigure;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LayerFigure;
-import org.jhotdraw8.draw.figure.TextEditableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
 
@@ -43,7 +39,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     private double defaultWidth = 100;
     private double defaultHeight = 100;
     private final @NonNull TextArea textArea = new TextArea();
-    private @Nullable TextEditableFigure.TextEditorData editorData;
+    private TextEditableFigure.@Nullable TextEditorData editorData;
 
     /**
      * The rubber band.
@@ -141,7 +137,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     }
 
 
-    private void startEditing(@NonNull TextEditableFigure.TextEditorData data, @NonNull DrawingView dv) {
+    private void startEditing(TextEditableFigure.@NonNull TextEditorData data, @NonNull DrawingView dv) {
         dv.getSelectedFigures().clear();
         dv.getEditor().setHandleType(HandleType.SELECT);
         dv.getSelectedFigures().add(data.figure);

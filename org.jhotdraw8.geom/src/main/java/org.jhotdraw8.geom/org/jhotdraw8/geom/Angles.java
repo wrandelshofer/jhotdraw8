@@ -115,7 +115,7 @@ public class Angles {
      * @param y the x value of the vector
      * @return the perpendicular vector
      */
-    public static @NonNull java.awt.geom.Point2D.Double perp(double x, double y) {
+    public static java.awt.geom.Point2D.@NonNull Double perp(double x, double y) {
         return new java.awt.geom.Point2D.Double(y, -x);
     }
 

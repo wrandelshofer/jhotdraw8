@@ -15,9 +15,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**
@@ -125,7 +123,7 @@ public abstract class AbstractIndexedArrayObservableSetTest {
         private final @NonNull StringBuilder buf = new StringBuilder();
 
         @Override
-        public void onChanged(@NonNull ListChangeListener.Change<? extends Character> c) {
+        public void onChanged(ListChangeListener.@NonNull Change<? extends Character> c) {
             while (c.next()) {
                 if (c.wasPermutated()) {
                     buf.append("perm(");

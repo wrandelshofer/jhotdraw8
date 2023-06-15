@@ -31,7 +31,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return the first entry or {@code null}
      * @throws java.util.NoSuchElementException if the map is empty
      */
-    default @Nullable Map.Entry<K, V> firstEntry() {
+    default Map.@Nullable Entry<K, V> firstEntry() {
         return isEmpty() ? null : _sequencedEntrySet().iterator().next();
     }
 
@@ -41,7 +41,7 @@ public interface SequencedMap<K, V> extends Map<K, V> {
      * @return the last entry or {@code null}
      * @throws java.util.NoSuchElementException if the map is empty
      */
-    default @Nullable Map.Entry<K, V> lastEntry() {
+    default Map.@Nullable Entry<K, V> lastEntry() {
         return isEmpty() ? null : _reversed()._sequencedEntrySet().iterator().next();
     }
 

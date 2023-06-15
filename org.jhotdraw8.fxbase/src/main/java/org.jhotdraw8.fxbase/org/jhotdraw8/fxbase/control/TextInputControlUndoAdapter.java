@@ -52,7 +52,7 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
     }
 
     @Override
-    public @NonNull TextFormatter.Change apply(@NonNull TextFormatter.Change change) {
+    public TextFormatter.@NonNull Change apply(TextFormatter.@NonNull Change change) {
         if (!listeners.isEmpty()) {
             String deletedText = change.isDeleted() ? change.getControlText().substring(change.getRangeStart(), change.getRangeEnd()) : null;
             String addedText = change.isAdded() ? change.getText() : null;

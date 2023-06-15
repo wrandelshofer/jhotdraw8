@@ -107,7 +107,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
 
             listView.setOnEditCommit(new EventHandler<ListView.EditEvent<URI>>() {
                 @Override
-                public void handle(@NonNull ListView.EditEvent<URI> t) {
+                public void handle(ListView.@NonNull EditEvent<URI> t) {
                     listView.getItems().set(t.getIndex(), t.getNewValue());
                 }
 

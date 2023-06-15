@@ -16,54 +16,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.QuadCurve;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
-import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
-import org.jhotdraw8.geom.intersect.IntersectCircleEllipse;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectCirclePoint;
-import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectCircleRectangle;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveCubicCurve;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveEllipse;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveLine;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurvePoint;
-import org.jhotdraw8.geom.intersect.IntersectCubicCurveQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectEllipseEllipse;
-import org.jhotdraw8.geom.intersect.IntersectEllipseLine;
-import org.jhotdraw8.geom.intersect.IntersectEllipseQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectEllipseRectangle;
-import org.jhotdraw8.geom.intersect.IntersectLineLine;
-import org.jhotdraw8.geom.intersect.IntersectLinePoint;
-import org.jhotdraw8.geom.intersect.IntersectLineQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectPointQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectQuadCurveQuadCurve;
-import org.jhotdraw8.geom.intersect.IntersectRectangleRectangle;
-import org.jhotdraw8.geom.intersect.IntersectionPointEx;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.geom.intersect.*;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 
 /**
@@ -94,17 +55,17 @@ public class IntersectionExampleMain extends Application {
         }
     }
 
-    private @Nullable Map.Entry<Shape, List<Handle>> createShapeAndHandles(final @Nullable String shapeName, Color shapeColor, Color handleColor) {
+    private Map.@Nullable Entry<Shape, List<Handle>> createShapeAndHandles(final @Nullable String shapeName, Color shapeColor, Color handleColor) {
         Shape shape = null;
         List<Handle> handles = new ArrayList<>();
         if (shapeName != null) {
             switch (shapeName) {
-            case "Circle": {
-                Circle circle = new Circle(100, 100, 60);
-                shape = circle;
-                Handle centerHandle = new Handle(handleColor);
-                centerHandle.updateHandle = () -> centerHandle.setPosition(circle.getCenterX(), circle.getCenterY());
-                centerHandle.updateShape = (p) -> {
+                case "Circle": {
+                    Circle circle = new Circle(100, 100, 60);
+                    shape = circle;
+                    Handle centerHandle = new Handle(handleColor);
+                    centerHandle.updateHandle = () -> centerHandle.setPosition(circle.getCenterX(), circle.getCenterY());
+                    centerHandle.updateShape = (p) -> {
                     circle.setCenterX(p.getX());
                     circle.setCenterY(p.getY());
                 };

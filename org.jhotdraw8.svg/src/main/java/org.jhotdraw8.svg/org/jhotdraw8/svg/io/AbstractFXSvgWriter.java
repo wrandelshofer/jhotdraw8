@@ -12,33 +12,14 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.FillRule;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
+import javafx.scene.paint.*;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
+import javafx.scene.shape.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -57,12 +38,7 @@ import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
-import org.jhotdraw8.geom.FXPreciseRotate;
-import org.jhotdraw8.geom.FXRectangles;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.FXSvgPaths;
-import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 import org.jhotdraw8.svg.text.SvgPaintConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
@@ -86,19 +62,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.io.Writer;
+import java.io.*;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 
@@ -141,7 +110,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
      *                       values
      * @return Returns the actual bounds of the paragraph.
      */
-    private @NonNull Rectangle2D.Double drawParagraph(@NonNull XMLStreamWriter w,
+    private Rectangle2D.@NonNull Double drawParagraph(@NonNull XMLStreamWriter w,
                                                       FontRenderContext frc, @NonNull String
                                                               paragraph, @NonNull AttributedCharacterIterator styledText,
                                                       float verticalPos, float maxVerticalPos, float leftMargin,
@@ -346,7 +315,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     protected abstract String getSvgVersion();
 
 
-    private void initIdFactoryRecursively(@NonNull javafx.scene.Node node) throws IOException {
+    private void initIdFactoryRecursively(javafx.scene.@NonNull Node node) throws IOException {
         String id = node.getId();
         if (id != null && idFactory.getObject(id) == null) {
             idFactory.putIdAndObject(id, node);

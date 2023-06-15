@@ -5,12 +5,7 @@
 
 package org.jhotdraw8.fxbase.concurrent;
 
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlyStringProperty;
+import javafx.beans.property.*;
 import javafx.concurrent.Worker;
 import org.jhotdraw8.annotation.NonNull;
 
@@ -46,7 +41,7 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
     }
 
     @Override
-    public @NonNull Worker.State getState() {
+    public Worker.@NonNull State getState() {
         return state.get();
     }
 
@@ -60,7 +55,7 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
      *
      * @param newValue the new value
      */
-    public void updateState(@NonNull Worker.State newValue) {
+    public void updateState(Worker.@NonNull State newValue) {
         update(newValue, state, stateUpdate);
     }
 

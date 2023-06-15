@@ -10,13 +10,7 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.SequencedData;
-import org.jhotdraw8.collection.impl.champ.SequencedEntry;
-import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
@@ -215,12 +209,12 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     }
 
     @SuppressWarnings("unchecked")
-    public @Nullable Map.Entry<K, V> firstEntry() {
+    public Map.@Nullable Entry<K, V> firstEntry() {
         return isEmpty() ? null : (Map.Entry<K, V>) vector.getFirst();
     }
 
     @SuppressWarnings("unchecked")
-    public @Nullable Map.Entry<K, V> lastEntry() {
+    public Map.@Nullable Entry<K, V> lastEntry() {
         return isEmpty() ? null : (Map.Entry<K, V>) vector.getLast();
     }
 

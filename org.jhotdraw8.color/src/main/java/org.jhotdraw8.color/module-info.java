@@ -10,7 +10,7 @@
 module org.jhotdraw8.color {
     requires transitive java.desktop;
     requires transitive javafx.graphics;
-    requires transitive org.jhotdraw8.annotation;
+    requires static org.jhotdraw8.annotation;
 
     exports org.jhotdraw8.color;
     exports org.jhotdraw8.color.math;

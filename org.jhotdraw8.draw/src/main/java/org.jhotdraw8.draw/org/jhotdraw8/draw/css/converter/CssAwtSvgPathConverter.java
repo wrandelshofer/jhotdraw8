@@ -35,7 +35,7 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
     }
 
     @Override
-    public @NonNull Path2D.Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Path2D.@NonNull Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_STRING, "⟨SvgPath⟩: String expected.");
         final String svgPathString = tt.currentStringNonNull();
 
@@ -75,7 +75,7 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
 
 
     @Override
-    public @Nullable Path2D.Double getDefaultValue() {
+    public Path2D.@Nullable Double getDefaultValue() {
         return null;
     }
 

@@ -80,11 +80,11 @@ class Intersections {
      * @param b corner point b
      * @return the bottom right corner
      */
-    public static @NonNull Point2D.Double bottomRight(@NonNull Point2D a, @NonNull Point2D b) {
+    public static Point2D.@NonNull Double bottomRight(@NonNull Point2D a, @NonNull Point2D b) {
         return new Point2D.Double(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
     }
 
-    public static @NonNull Point2D.Double bottomRight(double ax, double ay, double bx, double by) {
+    public static Point2D.@NonNull Double bottomRight(double ax, double ay, double bx, double by) {
         return new Point2D.Double(Math.max(ax, bx), Math.max(ay, by));
     }
 
@@ -121,11 +121,11 @@ class Intersections {
      * @param b corner point b
      * @return the top left corner
      */
-    public static @NonNull Point2D.Double topLeft(@NonNull Point2D a, @NonNull Point2D b) {
+    public static Point2D.@NonNull Double topLeft(@NonNull Point2D a, @NonNull Point2D b) {
         return new Point2D.Double(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
     }
 
-    public static @NonNull Point2D.Double topLeft(double ax, double ay, double bx, double by) {
+    public static Point2D.@NonNull Double topLeft(double ax, double ay, double bx, double by) {
         return new Point2D.Double(Math.min(ax, bx), Math.min(ay, by));
     }
 

@@ -33,11 +33,11 @@ public class IntersectLineRectangle {
                 Math.max(r0.getY(), r1.getY()));
     }
 
-    public static @NonNull IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Rectangle2D.Double r) {
+    public static @NonNull IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, Rectangle2D.@NonNull Double r) {
         return IntersectAABBLine.intersectLineAABBEx(a0, a1, r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
     }
 
-    public static @NonNull IntersectionResultEx intersectRectangleLineEx(@NonNull Rectangle2D.Double r, @NonNull Point2D a0, @NonNull Point2D a1) {
+    public static @NonNull IntersectionResultEx intersectRectangleLineEx(Rectangle2D.@NonNull Double r, @NonNull Point2D a0, @NonNull Point2D a1) {
         return IntersectAABBLine.intersectAABBLineEx(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY(), a0, a1);
     }
 }

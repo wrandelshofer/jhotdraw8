@@ -8,7 +8,7 @@
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.base {
-    requires transitive org.jhotdraw8.annotation;
+    requires static org.jhotdraw8.annotation;
     requires java.logging;
     requires java.prefs;
     exports org.jhotdraw8.base.converter;

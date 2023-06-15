@@ -7,30 +7,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotSame;
-import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractImmutableSetTest {
 
@@ -637,7 +618,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSomeNewKeysShouldReturnNewInstance(@NonNull org.jhotdraw8.collection.SetData data) throws Exception {
+    public void retainAllWithSomeNewKeysShouldReturnNewInstance(org.jhotdraw8.collection.@NonNull SetData data) throws Exception {
         ImmutableSet<HashCollider> instance = newInstance(data.a);
         ImmutableSet<HashCollider> instance2 = instance.retainAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);

@@ -18,7 +18,7 @@ import java.util.function.Function;
  * @param <K> the key type
  */
 public class VectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
-    private final @NonNull BitMappedTrie.BitMappedTrieSpliterator<Object> vector;
+    private final BitMappedTrie.@NonNull BitMappedTrieSpliterator<Object> vector;
     private final @NonNull Function<Object, K> mapper;
 
     public VectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int fromIndex, long est, int additionalCharacteristics) {

@@ -12,18 +12,10 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelBuffer;
-import javafx.scene.image.PixelFormat;
-import javafx.scene.image.WritableImage;
+import javafx.scene.image.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -197,7 +189,7 @@ public class ChromaticityDiagram extends Pane {
     }
 
     record UpdateRange(@NonNull NamedColorSpace cs, @NonNull PixelBuffer<IntBuffer> pxBuf,
-                       @NonNull Path2D.Float shape,
+                       Path2D.@NonNull Float shape,
                        @NonNull NamedColorSpace displayCS)
             implements BiConsumer<Integer, Integer> {
 

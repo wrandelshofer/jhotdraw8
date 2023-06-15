@@ -44,7 +44,7 @@ public class NullableAwtSvgPathStyleableKey extends AbstractStyleableKey<Path2D.
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableAwtSvgPathStyleableKey(@NonNull String key, @Nullable Path2D.Double defaultValue) {
+    public NullableAwtSvgPathStyleableKey(@NonNull String key, Path2D.@Nullable Double defaultValue) {
         super(null, key, Path2D.Double.class, true, defaultValue);
 
         converter = new CssAwtSvgPathConverter(isNullable());

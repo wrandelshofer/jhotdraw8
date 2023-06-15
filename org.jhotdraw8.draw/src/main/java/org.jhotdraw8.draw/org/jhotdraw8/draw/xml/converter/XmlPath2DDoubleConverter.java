@@ -38,7 +38,7 @@ public class XmlPath2DDoubleConverter implements Converter<Path2D.Double> {
     }
 
     @Override
-    public @Nullable Path2D.Double fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Path2D.@Nullable Double fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = buf.read(out);
         out.position(0);
@@ -51,13 +51,13 @@ public class XmlPath2DDoubleConverter implements Converter<Path2D.Double> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable Path2D.Double value) throws IOException {
+    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, Path2D.@Nullable Double value) throws IOException {
         final String content = value == null ? null : SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null));
         out.append(content == null ? "none" : content);
     }
 
     @Override
-    public @NonNull Path2D.Double getDefaultValue() {
+    public Path2D.@NonNull Double getDefaultValue() {
         Path2D.Double p = new Path2D.Double();
         return p;
     }

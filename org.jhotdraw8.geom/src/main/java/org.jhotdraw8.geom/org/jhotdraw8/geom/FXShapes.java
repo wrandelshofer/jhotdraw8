@@ -5,43 +5,17 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Bounds;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcTo;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.CubicCurveTo;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.FillRule;
-import javafx.scene.shape.HLineTo;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.QuadCurve;
-import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.VLineTo;
+import javafx.scene.shape.*;
 import javafx.scene.text.Text;
 import javafx.scene.transform.MatrixType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import java.awt.Shape;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Line2D;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Rectangle2D;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -461,7 +435,7 @@ public class FXShapes {
      * @param fxT A JavaFX Transform.
      * @return An AWT Transform.
      */
-    public static @Nullable AffineTransform awtTransformFromFX(@Nullable javafx.scene.transform.Transform fxT) {
+    public static @Nullable AffineTransform awtTransformFromFX(javafx.scene.transform.@Nullable Transform fxT) {
         if (fxT == null) {
             return null;
         }
@@ -508,7 +482,7 @@ public class FXShapes {
      * @param fxT   Optional transformation which is applied to the shape
      * @return JavaFX Shape
      */
-    public static @NonNull javafx.scene.shape.Path fxShapeFromAwt(@NonNull Shape shape, javafx.scene.transform.Transform fxT) {
+    public static javafx.scene.shape.@NonNull Path fxShapeFromAwt(@NonNull Shape shape, javafx.scene.transform.Transform fxT) {
         return fxShapeFromAwt(shape.getPathIterator(awtTransformFromFX(fxT)));
     }
 
@@ -519,7 +493,7 @@ public class FXShapes {
      * @param at    Optional transformation which is applied to the shape
      * @return JavaFX Shape
      */
-    public static @NonNull javafx.scene.shape.Path fxShapeFromAwt(@NonNull Shape shape, AffineTransform at) {
+    public static javafx.scene.shape.@NonNull Path fxShapeFromAwt(@NonNull Shape shape, AffineTransform at) {
         return fxShapeFromAwt(shape.getPathIterator(at));
     }
 
@@ -529,7 +503,7 @@ public class FXShapes {
      * @param shape AWT Shape
      * @return JavaFX Shape
      */
-    public static @NonNull javafx.scene.shape.Path fxShapeFromAwt(@NonNull Shape shape) {
+    public static javafx.scene.shape.@NonNull Path fxShapeFromAwt(@NonNull Shape shape) {
         return fxShapeFromAwt(shape.getPathIterator(null));
     }
 
@@ -539,17 +513,17 @@ public class FXShapes {
      * @param iter AWT Path Iterator
      * @return JavaFX Shape
      */
-    public static @NonNull javafx.scene.shape.Path fxShapeFromAwt(@NonNull PathIterator iter) {
+    public static javafx.scene.shape.@NonNull Path fxShapeFromAwt(@NonNull PathIterator iter) {
         javafx.scene.shape.Path fxpath = new javafx.scene.shape.Path();
 
         switch (iter.getWindingRule()) {
-        case PathIterator.WIND_EVEN_ODD:
-            fxpath.setFillRule(javafx.scene.shape.FillRule.EVEN_ODD);
-            break;
-        case PathIterator.WIND_NON_ZERO:
-            fxpath.setFillRule(javafx.scene.shape.FillRule.NON_ZERO);
-            break;
-        default:
+            case PathIterator.WIND_EVEN_ODD:
+                fxpath.setFillRule(javafx.scene.shape.FillRule.EVEN_ODD);
+                break;
+            case PathIterator.WIND_NON_ZERO:
+                fxpath.setFillRule(javafx.scene.shape.FillRule.NON_ZERO);
+                break;
+            default:
             throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
         }
 

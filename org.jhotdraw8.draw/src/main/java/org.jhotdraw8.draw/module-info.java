@@ -16,7 +16,7 @@ module org.jhotdraw8.draw {
     requires transitive javafx.controls;
     requires transitive javafx.fxml;
     requires transitive javafx.graphics;
-    requires transitive org.jhotdraw8.annotation;
+    requires static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.application;
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;

@@ -87,7 +87,7 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
     }
 
     @Override
-    public @NonNull Point2D.Double getLastPoint() {
+    public Point2D.@NonNull Double getLastPoint() {
         return new Point2D.Double(lastX, lastY);
     }
 

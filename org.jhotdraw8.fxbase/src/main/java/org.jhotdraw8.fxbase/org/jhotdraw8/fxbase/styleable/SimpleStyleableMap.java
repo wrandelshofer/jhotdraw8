@@ -11,16 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serial;
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.AbstractSet;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Integer.highestOneBit;
@@ -113,7 +104,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         originalMap.changeListenerList.add(observer);
     }
 
-    protected void callObservers(StyleOrigin origin, MapChangeListener.Change<K, V> change) {
+    protected void callObservers(@NonNull StyleOrigin origin, MapChangeListener.Change<K, V> change) {
         if (origin == StyleOrigin.USER) {
             if (originalMap.changeListenerList != null) {
                 for (MapChangeListener<? super K, ? super V> l : originalMap.changeListenerList) {

@@ -5,11 +5,7 @@
 
 package org.jhotdraw8.geom;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.Rectangle2D;
+import javafx.geometry.*;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
@@ -23,7 +19,7 @@ public class FXRectangles {
      * @param shape an AWT shape
      * @return JavaFX bounds
      */
-    public static @NonNull BoundingBox getBounds(@NonNull java.awt.Shape shape) {
+    public static @NonNull BoundingBox getBounds(java.awt.@NonNull Shape shape) {
         java.awt.geom.Rectangle2D r = shape.getBounds2D();
         return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
@@ -34,7 +30,7 @@ public class FXRectangles {
      * @param r a bounding box
      * @return the rectangle
      */
-    public static @NonNull java.awt.geom.Rectangle2D.Double toAwtRectangle2D(@NonNull Bounds r) {
+    public static java.awt.geom.Rectangle2D.@NonNull Double toAwtRectangle2D(@NonNull Bounds r) {
         return new java.awt.geom.Rectangle2D.Double(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
@@ -191,7 +187,7 @@ public class FXRectangles {
         return new Rectangle2D(x1, y1, x2 - x1, y2 - y1);
     }
 
-    public static @NonNull Point2D center(@NonNull java.awt.geom.Rectangle2D r) {
+    public static @NonNull Point2D center(java.awt.geom.@NonNull Rectangle2D r) {
         return new Point2D(r.getCenterX(), r.getCenterY());
     }
 

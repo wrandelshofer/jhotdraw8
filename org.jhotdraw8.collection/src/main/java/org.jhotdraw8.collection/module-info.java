@@ -8,7 +8,7 @@
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.collection {
-    requires transitive org.jhotdraw8.annotation;
+    requires static org.jhotdraw8.annotation;
     requires org.jhotdraw8.base;
     exports org.jhotdraw8.collection;
     exports org.jhotdraw8.collection.facade;

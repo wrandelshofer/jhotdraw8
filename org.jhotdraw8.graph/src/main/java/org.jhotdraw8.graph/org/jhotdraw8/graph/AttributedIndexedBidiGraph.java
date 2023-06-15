@@ -6,11 +6,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.AbstractCollection;
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 /**
  * This interface provides read-only indexed access to a directed graph {@code G = (V, A) } with
@@ -68,7 +64,7 @@ public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, Attr
             }
 
             @Override
-            public @NonNull Map.Entry<Integer, A> next() {
+            public Map.@NonNull Entry<Integer, A> next() {
                 int i = index++;
                 return new AbstractMap.SimpleEntry<>(
                         getPrevAsInt(vertex, i),

@@ -7,7 +7,7 @@ module org.jhotdraw8.examples {
     requires transitive org.jhotdraw8.draw;
     requires java.logging;
     requires java.prefs;
-    requires transitive org.jhotdraw8.annotation;
+    requires static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.color;
     requires transitive org.jhotdraw8.os;
     requires transitive org.jhotdraw8.collection;

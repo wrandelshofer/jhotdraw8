@@ -65,12 +65,12 @@ public class ReadOnlySequencedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
     }
 
     @Override
-    public @Nullable Map.Entry<K, V> firstEntry() {
+    public Map.@Nullable Entry<K, V> firstEntry() {
         return firstEntryFunction.get();
     }
 
     @Override
-    public @Nullable Map.Entry<K, V> lastEntry() {
+    public Map.@Nullable Entry<K, V> lastEntry() {
         return lastEntryFunction.get();
     }
 }

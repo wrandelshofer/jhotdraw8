@@ -15,12 +15,7 @@ import org.jhotdraw8.base.io.StreamPosTokenizer;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.FlatteningPathIterator;
-import java.awt.geom.IllegalPathStateException;
-import java.awt.geom.Path2D;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
+import java.awt.geom.*;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.ParseException;
@@ -646,7 +641,7 @@ public class SvgPaths {
      * @return the SvgPath2D
      * @throws ParseException if the String is not a valid path
      */
-    public static @NonNull Path2D.Double awtShapeFromSvgString(@NonNull String str) throws ParseException {
+    public static Path2D.@NonNull Double awtShapeFromSvgString(@NonNull String str) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
         buildFromSvgString(b, str);
         return b.build();
@@ -742,7 +737,7 @@ public class SvgPaths {
      * @param tolerance The tolerance for the test.
      * @return true if contained within tolerance
      */
-    public static boolean outlineContains(@NonNull Shape shape, @NonNull Point2D.Double p, double tolerance) {
+    public static boolean outlineContains(@NonNull Shape shape, Point2D.@NonNull Double p, double tolerance) {
         AwtPathBuilder b = new AwtPathBuilder();
 
         double[] coords = new double[6];
@@ -750,9 +745,9 @@ public class SvgPaths {
         double moveX = 0, moveY = 0;
         for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), Math.abs(tolerance + 0.1e-4)); !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-            case PathIterator.SEG_CLOSE:
-                if (IntersectLinePoint.lineContainsPoint(
-                        prevX, prevY, moveX, moveY,
+                case PathIterator.SEG_CLOSE:
+                    if (IntersectLinePoint.lineContainsPoint(
+                            prevX, prevY, moveX, moveY,
                         p.x, p.y, tolerance)) {
                     return true;
                 }
