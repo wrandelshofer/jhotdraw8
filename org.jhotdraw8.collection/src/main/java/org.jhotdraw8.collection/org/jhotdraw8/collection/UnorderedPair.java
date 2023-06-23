@@ -19,25 +19,41 @@ public interface UnorderedPair<V> {
 
     V other();
 
-    static <V> boolean unorderedPairEquals(@NonNull UnorderedPair<V> self, @Nullable Object obj) {
-        if (self == obj) {
+    /**
+     * Checks if a given ordered pair is equal to a given object.
+     *
+     * @param pair an ordered pair
+     * @param obj  an object
+     * @param <V>  the type of the elements that form the pair
+     * @return true if equal
+     */
+    static <V> boolean unorderedPairEquals(@NonNull UnorderedPair<V> pair, @Nullable Object obj) {
+        if (pair == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (self.getClass() != obj.getClass()) {
+        if (pair.getClass() != obj.getClass()) {
             return false;
         }
         final UnorderedPair<?> other = (UnorderedPair<?>) obj;
-        if (Objects.equals(self.either(), other.either()) && Objects.equals(self.other(), other.other())) {
+        if (Objects.equals(pair.either(), other.either()) && Objects.equals(pair.other(), other.other())) {
             return true;
         }
-        return Objects.equals(self.other(), other.either()) && Objects.equals(self.either(), other.other());
+        return Objects.equals(pair.other(), other.either()) && Objects.equals(pair.either(), other.other());
     }
 
-    static <V> int unorderedPairHashCode(@NonNull UnorderedPair<V> self) {
-        final int hash = 7 + Objects.hashCode(self.either()) + Objects.hashCode(self.other());
+    /**
+     * Computes a hash code for an ordered pair.
+     * The hash code is guaranteed to be non-zero.
+     *
+     * @param pair an ordered pair
+     * @param <V>  the type of the elements that form the pair
+     * @return the hash code
+     */
+    static <V> int unorderedPairHashCode(@NonNull UnorderedPair<V> pair) {
+        final int hash = 7 + Objects.hashCode(pair.either()) + Objects.hashCode(pair.other());
         return hash == 0 ? -61 : hash;
     }
 }

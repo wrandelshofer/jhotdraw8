@@ -9,6 +9,18 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 
+/**
+ * Read-only interface for a set with a well-defined iteration order.
+ * The state of the set may change.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>JEP draft: Sequenced Collections</dt>
+ *     <dd><a href="https://openjdk.java.net/jeps/8280836">java.ne</a></dd>
+ * </dl>
+ *
+ * @param <E> the element type
+ */
 public interface ReadOnlySequencedSet<E> extends ReadOnlySet<E>, ReadOnlySequencedCollection<E> {
     /**
      * Returns a reversed-order view of this set.

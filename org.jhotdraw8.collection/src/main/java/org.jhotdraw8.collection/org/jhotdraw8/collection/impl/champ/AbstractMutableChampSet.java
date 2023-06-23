@@ -7,7 +7,7 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.impl.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
@@ -124,6 +124,11 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         return super.equals(o);
     }
 
+    /**
+     * Returns the current value of the modification counter.
+     *
+     * @return value of modification counter
+     */
     protected int getModCount() {
         return modCount;
     }

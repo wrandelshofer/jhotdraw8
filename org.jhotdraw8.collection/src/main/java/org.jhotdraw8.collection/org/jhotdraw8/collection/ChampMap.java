@@ -9,11 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampIterator;
-import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
@@ -28,8 +24,8 @@ import java.util.Objects;
 import java.util.Spliterator;
 
 /**
- * Implements an immutable map using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP).
+ * Implements the {@link ImmutableMap} interface using a Compressed Hash-Array
+ * Mapped Prefix-tree (CHAMP).
  * <p>
  * Features:
  * <ul>

@@ -12,14 +12,8 @@ import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.SequencedData;
-import org.jhotdraw8.collection.impl.champ.SequencedEntry;
-import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.*;
+import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
@@ -34,8 +28,8 @@ import java.util.Set;
 import java.util.Spliterator;
 
 /**
- * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP) and a bit-mapped trie (Vector).
+ * Implements the {@code SequencedMap} interface using a Compressed
+ * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>

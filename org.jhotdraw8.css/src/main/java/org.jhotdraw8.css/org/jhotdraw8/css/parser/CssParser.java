@@ -727,13 +727,13 @@ public class CssParser {
      *
      * @param css a literal selector String
      * @return the parsed selector
-     * @throws IOException on failure
+     * @throws ParseException on failure
      */
     public @NonNull Selector parseSelector(@NonNull String css) throws ParseException {
         try {
             return parseSelector(new StreamCssTokenizer(new StringReader(css)));
         } catch (IOException e) {
-            var pe = new ParseException("Error parssing selector", 0);
+            var pe = new ParseException("Error parsing selector", 0);
             pe.initCause(e);
             throw pe;
         }

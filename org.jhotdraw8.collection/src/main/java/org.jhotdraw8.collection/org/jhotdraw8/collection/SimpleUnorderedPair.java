@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * A simple implementation of an unordered pair.
+ * A simple implementation of the {@link UnorderedPair} interface.
  * <p>
  * This is a value-type.
  *

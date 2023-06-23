@@ -6,7 +6,7 @@
 package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.impl.IdentityObject;
 
 /**
  * A {@link BitmapIndexedNode} that provides storage space for a 'owner' identity.

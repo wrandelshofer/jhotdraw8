@@ -13,7 +13,8 @@ import java.util.Collection;
 import java.util.Set;
 
 /**
- * Interface for an immutable set.
+ * Interface for an immutable set; the implementation guarantees that the
+ * state of the collection does not change.
  * <p>
  * An immutable set provides methods for creating a new immutable set with
  * added or removed elements, without changing the original immutable set.

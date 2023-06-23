@@ -5,9 +5,9 @@
 package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.FailFastIterator;
-import org.jhotdraw8.collection.FailFastSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
+import org.jhotdraw8.collection.iterator.FailFastIterator;
+import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
 import java.util.AbstractSet;

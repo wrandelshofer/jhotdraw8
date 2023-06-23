@@ -9,28 +9,19 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampIterator;
-import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 
 /**
- * Implements an immutable set using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP).
+ * Implements the {@link ImmutableSet} interface using a Compressed Hash-Array
+ * Mapped Prefix-tree (CHAMP).
  * <p>
  * Features:
  * <ul>

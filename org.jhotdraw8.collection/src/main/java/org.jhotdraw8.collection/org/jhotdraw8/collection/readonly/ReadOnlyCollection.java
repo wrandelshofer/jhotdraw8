@@ -133,7 +133,8 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * {@code ", "} (comma and space).  Elements are converted to strings as
      * by {@link String#valueOf(Object)}.
      *
-     * @param c an iterable
+     * @param c   an iterable
+     * @param <E> the element type
      * @return a string representation of the iterable
      */
     static <E> @NonNull String iterableToString(final @NonNull Iterable<E> c) {

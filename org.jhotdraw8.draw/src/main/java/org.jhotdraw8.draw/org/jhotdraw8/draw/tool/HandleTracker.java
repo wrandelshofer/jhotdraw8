@@ -17,7 +17,7 @@ import java.util.Collection;
  * <p>
  * A {@link HandleTracker} should set the {@link Node#accessibleTextProperty()}
  * and {@link Node#accessibleHelpProperty()} of its own {@link Node}, to the
- * values of the corresponding properties in the {@link Node provided
+ * values of the corresponding properties in the {@link Node} provided
  * by the current {@link Handle}.
  *
  * @author Werner Randelshofer

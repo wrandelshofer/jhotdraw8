@@ -16,16 +16,11 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Implements a mutable list using a {@code bit-mapped trie}.
+ * Implements the {@link List} interface using a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>

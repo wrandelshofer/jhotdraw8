@@ -5,6 +5,7 @@
 package org.jhotdraw8.collection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.facade.SetFacade;
 
@@ -51,9 +52,10 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      *
      * @param set a set
      * @param o   an object
+     * @param <E> the element type
      * @return {@code true} if the object is equal to the set
      */
-    static <E> boolean setEquals(@NonNull ReadOnlySet<E> set, Object o) {
+    static <E> boolean setEquals(@NonNull ReadOnlySet<E> set, @Nullable Object o) {
         if (o == set) {
             return true;
         }
@@ -80,15 +82,19 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * <p>
      * Returns {@code true} if the given object is also a read-only set and the
      * two sets contain the same elements, ignoring the sequence of the elements.
+     * <p>
+     * Implementations of this method should use {@link ReadOnlySet#setEquals}.
      *
      * @param o an object
      * @return {@code true} if the object is equal to this map
      */
-    boolean equals(Object o);
+    boolean equals(@Nullable Object o);
 
     /**
      * Returns the hash code value for this set. The hash code
      * is the sum of the hash code of its elements.
+     * <p>
+     * Implementations of this method should use {@link ReadOnlySet#iteratorToHashCode}.
      *
      * @return the hash code value for this set
      * @see Set#hashCode()

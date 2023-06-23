@@ -315,15 +315,15 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      *     <li>Scale the vector components by factors dependent upon both the source and destination reference whites.</li>
      *     <li>Transform from (ρ, γ, β) back to XYZ using the inverse transform of step 1.</li>
      * </ol>
-     * <pre>
-     * [M] = [M<sub>A</sub>]<sup>-1</sup> * [S] * [M<sub>A</sub>]</sup>
-     *
-     * where [S] is a diagonal matrix:
-     *
-     * [ ρ<sub>D</sub>/ρ<sub>S</sub>   0      0     ]
-     * [ 0     γ<sub>D</sub>/γ<sub>S</sub>    0     ]
-     * [ 0      0      β<sub>D</sub>/β<sub>S</sub>  ]
-     * </pre>
+     * <code>
+     * [M] = [M<sub>A</sub>]<sup>-1</sup> * [S] * [M<sub>A</sub>]
+     * </code><br>
+     * where [S] is a diagonal matrix:<br>
+     * <code>
+     * [ ρ<sub>D</sub>/ρ<sub>S</sub>   0      0     ]<br>
+     * [ 0     γ<sub>D</sub>/γ<sub>S</sub>    0     ]<br>
+     * [ 0      0      β<sub>D</sub>/β<sub>S</sub>  ]<br>
+     * </code>
      *
      *
      *

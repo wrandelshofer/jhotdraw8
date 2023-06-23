@@ -26,6 +26,9 @@ import java.util.Spliterators;
  */
 public abstract class AbstractEnumeratorSpliterator<E> extends Spliterators.AbstractSpliterator<E>
         implements EnumeratorSpliterator<E> {
+    /**
+     * The current element of the enumerator.
+     */
     protected E current;
 
     /**

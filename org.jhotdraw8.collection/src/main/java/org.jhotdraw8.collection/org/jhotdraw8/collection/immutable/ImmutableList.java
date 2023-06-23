@@ -12,7 +12,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import java.util.List;
 
 /**
- * Interface for an immutable list.
+ * Interface for an immutable list; the implementation guarantees that the state of the collection does not change.
  * <p>
  * An immutable list provides methods for creating a new immutable list with
  * added or removed elements, without changing the original immutable list.
@@ -30,10 +30,10 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
     @NonNull ImmutableList<E> clear();
 
     @Override
-    @NonNull ImmutableList<E> addFirst(@Nullable final E key);
+    @NonNull ImmutableList<E> addFirst(@Nullable final E element);
 
     @Override
-    @NonNull ImmutableList<E> addLast(@Nullable final E key);
+    @NonNull ImmutableList<E> addLast(@Nullable final E element);
 
     @Override
     default ImmutableList<E> removeFirst() {

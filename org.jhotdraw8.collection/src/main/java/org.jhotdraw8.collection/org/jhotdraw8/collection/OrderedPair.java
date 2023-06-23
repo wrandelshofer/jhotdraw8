@@ -20,28 +20,45 @@ public interface OrderedPair<U, V> {
 
     V second();
 
-
-    static <U, V> boolean orderedPairEquals(@NonNull OrderedPair<U, V> self, @Nullable Object obj) {
-        if (self == obj) {
+    /**
+     * Checks if a given ordered pair is equal to a given object.
+     *
+     * @param pair an ordered pair
+     * @param obj  an object
+     * @param <U>  the type of the first element of the pair
+     * @param <V>  the type of the second element of the pair
+     * @return true if equal
+     */
+    static <U, V> boolean orderedPairEquals(@NonNull OrderedPair<U, V> pair, @Nullable Object obj) {
+        if (pair == obj) {
             return true;
         }
         if (obj == null) {
             return false;
         }
-        if (self.getClass() != obj.getClass()) {
+        if (pair.getClass() != obj.getClass()) {
             return false;
         }
         final OrderedPair<?, ?> other = (OrderedPair<?, ?>) obj;
-        if (!Objects.equals(self.first(), other.first())) {
+        if (!Objects.equals(pair.first(), other.first())) {
             return false;
         }
-        return Objects.equals(self.second(), other.second());
+        return Objects.equals(pair.second(), other.second());
     }
 
-    static <U, V> int orderedPairHashCode(@NonNull OrderedPair<U, V> self) {
+    /**
+     * Computes a hash code for an ordered pair.
+     * The hash code is guaranteed to be non-zero.
+     *
+     * @param pair an ordered pair
+     * @param <U>  the type of the first element of the pair
+     * @param <V>  the type of the second element of the pair
+     * @return the hash code
+     */
+    static <U, V> int orderedPairHashCode(@NonNull OrderedPair<U, V> pair) {
         int hash = 3;
-        hash = 59 * hash + Objects.hashCode(self.first());
-        hash = 59 * hash + Objects.hashCode(self.second());
+        hash = 59 * hash + Objects.hashCode(pair.first());
+        hash = 59 * hash + Objects.hashCode(pair.second());
         return hash == 0 ? -89 : hash;
     }
 }

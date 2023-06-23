@@ -9,7 +9,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * An ordered pair which has non-null values.
+ * An implementation of the {@link OrderedPair} interface, which has non-null
+ * values.
  * <p>
  * This is a value-type.
  *

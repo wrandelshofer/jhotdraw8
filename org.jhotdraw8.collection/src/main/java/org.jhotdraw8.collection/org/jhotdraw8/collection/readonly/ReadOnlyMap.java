@@ -11,14 +11,11 @@ import org.jhotdraw8.collection.facade.ReadOnlyCollectionFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
 
-import java.util.AbstractMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
- * Read-only interface for a map.
+ * Read-only interface for a map. The state of the
+ * map may change.
  *
  * @param <K> the key type
  * @param <V> the value type
@@ -77,7 +74,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * Returns {@code true} if this map contains one or more keys to the
      * specified value.
      *
-     * @param value
+     * @param value a value
      * @return {@code true} if this map maps one or more keys to the
      * specified value
      */
@@ -93,7 +90,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     /**
      * Returns true if this map contains the specified entry.
      *
-     * @param o an entry
+     * @param o an entry (should be a {@link Map.Entry}).
      * @return true if this map contains the entry
      */
     default boolean containsEntry(Object o) {
@@ -196,6 +193,8 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @param map a map
      * @param o   an object
+     * @param <K> the key type
+     * @param <V> the value type
      * @return {@code true} if the object is equal to the map
      */
     static <K, V> boolean mapEquals(@NonNull ReadOnlyMap<K, V> map, Object o) {
@@ -238,6 +237,8 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * is the sum of the hash code of the entries.
      *
      * @param entries an iterable that is an entry set
+     * @param <K>     the key type
+     * @param <V>     the value type
      * @return the sum of the hash codes of the elements in the set
      * @see Map#hashCode()
      */

@@ -13,7 +13,7 @@ import java.util.Arrays;
 import static java.lang.Integer.max;
 
 /**
- * Provides helper methods for lists that are based on arrays.
+ * Provides static methods for lists that are based on arrays.
  *
  * @author Werner Randelshofer
  */

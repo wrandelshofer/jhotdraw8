@@ -13,7 +13,8 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 
 /**
- * Interface for an immutable sequenced map.
+ * Interface for an immutable map with a well-defined iteration order; the
+ * implementation guarantees that the state of the collection does not change.
  * <p>
  * An immutable sequenced map provides methods for creating a new immutable sequenced map with
  * added, updated or removed entries, without changing the original immutable sequenced map.

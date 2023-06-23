@@ -37,7 +37,6 @@ import java.util.ResourceBundle;
  * <dl>
  *     <dt>HSL</dt><dd>Hue, Saturation, Lightness</dd>
  *     <dt>HSB</dt><dd>Hue, Saturation, Brightness</dd>
- *     <dt></dt><dd></dd>
  * </dl>
  * <pre>
  *           saturation→

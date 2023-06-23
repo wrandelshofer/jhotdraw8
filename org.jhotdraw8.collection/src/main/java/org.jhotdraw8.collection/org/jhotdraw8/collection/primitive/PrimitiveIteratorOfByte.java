@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.base.function.ByteConsumer;
-
 import java.util.Objects;
 import java.util.PrimitiveIterator;
 import java.util.function.Consumer;

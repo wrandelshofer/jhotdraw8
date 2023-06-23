@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 
 /**
- * Maps an {@link Iterator} in an {@link Iterator} of a different element type.
+ * Maps an {@link Iterator} to a different element type.
  * <p>
  * The underlying iterator is referenced - not copied.
  *

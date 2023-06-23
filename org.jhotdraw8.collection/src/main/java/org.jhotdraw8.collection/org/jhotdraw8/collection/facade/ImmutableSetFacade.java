@@ -6,8 +6,8 @@
 package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Iterators;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
+import org.jhotdraw8.collection.iterator.Iterators;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlySet;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 

@@ -7,18 +7,13 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IdentityObject;
+import org.jhotdraw8.collection.impl.IdentityObject;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**
@@ -59,6 +54,11 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
      */
     protected int modCount;
 
+    /**
+     * Gets the owner object. If the owner object was set to null, creates a new one.
+     *
+     * @return the owner object
+     */
     @NonNull
     protected IdentityObject getOrCreateOwner() {
         if (owner == null) {
@@ -100,6 +100,11 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
         return super.getOrDefault(key, defaultValue);
     }
 
+    /**
+     * Returns the current value of the modification counter.
+     *
+     * @return value of modification counter
+     */
     protected int getModCount() {
         return modCount;
     }
@@ -178,6 +183,12 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
         return removed;
     }
 
+    /**
+     * Removes the specified entry frm the map.
+     *
+     * @param o an entry (should be a {@link Map.Entry}).
+     * @return true if the element was contained in the map
+     */
     @SuppressWarnings("unchecked")
     protected boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {

@@ -10,12 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.converter.NumberConverter;
-import org.jhotdraw8.color.CssColorSpaces;
-import org.jhotdraw8.color.NamedColorSpace;
-import org.jhotdraw8.color.ParametricHlsColorSpace;
-import org.jhotdraw8.color.ParametricHsvColorSpace;
-import org.jhotdraw8.color.ParametricScaledColorSpace;
-import org.jhotdraw8.color.SrgbColorSpace;
+import org.jhotdraw8.color.*;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -23,13 +18,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.value.CssColor;
-import org.jhotdraw8.draw.css.value.NamedCssColor;
-import org.jhotdraw8.draw.css.value.ShsbaCssColor;
-import org.jhotdraw8.draw.css.value.SrgbaCssColor;
-import org.jhotdraw8.draw.css.value.SystemCssColor;
-import org.jhotdraw8.draw.css.value.Uint4HexSrgbaCssColor;
-import org.jhotdraw8.draw.css.value.Uint8HexSrgbaCssColor;
+import org.jhotdraw8.draw.css.value.*;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -95,7 +84,7 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  *     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.</dt>
  *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-type">w3.org</a></dd>
  *
- *     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.  4.1 The <color> syntax.</dt>
+ *     <dt>CSS Color Module Level 4. 4. Representing Colors: the &lt;color&gt; type.  4.1 The &lt;color&gt; syntax.</dt>
  *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-syntax">w3.org</a></dd>
  *
  *     <dt>CSS Color Module Level 4. 5. sRGB Colors.</dt>

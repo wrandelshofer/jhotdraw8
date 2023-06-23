@@ -9,7 +9,7 @@ import javafx.scene.control.Alert;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.collection.Iterators;
+import org.jhotdraw8.collection.iterator.Iterators;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;

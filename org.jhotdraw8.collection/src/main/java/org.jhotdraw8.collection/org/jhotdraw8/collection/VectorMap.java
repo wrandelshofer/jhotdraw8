@@ -10,6 +10,7 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
+import org.jhotdraw8.collection.impl.IdentityObject;
 import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
@@ -24,8 +25,8 @@ import java.util.Objects;
 import java.util.Spliterator;
 
 /**
- * Implements an immutable map using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP) and a bit-mapped trie (Vector).
+ * Implements the {@link ImmutableSequencedMap} interface using a Compressed
+ * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>
@@ -397,12 +398,12 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         return m.toImmutable();
     }
 
-    public @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
+    @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
         return new IteratorFacade<>(reverseSpliterator(), null);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<Map.Entry<K, V>> reverseSpliterator() {
+    @NonNull EnumeratorSpliterator<Map.Entry<K, V>> reverseSpliterator() {
         return new ReverseChampVectorSpliterator<>(vector,
                 e -> ((SequencedEntry<K, V>) e),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);

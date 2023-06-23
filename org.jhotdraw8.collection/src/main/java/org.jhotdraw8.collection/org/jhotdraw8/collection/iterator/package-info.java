@@ -4,6 +4,6 @@
  */
 
 /**
- * Provides mapped collections and mapped iterators.
+ * Provides iterators and utility classes for iterators.
  */
-package org.jhotdraw8.collection.mapped;
+package org.jhotdraw8.collection.iterator;

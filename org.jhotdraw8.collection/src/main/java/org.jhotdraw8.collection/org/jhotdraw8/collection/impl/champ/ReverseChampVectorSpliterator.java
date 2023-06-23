@@ -12,14 +12,14 @@ import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 import java.util.function.Function;
 
 /**
- * @param <K>
+ * @param <E> the element type
  */
-public class ReverseChampVectorSpliterator<K> extends AbstractEnumeratorSpliterator<K> {
+public class ReverseChampVectorSpliterator<E> extends AbstractEnumeratorSpliterator<E> {
     private final @NonNull VectorList<Object> vector;
-    private final @NonNull Function<Object, K> mapper;
+    private final @NonNull Function<Object, E> mapper;
     private int index;
 
-    public ReverseChampVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int additionalCharacteristics, long est) {
+    public ReverseChampVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, E> mapper, int additionalCharacteristics, long est) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;

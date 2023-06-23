@@ -6,21 +6,16 @@ package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.FailFastIterator;
-import org.jhotdraw8.collection.FailFastListIterator;
-import org.jhotdraw8.collection.FailFastSpliterator;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.iterator.FailFastIterator;
+import org.jhotdraw8.collection.iterator.FailFastListIterator;
+import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.AbstractList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**

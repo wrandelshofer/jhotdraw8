@@ -7,10 +7,10 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.IdentityObject;
 import org.jhotdraw8.collection.OrderedPair;
 import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
+import org.jhotdraw8.collection.impl.IdentityObject;
 
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;

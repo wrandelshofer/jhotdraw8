@@ -9,29 +9,19 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.SetFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.BulkChangeEvent;
-import org.jhotdraw8.collection.impl.champ.ChampIterator;
-import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ.*;
+import org.jhotdraw8.collection.iterator.FailFastIterator;
+import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
- * Implements a mutable map using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP).
+ * Implements the {@link Map} interface using a Compressed Hash-Array Mapped
+ * Prefix-tree (CHAMP).
  * <p>
  * Features:
  * <ul>

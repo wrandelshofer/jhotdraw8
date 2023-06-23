@@ -13,16 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.SpliteratorIterable;
+import org.jhotdraw8.collection.iterator.SpliteratorIterable;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
-import org.jhotdraw8.fxcontrols.dock.DockChild;
-import org.jhotdraw8.fxcontrols.dock.DockNode;
-import org.jhotdraw8.fxcontrols.dock.DockParent;
-import org.jhotdraw8.fxcontrols.dock.DockRoot;
-import org.jhotdraw8.fxcontrols.dock.SimpleDockRoot;
-import org.jhotdraw8.fxcontrols.dock.SimpleDockable;
-import org.jhotdraw8.fxcontrols.dock.TabPaneTrack;
-import org.jhotdraw8.fxcontrols.dock.TabbedAccordionTrack;
+import org.jhotdraw8.fxcontrols.dock.*;
 
 import java.util.ArrayList;
 import java.util.List;

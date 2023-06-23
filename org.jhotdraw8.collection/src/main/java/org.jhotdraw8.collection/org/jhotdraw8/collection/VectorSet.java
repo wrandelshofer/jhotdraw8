@@ -11,13 +11,8 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.SequencedData;
-import org.jhotdraw8.collection.impl.champ.SequencedElement;
-import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
+import org.jhotdraw8.collection.impl.IdentityObject;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
@@ -25,16 +20,12 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 
 /**
- * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP) and a bit-mapped trie (Vector).
+ * Implements the {@link ImmutableSequencedSet} interface using a Compressed
+ * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>
@@ -210,8 +201,8 @@ public class VectorSet<E>
         return m.toImmutable();
     }
 
-    public @NonNull VectorSet<E> addFirst(@Nullable E key) {
-        return addFirst(key, true);
+    public @NonNull VectorSet<E> addFirst(@Nullable E element) {
+        return addFirst(element, true);
     }
 
     private @NonNull VectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
@@ -240,8 +231,8 @@ public class VectorSet<E>
         return this;
     }
 
-    public @NonNull VectorSet<E> addLast(@Nullable E key) {
-        return addLast(key, true);
+    public @NonNull VectorSet<E> addLast(@Nullable E element) {
+        return addLast(element, true);
     }
 
     private @NonNull VectorSet<E> addLast(@Nullable E e,
@@ -270,11 +261,6 @@ public class VectorSet<E>
             return renumber(newRoot, newVector, newSize, newOffset);
         }
         return this;
-    }
-
-    @Override
-    public @NonNull MutableVectorSet<E> asSet() {
-        return new MutableVectorSet<>(this);
     }
 
     /**
@@ -412,12 +398,12 @@ public class VectorSet<E>
         return m.toImmutable();
     }
 
-    public @NonNull Iterator<E> reverseIterator() {
+    @NonNull Iterator<E> reverseIterator() {
         return new IteratorFacade<>(reverseSpliterator(), null);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
+    @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
         return new ReverseChampVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);

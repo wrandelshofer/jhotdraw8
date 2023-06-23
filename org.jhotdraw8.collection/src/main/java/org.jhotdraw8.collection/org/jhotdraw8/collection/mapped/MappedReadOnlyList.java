@@ -16,7 +16,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 /**
- * Maps a {@link ReadOnlyList} in {@link ReadOnlyList} of a different element type.
+ * Maps a {@link ReadOnlyList} to a different element type.
  * <p>
  * The underlying List is referenced - not copied.
  *

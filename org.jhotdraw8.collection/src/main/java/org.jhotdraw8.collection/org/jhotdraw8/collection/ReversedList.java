@@ -13,7 +13,7 @@ import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
 
 /**
- * A ReversedList provides an unmodifiable view on a List in reverse order.
+ * Provides an unmodifiable view on a {@link List} in reverse order.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

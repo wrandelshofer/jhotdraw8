@@ -9,30 +9,75 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 
-import java.util.Collection;
 import java.util.NoSuchElementException;
 
 /**
- * Interface for an immutable sequenced collection.
+ * Interface for an immutable collection with a well-defined iteration order;
+ * the implementation guarantees that the state of the collection does not
+ * change.
  * <p>
- * An immutable sequenced collection provides methods for creating a new immutable sequenced collection with
- * added or removed elements, without changing the original immutable sequenced collection.
+ * An immutable sequenced collection provides methods for creating a new
+ * immutable sequenced collection with added or removed elements, without
+ * changing the original immutable sequenced collection.
  *
  * @param <E> the element type
  */
 public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>, ReadOnlySequencedCollection<E> {
+    @Override
     @NonNull ImmutableSequencedCollection<E> add(E element);
 
+    @Override
     @NonNull ImmutableSequencedCollection<E> addAll(@NonNull Iterable<? extends E> c);
 
-    @NonNull ImmutableSequencedCollection<E> addFirst(final @Nullable E key);
+    /**
+     * Returns a copy of this collection that contains all elements
+     * of this collection and also the specified element as the first
+     * element in the iteration order.
+     * <p>
+     * A collection may prevent that the same element can be
+     * added more than once.
+     * <p>
+     * If the iteration order is based on an ordering relation of
+     * the elements, then the element is only the first in a sequence of elements
+     * with the same ordering relation; which is not necessarily the first in
+     * the total iteration order.
+     *
+     * @param element an element
+     * @return this collection instance if it already contains the element
+     * as the first in the iteration order, or
+     * a different collection instance with the element added as the first
+     * in the iteration order
+     */
+    @NonNull ImmutableSequencedCollection<E> addFirst(final @Nullable E element);
 
-    @NonNull ImmutableSequencedCollection<E> addLast(final @Nullable E key);
+    /**
+     * Returns a copy of this collection that contains all elements
+     * of this collection and also the specified element as the last
+     * element in the iteration order.
+     * <p>
+     * A collection may prevent that the same element can be
+     * added more than once.
+     * <p>
+     * If the iteration order is based on an ordering relation of
+     * the elements, then the element is only the last in a sequence of elements
+     * with the same ordering relation; which is not necessarily the last in
+     * the total iteration order.
+     *
+     * @param element an element
+     * @return this collection instance if it already contains the element
+     * as the last in the iteration order, or
+     * a different collection instance with the element added as the last
+     * in the iteration order
+     */
+    @NonNull ImmutableSequencedCollection<E> addLast(final @Nullable E element);
 
+    @Override
     @NonNull ImmutableSequencedCollection<E> clear();
 
+    @Override
     @NonNull ImmutableSequencedCollection<E> remove(E element);
 
+    @Override
     @NonNull ImmutableSequencedCollection<E> removeAll(@NonNull Iterable<?> c);
 
     /**
@@ -57,7 +102,7 @@ public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>,
         return remove(getLast());
     }
 
+    @Override
     @NonNull ImmutableSequencedCollection<E> retainAll(@NonNull Iterable<?> c);
 
-    @NonNull Collection<E> toMutable();
 }

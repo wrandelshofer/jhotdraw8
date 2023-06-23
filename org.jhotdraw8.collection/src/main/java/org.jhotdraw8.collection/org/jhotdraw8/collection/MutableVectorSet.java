@@ -11,14 +11,9 @@ import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseChampVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.SequencedData;
-import org.jhotdraw8.collection.impl.champ.SequencedElement;
-import org.jhotdraw8.collection.impl.champ.VectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.*;
+import org.jhotdraw8.collection.iterator.FailFastIterator;
+import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
@@ -32,8 +27,8 @@ import java.util.Spliterator;
 import static org.jhotdraw8.collection.impl.champ.SequencedData.vecRemove;
 
 /**
- * Implements a mutable set using a Compressed Hash-Array Mapped Prefix-tree
- * (CHAMP), with predictable iteration order.
+ * Implements the {@code SequencedSet} interface using a Compressed
+ * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>

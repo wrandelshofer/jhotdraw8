@@ -8,8 +8,8 @@ package org.jhotdraw8.collection.immutable;
 import org.jhotdraw8.annotation.NonNull;
 
 /**
- * Functional Interface for an immutable set that only provides a
- * {@link #add} method.
+ * Functional Interface for an immutable set that only provides an
+ * {@link #add add} method.
  *
  * @param <E> the element type
  */

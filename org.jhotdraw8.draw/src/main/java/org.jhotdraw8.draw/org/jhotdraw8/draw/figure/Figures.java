@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.Iterators;
+import org.jhotdraw8.collection.iterator.Iterators;
 import org.jhotdraw8.geom.BoundsCalculator;
 
 import static java.lang.Double.max;

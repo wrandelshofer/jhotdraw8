@@ -7,16 +7,12 @@ package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.Iterators;
 import org.jhotdraw8.collection.immutable.ImmutableMap;
+import org.jhotdraw8.collection.iterator.Iterators;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Function;
 
 /**
@@ -104,6 +100,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
         return new ImmutableMapFacade<>(clone, cloneFunction);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NonNull ImmutableMapFacade<K, V> retainAll(@NonNull Iterable<? extends K> c) {
         if (isEmpty()) return this;

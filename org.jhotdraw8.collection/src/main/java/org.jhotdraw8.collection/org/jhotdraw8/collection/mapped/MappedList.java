@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Maps a {@link List} in a {@link List} of a different element type.
+ * Maps a {@link List} to a different element type.
  * <p>
  * The underlying list is referenced - not copied.
  *

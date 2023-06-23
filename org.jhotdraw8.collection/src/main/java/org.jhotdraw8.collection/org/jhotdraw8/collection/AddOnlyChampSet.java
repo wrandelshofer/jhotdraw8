@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * An immutable CHAMP set that only provides a {@link ImmutableAddOnlySet#add}
- * method.
+ * Implements the {@link ImmutableAddOnlySet} interface using a Compressed
+ * Hash-Array Mapped Prefix-tree (CHAMP).
  * <p>
  * References:
  * <dl>

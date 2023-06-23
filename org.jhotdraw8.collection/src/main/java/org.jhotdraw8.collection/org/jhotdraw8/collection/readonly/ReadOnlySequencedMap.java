@@ -15,6 +15,19 @@ import org.jhotdraw8.collection.sequenced.SequencedMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+/**
+ * Read-only interface for a map with a well-defined iteration order.
+ * The state of the map may change.
+ * <p>
+ * References:
+ * <dl>
+ *     <dt>JEP draft: Sequenced Collections</dt>
+ *     <dd><a href="https://openjdk.java.net/jeps/8280836">java.ne</a></dd>
+ * </dl>
+ *
+ * @param <K> the key type
+ * @param <V> the value type
+ */
 public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
     /**
      * Returns a reversed-order view of this map.

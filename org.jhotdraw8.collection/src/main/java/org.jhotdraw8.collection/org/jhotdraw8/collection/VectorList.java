@@ -18,19 +18,13 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 
 import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
 
 /**
- * Implements an immutable list using a {@code bit-mapped trie}.
+ * Implements the {@link ImmutableList} interface using a bit-mapped trie
+ * (Vector).
  * <p>
  * The code has been derived from Vavr Vector.java.
  * <p>
@@ -154,13 +148,13 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @Override
-    public @NonNull VectorList<E> addFirst(@Nullable E key) {
-        return new VectorList<>(prepend(key), size + 1);
+    public @NonNull VectorList<E> addFirst(@Nullable E element) {
+        return new VectorList<>(prepend(element), size + 1);
     }
 
     @Override
-    public @NonNull VectorList<E> addLast(@Nullable E key) {
-        return new VectorList<>(append(key), size + 1);
+    public @NonNull VectorList<E> addLast(@Nullable E element) {
+        return new VectorList<>(append(element), size + 1);
     }
 
     @Override

@@ -14,6 +14,9 @@ import java.util.Spliterators;
 public abstract class AbstractIntEnumeratorSpliterator
         extends Spliterators.AbstractIntSpliterator
         implements IntSpliterator {
+    /**
+     * The current element of the enumerator.
+     */
     protected int current;
 
     /**

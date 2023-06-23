@@ -16,6 +16,9 @@ import java.util.stream.StreamSupport;
  * @param <E> the element type
  */
 public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollection<E> {
+    /**
+     * Sole constructor. (For invocation by subclass constructors, typically implicit.).
+     */
     public AbstractReadOnlyCollection() {
     }
 

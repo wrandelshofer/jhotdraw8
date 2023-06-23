@@ -11,12 +11,7 @@ import org.jhotdraw8.collection.enumerator.ReadOnlyListSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Read-only interface for a list. The state of the
@@ -178,6 +173,8 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
     /**
      * Returns the index of the first occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
+     *
+     * @param o an element
      */
     default int indexOf(Object o) {
         for (int i = 0, n = size(); i < n; i++) {
@@ -201,7 +198,17 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
         return -1;
     }
 
-    static <E> boolean listEquals(@NonNull ReadOnlyList<E> list, Object o) {
+    /**
+     * Compares the given list with the given object for equality.
+     * <p>
+     * Returns {@code true} if the given object is also a read-only list and the
+     * two lists contain the same elements in the same sequence.
+     *
+     * @param list a list
+     * @param o    an object
+     * @return {@code true} if the object is equal to this list
+     */
+    static <E> boolean listEquals(@NonNull ReadOnlyList<E> list, @Nullable Object o) {
         if (o == list) {
             return true;
         }
@@ -244,15 +251,19 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * <p>
      * Returns {@code true} if the given object is also a read-only list and the
      * two lists contain the same elements in the same sequence.
+     * <p>
+     * Implementations of this method should use {@link ReadOnlyList#listEquals}.
      *
      * @param o an object
      * @return {@code true} if the object is equal to this list
      */
-    boolean equals(Object o);
+    boolean equals(@Nullable Object o);
 
     /**
      * Returns the hash code value for this list. The hash code
      * is the result of the calculation described in {@link List#hashCode()}.
+     * <p>
+     * Implementations of this method should use {@link ReadOnlyList#iteratorToHashCode}.
      *
      * @return the hash code value for this set
      */
