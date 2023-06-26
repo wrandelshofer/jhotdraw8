@@ -59,27 +59,21 @@ public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
     @Override
     protected <TT extends Rectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinX()));
-        if (withComma) {
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-        }
-        if (withSpace) {
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-        }
+        produceDelimiter(out);
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinY()));
-        if (withComma) {
-            out.accept(new CssToken(CssTokenType.TT_COMMA));
-        }
-        if (withSpace) {
-            out.accept(new CssToken(CssTokenType.TT_S, " "));
-        }
+        produceDelimiter(out);
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getWidth()));
+        produceDelimiter(out);
+        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getHeight()));
+    }
+
+    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }
         if (withSpace) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
         }
-        out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getHeight()));
     }
 
     @Override

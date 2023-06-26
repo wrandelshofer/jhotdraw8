@@ -20,7 +20,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Set} functions into the {@link Set} interface.
+ * Wraps {@code Set} functions into the {@link SequencedSet} interface.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Collection} functions into the {@link Collection} interface.
+ * Wraps {@code Collection} functions into the {@link SequencedCollection} interface.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

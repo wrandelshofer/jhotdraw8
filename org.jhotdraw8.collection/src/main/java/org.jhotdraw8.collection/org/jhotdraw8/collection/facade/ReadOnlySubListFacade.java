@@ -10,14 +10,17 @@ import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
+/**
+ * Wraps  {@code List} functions for a sub-list in the {@link ReadOnlyList}
+ * interface.
+ *
+ * @param <E> the element type
+ * @author Werner Randelshofer
+ */
 public class ReadOnlySubListFacade<E> extends AbstractReadOnlyList<E> {
 
     private final ReadOnlyList<E> root;

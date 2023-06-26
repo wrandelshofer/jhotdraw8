@@ -19,7 +19,7 @@ import java.util.*;
 import java.util.stream.Stream;
 
 /**
- * Wraps {@code ImmutableList} functions into the {@link List} interface.
+ * Wraps {@link ImmutableList} functions into the {@link List} interface.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
