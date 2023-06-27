@@ -22,39 +22,14 @@ import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.BitSet;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.BiConsumer;
-import java.util.function.BiPredicate;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
+import java.util.*;
+import java.util.function.*;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.ContourIntersections.allSelfIntersects;
-import static org.jhotdraw8.geom.contour.ContourIntersections.findIntersects;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrCircle2Circle2;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2Circle2;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrLineSeg2LineSeg2;
-import static org.jhotdraw8.geom.contour.ContourIntersections.intrPlineSegs;
-import static org.jhotdraw8.geom.contour.PlineVertex.closestPointOnSeg;
-import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
-import static org.jhotdraw8.geom.contour.PlineVertex.segMidpoint;
-import static org.jhotdraw8.geom.contour.PlineVertex.splitAtPoint;
+import static org.jhotdraw8.geom.contour.ContourIntersections.*;
+import static org.jhotdraw8.geom.contour.PlineVertex.*;
 import static org.jhotdraw8.geom.contour.PolyArcPath.createApproxSpatialIndex;
-import static org.jhotdraw8.geom.contour.Utils.angle;
-import static org.jhotdraw8.geom.contour.Utils.deltaAngle;
-import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
-import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
-import static org.jhotdraw8.geom.contour.Utils.realPrecision;
-import static org.jhotdraw8.geom.contour.Utils.sliceJoinThreshold;
-import static org.jhotdraw8.geom.contour.Utils.unitPerp;
+import static org.jhotdraw8.geom.contour.Utils.*;
 
 /**
  * ContourBuilder.
@@ -63,7 +38,7 @@ import static org.jhotdraw8.geom.contour.Utils.unitPerp;
  * <p>
  * This code has been derived from CavalierContours.
  * <dl>
- *     <dt>CavalierCoutours. Copyright (c) 2019 Jedidiah Buck McCready.
+ *     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
  *    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
  *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>

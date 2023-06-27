@@ -17,25 +17,14 @@ import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
-import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
-import org.jhotdraw8.geom.intersect.IntersectCircleLine;
-import org.jhotdraw8.geom.intersect.IntersectLineLine;
-import org.jhotdraw8.geom.intersect.IntersectionPoint;
-import org.jhotdraw8.geom.intersect.IntersectionPointEx;
-import org.jhotdraw8.geom.intersect.IntersectionResult;
-import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.*;
 
 import java.awt.geom.Point2D;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiPredicate;
-import java.util.function.DoubleFunction;
-import java.util.function.IntConsumer;
-import java.util.function.IntPredicate;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.function.*;
 
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
 import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
@@ -50,7 +39,7 @@ import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
  * <p>
  * This code has been derived from CavalierContours.
  * <dl>
- *     <dt>CavalierCoutours. Copyright (c) 2019 Jedidiah Buck McCready.
+ *     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
  *    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
  *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>

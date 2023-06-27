@@ -25,10 +25,7 @@ import java.util.function.Predicate;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.Utils.angle;
-import static org.jhotdraw8.geom.contour.Utils.closestPointOnLineSeg;
-import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
-import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
+import static org.jhotdraw8.geom.contour.Utils.*;
 
 /**
  * PlineVertex.
@@ -37,7 +34,7 @@ import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
  * <p>
  * This code has been derived from CavalierContours.
  * <dl>
- *     <dt>CavalierCoutours. Copyright (c) 2019 Jedidiah Buck McCready.
+ *     <dt>CavalierContours. Copyright (c) 2019 Jedidiah Buck McCready.
  *    <a href="https://github.com/jbuckmccready/CavalierContours/blob/7a35376eb4c2d5f917d3e0564ea630c94137255e/LICENSE">MIT License.</a></dt>
  *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>
