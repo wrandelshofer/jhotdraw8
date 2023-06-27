@@ -35,7 +35,7 @@ public class Points {
     }
 
     /**
-     * Gets the distance between the points (x1,y1) and (x2,y2).
+     * Computes the distance between the points (x1,y1) and (x2,y2).
      *
      * @param x1 x-coordinate of point 1
      * @param y1 y-coordinate of point 1
@@ -47,6 +47,23 @@ public class Points {
         double dx = x1 - x2;
         double dy = y1 - y2;
         return sqrt(dx * dx + dy * dy);
+    }
+
+    /**
+     * Computes the distance between the points (x1,y1) and (x2,y2) with float precision.
+     * <p>
+     * Computing the sqrt of a float is twice as fast as computing the sqrt of a double.
+     *
+     * @param x1 x-coordinate of point 1
+     * @param y1 y-coordinate of point 1
+     * @param x2 x-coordinate of point 2
+     * @param y2 y-coordinate of point 2
+     * @return
+     */
+    public static float distanceF(double x1, double y1, double x2, double y2) {
+        double dx = x1 - x2;
+        double dy = y1 - y2;
+        return (float) sqrt((float) (dx * dx + dy * dy));
     }
 
     public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2) {
