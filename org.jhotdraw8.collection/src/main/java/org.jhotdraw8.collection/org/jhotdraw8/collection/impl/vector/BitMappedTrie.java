@@ -12,14 +12,10 @@ import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -123,7 +119,7 @@ public class BitMappedTrie<T> implements Serializable {
     @SuppressWarnings("unchecked")
     @NonNull BitMappedTrie<T> prependAll(@NonNull Iterable<? extends T> iterable) {
         if (iterable instanceof SequencedCollection<?> s) {
-            return prepend((Iterator<? extends T>) s._reversed().iterator(), s.size());
+            return prepend((Iterator<? extends T>) s.reversed().iterator(), s.size());
         }
         if (iterable instanceof ReadOnlySequencedCollection<?> c) {
             return append(iterable.iterator(), c.size());

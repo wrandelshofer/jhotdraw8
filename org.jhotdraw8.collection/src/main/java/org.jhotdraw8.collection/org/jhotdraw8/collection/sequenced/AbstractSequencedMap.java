@@ -13,12 +13,7 @@ import org.jhotdraw8.collection.mapped.MappedIterator;
 import org.jhotdraw8.collection.mapped.MappedSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
-import java.util.AbstractMap;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Abstract base class for {@link SequencedMap}s.
@@ -39,7 +34,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     boolean removeValue(final @Nullable Object o) {
-        for (Entry<K, V> entry : _sequencedEntrySet()) {
+        for (Entry<K, V> entry : sequencedEntrySet()) {
             if (Objects.equals(entry.getValue(), o)) {
                 remove(entry.getKey());
                 return true;
@@ -59,7 +54,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
-    public @NonNull SequencedSet<K> _sequencedKeySet() {
+    public @NonNull SequencedSet<K> sequencedKeySet() {
         return createKeySet(this);
     }
 
@@ -70,17 +65,17 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
 
     @Override
     public @NonNull Set<Entry<K, V>> entrySet() {
-        return _sequencedEntrySet();
+        return sequencedEntrySet();
     }
 
 
     @SuppressWarnings({"SuspiciousMethodCalls"})
     public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
         return new SequencedSetFacade<>(
-                () -> new MappedIterator<>(m._sequencedEntrySet().iterator(), Entry::getKey),
-                () -> new MappedSpliterator<>(m._sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
-                () -> new MappedIterator<>(m._reversed()._sequencedEntrySet().iterator(), Entry::getKey),
-                () -> new MappedSpliterator<>(m._reversed()._sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
+                () -> new MappedIterator<>(m.sequencedEntrySet().iterator(), Entry::getKey),
+                () -> new MappedSpliterator<>(m.sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
+                () -> new MappedIterator<>(m.reversed().sequencedEntrySet().iterator(), Entry::getKey),
+                () -> new MappedSpliterator<>(m.reversed().sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
                 m::size,
                 m::containsKey,
                 m::clear,
@@ -105,7 +100,7 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
     @Override
-    public @NonNull SequencedCollection<V> _sequencedValues() {
+    public @NonNull SequencedCollection<V> sequencedValues() {
         return createValues(this);
     }
 
@@ -116,13 +111,13 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
 
     public static <K, V> @NonNull SequencedCollection<V> createValues(@NonNull SequencedMap<K, V> m) {
         return new SequencedCollectionFacade<>(
-                () -> new MappedIterator<>(m._sequencedEntrySet().iterator(), Entry::getValue),
-                () -> new MappedIterator<>(m._reversed()._sequencedEntrySet().iterator(), Entry::getValue),
+                () -> new MappedIterator<>(m.sequencedEntrySet().iterator(), Entry::getValue),
+                () -> new MappedIterator<>(m.reversed().sequencedEntrySet().iterator(), Entry::getValue),
                 m::size,
                 m::containsValue,
                 m::clear,
                 (o) -> {
-                    for (Entry<K, V> entry : m._sequencedEntrySet()) {
+                    for (Entry<K, V> entry : m.sequencedEntrySet()) {
                         if (Objects.equals(entry.getValue(), o)) {
                             m.remove(entry.getKey());
                             return true;
@@ -155,6 +150,6 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
 
     @Override
     public @NonNull Iterator<Entry<K, V>> iterator() {
-        return _sequencedEntrySet().iterator();
+        return sequencedEntrySet().iterator();
     }
 }

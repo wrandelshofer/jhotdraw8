@@ -11,7 +11,6 @@ import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
@@ -86,7 +85,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull SequencedCollection<E> _reversed() {
+    public @NonNull List<E> reversed() {
         return new ListFacade<E>(
                 this::size,
                 index -> get(size - 1 - index),
@@ -281,11 +280,11 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public E removeFirst() {
-        return SequencedCollection.super.removeFirst();
+        return super.removeFirst();
     }
 
     @Override
     public E removeLast() {
-        return SequencedCollection.super.removeLast();
+        return super.removeLast();
     }
 }

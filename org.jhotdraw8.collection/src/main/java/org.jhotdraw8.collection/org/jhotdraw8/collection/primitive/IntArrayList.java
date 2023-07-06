@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.*;
 import java.util.function.IntPredicate;
@@ -495,7 +494,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     @Override
-    public @NonNull SequencedCollection<Integer> _reversed() {
+    public @NonNull SequencedCollection<Integer> reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)

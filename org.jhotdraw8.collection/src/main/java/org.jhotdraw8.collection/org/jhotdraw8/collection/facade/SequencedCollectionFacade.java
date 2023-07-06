@@ -8,10 +8,10 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.SequencedCollection;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
@@ -103,7 +103,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
     }
 
     @Override
-    public @NonNull SequencedCollection<E> _reversed() {
+    public @NonNull SequencedCollection<E> reversed() {
         return new SequencedCollectionFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

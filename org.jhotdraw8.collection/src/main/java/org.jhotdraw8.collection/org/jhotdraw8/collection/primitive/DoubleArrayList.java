@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.*;
 import java.util.function.DoublePredicate;
@@ -496,7 +495,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
     }
 
     @Override
-    public @NonNull SequencedCollection<Double> _reversed() {
+    public @NonNull SequencedCollection<Double> reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)

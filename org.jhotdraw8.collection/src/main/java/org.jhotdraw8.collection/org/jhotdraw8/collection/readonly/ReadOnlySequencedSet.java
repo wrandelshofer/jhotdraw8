@@ -7,7 +7,8 @@ package org.jhotdraw8.collection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.sequenced.SequencedSet;
+
+import java.util.SequencedSet;
 
 /**
  * Read-only interface for a set with a well-defined iteration order.

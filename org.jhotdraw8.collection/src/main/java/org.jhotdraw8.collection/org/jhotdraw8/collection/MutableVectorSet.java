@@ -15,14 +15,10 @@ import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 import static org.jhotdraw8.collection.impl.champ.SequencedData.vecRemove;
 
@@ -338,7 +334,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(this._reversed());
+        return new ReadOnlySequencedSetFacade<>(this.reversed());
     }
 
     @SuppressWarnings("unchecked")
@@ -389,7 +385,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     @Override
-    public @NonNull SequencedSet<E> _reversed() {
+    public @NonNull SequencedSet<E> reversed() {
         return new SequencedSetFacade<>(
                 this::reverseIterator,
                 this::reverseSpliterator,

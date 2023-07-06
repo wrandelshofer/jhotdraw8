@@ -6,12 +6,11 @@ package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.ReverseListSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.AbstractList;
 import java.util.List;
+import java.util.SequencedCollection;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.IntFunction;
@@ -73,12 +72,12 @@ public class ListFacade<E> extends AbstractList<E>
 
     @Override
     public E getFirst() {
-        return SequencedCollection.super.getFirst();
+        return super.getFirst();
     }
 
     @Override
     public E getLast() {
-        return SequencedCollection.super.getLast();
+        return super.getLast();
     }
 
     @Override
@@ -112,18 +111,13 @@ public class ListFacade<E> extends AbstractList<E>
     }
 
     @Override
-    public @NonNull SequencedCollection<E> _reversed() {
-        return new SequencedCollectionFacade<>(
-                () -> new ReverseListSpliterator<>(this, 0, size()),
-                this::iterator,
-                sizeFunction,
-                this::contains,
-                clearFunction,
-                this::remove,
-                this::getLast,
-                this::getFirst,
-                this::addLast,
-                this::addFirst
+    public @NonNull List<E> reversed() {
+        return new ListFacade<E>(
+                (IntSupplier) sizeFunction,
+                (IntFunction<E>) (i) -> getFunction.apply(sizeFunction.getAsInt() - i - 1),
+                (Runnable) clearFunction,
+                (BiConsumer<Integer, E>) (i, e) -> addFunction.accept(sizeFunction.getAsInt() - i - 1, e),
+                (IntFunction<E>) (i) -> removeFunction.apply(sizeFunction.getAsInt() - i - 1)
         );
     }
 

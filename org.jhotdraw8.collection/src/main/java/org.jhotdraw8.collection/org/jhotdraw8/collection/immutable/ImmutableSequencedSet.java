@@ -8,9 +8,9 @@ package org.jhotdraw8.collection.immutable;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.collection.sequenced.SequencedSet;
 
 import java.util.NoSuchElementException;
+import java.util.SequencedSet;
 
 /**
  * Interface for an immutable set with a well-defined iteration order; the

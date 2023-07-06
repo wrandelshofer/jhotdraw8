@@ -6,17 +6,9 @@ import org.jhotdraw8.collection.sequenced.SequencedMap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     /**
@@ -233,13 +225,13 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     protected <K, V> void assertEqualSequence(Collection<Map.Entry<K, V>> expected, SequencedMap<K, V> actual, String message) {
         ArrayList<Map.Entry<K, V>> expectedList = new ArrayList<>(expected);
-        assertEquals(expectedList, new ArrayList<>(actual._sequencedEntrySet()), message);
+        assertEquals(expectedList, new ArrayList<>(actual.sequencedEntrySet()), message);
 
         if (!expected.isEmpty()) {
             assertEquals(expectedList.get(0), actual.firstEntry(), message);
-            assertEquals(expectedList.get(0), actual._sequencedEntrySet().iterator().next(), message);
+            assertEquals(expectedList.get(0), actual.sequencedEntrySet().iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.lastEntry(), message);
-            assertEquals(expectedList.get(expectedList.size() - 1), actual._reversed()._sequencedEntrySet().iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().sequencedEntrySet().iterator().next(), message);
         }
 
         LinkedHashMap<Object, Object> x = new LinkedHashMap<>();

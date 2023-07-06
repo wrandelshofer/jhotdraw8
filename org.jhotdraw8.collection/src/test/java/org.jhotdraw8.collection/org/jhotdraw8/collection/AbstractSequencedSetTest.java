@@ -9,18 +9,9 @@ import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     protected abstract <E> @NonNull SequencedSet<E> newInstance();
@@ -69,8 +60,8 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         for (HashCollider e : shuffled) {
             instance.addFirst(e);
             assertEquals(e, instance.getFirst());
-            assertEquals(e, instance._reversed().getLast());
-            assertEquals(e, instance._reversed()._reversed().getFirst());
+            assertEquals(e, instance.reversed().getLast());
+            assertEquals(e, instance.reversed().reversed().getFirst());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "addFirst");
@@ -85,10 +76,10 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         ArrayList<HashCollider> shuffled = new ArrayList<>(data.a().asSet());
         Collections.shuffle(shuffled, new Random(0));
         for (HashCollider e : shuffled) {
-            instance._reversed().addLast(e);
+            instance.reversed().addLast(e);
             assertEquals(e, instance.getFirst());
-            assertEquals(e, instance._reversed().getLast());
-            assertEquals(e, instance._reversed()._reversed().getFirst());
+            assertEquals(e, instance.reversed().getLast());
+            assertEquals(e, instance.reversed().reversed().getFirst());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "addFirst");
@@ -102,11 +93,11 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
             assertFalse(instance.contains(e));
-            assertFalse(instance._reversed().contains(e));
+            assertFalse(instance.reversed().contains(e));
             instance.addFirst(e);
             assertEquals(e, instance.getFirst());
-            assertEquals(e, instance._reversed().getLast());
-            assertEquals(e, instance._reversed()._reversed().getFirst());
+            assertEquals(e, instance.reversed().getLast());
+            assertEquals(e, instance.reversed().reversed().getFirst());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "addFirst");
@@ -120,11 +111,11 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
             assertFalse(instance.contains(e));
-            assertFalse(instance._reversed().contains(e));
-            instance._reversed().addLast(e);
+            assertFalse(instance.reversed().contains(e));
+            instance.reversed().addLast(e);
             assertEquals(e, instance.getFirst());
-            assertEquals(e, instance._reversed().getLast());
-            assertEquals(e, instance._reversed()._reversed().getFirst());
+            assertEquals(e, instance.reversed().getLast());
+            assertEquals(e, instance.reversed().reversed().getFirst());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "addFirst");
@@ -141,8 +132,8 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         for (HashCollider e : shuffled) {
             instance.addLast(e);
             assertEquals(e, instance.getLast());
-            assertEquals(e, instance._reversed().getFirst());
-            assertEquals(e, instance._reversed()._reversed().getLast());
+            assertEquals(e, instance.reversed().getFirst());
+            assertEquals(e, instance.reversed().reversed().getLast());
             expected.remove(e);
             expected.add(e);
             assertEqualSequence(expected, instance, "addLast");
@@ -179,10 +170,10 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         ArrayList<HashCollider> shuffled = new ArrayList<>(data.a().asSet());
         Collections.shuffle(shuffled, new Random(0));
         for (HashCollider e : shuffled) {
-            instance._reversed().addFirst(e);
+            instance.reversed().addFirst(e);
             assertEquals(e, instance.getLast());
-            assertEquals(e, instance._reversed().getFirst());
-            assertEquals(e, instance._reversed()._reversed().getLast());
+            assertEquals(e, instance.reversed().getFirst());
+            assertEquals(e, instance.reversed().reversed().getLast());
             expected.remove(e);
             expected.add(e);
             assertEqualSequence(expected, instance, "addLast");
@@ -209,7 +200,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
-            instance._reversed().addFirst(e);
+            instance.reversed().addFirst(e);
             assertEquals(e, instance.getLast());
             expected.remove(e);
             expected.add(e);
@@ -259,7 +250,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
-            assertEquals(instance._reversed().removeLast(), expected.remove(0));
+            assertEquals(instance.reversed().removeLast(), expected.remove(0));
             assertEqualSequence(expected, instance, "removeFirst");
         }
     }
@@ -309,7 +300,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
-            assertEquals(instance._reversed().removeFirst(), expected.remove(expected.size() - 1));
+            assertEquals(instance.reversed().removeFirst(), expected.remove(expected.size() - 1));
             assertEqualSequence(expected, instance, "removeLast");
         }
     }
@@ -320,22 +311,22 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     public void reversedContainsShouldYieldExpectedValue(@NonNull SetData data) {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         for (HashCollider k : data.a()) {
-            assertTrue(instance._reversed().contains(k));
+            assertTrue(instance.reversed().contains(k));
         }
         for (HashCollider k : data.c()) {
-            assertFalse(instance._reversed().contains(k));
+            assertFalse(instance.reversed().contains(k));
         }
-        assertFalse(instance._reversed().contains(new Object()));
+        assertFalse(instance.reversed().contains(new Object()));
 
         instance.addAll(data.someAPlusSomeB().asSet());
         for (HashCollider k : data.a()) {
-            assertTrue(instance._reversed().contains(k));
+            assertTrue(instance.reversed().contains(k));
         }
         for (HashCollider k : data.someAPlusSomeB()) {
-            assertTrue(instance._reversed().contains(k));
+            assertTrue(instance.reversed().contains(k));
         }
         for (HashCollider k : data.c()) {
-            assertFalse(instance._reversed().contains(k));
+            assertFalse(instance.reversed().contains(k));
         }
     }
 
@@ -383,8 +374,8 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         for (HashCollider e : data.c()) {
-            instance._reversed().add(e);
-            assertEquals(e, instance._reversed().getLast());
+            instance.reversed().add(e);
+            assertEquals(e, instance.reversed().getLast());
             expected.remove(e);
             expected.add(0, e);
             assertEqualSequence(expected, instance, "add");
@@ -396,7 +387,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     public void reversedOfReversedShouldHaveSameSequence(@NonNull SetData data) throws Exception {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
-        ArrayList<HashCollider> actual = new ArrayList<>(instance._reversed()._reversed());
+        ArrayList<HashCollider> actual = new ArrayList<>(instance.reversed().reversed());
         assertEquals(expected, actual);
     }
 
@@ -406,7 +397,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
         SequencedSet<HashCollider> instance = newInstance(data.a());
         List<HashCollider> expected = new ArrayList<>(data.a().asSet());
         Collections.reverse(expected);
-        ArrayList<HashCollider> actual = new ArrayList<>(instance._reversed());
+        ArrayList<HashCollider> actual = new ArrayList<>(instance.reversed());
         assertEquals(expected, actual);
     }
 
@@ -444,7 +435,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
             assertEquals(expectedList.get(0), actual.getFirst(), message);
             assertEquals(expectedList.get(0), actual.iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.getLast(), message);
-            assertEquals(expectedList.get(expectedList.size() - 1), actual._reversed().iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().iterator().next(), message);
         }
         assertEquals(expected.toString(), actual.toString(), message);
     }

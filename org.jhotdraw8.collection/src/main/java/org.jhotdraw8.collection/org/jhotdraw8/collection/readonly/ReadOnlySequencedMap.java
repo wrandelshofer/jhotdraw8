@@ -10,10 +10,10 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
-import org.jhotdraw8.collection.sequenced.SequencedMap;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.SequencedMap;
 
 /**
  * Read-only interface for a map with a well-defined iteration order.

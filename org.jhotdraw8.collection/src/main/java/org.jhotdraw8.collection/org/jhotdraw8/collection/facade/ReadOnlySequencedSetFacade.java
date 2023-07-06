@@ -6,9 +6,9 @@ package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.collection.sequenced.SequencedSet;
 
 import java.util.Iterator;
+import java.util.SequencedSet;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -32,7 +32,7 @@ public class ReadOnlySequencedSetFacade<E> extends ReadOnlySetFacade<E>
     }
 
     public ReadOnlySequencedSetFacade(@NonNull SequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet._reversed().iterator(), backingSet::size,
+        this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 

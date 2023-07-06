@@ -16,16 +16,10 @@ import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
-import org.jhotdraw8.collection.sequenced.SequencedMap;
-import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Implements the {@code SequencedMap} interface using a Compressed
@@ -197,7 +191,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      */
     @Override
     public @NonNull SequencedSet<Entry<K, V>> entrySet() {
-        return _sequencedEntrySet();
+        return sequencedEntrySet();
     }
 
     /**
@@ -206,7 +200,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * @return a view of the entries contained in this map
      */
     @Override
-    public @NonNull SequencedSet<Entry<K, V>> _sequencedEntrySet() {
+    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return new SequencedSetFacade<>(
                 this::iterator,
                 this::spliterator,
@@ -257,7 +251,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     }
 
     @Override
-    public @NonNull SequencedSet<K> _sequencedKeySet() {
+    public @NonNull SequencedSet<K> sequencedKeySet() {
         return AbstractSequencedMap.createKeySet(this);
     }
 
@@ -441,7 +435,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     }
 
     @Override
-    public @NonNull SequencedMap<K, V> _reversed() {
+    public @NonNull SequencedMap<K, V> reversed() {
         return new SequencedMapFacade<>(
                 this::reverseIterator,
                 this::iterator,
@@ -470,7 +464,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     }
 
     @Override
-    public @NonNull SequencedCollection<V> _sequencedValues() {
+    public @NonNull SequencedCollection<V> sequencedValues() {
         return AbstractSequencedMap.createValues(this);
     }
 

@@ -41,31 +41,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17">
-      <module name="org.jhotdraw8" target="17" />
-      <module name="org.jhotdraw8.annotation" target="17" />
-      <module name="org.jhotdraw8.application" target="17" />
-      <module name="org.jhotdraw8.base" target="17" />
-      <module name="org.jhotdraw8.collection" target="17" />
-      <module name="org.jhotdraw8.color" target="17" />
       <module name="org.jhotdraw8.color (1)" target="17" />
-      <module name="org.jhotdraw8.css" target="17" />
       <module name="org.jhotdraw8.dock" target="17" />
       <module name="org.jhotdraw8.dock (1)" target="17" />
-      <module name="org.jhotdraw8.draw" target="17" />
-      <module name="org.jhotdraw8.examples" target="17" />
       <module name="org.jhotdraw8.font" target="17" />
-      <module name="org.jhotdraw8.fxbase" target="17" />
-      <module name="org.jhotdraw8.fxcollection" target="17" />
-      <module name="org.jhotdraw8.fxcontrols" target="17" />
-      <module name="org.jhotdraw8.geom" target="17" />
-      <module name="org.jhotdraw8.graph" target="17" />
-      <module name="org.jhotdraw8.grapher" target="17" />
-      <module name="org.jhotdraw8.os" target="17" />
       <module name="org.jhotdraw8.precondition" target="17" />
-      <module name="org.jhotdraw8.svg" target="17" />
-      <module name="org.jhotdraw8.teddy" target="17" />
-      <module name="org.jhotdraw8.theme" target="17" />
-      <module name="org.jhotdraw8.xml" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
