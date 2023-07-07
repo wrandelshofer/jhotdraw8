@@ -121,13 +121,4 @@ public class ListFacade<E> extends AbstractList<E>
         );
     }
 
-    @Override
-    public E removeFirst() {
-        return SequencedCollection.super.removeFirst();
-    }
-
-    @Override
-    public E removeLast() {
-        return SequencedCollection.super.removeLast();
-    }
 }

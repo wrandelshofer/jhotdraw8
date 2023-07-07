@@ -6,12 +6,12 @@ package org.jhotdraw8.collection;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SequencedCollection;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -1,9 +1,9 @@
 package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.List;
+import java.util.SequencedCollection;
 
 public class MutableVectorListTest extends AbstractListTest {
     @Override
