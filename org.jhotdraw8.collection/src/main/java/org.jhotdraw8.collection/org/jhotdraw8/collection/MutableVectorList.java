@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.facade.ListFacade;
+import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
@@ -15,7 +16,12 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
@@ -81,7 +87,11 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
-        return null;
+        return new ReadOnlyListFacade<>(
+                this::size,
+                index -> get(size - 1 - index),
+                () -> this
+        );
     }
 
     @Override

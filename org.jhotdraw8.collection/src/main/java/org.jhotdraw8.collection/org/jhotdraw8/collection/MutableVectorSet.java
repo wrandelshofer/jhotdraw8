@@ -9,7 +9,14 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.impl.champ.*;
+import org.jhotdraw8.collection.impl.champ.AbstractMutableChampSet;
+import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.collection.impl.champ.ChangeEvent;
+import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.SequencedData;
+import org.jhotdraw8.collection.impl.champ.SequencedElement;
+import org.jhotdraw8.collection.impl.champ.TombSkippingVectorSpliterator;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
@@ -17,7 +24,11 @@ import org.jhotdraw8.collection.serialization.SetSerializationProxy;
 import org.jhotdraw8.collection.spliterator.FailFastSpliterator;
 
 import java.io.Serial;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 import static org.jhotdraw8.collection.impl.champ.SequencedData.vecRemove;
 

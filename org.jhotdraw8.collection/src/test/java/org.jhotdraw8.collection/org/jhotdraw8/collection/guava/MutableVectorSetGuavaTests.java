@@ -31,11 +31,12 @@ public class MutableVectorSetGuavaTests {
 
     public Test allTests() {
         TestSuite suite = new TestSuite(MutableVectorSet.class.getSimpleName());
-        suite.addTest(testsForTrieSet());
+        suite.addTest(testsForSet());
+        suite.addTest(testsForReversedSet());
         return suite;
     }
 
-    public Test testsForTrieSet() {
+    public Test testsForSet() {
         return SetTestSuiteBuilder.using(
                         new TestStringSetGenerator() {
                             @Override
@@ -52,11 +53,32 @@ public class MutableVectorSetGuavaTests {
                         CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
-                .suppressing(suppressForTrieSet())
+                .suppressing(suppressForSet())
                 .createTestSuite();
     }
 
-    protected Collection<Method> suppressForTrieSet() {
+    public Test testsForReversedSet() {
+        return SetTestSuiteBuilder.using(
+                        new TestStringSetGenerator() {
+                            @Override
+                            public Set<String> create(String[] elements) {
+                                return new MutableVectorSet<>(MinimalCollection.of(elements))._reversed();
+                            }
+                        })
+                .named(MutableVectorSet.class.getSimpleName() + "_reversed")
+                .withFeatures(
+                        SetFeature.GENERAL_PURPOSE,
+                        //CollectionFeature.KNOWN_ORDER,
+                        CollectionFeature.ALLOWS_NULL_VALUES,
+                        CollectionFeature.ALLOWS_NULL_QUERIES,
+                        //CollectionFeature.SERIALIZABLE,
+                        CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
+                        CollectionSize.ANY)
+                .suppressing(suppressForSet())
+                .createTestSuite();
+    }
+
+    protected Collection<Method> suppressForSet() {
         return Collections.emptySet();
     }
 

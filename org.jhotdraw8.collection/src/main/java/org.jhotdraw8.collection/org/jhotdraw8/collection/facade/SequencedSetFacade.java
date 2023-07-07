@@ -82,21 +82,20 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
                               @Nullable Consumer<E> addFirstFunction,
                               @Nullable Consumer<E> addLastFunction) {
         super(iteratorFunction, spliteratorFunction, sizeFunction, containsFunction, clearFunction, addFunction, removeFunction);
-        this.getFirstFunction = getFirstFunction == null ? () -> {
+        Supplier<E> throwingSupplier = () -> {
             throw new UnsupportedOperationException();
-        } : getFirstFunction;
-        this.getLastFunction = getLastFunction == null ? () -> {
+        };
+        this.getFirstFunction = getFirstFunction == null ? throwingSupplier : getFirstFunction;
+        this.getLastFunction = getLastFunction == null ? throwingSupplier : getLastFunction;
+        Consumer<E> throwingConsumer = e -> {
             throw new UnsupportedOperationException();
-        } : getLastFunction;
-        this.addFirstFunction = addFirstFunction == null ? e -> {
+        };
+        Predicate<E> throwingPredicate = e -> {
             throw new UnsupportedOperationException();
-        } : addFirstFunction;
-        this.addLastFunction = addLastFunction == null ? e -> {
-            throw new UnsupportedOperationException();
-        } : addLastFunction;
-        this.reversedAddFunction = reversedAddFunction == null ? o -> {
-            throw new UnsupportedOperationException();
-        } : reversedAddFunction;
+        };
+        this.addFirstFunction = addFirstFunction == null ? throwingConsumer : addFirstFunction;
+        this.addLastFunction = addLastFunction == null ? throwingConsumer : addLastFunction;
+        this.reversedAddFunction = reversedAddFunction == null ? throwingPredicate : reversedAddFunction;
         this.reverseIteratorFunction = reverseIteratorFunction;
         this.reverseSpliteratorFunction = reverseSpliteratorFunction;
     }
@@ -132,8 +131,10 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
     public @NonNull SequencedSet<E> _reversed() {
         return new SequencedSetFacade<>(
                 reverseIteratorFunction,
-                spliteratorFunction, iteratorFunction,
-                reverseSpliteratorFunction, sizeFunction,
+                reverseSpliteratorFunction,
+                iteratorFunction,
+                spliteratorFunction,
+                sizeFunction,
                 containsFunction,
                 clearFunction,
                 removeFunction,
