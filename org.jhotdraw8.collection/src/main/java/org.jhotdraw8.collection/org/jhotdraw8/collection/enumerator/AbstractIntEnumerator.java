@@ -7,13 +7,13 @@ package org.jhotdraw8.collection.enumerator;
 import java.util.Spliterators;
 
 /**
- * Abstract base class for {@link IntSpliterator}s.
+ * Abstract base class for {@link IntEnumerator}s.
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractIntEnumeratorSpliterator
+public abstract class AbstractIntEnumerator
         extends Spliterators.AbstractIntSpliterator
-        implements IntSpliterator {
+        implements IntEnumerator {
     /**
      * The current element of the enumerator.
      */
@@ -29,12 +29,14 @@ public abstract class AbstractIntEnumeratorSpliterator
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractIntEnumeratorSpliterator(long est, int additionalCharacteristics) {
+    protected AbstractIntEnumerator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public final int currentAsInt() {
         return current;

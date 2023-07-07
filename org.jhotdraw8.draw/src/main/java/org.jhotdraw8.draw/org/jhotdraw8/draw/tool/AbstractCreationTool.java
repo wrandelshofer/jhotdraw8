@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.tool;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -67,7 +66,9 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
         }
         // search for a suitable parent front to back
         Figure layer = null;
-        for (Figure candidate : new ReversedList<>(dv.getDrawing().getChildren())) {
+        var layers = dv.getDrawing().getChildren();
+        for (int i = layers.size() - 1; i >= 0; i--) {
+            Figure candidate = layers.get(i);
             if (candidate.isEditable() && candidate.isAllowsChildren()
                     && newFigure.isSuitableParent(candidate)
                     && candidate.isSuitableChild(newFigure)) {

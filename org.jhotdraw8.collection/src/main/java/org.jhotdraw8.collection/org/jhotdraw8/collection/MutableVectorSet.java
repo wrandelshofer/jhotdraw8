@@ -7,21 +7,17 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
 import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
-import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
+import org.jhotdraw8.collection.spliterator.FailFastSpliterator;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 import static org.jhotdraw8.collection.impl.champ.SequencedData.vecRemove;
 
@@ -226,10 +222,10 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @Override
     @SuppressWarnings("unchecked")
     public @NonNull Iterator<E> iterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(new VectorSpliterator<>(vector,
+        return new FailFastIterator<>(Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
-                0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED),
-                this::iteratorRemove), () -> modCount);
+                0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
+                this::iteratorRemove, () -> modCount);
     }
 /*
     public boolean removeAll(@NonNull Iterable<?> c) {
@@ -309,15 +305,15 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @SuppressWarnings("unchecked")
     private @NonNull Iterator<E> reverseIterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(new ReverseChampVectorSpliterator<>(vector,
+        return new FailFastIterator<>(Spliterators.iterator(new ReverseTombSkippingVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
-                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED),
-                this::iteratorRemove), () -> modCount);
+                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
+                this::iteratorRemove, () -> modCount);
     }
 
     @SuppressWarnings("unchecked")
     private @NonNull Spliterator<E> reverseSpliterator() {
-        return new FailFastSpliterator<>(new ReverseChampVectorSpliterator<>(vector,
+        return new FailFastSpliterator<>(new ReverseTombSkippingVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
     }
@@ -325,7 +321,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(new VectorSpliterator<>(vector,
+        return new FailFastSpliterator<>(new TombSkippingVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
     }

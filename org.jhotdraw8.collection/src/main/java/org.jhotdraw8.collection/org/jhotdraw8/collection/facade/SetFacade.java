@@ -8,11 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 
-import java.util.AbstractSet;
-import java.util.Iterator;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -52,6 +48,7 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
                 () -> Spliterators.spliterator(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT),
                 sizeFunction, containsFunction, null, null, null);
     }
+
     public SetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
                      @NonNull Supplier<Spliterator<E>> spliteratorFunction,
                      @NonNull IntSupplier sizeFunction,

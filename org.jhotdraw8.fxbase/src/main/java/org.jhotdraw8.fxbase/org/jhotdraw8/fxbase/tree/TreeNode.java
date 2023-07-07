@@ -6,15 +6,10 @@ package org.jhotdraw8.fxbase.tree;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.ListSpliterator;
-import org.jhotdraw8.collection.iterator.SpliteratorIterable;
+import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
 
 import java.io.IOException;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * Represents a node of a tree structure.
@@ -142,10 +137,6 @@ public interface TreeNode<T extends TreeNode<T>> {
      */
     @NonNull List<T> getChildren();
 
-    default @NonNull EnumeratorSpliterator<T> getChildEnumerator() {
-        return new ListSpliterator<>(getChildren());
-    }
-
     /**
      * Gets the first child.
      *
@@ -247,17 +238,6 @@ public interface TreeNode<T extends TreeNode<T>> {
         );
     }
 
-    /**
-     * Returns an enumerator which can iterate through this figure and all its
-     * descendants in preorder sequence.
-     *
-     * @return the iterable
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    default @NonNull EnumeratorSpliterator<T> preorderEnumerator() {
-        T t = (T) this;
-        return new PreorderEnumeratorSpliterator<T>(TreeNode::getChildEnumerator, t);
-    }
 
     /**
      * Returns a spliterator which can iterate through this figure and all its
@@ -266,7 +246,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @return the iterable
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    default @NonNull PreorderSpliterator<T> preorderSpliterator() {
+    default @NonNull Spliterator<T> preorderSpliterator() {
         T t = (T) this;
         return new PreorderSpliterator<>(TreeNode::getChildren, t);
     }

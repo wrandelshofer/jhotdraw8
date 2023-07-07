@@ -28,12 +28,11 @@ public class FailFastIterator<E> implements Iterator<E> {
     private boolean canRemove;
 
     public FailFastIterator(@NonNull Iterator<? extends E> i, @NonNull IntSupplier modCountSupplier) {
-        this(i, modCountSupplier, (e) -> i.remove());
+        this(i, (e) -> i.remove(), modCountSupplier);
     }
 
     public FailFastIterator(@NonNull Iterator<? extends E> i,
-                            @NonNull IntSupplier modCountSupplier,
-                            @NonNull Consumer<E> removeFunction) {
+                            @NonNull Consumer<E> removeFunction, @NonNull IntSupplier modCountSupplier) {
         this.i = i;
         this.modCountSupplier = modCountSupplier;
         this.expectedModCount = modCountSupplier.getAsInt();

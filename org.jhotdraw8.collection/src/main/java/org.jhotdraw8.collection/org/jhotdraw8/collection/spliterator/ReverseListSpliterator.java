@@ -3,15 +3,16 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.enumerator;
+package org.jhotdraw8.collection.spliterator;
 
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Spliterator;
+import java.util.function.Consumer;
 
-public class ReverseListSpliterator<E> extends AbstractListEnumeratorSpliterator<E> {
+public class ReverseListSpliterator<E> extends AbstractListIteratorSpliterator<E> {
     private int index;
     private final int fromInclusive;
     private final int toExclusive;
@@ -31,12 +32,10 @@ public class ReverseListSpliterator<E> extends AbstractListEnumeratorSpliterator
         return index >= fromInclusive;
     }
 
-    @Override
     public boolean moveNext() {
         return tryAdvance(e -> current = e);
     }
 
-    @Override
     public E current() {
         return current;
     }
@@ -70,6 +69,15 @@ public class ReverseListSpliterator<E> extends AbstractListEnumeratorSpliterator
     @Override
     public int previousIndex() {
         return index + 1;
+    }
+
+    @Override
+    public boolean tryAdvance(Consumer<? super E> action) {
+        if (hasNext()) {
+            action.accept(next());
+            return true;
+        }
+        return false;
     }
 
     @Override

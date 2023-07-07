@@ -6,9 +6,9 @@ package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.ReverseListSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
+import org.jhotdraw8.collection.spliterator.ReverseListSpliterator;
 
 import java.util.AbstractList;
 import java.util.List;

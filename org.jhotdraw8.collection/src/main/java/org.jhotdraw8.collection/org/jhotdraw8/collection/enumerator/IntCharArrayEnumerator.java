@@ -10,12 +10,12 @@ import org.jhotdraw8.annotation.Nullable;
 /**
  * An integer enumerator/spliterator over a char array.
  */
-public class IntCharArraySpliterator extends AbstractIntEnumeratorSpliterator {
+public class IntCharArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;
     private final char[] arrows;
     private int index;
 
-    public IntCharArraySpliterator(int lo, int hi, char[] arrows) {
+    public IntCharArrayEnumerator(int lo, int hi, char[] arrows) {
         super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = hi;
         index = lo;
@@ -37,10 +37,10 @@ public class IntCharArraySpliterator extends AbstractIntEnumeratorSpliterator {
     }
 
     @Override
-    public @Nullable IntCharArraySpliterator trySplit() {
+    public @Nullable IntCharArrayEnumerator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new IntCharArraySpliterator(lo, index = mid, arrows);
+                new IntCharArrayEnumerator(lo, index = mid, arrows);
     }
 
 }

@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.enumerator;
+package org.jhotdraw8.collection.spliterator;
 
 
 import java.util.ListIterator;
@@ -17,8 +17,8 @@ import java.util.function.Consumer;
  * @param <E> the element type
  * @author Adrien Grzechowiak
  */
-public abstract class AbstractListEnumeratorSpliterator<E> implements ListIterator<E>, EnumeratorSpliterator<E> {
-    public AbstractListEnumeratorSpliterator() {
+public abstract class AbstractListIteratorSpliterator<E> implements ListIterator<E>, Spliterator<E> {
+    public AbstractListIteratorSpliterator() {
     }
 
     @Override
@@ -28,7 +28,7 @@ public abstract class AbstractListEnumeratorSpliterator<E> implements ListIterat
 
     @Override
     public void forEachRemaining(Consumer<? super E> action) {
-        EnumeratorSpliterator.super.forEachRemaining(action);
+        ListIterator.super.forEachRemaining(action);
     }
 
     @Override

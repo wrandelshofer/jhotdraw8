@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.IntSpliterator;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.graph.AttributedIndexedDirectedGraph;
@@ -61,7 +61,7 @@ public class TopologicalSortAlgo {
         // Step 1: compute number of incoming arrows for each vertex
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
-            for (IntSpliterator iter = model.nextVerticesEnumerator(i); iter.moveNext(); ) {
+            for (IntEnumerator iter = model.nextVerticesEnumerator(i); iter.moveNext(); ) {
                 int v = iter.currentAsInt();
                 deg[v]++;
             }
@@ -86,7 +86,7 @@ public class TopologicalSortAlgo {
                     break;
                 }
                 int v = queue[first++];
-                for (IntSpliterator iter = model.nextVerticesEnumerator(v); iter.moveNext(); ) {
+                for (IntEnumerator iter = model.nextVerticesEnumerator(v); iter.moveNext(); ) {
                     int u = iter.currentAsInt();
                     if (--deg[u] == 0) {
                         queue[last++] = u;
@@ -129,7 +129,7 @@ public class TopologicalSortAlgo {
         // Step 1: compute number of incoming arrows for each vertex
         final int[] deg = new int[n]; // deg is the number of unprocessed incoming arrows on vertex
         for (int i = 0; i < n; i++) {
-            for (IntSpliterator iter = model.nextVerticesEnumerator(i); iter.moveNext(); ) {
+            for (IntEnumerator iter = model.nextVerticesEnumerator(i); iter.moveNext(); ) {
                 int v = iter.currentAsInt();
                 deg[v]++;
             }
@@ -157,7 +157,7 @@ public class TopologicalSortAlgo {
                 }
                 int v = queue[first++];
                 queue[first - 1] = 0;//for debugging
-                for (IntSpliterator iter = model.nextVerticesEnumerator(v); iter.moveNext(); ) {
+                for (IntEnumerator iter = model.nextVerticesEnumerator(v); iter.moveNext(); ) {
                     int u = iter.currentAsInt();
                     if (--deg[u] == 0) {
                         queue[last++] = u;

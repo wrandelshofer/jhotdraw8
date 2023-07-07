@@ -17,7 +17,7 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
     }
 
     public boolean equals(Object o) {
-        return ReadOnlyMap.mapEquals(this,o);
+        return ReadOnlyMap.mapEquals(this, o);
     }
 
     @Override

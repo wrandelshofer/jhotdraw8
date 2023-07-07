@@ -10,10 +10,10 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.SetFacade;
 import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
-import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
+import org.jhotdraw8.collection.spliterator.FailFastSpliterator;
 
 import java.io.Serial;
 import java.util.*;
@@ -136,7 +136,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         return new FailFastIterator<>(
                 new ChampIterator<SimpleImmutableEntry<K, V>, Entry<K, V>>(root,
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
-                this::getModCount, this::iteratorRemove
+                this::iteratorRemove, this::getModCount
         );
     }
 

@@ -13,12 +13,7 @@ import org.jhotdraw8.collection.mapped.MappedIterator;
 import org.jhotdraw8.collection.mapped.MappedSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
-import java.util.AbstractMap;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Abstract base class for {@link SequencedMap}s.

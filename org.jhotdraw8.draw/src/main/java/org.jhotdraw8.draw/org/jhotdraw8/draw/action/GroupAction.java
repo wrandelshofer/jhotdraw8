@@ -62,7 +62,10 @@ public class GroupAction extends AbstractDrawingViewAction {
     }
 
     public static void group(@NonNull DrawingView view, @NonNull Collection<Figure> figures, @NonNull Supplier<Figure> groupFactory) {
-        // We don't addChild an empty group
+        Drawing drawing = view.getDrawing();
+        if (drawing == null) {
+            return;
+        }
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be grouped");
             alert.getDialogPane().setMaxWidth(640.0);
@@ -71,7 +74,6 @@ public class GroupAction extends AbstractDrawingViewAction {
         }
         Figure first = figures.iterator().next();
 
-        Drawing drawing = view.getDrawing();
         for (Figure child : figures) {
             if (child instanceof Layer) {
                 // FIXME internationalize me

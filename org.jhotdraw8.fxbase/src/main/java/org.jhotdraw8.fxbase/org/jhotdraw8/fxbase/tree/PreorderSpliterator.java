@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -18,7 +18,7 @@ import java.util.function.Function;
  * @param <T> the element type
  * @author Werner Randelshofer
  */
-public class PreorderSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
+public class PreorderSpliterator<T> extends AbstractEnumerator<T> {
     private final Function<T, Iterable<? extends T>> getChildrenFunction;
     private final Deque<Iterator<? extends T>> stack = new ArrayDeque<>();
 

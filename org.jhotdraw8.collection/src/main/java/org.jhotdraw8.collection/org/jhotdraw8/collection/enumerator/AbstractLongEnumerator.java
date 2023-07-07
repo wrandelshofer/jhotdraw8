@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractLongSpliterator.java
+ * @(#)AbstractIntSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.enumerator;
@@ -7,13 +7,16 @@ package org.jhotdraw8.collection.enumerator;
 import java.util.Spliterators;
 
 /**
- * Abstract base class for {@link LongSpliterator}s.
+ * Abstract base class for {@link IntEnumerator}s.
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractLongEnumeratorSpliterator extends Spliterators.AbstractLongSpliterator
-        implements LongSpliterator {
-
+public abstract class AbstractLongEnumerator
+        extends Spliterators.AbstractLongSpliterator
+        implements LongEnumerator {
+    /**
+     * The current element of the enumerator.
+     */
     protected long current;
 
     /**
@@ -26,7 +29,7 @@ public abstract class AbstractLongEnumeratorSpliterator extends Spliterators.Abs
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractLongEnumeratorSpliterator(long est, int additionalCharacteristics) {
+    protected AbstractLongEnumerator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 

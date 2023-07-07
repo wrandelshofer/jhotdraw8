@@ -20,7 +20,7 @@ import java.util.function.IntConsumer;
  *
  * @author Werner Randelshofer
  */
-public interface IntSpliterator extends EnumeratorSpliterator<Integer>, Spliterator.OfInt {
+public interface IntEnumerator extends EnumeratorSpliterator<Integer>, Spliterator.OfInt {
 
     /**
      * {@inheritDoc}

@@ -46,6 +46,7 @@ import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(log N)</li>
  *     <li>getFirst, getLast: O(log N)</li>
+ *     <li>reversed: O(N)</li>
  * </ul>
  * <p>
  * References:
@@ -174,6 +175,10 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
                 () -> size,
                 index -> get(size - 1 - index),
                 () -> this);
+    }
+
+    public @NonNull VectorList<E> reversed() {
+        return size < 2 ? this : VectorList.copyOf(readOnlyReversed());
     }
 
     @Override

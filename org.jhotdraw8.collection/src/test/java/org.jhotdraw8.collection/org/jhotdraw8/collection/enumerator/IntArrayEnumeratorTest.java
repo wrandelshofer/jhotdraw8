@@ -14,21 +14,21 @@ import java.util.function.IntConsumer;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class IntArrayEnumeratorTestSpliterator {
+public class IntArrayEnumeratorTest {
 
     /**
      * Tests if it is possible to iterate over a given array
-     * using the {@link IntArraySpliterator#moveNext()} method.
+     * using the {@link IntArrayEnumerator#moveNext()} method.
      * <p>
-     * Tests methods: {@link IntArraySpliterator#estimateSize()} ,
-     * {@link IntArraySpliterator#moveNext()},
-     * {@link IntArraySpliterator#current()},
-     * {@link IntArraySpliterator#currentAsInt()}.
+     * Tests methods: {@link IntArrayEnumerator#estimateSize()} ,
+     * {@link IntArrayEnumerator#moveNext()},
+     * {@link IntArrayEnumerator#current()},
+     * {@link IntArrayEnumerator#currentAsInt()}.
      */
     @Test
     public void testMoveNext() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntArraySpliterator instance = new IntArraySpliterator(a, 0, a.length);
+        final IntArrayEnumerator instance = new IntArrayEnumerator(a, 0, a.length);
         assertEquals(a.length, instance.estimateSize());
         for (int j : a) {
             assertTrue(instance.moveNext());
@@ -40,15 +40,15 @@ public class IntArrayEnumeratorTestSpliterator {
 
     /**
      * Tests if it is possible to iterate over a given array
-     * using the {@link IntArraySpliterator#tryAdvance(IntConsumer)} ()} method.
+     * using the {@link IntArrayEnumerator#tryAdvance(IntConsumer)} ()} method.
      * <p>
-     * Tests methods: {@link IntArraySpliterator#estimateSize()} ,
-     * {@link IntArraySpliterator#tryAdvance(IntConsumer)}}.
+     * Tests methods: {@link IntArrayEnumerator#estimateSize()} ,
+     * {@link IntArrayEnumerator#tryAdvance(IntConsumer)}}.
      */
     @Test
     public void testTryAdvance() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntArraySpliterator instance = new IntArraySpliterator(a, 0, a.length);
+        final IntArrayEnumerator instance = new IntArrayEnumerator(a, 0, a.length);
         assertEquals(a.length, instance.estimateSize());
         int[] element = new int[1];
         for (int j : a) {
@@ -61,15 +61,15 @@ public class IntArrayEnumeratorTestSpliterator {
     /**
      * Tests if it is possible to iterate over a given sub-array.
      * <p>
-     * Tests methods: {@link IntArraySpliterator#estimateSize()} ,
-     * {@link IntArraySpliterator#moveNext()}, {@link IntArraySpliterator#current()}.
+     * Tests methods: {@link IntArrayEnumerator#estimateSize()} ,
+     * {@link IntArrayEnumerator#moveNext()}, {@link IntArrayEnumerator#current()}.
      */
     @Test
     public void testSubArray() {
         final int toExclusive = 4;
         final int from = 2;
         int[] a = {1, 2, 3, 4, 5};
-        final IntArraySpliterator instance = new IntArraySpliterator(a, from, toExclusive);
+        final IntArrayEnumerator instance = new IntArrayEnumerator(a, from, toExclusive);
         assertEquals(toExclusive - from, instance.estimateSize());
         for (int i = from; i < toExclusive; i++) {
             assertTrue(instance.moveNext());
@@ -80,13 +80,13 @@ public class IntArrayEnumeratorTestSpliterator {
     /**
      * Tests if it is possible to split the iterator once.
      * <p>
-     * Tests methods: {@link IntArraySpliterator#trySplit()}.
+     * Tests methods: {@link IntArrayEnumerator#trySplit()}.
      */
     @Test
     public void testTrySplit() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntArraySpliterator instance = new IntArraySpliterator(a, 0, a.length);
-        final IntArraySpliterator prefix = instance.trySplit();
+        final IntArrayEnumerator instance = new IntArrayEnumerator(a, 0, a.length);
+        final IntArrayEnumerator prefix = instance.trySplit();
         assertNotNull(prefix);
         assertEquals(a.length, instance.estimateSize() + prefix.estimateSize());
 
@@ -106,16 +106,16 @@ public class IntArrayEnumeratorTestSpliterator {
      * Tests if it is possible to split the repeated times until it
      * is too small.
      * <p>
-     * Tests methods: {@link IntArraySpliterator#trySplit()}.
+     * Tests methods: {@link IntArrayEnumerator#trySplit()}.
      */
     @Test
     public void testTrySplitUnlessTooSmall() {
         int[] a = {1, 2, 3, 4, 5};
-        final IntArraySpliterator instance = new IntArraySpliterator(a, 0, a.length);
-        Deque<IntArraySpliterator> stack = new ArrayDeque<>();
+        final IntArrayEnumerator instance = new IntArrayEnumerator(a, 0, a.length);
+        Deque<IntArrayEnumerator> stack = new ArrayDeque<>();
         stack.push(instance);
 
-        IntArraySpliterator it = instance.trySplit();
+        IntArrayEnumerator it = instance.trySplit();
         int maxIterations = a.length;
         int counter = 0;
         while (it != null && counter < maxIterations) {

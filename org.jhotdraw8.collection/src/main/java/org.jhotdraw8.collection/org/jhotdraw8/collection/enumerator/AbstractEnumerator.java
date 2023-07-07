@@ -10,7 +10,7 @@ import java.util.Spliterators;
 /**
  * Abstract base classes for {@link Spliterator}s.
  * <p>
- * Subclasses should only implement the {@link Spliterator#moveNext()}
+ * Subclasses should only implement the {@link Enumerator#moveNext()}
  * method and the {@link Spliterator#trySplit()} method:
  * <pre>
  *     public boolean moveNext() {
@@ -24,7 +24,7 @@ import java.util.Spliterators;
  *
  * @param <E> the element type
  */
-public abstract class AbstractEnumeratorSpliterator<E> extends Spliterators.AbstractSpliterator<E>
+public abstract class AbstractEnumerator<E> extends Spliterators.AbstractSpliterator<E>
         implements EnumeratorSpliterator<E> {
     /**
      * The current element of the enumerator.
@@ -41,7 +41,7 @@ public abstract class AbstractEnumeratorSpliterator<E> extends Spliterators.Abst
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractEnumeratorSpliterator(long est, int additionalCharacteristics) {
+    protected AbstractEnumerator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 

@@ -14,16 +14,8 @@ import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.sequenced.SequencedMap;
 import org.jhotdraw8.collection.sequenced.SequencedSet;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.function.IntSupplier;
-import java.util.function.Predicate;
-import java.util.function.Supplier;
+import java.util.*;
+import java.util.function.*;
 
 /**
  * Wraps {@code Map} functions into the {@link SequencedMap} interface.

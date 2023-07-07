@@ -6,7 +6,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.collection.impl.IdentityObject;
@@ -18,10 +17,7 @@ import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Implements the {@link ImmutableSequencedMap} interface using a Compressed
@@ -179,7 +175,6 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     }
 
 
-
     /**
      * {@inheritDoc}
      */
@@ -239,7 +234,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return new IteratorFacade<>(spliterator(), null);
+        return Spliterators.iterator(spliterator());
     }
 
     @Override
@@ -398,12 +393,12 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     }
 
     @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
-        return new IteratorFacade<>(reverseSpliterator(), null);
+        return Spliterators.iterator(reverseSpliterator());
     }
 
     @SuppressWarnings("unchecked")
     @NonNull Spliterator<Map.Entry<K, V>> reverseSpliterator() {
-        return new ReverseChampVectorSpliterator<>(vector,
+        return new ReverseTombSkippingVectorSpliterator<>(vector,
                 e -> ((SequencedEntry<K, V>) e),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -415,7 +410,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return new VectorSpliterator<>(vector,
+        return new TombSkippingVectorSpliterator<>(vector,
                 e -> ((Map.Entry<K, V>) e),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

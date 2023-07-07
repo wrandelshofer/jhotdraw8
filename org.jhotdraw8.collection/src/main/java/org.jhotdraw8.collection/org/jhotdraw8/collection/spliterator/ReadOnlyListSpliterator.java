@@ -2,7 +2,7 @@
  * @(#)ReadOnlyListSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection.enumerator;
+package org.jhotdraw8.collection.spliterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -14,18 +14,17 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * A {@link ListIterator}, {@link Spliterator}, and {@link Spliterator} for a
+ * A {@link ListIterator}, and {@link Spliterator} for a
  * {@link ReadOnlyList}.
  * <p>
  * Does not perform modification checks.
  *
  * @param <E> the element type
  */
-public class ReadOnlyListSpliterator<E> extends AbstractListEnumeratorSpliterator<E> {
+public class ReadOnlyListSpliterator<E> extends AbstractListIteratorSpliterator<E> {
     private final @NonNull ReadOnlyList<E> list;
     private int index;
     private final int size;
-    private E current;
 
     public ReadOnlyListSpliterator(@NonNull ReadOnlyList<E> list) {
         this(list, 0, list.size());
@@ -48,7 +47,7 @@ public class ReadOnlyListSpliterator<E> extends AbstractListEnumeratorSpliterato
 
     @Override
     public E next() {
-        return current = list.get(index++);
+        return list.get(index++);
     }
 
     @Override
@@ -58,7 +57,7 @@ public class ReadOnlyListSpliterator<E> extends AbstractListEnumeratorSpliterato
 
     @Override
     public E previous() {
-        return current = list.get(--index);
+        return list.get(--index);
     }
 
     @Override
@@ -75,7 +74,7 @@ public class ReadOnlyListSpliterator<E> extends AbstractListEnumeratorSpliterato
     public boolean tryAdvance(@Nullable Consumer<? super E> action) {
         Objects.requireNonNull(action, "action");
         if (index >= 0 && index < getSize()) {
-            action.accept(current = list.get(index++));
+            action.accept(list.get(index++));
             return true;
         }
         return false;
@@ -92,16 +91,5 @@ public class ReadOnlyListSpliterator<E> extends AbstractListEnumeratorSpliterato
     @Override
     public long estimateSize() {
         return getSize() - index;
-    }
-
-
-    @Override
-    public boolean moveNext() {
-        return tryAdvance(e -> current = e);
-    }
-
-    @Override
-    public E current() {
-        return current;
     }
 }

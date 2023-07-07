@@ -13,14 +13,17 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
+ * A spliterator for a {@code VectorMap} or {@code VectorSet} that skips
+ * tombstones.
+ *
  * @param <E> the element type
  */
-public class ReverseChampVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
+public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
     private final @NonNull VectorList<Object> vector;
     private final @NonNull Function<Object, E> mapper;
     private int index;
 
-    public ReverseChampVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, E> mapper, int additionalCharacteristics, long est) {
+    public ReverseTombSkippingVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, E> mapper, int additionalCharacteristics, long est) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;

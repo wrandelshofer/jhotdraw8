@@ -8,14 +8,14 @@ package org.jhotdraw8.collection.enumerator;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * An {@link IntSpliterator} over an unsigned short array.
+ * An {@link IntEnumerator} over an unsigned short array.
  */
-public class IntUShortArraySpliterator extends AbstractIntEnumeratorSpliterator {
+public class IntUShortArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;
     private final short[] arrows;
     private int index;
 
-    public IntUShortArraySpliterator(int lo, int hi, short[] arrows) {
+    public IntUShortArrayEnumerator(int lo, int hi, short[] arrows) {
         super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
         limit = hi;
         index = lo;
@@ -32,10 +32,10 @@ public class IntUShortArraySpliterator extends AbstractIntEnumeratorSpliterator 
     }
 
     @Override
-    public @Nullable IntUShortArraySpliterator trySplit() {
+    public @Nullable IntUShortArrayEnumerator trySplit() {
         int lo = index, mid = (lo + limit) >>> 1;
         return (lo >= mid) ? null : // divide range in half unless too small
-                new IntUShortArraySpliterator(lo, index = mid, arrows);
+                new IntUShortArrayEnumerator(lo, index = mid, arrows);
     }
 
 }

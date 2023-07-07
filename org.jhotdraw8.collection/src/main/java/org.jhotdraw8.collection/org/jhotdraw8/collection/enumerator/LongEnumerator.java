@@ -1,5 +1,5 @@
 /*
- * @(#)LongSpliterator.java
+ * @(#)IntSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.enumerator;
@@ -20,7 +20,7 @@ import java.util.function.LongConsumer;
  *
  * @author Werner Randelshofer
  */
-public interface LongSpliterator extends EnumeratorSpliterator<Long>, Spliterator.OfLong {
+public interface LongEnumerator extends EnumeratorSpliterator<Long>, Spliterator.OfLong {
 
     /**
      * {@inheritDoc}
