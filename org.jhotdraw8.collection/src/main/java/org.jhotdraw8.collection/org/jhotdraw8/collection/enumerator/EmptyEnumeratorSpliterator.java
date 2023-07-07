@@ -1,5 +1,5 @@
 /*
- * @(#)EmptyEnumeratorSpliterator.java
+ * @(#)EmptySpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -15,15 +15,15 @@ import java.util.Spliterator;
  *
  * @param <E> the element type
  */
-public class EmptySpliterator<E> implements EnumeratorSpliterator<E> {
-    private static final EmptySpliterator<Object> singleton = new EmptySpliterator<>();
+public class EmptyEnumeratorSpliterator<E> implements EnumeratorSpliterator<E> {
+    private static final EmptyEnumeratorSpliterator<Object> singleton = new EmptyEnumeratorSpliterator<>();
 
     @SuppressWarnings("unchecked")
     public static <T> @NonNull EnumeratorSpliterator<T> emptyEnumerator() {
         return (EnumeratorSpliterator<T>) singleton;
     }
 
-    private EmptySpliterator() {
+    private EmptyEnumeratorSpliterator() {
 
     }
 

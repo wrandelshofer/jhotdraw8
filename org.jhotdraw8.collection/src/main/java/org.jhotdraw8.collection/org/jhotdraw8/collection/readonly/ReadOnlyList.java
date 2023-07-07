@@ -6,7 +6,6 @@ package org.jhotdraw8.collection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.ReadOnlyListSpliterator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
@@ -117,7 +116,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return an iterator.
      */
     @Override
-    default @NonNull EnumeratorSpliterator<E> spliterator() {
+    default @NonNull Spliterator<E> spliterator() {
         return new ReadOnlyListSpliterator<>(this);
     }
 

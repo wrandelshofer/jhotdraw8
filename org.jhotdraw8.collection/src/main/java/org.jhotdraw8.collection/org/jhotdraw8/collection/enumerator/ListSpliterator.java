@@ -1,5 +1,5 @@
 /*
- * @(#)ListEnumeratorSpliterator.java
+ * @(#)ListSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Spliterator;
 
 /**
- * An {@link EnumeratorSpliterator} over a {@link List}.
+ * An {@link Spliterator} over a {@link List}.
  * <p>
  * Does not perform modification checks.
  *

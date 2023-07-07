@@ -8,20 +8,13 @@ package org.jhotdraw8.graph.algo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.TriFunction;
-import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.SimpleOrderedPair;
+import org.jhotdraw8.collection.pair.OrderedPair;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 
 public class MinimumSpanningTreeAlgo {

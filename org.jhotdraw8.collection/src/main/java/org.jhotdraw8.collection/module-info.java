@@ -20,4 +20,5 @@ module org.jhotdraw8.collection {
     exports org.jhotdraw8.collection.reflect;
     exports org.jhotdraw8.collection.sequenced;
     exports org.jhotdraw8.collection;
+    exports org.jhotdraw8.collection.pair;
 }

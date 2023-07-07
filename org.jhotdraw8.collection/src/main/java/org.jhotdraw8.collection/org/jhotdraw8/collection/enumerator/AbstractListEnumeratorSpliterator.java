@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractListEnumeratorSpliterator.java
+ * @(#)AbstractListSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -11,7 +11,7 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * Abstract base classes for {@link EnumeratorSpliterator}s that also implement
+ * Abstract base classes for {@link Spliterator}s that also implement
  * the {@link ListIterator} interface.
  *
  * @param <E> the element type

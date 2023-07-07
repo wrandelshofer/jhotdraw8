@@ -7,7 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.SetFacade;
 import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
@@ -142,7 +141,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     }
 
     @Override
-    public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
+    public @NonNull Spliterator<Entry<K, V>> spliterator() {
         return new FailFastSpliterator<>(
                 new ChampSpliterator<>(root,
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),

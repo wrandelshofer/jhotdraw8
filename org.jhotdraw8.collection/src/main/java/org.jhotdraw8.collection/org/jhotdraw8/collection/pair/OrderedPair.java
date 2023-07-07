@@ -1,4 +1,4 @@
-package org.jhotdraw8.collection;
+package org.jhotdraw8.collection.pair;
 
 
 import org.jhotdraw8.annotation.NonNull;

@@ -6,10 +6,10 @@
 package org.jhotdraw8.collection.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
 import java.util.ConcurrentModificationException;
 import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
@@ -19,7 +19,7 @@ import java.util.function.IntSupplier;
  *
  * @param <E> the element type
  */
-public class FailFastSpliterator<E> extends AbstractEnumeratorSpliterator<E> implements Consumer<E> {
+public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
     private final @NonNull Spliterator<? extends E> s;
     private final int expectedModCount;
     private final @NonNull IntSupplier modCountSupplier;
@@ -32,14 +32,9 @@ public class FailFastSpliterator<E> extends AbstractEnumeratorSpliterator<E> imp
     }
 
     @Override
-    public void accept(E e) {
-        current = e;
-    }
-
-    @Override
-    public boolean moveNext() {
+    public boolean tryAdvance(Consumer<? super E> action) {
         ensureUnmodified();
-        return s.tryAdvance(this);
+        return s.tryAdvance(action);
     }
 
     protected void ensureUnmodified() {
@@ -47,6 +42,7 @@ public class FailFastSpliterator<E> extends AbstractEnumeratorSpliterator<E> imp
             throw new ConcurrentModificationException();
         }
     }
+
 
     @Override
     public Spliterator<E> trySplit() {

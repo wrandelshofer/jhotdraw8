@@ -7,8 +7,8 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.immutable.ImmutableList;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
@@ -21,9 +21,7 @@ import org.junit.jupiter.api.TestFactory;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 /**

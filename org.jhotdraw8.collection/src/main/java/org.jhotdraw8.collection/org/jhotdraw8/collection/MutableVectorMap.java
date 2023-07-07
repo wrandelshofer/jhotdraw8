@@ -7,7 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
@@ -173,7 +172,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
+    private @NonNull Spliterator<Entry<K, V>> reverseSpliterator() {
         return new ReverseChampVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
@@ -182,7 +181,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
+    public @NonNull Spliterator<Entry<K, V>> spliterator() {
         return new VectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),

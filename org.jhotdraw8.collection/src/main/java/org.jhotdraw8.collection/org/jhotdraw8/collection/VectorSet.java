@@ -7,7 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
@@ -403,7 +402,7 @@ public class VectorSet<E>
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
+    @NonNull Spliterator<E> reverseSpliterator() {
         return new ReverseChampVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -416,7 +415,7 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull EnumeratorSpliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return new VectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);

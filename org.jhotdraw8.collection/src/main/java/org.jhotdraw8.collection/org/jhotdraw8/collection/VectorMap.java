@@ -6,7 +6,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
@@ -403,7 +402,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull EnumeratorSpliterator<Map.Entry<K, V>> reverseSpliterator() {
+    @NonNull Spliterator<Map.Entry<K, V>> reverseSpliterator() {
         return new ReverseChampVectorSpliterator<>(vector,
                 e -> ((SequencedEntry<K, V>) e),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
@@ -415,7 +414,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         return size;
     }
 
-    public @NonNull EnumeratorSpliterator<Map.Entry<K, V>> spliterator() {
+    public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
         return new VectorSpliterator<>(vector,
                 e -> ((Map.Entry<K, V>) e),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);

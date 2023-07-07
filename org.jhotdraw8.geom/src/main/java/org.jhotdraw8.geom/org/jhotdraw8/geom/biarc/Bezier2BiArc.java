@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.SimpleOrderedPair;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.CubicCurveCharacteristics;
 import org.jhotdraw8.geom.CubicCurves;

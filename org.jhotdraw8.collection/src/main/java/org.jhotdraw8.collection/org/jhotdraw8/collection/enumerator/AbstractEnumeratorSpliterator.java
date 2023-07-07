@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractEnumeratorSpliterator.java
+ * @(#)AbstractSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.enumerator;
@@ -8,9 +8,9 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 
 /**
- * Abstract base classes for {@link EnumeratorSpliterator}s.
+ * Abstract base classes for {@link Spliterator}s.
  * <p>
- * Subclasses should only implement the {@link EnumeratorSpliterator#moveNext()}
+ * Subclasses should only implement the {@link Spliterator#moveNext()}
  * method and the {@link Spliterator#trySplit()} method:
  * <pre>
  *     public boolean moveNext() {

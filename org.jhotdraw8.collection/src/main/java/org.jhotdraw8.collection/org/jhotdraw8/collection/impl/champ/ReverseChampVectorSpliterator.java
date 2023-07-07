@@ -7,14 +7,15 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.VectorList;
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
+import java.util.Spliterators;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
  * @param <E> the element type
  */
-public class ReverseChampVectorSpliterator<E> extends AbstractEnumeratorSpliterator<E> {
+public class ReverseChampVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
     private final @NonNull VectorList<Object> vector;
     private final @NonNull Function<Object, E> mapper;
     private int index;
@@ -27,7 +28,7 @@ public class ReverseChampVectorSpliterator<E> extends AbstractEnumeratorSplitera
     }
 
     @Override
-    public boolean moveNext() {
+    public boolean tryAdvance(Consumer<? super E> action) {
         if (index < 0) {
             return false;
         }
@@ -36,7 +37,8 @@ public class ReverseChampVectorSpliterator<E> extends AbstractEnumeratorSplitera
             index -= t.before();
             o = vector.get(index--);
         }
-        current = mapper.apply(o);
+        action.accept(mapper.apply(o));
         return true;
     }
+
 }

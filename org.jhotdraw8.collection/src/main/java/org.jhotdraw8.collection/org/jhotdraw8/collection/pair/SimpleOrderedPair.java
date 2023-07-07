@@ -1,60 +1,64 @@
 /*
- * @(#)UnorderedPair.java
+ * @(#)OrderedPair.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.collection;
+package org.jhotdraw8.collection.pair;
+
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * A simple implementation of the {@link UnorderedPair} interface.
+ * A simple implementation of the {@link OrderedPair} interface.
  * <p>
  * This is a value-type.
  *
- * @param <V> the type of the elements that form the pair
+ * @param <U> the type of the first element of the pair
+ * @param <V> the type of the second element of the pair
  * @author Werner Randelshofer
  */
-public class SimpleUnorderedPair<V> implements UnorderedPair<V> {
+public class SimpleOrderedPair<U, V> implements OrderedPair<U, V> {
 
-    private final V a;
+    private final U a;
     private final V b;
     /**
      * Cached hash-value for faster hashing.
      */
     private int hash;
 
-    public SimpleUnorderedPair(V a, V b) {
+    public SimpleOrderedPair(U a, V b) {
         this.a = a;
         this.b = b;
     }
 
     @Override
-    public V either() {
+    public U first() {
         return a;
     }
 
     @Override
-    public V other() {
+    public V second() {
         return b;
     }
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        return UnorderedPair.unorderedPairEquals(this, obj);
+        return OrderedPair.orderedPairEquals(this, obj);
     }
 
     @Override
     public int hashCode() {
         if (hash == 0) {
-            hash = UnorderedPair.unorderedPairHashCode(this);
+            hash = OrderedPair.orderedPairHashCode(this);
         }
         return hash;
     }
 
     @Override
     public @NonNull String toString() {
-        return "UnorderedPair{" + "a=" + a + ", b=" + b + '}';
+        return "OrderedPair{"
+                + a +
+                ", " + b +
+                '}';
     }
-
 }

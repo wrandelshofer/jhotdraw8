@@ -1,5 +1,5 @@
 /*
- * @(#)ReadOnlyListEnumeratorSpliterator.java
+ * @(#)ReadOnlyListSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.enumerator;
@@ -14,7 +14,7 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * A {@link ListIterator}, {@link EnumeratorSpliterator}, and {@link Spliterator} for a
+ * A {@link ListIterator}, {@link Spliterator}, and {@link Spliterator} for a
  * {@link ReadOnlyList}.
  * <p>
  * Does not perform modification checks.

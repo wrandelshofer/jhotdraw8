@@ -16,7 +16,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
-import org.jhotdraw8.collection.OrderedPair;
+import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.*;
 

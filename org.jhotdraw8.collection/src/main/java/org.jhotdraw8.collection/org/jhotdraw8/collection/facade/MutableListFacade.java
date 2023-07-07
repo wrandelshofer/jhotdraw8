@@ -6,7 +6,6 @@ package org.jhotdraw8.collection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.iterator.FailFastListIterator;
@@ -91,7 +90,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull EnumeratorSpliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return new FailFastSpliterator<>(backingList.spliterator(), () -> this.modCount);
     }
 

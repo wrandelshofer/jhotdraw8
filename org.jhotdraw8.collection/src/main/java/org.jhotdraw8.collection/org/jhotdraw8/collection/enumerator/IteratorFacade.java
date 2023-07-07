@@ -10,21 +10,22 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * Wraps an {@link Enumerator} into an {@link Iterator} interface.
+ * Wraps an {@link Spliterator} into an {@link Iterator} interface.
  *
  * @param <E> the element type
  */
-public class IteratorFacade<E> implements Iterator<E> {
-    private final @NonNull Enumerator<E> e;
+public class IteratorFacade<E> implements Iterator<E>, Consumer<E> {
+    private final @NonNull Spliterator<E> e;
     private final @Nullable Consumer<E> removeFunction;
     private boolean valueReady;
     private boolean canRemove;
     private E current;
 
-    public IteratorFacade(@NonNull Enumerator<E> e, @Nullable Consumer<E> removeFunction) {
+    public IteratorFacade(@NonNull Spliterator<E> e, @Nullable Consumer<E> removeFunction) {
         this.e = e;
         this.removeFunction = removeFunction;
     }
@@ -36,7 +37,7 @@ public class IteratorFacade<E> implements Iterator<E> {
             // But the contract of hasNext() does not allow, that we change
             // the current value of the iterator.
             // This is why, we need a 'current' field in this facade.
-            valueReady = e.moveNext();
+            valueReady = e.tryAdvance(this);
         }
         return valueReady;
     }
@@ -48,7 +49,7 @@ public class IteratorFacade<E> implements Iterator<E> {
         } else {
             valueReady = false;
             canRemove = true;
-            return current = e.current();
+            return current;
         }
     }
 
@@ -61,5 +62,10 @@ public class IteratorFacade<E> implements Iterator<E> {
         } else {
             Iterator.super.remove();
         }
+    }
+
+    @Override
+    public void accept(E e) {
+        current = e;
     }
 }

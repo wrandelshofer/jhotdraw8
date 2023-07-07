@@ -7,7 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
@@ -317,7 +316,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
+    private @NonNull Spliterator<E> reverseSpliterator() {
         return new FailFastSpliterator<>(new ReverseChampVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
@@ -325,7 +324,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull EnumeratorSpliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return new FailFastSpliterator<>(new VectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);

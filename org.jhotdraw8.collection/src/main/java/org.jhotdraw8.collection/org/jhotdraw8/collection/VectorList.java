@@ -7,7 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
@@ -321,7 +320,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @Override
-    public @NonNull EnumeratorSpliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return super.spliterator(0, Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
     }
 
