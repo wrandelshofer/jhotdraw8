@@ -5,9 +5,9 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.mapped.MappedList;
+import org.jhotdraw8.collection.pair.OrderedPair;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.MinimumSpanningTreeAlgo;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.junit.jupiter.api.Test;

@@ -7,7 +7,6 @@ package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.LongSpliterator;
 
 import java.util.Collection;
 import java.util.Queue;
@@ -53,9 +52,10 @@ public interface LongQueue extends Queue<Long> {
                 .forEachRemaining((LongConsumer) tmp::addAsLong);
         clear();
         boolean removed = false;
-        for (final LongSpliterator i = tmp.enumerator(); i.moveNext(); ) {
-            if (c.contains(i.current())) {
-                addAsLong(i.currentAsLong());
+        for (final var i = tmp.iterator(); i.hasNext(); ) {
+            long current = i.nextLong();
+            if (c.contains(current)) {
+                addAsLong(current);
             } else {
                 removed = true;
             }

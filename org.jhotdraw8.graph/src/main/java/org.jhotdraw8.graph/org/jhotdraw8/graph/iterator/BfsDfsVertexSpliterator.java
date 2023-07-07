@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph.iterator;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.graph.algo.AddToSet;
 
 import java.util.ArrayDeque;
@@ -29,7 +29,7 @@ import java.util.function.Function;
  * @param <V> the vertex data type
  * @author Werner Randelshofer
  */
-public class BfsDfsVertexSpliterator<V> extends AbstractEnumeratorSpliterator<V> {
+public class BfsDfsVertexSpliterator<V> extends AbstractEnumerator<V> {
 
     private final @NonNull Function<V, Iterable<V>> nextFunction;
     private final @NonNull Deque<V> deque;

@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Double6Consumer;
 import org.jhotdraw8.base.function.Double8Consumer;
-import org.jhotdraw8.collection.SimpleOrderedPair;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;

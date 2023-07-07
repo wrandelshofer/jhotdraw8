@@ -7,6 +7,7 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 
 import java.util.List;
@@ -141,6 +142,18 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      */
     @Override
     @NonNull ImmutableList<E> retainAll(@NonNull Iterable<?> c);
+
+    /**
+     * Returns a reversed copy of this list.
+     * <p>
+     * This operation may be implemented in O(N).
+     * <p>
+     * Use {@link #readOnlyReversed()} if you only
+     * need to iterate in the reversed sequence over this list.
+     *
+     * @return a reversed copy of this list.
+     */
+    @NonNull VectorList<E> reversed();
 
     /**
      * Returns a copy of this list that contains all elements

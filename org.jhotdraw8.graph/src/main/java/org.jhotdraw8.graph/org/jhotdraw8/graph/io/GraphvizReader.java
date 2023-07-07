@@ -6,8 +6,8 @@
 package org.jhotdraw8.graph.io;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.SimpleOrderedPair;
+import org.jhotdraw8.collection.pair.OrderedPair;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.MutableDirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableBidiGraph;
 
@@ -17,11 +17,7 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;

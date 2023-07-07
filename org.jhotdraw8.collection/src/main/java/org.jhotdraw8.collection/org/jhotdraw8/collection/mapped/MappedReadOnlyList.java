@@ -5,7 +5,6 @@
 package org.jhotdraw8.collection.mapped;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedCollectionFacade;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
@@ -13,6 +12,7 @@ import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
@@ -109,8 +109,8 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return (EnumeratorSpliterator<E>) backingList.spliterator();
+    public @NonNull Spliterator<E> spliterator() {
+        return new MappedSpliterator<>(backingList.spliterator(), mapf);
     }
 
     @Override

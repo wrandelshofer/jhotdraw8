@@ -8,14 +8,15 @@ package org.jhotdraw8.collection.impl.vector;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -404,16 +405,16 @@ public class BitMappedTrie<T> implements Serializable {
     }
 
 
- public @NonNull EnumeratorSpliterator<T> spliterator(int fromIndex, int characteristics) {
-     return new BitMappedTrieSpliterator<>(this, fromIndex, characteristics);
- }
+    public @NonNull Spliterator<T> spliterator(int fromIndex, int characteristics) {
+        return new BitMappedTrieSpliterator<>(this, fromIndex, characteristics);
+    }
 
     @NonNull
     public Iterator<T> iterator(int fromIndex) {
         return new BitMappedTrieIterator<>(this, fromIndex);
     }
 
-    public static class BitMappedTrieSpliterator<T> extends AbstractEnumeratorSpliterator<T> {
+    public static class BitMappedTrieSpliterator<T> extends Spliterators.AbstractSpliterator<T> {
         private final int globalLength;
         private int globalIndex;
 
@@ -433,16 +434,17 @@ public class BitMappedTrie<T> implements Serializable {
         }
 
         @Override
-        public boolean moveNext() {
+        public boolean tryAdvance(@NonNull Consumer<? super T> action) {
             if (globalIndex >= globalLength) {
                 return false;
             }
             if (index == length) {
                 setCurrentArray();
             }
-            current = root.type.getAt(leaf, index);
+            var current = root.type.getAt(leaf, index);
             index++;
             globalIndex++;
+            action.accept(current);
             return true;
         }
 

@@ -8,16 +8,10 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 
 /**
@@ -127,13 +121,13 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         }
         int oldArrowCount = arrowCount;
         // Unlink node from its "next" nodes
-        for (EnumeratorSpliterator<Node<V, A>> i = node.next.nodesEnumerator(); i.moveNext(); ) {
+        for (var i = node.next.nodesEnumerator(); i.moveNext(); ) {
             Node<V, A> next = i.current();
             next.prev.remove(node);
             arrowCount--;
         }
         // Unlink node from its "prev" nodes
-        for (EnumeratorSpliterator<Node<V, A>> i = node.prev.nodesEnumerator(); i.moveNext(); ) {
+        for (var i = node.prev.nodesEnumerator(); i.moveNext(); ) {
             Node<V, A> prev = i.current();
             prev.next.remove(node);
             arrowCount--;
@@ -363,7 +357,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
         private @NonNull EnumeratorSpliterator<Node<V, A>> nodesEnumerator() {
             // We must use explicit type arguments in Java 8!
-            return new AbstractEnumeratorSpliterator<Node<V, A>>(size, 0) {
+            return new AbstractEnumerator<Node<V, A>>(size, 0) {
                 int index = 0;
 
                 @Override

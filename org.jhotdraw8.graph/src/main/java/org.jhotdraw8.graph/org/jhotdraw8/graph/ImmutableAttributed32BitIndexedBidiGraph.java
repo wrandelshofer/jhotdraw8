@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.IntArraySpliterator;
-import org.jhotdraw8.collection.enumerator.IntSpliterator;
+import org.jhotdraw8.collection.enumerator.IntArrayEnumerator;
+import org.jhotdraw8.collection.enumerator.IntEnumerator;
 import org.jhotdraw8.graph.precondition.Preconditions;
 
 import java.util.Collections;
@@ -338,9 +338,9 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull IntSpliterator nextVerticesEnumerator(int v) {
+    public @NonNull IntEnumerator nextVerticesEnumerator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
-        return new IntArraySpliterator(this.next, offset, nextOffset);
+        return new IntArrayEnumerator(this.next, offset, nextOffset);
     }
 }

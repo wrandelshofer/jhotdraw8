@@ -7,8 +7,6 @@ package org.jhotdraw8.collection.primitive;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
-import org.jhotdraw8.collection.enumerator.LongArraySpliterator;
-import org.jhotdraw8.collection.enumerator.LongSpliterator;
 
 import java.util.*;
 import java.util.function.LongPredicate;
@@ -355,24 +353,7 @@ public class LongArrayList extends AbstractList<Long> {
      */
     @Override
     public PrimitiveIterator.@NonNull OfLong iterator() {
-        return new PrimitiveIterator.OfLong() {
-            private int index = 0;
-            private final int size = LongArrayList.this.size;
-            private final long[] items = LongArrayList.this.items;
-
-            @Override
-            public long nextLong() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                return items[index++];
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < size;
-            }
-        };
+        return Spliterators.iterator(spliterator());
     }
 
     /**
@@ -382,16 +363,8 @@ public class LongArrayList extends AbstractList<Long> {
      */
     @Override
     public Spliterator.@NonNull OfLong spliterator() {
-        return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
-    }
-
-    /**
-     * Returns a spliterator for this list.
-     *
-     * @return a spliterator over the elements of this list
-     */
-    public @NonNull LongSpliterator enumerator() {
-        return new LongArraySpliterator(items, 0, size);
+        //FIXME implement a fail-fast spliterator for long arrays
+        return Spliterators.spliterator(items, 0, size, Spliterator.SIZED | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
     /**

@@ -7,8 +7,9 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.AbstractEnumeratorSpliterator;
 
+import java.util.Spliterators;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -26,7 +27,7 @@ import java.util.function.Function;
  * @param <K> the data type of the trie node
  * @param <E> the element type of the iterator
  */
-public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
+public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> {
     private final @NonNull Function<K, E> mappingFunction;
     private static final int MAX_DEPTH = 7;
 
@@ -65,11 +66,6 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
         }
     }
 
-    @Override
-    public E current() {
-        return mappingFunction.apply(current);
-    }
-
     private boolean searchNextValueNode() {
         // For inlining, it is essential that this method has a very small amount of byte code!
         while (currentStackLevel >= 0) {
@@ -98,11 +94,11 @@ public class ChampSpliterator<K, E> extends AbstractEnumeratorSpliterator<E> {
     }
 
     @Override
-    public boolean moveNext() {
+    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
         // For inlining, it is essential that this method has a very small amount of byte code!
         // Specifically, do not inline searchNextValueNode() into this method!
         if (currentValueCursor < currentValueLength || searchNextValueNode()) {
-            current = currentValueNode.getData(currentValueCursor++);
+            action.accept(mappingFunction.apply(currentValueNode.getData(currentValueCursor++)));
             return true;
         }
         return false;

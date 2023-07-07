@@ -7,7 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
@@ -47,6 +46,7 @@ import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(log N)</li>
  *     <li>getFirst, getLast: O(log N)</li>
+ *     <li>reversed: O(N)</li>
  * </ul>
  * <p>
  * References:
@@ -175,6 +175,10 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
                 () -> size,
                 index -> get(size - 1 - index),
                 () -> this);
+    }
+
+    public @NonNull VectorList<E> reversed() {
+        return size < 2 ? this : VectorList.copyOf(readOnlyReversed());
     }
 
     @Override
@@ -321,7 +325,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     }
 
     @Override
-    public @NonNull EnumeratorSpliterator<E> spliterator() {
+    public @NonNull Spliterator<E> spliterator() {
         return super.spliterator(0, Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
     }
 

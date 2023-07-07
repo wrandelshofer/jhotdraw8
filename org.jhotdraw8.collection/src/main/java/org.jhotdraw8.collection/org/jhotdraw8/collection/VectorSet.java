@@ -7,8 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.collection.impl.IdentityObject;
@@ -312,7 +310,7 @@ public class VectorSet<E>
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new IteratorFacade<>(spliterator(), null);
+        return Spliterators.iterator(spliterator());
     }
 
     @Override
@@ -399,12 +397,12 @@ public class VectorSet<E>
     }
 
     @NonNull Iterator<E> reverseIterator() {
-        return new IteratorFacade<>(reverseSpliterator(), null);
+        return Spliterators.iterator(reverseSpliterator());
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull EnumeratorSpliterator<E> reverseSpliterator() {
-        return new ReverseChampVectorSpliterator<>(vector,
+    @NonNull Spliterator<E> reverseSpliterator() {
+        return new ReverseTombSkippingVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -416,8 +414,8 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull EnumeratorSpliterator<E> spliterator() {
-        return new VectorSpliterator<>(vector,
+    public @NonNull Spliterator<E> spliterator() {
+        return new TombSkippingVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }

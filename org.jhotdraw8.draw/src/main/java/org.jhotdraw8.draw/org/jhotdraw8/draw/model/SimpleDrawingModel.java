@@ -11,15 +11,9 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.figure.ChildLayoutingFigure;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.TransformableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
@@ -29,14 +23,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 
-import java.util.AbstractMap;
-import java.util.ArrayDeque;
-import java.util.Collections;
-import java.util.IdentityHashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /**
@@ -387,11 +374,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             final Set<Figure> subtrees = Collections.newSetFromMap(new IdentityHashMap<>(dirties.size() * 2));
             for (Figure f : dirties) {
                 if (subtrees.add(f) && !(f instanceof Layer)) {
-                    EnumeratorSpliterator<Figure> enumerator = f.preorderEnumerator();
-                    while (enumerator.moveNext()) {
-                        Figure ff = enumerator.current();
-                        subtrees.add(ff);
-                    }
+                   f.preorderSpliterator().forEachRemaining(subtrees::add);
                 }
             }
 

@@ -7,8 +7,8 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.TriFunction;
-import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.SimpleOrderedPair;
+import org.jhotdraw8.collection.pair.OrderedPair;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
 import java.util.function.ToDoubleFunction;
 

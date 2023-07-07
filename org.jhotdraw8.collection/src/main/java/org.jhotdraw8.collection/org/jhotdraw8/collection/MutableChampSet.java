@@ -9,9 +9,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
-import org.jhotdraw8.collection.iterator.FailFastSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
+import org.jhotdraw8.collection.spliterator.FailFastSpliterator;
 
 import java.io.Serial;
 import java.util.*;
@@ -256,7 +256,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(
                 new ChampIterator<E, E>(root, null),
-                this::getModCount, this::iteratorRemove
+                this::iteratorRemove, this::getModCount
         );
     }
 

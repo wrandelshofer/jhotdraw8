@@ -7,10 +7,10 @@ package org.jhotdraw8.fxcollection.indexedset;
 import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.ReverseListSpliterator;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
+import org.jhotdraw8.collection.spliterator.ReverseListSpliterator;
 import org.jhotdraw8.fxcollection.precondition.Preconditions;
 
 import java.util.*;

@@ -6,12 +6,7 @@ package org.jhotdraw8.collection.primitive;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractCollection;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Spliterators;
+import java.util.*;
 
 /**
  * An optimized array-based binary heap with long keys.

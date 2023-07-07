@@ -31,6 +31,10 @@ public class MappedSpliterator<E, F> implements Spliterator<E> {
         this.characteristics = characteristics;
     }
 
+    public MappedSpliterator(@NonNull Spliterator<? extends F> s, @NonNull Function<F, E> mappingFunction) {
+        this(s, mappingFunction, s.characteristics());
+    }
+
     @Override
     public boolean tryAdvance(Consumer<? super E> action) {
         return s.tryAdvance(k -> action.accept(mappingFunction.apply(k)));

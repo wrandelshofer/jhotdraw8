@@ -7,8 +7,6 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
-import org.jhotdraw8.collection.enumerator.IteratorFacade;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
@@ -157,18 +155,18 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(spliterator(),
-                this::iteratorRemove), () -> modCount);
+        return new FailFastIterator<>(Spliterators.iterator(spliterator()),
+                this::iteratorRemove, () -> modCount);
     }
 
     private @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
-        return new FailFastIterator<>(new IteratorFacade<>(reverseSpliterator(),
-                this::iteratorRemove), () -> modCount);
+        return new FailFastIterator<>(Spliterators.iterator(reverseSpliterator()),
+                this::iteratorRemove, () -> modCount);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull EnumeratorSpliterator<Entry<K, V>> reverseSpliterator() {
-        return new ReverseChampVectorSpliterator<Entry<K, V>>(vector,
+    private @NonNull Spliterator<Entry<K, V>> reverseSpliterator() {
+        return new ReverseTombSkippingVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
                 size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
@@ -176,8 +174,8 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull EnumeratorSpliterator<Entry<K, V>> spliterator() {
-        return new VectorSpliterator<Entry<K, V>>(vector,
+    public @NonNull Spliterator<Entry<K, V>> spliterator() {
+        return new TombSkippingVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
                 0, size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);

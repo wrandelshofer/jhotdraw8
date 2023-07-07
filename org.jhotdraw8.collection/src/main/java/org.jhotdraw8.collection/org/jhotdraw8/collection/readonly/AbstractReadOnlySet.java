@@ -15,7 +15,7 @@ public abstract class AbstractReadOnlySet<E> extends AbstractReadOnlyCollection<
 
     @Override
     public boolean equals(Object o) {
-        return ReadOnlySet.setEquals(this,o);
+        return ReadOnlySet.setEquals(this, o);
     }
 
     @Override

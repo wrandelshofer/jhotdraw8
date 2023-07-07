@@ -7,10 +7,11 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.OrderedPair;
-import org.jhotdraw8.collection.SimpleOrderedPair;
 import org.jhotdraw8.collection.VectorList;
+import org.jhotdraw8.collection.enumerator.EnumeratorFacade;
 import org.jhotdraw8.collection.impl.IdentityObject;
+import org.jhotdraw8.collection.pair.OrderedPair;
+import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
 import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
@@ -81,7 +82,7 @@ public interface SequencedData {
         ChangeEvent<K> details = new ChangeEvent<>();
         BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
         int seq = 0;
-        for (var i = new VectorSpliterator<K>(vector, o -> (K) o, 0, Long.MAX_VALUE, 0); i.moveNext(); ) {
+        for (var i = new EnumeratorFacade<K>(new TombSkippingVectorSpliterator<K>(vector, o -> (K) o, 0, Long.MAX_VALUE, 0)); i.moveNext(); ) {
             K current = i.current();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);

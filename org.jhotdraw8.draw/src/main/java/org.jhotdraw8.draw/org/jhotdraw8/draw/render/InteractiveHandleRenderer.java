@@ -8,13 +8,7 @@ package org.jhotdraw8.draw.render;
 import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.beans.property.ReadOnlySetWrapper;
-import javafx.beans.property.SetProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleSetProperty;
+import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
@@ -26,7 +20,6 @@ import javafx.util.Duration;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
-import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -37,16 +30,7 @@ import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class InteractiveHandleRenderer {
@@ -160,7 +144,9 @@ public class InteractiveHandleRenderer {
             return null;
         }
         final double tolerance = getEditor().getTolerance();
-        for (Map.Entry<Node, Handle> e : new ReversedList<>(new ArrayList<>(nodeToHandleMap.entrySet()))) {
+        ArrayList<Map.Entry<Node, Handle>> entries = new ArrayList<>(nodeToHandleMap.entrySet());
+        for (int i = entries.size() - 1; i >= 0; i--) {
+            Map.Entry<Node, Handle> e = entries.get(i);
             final Handle handle = e.getValue();
             if (!handle.isSelectable()) {
                 continue;

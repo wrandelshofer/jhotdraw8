@@ -9,17 +9,10 @@ import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.collection.ReversedList;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.figure.ConnectableFigure;
-import org.jhotdraw8.draw.figure.ConnectingFigure;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.LayerFigure;
-import org.jhotdraw8.draw.figure.LineConnectionFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
 
@@ -89,7 +82,9 @@ public class ConnectionTool extends AbstractTool {
         }
         // search for a suitable layer front to back
         Layer layer = null;
-        for (Figure candidate : new ReversedList<>(drawing.getChildren())) {
+        var layers = dv.getDrawing().getChildren();
+        for (int i = layers.size() - 1; i >= 0; i--) {
+            Figure candidate = layers.get(i);
             if (candidate.isEditable() && candidate.isAllowsChildren()
                     && candidate.isSuitableChild(newFigure)
                     && newFigure.isSuitableParent(candidate)
