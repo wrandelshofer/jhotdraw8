@@ -14,7 +14,7 @@ import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jhotdraw8.pcollection.ChampSet;
-import org.jhotdraw8.pcollection.impl.facade.MutableSetFacade;
+import org.jhotdraw8.pcollection.facade.MutableSetFacade;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

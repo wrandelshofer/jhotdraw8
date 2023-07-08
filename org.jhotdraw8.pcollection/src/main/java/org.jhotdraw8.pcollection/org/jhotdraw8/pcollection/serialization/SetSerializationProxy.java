@@ -1,42 +1,41 @@
 /*
- * @(#)MapSerializationProxy.java
+ * @(#)SetSerializationProxy.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.pcollection.impl.serialization;
+package org.jhotdraw8.pcollection.serialization;
 
 import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 /**
- * A serialization proxy that serializes a map independently of its internal
+ * A serialization proxy that serializes a set independently of its internal
  * structure.
  * <p>
  * Usage:
  * <pre>
- * class MyMap&lt;K, V&gt; implements Map&lt;K, V&gt;, Serializable {
+ * class MySet&lt;E&gt; implements Set&lt;E&gt;, Serializable {
  *   private final static long serialVersionUID = 0L;
  *
  *   private Object writeReplace() throws ObjectStreamException {
  *      return new SerializationProxy&lt;&gt;(this);
  *   }
  *
- *   static class SerializationProxy&lt;K, V&gt;
- *                  extends MapSerializationProxy&lt;K, V&gt; {
+ *   static class SerializationProxy&lt;E&gt;
+ *                  extends SetSerializationProxy&lt;E&gt; {
  *      private final static long serialVersionUID = 0L;
- *      SerializationProxy(Map&lt;K, V&gt; target) {
+ *      SerializationProxy(Set&lt;E&gt; target) {
  *          super(target);
  *      }
  *     {@literal @Override}
  *      protected Object readResolve() {
- *          return new MyMap&lt;&gt;(deserialized);
+ *          return new MySet&lt;&gt;(deserialized);
  *      }
  *   }
  * }
@@ -53,16 +52,15 @@ import java.util.Map;
  *     <dd><a href="https://docs.oracle.com/en/java/javase/17/docs/specs/serialization/input.html#the-readresolve-method"></a>oracle.com</dd>
  * </dl>
  *
- * @param <K> the key type
- * @param <V> the value type
+ * @param <E> the element type
  */
-public abstract class MapSerializationProxy<K, V> implements Serializable {
-    private final transient Map<K, V> serialized;
-    protected transient List<Map.Entry<K, V>> deserialized;
+public abstract class SetSerializationProxy<E> implements Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
+    private final transient Set<E> serialized;
+    protected transient List<E> deserialized;
 
-    protected MapSerializationProxy(Map<K, V> serialized) {
+    protected SetSerializationProxy(@NonNull Set<E> serialized) {
         this.serialized = serialized;
     }
 
@@ -70,9 +68,8 @@ public abstract class MapSerializationProxy<K, V> implements Serializable {
     private void writeObject(java.io.@NonNull ObjectOutputStream s)
             throws IOException {
         s.writeInt(serialized.size());
-        for (Map.Entry<K, V> entry : serialized.entrySet()) {
-            s.writeObject(entry.getKey());
-            s.writeObject(entry.getValue());
+        for (E e : serialized) {
+            s.writeObject(e);
         }
     }
 
@@ -83,10 +80,8 @@ public abstract class MapSerializationProxy<K, V> implements Serializable {
         deserialized = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             @SuppressWarnings("unchecked")
-            K key = (K) s.readObject();
-            @SuppressWarnings("unchecked")
-            V value = (V) s.readObject();
-            deserialized.add(new AbstractMap.SimpleImmutableEntry<>(key, value));
+            E e = (E) s.readObject();
+            deserialized.add(e);
         }
     }
 

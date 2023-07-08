@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.pcollection.impl.facade;
+package org.jhotdraw8.pcollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -116,7 +116,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
             collection = (Collection<K>) cc;
         } else {
             collection = new HashSet<K>();
-            c.forEach(e -> collection.add((K) e));
+            c.forEach(collection::add);
         }
         return clone.keySet().retainAll(collection) ? new ImmutableMapFacade<>(clone, cloneFunction) : this;
     }

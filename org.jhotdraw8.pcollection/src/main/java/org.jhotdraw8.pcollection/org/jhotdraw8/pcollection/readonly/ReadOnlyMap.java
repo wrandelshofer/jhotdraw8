@@ -6,9 +6,9 @@ package org.jhotdraw8.pcollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.pcollection.impl.facade.MapFacade;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlyCollectionFacade;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlySetFacade;
+import org.jhotdraw8.pcollection.facade.MapFacade;
+import org.jhotdraw8.pcollection.facade.ReadOnlyCollectionFacade;
+import org.jhotdraw8.pcollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.pcollection.impl.iteration.MappedIterator;
 
 import java.util.AbstractMap;

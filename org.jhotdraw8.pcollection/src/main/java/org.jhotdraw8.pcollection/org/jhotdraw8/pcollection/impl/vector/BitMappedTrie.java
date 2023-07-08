@@ -521,8 +521,6 @@ public class BitMappedTrie<T> implements Serializable {
         }
     }
 
-    ;
-
     @SuppressWarnings("unchecked")
     <T2> int visit(@NonNull LeafVisitor<T2> visitor) {
         int globalIndex = 0, start = lastDigit(offset);

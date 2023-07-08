@@ -1,11 +1,10 @@
 /*
- * @(#)ReadOnlySequencedCollectionFacade.java
+ * @(#)ReadOnlySequencedSetFacade.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.pcollection.impl.facade;
+package org.jhotdraw8.pcollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.pcollection.sequenced.SequencedSet;
 
@@ -20,30 +19,29 @@ import java.util.function.Supplier;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFacade<E>
-        implements ReadOnlySequencedCollection<E> {
+public class ReadOnlySequencedSetFacade<E> extends ReadOnlySetFacade<E>
+        implements ReadOnlySequencedSet<E> {
 
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
     final @NonNull Supplier<Iterator<E>> reverseIteratorFunction;
 
-    public ReadOnlySequencedCollectionFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(),
-                backingSet::size,
+    public ReadOnlySequencedSetFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
+        this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 
-    public ReadOnlySequencedCollectionFacade(@NonNull SequencedSet<E> backingSet) {
+    public ReadOnlySequencedSetFacade(@NonNull SequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet._reversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast);
     }
 
-    public ReadOnlySequencedCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                             @NonNull Supplier<Iterator<E>> reverseIteratorFunction,
-                                             @NonNull IntSupplier sizeFunction,
-                                             @NonNull Predicate<Object> containsFunction,
-                                             @NonNull Supplier<E> getFirstFunction,
-                                             @NonNull Supplier<E> getLastFunction) {
+    public ReadOnlySequencedSetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                                      @NonNull Supplier<Iterator<E>> reverseIteratorFunction,
+                                      @NonNull IntSupplier sizeFunction,
+                                      @NonNull Predicate<Object> containsFunction,
+                                      @NonNull Supplier<E> getFirstFunction,
+                                      @NonNull Supplier<E> getLastFunction) {
         super(iteratorFunction, sizeFunction, containsFunction);
         this.getFirstFunction = getFirstFunction;
         this.getLastFunction = getLastFunction;
@@ -62,8 +60,8 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
     }
 
     @Override
-    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
-        return new ReadOnlySequencedCollectionFacade<>(
+    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+        return new ReadOnlySequencedSetFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,
                 sizeFunction,

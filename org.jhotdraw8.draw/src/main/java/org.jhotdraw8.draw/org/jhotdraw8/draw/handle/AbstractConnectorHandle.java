@@ -40,8 +40,8 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
      * @param connector       a connector
      * @param connectedFigure the connected figure
      */
-    protected record ConnectorAndConnectedFigure(@NonNull Connector connector,
-                                                 @NonNull Figure connectedFigure) {
+    public record ConnectorAndConnectedFigure(@NonNull Connector connector,
+                                              @NonNull Figure connectedFigure) {
     }
 
     protected final @NonNull MapAccessor<Connector> connectorKey;

@@ -1,7 +1,7 @@
 package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.pcollection.impl.facade.MapFacade;
+import org.jhotdraw8.pcollection.facade.MapFacade;
 
 import java.util.HashMap;
 import java.util.Map;

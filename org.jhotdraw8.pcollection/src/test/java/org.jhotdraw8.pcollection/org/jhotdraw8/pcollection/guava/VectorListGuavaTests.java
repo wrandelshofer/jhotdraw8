@@ -15,7 +15,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jhotdraw8.pcollection.MutableVectorList;
 import org.jhotdraw8.pcollection.VectorList;
-import org.jhotdraw8.pcollection.impl.facade.MutableListFacade;
+import org.jhotdraw8.pcollection.facade.MutableListFacade;
 
 import java.lang.reflect.Method;
 import java.util.Collection;

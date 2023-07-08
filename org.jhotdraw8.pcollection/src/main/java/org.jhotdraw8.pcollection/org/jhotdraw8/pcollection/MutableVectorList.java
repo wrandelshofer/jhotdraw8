@@ -6,13 +6,13 @@
 package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.pcollection.impl.facade.ListFacade;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlyListFacade;
-import org.jhotdraw8.pcollection.impl.serialization.ListSerializationProxy;
+import org.jhotdraw8.pcollection.facade.ListFacade;
+import org.jhotdraw8.pcollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.pcollection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyList;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.pcollection.sequenced.SequencedCollection;
+import org.jhotdraw8.pcollection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -162,8 +162,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean removeAll(@NonNull Collection<?> c) {
         int oldSize = size;
-        @SuppressWarnings("unchecked")
-        VectorList<E> immutable = toImmutable().removeAll((Iterable<? extends E>) c);
+        VectorList<E> immutable = toImmutable().removeAll(c);
         if (oldSize != immutable.size) {
             root = immutable;
             modCount++;
@@ -176,8 +175,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean retainAll(@NonNull Collection<?> c) {
         int oldSize = size;
-        @SuppressWarnings("unchecked")
-        VectorList<E> immutable = toImmutable().retainAll((Collection<? extends E>) c);
+        VectorList<E> immutable = toImmutable().retainAll(c);
         if (oldSize != immutable.size) {
             root = immutable;
             modCount++;

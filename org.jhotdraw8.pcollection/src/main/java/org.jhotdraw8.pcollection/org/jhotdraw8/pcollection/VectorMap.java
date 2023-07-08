@@ -6,6 +6,7 @@ package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.pcollection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.pcollection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.pcollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
@@ -15,10 +16,9 @@ import org.jhotdraw8.pcollection.impl.champ.ReverseTombSkippingVectorSpliterator
 import org.jhotdraw8.pcollection.impl.champ.SequencedData;
 import org.jhotdraw8.pcollection.impl.champ.SequencedEntry;
 import org.jhotdraw8.pcollection.impl.champ.TombSkippingVectorSpliterator;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlySequencedMapFacade;
-import org.jhotdraw8.pcollection.impl.serialization.MapSerializationProxy;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.pcollection.serialization.MapSerializationProxy;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
@@ -384,7 +384,7 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
 
         if (SequencedData.vecMustRenumber(size, offset, this.vector.size())) {
             var owner = new IdentityObject();
-            var result = SequencedData.<SequencedEntry<K, V>>vecRenumber(
+            var result = SequencedData.vecRenumber(
                     new IdentityObject(), size, root, vector, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
             return new VectorMap<>(
@@ -394,7 +394,6 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         return new VectorMap<>(root, vector, size, offset);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull VectorMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
         var m = toMutable();

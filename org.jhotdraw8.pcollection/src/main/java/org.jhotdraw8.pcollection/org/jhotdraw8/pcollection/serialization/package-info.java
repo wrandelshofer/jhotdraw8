@@ -2,7 +2,8 @@
  * @(#)package-info.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
+
 /**
- * Provides facades for collection interfaces.
+ * Provides serialization proxies for collections.
  */
-package org.jhotdraw8.pcollection.impl.facade;
+package org.jhotdraw8.pcollection.serialization;

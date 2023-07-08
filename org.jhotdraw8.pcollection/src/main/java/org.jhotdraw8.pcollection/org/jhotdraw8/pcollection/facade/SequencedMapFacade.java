@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.pcollection.impl.facade;
+package org.jhotdraw8.pcollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -210,12 +210,12 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                 clearFunction,
                 this::removeEntry,
                 () -> {
-                    Entry<K, V> e = firstEntry();
+                    Entry<K, V> e = lastEntryFunction.get();
                     if (e == null) throw new NoSuchElementException();
                     return e.getKey();
                 },
                 () -> {
-                    Entry<K, V> e = lastEntry();
+                    Entry<K, V> e = firstEntryFunction.get();
                     if (e == null) throw new NoSuchElementException();
                     return e.getKey();
                 },

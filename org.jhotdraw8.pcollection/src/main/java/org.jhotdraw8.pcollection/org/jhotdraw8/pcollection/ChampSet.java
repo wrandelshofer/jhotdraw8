@@ -13,9 +13,9 @@ import org.jhotdraw8.pcollection.impl.champ.ChampIterator;
 import org.jhotdraw8.pcollection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
 import org.jhotdraw8.pcollection.impl.champ.Node;
-import org.jhotdraw8.pcollection.impl.serialization.SetSerializationProxy;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySet;
+import org.jhotdraw8.pcollection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;

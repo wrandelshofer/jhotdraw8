@@ -2,7 +2,7 @@
  * @(#)MutableSetFacade.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.pcollection.impl.facade;
+package org.jhotdraw8.pcollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.pcollection.immutable.ImmutableSet;
@@ -62,7 +62,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
     @Override
     public @NonNull Iterator<E> iterator() {
         Iterator<E> it = new Iterator<>() {
-            Iterator<E> b = backingSet.iterator();
+            final Iterator<E> b = backingSet.iterator();
             E current;
             boolean canRemove;
 
@@ -106,7 +106,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
     @Override
     public boolean add(E e) {
         ImmutableSet<E> oldSet = backingSet;
-        backingSet = backingSet.add((E) e);
+        backingSet = backingSet.add(e);
         if (oldSet != backingSet) {
             modCount++;
             return true;

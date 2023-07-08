@@ -6,8 +6,8 @@ package org.jhotdraw8.pcollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.pcollection.impl.facade.ListFacade;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlyListFacade;
+import org.jhotdraw8.pcollection.facade.ListFacade;
+import org.jhotdraw8.pcollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.pcollection.impl.iteration.ReadOnlyListSpliterator;
 
 import java.util.ArrayList;

@@ -150,7 +150,6 @@ org/jhotdraw8/pcollection/jmh/jmh_generated/ScalaHashSetJmh_jmhType_B2.class
 org/jhotdraw8/pcollection/jmh/jmh_generated/MutableVectorListJmh_mHead_jmhTest.class
 META-INF/CompilerHints
 org/jhotdraw8/pcollection/OrderedPairTest.class
-org/.DS_Store
 org/jhotdraw8/pcollection/jmh/jmh_generated/KotlinxPersistentHashSetJmh_mIterate_jmhTest.class
 org/jhotdraw8/pcollection/MutableVectorListTest.class
 org/jhotdraw8/pcollection/jmh/jmh_generated/VavrVectorJmh_mIterate_jmhTest.class

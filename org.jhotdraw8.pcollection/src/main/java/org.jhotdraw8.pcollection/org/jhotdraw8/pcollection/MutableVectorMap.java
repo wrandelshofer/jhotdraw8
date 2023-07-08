@@ -7,6 +7,9 @@ package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.pcollection.facade.ReadOnlySequencedMapFacade;
+import org.jhotdraw8.pcollection.facade.SequencedMapFacade;
+import org.jhotdraw8.pcollection.facade.SequencedSetFacade;
 import org.jhotdraw8.pcollection.impl.champ.AbstractMutableChampMap;
 import org.jhotdraw8.pcollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
@@ -15,15 +18,12 @@ import org.jhotdraw8.pcollection.impl.champ.ReverseTombSkippingVectorSpliterator
 import org.jhotdraw8.pcollection.impl.champ.SequencedData;
 import org.jhotdraw8.pcollection.impl.champ.SequencedEntry;
 import org.jhotdraw8.pcollection.impl.champ.TombSkippingVectorSpliterator;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlySequencedMapFacade;
-import org.jhotdraw8.pcollection.impl.facade.SequencedMapFacade;
-import org.jhotdraw8.pcollection.impl.facade.SequencedSetFacade;
 import org.jhotdraw8.pcollection.impl.iteration.FailFastIterator;
-import org.jhotdraw8.pcollection.impl.serialization.MapSerializationProxy;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.pcollection.sequenced.SequencedCollection;
 import org.jhotdraw8.pcollection.sequenced.SequencedMap;
 import org.jhotdraw8.pcollection.sequenced.SequencedSet;
+import org.jhotdraw8.pcollection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
 import java.util.Iterator;

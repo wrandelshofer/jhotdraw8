@@ -3,7 +3,6 @@
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/guava/MutableVectorSetGuavaTests.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/jol/VavrHashMapJol.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/jmh/VavrTreeMapJmh.java
-/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/enumerator/IntArrayEnumeratorTest.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/VectorSetTest.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/AbstractSequencedSetTest.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/MutableChampSetTest.java
@@ -73,4 +72,3 @@
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/jol/VavrLinkedHashSetJol.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/jol/VavrTreeMapJol.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/jmh/VectorListJmh.java
-/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/test/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/enumerator/IntRangeEnumeratorSpliteratorTest.java

@@ -6,7 +6,7 @@
 package org.jhotdraw8.pcollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.pcollection.impl.facade.SequencedSetFacade;
+import org.jhotdraw8.pcollection.facade.SequencedSetFacade;
 import org.jhotdraw8.pcollection.sequenced.SequencedSet;
 
 /**

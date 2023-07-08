@@ -2,7 +2,7 @@
  * @(#)SetFacade.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.pcollection.impl.facade;
+package org.jhotdraw8.pcollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -88,7 +88,7 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
     @SuppressWarnings("unchecked")
     @Override
     public Spliterator<E> spliterator() {
-        return (Spliterator<E>) spliteratorFunction.get();
+        return spliteratorFunction.get();
     }
 
     @Override

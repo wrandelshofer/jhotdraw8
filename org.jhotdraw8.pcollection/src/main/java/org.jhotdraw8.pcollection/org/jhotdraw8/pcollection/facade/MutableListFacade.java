@@ -2,7 +2,7 @@
  * @(#)MutableListFacade.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.pcollection.impl.facade;
+package org.jhotdraw8.pcollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -73,10 +73,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
         ImmutableList<E> oldList = backingList;
         backingList = backingList.remove((E) o);
         modCount++;
-        if (oldList != backingList) {
-            return true;
-        }
-        return false;
+        return oldList != backingList;
     }
 
     @Override
@@ -245,7 +242,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     @Override
     public boolean add(E e) {
         ImmutableList<E> oldList = backingList;
-        backingList = backingList.add((E) e);
+        backingList = backingList.add(e);
         if (oldList != backingList) {
             modCount++;
             return true;
@@ -255,14 +252,14 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public void add(int index, E e) {
-        backingList = backingList.add(index, (E) e);
+        backingList = backingList.add(index, e);
         modCount++;
     }
 
     @Override
     public E set(int index, E e) {
         E oldValue = backingList.get(index);
-        backingList = backingList.set(index, (E) e);
+        backingList = backingList.set(index, e);
         return oldValue;
     }
 

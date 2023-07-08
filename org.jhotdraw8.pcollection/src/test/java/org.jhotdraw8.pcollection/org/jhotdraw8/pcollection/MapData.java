@@ -1,6 +1,6 @@
 package org.jhotdraw8.pcollection;
 
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlyMapFacade;
+import org.jhotdraw8.pcollection.facade.ReadOnlyMapFacade;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyMap;
 
 import java.util.ArrayList;

@@ -7,13 +7,13 @@ package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.pcollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.pcollection.immutable.ImmutableList;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlyListFacade;
-import org.jhotdraw8.pcollection.impl.serialization.ListSerializationProxy;
 import org.jhotdraw8.pcollection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyList;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.pcollection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;

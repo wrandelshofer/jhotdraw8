@@ -8,7 +8,6 @@ package org.jhotdraw8.pcollection.facade;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.pcollection.AbstractImmutableSetTest;
 import org.jhotdraw8.pcollection.immutable.ImmutableSet;
-import org.jhotdraw8.pcollection.impl.facade.ImmutableSetFacade;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySet;
 
 import java.util.LinkedHashSet;

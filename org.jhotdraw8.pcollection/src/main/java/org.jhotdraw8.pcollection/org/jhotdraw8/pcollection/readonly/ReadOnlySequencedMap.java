@@ -7,8 +7,8 @@ package org.jhotdraw8.pcollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.pcollection.impl.facade.SequencedMapFacade;
+import org.jhotdraw8.pcollection.facade.ReadOnlySequencedSetFacade;
+import org.jhotdraw8.pcollection.facade.SequencedMapFacade;
 import org.jhotdraw8.pcollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.pcollection.sequenced.SequencedMap;
 

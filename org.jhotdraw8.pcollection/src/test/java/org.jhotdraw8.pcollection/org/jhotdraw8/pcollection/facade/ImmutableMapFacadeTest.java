@@ -8,7 +8,6 @@ package org.jhotdraw8.pcollection.facade;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.pcollection.AbstractImmutableMapTest;
 import org.jhotdraw8.pcollection.immutable.ImmutableMap;
-import org.jhotdraw8.pcollection.impl.facade.ImmutableMapFacade;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyMap;
 
 import java.util.LinkedHashMap;

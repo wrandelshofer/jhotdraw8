@@ -6,16 +6,16 @@ package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.pcollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.pcollection.immutable.ImmutableMap;
 import org.jhotdraw8.pcollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.pcollection.impl.champ.ChampIterator;
 import org.jhotdraw8.pcollection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
 import org.jhotdraw8.pcollection.impl.champ.Node;
-import org.jhotdraw8.pcollection.impl.facade.ReadOnlySetFacade;
-import org.jhotdraw8.pcollection.impl.serialization.MapSerializationProxy;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySet;
+import org.jhotdraw8.pcollection.serialization.MapSerializationProxy;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;

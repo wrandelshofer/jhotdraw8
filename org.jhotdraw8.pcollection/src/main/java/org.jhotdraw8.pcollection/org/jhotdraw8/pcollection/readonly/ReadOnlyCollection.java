@@ -5,7 +5,7 @@
 package org.jhotdraw8.pcollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.pcollection.impl.facade.CollectionFacade;
+import org.jhotdraw8.pcollection.facade.CollectionFacade;
 
 import java.util.Arrays;
 import java.util.Collection;
