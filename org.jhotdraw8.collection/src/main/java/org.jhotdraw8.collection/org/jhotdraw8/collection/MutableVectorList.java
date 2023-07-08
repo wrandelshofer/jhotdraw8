@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.facade.ListFacade;
+import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
@@ -14,7 +15,12 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
@@ -30,12 +36,12 @@ import java.util.stream.Stream;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(1)</li>
- *     <li>set: O(1)</li>
- *     <li>remove: O(n)</li>
- *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
- *     this mutable list instance.</li>
+ *     <li>addLast: O(log N)</li>
+ *     <li>set: O(log N)</li>
+ *     <li>removeAt: O(N)</li>
+ *     <li>removeFirst,removeLast: O(log N)</li>
+ *     <li>contains: O(N)</li>
+ *     <li>toImmutable: O(1)</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>
@@ -50,7 +56,7 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedCollection<E> {
+public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedCollection<E>, Cloneable {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -80,7 +86,11 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
-        return null;
+        return new ReadOnlyListFacade<>(
+                this::size,
+                index -> get(size - 1 - index),
+                () -> this
+        );
     }
 
     @Override
@@ -247,7 +257,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public @NonNull Spliterator<E> spliterator() {
-        return root.spliterator(0, Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
+        return root.spliterator(0, size(), Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
     }
 
     @Override
@@ -260,6 +270,18 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         root = toImmutable().removeRange(fromIndex, toIndex);
         size -= toIndex - fromIndex;
         modCount++;
+    }
+
+    @Override
+    public MutableVectorList<E> clone() {
+        try {
+            @SuppressWarnings("unchecked")
+            MutableVectorList<E> clone = (MutableVectorList<E>) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     private static class SerializationProxy<E> extends ListSerializationProxy<E> {

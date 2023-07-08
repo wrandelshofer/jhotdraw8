@@ -41,7 +41,7 @@ public interface StyleableBean {
     /**
      * Gets a read-only property of the id.
      *
-     * @return
+     * @return a read-only view on the id property
      */
     @NonNull ReadOnlyProperty<String> idProperty();
 

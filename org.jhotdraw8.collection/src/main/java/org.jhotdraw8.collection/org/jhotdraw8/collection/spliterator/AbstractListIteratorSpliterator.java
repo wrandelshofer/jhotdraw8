@@ -18,6 +18,9 @@ import java.util.function.Consumer;
  * @author Adrien Grzechowiak
  */
 public abstract class AbstractListIteratorSpliterator<E> implements ListIterator<E>, Spliterator<E> {
+    /**
+     * Constructs a new instance.
+     */
     public AbstractListIteratorSpliterator() {
     }
 

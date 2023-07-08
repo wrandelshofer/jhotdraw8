@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
@@ -101,7 +101,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param dfs   whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull EnumeratorSpliterator<V> searchPrevVertices(final @NonNull V start, final boolean dfs) {
+    default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final boolean dfs) {
         final Set<V> visited = new HashSet<>();
         return searchPrevVertices(start, visited::add, dfs);
     }
@@ -114,7 +114,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param dfs     whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull EnumeratorSpliterator<V> searchPrevVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+    default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
         return new BfsDfsVertexSpliterator<V>(this::getPrevVertices, start, visited, dfs);
     }
 

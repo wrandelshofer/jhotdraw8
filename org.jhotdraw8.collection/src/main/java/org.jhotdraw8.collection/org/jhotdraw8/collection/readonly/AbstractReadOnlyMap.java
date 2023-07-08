@@ -13,6 +13,9 @@ import org.jhotdraw8.annotation.NonNull;
  * @param <V> the value type
  */
 public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
+    /**
+     * Constructs a new instance.
+     */
     public AbstractReadOnlyMap() {
     }
 

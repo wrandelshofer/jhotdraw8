@@ -1,9 +1,19 @@
 package org.jhotdraw8.collection.jmh;
 
 import org.jhotdraw8.collection.VectorMap;
-import org.jhotdraw8.collection.enumerator.Enumerator;
-import org.jhotdraw8.collection.enumerator.EnumeratorFacade;
-import org.openjdk.jmh.annotations.*;
+import org.jhotdraw8.collection.enumerator.BareEnumerator;
+import org.jhotdraw8.collection.enumerator.SpliteratorEnumeratorWrapper;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -85,8 +95,7 @@ public class VectorMapJmh {
     @Param({"10", "1000", "100000", "10000000"})
     private int size;
 
-    @Param({"-65"})
-    private int mask;
+    private int mask = -65;
 
     private BenchmarkData data;
     private VectorMap<Key, Boolean> mapA;
@@ -112,7 +121,7 @@ public class VectorMapJmh {
     @Benchmark
     public int mIterateEnumerator() {
         int sum = 0;
-        for (Enumerator<Map.Entry<Key, Boolean>> i = new EnumeratorFacade<>(mapA.spliterator()); i.moveNext(); ) {
+        for (BareEnumerator<Map.Entry<Key, Boolean>> i = new SpliteratorEnumeratorWrapper<>(mapA.spliterator()); i.moveNext(); ) {
             sum += i.current().getKey().value;
         }
         return sum;

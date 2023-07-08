@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.Nullable;
  * <p>
  * This is a value-type.
  *
- * @param <@NonNull V> the type of the elements that form the pair
+ * @param <V> the type of the elements that form the pair
  * @author Werner Randelshofer
  */
 public class NonNullUnorderedPair<V> implements UnorderedPair<V> {

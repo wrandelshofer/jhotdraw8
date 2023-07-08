@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.graph.precondition.Preconditions;
 
@@ -70,7 +70,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     public AbstractMutableIndexedBidiGraph(@NonNull IndexedDirectedGraph g) {
         buildAddVertices(g.getVertexCount());
         for (int v = 0; v < vertexCount; v++) {
-            for (IntEnumerator it = g.nextVerticesEnumerator(v); it.moveNext(); ) {
+            for (Enumerator.OfInt it = g.nextVerticesEnumerator(v); it.moveNext(); ) {
                 buildAddArrow(v, it.currentAsInt());
             }
         }

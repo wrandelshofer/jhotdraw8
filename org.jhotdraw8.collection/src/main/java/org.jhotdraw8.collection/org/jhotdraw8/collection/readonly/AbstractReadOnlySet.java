@@ -10,6 +10,9 @@ package org.jhotdraw8.collection.readonly;
  * @param <E> the element type
  */
 public abstract class AbstractReadOnlySet<E> extends AbstractReadOnlyCollection<E> implements ReadOnlySet<E> {
+    /**
+     * Constructs a new instance.
+     */
     public AbstractReadOnlySet() {
     }
 

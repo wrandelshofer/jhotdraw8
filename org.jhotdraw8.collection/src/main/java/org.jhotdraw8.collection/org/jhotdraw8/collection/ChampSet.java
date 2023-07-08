@@ -100,6 +100,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         this.size = size;
     }
 
+
     /**
      * Returns an immutable set that contains the provided elements.
      *

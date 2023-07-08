@@ -13,7 +13,12 @@ import org.jhotdraw8.collection.mapped.MappedIterator;
 import org.jhotdraw8.collection.mapped.MappedSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Spliterator;
 
 /**
  * Abstract base class for {@link SequencedMap}s.
@@ -22,6 +27,9 @@ import java.util.*;
  * @param <V> the value type
  */
 public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
+    /**
+     * Constructs a new instance.
+     */
     public AbstractSequencedMap() {
     }
 

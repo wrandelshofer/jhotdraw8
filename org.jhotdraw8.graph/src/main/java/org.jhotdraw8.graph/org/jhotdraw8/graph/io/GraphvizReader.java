@@ -17,7 +17,11 @@ import java.io.StreamTokenizer;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -51,6 +55,9 @@ import java.util.function.Supplier;
  *     <dt>Graphviz. DOT Language.</dt>
  *     <dd><a href="https://graphviz.org/doc/info/lang.html">graphviz.org</a></dd>
  * </dl>
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
  */
 public class GraphvizReader<V, A> {
     private final @NonNull BiFunction<String, Map<String, String>, V> vertexFactory;

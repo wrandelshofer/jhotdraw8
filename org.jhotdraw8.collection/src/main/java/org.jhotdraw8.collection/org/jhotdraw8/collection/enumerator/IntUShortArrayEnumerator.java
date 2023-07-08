@@ -8,7 +8,7 @@ package org.jhotdraw8.collection.enumerator;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * An {@link IntEnumerator} over an unsigned short array.
+ * An {@link Enumerator.OfInt} over an unsigned short array.
  */
 public class IntUShortArrayEnumerator extends AbstractIntEnumerator {
     private final int limit;

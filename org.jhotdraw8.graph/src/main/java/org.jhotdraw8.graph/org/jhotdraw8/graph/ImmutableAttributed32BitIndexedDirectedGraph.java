@@ -5,8 +5,8 @@
 package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntArrayEnumerator;
-import org.jhotdraw8.collection.enumerator.IntEnumerator;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -272,7 +272,7 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public @NonNull IntEnumerator nextVerticesEnumerator(int v) {
+    public Enumerator.@NonNull OfInt nextVerticesEnumerator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
         return new IntArrayEnumerator(this.next, offset, nextOffset);

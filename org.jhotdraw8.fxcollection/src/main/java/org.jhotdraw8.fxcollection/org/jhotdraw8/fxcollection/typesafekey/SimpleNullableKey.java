@@ -13,6 +13,7 @@ import java.lang.reflect.Type;
 /**
  * A simple {@link Key} which has a nullable value.
  *
+ * @param <T> the value type
  * @author Werner Randelshofer
  */
 public class SimpleNullableKey<T> extends AbstractKey<T> implements NullableKey<T> {

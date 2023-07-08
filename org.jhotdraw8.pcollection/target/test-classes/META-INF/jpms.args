@@ -1,0 +1,4 @@
+--patch-module
+org.jhotdraw8.pcollection=_
+--add-reads
+org.jhotdraw8.pcollection=ALL-UNNAMED

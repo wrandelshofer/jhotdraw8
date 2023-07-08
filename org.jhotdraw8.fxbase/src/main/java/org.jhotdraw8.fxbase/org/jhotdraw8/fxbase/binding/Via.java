@@ -19,20 +19,23 @@ import java.util.function.Function;
  * Builder for bindings that go via multiple properties.
  * <p>
  * Usage: Bind a text field to {@code person.address.city}.
- * <pre>
+ * <pre>{@literal
  *     TextField cityField;
+ *     Property<Person> personProperty;
  *
- *     Via via = new Via(personProperty);
+ *     Via<Person> via = new Via<>(personProperty);
  *     cityField.textProperty().bindBidirectional(
  *         via.via(Person::addressProperty)
  *         .via(Address::cityProperty)
  *         .get()
  *     );
- * </pre>
+ * }</pre>
  * <p>
  * Creates change listeners that are strongly referenced from the root object.
  * <p>
  * When the root object is garbage collected, the change listeners unregister themselves.
+ *
+ * @param <T> the value type of the property
  */
 public class Via<T> {
     private final @NonNull WeakReference<Property<?>> weakReferenceToRoot;

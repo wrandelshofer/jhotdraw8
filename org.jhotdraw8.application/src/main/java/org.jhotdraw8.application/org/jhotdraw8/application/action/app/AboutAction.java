@@ -35,7 +35,9 @@ import static org.jhotdraw8.application.Application.VERSION_KEY;
  * @author Werner Randelshofer
  */
 public class AboutAction extends AbstractApplicationAction {
-
+    /**
+     * The id of this action.
+     */
     public static final String ID = "application.about";
 
     /**

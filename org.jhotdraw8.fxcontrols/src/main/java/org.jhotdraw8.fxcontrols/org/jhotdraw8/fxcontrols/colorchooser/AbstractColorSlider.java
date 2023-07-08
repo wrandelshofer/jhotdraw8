@@ -479,9 +479,9 @@ public abstract class AbstractColorSlider extends Pane {
      *     +----------
      * </pre>
      *
-     * @param colorSpace
-     * @param component
-     * @return
+     * @param colorSpace a color space
+     * @param component component values in the specified color space
+     * @return true if at least one component value is out of gamut
      */
     protected static boolean outOfGamut(NamedColorSpace colorSpace, float[] component) {
         float epsMax;

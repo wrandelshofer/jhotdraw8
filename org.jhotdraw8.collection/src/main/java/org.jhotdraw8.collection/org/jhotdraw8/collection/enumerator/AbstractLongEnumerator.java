@@ -7,13 +7,13 @@ package org.jhotdraw8.collection.enumerator;
 import java.util.Spliterators;
 
 /**
- * Abstract base class for {@link IntEnumerator}s.
+ * Abstract base class for {@link Enumerator.OfLong}s.
  *
  * @author Werner Randelshofer
  */
 public abstract class AbstractLongEnumerator
         extends Spliterators.AbstractLongSpliterator
-        implements LongEnumerator {
+        implements Enumerator.OfLong {
     /**
      * The current element of the enumerator.
      */

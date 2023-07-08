@@ -21,6 +21,7 @@ import java.util.function.Function;
  * breadth-first-order or in depth-first-order.
  *
  * @param <V> the vertex data type
+ * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
 public class BfsDfsArcSpliterator<V, A> extends AbstractEnumerator<Arc<V, A>> {
