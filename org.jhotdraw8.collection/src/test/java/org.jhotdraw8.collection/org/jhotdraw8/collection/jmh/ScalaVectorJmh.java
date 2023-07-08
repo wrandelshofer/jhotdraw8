@@ -17,6 +17,7 @@ import scala.collection.mutable.ReusableBuilder;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.math.BigInteger;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -26,46 +27,51 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  * # org.scala-lang:scala-library:2.13.8
  *
- * Benchmark                          (size)  Mode  Cnt         Score   Error  Units
- * ScalaVectorJmh.mAddFirst               10  avgt             27.796          ns/op
- * ScalaVectorJmh.mAddFirst          1000000  avgt            320.989          ns/op
- * ScalaVectorJmh.mAddLast                10  avgt             24.118          ns/op
- * ScalaVectorJmh.mAddLast           1000000  avgt            207.482          ns/op
- * ScalaVectorJmh.mContainsNotFound       10  avgt             14.826          ns/op
- * ScalaVectorJmh.mContainsNotFound  1000000  avgt       20864102.835          ns/op
- * ScalaVectorJmh.mGet                    10  avgt              4.311          ns/op
- * ScalaVectorJmh.mGet               1000000  avgt            198.885          ns/op
- * ScalaVectorJmh.mHead                   10  avgt              1.082          ns/op
- * ScalaVectorJmh.mHead              1000000  avgt              1.082          ns/op
- * ScalaVectorJmh.mIterate                10  avgt             11.180          ns/op
- * ScalaVectorJmh.mIterate           1000000  avgt       32438888.398          ns/op
- * ScalaVectorJmh.mRemoveLast             10  avgt             18.567          ns/op
- * ScalaVectorJmh.mRemoveLast        1000000  avgt            103.234          ns/op
- * ScalaVectorJmh.mReversedIterate        10  avgt             10.555          ns/op
- * ScalaVectorJmh.mReversedIterate   1000000  avgt       43129266.738          ns/op
- * ScalaVectorJmh.mTail                   10  avgt             18.878          ns/op
- * ScalaVectorJmh.mTail              1000000  avgt             46.531          ns/op
- * ScalaVectorJmh.mSet                    10  avgt             33.717          ns/op
- * ScalaVectorJmh.mSet               1000000  avgt            847.992          ns/op
+ * Benchmark           (size)  Mode  Cnt         Score   Error  Units
+ * mAddFirst               10  avgt             27.796          ns/op
+ * mAddFirst          1000000  avgt            320.989          ns/op
+ * mAddLast                10  avgt             24.118          ns/op
+ * mAddLast           1000000  avgt            207.482          ns/op
+ * mContainsNotFound       10  avgt             14.826          ns/op
+ * mContainsNotFound  1000000  avgt       20864102.835          ns/op
+ * mGet                    10  avgt              4.311          ns/op
+ * mGet               1000000  avgt            198.885          ns/op
+ * mHead                   10  avgt              1.082          ns/op
+ * mHead              1000000  avgt              1.082          ns/op
+ * mIterate                10  avgt             11.180          ns/op
+ * mIterate           1000000  avgt       32438888.398          ns/op
+ * mRemoveAtIndex          10  avgt    2        51.895          ns/op
+ * mRemoveAtIndex        1000  avgt    2       287.529          ns/op
+ * mRemoveAtIndex     1000000  avgt    2       936.376          ns/op
+ * mRemoveLast             10  avgt    2        12.412          ns/op
+ * mRemoveLast           1000  avgt    2        41.881          ns/op
+ * mRemoveLast        1000000  avgt    2        80.044          ns/op
+ * mReversedIterate        10  avgt             10.555          ns/op
+ * mReversedIterate   1000000  avgt       43129266.738          ns/op
+ * mTail                   10  avgt             18.878          ns/op
+ * mTail              1000000  avgt             46.531          ns/op
+ * mSet                    10  avgt             33.717          ns/op
+ * mSet               1000000  avgt            847.992          ns/op
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 0)
-@Warmup(iterations = 0)
-@Fork(value = 0)
+@Measurement(iterations = 1)
+@Warmup(iterations = 1)
+@Fork(value = 1)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 @SuppressWarnings("unchecked")
 public class ScalaVectorJmh {
-    @Param({"10", "1000000"})
+    @Param({"10", "1000", "1000000"})
     private int size;
 
-    private final int mask = ~64;
+    private int mask = -65;
 
     private BenchmarkData data;
     private Vector<Key> listA;
 
 
     private Method updated;
+    private int index;
 
 
     @Setup
@@ -83,6 +89,7 @@ public class ScalaVectorJmh {
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
+        index = Math.min(listA.length() - 1, BigInteger.valueOf(listA.length() / 2).nextProbablePrime().intValue());
     }
 
     @Benchmark
@@ -123,6 +130,11 @@ public class ScalaVectorJmh {
     @Benchmark
     public Vector<Key> mRemoveLast() {
         return listA.dropRight(1);
+    }
+
+    @Benchmark
+    public Vector<Key> mRemoveAtIndex() {
+        return listA.take(index).appendedAll(listA.drop(index));
     }
 
     @Benchmark

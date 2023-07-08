@@ -17,7 +17,13 @@ import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Spliterator;
 
 import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
 
@@ -37,12 +43,12 @@ import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(log N)</li>
+ *     <li>addLast: O(log N)</li>
  *     <li>set: O(log N)</li>
- *     <li>remove: O(n)</li>
- *     <li>contains: O(log N)</li>
- *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in
- *     the mutable copy</li>
+ *     <li>removeAt: O(N)</li>
+ *     <li>removeFirst,removeLast: O(log N)</li>
+ *     <li>contains: O(N)</li>
+ *     <li>toMutable: O(1)</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(log N)</li>
  *     <li>getFirst, getLast: O(log N)</li>
@@ -88,7 +94,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     @SuppressWarnings("unchecked")
     @SafeVarargs
     public static <T> VectorList<T> of(T... t) {
-        return ((VectorList<T>) EMPTY).addAll(Arrays.asList(t));
+        return new VectorList<T>(BitMappedTrie.ofAll(t), t.length);
 
     }
 
@@ -104,6 +110,9 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
         }
         if (iterable instanceof MutableVectorList<?> mc) {
             return (VectorList<T>) mc.toImmutable();
+        }
+        if (iterable instanceof Collection<?> c) {
+            return new VectorList<T>(BitMappedTrie.ofAll(c.toArray()), c.size());
         }
         BitMappedTrie<T> root = BitMappedTrie.<T>empty().appendAll(iterable);
         return root.length() == 0 ? of() : new VectorList<T>(root, root.length);
@@ -121,6 +130,9 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
 
     @Override
     public @NonNull VectorList<E> add(int index, @NonNull E element) {
+        if (index == 0) {
+            return new VectorList<>(prepend(element), size + 1);
+        }
         return index == size ? add(element) : addAll(index, Collections.singleton(element));
     }
 
@@ -149,7 +161,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
 
     @Override
     public @NonNull VectorList<E> addFirst(@Nullable E element) {
-        return new VectorList<>(prepend(element), size + 1);
+        return add(0, element);
     }
 
     @Override
@@ -159,7 +171,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
 
     @Override
     public @NonNull VectorList<E> addAll(int index, @NonNull Iterable<? extends E> c) {
-        Objects.requireNonNull(c, "elements is null");
+        Objects.requireNonNull(c, "c is null");
         if (index >= 0 && index <= size) {
             final VectorList<E> begin = readOnlySubList(0, index).addAll(c);
             final VectorList<E> end = readOnlySubList(index, size);
@@ -233,14 +245,12 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     public @NonNull VectorList<E> removeRange(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size + 1);
-        if (fromIndex == 0) {
-            return readOnlySubList(toIndex, size);
-        }
-        if (toIndex == size) {
-            return readOnlySubList(0, fromIndex);
-        }
-        final VectorList<E> begin = readOnlySubList(0, fromIndex);
-        return begin.addAll(() -> listIterator(toIndex));
+        var begin = take(fromIndex);
+        var end = drop(toIndex);
+        return new VectorList<>(begin.length > end.length
+                ? begin.append(end.iterator(), end.length)
+                : end.prepend(begin.iterator(), begin.length),
+                size - (toIndex - fromIndex));
     }
 
     @Override
@@ -291,7 +301,7 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
 
     public int indexOf(Object o, int fromIndex) {
         if (fromIndex < size) {
-            for (Iterator<E> i = iterator(fromIndex); i.hasNext(); fromIndex++) {
+            for (Iterator<E> i = iterator(fromIndex, size()); i.hasNext(); fromIndex++) {
                 E e = i.next();
                 if (Objects.equals(o, e)) {
                     return fromIndex;
@@ -321,12 +331,12 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return super.iterator(0);
+        return super.iterator(0, size());
     }
 
     @Override
     public @NonNull Spliterator<E> spliterator() {
-        return super.spliterator(0, Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
+        return super.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
     }
 
     private static class SerializationProxy<E> extends ListSerializationProxy<E> {
