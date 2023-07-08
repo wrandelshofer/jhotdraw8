@@ -82,8 +82,7 @@ public class SequencedElement<E> implements SequencedData {
 
     @Override
     public String toString() {
-        return "{" +
-                "" + element +
+        return "{" + element +
                 ", seq=" + sequenceNumber +
                 '}';
     }

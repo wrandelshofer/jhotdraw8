@@ -11,6 +11,7 @@ import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.iterator.FailFastListIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.spliterator.FailFastSpliterator;
 
 import java.util.AbstractList;
@@ -19,7 +20,6 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
-import java.util.SequencedCollection;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
@@ -50,13 +50,12 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull List<E> reversed() {
-        return new ListFacade<E>(
+    public @NonNull SequencedCollection<E> _reversed() {
+        return new SequencedCollectionFacade<E>(
+                this::reverseIterator,
+                this::iterator,
                 this::size,
-                i -> get(size() - 1 - i),
-                this::clear,
-                (i, e) -> add(size() - 1 - i, e),
-                (i) -> remove(size() - 1 - i)
+                this::contains
         );
     }
 
@@ -74,10 +73,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
         ImmutableList<E> oldList = backingList;
         backingList = backingList.remove((E) o);
         modCount++;
-        if (oldList != backingList) {
-            return true;
-        }
-        return false;
+        return oldList != backingList;
     }
 
     @Override
@@ -246,7 +242,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     @Override
     public boolean add(E e) {
         ImmutableList<E> oldList = backingList;
-        backingList = backingList.add((E) e);
+        backingList = backingList.add(e);
         if (oldList != backingList) {
             modCount++;
             return true;
@@ -256,14 +252,14 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public void add(int index, E e) {
-        backingList = backingList.add(index, (E) e);
+        backingList = backingList.add(index, e);
         modCount++;
     }
 
     @Override
     public E set(int index, E e) {
         E oldValue = backingList.get(index);
-        backingList = backingList.set(index, (E) e);
+        backingList = backingList.set(index, e);
         return oldValue;
     }
 
@@ -286,5 +282,15 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     public @NonNull ListIterator<E> listIterator(int index) {
         Objects.checkIndex(index, size() + 1);
         return new FailFastListIterator<>(new MyListIterator(index), () -> this.modCount);
+    }
+
+    @Override
+    public E removeFirst() {
+        return SequencedCollection.super.removeFirst();
+    }
+
+    @Override
+    public E removeLast() {
+        return SequencedCollection.super.removeLast();
     }
 }

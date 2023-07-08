@@ -93,7 +93,7 @@ public interface SequencedData {
     }
 
 
-    final static VectorTombstone TOMB_ZERO_ZERO = new VectorTombstone(0, 0);
+    VectorTombstone TOMB_ZERO_ZERO = new VectorTombstone(0, 0);
 
     static <K extends SequencedData> OrderedPair<VectorList<Object>, Integer> vecRemove(VectorList<Object> vector, K oldElem, int offset) {
         // If the element is the first, we can remove it and its neighboring tombstones from the vector.

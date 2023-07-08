@@ -10,7 +10,11 @@ import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 
@@ -26,8 +30,8 @@ public class ReadOnlySubListFacade<E> extends AbstractReadOnlyList<E> {
     private final ReadOnlyList<E> root;
     private final ReadOnlySubListFacade<E> parent;
     private final int offset;
-    private int size;
-    private int modCount;
+    private final int size;
+    private final int modCount;
     private final @NonNull IntSupplier modCountSupplier;
 
     /**
@@ -119,7 +123,7 @@ public class ReadOnlySubListFacade<E> extends AbstractReadOnlyList<E> {
         return new ListIterator<E>() {
             int cursor = index;
             int lastRet = -1;
-            int expectedModCount = ReadOnlySubListFacade.this.modCount;
+            final int expectedModCount = ReadOnlySubListFacade.this.modCount;
 
             public boolean hasNext() {
                 return cursor != ReadOnlySubListFacade.this.size;
@@ -134,7 +138,7 @@ public class ReadOnlySubListFacade<E> extends AbstractReadOnlyList<E> {
                 if (offset + i >= root.size())
                     throw new ConcurrentModificationException();
                 cursor = i + 1;
-                return (E) root.get(offset + (lastRet = i));
+                return root.get(offset + (lastRet = i));
             }
 
             public boolean hasPrevious() {
@@ -150,7 +154,7 @@ public class ReadOnlySubListFacade<E> extends AbstractReadOnlyList<E> {
                 if (offset + i >= root.size())
                     throw new ConcurrentModificationException();
                 cursor = i;
-                return (E) root.get(offset + (lastRet = i));
+                return root.get(offset + (lastRet = i));
             }
 
             public void forEachRemaining(Consumer<? super E> action) {

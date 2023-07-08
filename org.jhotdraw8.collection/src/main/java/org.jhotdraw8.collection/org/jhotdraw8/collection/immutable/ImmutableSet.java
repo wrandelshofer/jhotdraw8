@@ -117,7 +117,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
             var s = this;
             for (var e : this) {
                 if (!co.contains(e)) {
-                    s = s.remove((E) e);
+                    s = s.remove(e);
                 }
             }
             return s;
@@ -130,7 +130,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
         var s = this;
         for (var e : this) {
             if (!rc.contains(e)) {
-                s = s.remove((E) e);
+                s = s.remove(e);
             }
         }
         return s;
