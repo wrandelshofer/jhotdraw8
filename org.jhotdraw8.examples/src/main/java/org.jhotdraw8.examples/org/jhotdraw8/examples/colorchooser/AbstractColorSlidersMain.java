@@ -27,7 +27,16 @@ import java.util.function.Function;
 import java.util.function.ToIntFunction;
 import java.util.stream.Collectors;
 
+/**
+ * Abstract base class for color slider examples.
+ */
 public abstract class AbstractColorSlidersMain extends Application {
+    /**
+     * Constructs a new instance.
+     */
+    public AbstractColorSlidersMain() {
+    }
+
     @NonNull
     protected ComboBox<ToIntFunction<Integer>> createBitDepthComboBox() {
         ComboBox<ToIntFunction<Integer>> comboBox = new ComboBox<>();
@@ -63,6 +72,12 @@ public abstract class AbstractColorSlidersMain extends Application {
         return comboBox;
     }
 
+    /**
+     * Creates a combo box for choosing a color space from the provided set.
+     *
+     * @param colorSpaces a set of color spaces
+     * @return a combo box
+     */
     protected @NonNull ComboBox<NamedColorSpace> createColorSpaceComboBox(NamedColorSpace... colorSpaces) {
         Map<String, NamedColorSpace> map =
                 Arrays.asList(colorSpaces)
@@ -87,6 +102,12 @@ public abstract class AbstractColorSlidersMain extends Application {
         return comboBox;
     }
 
+    /**
+     * Creates text fields for the specified component properties.
+     *
+     * @param components properties holding component values
+     * @return text fields
+     */
     @NonNull
     protected List<TextField> createTextFields(@NonNull FloatProperty... components) {
         List<TextField> fields = new ArrayList<>(components.length);

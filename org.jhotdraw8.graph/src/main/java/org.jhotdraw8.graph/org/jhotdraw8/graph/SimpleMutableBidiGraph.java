@@ -9,9 +9,15 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -63,6 +69,9 @@ import java.util.*;
  * </pre>
  *
  * @author Werner Randelshofer
+ *
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
  */
 public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
@@ -355,7 +364,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             return unchecked;
         }
 
-        private @NonNull EnumeratorSpliterator<Node<V, A>> nodesEnumerator() {
+        private @NonNull Enumerator<Node<V, A>> nodesEnumerator() {
             // We must use explicit type arguments in Java 8!
             return new AbstractEnumerator<Node<V, A>>(size, 0) {
                 int index = 0;

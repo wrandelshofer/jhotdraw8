@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
-import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.precondition.Preconditions;
@@ -171,7 +171,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @param visited the set of visited vertices
      * @return the enumerator provides the vertex index
      */
-    public @NonNull IntEnumerator searchPrevVertices(final int vidx, boolean dfs, final @NonNull AddToIntSet visited) {
+    public Enumerator.@NonNull OfInt searchPrevVertices(final int vidx, boolean dfs, final @NonNull AddToIntSet visited) {
         return new SearchVertexSpliterator(vidx, prevChunks, dfs, visited);
     }
 
@@ -196,7 +196,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @param visited the set of visited vertices
      * @return the enumerator provides the vertex index
      */
-    public @NonNull IntEnumerator searchNextVertices(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+    public Enumerator.@NonNull OfInt searchNextVertices(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
         return new SearchVertexSpliterator(v, nextChunks, dfs, visited);
     }
 

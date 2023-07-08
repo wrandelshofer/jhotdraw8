@@ -1,49 +1,167 @@
 /*
- * @(#)Enumerator.java
+ * @(#)Spliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.collection.enumerator;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
+import java.util.Spliterator;
+import java.util.function.Consumer;
+import java.util.function.DoubleConsumer;
+import java.util.function.IntConsumer;
+import java.util.function.LongConsumer;
 
 /**
- * Interface for enumerating elements of a collection.
- * <p>
- * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
- * {@link Iterator}, and avoids the inherent race involved in having separate methods for
- * {@code hasNext()} and {@code next()}.
+ * Interface for classes that implement both the {@link BareEnumerator} and
+ * the {@link Spliterator} interface.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public interface Enumerator<E> {
-    /**
-     * Advances the enumerator to the next element of the collection.
-     *
-     * @return true if the enumerator was successfully advanced to the next element;
-     * false if the enumerator has passed the end of the collection.
-     */
-    boolean moveNext();
+public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
+    @Override
+    default boolean tryAdvance(@NonNull Consumer<? super E> action) {
+        if (moveNext()) {
+            action.accept(current());
+            return true;
+        }
+        return false;
+    }
 
     /**
-     * Gets the element in the collection at the current position of the enumerator.
+     * An object for enumerating primitive long-valued elements of a collection.
      * <p>
-     * Current is undefined under any of the following conditions:
-     * <ul>
-     * <li>The enumerator is positioned before the first element in the collection.
-     * Immediately after the enumerator is created {@link #moveNext} must be called to advance
-     * the enumerator to the first element of the collection before reading the value of Current.</li>
+     * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
+     * {@link Iterator}, and avoids the inherent race involved in having separate methods for
+     * {@code hasNext()} and {@code next()}.
      *
-     * <li>The last call to {@link #moveNext} returned false, which indicates the end
-     * of the collection.</li>
-     *
-     * <li>The enumerator is invalidated due to changes made in the collection,
-     * such as adding, modifying, or deleting elements.</li>
-     * </ul>
-     * Current returns the same object until MoveNext is called.MoveNext
-     * sets Current to the next element.
-     *
-     * @return current
+     * @author Werner Randelshofer
      */
-    E current();
+    interface OfLong extends Enumerator<Long>, Spliterator.OfLong {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default @NonNull Long current() {
+            return currentAsLong();
+        }
+
+        /**
+         * Returns the current value.
+         *
+         * @return current
+         * @see Enumerator#current()
+         */
+        long currentAsLong();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default boolean tryAdvance(@NonNull LongConsumer action) {
+            if (moveNext()) {
+                action.accept(currentAsLong());
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default boolean tryAdvance(@NonNull Consumer<? super Long> action) {
+            return Enumerator.super.tryAdvance(action);
+        }
+
+    }
+
+    /**
+     * An object for enumerating primitive double-valued elements of a collection.
+     */
+    interface OfDouble extends Enumerator<Double>, Spliterator.OfDouble {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default @NonNull Double current() {
+            return currentAsDouble();
+        }
+
+        /**
+         * Returns the current value.
+         *
+         * @return current
+         * @see Enumerator#current()
+         */
+        double currentAsDouble();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default boolean tryAdvance(@NonNull DoubleConsumer action) {
+            if (moveNext()) {
+                action.accept(currentAsDouble());
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default boolean tryAdvance(@NonNull Consumer<? super Double> action) {
+            return Enumerator.super.tryAdvance(action);
+        }
+
+    }
+
+    /**
+     * An object for enumerating primitive int-valued elements of a collection.
+     */
+    interface OfInt extends Enumerator<Integer>, Spliterator.OfInt {
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default @NonNull Integer current() {
+            return currentAsInt();
+        }
+
+        /**
+         * Returns the current value.
+         *
+         * @return current
+         * @see Enumerator#current()
+         */
+        int currentAsInt();
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default boolean tryAdvance(@NonNull IntConsumer action) {
+            if (moveNext()) {
+                action.accept(currentAsInt());
+                return true;
+            }
+            return false;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        default boolean tryAdvance(@NonNull Consumer<? super Integer> action) {
+            return Enumerator.super.tryAdvance(action);
+        }
+
+    }
 }

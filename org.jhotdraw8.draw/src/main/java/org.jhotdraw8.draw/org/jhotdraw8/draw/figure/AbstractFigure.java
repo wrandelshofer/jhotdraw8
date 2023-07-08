@@ -244,9 +244,9 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      * @param key        the changed key
      * @param oldValue   the old value
      * @param newValue   the new value
-     * @param wasAdded
-     * @param wasRemoved
-     * @param <T>
+     * @param wasAdded   whether the value was added (hence oldValue does not matter)
+     * @param wasRemoved whether the value was removed (hence newValue does not matter)
+     * @param <T>        the value type of the property
      */
     @Override
     protected <T> void onPropertyChanged(Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {

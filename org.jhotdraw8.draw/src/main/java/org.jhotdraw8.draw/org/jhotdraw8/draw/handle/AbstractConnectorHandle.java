@@ -34,22 +34,14 @@ import java.util.stream.Collectors;
  * @author Werner Randelshofer
  */
 public abstract class AbstractConnectorHandle extends AbstractHandle {
-    protected static class ConnectorAndConnectedFigure {
-        final @NonNull Connector connector;
-        final @NonNull Figure connectedFigure;
-
-        public ConnectorAndConnectedFigure(@NonNull Connector connector, @NonNull Figure connectedFigure) {
-            this.connector = connector;
-            this.connectedFigure = connectedFigure;
-        }
-
-        public @NonNull Connector getConnector() {
-            return connector;
-        }
-
-        public @NonNull Figure getConnectedFigure() {
-            return connectedFigure;
-        }
+    /**
+     * Record for a connector and its connected figure.
+     *
+     * @param connector       a connector
+     * @param connectedFigure the connected figure
+     */
+    protected record ConnectorAndConnectedFigure(@NonNull Connector connector,
+                                                 @NonNull Figure connectedFigure) {
     }
 
     protected final @NonNull MapAccessor<Connector> connectorKey;
@@ -146,9 +138,9 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                 newConnectedFigure = prevTarget;
                 ConnectableFigure cff = (ConnectableFigure) prevTarget;
                 final ConnectorAndConnectedFigure connectorAndConnectedFigure = find(constrainedPointInWorld, o, cff, event, tolerance);
-                newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.getConnector();
+                newConnector = connectorAndConnectedFigure == null ? null : connectorAndConnectedFigure.connector();
                 if (newConnector != null && o.canConnect(cff, newConnector)) {
-                    newConnectedFigure = connectorAndConnectedFigure.getConnectedFigure();
+                    newConnectedFigure = connectorAndConnectedFigure.connectedFigure();
                     constrainedPointInWorld = new CssPoint2D(newConnector.getPointAndDerivativeInLocal(o, cff).getPoint(Point2D::new));
                     isConnected = true;
                 }
@@ -166,15 +158,15 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPointInWorld);
                             if (ff.getBoundsInLocal().contains(pointInLocal)) {
                                 final ConnectorAndConnectedFigure candidate = find(constrainedPointInWorld, o, cff, event, tolerance);
-                                final Connector candidateConnector = candidate == null ? null : candidate.getConnector();
+                                final Connector candidateConnector = candidate == null ? null : candidate.connector();
                                 if (candidateConnector != null && o.canConnect(ff, newConnector)) {
-                                    Point2D p = candidate.getConnector().getPointAndDerivativeInWorld(owner, candidate.getConnectedFigure()).getPoint(Point2D::new);
+                                    Point2D p = candidate.connector().getPointAndDerivativeInWorld(owner, candidate.connectedFigure()).getPoint(Point2D::new);
                                     double distanceSq = FXGeom.distanceSq(p, unconstrainedPointInWorld);
                                     if (distanceSq <= closestDistanceSq) {
                                         // we compare <= because we go back to front, and the
                                         // front-most figure wins
                                         closestDistanceSq = distanceSq;
-                                        newConnectedFigure = candidate.getConnectedFigure();
+                                        newConnectedFigure = candidate.connectedFigure();
                                         newConnector = candidateConnector;
                                         isConnected = true;
                                     }

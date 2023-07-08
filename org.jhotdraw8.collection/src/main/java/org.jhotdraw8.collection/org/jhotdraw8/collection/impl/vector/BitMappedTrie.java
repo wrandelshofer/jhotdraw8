@@ -14,7 +14,12 @@ import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -97,7 +102,7 @@ public class BitMappedTrie<T> implements Serializable {
         return branchCount * fullBranchSize;
     }
 
-    static <T> @NonNull BitMappedTrie<T> ofAll(@NonNull Object array) {
+    protected static <T> @NonNull BitMappedTrie<T> ofAll(@NonNull Object array) {
         final ArrayType<T> type = ArrayType.of(array);
         final int size = type.lengthOf(array);
         return (size == 0) ? empty() : ofAll(array, type, size);
@@ -117,7 +122,8 @@ public class BitMappedTrie<T> implements Serializable {
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull BitMappedTrie<T> prependAll(@NonNull Iterable<? extends T> iterable) {
+    @NonNull
+    protected BitMappedTrie<T> prependAll(@NonNull Iterable<? extends T> iterable) {
         if (iterable instanceof SequencedCollection<?> s) {
             return prepend((Iterator<? extends T>) s._reversed().iterator(), s.size());
         }
@@ -214,7 +220,8 @@ public class BitMappedTrie<T> implements Serializable {
         return result;
     }
 
-    private @NonNull BitMappedTrie<T> append(java.util.@NonNull Iterator<? extends T> iterator, int size) {
+    @NonNull
+    public BitMappedTrie<T> append(java.util.@NonNull Iterator<? extends T> iterator, int size) {
         BitMappedTrie<T> result = this;
         while (size > 0) {
             Object array = result.array;
@@ -404,13 +411,18 @@ public class BitMappedTrie<T> implements Serializable {
     }
 
 
-    public @NonNull Spliterator<T> spliterator(int fromIndex, int characteristics) {
-        return new BitMappedTrieSpliterator<>(this, fromIndex, characteristics);
+    public @NonNull Spliterator<T> spliterator(int fromIndex, int toIndex, int characteristics) {
+        return new BitMappedTrieSpliterator<>(this, fromIndex, toIndex, characteristics);
     }
 
     @NonNull
-    public Iterator<T> iterator(int fromIndex) {
-        return new BitMappedTrieIterator<>(this, fromIndex);
+    public Iterator<T> iterator(int fromIndex, int toIndex) {
+        return new BitMappedTrieIterator<>(this, fromIndex, toIndex);
+    }
+
+    @NonNull
+    public Iterator<T> iterator() {
+        return new BitMappedTrieIterator<>(this, 0, length);
     }
 
     public static class BitMappedTrieSpliterator<T> extends Spliterators.AbstractSpliterator<T> {
@@ -422,10 +434,10 @@ public class BitMappedTrie<T> implements Serializable {
         private int length;
         private final @NonNull BitMappedTrie<T> root;
 
-        public BitMappedTrieSpliterator(@NonNull BitMappedTrie<T> root, int fromIndex, int characteristics) {
+        public BitMappedTrieSpliterator(@NonNull BitMappedTrie<T> root, int fromIndex, int toIndex, int characteristics) {
             super(root.length - fromIndex, characteristics);
             this.root = root;
-            globalLength = root.length;
+            globalLength = toIndex;
             globalIndex = fromIndex;
             index = lastDigit(root.offset + globalIndex);
             leaf = root.getLeaf(globalIndex);
@@ -471,9 +483,9 @@ public class BitMappedTrie<T> implements Serializable {
         private int length;
         private final @NonNull BitMappedTrie<T> root;
 
-        public BitMappedTrieIterator(@NonNull BitMappedTrie<T> root, int fromIndex) {
+        public BitMappedTrieIterator(@NonNull BitMappedTrie<T> root, int fromIndex, int toIndex) {
             this.root = root;
-            globalLength = root.length;
+            globalLength = toIndex;
             globalIndex = fromIndex;
             index = lastDigit(root.offset + fromIndex);
             leaf = root.getLeaf(globalIndex);

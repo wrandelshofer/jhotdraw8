@@ -10,7 +10,13 @@ import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.spliterator.ReadOnlyListSpliterator;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Spliterator;
 
 /**
  * Read-only interface for a list. The state of the
@@ -174,6 +180,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * in this list, or -1 if this list does not contain the element.
      *
      * @param o an element
+     * @return the index of the element or -1
      */
     default int indexOf(Object o) {
         for (int i = 0, n = size(); i < n; i++) {
@@ -187,6 +194,9 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
     /**
      * Returns the index of the last occurrence of the specified element
      * in this list, or -1 if this list does not contain the element.
+     *
+     * @param o an element
+     * @return the index of the element or -1
      */
     default int lastIndexOf(Object o) {
         for (int i = size() - 1; i >= 0; i--) {
@@ -205,6 +215,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      *
      * @param list a list
      * @param o    an object
+     * @param <E>  the element type of the list
      * @return {@code true} if the object is equal to this list
      */
     static <E> boolean listEquals(@NonNull ReadOnlyList<E> list, @Nullable Object o) {

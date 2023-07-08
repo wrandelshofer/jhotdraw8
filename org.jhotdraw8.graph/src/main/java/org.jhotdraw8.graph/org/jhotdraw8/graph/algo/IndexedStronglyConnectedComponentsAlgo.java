@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.IntEnumerator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
@@ -13,7 +13,11 @@ import org.jhotdraw8.collection.primitive.IntDeque;
 import org.jhotdraw8.collection.primitive.IntList;
 import org.jhotdraw8.graph.IndexedDirectedGraph;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.List;
 import java.util.function.Function;
 
 import static java.lang.Math.min;
@@ -48,7 +52,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
      * @return set of strongly connected components (sets of vertices).
      */
     public @NonNull List<IntList> findStronglyConnectedComponents(
-            int vertexCount, @NonNull Function<Integer, IntEnumerator> nextNodeFunction) {
+            int vertexCount, @NonNull Function<Integer, Enumerator.OfInt> nextNodeFunction) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from
         // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm
@@ -61,8 +65,8 @@ public class IndexedStronglyConnectedComponentsAlgo {
         IntDeque stack = new IntArrayDeque();
 
         IntDeque minStack = new IntArrayDeque();
-        Deque<IntEnumerator> enumeratorStack = new ArrayDeque<>();
-        IntEnumerator enumerator = new IntRangeEnumerator(vertexCount);
+        Deque<Enumerator.OfInt> enumeratorStack = new ArrayDeque<>();
+        Enumerator.OfInt enumerator = new IntRangeEnumerator(vertexCount);
 
         STRONGCONNECT:
         while (true) {

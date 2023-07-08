@@ -31,6 +31,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * iterator.
      *
      * @param iterator an iterator
+     * @param <E>      the element type
      * @return the sum of the hash codes of the elements
      * @see Set#hashCode()
      */

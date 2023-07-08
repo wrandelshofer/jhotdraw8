@@ -8,6 +8,11 @@ import java.util.AbstractSet;
 import java.util.Iterator;
 import java.util.Spliterator;
 
+/**
+ * Abstract base class for {@link SequencedSet}s.
+ *
+ * @param <E> the element type
+ */
 public abstract class AbstractSequencedSet<E> extends AbstractSet<E> implements SequencedSet<E> {
     @Override
     public @NonNull SequencedSet<E> _reversed() {
@@ -30,6 +35,13 @@ public abstract class AbstractSequencedSet<E> extends AbstractSet<E> implements 
 
     protected abstract Spliterator<E> reverseSpliterator();
 
+    /**
+     * Adds an element to the set. If the element was not in the set,
+     * it is added at the front of this collection.
+     *
+     * @param e the element
+     * @return true if the element was not in the set
+     */
     protected boolean reverseAdd(@Nullable E e) {
         boolean didNotAlreadyContain = !contains(e);
         if (didNotAlreadyContain) {

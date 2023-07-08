@@ -6,7 +6,11 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * This interface provides read-only indexed access to a directed graph {@code G = (V, A) } with
@@ -24,7 +28,8 @@ import java.util.*;
  * <li>The arrow {@code a_(i,j) ∈ A}.</li>
  * </ul>
  *
- * @author wr
+ * @param <V> the vertex data type
+ * @param <A> the arrow data type
  */
 public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, AttributedIndexedDirectedGraph<V, A> {
 

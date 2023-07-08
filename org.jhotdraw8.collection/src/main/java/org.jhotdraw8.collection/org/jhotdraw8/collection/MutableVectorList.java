@@ -37,12 +37,12 @@ import java.util.stream.Stream;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(1)</li>
- *     <li>set: O(1)</li>
- *     <li>remove: O(n)</li>
- *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
- *     this mutable list instance.</li>
+ *     <li>addLast: O(log N)</li>
+ *     <li>set: O(log N)</li>
+ *     <li>removeAt: O(N)</li>
+ *     <li>removeFirst,removeLast: O(log N)</li>
+ *     <li>contains: O(N)</li>
+ *     <li>toImmutable: O(1)</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>
@@ -258,7 +258,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public @NonNull Spliterator<E> spliterator() {
-        return root.spliterator(0, Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
+        return root.spliterator(0, size(), Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
     }
 
     @Override

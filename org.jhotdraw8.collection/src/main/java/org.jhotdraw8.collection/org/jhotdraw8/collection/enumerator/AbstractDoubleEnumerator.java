@@ -7,29 +7,29 @@ package org.jhotdraw8.collection.enumerator;
 import java.util.Spliterators;
 
 /**
- * Abstract base class for {@link Enumerator.OfLong}s.
+ * Abstract base class for {@link Enumerator.OfDouble}s.
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractLongEnumerator
-        extends Spliterators.AbstractLongSpliterator
-        implements Enumerator.OfLong {
+public abstract class AbstractDoubleEnumerator
+        extends Spliterators.AbstractDoubleSpliterator
+        implements Enumerator.OfDouble {
     /**
      * The current element of the enumerator.
      */
-    protected long current;
+    protected double current;
 
     /**
      * Creates a spliterator reporting the given estimated size and
      * additionalCharacteristics.
      *
      * @param est                       the estimated size of this spliterator if known, otherwise
-     *                                  {@code Long.MAX_VALUE}.
+     *                                  {@code Double.MAX_VALUE}.
      * @param additionalCharacteristics properties of this spliterator's
      *                                  source or elements.  If {@code SIZED} is reported then this
      *                                  spliterator will additionally report {@code SUBSIZED}.
      */
-    protected AbstractLongEnumerator(long est, int additionalCharacteristics) {
+    protected AbstractDoubleEnumerator(long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
     }
 
@@ -38,7 +38,7 @@ public abstract class AbstractLongEnumerator
      * {@inheritDoc}
      */
     @Override
-    public final long currentAsLong() {
+    public final double currentAsDouble() {
         return current;
     }
 

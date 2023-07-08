@@ -27,7 +27,7 @@ public class TombSkippingVectorSpliterator<K> extends Spliterators.AbstractSplit
 
     public TombSkippingVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, K> mapper, int fromIndex, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
-        this.vector = new BitMappedTrie.BitMappedTrieSpliterator<>(vector, fromIndex, 0);
+        this.vector = new BitMappedTrie.BitMappedTrieSpliterator<>(vector, fromIndex, vector.size(), 0);
         this.mapper = mapper;
     }
 

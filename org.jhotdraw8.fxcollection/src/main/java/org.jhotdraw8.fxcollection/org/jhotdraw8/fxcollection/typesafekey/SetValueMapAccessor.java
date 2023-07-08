@@ -19,6 +19,7 @@ import java.util.Set;
 /**
  * SetValueMapAccessor.
  *
+ * @param <E> the value type
  * @author Werner Randelshofer
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {

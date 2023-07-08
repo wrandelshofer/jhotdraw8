@@ -5,7 +5,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.GrowableIntSet8Bit;
 import org.jhotdraw8.collection.primitive.LongArrayDeque;
 import org.jhotdraw8.graph.algo.AddToIntSet;
@@ -22,6 +22,8 @@ import java.util.function.IntPredicate;
  * algorithm.
  * <p>
  * This implementation is optimized for {@link org.jhotdraw8.graph.IndexedDirectedGraph}.
+ *
+ * @param <C> the numeric type of cost values
  */
 public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> implements IndexedVertexReachabilityAlgo<C> {
     public AnyIndexedVertexReachabilityAlgo() {
@@ -140,7 +142,7 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
 
     /**
      * Internal helper class, so that we can use a {@link Spliterator}
-     * like an {@link EnumeratorSpliterator}.
+     * like an {@link Enumerator}.
      */
     private static class MyIntConsumer implements IntConsumer {
         int value;

@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.collection.spliterator;
 
-import org.jhotdraw8.collection.enumerator.EnumeratorSpliterator;
+import org.jhotdraw8.collection.enumerator.Enumerator;
 
 import java.util.Spliterators;
 
@@ -14,7 +14,7 @@ import java.util.Spliterators;
  *
  * @param <E> the element type
  */
-public class SingletonSpliterator<E> extends Spliterators.AbstractSpliterator<E> implements EnumeratorSpliterator<E> {
+public class SingletonSpliterator<E> extends Spliterators.AbstractSpliterator<E> implements Enumerator<E> {
     private final E current;
     private boolean canMove = true;
 
