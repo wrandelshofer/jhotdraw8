@@ -163,7 +163,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public boolean removeAll(@NonNull Collection<?> c) {
         int oldSize = size;
         @SuppressWarnings("unchecked")
-        VectorList<E> immutable = toImmutable().removeAll((Iterable<? extends E>) c);
+        VectorList<E> immutable = toImmutable().removeAll(c);
         if (oldSize != immutable.size) {
             root = immutable;
             modCount++;
@@ -177,7 +177,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public boolean retainAll(@NonNull Collection<?> c) {
         int oldSize = size;
         @SuppressWarnings("unchecked")
-        VectorList<E> immutable = toImmutable().retainAll((Collection<? extends E>) c);
+        VectorList<E> immutable = toImmutable().retainAll(c);
         if (oldSize != immutable.size) {
             root = immutable;
             modCount++;

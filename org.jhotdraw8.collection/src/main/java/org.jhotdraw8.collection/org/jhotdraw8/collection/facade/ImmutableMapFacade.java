@@ -12,7 +12,11 @@ import org.jhotdraw8.collection.iterator.Iterators;
 import org.jhotdraw8.collection.readonly.AbstractReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 
 /**
@@ -112,7 +116,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
             collection = (Collection<K>) cc;
         } else {
             collection = new HashSet<K>();
-            c.forEach(e -> collection.add((K) e));
+            c.forEach(e -> collection.add(e));
         }
         return clone.keySet().retainAll(collection) ? new ImmutableMapFacade<>(clone, cloneFunction) : this;
     }

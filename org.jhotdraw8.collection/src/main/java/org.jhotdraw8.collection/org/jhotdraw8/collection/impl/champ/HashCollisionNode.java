@@ -346,7 +346,6 @@ class HashCollisionNode<D> extends Node<D> {
         int resultSize = 0;
         Object[] buffer = new Object[thisSize];
         Object[] thisArray = this.data;
-        outer:
         for (int i = 0; i < thisSize; i++) {
             D thisData = (D) thisArray[i];
             if (predicate.test(thisData)) {
