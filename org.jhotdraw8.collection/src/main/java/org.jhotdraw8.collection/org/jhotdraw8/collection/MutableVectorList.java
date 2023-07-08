@@ -57,7 +57,7 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedCollection<E> {
+public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedCollection<E>, Cloneable {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -271,6 +271,18 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         root = toImmutable().removeRange(fromIndex, toIndex);
         size -= toIndex - fromIndex;
         modCount++;
+    }
+
+    @Override
+    public MutableVectorList<E> clone() {
+        try {
+            @SuppressWarnings("unchecked")
+            MutableVectorList<E> clone = (MutableVectorList<E>) super.clone();
+            // TODO: copy mutable state here, so the clone can't change the internals of the original
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 
     private static class SerializationProxy<E> extends ListSerializationProxy<E> {
