@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.collection.reflect;
 
-import org.jhotdraw8.collection.precondition.Preconditions;
-
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
@@ -34,7 +32,10 @@ public class TypeToken<T> {
      */
     final Type capture() {
         Type superclass = getClass().getGenericSuperclass();
-        Preconditions.checkArgument(superclass instanceof ParameterizedType, "%s isn't parameterized", superclass);
+        boolean expression = superclass instanceof ParameterizedType;
+        if (!expression) {
+            throw new IllegalArgumentException(superclass + " isn't parameterized");
+        }
         return ((ParameterizedType) superclass).getActualTypeArguments()[0];
     }
 

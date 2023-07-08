@@ -3,7 +3,9 @@
   ~ Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
   -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -11,17 +13,20 @@
     <artifactId>org.jhotdraw8</artifactId>
     <version>${revision}</version>
   </parent>
-  <artifactId>org.jhotdraw8.collection</artifactId>
+  <artifactId>org.jhotdraw8.pcollection</artifactId>
   <packaging>jar</packaging>
 
-  <name>JHotDraw8 Utility classes for Collections</name>
+  <name>JHotDraw8 Persistent Collections</name>
 
   <build>
-    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.collection</sourceDirectory>
-    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.collection</testSourceDirectory>
+    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.pcollection
+    </sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.pcollection
+    </testSourceDirectory>
     <resources>
       <resource>
-        <directory>${basedir}/src/main/java/org.jhotdraw8.collection</directory>
+        <directory>${basedir}/src/main/java/org.jhotdraw8.pcollection
+        </directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
@@ -30,7 +35,8 @@
     </resources>
     <testResources>
       <testResource>
-        <directory>${basedir}/src/test/java/org.jhotdraw8.collection</directory>
+        <directory>${basedir}/src/test/java/org.jhotdraw8.pcollection
+        </directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>

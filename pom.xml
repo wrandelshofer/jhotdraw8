@@ -40,6 +40,7 @@
     <module>org.jhotdraw8.color</module>
     <module>org.jhotdraw8.draw</module>
     <module>org.jhotdraw8.collection</module>
+    <module>org.jhotdraw8.pcollection</module>
     <module>org.jhotdraw8.examples</module>
     <module>org.jhotdraw8.fxcollection</module>
     <module>org.jhotdraw8.fxcontrols</module>
