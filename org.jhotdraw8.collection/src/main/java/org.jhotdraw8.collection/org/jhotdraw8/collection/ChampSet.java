@@ -108,7 +108,6 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
      * @param <E> the element type
      * @return an immutable set of the provided elements
      */
-    @SuppressWarnings("unchecked")
     public static <E> @NonNull ChampSet<E> copyOf(@NonNull Iterable<? extends E> c) {
         return ChampSet.<E>of().addAll(c);
     }
