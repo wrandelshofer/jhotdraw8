@@ -8,19 +8,14 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.immutable.ImmutableList;
 import org.jhotdraw8.pcollection.impl.iteration.FailFastIterator;
-import org.jhotdraw8.pcollection.impl.iteration.FailFastListIterator;
 import org.jhotdraw8.pcollection.impl.iteration.FailFastSpliterator;
+import org.jhotdraw8.pcollection.impl.iteration.MutableListIterator;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyList;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.pcollection.sequenced.SequencedCollection;
+import org.jhotdraw8.pcollection.sequenced.ReversedSequencedListView;
+import org.jhotdraw8.pcollection.sequenced.SequencedList;
 
-import java.util.AbstractList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -29,7 +24,7 @@ import java.util.stream.Stream;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyList<E>, SequencedCollection<E> {
+public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyList<E>, SequencedList<E> {
     private @NonNull ImmutableList<E> backingList;
     private int modCount;
 
@@ -50,13 +45,12 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull SequencedCollection<E> _reversed() {
-        return new SequencedCollectionFacade<E>(
-                this::reverseIterator,
-                this::iterator,
-                this::size,
-                this::contains
-        );
+    public @NonNull SequencedList<E> _reversed() {
+        return new ReversedSequencedListView<>(this, this::getModCount);
+    }
+
+    private int getModCount() {
+        return modCount;
     }
 
     @Override
@@ -162,83 +156,6 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
         }
     }
 
-    class MyListIterator implements ListIterator<E> {
-        int index;
-        @Nullable E current;
-        int prevIndex = -1;
-
-        MyListIterator(int index) {
-            this.index = index;
-        }
-
-        @Override
-        public boolean hasNext() {
-            return index < size();
-        }
-
-        @Override
-        public E next() {
-            if (!hasNext()) throw new NoSuchElementException();
-            prevIndex = index;
-            current = get(index++);
-            return current;
-        }
-
-        @Override
-        public boolean hasPrevious() {
-            return index > 0;
-        }
-
-        @Override
-        public E previous() {
-            if (!hasPrevious()) throw new NoSuchElementException();
-            current = get(--index);
-            prevIndex = index;
-            return current;
-        }
-
-        @Override
-        public int nextIndex() {
-            return index;
-        }
-
-        @Override
-        public int previousIndex() {
-            return index - 1;
-        }
-
-        @Override
-        public void remove() {
-            if (prevIndex >= 0 && prevIndex < size()) {
-                MutableListFacade.this.remove(prevIndex);
-                index = prevIndex;
-                prevIndex = -1;
-            } else {
-                throw new IllegalStateException();
-            }
-        }
-
-        @Override
-        public void set(E e) {
-            if (prevIndex >= 0 && prevIndex < size()) {
-                MutableListFacade.this.set(prevIndex, e);
-            } else {
-                throw new IllegalStateException();
-            }
-        }
-
-        @Override
-        public void add(E e) {
-            if (index >= 0 && index <= size()) {
-                MutableListFacade.this.add(index++, e);
-                prevIndex = -1;
-            } else {
-                throw new IllegalStateException();
-            }
-
-        }
-    }
-
     @Override
     public boolean add(E e) {
         ImmutableList<E> oldList = backingList;
@@ -280,17 +197,16 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public @NonNull ListIterator<E> listIterator(int index) {
-        Objects.checkIndex(index, size() + 1);
-        return new FailFastListIterator<>(new MyListIterator(index), () -> this.modCount);
+        return new MutableListIterator<>(this, index, this::getModCount);
     }
 
     @Override
     public E removeFirst() {
-        return SequencedCollection.super.removeFirst();
+        return SequencedList.super.removeFirst();
     }
 
     @Override
     public E removeLast() {
-        return SequencedCollection.super.removeLast();
+        return SequencedList.super.removeLast();
     }
 }

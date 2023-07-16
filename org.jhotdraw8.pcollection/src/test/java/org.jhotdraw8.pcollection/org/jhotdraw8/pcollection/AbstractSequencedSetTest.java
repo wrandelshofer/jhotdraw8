@@ -2,25 +2,15 @@ package org.jhotdraw8.pcollection;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.pcollection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySet;
 import org.jhotdraw8.pcollection.sequenced.SequencedSet;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     protected abstract <E> @NonNull SequencedSet<E> newInstance();
@@ -38,7 +28,6 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     protected abstract <E> @NonNull SequencedSet<E> newInstance(@NonNull ReadOnlySequencedSet<E> m);
 
-    protected abstract <E> @NonNull ImmutableSequencedSet<E> toImmutableInstance(@NonNull SequencedSet<E> m);
 
     protected abstract <E> @NonNull SequencedSet<E> toClonedInstance(@NonNull SequencedSet<E> m);
 
@@ -50,7 +39,6 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     protected abstract <E> @NonNull SequencedSet<E> newInstance(ReadOnlySet<E> m);
 
-    protected abstract <E> @NonNull ImmutableSequencedSet<E> toImmutableInstance(Set<E> m);
 
     protected abstract <E> @NonNull SequencedSet<E> toClonedInstance(Set<E> m);
 

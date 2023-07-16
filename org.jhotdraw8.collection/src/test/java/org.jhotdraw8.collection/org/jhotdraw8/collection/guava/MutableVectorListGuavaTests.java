@@ -32,11 +32,11 @@ public class MutableVectorListGuavaTests {
 
     public Test allTests() {
         TestSuite suite = new TestSuite(MutableVectorList.class.getSimpleName());
-        suite.addTest(testsForTrieList());
+        suite.addTest(testsForList());
         return suite;
     }
 
-    public Test testsForTrieList() {
+    public Test testsForList() {
         return ListTestSuiteBuilder.using(
                         new TestStringListGenerator() {
                             @Override

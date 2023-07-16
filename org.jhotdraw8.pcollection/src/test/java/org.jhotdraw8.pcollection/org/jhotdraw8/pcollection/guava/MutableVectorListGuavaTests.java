@@ -32,11 +32,12 @@ public class MutableVectorListGuavaTests {
 
     public Test allTests() {
         TestSuite suite = new TestSuite(MutableVectorList.class.getSimpleName());
-        suite.addTest(testsForTrieList());
+        suite.addTest(testsForList());
+        suite.addTest(testsForReversedList());
         return suite;
     }
 
-    public Test testsForTrieList() {
+    public Test testsForList() {
         return ListTestSuiteBuilder.using(
                         new TestStringListGenerator() {
                             @Override
@@ -50,6 +51,26 @@ public class MutableVectorListGuavaTests {
                         CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
                         CollectionFeature.SERIALIZABLE,
+                        CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
+                        CollectionSize.ANY)
+                .suppressing(suppressForTrieSet())
+                .createTestSuite();
+    }
+
+    public Test testsForReversedList() {
+        return ListTestSuiteBuilder.using(
+                        new TestStringListGenerator() {
+                            @Override
+                            public List<String> create(String[] elements) {
+                                return new MutableVectorList<>(MinimalCollection.of(elements))._reversed();
+                            }
+                        })
+                .named(MutableVectorList.class.getSimpleName() + ".reversed")
+                .withFeatures(
+                        ListFeature.GENERAL_PURPOSE,
+                        CollectionFeature.ALLOWS_NULL_VALUES,
+                        CollectionFeature.ALLOWS_NULL_QUERIES,
+                        //  CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
                 .suppressing(suppressForTrieSet())

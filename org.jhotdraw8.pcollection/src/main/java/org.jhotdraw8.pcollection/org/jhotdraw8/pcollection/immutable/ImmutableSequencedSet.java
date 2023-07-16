@@ -78,4 +78,9 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
 
     @Override
     @NonNull SequencedSet<E> toMutable();
+
+    default @NonNull ImmutableSequencedSet<E> reversed() {
+        if (size() < 2) return this;
+        return clear().addAll(readOnlyReversed());
+    }
 }

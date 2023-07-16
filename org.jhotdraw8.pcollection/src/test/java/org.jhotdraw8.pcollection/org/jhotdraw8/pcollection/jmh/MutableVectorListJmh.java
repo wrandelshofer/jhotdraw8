@@ -1,17 +1,7 @@
 package org.jhotdraw8.pcollection.jmh;
 
 import org.jhotdraw8.pcollection.MutableVectorList;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.annotations.*;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -45,9 +35,12 @@ import java.util.concurrent.TimeUnit;
  * mHead                   10  avgt               2.158          ns/op
  * mHead                 1000  avgt               2.660          ns/op
  * mHead              1000000  avgt               5.910          ns/op
- * mIterate                10  avgt              12.823          ns/op
- * mIterate              1000  avgt            2088.217          ns/op
- * mIterate           1000000  avgt        22462897.942          ns/op ?
+ * mIterate                10  avgt              21.857          ns/op
+ * mIterate              1000  avgt            3210.117          ns/op
+ * mIterate           1000000  avgt        18557712.837          ns/op
+ * mListIterate            10  avgt              14.543          ns/op
+ * mListIterate          1000  avgt            2175.769          ns/op
+ * mListIterate       1000000  avgt        23116989.919          ns/op
  * mRemoveAtIndex          10  avgt              44.574          ns/op
  * mRemoveAtIndex        1000  avgt            2872.760          ns/op
  * mRemoveAtIndex     1000000  avgt         3297735.069          ns/op
@@ -63,10 +56,6 @@ import java.util.concurrent.TimeUnit;
  * mTail                   10  avgt              16.312          ns/op
  * mTail                 1000  avgt              16.619          ns/op
  * mTail              1000000  avgt              20.296          ns/op
- *
- * Process finished with exit code 0
- *
- * Process finished with exit code 0
  */
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
@@ -130,6 +119,15 @@ public class MutableVectorListJmh {
     public int mIterate() {
         int sum = 0;
         for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
+            sum += i.next().value;
+        }
+        return sum;
+    }
+
+    @Benchmark
+    public int mListIterate() {
+        int sum = 0;
+        for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
             sum += i.next().value;
         }
         return sum;

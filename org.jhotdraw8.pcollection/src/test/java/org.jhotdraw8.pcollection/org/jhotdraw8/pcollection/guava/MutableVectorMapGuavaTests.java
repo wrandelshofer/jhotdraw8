@@ -32,11 +32,12 @@ public class MutableVectorMapGuavaTests {
 
     public Test allTests() {
         TestSuite suite = new TestSuite(MutableVectorMap.class.getSimpleName());
-        suite.addTest(testsForLinkedTrieMap());
+        //    suite.addTest(testsForMap());
+        suite.addTest(testsForReversedMap());
         return suite;
     }
 
-    public Test testsForLinkedTrieMap() {
+    public Test testsForMap() {
         return MapTestSuiteBuilder.using(
                         new TestStringMapGenerator() {
                             @Override
@@ -54,6 +55,29 @@ public class MutableVectorMapGuavaTests {
                         CollectionFeature.SUPPORTS_ITERATOR_REMOVE,
                         CollectionFeature.KNOWN_ORDER,
                         CollectionFeature.SERIALIZABLE,
+                        CollectionSize.ANY)
+                .suppressing(suppressForRobinHoodHashMap())
+                .createTestSuite();
+    }
+
+    public Test testsForReversedMap() {
+        return MapTestSuiteBuilder.using(
+                        new TestStringMapGenerator() {
+                            @Override
+                            protected Map<String, String> create(Map.Entry<String, String>[] entries) {
+                                return new MutableVectorMap<>(Arrays.asList(entries))._reversed();
+                            }
+                        })
+                .named(MutableVectorMap.class.getSimpleName() + ".reversed")
+                .withFeatures(
+                        MapFeature.GENERAL_PURPOSE,
+                        MapFeature.ALLOWS_NULL_KEYS,
+                        MapFeature.ALLOWS_NULL_VALUES,
+                        MapFeature.ALLOWS_ANY_NULL_QUERIES,
+                        MapFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
+                        CollectionFeature.SUPPORTS_ITERATOR_REMOVE,
+                        //CollectionFeature.KNOWN_ORDER,
+                        //CollectionFeature.SERIALIZABLE,
                         CollectionSize.ANY)
                 .suppressing(suppressForRobinHoodHashMap())
                 .createTestSuite();

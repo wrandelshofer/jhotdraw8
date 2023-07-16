@@ -3,16 +3,11 @@ package org.jhotdraw8.pcollection;
 import de.sandec.jmemorybuddy.JMemoryBuddy;
 import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -47,37 +42,59 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void listIteratorNextShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
         List<HashCollider> l = newListInstance();
         l.add(data.a.iterator().next());
         ListIterator<HashCollider> i = l.listIterator();
         i.next();
         i.remove();
-        assertThrows(NoSuchElementException.class, () -> i.next());
+        assertThrows(NoSuchElementException.class, i::next);
     }
 
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorShouldThrowNoSuchElementException2(@NonNull SetData data) throws Exception {
+    public void listIteratorNextShouldThrowNoSuchElementException2(@NonNull SetData data) throws Exception {
         List<HashCollider> l = newListInstance();
         l.add(data.a.iterator().next());
         ListIterator<HashCollider> i = l.listIterator();
         i.add(data.b.iterator().next());
         i.next();
         i.remove();
-        assertThrows(NoSuchElementException.class, () -> i.next());
+        assertThrows(NoSuchElementException.class, i::next);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorShouldThrowIllegalStateException(@NonNull SetData data) throws Exception {
+    public void listIteratorPreviousShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+        List<HashCollider> l = newListInstance();
+        l.add(data.a.iterator().next());
+        ListIterator<HashCollider> i = l.listIterator(0);
+        i.next();
+        i.remove();
+        assertThrows(NoSuchElementException.class, i::previous);
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void listIteratorPreviousShouldThrowNoSuchElementException2(@NonNull SetData data) throws Exception {
+        List<HashCollider> l = newListInstance();
+        l.add(data.a.iterator().next());
+        ListIterator<HashCollider> i = l.listIterator(0);
+        i.add(data.b.iterator().next());
+        i.previous();
+        i.remove();
+        assertThrows(NoSuchElementException.class, i::previous);
+    }
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void listIteratorRemoveShouldThrowIllegalStateException(@NonNull SetData data) throws Exception {
         List<HashCollider> l = newListInstance();
         ListIterator<HashCollider> i = l.listIterator();
-        i.hasNext();
-        i.hasNext();
         i.add(data.a.iterator().next());
-        assertThrows(IllegalStateException.class, () -> i.remove());
+        assertThrows(IllegalStateException.class, i::remove);
     }
 
     @ParameterizedTest
@@ -90,6 +107,18 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
         l.set(0, data.b.iterator().next());
         HashCollider actualValue = subIterator.next();
         assertEquals(data.b.iterator().next(), actualValue);
+    }
+
+    @Test
+    public void indexOfEmptyCollection() throws Exception {
+        List<HashCollider> l = newListInstance();
+        assertEquals(-1, l.indexOf(new HashCollider(1, -1)));
+    }
+
+    @Test
+    public void lastIndexOfEmptyCollection() throws Exception {
+        List<HashCollider> l = newListInstance();
+        assertEquals(-1, l.lastIndexOf(new HashCollider(1, -1)));
     }
 
     @ParameterizedTest

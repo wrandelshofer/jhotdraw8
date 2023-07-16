@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.pcollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.pcollection.sequenced.SequencedSet;
 
 import java.util.Iterator;
@@ -129,20 +130,6 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
 
     @Override
     public @NonNull SequencedSet<E> _reversed() {
-        return new SequencedSetFacade<>(
-                reverseIteratorFunction,
-                reverseSpliteratorFunction,
-                iteratorFunction,
-                spliteratorFunction,
-                sizeFunction,
-                containsFunction,
-                clearFunction,
-                removeFunction,
-                getLastFunction,
-                getFirstFunction,
-                reversedAddFunction,
-                addFunction,
-                addLastFunction,
-                addFirstFunction);
+        return new ReversedSequencedSetView<>(this, reverseIteratorFunction, reverseSpliteratorFunction);
     }
 }

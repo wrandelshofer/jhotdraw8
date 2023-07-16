@@ -6,27 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class AbstractSetTest {
     private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
@@ -116,6 +101,9 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void addAllWithCloneShouldReturnFalse(@NonNull SetData data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
+        if (!(instance instanceof Cloneable)) {
+            return;
+        }
         Set<HashCollider> instance2 = toClonedInstance(instance);
         assertFalse(instance.addAll(instance2));
         assertEquals(data.a.asSet(), instance);
@@ -244,6 +232,9 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void cloneShouldYieldEqualSet(@NonNull SetData data) {
         Set<HashCollider> instance = newInstance(data.a());
+        if (!(instance instanceof Cloneable)) {
+            return;
+        }
         Set<HashCollider> clone = toClonedInstance(instance);
         assertEqualSet(data.a().asSet(), clone);
     }
@@ -307,6 +298,9 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void equalsWithCloneShouldYieldTrue(@NonNull SetData data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a());
+        if (!(instance instanceof Cloneable)) {
+            return;
+        }
         Set<HashCollider> clone = toClonedInstance(instance);
         assertEquals(data.a().asSet(), clone);
         assertEquals(instance, clone);
@@ -505,6 +499,9 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void serializationShouldYieldSameSet(@NonNull SetData data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a());
+        if (!(instance instanceof Serializable)) {
+            return;
+        }
         assertEqualSet(data.a().asSet(), instance);
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         try (ObjectOutputStream out = new ObjectOutputStream(buf)) {
@@ -546,6 +543,9 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithCloneShouldReturnFalse(@NonNull SetData data) throws Exception {
         Set<HashCollider> instance = newInstance(data.a);
+        if (!(instance instanceof Cloneable)) {
+            return;
+        }
         Set<HashCollider> instance2 = toClonedInstance(instance);
         assertFalse(instance.retainAll(instance2));
         assertEqualSet(data.a, instance);

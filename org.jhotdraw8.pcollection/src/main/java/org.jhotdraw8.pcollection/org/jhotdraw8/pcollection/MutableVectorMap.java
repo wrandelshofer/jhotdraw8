@@ -10,27 +10,17 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.pcollection.facade.SequencedMapFacade;
 import org.jhotdraw8.pcollection.facade.SequencedSetFacade;
-import org.jhotdraw8.pcollection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.pcollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.pcollection.impl.champ.Node;
-import org.jhotdraw8.pcollection.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.pcollection.impl.champ.SequencedData;
-import org.jhotdraw8.pcollection.impl.champ.SequencedEntry;
-import org.jhotdraw8.pcollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.pcollection.impl.champ.*;
 import org.jhotdraw8.pcollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.pcollection.sequenced.ReversedSequencedMapView;
 import org.jhotdraw8.pcollection.sequenced.SequencedCollection;
 import org.jhotdraw8.pcollection.sequenced.SequencedMap;
 import org.jhotdraw8.pcollection.sequenced.SequencedSet;
 import org.jhotdraw8.pcollection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 
 /**
  * Implements the {@code SequencedMap} interface using a Compressed
@@ -447,20 +437,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
 
     @Override
     public @NonNull SequencedMap<K, V> _reversed() {
-        return new SequencedMapFacade<>(
-                this::reverseIterator,
-                this::iterator,
-                this::size,
-                this::containsKey,
-                this::get,
-                this::clear,
-                this::remove,
-                this::lastEntry,
-                this::firstEntry,
-                this::putFirstFalse,
-                this::putLast,
-                this::putFirst
-        );
+        return new ReversedSequencedMapView<>(this);
     }
 
     /**

@@ -6,22 +6,17 @@
 package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.pcollection.facade.ListFacade;
 import org.jhotdraw8.pcollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.pcollection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyList;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.pcollection.sequenced.SequencedCollection;
+import org.jhotdraw8.pcollection.sequenced.ReversedSequencedListView;
+import org.jhotdraw8.pcollection.sequenced.SequencedList;
 import org.jhotdraw8.pcollection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -57,7 +52,7 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedCollection<E>, Cloneable {
+public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedList<E>, Cloneable {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -95,14 +90,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull SequencedCollection<E> _reversed() {
-        return new ListFacade<E>(
-                this::size,
-                index -> get(size - 1 - index),
-                this::clear,
-                (index, element) -> add(size - 1 - index, element),
-                index -> remove(size - 1 - index)
-        );
+    public @NonNull SequencedList<E> _reversed() {
+        return new ReversedSequencedListView<E>(this, this::modCount);
+    }
+
+    private int modCount() {
+        return modCount;
     }
 
     @Override
@@ -300,11 +293,11 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public E removeFirst() {
-        return SequencedCollection.super.removeFirst();
+        return SequencedList.super.removeFirst();
     }
 
     @Override
     public E removeLast() {
-        return SequencedCollection.super.removeLast();
+        return SequencedList.super.removeLast();
     }
 }

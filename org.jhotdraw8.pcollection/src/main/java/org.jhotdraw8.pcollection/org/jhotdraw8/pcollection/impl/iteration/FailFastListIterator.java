@@ -24,12 +24,11 @@ public class FailFastListIterator<E> implements ListIterator<E> {
     private final @NonNull Runnable removeFunction;
 
     public FailFastListIterator(@NonNull ListIterator<E> i, @NonNull IntSupplier modCountSupplier) {
-        this(i, modCountSupplier, i::remove);
+        this(i, i::remove, modCountSupplier);
     }
 
     public FailFastListIterator(@NonNull ListIterator<E> i,
-                                @NonNull IntSupplier modCountSupplier,
-                                @NonNull Runnable removeFunction) {
+                                @NonNull Runnable removeFunction, @NonNull IntSupplier modCountSupplier) {
         this.i = i;
         this.modCountSupplier = modCountSupplier;
         this.expectedModCount = modCountSupplier.getAsInt();
@@ -82,20 +81,24 @@ public class FailFastListIterator<E> implements ListIterator<E> {
     public void remove() {
         ensureUnmodified();
         removeFunction.run();
-        expectedModCount = modCountSupplier.getAsInt();
+        updateModified();
     }
 
     @Override
     public void set(E e) {
         ensureUnmodified();
         i.set(e);
-        expectedModCount = modCountSupplier.getAsInt();
+        updateModified();
     }
 
     @Override
     public void add(E e) {
         ensureUnmodified();
         i.add(e);
+        updateModified();
+    }
+
+    private void updateModified() {
         expectedModCount = modCountSupplier.getAsInt();
     }
 }

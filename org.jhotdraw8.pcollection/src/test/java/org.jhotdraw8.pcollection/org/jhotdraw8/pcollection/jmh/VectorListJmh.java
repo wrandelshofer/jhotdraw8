@@ -1,19 +1,10 @@
 package org.jhotdraw8.pcollection.jmh;
 
 import org.jhotdraw8.pcollection.VectorList;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.annotations.*;
 
 import java.math.BigInteger;
+import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -50,6 +41,9 @@ import java.util.concurrent.TimeUnit;
  * mIterate                10  avgt              12.636          ns/op
  * mIterate              1000  avgt            1426.097          ns/op
  * mIterate           1000000  avgt        12576434.361          ns/op
+ * mListIterate            10  avgt              23.463          ns/op
+ * mListIterate          1000  avgt            2973.783          ns/op
+ * mListIterate       1000000  avgt        23631687.953          ns/op
  * mRemoveAtIndex          10  avgt              40.534          ns/op
  * mRemoveAtIndex        1000  avgt            3046.037          ns/op
  * mRemoveAtIndex     1000000  avgt         3367569.843          ns/op
@@ -95,8 +89,8 @@ public class VectorListJmh {
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 
-    /*
-        @Benchmark
+
+    @Benchmark
         public VectorList<Key> mAddAll() {
             return VectorList.copyOf(data.setA);
         }        @Benchmark
@@ -113,7 +107,7 @@ public class VectorListJmh {
             return set;
         }
 
-        //@Benchmark
+    @Benchmark
         public VectorList<Key> mRemoveOneByOne() {
             var map = listA;
             for (var e : data.listA) {
@@ -123,29 +117,38 @@ public class VectorListJmh {
             return map;
         }
 
-        //@Benchmark
+    @Benchmark
         public VectorList<Key> mRemoveAll() {
             VectorList<Key> set = listA;
             return set.removeAll(data.listA);
-        }
+    }
 
-        @Benchmark
-        public int mIterate() {
-            int sum = 0;
-            for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
-                sum += i.next().value;
-            }
-            return sum;
+    @Benchmark
+    public int mIterate() {
+        int sum = 0;
+        for (Iterator<Key> i = listA.iterator(); i.hasNext(); ) {
+            sum += i.next().value;
         }
+        return sum;
+    }
 
-        @Benchmark
-        public int mReversedIterate() {
-            int sum = 0;
-            for (int i=listA.size()-1;i>=0;i--) {
-                sum += listA.get(i).value;
-            }
-            return sum;
+    @Benchmark
+    public int mListIterate() {
+        int sum = 0;
+        for (Iterator<Key> i = listA.listIterator(); i.hasNext(); ) {
+            sum += i.next().value;
         }
+        return sum;
+    }
+
+    @Benchmark
+    public int mReversedIterate() {
+        int sum = 0;
+        for (int i = listA.size() - 1; i >= 0; i--) {
+            sum += listA.get(i).value;
+        }
+        return sum;
+    }
 
         @Benchmark
         public VectorList<Key> mTail() {
@@ -163,7 +166,7 @@ public class VectorListJmh {
             Key key = data.nextKeyInB();
             return (listA).add(0,key);
         }
-*/
+
 
 
     @Benchmark
@@ -175,7 +178,7 @@ public class VectorListJmh {
     public VectorList<Key> mRemoveAtIndex() {
         return listA.removeAt(index);
     }
-/*
+
     @Benchmark
     public Key mGet() {
         int index = data.nextIndexInA();
@@ -200,5 +203,5 @@ public class VectorListJmh {
         return listA.set(index, key);
     }
 
- */
+
 }

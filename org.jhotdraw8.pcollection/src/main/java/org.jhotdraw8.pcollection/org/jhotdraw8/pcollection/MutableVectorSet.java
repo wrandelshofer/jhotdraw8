@@ -8,27 +8,16 @@ package org.jhotdraw8.pcollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.pcollection.facade.SequencedSetFacade;
-import org.jhotdraw8.pcollection.impl.champ.AbstractMutableChampSet;
-import org.jhotdraw8.pcollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.pcollection.impl.champ.Node;
-import org.jhotdraw8.pcollection.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.pcollection.impl.champ.SequencedData;
-import org.jhotdraw8.pcollection.impl.champ.SequencedElement;
-import org.jhotdraw8.pcollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.pcollection.impl.champ.*;
 import org.jhotdraw8.pcollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.pcollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedSet;
+import org.jhotdraw8.pcollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.pcollection.sequenced.SequencedSet;
 import org.jhotdraw8.pcollection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 
 import static org.jhotdraw8.pcollection.impl.champ.SequencedData.vecRemove;
 
@@ -396,19 +385,8 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @Override
     public @NonNull SequencedSet<E> _reversed() {
-        return new SequencedSetFacade<>(
-                this::reverseIterator,
-                this::reverseSpliterator,
-                this::iterator,
-                this::spliterator,
-                this::size,
-                this::contains,
-                this::clear,
-                this::remove,
-                this::getLast, this::getFirst,
-                e -> addFirst(e, false), this::add,
-                this::addLast, this::addFirst
-        );
+        return new ReversedSequencedSetView<>(this, this::reverseIterator,
+                this::reverseSpliterator);
     }
 
     /**
