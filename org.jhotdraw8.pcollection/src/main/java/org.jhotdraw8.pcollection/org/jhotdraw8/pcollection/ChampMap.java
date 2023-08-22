@@ -16,11 +16,8 @@ import org.jhotdraw8.pcollection.serialization.MapSerializationProxy;
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Spliterator;
 
 /**
  * Implements the {@link ImmutableMap} interface using a Compressed Hash-Array
@@ -295,6 +292,14 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         return new MutableChampMap<>(this);
     }
 
+    /**
+     * Returns a string representation of this map.
+     * <p>
+     * The string representation is consistent with the one produced
+     * by {@link AbstractMap#toString()}.
+     *
+     * @return a string representation
+     */
     @Override
     public @NonNull String toString() {
         return ReadOnlyMap.mapToString(this);

@@ -425,6 +425,14 @@ public class VectorSet<E>
         return new MutableVectorSet<>(this);
     }
 
+    /**
+     * Returns a string representation of this set.
+     * <p>
+     * The string representation is consistent with the one produced
+     * by {@link AbstractSet#toString()}.
+     *
+     * @return a string representation
+     */
     @Override
     public @NonNull String toString() {
         return ReadOnlyCollection.iterableToString(this);

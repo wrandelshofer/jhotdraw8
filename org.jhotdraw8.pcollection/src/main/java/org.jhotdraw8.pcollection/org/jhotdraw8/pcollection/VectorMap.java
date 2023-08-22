@@ -429,6 +429,14 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
         return new MutableVectorMap<>(this);
     }
 
+    /**
+     * Returns a string representation of this map.
+     * <p>
+     * The string representation is consistent with the one produced
+     * by {@link AbstractMap#toString()}.
+     *
+     * @return a string representation
+     */
     @Override
     public @NonNull String toString() {
         return ReadOnlyMap.mapToString(this);

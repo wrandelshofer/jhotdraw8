@@ -17,13 +17,7 @@ import org.jhotdraw8.pcollection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 
 import static org.jhotdraw8.pcollection.impl.vector.ArrayType.obj;
 
@@ -364,6 +358,14 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
         return ReadOnlyList.listEquals(this, obj);
     }
 
+    /**
+     * Returns a string representation of this list.
+     * <p>
+     * The string representation is consistent with the one produced
+     * by {@link AbstractList#toString()}.
+     *
+     * @return a string representation
+     */
     @Override
     public String toString() {
         return ReadOnlyCollection.iterableToString(this);

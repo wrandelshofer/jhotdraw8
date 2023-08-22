@@ -52,11 +52,13 @@ package org.jhotdraw8.collection.transform;
  */
 public interface Transformable {
     /**
-     * Returns a {@link Transformer} with self type.
+     * Allows to transform this object in a fluent programming style.
      * <p>
      * Usage:
      * <pre>{@literal
-     * var result = obj.transformed().by(function);
+     * var result = obj.transformed().by(function1)
+     *                 .transformed().by(function2)
+     *                 .transformed().by(function3);
      * }</pre>
      *
      * @return transformer with self type
