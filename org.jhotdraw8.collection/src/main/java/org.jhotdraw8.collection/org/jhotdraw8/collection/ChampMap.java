@@ -12,6 +12,7 @@ import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
+import org.jhotdraw8.collection.transform.Transformer;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
@@ -21,6 +22,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
+import java.util.function.Function;
 
 /**
  * Implements the {@link ImmutableMap} interface using a Compressed Hash-Array
@@ -87,13 +89,13 @@ import java.util.Spliterator;
 @SuppressWarnings("exports")
 public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>>
         implements ImmutableMap<K, V>, Serializable {
-    private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
-    @Serial
-    private static final long serialVersionUID = 0L;
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
     static final int SALT = new java.util.Random().nextInt();
+    private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
+    @Serial
+    private static final long serialVersionUID = 0L;
     final int size;
 
     ChampMap(@NonNull BitmapIndexedNode<SimpleImmutableEntry<K, V>> root, int size) {
@@ -150,6 +152,11 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         return (ChampMap<K, V>) ChampMap.EMPTY;
     }
 
+    @Nullable
+    static <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
+        return Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    }
+
     /**
      * {@inheritDoc}
      */
@@ -186,11 +193,6 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
         Object result = find(
                 new SimpleImmutableEntry<>((K) o, null), keyHash(o), 0, ChampMap::entryKeyEquals);
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
-    }
-
-    @Nullable
-    static <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
-        return Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
     }
 
     @Override
@@ -296,6 +298,15 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     }
 
     @Override
+    public Transformer<ChampMap<K, V>> transformed() {
+        return this::transform;
+    }
+
+    private <R> R transform(Function<? super ChampMap<K, V>, ? extends R> f) {
+        return f.apply(this);
+    }
+
+    @Override
     public @NonNull String toString() {
         return ReadOnlyMap.mapToString(this);
     }
@@ -319,4 +330,5 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
             return ChampMap.of().putAll(deserialized);
         }
     }
+
 }

@@ -14,16 +14,12 @@ import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.collection.serialization.ListSerializationProxy;
+import org.jhotdraw8.collection.transform.Transformer;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
+import java.util.function.Function;
 
 import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
 
@@ -91,10 +87,9 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
         return (VectorList<T>) EMPTY;
     }
 
-    @SuppressWarnings("unchecked")
     @SafeVarargs
     public static <T> VectorList<T> of(T... t) {
-        return new VectorList<T>(BitMappedTrie.ofAll(t), t.length);
+        return new VectorList<>(BitMappedTrie.ofAll(t), t.length);
 
     }
 
@@ -112,10 +107,10 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
             return (VectorList<T>) mc.toImmutable();
         }
         if (iterable instanceof Collection<?> c) {
-            return new VectorList<T>(BitMappedTrie.ofAll(c.toArray()), c.size());
+            return new VectorList<>(BitMappedTrie.ofAll(c.toArray()), c.size());
         }
         BitMappedTrie<T> root = BitMappedTrie.<T>empty().appendAll(iterable);
-        return root.length() == 0 ? of() : new VectorList<T>(root, root.length);
+        return root.length() == 0 ? of() : new VectorList<>(root, root.length);
     }
 
     @Override
@@ -324,11 +319,6 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
         return new MutableVectorList<>(this);
     }
 
-    @Serial
-    private @NonNull Object writeReplace() {
-        return new VectorList.SerializationProxy<>(this.toMutable());
-    }
-
     @Override
     public @NonNull Iterator<E> iterator() {
         return super.iterator(0, size());
@@ -337,6 +327,35 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
     @Override
     public @NonNull Spliterator<E> spliterator() {
         return super.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
+    }
+
+    @Override
+    public int hashCode() {
+        return ReadOnlyList.iteratorToHashCode(iterator());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return ReadOnlyList.listEquals(this, obj);
+    }
+
+    @Override
+    public Transformer<VectorList<E>> transformed() {
+        return this::transform;
+    }
+
+    private <R> R transform(Function<? super VectorList<E>, ? extends R> f) {
+        return f.apply(this);
+    }
+
+    @Override
+    public String toString() {
+        return ReadOnlyCollection.iterableToString(this);
+    }
+
+    @Serial
+    private @NonNull Object writeReplace() {
+        return new VectorList.SerializationProxy<>(this.toMutable());
     }
 
     private static class SerializationProxy<E> extends ListSerializationProxy<E> {
@@ -353,21 +372,5 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
             return VectorList.of().addAll(deserialized);
         }
     }
-
-    @Override
-    public int hashCode() {
-        return ReadOnlyList.iteratorToHashCode(iterator());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return ReadOnlyList.listEquals(this, obj);
-    }
-
-    @Override
-    public String toString() {
-        return ReadOnlyCollection.iterableToString(this);
-    }
-
 
 }

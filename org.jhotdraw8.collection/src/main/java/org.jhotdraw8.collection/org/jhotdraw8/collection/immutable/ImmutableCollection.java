@@ -6,6 +6,7 @@ package org.jhotdraw8.collection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.collection.transform.Transformable;
 
 import java.util.Collection;
 
@@ -15,7 +16,7 @@ import java.util.Collection;
  *
  * @param <E> the element type
  */
-public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
+public interface ImmutableCollection<E> extends ReadOnlyCollection<E>, Transformable {
     /**
      * Returns a copy of this collection that is empty.
      *

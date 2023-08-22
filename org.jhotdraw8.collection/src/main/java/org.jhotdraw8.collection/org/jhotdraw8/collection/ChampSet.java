@@ -8,23 +8,16 @@ package org.jhotdraw8.collection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.immutable.ImmutableSet;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChampIterator;
-import org.jhotdraw8.collection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
+import org.jhotdraw8.collection.transform.Transformer;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Random;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
+import java.util.function.Function;
 
 
 /**
@@ -149,7 +142,6 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public @NonNull ChampSet<E> addAll(@NonNull Iterable<? extends E> c) {
         var m = toMutable();
         m.addAll(c);
@@ -205,7 +197,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new ChampIterator<E, E>(this, null);
+        return new ChampIterator<>(this, null);
     }
 
     static int keyHash(Object e) {
@@ -223,7 +215,6 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
         return this;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampSet<E> removeAll(@NonNull Iterable<?> c) {
         var m = toMutable();
@@ -232,7 +223,6 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull ChampSet<E> retainAll(@NonNull Iterable<?> c) {
         var m = toMutable();
@@ -252,6 +242,15 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     @Override
     public @NonNull MutableChampSet<E> toMutable() {
         return new MutableChampSet<>(this);
+    }
+
+    @Override
+    public Transformer<ChampSet<E>> transformed() {
+        return this::transform;
+    }
+
+    private <R> R transform(Function<? super ChampSet<E>, ? extends R> f) {
+        return f.apply(this);
     }
 
     @Override

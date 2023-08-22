@@ -1,6 +1,7 @@
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/AddOnlyChampSet.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/MutableVectorList.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/ChampIterator.java
+/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/sequenced/ReversedSequencedSetView.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/MutableVectorSet.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/MapFacade.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/SequencedData.java
@@ -11,6 +12,7 @@
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/readonly/AbstractReadOnlyMap.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/vector/BitMappedTrie.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/readonly/ReadOnlySequencedCollection.java
+/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/sequenced/ReversedSequencedListView.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/readonly/ReadOnlySequencedSet.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/iteration/FailFastSpliterator.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/vector/NodeModifier.java
@@ -29,6 +31,7 @@
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/MutableBitmapIndexedNode.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/VectorSet.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/AbstractMutableChampMap.java
+/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/iteration/MutableListIterator.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/MutableMapEntry.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/module-info.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/SequencedCollectionFacade.java
@@ -40,6 +43,7 @@
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/immutable/ImmutableMap.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/vector/ArrayType.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/immutable/ImmutableCollection.java
+/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/sequenced/ReversedSequencedMapView.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/ReadOnlyMapFacade.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/ChampSet.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/ListFacade.java
@@ -68,17 +72,20 @@
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/sequenced/SequencedMap.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/ReadOnlySequencedMapFacade.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/HashCollisionNode.java
+/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/readonly/ReversedReadOnlySequencedMapView.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/immutable/ImmutableSequencedSet.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/sequenced/SequencedSet.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/Node.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/iteration/FailFastIterator.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/immutable/ImmutableSequencedMap.java
+/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/sequenced/SequencedList.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/TombSkippingVectorSpliterator.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/MutableHashCollisionNode.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/iteration/MappedSpliterator.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/readonly/ReadOnlyCollection.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/MutableListFacade.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/MutableSetFacade.java
+/Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/readonly/ReversedReadOnlySequencedSetView.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/facade/SequencedMapFacade.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/impl/champ/SequencedElement.java
 /Users/Shared/Developer/Java/JHotDraw/current/git-jhotdraw8/org.jhotdraw8/org.jhotdraw8.pcollection/src/main/java/org.jhotdraw8.pcollection/org/jhotdraw8/pcollection/immutable/ImmutableSequencedCollection.java

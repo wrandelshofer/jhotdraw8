@@ -15,10 +15,12 @@ import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.serialization.SetSerializationProxy;
+import org.jhotdraw8.collection.transform.Transformer;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Function;
 
 
 /**
@@ -426,6 +428,15 @@ public class VectorSet<E>
     }
 
     @Override
+    public Transformer<VectorSet<E>> transformed() {
+        return this::transform;
+    }
+
+    private <R> R transform(Function<? super VectorSet<E>, ? extends R> f) {
+        return f.apply(this);
+    }
+
+    @Override
     public @NonNull String toString() {
         return ReadOnlyCollection.iterableToString(this);
     }
@@ -449,5 +460,4 @@ public class VectorSet<E>
             return VectorSet.copyOf(deserialized);
         }
     }
-
 }

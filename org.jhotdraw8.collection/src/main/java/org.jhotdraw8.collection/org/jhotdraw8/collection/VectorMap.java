@@ -9,25 +9,17 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.collection.impl.IdentityObject;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.SequencedData;
-import org.jhotdraw8.collection.impl.champ.SequencedEntry;
-import org.jhotdraw8.collection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.readonly.ReadOnlyMap;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
+import org.jhotdraw8.collection.transform.Transformer;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
+import java.util.function.Function;
 
 /**
  * Implements the {@link ImmutableSequencedMap} interface using a Compressed
@@ -438,6 +430,16 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     @Override
     public @NonNull MutableVectorMap<K, V> asMap() {
         return new MutableVectorMap<>(this);
+    }
+
+
+    @Override
+    public Transformer<VectorMap<K, V>> transformed() {
+        return this::transform;
+    }
+
+    private <R> R transform(Function<? super VectorMap<K, V>, ? extends R> f) {
+        return f.apply(this);
     }
 
     @Override

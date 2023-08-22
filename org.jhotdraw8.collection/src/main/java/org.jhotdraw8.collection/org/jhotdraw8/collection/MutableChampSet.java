@@ -159,6 +159,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         }
         if (c instanceof ChampSet<?> that) {
             BulkChangeEvent bulkChange = new BulkChangeEvent();
+            @SuppressWarnings("unchecked")
             BitmapIndexedNode<E> newRootNode = root.removeAll(makeOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             if (bulkChange.removed == 0) {
                 return false;
@@ -183,6 +184,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         if (c instanceof MutableChampSet<?> m) {
             ChampSet<?> that = m.toImmutable();
             BulkChangeEvent bulkChange = new BulkChangeEvent();
+            @SuppressWarnings("unchecked")
             BitmapIndexedNode<E> newRootNode = root.retainAll(makeOwner(), (BitmapIndexedNode<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             if (bulkChange.removed == 0) {
                 return false;

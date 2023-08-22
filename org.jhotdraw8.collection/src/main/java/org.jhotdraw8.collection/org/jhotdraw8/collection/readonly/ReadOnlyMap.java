@@ -12,8 +12,6 @@ import org.jhotdraw8.collection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.collection.mapped.MappedIterator;
 
 import java.util.*;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Read-only interface for a map. The state of the
@@ -54,7 +52,6 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @param defaultValue a default value
      * @return the mapped value or the specified default value
      */
-    @SuppressWarnings("unchecked")
     default @Nullable V getOrDefault(@NonNull Object key, @Nullable V defaultValue) {
         V v;
         return (((v = get(key)) != null) || containsKey(key))
@@ -286,14 +283,5 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     @Override
     default Spliterator<Map.Entry<K, V>> spliterator() {
         return Iterable.super.spliterator();
-    }
-
-    /**
-     * Returns a stream.
-     *
-     * @return a stream
-     */
-    default Stream<Map.Entry<K, V>> stream() {
-        return StreamSupport.stream(spliterator(), false);
     }
 }

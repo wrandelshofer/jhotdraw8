@@ -23,6 +23,7 @@ org/jhotdraw8/pcollection/ChampMap$SerializationProxy.class
 org/jhotdraw8/pcollection/readonly/AbstractReadOnlyMap.class
 org/jhotdraw8/pcollection/facade/package-info.class
 org/jhotdraw8/pcollection/MutableVectorMap.class
+org/jhotdraw8/pcollection/impl/iteration/MutableListIterator.class
 org/jhotdraw8/pcollection/impl/vector/ArrayType$CharArrayType.class
 org/jhotdraw8/pcollection/sequenced/SequencedSet.class
 org/jhotdraw8/pcollection/VectorList.class
@@ -31,6 +32,8 @@ org/jhotdraw8/pcollection/impl/champ/MutableHashCollisionNode.class
 org/jhotdraw8/pcollection/impl/champ/ChampIterator.class
 org/jhotdraw8/pcollection/impl/champ/ChangeEvent.class
 org/jhotdraw8/pcollection/immutable/package-info.class
+org/jhotdraw8/pcollection/sequenced/SequencedList.class
+org/jhotdraw8/pcollection/sequenced/ReversedSequencedMapView.class
 org/jhotdraw8/pcollection/impl/iteration/Iterators$1.class
 org/jhotdraw8/pcollection/package-info.class
 org/jhotdraw8/pcollection/immutable/ImmutableSequencedMap.class
@@ -59,6 +62,7 @@ org/jhotdraw8/pcollection/facade/ReadOnlySequencedSetFacade.class
 org/jhotdraw8/pcollection/immutable/ImmutableAddOnlySet.class
 org/jhotdraw8/pcollection/immutable/ImmutableSequencedSet.class
 org/jhotdraw8/pcollection/impl/iteration/FailFastListIterator.class
+org/jhotdraw8/pcollection/readonly/ReversedReadOnlySequencedSetView.class
 org/jhotdraw8/pcollection/impl/vector/BitMappedTrie$BitMappedTrieSpliterator.class
 org/jhotdraw8/pcollection/VectorSet$SerializationProxy.class
 org/jhotdraw8/pcollection/MutableChampSet$SerializationProxy.class
@@ -67,6 +71,7 @@ org/jhotdraw8/pcollection/impl/vector/BitMappedTrie$BitMappedTrieIterator.class
 org/jhotdraw8/pcollection/impl/iteration/AbstractListIteratorSpliterator.class
 org/jhotdraw8/pcollection/VectorSet.class
 org/jhotdraw8/pcollection/impl/vector/ArrayType$ByteArrayType.class
+org/jhotdraw8/pcollection/sequenced/ReversedSequencedListView.class
 org/jhotdraw8/pcollection/sequenced/SequencedCollection.class
 org/jhotdraw8/pcollection/impl/champ/BulkChangeEvent.class
 org/jhotdraw8/pcollection/facade/SequencedCollectionFacade.class
@@ -74,7 +79,6 @@ org/jhotdraw8/pcollection/impl/iteration/FailFastSpliterator.class
 org/jhotdraw8/pcollection/impl/iteration/FailFastIterator.class
 org/jhotdraw8/pcollection/VectorMap$SerializationProxy.class
 org/jhotdraw8/pcollection/impl/vector/NodeModifier.class
-org/jhotdraw8/pcollection/facade/MutableListFacade$MyListIterator.class
 org/jhotdraw8/pcollection/immutable/ImmutableSequencedCollection.class
 org/jhotdraw8/pcollection/ChampMap.class
 org/jhotdraw8/pcollection/impl/champ/SequencedData$1.class
@@ -86,7 +90,9 @@ org/jhotdraw8/pcollection/readonly/ReadOnlySequencedSet.class
 org/jhotdraw8/pcollection/sequenced/SequencedMap.class
 org/jhotdraw8/pcollection/facade/CollectionFacade.class
 org/jhotdraw8/pcollection/facade/ReadOnlyListFacade.class
+org/jhotdraw8/pcollection/readonly/ReversedReadOnlySequencedMapView.class
 org/jhotdraw8/pcollection/impl/champ/VectorTombstone.class
+org/jhotdraw8/pcollection/sequenced/ReversedSequencedSetView.class
 org/jhotdraw8/pcollection/impl/vector/LeafVisitor.class
 org/jhotdraw8/pcollection/immutable/ImmutableCollection.class
 org/jhotdraw8/pcollection/impl/vector/ArrayType.class

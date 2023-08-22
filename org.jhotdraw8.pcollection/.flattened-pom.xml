@@ -3,27 +3,23 @@
   ~ @(#)pom.xml
   ~ Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
   -->
-<project
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-        xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>ch.randelshofer</groupId>
-  <artifactId>org.jhotdraw8.pcollection</artifactId>
-  <version>1.0</version>
-  <name>JHotDraw8 Persistent Collections</name>
-  <url>https://github.com/wrandelshofer/jhotdraw8/org.jhotdraw8.pcollection
-  </url>
-  <licenses>
-    <license>
-      <name>MIT License</name>
-      <url>https://opensource.org/licenses/MIT</url>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>ch.randelshofer</groupId>
+    <artifactId>org.jhotdraw8.pcollection</artifactId>
+    <version>1.0</version>
+    <name>JHotDraw8 Persistent Collections</name>
+    <url>https://github.com/wrandelshofer/jhotdraw8/org.jhotdraw8.pcollection</url>
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
     </license>
   </licenses>
   <scm>
-    <url>
-      https://github.com/wrandelshofer/jhotdraw8.git/org.jhotdraw8.pcollection
-    </url>
+      <url>https://github.com/wrandelshofer/jhotdraw8.git/org.jhotdraw8.pcollection</url>
   </scm>
   <distributionManagement>
     <repository>
