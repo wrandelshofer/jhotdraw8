@@ -77,7 +77,13 @@ public interface ArrayType<T> {
     }
 
     /**
-     * System.arrayCopy with same source and destination
+     * Creates a new array that contains the specified
+     * range of elements from the provided array.
+     *
+     * @param array the array
+     * @param from  the first index (inclusive)
+     * @param to    the last index (exclusive)
+     * @return
      */
     default Object copyRange(Object array, int from, int to) {
         final int length = to - from;
@@ -85,7 +91,7 @@ public interface ArrayType<T> {
     }
 
     /**
-     * Repeatedly group an array into equal sized sub-trees
+     * Repeatedly group an array into equal sized subtrees.
      */
     default Object grouped(Object array, int groupSize) {
         final int arrayLength = lengthOf(array);

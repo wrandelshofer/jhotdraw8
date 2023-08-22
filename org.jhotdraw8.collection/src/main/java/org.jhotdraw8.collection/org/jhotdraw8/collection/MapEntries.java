@@ -29,7 +29,7 @@ public class MapEntries {
      *
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> ArrayList<Map.Entry<K, V>> of() {
+    public static @NonNull <K, V> List<Map.Entry<K, V>> of() {
         return new ArrayList<>();
     }
 

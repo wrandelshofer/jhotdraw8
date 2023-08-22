@@ -31,8 +31,20 @@ public abstract class AbstractSequencedSet<E> extends AbstractSet<E> implements 
         );
     }
 
+    /**
+     * Returns an iterator that iterates in the reverse
+     * sequence over the elements contained in this collection.
+     *
+     * @return an iterator that iterates in reverse
+     */
     protected abstract Iterator<E> reverseIterator();
 
+    /**
+     * Returns a spliterator that iterates in the reverse
+     * sequence over the elements contained in this collection.
+     *
+     * @return a spliterator that iterates in reverse
+     */
     protected abstract Spliterator<E> reverseSpliterator();
 
     /**

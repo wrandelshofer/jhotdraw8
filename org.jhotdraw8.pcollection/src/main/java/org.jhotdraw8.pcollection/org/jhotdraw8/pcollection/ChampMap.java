@@ -8,11 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.pcollection.immutable.ImmutableMap;
-import org.jhotdraw8.pcollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.pcollection.impl.champ.ChampIterator;
-import org.jhotdraw8.pcollection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.pcollection.impl.champ.Node;
+import org.jhotdraw8.pcollection.impl.champ.*;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySet;
 import org.jhotdraw8.pcollection.serialization.MapSerializationProxy;
@@ -61,7 +57,7 @@ import java.util.Spliterator;
  * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
  * <p>
  * This map can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}}. The mutable copy shares its nodes
+ * using method {@link #toMutable()}. The mutable copy shares its nodes
  * with this map, until it has gradually replaced the nodes with exclusively
  * owned nodes.
  * <p>

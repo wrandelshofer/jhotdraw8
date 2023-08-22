@@ -12,7 +12,7 @@ import java.util.function.Function;
  *      <dd><a href="https://blog.tlinkowski.pl/2018/transformer-pattern/">blog.tlinkowski.pl</a>
  * </dl>
  *
- * @param <T>
+ * @param <T> the type of the object that is to be transformed
  */
 @FunctionalInterface
 public interface Transformer<T> {

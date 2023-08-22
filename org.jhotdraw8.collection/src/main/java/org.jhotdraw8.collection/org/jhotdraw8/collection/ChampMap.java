@@ -52,6 +52,9 @@ import java.util.function.Function;
  * This map performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
  * <p>
+ * Uses a Compressed Hash-Array Mapped Prefix-tree (CHAMP) trie for storing
+ * the map entries.
+ * <p>
  * The CHAMP trie contains nodes that may be shared with other maps.
  * <p>
  * If a write operation is performed on a node, then this map creates a
@@ -59,7 +62,7 @@ import java.util.function.Function;
  * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
  * <p>
  * This map can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}}. The mutable copy shares its nodes
+ * using method {@link #toMutable()}. The mutable copy shares its nodes
  * with this map, until it has gradually replaced the nodes with exclusively
  * owned nodes.
  * <p>

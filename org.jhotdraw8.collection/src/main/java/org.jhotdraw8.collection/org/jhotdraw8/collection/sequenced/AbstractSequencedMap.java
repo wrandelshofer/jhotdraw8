@@ -13,12 +13,7 @@ import org.jhotdraw8.collection.mapped.MappedIterator;
 import org.jhotdraw8.collection.mapped.MappedSpliterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 
-import java.util.AbstractMap;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Abstract base class for {@link SequencedMap}s.
@@ -77,6 +72,14 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
     }
 
 
+    /**
+     * Creates a set that contains the keys of the provided map.
+     *
+     * @param m   a map
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return a set of the keys
+     */
     @SuppressWarnings({"SuspiciousMethodCalls"})
     public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
         return new SequencedSetFacade<>(
@@ -117,6 +120,14 @@ public abstract class AbstractSequencedMap<K, V> extends AbstractMap<K, V> imple
         return createValues(this);
     }
 
+    /**
+     * Creates a collection that contains the values of the provided map.
+     *
+     * @param m   a map
+     * @param <K> the key type of the map
+     * @param <V> the value type of the map
+     * @return a collection of the values
+     */
     public static <K, V> @NonNull SequencedCollection<V> createValues(@NonNull SequencedMap<K, V> m) {
         return new SequencedCollectionFacade<>(
                 () -> new MappedIterator<>(m._sequencedEntrySet().iterator(), Entry::getValue),

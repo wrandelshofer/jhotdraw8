@@ -7,13 +7,8 @@ package org.jhotdraw8.pcollection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.AbstractMap;
+import java.util.*;
 import java.util.AbstractMap.SimpleImmutableEntry;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -34,7 +29,7 @@ public class MapEntries {
      *
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> ArrayList<Map.Entry<K, V>> of() {
+    public static @NonNull <K, V> List<Map.Entry<K, V>> of() {
         return new ArrayList<>();
     }
 

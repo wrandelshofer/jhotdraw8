@@ -56,6 +56,9 @@ import java.util.function.Function;
  * This set performs read and write operations of single elements in O(log N) time,
  * and in O(log N) space, where N is the number of elements in the set.
  * <p>
+ * Uses a Compressed Hash-Array Mapped Prefix-tree (CHAMP) trie for storing
+ * the map entries.
+ * <p>
  * The CHAMP trie contains nodes that may be shared with other sets.
  * <p>
  * If a write operation is performed on a node, then this set creates a
@@ -63,7 +66,7 @@ import java.util.function.Function;
  * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
  * <p>
  * This set can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}}. The mutable copy shares its nodes
+ * using method {@link #toMutable()}. The mutable copy shares its nodes
  * with this set, until it has gradually replaced the nodes with exclusively
  * owned nodes.
  * <p>
@@ -154,7 +157,6 @@ public class VectorSet<E>
      * @return an immutable set of the provided elements
      */
 
-    @SuppressWarnings("unchecked")
     public static <E> @NonNull VectorSet<E> copyOf(@NonNull Iterable<? extends E> c) {
         return VectorSet.<E>of().addAll(c);
     }
@@ -181,7 +183,7 @@ public class VectorSet<E>
      * @return an immutable set of the provided elements
      */
 
-    @SuppressWarnings({"unchecked", "varargs"})
+    @SuppressWarnings({"varargs"})
     @SafeVarargs
     public static <E> @NonNull VectorSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
@@ -194,7 +196,6 @@ public class VectorSet<E>
     }
 
     @Override
-    @SuppressWarnings({"unchecked"})
     public @NonNull VectorSet<E> addAll(@NonNull Iterable<? extends E> c) {
         var m = toMutable();
         m.addAll(c);
@@ -238,7 +239,7 @@ public class VectorSet<E>
     private @NonNull VectorSet<E> addLast(@Nullable E e,
                                           boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var newElem = new SequencedElement<E>(e, vector.size() - offset);
+        var newElem = new SequencedElement<>(e, vector.size() - offset);
         var newRoot = put(null, newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
@@ -351,13 +352,11 @@ public class VectorSet<E>
         return m.toImmutable();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public VectorSet<E> removeFirst() {
         return remove(getFirst());
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public VectorSet<E> removeLast() {
         return remove(getLast());
@@ -390,7 +389,6 @@ public class VectorSet<E>
         return new VectorSet<>(root, vector, size, offset);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull VectorSet<E> retainAll(@NonNull Iterable<?> c) {
         var m = toMutable();

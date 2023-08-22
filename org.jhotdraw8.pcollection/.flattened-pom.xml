@@ -16,16 +16,16 @@
         <license>
             <name>MIT License</name>
             <url>https://opensource.org/licenses/MIT</url>
-    </license>
-  </licenses>
-  <scm>
-      <url>https://github.com/wrandelshofer/jhotdraw8.git/org.jhotdraw8.pcollection</url>
-  </scm>
-  <distributionManagement>
-    <repository>
-      <id>internal.repo</id>
-      <name>My Internal Repository</name>
-      <url>file:///Users/Shared/Developer/Maven</url>
+        </license>
+    </licenses>
+    <scm>
+        <url>https://github.com/wrandelshofer/jhotdraw8.git/org.jhotdraw8.pcollection</url>
+    </scm>
+    <distributionManagement>
+        <repository>
+            <id>internal.repo</id>
+            <name>My Internal Repository</name>
+            <url>file:///Users/Shared/Developer/Maven</url>
     </repository>
   </distributionManagement>
   <dependencies>

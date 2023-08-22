@@ -48,6 +48,9 @@ import java.util.function.Function;
  * This set performs read and write operations of single elements in O(1) time,
  * and in O(1) space.
  * <p>
+ * Uses a Compressed Hash-Array Mapped Prefix-tree (CHAMP) trie for storing
+ * the set elements.
+ * <p>
  * The CHAMP trie contains nodes that may be shared with other sets.
  * <p>
  * If a write operation is performed on a node, then this set creates a

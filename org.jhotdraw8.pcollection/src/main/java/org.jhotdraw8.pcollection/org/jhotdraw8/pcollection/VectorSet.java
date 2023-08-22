@@ -9,14 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.pcollection.immutable.ImmutableSequencedSet;
-import org.jhotdraw8.pcollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.pcollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.pcollection.impl.champ.IdentityObject;
-import org.jhotdraw8.pcollection.impl.champ.Node;
-import org.jhotdraw8.pcollection.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.pcollection.impl.champ.SequencedData;
-import org.jhotdraw8.pcollection.impl.champ.SequencedElement;
-import org.jhotdraw8.pcollection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.pcollection.impl.champ.*;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySet;
@@ -24,12 +17,7 @@ import org.jhotdraw8.pcollection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.Objects;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 
 
 /**
@@ -72,7 +60,7 @@ import java.util.Spliterators;
  * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
  * <p>
  * This set can create a mutable copy of itself in O(1) time and O(1) space
- * using method {@link #toMutable()}}. The mutable copy shares its nodes
+ * using method {@link #toMutable()}. The mutable copy shares its nodes
  * with this set, until it has gradually replaced the nodes with exclusively
  * owned nodes.
  * <p>

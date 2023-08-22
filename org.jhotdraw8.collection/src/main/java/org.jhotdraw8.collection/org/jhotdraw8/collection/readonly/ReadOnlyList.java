@@ -10,13 +10,7 @@ import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.spliterator.ReadOnlyListSpliterator;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 
 /**
  * Read-only interface for a list. The state of the
@@ -244,6 +238,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * the iterator is from a list.
      *
      * @param iterator an iterator over a list
+     * @param <E>      the element type
      * @return the ordered sum of the hash codes of the elements in the list
      * @see List#hashCode()
      */

@@ -23,15 +23,15 @@ package org.jhotdraw8.collection.transform;
  *    var obj = new Sample();
  *    Function<Sample,String> func = obj::toString;
  *
- *    obj.transformed().by(func);
+ *    var result = obj.transformed().by(func);
  * }</pre>
  * If the function returns a {@code Transformable}, the API can
  * be used in a fluent style:
  * <pre>{@literal
  *    var obj = new Sample();
- *    Function<Sample,Sample> func = Sample::removeFirst;
+ *    Function<Sample, Sample> func = Sample::removeFirst;
  *
- *    obj.transformed().by(func).transformed().by(func);
+ *    var result = obj.transformed().by(func).transformed().by(func);
  * }</pre>
  * <p>
  * Note: The fluent style would be less clumsy, if Java provided
