@@ -34,12 +34,12 @@ package org.jhotdraw8.collection.transform;
  *    var result = obj.transformed().by(func).transformed().by(func);
  * }</pre>
  * <p>
- * Note: The fluent style would be less clumsy, if Java provided
+ * Note: The fluent style would be more elegant, if Java provided
  * a self-type. In this case, the {@code Transformable}
  * interface could be simplified to this:
  * <pre>{@literal
  * interface Transformable {
- *    <T> T transform(Function<self-type,T> f);
+ *    <T> T transform(Function<self-type, T> f);
  * }
  * }</pre>
  * <p>
