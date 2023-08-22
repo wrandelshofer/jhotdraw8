@@ -8,7 +8,7 @@ package org.jhotdraw8.pcollection.impl.champ;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.impl.IdentityObject;
-import org.jhotdraw8.pcollection.impl.ListHelper;
+import org.jhotdraw8.pcollection.util.ListHelper;
 
 import java.util.Arrays;
 import java.util.Objects;

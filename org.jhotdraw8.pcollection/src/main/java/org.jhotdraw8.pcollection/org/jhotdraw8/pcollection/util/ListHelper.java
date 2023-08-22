@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.pcollection.impl;
+package org.jhotdraw8.pcollection.util;
 
 import org.jhotdraw8.annotation.NonNull;
 

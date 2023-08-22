@@ -10,9 +10,9 @@ import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
 import org.jhotdraw8.collection.enumerator.AbstractLongEnumerator;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntUShortArrayEnumerator;
-import org.jhotdraw8.collection.impl.ListHelper;
 import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
+import org.jhotdraw8.collection.util.ListHelper;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.precondition.Preconditions;
 
