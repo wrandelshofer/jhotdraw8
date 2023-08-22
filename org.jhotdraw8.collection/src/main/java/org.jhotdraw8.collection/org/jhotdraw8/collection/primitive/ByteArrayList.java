@@ -6,8 +6,8 @@ package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.facade.ListFacade;
+import org.jhotdraw8.collection.impl.ListHelper;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
 import java.util.*;

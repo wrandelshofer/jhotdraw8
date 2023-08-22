@@ -6,6 +6,7 @@
 package org.jhotdraw8.pcollection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.pcollection.impl.IdentityObject;
 
 /**
  * A {@link HashCollisionNode} that provides storage space for a 'owner' identity.

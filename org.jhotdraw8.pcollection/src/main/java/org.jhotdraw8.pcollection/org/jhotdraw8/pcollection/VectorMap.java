@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.pcollection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.pcollection.immutable.ImmutableSequencedMap;
+import org.jhotdraw8.pcollection.impl.IdentityObject;
 import org.jhotdraw8.pcollection.impl.champ.*;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySequencedMap;

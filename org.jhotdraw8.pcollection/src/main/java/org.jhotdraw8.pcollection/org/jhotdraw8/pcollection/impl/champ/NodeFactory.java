@@ -7,6 +7,7 @@ package org.jhotdraw8.pcollection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.pcollection.impl.IdentityObject;
 
 /**
  * Provides factory methods for {@link Node}s.

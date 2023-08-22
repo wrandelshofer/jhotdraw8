@@ -7,17 +7,13 @@ package org.jhotdraw8.pcollection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.pcollection.impl.IdentityObject;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyMap;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.function.Predicate;
 
 /**

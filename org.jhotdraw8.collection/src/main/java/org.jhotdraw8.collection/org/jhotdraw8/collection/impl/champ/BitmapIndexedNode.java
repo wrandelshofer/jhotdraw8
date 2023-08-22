@@ -7,8 +7,8 @@ package org.jhotdraw8.collection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ListHelper;
 import org.jhotdraw8.collection.impl.IdentityObject;
+import org.jhotdraw8.collection.impl.ListHelper;
 
 import java.util.Arrays;
 import java.util.function.BiFunction;

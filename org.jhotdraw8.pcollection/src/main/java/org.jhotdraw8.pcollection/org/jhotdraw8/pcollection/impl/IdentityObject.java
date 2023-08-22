@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.pcollection.impl.champ;
+package org.jhotdraw8.pcollection.impl;
 
 import java.io.Serial;
 import java.io.Serializable;

@@ -7,6 +7,7 @@ package org.jhotdraw8.pcollection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.pcollection.impl.IdentityObject;
 import org.jhotdraw8.pcollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.pcollection.readonly.ReadOnlySet;
 
