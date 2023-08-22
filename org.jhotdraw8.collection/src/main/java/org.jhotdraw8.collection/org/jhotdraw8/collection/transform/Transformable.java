@@ -56,7 +56,7 @@ public interface Transformable {
      * <p>
      * Usage:
      * <pre>{@literal
-     * obj.transformed().by(function);
+     * var result = obj.transformed().by(function);
      * }</pre>
      *
      * @return transformer with self type
