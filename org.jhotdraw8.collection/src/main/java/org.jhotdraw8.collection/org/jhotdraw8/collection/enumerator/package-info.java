@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 /**
- * Provides C#-like {@link org.jhotdraw8.collection.enumerator.BareEnumerator}s.
+ * Provides C#-like {@code Enumerator}s.
  * They are easier to code and are slightly faster than
  * {@link java.util.Iterator}s.
  */
