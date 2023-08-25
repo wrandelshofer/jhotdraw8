@@ -2,18 +2,7 @@ package org.jhotdraw8.collection.jmh;
 
 
 import org.jhotdraw8.collection.ChampSet;
-import org.jhotdraw8.collection.enumerator.SpliteratorEnumeratorWrapper;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -104,12 +93,12 @@ import java.util.concurrent.TimeUnit;
  */
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
-@Warmup(iterations = 2)
+@Warmup(iterations = 1)
 @Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx28g",})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampSetJmh {
-    @Param({/*"10", "1000",*/ "100000"/*, "10000000"*/})
+    @Param({/*"10", "1000",*/ /*"100000",*/ "100000"})
     private int size;
 
     @Param({"-65"})
@@ -131,7 +120,7 @@ public class ChampSetJmh {
         assert setAA.size() == size;
     }
 
-    /*
+
         @Benchmark
         public ChampSet<Key> mCopyOf() {
             ChampSet<Key> set = ChampSet.copyOf(data.listA);
@@ -149,7 +138,7 @@ public class ChampSetJmh {
             assert set.size() == data.listA.size();
             return set;
         }
-
+/*
         @Benchmark
         public ChampSet<Key> mRemoveOneByOne() {
             ChampSet<Key> set = setA;
@@ -209,7 +198,7 @@ public class ChampSetJmh {
             assert updated.isEmpty();
             return updated;
         }
-    */
+
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -227,7 +216,6 @@ public class ChampSetJmh {
         }
         return sum;
     }
-/*
 
     @Benchmark
     public Key mHead() {

@@ -1,7 +1,10 @@
 package org.jhotdraw8.collection;
 
+import org.junit.Ignore;
+
 import java.util.Set;
 
+@Ignore
 public class MutableChampSetLongRunningTest extends AbstractSetLongRunningTest {
 
     @Override

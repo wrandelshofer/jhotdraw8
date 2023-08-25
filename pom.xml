@@ -143,9 +143,10 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
         <configuration>
-          <argLine>-Xmx4g</argLine>
-          <parallel>classesAndMethods</parallel>
-          <forkCount>4</forkCount>
+            <argLine>--add-exports org.junit.platform.commons/org.junit.platform.commons.logging=ALL-UNNAMED</argLine>
+            <argLine>--add-exports org.junit.platform.commons/org.junit.platform.commons.util=ALL-UNNAMED</argLine>
+            <parallel>classesAndMethods</parallel>
+            <forkCount>4</forkCount>
         </configuration>
       </plugin>
       <plugin>

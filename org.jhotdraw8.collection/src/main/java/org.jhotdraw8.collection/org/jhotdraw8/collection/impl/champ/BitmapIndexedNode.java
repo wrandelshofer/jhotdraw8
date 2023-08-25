@@ -82,6 +82,12 @@ public class BitmapIndexedNode<D> extends Node<D> {
         }
         Object[] dst = ListHelper.copyComponentAdd(this.mixed, idx, 1);
         dst[idx] = data;
+        /*
+        if (isAllowedToUpdate(owner)) {
+            this.mixed=dst;
+            this.dataMap=dataMap | bitpos;
+            return this;
+        }*/
         return newBitmapIndexedNode(owner, nodeMap, dataMap | bitpos, dst);
     }
 
@@ -344,7 +350,8 @@ public class BitmapIndexedNode<D> extends Node<D> {
                             newData, dataHash, shift + BIT_PARTITION_SIZE);
             details.setAdded(newData);
             return copyAndMigrateFromDataToNode(owner, bitpos, updatedSubNode);
-        } else if ((nodeMap & bitpos) != 0) {
+        }
+        if ((nodeMap & bitpos) != 0) {
             Node<D> subNode = getNode(nodeIndex(bitpos));
             Node<D> updatedSubNode = subNode
                     .put(owner, newData, dataHash, shift + BIT_PARTITION_SIZE, details, updateFunction, equalsFunction, hashFunction);

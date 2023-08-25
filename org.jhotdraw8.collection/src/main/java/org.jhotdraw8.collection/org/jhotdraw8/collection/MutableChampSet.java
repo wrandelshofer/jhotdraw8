@@ -7,6 +7,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.collection.impl.IdentityObject;
 import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlyCollection;
@@ -16,6 +17,8 @@ import org.jhotdraw8.collection.spliterator.FailFastSpliterator;
 import java.io.Serial;
 import java.util.*;
 import java.util.function.Function;
+
+import static org.jhotdraw8.collection.ChampSet.keyHash;
 
 /**
  * Implements the {@link Set} interface using a Compressed Hash-Array Mapped
@@ -96,7 +99,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         ChangeEvent<E> details = new ChangeEvent<>();
         root = root.put(makeOwner(),
                 e, ChampSet.keyHash(e), 0, details,
-                (oldKey, newKey) -> oldKey,
+                ChampSet::updateElement,
                 Objects::equals, ChampSet::keyHash);
         if (details.isModified()) {
             size++;
@@ -124,18 +127,28 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             size = cc.size;
             return true;
         }
+        IdentityObject currentOwner = makeOwner();
+        ChangeEvent<E> details = new ChangeEvent<>();
+        var newRootNode = root;
         if (c instanceof ChampSet<?> that) {
             var bulkChange = new BulkChangeEvent();
-            var newRootNode = root.putAll(makeOwner(), (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
-            if (bulkChange.inBoth == that.size()) {
-                return false;
-            }
-            root = newRootNode;
+            newRootNode = newRootNode.putAll(currentOwner, (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, details);
             size += that.size - bulkChange.inBoth;
-            modCount++;
-            return true;
+        } else {
+            for (E e : c) {
+                details.resetModified();
+                newRootNode = newRootNode.put(currentOwner, e, keyHash(e), 0, details, ChampSet::updateElement, Objects::equals, ChampSet::keyHash);
+                if (details.isModified()) {
+                    size++;
+                }
+            }
         }
-        return super.addAll(c);
+        if (newRootNode == root) {
+            return false;
+        }
+        root = newRootNode;
+        modCount++;
+        return true;
     }
 
     @Override
@@ -256,7 +269,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable final Object o) {
-        return Node.NO_DATA != root.find((E) o, ChampSet.keyHash(o), 0, Objects::equals);
+        return Node.NO_DATA != root.find((E) o, keyHash(o), 0, Objects::equals);
     }
 
     @Override

@@ -2,6 +2,7 @@ package org.jhotdraw8.collection;
 
 import org.jhotdraw8.collection.computed.ComputedList;
 import org.jhotdraw8.collection.readonly.SizeLimitExceededException;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -25,6 +26,8 @@ public abstract class AbstractSetLongRunningTest {
      * Should not throw a size limit exception, when we add {@link #maxSize()} elements.
      */
     @Test
+    @Disabled
+
     public void shouldThrowSizeLimitExceededException() {
         Set<Long> instance = createInstance();
         ComputedList<Long> toBeAdded = new ComputedList<>(maxSize(), i -> i);

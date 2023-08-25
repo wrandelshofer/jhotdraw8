@@ -31,8 +31,7 @@ public class ChangeEvent<D> {
     private @Nullable D oldData;
     private @Nullable D newData;
 
-    public ChangeEvent() {
-    }
+
 
     void found(D data) {
         this.oldData = data;
@@ -98,7 +97,11 @@ public class ChangeEvent<D> {
         return type == Type.REPLACED;
     }
 
-    void reset() {
+    public void resetModified() {
+        type = Type.UNCHANGED;
+    }
+
+    public void reset() {
         type = Type.UNCHANGED;
         oldData = null;
         newData = null;

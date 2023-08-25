@@ -2,17 +2,7 @@ package org.jhotdraw8.collection.jmh;
 
 import kotlinx.collections.immutable.ExtensionsKt;
 import kotlinx.collections.immutable.PersistentSet;
-import org.openjdk.jmh.annotations.Benchmark;
-import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Fork;
-import org.openjdk.jmh.annotations.Measurement;
-import org.openjdk.jmh.annotations.Mode;
-import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.annotations.*;
 
 import java.util.concurrent.TimeUnit;
 
@@ -23,6 +13,8 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
  * Benchmark           (size)  Mode  Cnt    _     Score         Error  Units
+ * mCopyOf            100000   avgt    4     7117795.234 ±  563194.353  ns/op
+ * mCopyOnyByOne      100000   avgt    4     7672045.412 ± 9901057.996  ns/op
  * mContainsFound     1000000  avgt    4    _   165.449 ±      13.209  ns/op
  * mContainsNotFound  1000000  avgt    4    _   169.791 ±       2.502  ns/op
  * mHead              1000000  avgt    4    _   104.946 ±       3.025  ns/op
@@ -38,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class KotlinxPersistentHashSetJmh {
-    @Param({"1000000"})
+    @Param({"100000"})
     private int size;
 
     private final int mask = ~64;
@@ -52,6 +44,25 @@ public class KotlinxPersistentHashSetJmh {
         setA = ExtensionsKt.toPersistentHashSet(data.setA);
     }
 
+
+    @Benchmark
+    public PersistentSet<Key> mCopyOf() {
+        PersistentSet<Key> set = setA.addAll(data.listA);
+        assert set.size() == data.listA.size();
+        return set;
+    }
+
+
+    @Benchmark
+    public PersistentSet<Key> mCopyOnyByOne() {
+        PersistentSet<Key> set = setA;
+        for (Key key : data.listA) {
+            set = set.add(key);
+        }
+        assert set.size() == data.listA.size();
+        return set;
+    }
+    /*
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -88,4 +99,6 @@ public class KotlinxPersistentHashSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
+
+     */
 }

@@ -85,7 +85,7 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
-    static final int SALT = new Random().nextInt();
+    static final int SALT = 0;// new Random().nextInt();
     /**
      * The size of the set.
      */
