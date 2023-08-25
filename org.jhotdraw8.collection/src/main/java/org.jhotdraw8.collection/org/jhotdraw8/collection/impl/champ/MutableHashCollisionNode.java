@@ -26,8 +26,8 @@ class MutableHashCollisionNode<K> extends HashCollisionNode<K> {
     private static final long serialVersionUID = 0L;
     private final @NonNull IdentityObject ownedBy;
 
-    MutableHashCollisionNode(@NonNull IdentityObject ownedBy, int hash, Object @NonNull [] entries) {
-        super(hash, entries);
+    MutableHashCollisionNode(@NonNull IdentityObject ownedBy, Object @NonNull [] entries) {
+        super(entries);
         this.ownedBy = ownedBy;
     }
 

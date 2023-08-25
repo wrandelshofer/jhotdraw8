@@ -79,7 +79,7 @@ public abstract class Node<D> {
     }
 
     /**
-     * Given a masked dataHash, returns its bit-position
+     * Given a masked bit-position, returns its mask
      * in the bit-map.
      * <p>
      * For example, if the bit partition is 5 bits, then
@@ -87,11 +87,11 @@ public abstract class Node<D> {
      * If the masked dataHash is 3 then the bit-position is
      * the bit with index 3. That is, 1<<3 = 0b0100.
      *
-     * @param mask masked data hash
-     * @return bit position
+     * @param bitpos bitposition
+     * @return mask
      */
-    static int bitpos(int mask) {
-        return 1 << mask;
+    static int mask(int bitpos) {
+        return 1 << bitpos;
     }
 
     public static <E> @NonNull E getFirst(@NonNull Node<E> node) {
@@ -134,7 +134,7 @@ public abstract class Node<D> {
         throw new NoSuchElementException();
     }
 
-    static int mask(int dataHash, int shift) {
+    static int bitpos(int dataHash, int shift) {
         return (dataHash >>> shift) & BIT_PARTITION_MASK;
     }
 
@@ -149,16 +149,16 @@ public abstract class Node<D> {
             return NodeFactory.newHashCollisionNode(owner, keyHash0, entries);
         }
 
-        int mask0 = mask(keyHash0, shift);
-        int mask1 = mask(keyHash1, shift);
+        int bitpos0 = bitpos(keyHash0, shift);
+        int bitpos1 = bitpos(keyHash1, shift);
 
-        if (mask0 != mask1) {
+        if (bitpos0 != bitpos1) {
             // both nodes fit on same level
-            int dataMap = bitpos(mask0) | bitpos(mask1);
+            int dataMap = mask(bitpos0) | mask(bitpos1);
 
             Object[] entries = new Object[2];
             if (BitmapIndexedNode.DATA_FIRST) {
-                if (mask0 < mask1) {
+                if (bitpos0 < bitpos1) {
                     entries[0] = k0;
                     entries[1] = k1;
                 } else {
@@ -166,7 +166,7 @@ public abstract class Node<D> {
                     entries[1] = k0;
                 }
             } else {
-                if (mask0 < mask1) {
+                if (bitpos0 < bitpos1) {
                     entries[0] = k1;
                     entries[1] = k0;
                 } else {
@@ -182,7 +182,7 @@ public abstract class Node<D> {
                     shift + BIT_PARTITION_SIZE);
             // values fit on next level
 
-            int nodeMap = bitpos(mask0);
+            int nodeMap = mask(bitpos0);
             return NodeFactory.newBitmapIndexedNode(owner, nodeMap, (0), new Object[]{node});
         }
     }

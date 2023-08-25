@@ -129,26 +129,22 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         }
         IdentityObject currentOwner = makeOwner();
         ChangeEvent<E> details = new ChangeEvent<>();
-        var newRootNode = root;
+        int oldSize = size;
         if (c instanceof ChampSet<?> that) {
             var bulkChange = new BulkChangeEvent();
-            newRootNode = newRootNode.putAll(currentOwner, (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, details);
+            root = root.putAll(makeOwner(), (Node<E>) that, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             size += that.size - bulkChange.inBoth;
         } else {
             for (E e : c) {
                 details.resetModified();
-                newRootNode = newRootNode.put(currentOwner, e, keyHash(e), 0, details, ChampSet::updateElement, Objects::equals, ChampSet::keyHash);
+                root = root.put(currentOwner, e, keyHash(e), 0, details, ChampSet::updateElement, Objects::equals, ChampSet::keyHash);
                 if (details.isModified()) {
                     size++;
                 }
             }
         }
-        if (newRootNode == root) {
-            return false;
-        }
-        root = newRootNode;
         modCount++;
-        return true;
+        return size != oldSize;
     }
 
     @Override

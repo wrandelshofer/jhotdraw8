@@ -39,11 +39,11 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
     AddOnlyChampSet() {
     }
 
-    private static char bitpos(int mask) {
-        return (char) (1 << mask);
+    private static char mask(int bitpos) {
+        return (char) (1 << bitpos);
     }
 
-    private static int mask(int keyHash, int shift) {
+    private static int bitpos(int keyHash, int shift) {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
@@ -56,12 +56,12 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             return unchecked;
         }
 
-        int mask0 = mask(keyHash0, shift);
-        int mask1 = mask(keyHash1, shift);
+        int mask0 = bitpos(keyHash0, shift);
+        int mask1 = bitpos(keyHash1, shift);
 
         if (mask0 != mask1) {
             // both nodes fit on same level
-            final char dataMap = (char) (bitpos(mask0) | bitpos(mask1));
+            final char dataMap = (char) (mask(mask0) | mask(mask1));
 
             if (mask0 < mask1) {
                 return new BitmapIndexedNode<>((char) 0, dataMap, key0, key1);
@@ -72,7 +72,7 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             final AddOnlyChampSet<K> node =
                     mergeTwoKeyValPairs(key0, keyHash0, key1, keyHash1, shift + BIT_PARTITION_SIZE);
             // values fit on next level
-            final char nodeMap = bitpos(mask0);
+            final char nodeMap = mask(mask0);
             return new BitmapIndexedNode<>(nodeMap, (char) 0, node);
         }
     }
@@ -132,9 +132,9 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             this.nodes = nodes;
         }
 
-        @NonNull AddOnlyChampSet<K> copyAndInsertValue(int bitpos,
+        @NonNull AddOnlyChampSet<K> copyAndInsertValue(int mask,
                                                        @NonNull K key) {
-            final int idx = ENTRY_LENGTH * dataIndex(bitpos);
+            final int idx = ENTRY_LENGTH * dataIndex(mask);
 
             // copy 'src' and insert 1 element(s) at position 'idx'
             final Object[] src = this.nodes;
@@ -143,13 +143,13 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             System.arraycopy(src, idx, dst, idx + 1, src.length - idx);
             dst[idx] = key;
 
-            return new BitmapIndexedNode<>(nodeMap, (char) (dataMap | bitpos), dst);
+            return new BitmapIndexedNode<>(nodeMap, (char) (dataMap | mask), dst);
         }
 
-        @NonNull AddOnlyChampSet<K> copyAndMigrateFromInlineToNode(int bitpos, @NonNull AddOnlyChampSet<K> node) {
+        @NonNull AddOnlyChampSet<K> copyAndMigrateFromInlineToNode(int mask, @NonNull AddOnlyChampSet<K> node) {
 
-            final int idxOld = ENTRY_LENGTH * dataIndex(bitpos);
-            final int idxNew = this.nodes.length - ENTRY_LENGTH - nodeIndex(bitpos);
+            final int idxOld = ENTRY_LENGTH * dataIndex(mask);
+            final int idxNew = this.nodes.length - ENTRY_LENGTH - nodeIndex(mask);
             assert idxOld <= idxNew;
 
             // copy 'src' and remove 1 element(s) at position 'idxOld' and
@@ -161,13 +161,13 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
             dst[idxNew] = node;
 
-            return new BitmapIndexedNode<>((char) (nodeMap | bitpos), (char) (dataMap ^ bitpos), dst);
+            return new BitmapIndexedNode<>((char) (nodeMap | mask), (char) (dataMap ^ mask), dst);
         }
 
-        @NonNull AddOnlyChampSet<K> copyAndSetNode(int bitpos,
+        @NonNull AddOnlyChampSet<K> copyAndSetNode(int mask,
                                                    @NonNull AddOnlyChampSet<K> newNode) {
 
-            final int nodeIndex = nodeIndex(bitpos);
+            final int nodeIndex = nodeIndex(mask);
             final int idx = this.nodes.length - 1 - nodeIndex;
 
             // copy 'src' and set 1 element(s) at position 'idx'
@@ -179,8 +179,8 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             return new BitmapIndexedNode<>(nodeMap, dataMap, dst);
         }
 
-        int dataIndex(int bitpos) {
-            return Integer.bitCount(dataMap & (bitpos - 1));
+        int dataIndex(int mask) {
+            return Integer.bitCount(dataMap & (mask - 1));
         }
 
         @SuppressWarnings("unchecked")
@@ -193,22 +193,22 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             return (AddOnlyChampSet<K>) nodes[nodes.length - 1 - index];
         }
 
-        @NonNull AddOnlyChampSet<K> nodeAt(int bitpos) {
-            return getNode(nodeIndex(bitpos));
+        @NonNull AddOnlyChampSet<K> nodeAt(int mask) {
+            return getNode(nodeIndex(mask));
         }
 
-        int nodeIndex(int bitpos) {
-            return Integer.bitCount(nodeMap & (bitpos - 1));
+        int nodeIndex(int mask) {
+            return Integer.bitCount(nodeMap & (mask - 1));
         }
 
         @Override
         @NonNull AddOnlyChampSet<K> updated(@NonNull K key, int keyHash,
                                             int shift) {
-            final int mask = mask(keyHash, shift);
-            final int bitpos = bitpos(mask);
+            final int bitpos = bitpos(keyHash, shift);
+            final int mask = mask(bitpos);
 
-            if ((dataMap & bitpos) != 0) { // in-place value
-                final int dataIndex = dataIndex(bitpos);
+            if ((dataMap & mask) != 0) { // in-place value
+                final int dataIndex = dataIndex(mask);
                 final K currentKey = getKey(dataIndex);
 
                 if (Objects.equals(currentKey, key)) {
@@ -216,21 +216,21 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
                 } else {
                     final AddOnlyChampSet<K> subNodeNew = mergeTwoKeyValPairs(currentKey,
                             currentKey.hashCode(), key, keyHash, shift + BIT_PARTITION_SIZE);
-                    return copyAndMigrateFromInlineToNode(bitpos, subNodeNew);
+                    return copyAndMigrateFromInlineToNode(mask, subNodeNew);
                 }
-            } else if ((nodeMap & bitpos) != 0) { // node (not value)
-                final AddOnlyChampSet<K> subNode = nodeAt(bitpos);
+            } else if ((nodeMap & mask) != 0) { // node (not value)
+                final AddOnlyChampSet<K> subNode = nodeAt(mask);
                 final AddOnlyChampSet<K> subNodeNew =
                         subNode.updated(key, keyHash, shift + BIT_PARTITION_SIZE);
 
                 if (subNode != subNodeNew) {
-                    return copyAndSetNode(bitpos, subNodeNew);
+                    return copyAndSetNode(mask, subNodeNew);
                 } else {
                     return this;
                 }
             } else {
                 // no value
-                return copyAndInsertValue(bitpos, key);
+                return copyAndInsertValue(mask, key);
             }
         }
 

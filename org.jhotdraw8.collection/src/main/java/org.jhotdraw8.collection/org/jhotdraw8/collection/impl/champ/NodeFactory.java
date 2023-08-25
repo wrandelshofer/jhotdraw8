@@ -31,7 +31,7 @@ class NodeFactory {
     static <K> @NonNull HashCollisionNode<K> newHashCollisionNode(
             @Nullable IdentityObject owner, int hash, @NonNull Object @NonNull [] entries) {
         return owner == null
-                ? new HashCollisionNode<>(hash, entries)
-                : new MutableHashCollisionNode<>(owner, hash, entries);
+                ? new HashCollisionNode<>(entries)
+                : new MutableHashCollisionNode<>(owner, entries);
     }
 }
