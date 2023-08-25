@@ -317,6 +317,11 @@ public class VectorSet<E>
     }
 
     @Override
+    public long maxSize() {
+        return 1 << 30;
+    }
+
+    @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(
                 this::reverseIterator,

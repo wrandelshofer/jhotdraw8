@@ -11,17 +11,13 @@ import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.collection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.collection.readonly.SizeLimitExceededException;
 import org.jhotdraw8.collection.sequenced.SequencedCollection;
 import org.jhotdraw8.collection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Spliterator;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -29,6 +25,7 @@ import java.util.stream.Stream;
  * <p>
  * Features:
  * <ul>
+ *     <li>supports up to {@code Integer.MAX_VALUE} entries</li>
  *     <li>allows null elements</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>
@@ -132,8 +129,14 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
+    public boolean addAll(@NonNull Collection<? extends E> c) {
+        return addAll(size, c);
+    }
+
+    @Override
     public boolean addAll(int index, Collection<? extends E> c) {
         Objects.checkIndex(index, size + 1);
+        if (size + c.size() > maxSize()) throw new SizeLimitExceededException();
         int oldSize = size;
         VectorList<E> immutable = toImmutable().addAll(index, c);
         if (oldSize != immutable.size) {
@@ -219,6 +222,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean add(E e) {
+        if (size == maxSize()) throw new SizeLimitExceededException();
         root = root.append(e);
         size++;
         modCount++;
@@ -241,6 +245,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public void add(int index, E element) {
         Objects.checkIndex(index, size + 1);
+        if (size == maxSize()) throw new SizeLimitExceededException();
         if (index == size) {
             add(element);
         } else {

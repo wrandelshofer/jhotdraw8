@@ -214,6 +214,11 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     }
 
     @Override
+    public long maxSize() {
+        return 1 << 30;
+    }
+
+    @Override
     public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
         var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
         var newRootNode = put(null, new SimpleImmutableEntry<>(key, value),
@@ -280,7 +285,6 @@ public class ChampMap<K, V> extends BitmapIndexedNode<SimpleImmutableEntry<K, V>
     public int size() {
         return size;
     }
-
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
         return new ChampSpliterator<>(this, null, size(), Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }

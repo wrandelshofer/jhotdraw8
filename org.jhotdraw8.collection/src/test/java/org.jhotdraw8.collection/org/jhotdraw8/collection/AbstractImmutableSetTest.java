@@ -61,11 +61,9 @@ public abstract class AbstractImmutableSetTest {
         assertEqualSet(expected.asSet(), actual);
     }
 
-    protected void assertEqualSet(@NonNull Set<HashCollider> expected, @NonNull ImmutableSet<HashCollider> actual) {
-        ArrayList<HashCollider> expectedValues = new ArrayList<>(expected);
-        ArrayList<HashCollider> actualValues = new ArrayList<>(actual.asSet());
-        expectedValues.sort(Comparator.comparing(HashCollider::getValue));
-        actualValues.sort(Comparator.comparing(HashCollider::getValue));
+    protected <T> void assertEqualSet(@NonNull Set<T> expected, @NonNull ImmutableSet<T> actual) {
+        Set<T> expectedValues = new LinkedHashSet<>(expected);
+        Set<T> actualValues = new LinkedHashSet<>(actual.asSet());
         assertEquals(expectedValues, actualValues);
 
         for (var e : expected) {

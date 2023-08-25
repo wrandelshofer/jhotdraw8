@@ -31,6 +31,7 @@ import static org.jhotdraw8.collection.impl.vector.ArrayType.obj;
  * <p>
  * Features:
  * <ul>
+ *     <li>supports up to {@code Integer.MAX_VALUE} entries</li>
  *     <li>allows null elements</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>
@@ -174,6 +175,11 @@ public class VectorList<E> extends BitMappedTrie<E> implements ImmutableList<E>,
         } else {
             throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size);
         }
+    }
+
+    @Override
+    public long maxSize() {
+        return Integer.MAX_VALUE - 8;
     }
 
     @Override

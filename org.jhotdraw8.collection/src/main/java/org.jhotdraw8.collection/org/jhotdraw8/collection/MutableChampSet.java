@@ -139,6 +139,11 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     }
 
     @Override
+    public long maxSize() {
+        return 1 << 30;
+    }
+
+    @Override
     public boolean removeAll(@NonNull Collection<?> c) {
         return removeAll((Iterable<?>) c);
     }

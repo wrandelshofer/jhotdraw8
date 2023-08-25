@@ -27,11 +27,44 @@ import java.util.stream.StreamSupport;
 public interface ReadOnlyCollection<E> extends Iterable<E> {
 
     /**
+     * Returns the maximal size of this collection.
+     * <p>
+     * Attempting to add more elements to this collection will result
+     * in a {@link SizeLimitExceededException}.
+     * <p>
+     * The default implementation provided by this interface
+     * returns {@link Integer#MAX_VALUE} {@code - 16}.
+     * This is the largest supported array size on a JVM when
+     * pointers are not compressed.
+     *
+     * @return the maximal size
+     */
+    default long maxSize() {
+        return Integer.MAX_VALUE - 16;
+    }
+
+
+    /**
      * Returns the size of the collection.
+     * <p>
+     * If this collection contains more than {@link Integer#MAX_VALUE}
+     * elements, returns {@link Integer#MAX_VALUE}.
      *
      * @return the size
      */
     int size();
+
+    /**
+     * Returns the size of the collection as a long value.
+     * <p>
+     * The default implementation provided by this interface
+     * returns {@link #size()}.
+     *
+     * @return the size
+     */
+    default long sizeAsLong() {
+        return size();
+    }
 
     /**
      * Returns true if the collection is empty.

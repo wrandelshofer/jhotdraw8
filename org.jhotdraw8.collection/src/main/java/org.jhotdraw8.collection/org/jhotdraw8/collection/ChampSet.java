@@ -208,6 +208,12 @@ public class ChampSet<E> extends BitmapIndexedNode<E> implements ImmutableSet<E>
     }
 
     @Override
+    public long maxSize() {
+        return 1 << 30;
+    }
+
+
+    @Override
     public @NonNull ChampSet<E> remove(@NonNull E key) {
         int keyHash = keyHash(key);
         ChangeEvent<E> details = new ChangeEvent<>();

@@ -195,6 +195,11 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     }
 
     @Override
+    public long maxSize() {
+        return 1 << 30;
+    }
+
+    @Override
     public V put(K key, V value) {
         SimpleImmutableEntry<K, V> oldValue = putEntry(key, value).getOldData();
         return oldValue == null ? null : oldValue.getValue();

@@ -29,11 +29,38 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     boolean isEmpty();
 
     /**
+     * Returns the maximal size of this collection.
+     * <p>
+     * Attempting to add more elements to this collection will result
+     * in a {@link SizeLimitExceededException}.
+     * <p>
+     * The default implementation provided by this interface
+     * returns {@link Integer#MAX_VALUE} {@code - 4}.
+     *
+     * @return the maximal size
+     */
+    default long maxSize() {
+        return Integer.MAX_VALUE - 4;
+    }
+
+    /**
      * Returns the number of entries contained in this map..
      *
      * @return the number of entries
      */
     int size();
+
+    /**
+     * Returns the size of the collection as a long value.
+     * <p>
+     * The default implementation provided by this interface
+     * returns {@link #size()}.
+     *
+     * @return the size
+     */
+    default long sizeAsLong() {
+        return size();
+    }
 
     /**
      * Returns the value to which the key is mapped, or {@code null} if this map

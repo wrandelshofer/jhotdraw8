@@ -10,14 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedMapFacade;
 import org.jhotdraw8.collection.facade.SequencedSetFacade;
-import org.jhotdraw8.collection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.collection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.collection.impl.champ.ChangeEvent;
-import org.jhotdraw8.collection.impl.champ.Node;
-import org.jhotdraw8.collection.impl.champ.ReverseTombSkippingVectorSpliterator;
-import org.jhotdraw8.collection.impl.champ.SequencedData;
-import org.jhotdraw8.collection.impl.champ.SequencedEntry;
-import org.jhotdraw8.collection.impl.champ.TombSkippingVectorSpliterator;
+import org.jhotdraw8.collection.impl.champ.*;
 import org.jhotdraw8.collection.iterator.FailFastIterator;
 import org.jhotdraw8.collection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.collection.sequenced.AbstractSequencedMap;
@@ -27,11 +20,7 @@ import org.jhotdraw8.collection.sequenced.SequencedSet;
 import org.jhotdraw8.collection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-import java.util.Spliterator;
-import java.util.Spliterators;
+import java.util.*;
 
 /**
  * Implements the {@code SequencedMap} interface using a Compressed
@@ -260,6 +249,11 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     private void iteratorRemove(Entry<K, V> entry) {
         owner = null;
         remove(entry.getKey());
+    }
+
+    @Override
+    public long maxSize() {
+        return 1 << 30;
     }
 
     @Override

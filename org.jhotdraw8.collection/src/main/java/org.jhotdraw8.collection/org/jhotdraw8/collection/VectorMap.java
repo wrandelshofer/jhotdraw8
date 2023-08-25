@@ -243,6 +243,11 @@ public class VectorMap<K, V> extends BitmapIndexedNode<SequencedEntry<K, V>> imp
     }
 
     @Override
+    public long maxSize() {
+        return 1 << 30;
+    }
+
+    @Override
     public @NonNull VectorMap<K, V> put(@NonNull K key, @Nullable V value) {
         return putLast(key, value, false);
     }
