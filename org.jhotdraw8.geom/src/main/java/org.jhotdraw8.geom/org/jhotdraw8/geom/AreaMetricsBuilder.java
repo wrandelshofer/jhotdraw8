@@ -17,7 +17,7 @@ import java.util.DoubleSummaryStatistics;
  * XXX Only works with consolidated inputs, for example from a {@link java.awt.geom.Area} object
  */
 public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
-    private DoubleSummaryStatistics areaTimesTwo = new DoubleSummaryStatistics();
+    private final DoubleSummaryStatistics areaTimesTwo = new DoubleSummaryStatistics();
     double lastMoveToX, lastMoveToY;
 
     @Override

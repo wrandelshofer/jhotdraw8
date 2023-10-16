@@ -178,7 +178,7 @@ public class Bezier2BiArc {
         if (bezier.getP1().equals(bezier.getCtrlP1()) || bezier.getP2().equals(bezier.getCtrlP2())) {
             stack.push(bezier);
         } else {
-            DoubleArrayList inflex = new CubicCurveCharacteristics().inflectionPoints(bezier);
+            DoubleArrayList inflex = CubicCurveCharacteristics.inflectionPoints(bezier);
 
             if (inflex.size() == 1) {
                 SimpleOrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted = CubicCurves.split(bezier, inflex.get(0));

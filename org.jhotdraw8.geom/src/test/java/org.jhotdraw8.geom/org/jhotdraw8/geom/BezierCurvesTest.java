@@ -47,7 +47,7 @@ public class BezierCurvesTest {
     }
 
     public void testCurveCharacteristics(double[] b, CubicCurveCharacteristics.Characteristics expected) {
-        CubicCurveCharacteristics.Characteristics actual = new CubicCurveCharacteristics().characteristics(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
+        CubicCurveCharacteristics.Characteristics actual = CubicCurveCharacteristics.characteristics(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
         assertEquals(expected, actual);
     }
 
@@ -84,7 +84,6 @@ public class BezierCurvesTest {
     }
 
     private void testInflections(double[] b, double[] expected) {
-        new CubicCurveCharacteristics();
         DoubleArrayList inflections = CubicCurveCharacteristics.inflectionPoints(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
         assertArrayEquals(expected, inflections.toDoubleArray());
     }
@@ -107,7 +106,7 @@ public class BezierCurvesTest {
     }
 
     private void testAlign(double[] b, double[] expected) {
-        double[] actual = new CubicCurveCharacteristics().align(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
+        double[] actual = CubicCurveCharacteristics.align(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
         assertArrayEquals(expected, actual);
     }
 }

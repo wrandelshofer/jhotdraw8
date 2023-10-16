@@ -22,7 +22,7 @@ public class CubicCurveCharacteristics {
     /**
      * Don't let anyone instantiate this class.
      */
-    public CubicCurveCharacteristics() {
+    private CubicCurveCharacteristics() {
     }
 
     public enum Characteristics {
@@ -211,7 +211,7 @@ public class CubicCurveCharacteristics {
     /**
      * Computes the inflection points of the given cubic curve.
      */
-    public @NonNull DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
+    public static @NonNull DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
         return inflectionPoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
     }
 
