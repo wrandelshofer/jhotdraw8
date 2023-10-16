@@ -12,10 +12,11 @@ public class ZipTransformer {
      * Zips a list with itself.
      * <p>
      * Example:
+     * <pre>{@literal
      * VectorList<String> list = VectorList.of("a","b","c");
      * VectorList<String> result = list.transformed().by(Zipper.zipList((a,b)->a+b));
      * // result = ["ab","c"];
-     * </p>
+     * }</pre>
      *
      * @param combinator the combinator
      * @param <E>        the element type
@@ -44,10 +45,11 @@ public class ZipTransformer {
      * Zips a list with itself in reverse order.
      * <p>
      * Example:
+     * <pre>{@literal
      * VectorList<String> list = VectorList.of("a","b","c");
      * VectorList<String> result = list.transformed().by(Zipper.zipListInReverse((a,b)->a+b));
      * // result = ["a","bc"];
-     * </p>
+     * }</pre>
      *
      * @param combinator the combinator
      * @param <E>        the element type
