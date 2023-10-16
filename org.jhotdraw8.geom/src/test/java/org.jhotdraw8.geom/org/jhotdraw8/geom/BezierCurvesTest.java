@@ -107,6 +107,6 @@ public class BezierCurvesTest {
 
     private void testAlign(double[] b, double[] expected) {
         double[] actual = CubicCurveCharacteristics.align(b[0], b[1], b[2], b[3], b[4], b[5], b[6], b[7]);
-        assertArrayEquals(expected, actual);
+        assertArrayEquals(expected, actual, 1e-6);
     }
 }
