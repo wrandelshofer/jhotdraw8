@@ -15,7 +15,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * PreorderSpliterator.
+ * PostorderSpliterator.
  *
  * @param <T> the element type
  * @author Werner Randelshofer
