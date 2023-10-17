@@ -83,7 +83,7 @@ public interface ArrayType<T> {
      * @param array the array
      * @param from  the first index (inclusive)
      * @param to    the last index (exclusive)
-     * @return
+     * @return a new array
      */
     default Object copyRange(Object array, int from, int to) {
         final int length = to - from;
@@ -92,6 +92,10 @@ public interface ArrayType<T> {
 
     /**
      * Repeatedly group an array into equal sized subtrees.
+     *
+     * @param array     an array
+     * @param groupSize the group size
+     * @return a new array of arrays
      */
     default Object grouped(Object array, int groupSize) {
         final int arrayLength = lengthOf(array);
@@ -108,7 +112,12 @@ public interface ArrayType<T> {
     }
 
     /**
-     * clone the source and set the value at the given position
+     * Clone the source and set the value at the given position.
+     *
+     * @param array an array
+     * @param index the position
+     * @param element the value to be set at the position
+     * @return a new array
      */
     default Object copyUpdate(Object array, int index, T element) {
         final Object copy = copy(array, index + 1);
@@ -123,7 +132,11 @@ public interface ArrayType<T> {
     }
 
     /**
-     * clone the source and keep everything after the index (pre-padding the values with null)
+     * Clone the source and keep everything after the index (pre-padding the values with null).
+     *
+     * @param array an array
+     * @param index the position to be removed
+     * @return a new array
      */
     default Object copyDrop(Object array, int index) {
         final int length = lengthOf(array);
@@ -131,7 +144,11 @@ public interface ArrayType<T> {
     }
 
     /**
-     * clone the source and keep everything before and including the index
+     * Clone the source and keep everything before and including the index.
+     *
+     * @param array an array
+     * @param lastIndex the last position to be kept (inclusive)
+     * @return a new array
      */
     default Object copyTake(Object array, int lastIndex) {
         return copyRange(array, 0, lastIndex + 1);
@@ -139,6 +156,9 @@ public interface ArrayType<T> {
 
     /**
      * Create a single element array
+     *
+     * @param element an element
+     * @return a new array
      */
     default Object asArray(T element) {
         final Object result = newInstance(1);
@@ -148,6 +168,10 @@ public interface ArrayType<T> {
 
     /**
      * Store the content of an iterator in an array
+     *
+     * @param it an iterator
+     * @param length the desired array length
+     * @return a new array
      */
     static Object[] asArray(java.util.Iterator<?> it, int length) {
         final Object[] array = new Object[length];
