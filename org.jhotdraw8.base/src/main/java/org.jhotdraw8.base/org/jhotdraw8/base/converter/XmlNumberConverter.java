@@ -18,9 +18,19 @@ public class XmlNumberConverter extends NumberConverter {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * Creates a new instance.
+     */
     public XmlNumberConverter() {
     }
 
+    /**
+     * Creates a new instance that only accepts values in the specified range.
+     *
+     * @param min        the minimal accepted value (inclusive)
+     * @param max        the maximal accepted value (inclusive)
+     * @param multiplier a multiplication factor applied to the number after parsing it
+     */
     public XmlNumberConverter(double min, double max, double multiplier) {
         super(min, max, multiplier);
     }
