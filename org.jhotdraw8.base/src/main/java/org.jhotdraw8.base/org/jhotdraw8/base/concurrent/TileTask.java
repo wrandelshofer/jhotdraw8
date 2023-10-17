@@ -16,14 +16,10 @@ import java.util.function.Consumer;
  * in chunks of up to {@code chunkSize}.
  */
 public class TileTask extends CountedCompleter<Void> {
-    public record Tile(int xfrom, int yfrom, int xto, int yto) {
-    }
-
-    ;
-    final @NonNull Tile tile;
-    final int chunkSize;
-    final @NonNull Consumer<Tile> tileConsumer;
-    final @NonNull CompletableFuture<Void> future;
+    private final @NonNull Tile tile;
+    private final int chunkSize;
+    private final @NonNull Consumer<Tile> tileConsumer;
+    private final @NonNull CompletableFuture<Void> future;
 
     public TileTask(@NonNull Tile tile, int chunkSize, @NonNull Consumer<Tile> tileConsumer, @NonNull CompletableFuture<Void> future) {
         this(null, tile, chunkSize, tileConsumer, future);
@@ -35,6 +31,17 @@ public class TileTask extends CountedCompleter<Void> {
         this.tile = tile;
         this.tileConsumer = tileConsumer;
         this.future = future;
+    }
+
+    public static void forEach(int x, int y, int width, int height, int chunkSize, Consumer<Tile> action) {
+        new TileTask(null, new Tile(x, y, x + width, y + height), chunkSize, action, new CompletableFuture<>()).invoke();
+    }
+
+    public static CompletableFuture<Void> fork(int x, int y, int width, int height, int chunkSize, Consumer<Tile> action) {
+        CompletableFuture<Void> future = new CompletableFuture<>();
+        TileTask rangeTask = new TileTask(null, new Tile(x, y, x + width, y + height), chunkSize, action, future);
+        rangeTask.fork();
+        return future;
     }
 
     @Override
@@ -72,14 +79,6 @@ public class TileTask extends CountedCompleter<Void> {
         return true;
     }
 
-    public static void forEach(int x, int y, int width, int height, int chunkSize, Consumer<Tile> action) {
-        new TileTask(null, new Tile(x, y, x + width, y + height), chunkSize, action, new CompletableFuture<>()).invoke();
-    }
-
-    public static CompletableFuture<Void> fork(int x, int y, int width, int height, int chunkSize, Consumer<Tile> action) {
-        CompletableFuture<Void> future = new CompletableFuture<>();
-        TileTask rangeTask = new TileTask(null, new Tile(x, y, x + width, y + height), chunkSize, action, future);
-        rangeTask.fork();
-        return future;
+    public record Tile(int xfrom, int yfrom, int xto, int yto) {
     }
 }

@@ -16,10 +16,10 @@ import java.util.function.BiConsumer;
  * in chunks of up to {@code chunkSize}.
  */
 public class RangeTask extends CountedCompleter<Void> {
-    final int lo, hi;
-    final int chunkSize;
-    final @NonNull BiConsumer<Integer, Integer> rangeConsumer;
-    final @NonNull CompletableFuture<Void> future;
+    private final int lo, hi;
+    private final int chunkSize;
+    private final @NonNull BiConsumer<Integer, Integer> rangeConsumer;
+    private final @NonNull CompletableFuture<Void> future;
 
     public RangeTask(int lo, int hi, int chunkSize, @NonNull BiConsumer<Integer, Integer> rangeConsumer, @NonNull CompletableFuture<Void> future) {
         this(null, lo, hi, chunkSize, rangeConsumer, future);
