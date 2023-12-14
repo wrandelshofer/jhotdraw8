@@ -4,7 +4,7 @@
  */
 
 /**
- * Defines interfaces for primitive collections, read-only collections and immutable collections,
+ * Defines interfaces for read-only collections and immutable collections,
  * and provides efficient implementations of these interfaces.
  */
 @SuppressWarnings("module")
