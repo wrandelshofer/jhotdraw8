@@ -40,7 +40,7 @@
     <module>org.jhotdraw8.color</module>
     <module>org.jhotdraw8.draw</module>
     <module>org.jhotdraw8.collection</module>
-    <module>org.jhotdraw8.immutable_collection</module>
+    <module>org.jhotdraw8.icollection</module>
     <module>org.jhotdraw8.examples</module>
     <module>org.jhotdraw8.fxcollection</module>
     <module>org.jhotdraw8.fxcontrols</module>
@@ -55,8 +55,8 @@
   </modules>
 
   <properties>
-    <maven.compiler.target>17</maven.compiler.target>
-    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>21</maven.compiler.target>
+    <maven.compiler.source>21</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
