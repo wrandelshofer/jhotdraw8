@@ -10,7 +10,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.icollection.sequenced.SequencedCollection;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -120,7 +119,7 @@ public class BitMappedTrie<T> implements Serializable {
     @NonNull
     protected BitMappedTrie<T> prependAll(@NonNull Iterable<? extends T> iterable) {
         if (iterable instanceof SequencedCollection<?> s) {
-            return prepend((Iterator<? extends T>) s._reversed().iterator(), s.size());
+            return prepend((Iterator<? extends T>) s.reversed().iterator(), s.size());
         }
         if (iterable instanceof ReadOnlySequencedCollection<?> c) {
             return append(iterable.iterator(), c.size());

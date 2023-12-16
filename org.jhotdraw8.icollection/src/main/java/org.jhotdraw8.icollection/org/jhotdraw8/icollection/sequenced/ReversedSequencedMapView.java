@@ -3,9 +3,7 @@ package org.jhotdraw8.icollection.sequenced;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Provides a reversed view on a {@link SequencedMap}.
@@ -68,7 +66,7 @@ public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements
     @NonNull
     @Override
     public Set<Entry<K, V>> entrySet() {
-        return src._sequencedEntrySet()._reversed();
+        return src.sequencedEntrySet().reversed();
     }
 
     @Override
@@ -95,33 +93,33 @@ public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements
     @NonNull
     @Override
     public Set<K> keySet() {
-        return src._sequencedKeySet()._reversed();
+        return src.sequencedKeySet().reversed();
     }
 
     @NonNull
     @Override
     public Collection<V> values() {
-        return src._sequencedValues()._reversed();
+        return src.sequencedValues().reversed();
     }
 
     @Override
-    public @NonNull SequencedMap<K, V> _reversed() {
+    public @NonNull SequencedMap<K, V> reversed() {
         return src;
     }
 
     @Override
-    public @NonNull SequencedSet<K> _sequencedKeySet() {
-        return src._sequencedKeySet()._reversed();
+    public @NonNull SequencedSet<K> sequencedKeySet() {
+        return src.sequencedKeySet().reversed();
     }
 
     @Override
-    public @NonNull SequencedCollection<V> _sequencedValues() {
-        return src._sequencedValues()._reversed();
+    public @NonNull SequencedCollection<V> sequencedValues() {
+        return src.sequencedValues().reversed();
     }
 
     @Override
-    public @NonNull SequencedSet<Entry<K, V>> _sequencedEntrySet() {
-        return src._sequencedEntrySet()._reversed();
+    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
+        return src.sequencedEntrySet().reversed();
     }
 
     @Nullable

@@ -8,10 +8,10 @@ package org.jhotdraw8.icollection.facade;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
-import org.jhotdraw8.icollection.sequenced.SequencedMap;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.function.Function;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
@@ -34,7 +34,7 @@ public class ReadOnlySequencedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
         super(target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;
-        this.reverseIteratorFunction = () -> target._reversed()._sequencedEntrySet().iterator();
+        this.reverseIteratorFunction = () -> target.reversed().sequencedEntrySet().iterator();
     }
 
     public ReadOnlySequencedMapFacade(

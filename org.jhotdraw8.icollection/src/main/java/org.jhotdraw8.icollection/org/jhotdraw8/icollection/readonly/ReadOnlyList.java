@@ -13,8 +13,7 @@ import org.jhotdraw8.icollection.impl.iteration.ReadOnlyListSpliterator;
 import java.util.*;
 
 /**
- * Read-only interface for a list. The state of the
- * list may change.
+ * A read-only interface for a set. A set is a collection that contains no duplicate elements.
  * <p>
  * Note: To compare a ReadOnlyList to a {@link List}, you must either
  * wrap the ReadOnlyList into a List using {@link ListFacade},

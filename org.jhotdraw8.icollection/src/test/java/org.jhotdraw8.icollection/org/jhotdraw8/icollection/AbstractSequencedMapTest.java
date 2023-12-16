@@ -2,7 +2,6 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedMap;
-import org.jhotdraw8.icollection.sequenced.SequencedMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -226,13 +225,13 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     protected <K, V> void assertEqualSequence(Collection<Map.Entry<K, V>> expected, SequencedMap<K, V> actual, String message) {
         ArrayList<Map.Entry<K, V>> expectedList = new ArrayList<>(expected);
-        assertEquals(expectedList, new ArrayList<>(actual._sequencedEntrySet()), message);
+        assertEquals(expectedList, new ArrayList<>(actual.sequencedEntrySet()), message);
 
         if (!expected.isEmpty()) {
             assertEquals(expectedList.get(0), actual.firstEntry(), message);
-            assertEquals(expectedList.get(0), actual._sequencedEntrySet().iterator().next(), message);
+            assertEquals(expectedList.get(0), actual.sequencedEntrySet().iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.lastEntry(), message);
-            assertEquals(expectedList.get(expectedList.size() - 1), actual._reversed()._sequencedEntrySet().iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().sequencedEntrySet().iterator().next(), message);
         }
 
         LinkedHashMap<Object, Object> x = new LinkedHashMap<>();
@@ -248,9 +247,9 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
         assertTrue(instance.entrySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "entrySet should be ordered");
         assertTrue(instance.keySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "keySet should be ordered");
         assertTrue(instance.values().spliterator().hasCharacteristics(Spliterator.ORDERED), "valueSet should be ordered");
-        assertTrue(instance._reversed().entrySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "entrySet should be ordered");
-        assertTrue(instance._reversed().keySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "keySet should be ordered");
-        assertTrue(instance._reversed().values().spliterator().hasCharacteristics(Spliterator.ORDERED), "valueSet should be ordered");
+        assertTrue(instance.reversed().entrySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "entrySet should be ordered");
+        assertTrue(instance.reversed().keySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "keySet should be ordered");
+        assertTrue(instance.reversed().values().spliterator().hasCharacteristics(Spliterator.ORDERED), "valueSet should be ordered");
     }
 
 }

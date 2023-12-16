@@ -6,13 +6,13 @@ package org.jhotdraw8.icollection;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.sequenced.SequencedCollection;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SequencedCollection;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
@@ -51,8 +51,7 @@ public abstract class AbstractSequencedCollectionTest {
         assertEquals(expected, instance);
     }
 
-    @NonNull
-    protected abstract SequencedCollection<Key> newInstance();
+    protected abstract @NonNull SequencedCollection<Key> newInstance();
 
     @ParameterizedTest
     @MethodSource("dataProvider")
@@ -88,6 +87,6 @@ public abstract class AbstractSequencedCollectionTest {
     public void spliteratorShouldSupportEncounterOrder() throws Exception {
         SequencedCollection<Key> instance = newInstance();
         assertEquals(instance.spliterator().characteristics() & Spliterator.ORDERED, Spliterator.ORDERED, "spliterator should be ordered");
-        assertEquals(instance._reversed().spliterator().characteristics() & Spliterator.ORDERED, Spliterator.ORDERED, "spliterator should be ordered");
+        assertEquals(instance.reversed().spliterator().characteristics() & Spliterator.ORDERED, Spliterator.ORDERED, "spliterator should be ordered");
     }
 }

@@ -14,7 +14,6 @@ import com.google.common.collect.testing.features.ListFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jhotdraw8.icollection.MutableVectorList;
-import org.jhotdraw8.icollection.sequenced.SequencedList;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -64,7 +63,7 @@ public class MutableVectorListGuavaTests {
                         new TestStringListGenerator() {
                             @Override
                             public List<String> create(String[] elements) {
-                                SequencedList<String> list = new MutableVectorList<String>()._reversed();
+                                List<String> list = new MutableVectorList<String>().reversed();
                                 list.addAll(Arrays.asList(elements));
                                 return list;
                             }

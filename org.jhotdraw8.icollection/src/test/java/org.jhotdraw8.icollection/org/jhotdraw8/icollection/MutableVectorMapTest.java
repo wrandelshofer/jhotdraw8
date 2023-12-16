@@ -7,11 +7,11 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedMap;
-import org.jhotdraw8.icollection.sequenced.SequencedMap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Map;
+import java.util.SequencedMap;
 
 public class MutableVectorMapTest extends AbstractSequencedMapTest {
     @Override

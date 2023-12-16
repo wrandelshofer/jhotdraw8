@@ -14,8 +14,7 @@ import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import java.util.*;
 
 /**
- * Read-only interface for a map. The state of the
- * map may change.
+ * A read-only interface for a map. A map is an object that maps keys to values.
  *
  * @param <K> the key type
  * @param <V> the value type

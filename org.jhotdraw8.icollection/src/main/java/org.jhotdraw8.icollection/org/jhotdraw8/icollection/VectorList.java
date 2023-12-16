@@ -239,10 +239,16 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         Objects.checkIndex(toIndex, size + 1);
         var begin = trie.take(fromIndex);
         var end = trie.drop(toIndex);
+        return new VectorList<>(begin.append(end.iterator(), end.length), size - (toIndex - fromIndex));
+
+        // The following code does not work as expected, because prepend inserts
+        // elements in reverse sequence.
+        /*
         return new VectorList<>(begin.length > end.length
                 ? begin.append(end.iterator(), end.length)
                 : end.prepend(begin.iterator(), begin.length),
                 size - (toIndex - fromIndex));
+         */
     }
 
     @Override

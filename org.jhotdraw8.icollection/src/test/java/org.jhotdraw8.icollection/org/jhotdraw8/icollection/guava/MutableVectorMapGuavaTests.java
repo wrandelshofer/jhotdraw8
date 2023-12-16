@@ -65,7 +65,7 @@ public class MutableVectorMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableVectorMap<>(Arrays.asList(entries))._reversed();
+                                return new MutableVectorMap<>(Arrays.asList(entries)).reversed();
                             }
                         })
                 .named(MutableVectorMap.class.getSimpleName() + ".reversed")

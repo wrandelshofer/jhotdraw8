@@ -62,10 +62,10 @@ public class MutableVectorSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new MutableVectorSet<>(MinimalCollection.of(elements))._reversed();
+                                return new MutableVectorSet<>(MinimalCollection.of(elements)).reversed();
                             }
                         })
-                .named(MutableVectorSet.class.getSimpleName() + "_reversed")
+                .named(MutableVectorSet.class.getSimpleName() + "reversed")
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         //CollectionFeature.KNOWN_ORDER,

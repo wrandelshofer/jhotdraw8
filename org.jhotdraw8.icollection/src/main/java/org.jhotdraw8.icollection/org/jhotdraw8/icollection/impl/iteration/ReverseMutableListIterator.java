@@ -109,9 +109,9 @@ public class ReverseMutableListIterator<E> implements ListIterator<E> {
     public void add(E e) {
         ensureUnmodified();
         try {
-            int i = index;
             src.add(src.size() - index, e);
             lastReturned = -1;
+            index++;
             updateModified();
         } catch (IndexOutOfBoundsException ex) {
             throw new ConcurrentModificationException();

@@ -7,11 +7,12 @@ package org.jhotdraw8.icollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.SequencedSetFacade;
-import org.jhotdraw8.icollection.sequenced.SequencedSet;
+
+import java.util.SequencedSet;
 
 /**
- * Read-only interface for a set with a well-defined iteration order.
- * The state of the set may change.
+ * A read-only interface for a sequenced set. A sequenced set is a collection that is both a
+ * sequenced collection and a set.
  * <p>
  * References:
  * <dl>

@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 /**
- * Read-only interface for a set. The state of the set may change.
+ * A read-only interface to a set. A set is a collection that contains no duplicate elements.
  * <p>
  * Note: To compare a ReadOnlySet to a {@link Set}, you must either
  * wrap the ReadOnlySet into a Set using {@link SetFacade},

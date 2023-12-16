@@ -7,10 +7,13 @@ package org.jhotdraw8.icollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.SequencedCollectionFacade;
-import org.jhotdraw8.icollection.sequenced.SequencedCollection;
+
+import java.util.SequencedCollection;
 
 /**
- * Read-only interface for a collection with a well-defined iteration order.
+ * A read-only interface for o sequenced collection.
+ * A sequenced collection has a well-defined encounter order,
+ * that supports operations at both ends, and that is reversible.
  *
  * @param <E> the element type
  */

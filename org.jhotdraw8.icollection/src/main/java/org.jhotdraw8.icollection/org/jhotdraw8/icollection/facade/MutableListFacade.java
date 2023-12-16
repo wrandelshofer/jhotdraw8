@@ -12,8 +12,7 @@ import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.MutableListIterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.icollection.sequenced.ReversedSequencedListView;
-import org.jhotdraw8.icollection.sequenced.SequencedList;
+import org.jhotdraw8.icollection.sequenced.ReversedListView;
 
 import java.util.*;
 import java.util.stream.Stream;
@@ -24,7 +23,7 @@ import java.util.stream.Stream;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyList<E>, SequencedList<E> {
+public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyList<E>, List<E> {
     private @NonNull ImmutableList<E> backingList;
     private int modCount;
 
@@ -45,8 +44,8 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull SequencedList<E> _reversed() {
-        return new ReversedSequencedListView<>(this, this::getModCount);
+    public @NonNull List<E> reversed() {
+        return new ReversedListView<>(this, this::getModCount);
     }
 
     private int getModCount() {
@@ -198,15 +197,5 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     @Override
     public @NonNull ListIterator<E> listIterator(int index) {
         return new MutableListIterator<>(this, index, this::getModCount);
-    }
-
-    @Override
-    public E removeFirst() {
-        return SequencedList.super.removeFirst();
-    }
-
-    @Override
-    public E removeLast() {
-        return SequencedList.super.removeLast();
     }
 }

@@ -158,20 +158,63 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @Test
     public void listIteratorShouldSupportAddAddNextRemove() {
-        List<Key> r = newListInstance();
-        r.add(new Key(1));
-        r.add(new Key(2));
-        r.add(new Key(3));
-        r.add(new Key(4));
+        List<Key> initialList = List.of(new Key(1), new Key(2), new Key(3), new Key(4));
 
-        ListIterator<Key> i = r.listIterator();
+        List<Key> expected = new ArrayList<>();
+        expected.addAll(initialList);
+        ListIterator<Key> j = expected.listIterator();
+        j.add(new Key(10));
+        j.add(new Key(20));
+        var next = j.next();
+        assertEquals(new Key(1), next);
+        j.remove();
+
+        List<Key> actual = newListInstance();
+        actual.addAll(initialList);
+        ListIterator<Key> i = actual.listIterator();
         i.add(new Key(10));
         i.add(new Key(20));
-        var next = i.next();
+        next = i.next();
         assertEquals(new Key(1), next);
         i.remove();
 
-        assertEquals(List.of(new Key(10), new Key(20), new Key(2), new Key(3), new Key(4)), r);
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    public void addShouldSupportConsecutiveInsertionInTheMiddleWithIncreasingIndex() {
+        List<Key> actual = newListInstance();
+        actual.addAll(List.of(new Key(1), new Key(2), new Key(7), new Key(8)));
+
+        actual.add(2, new Key(3));
+        assertEquals(List.of(new Key(1), new Key(2), new Key(3), new Key(7), new Key(8)), actual);
+
+        actual.add(3, new Key(4));
+        assertEquals(List.of(new Key(1), new Key(2), new Key(3), new Key(4), new Key(7), new Key(8)), actual);
+
+        actual.add(4, new Key(5));
+        assertEquals(List.of(new Key(1), new Key(2), new Key(3), new Key(4), new Key(5), new Key(7), new Key(8)), actual);
+
+        actual.add(5, new Key(6));
+        assertEquals(List.of(new Key(1), new Key(2), new Key(3), new Key(4), new Key(5), new Key(6), new Key(7), new Key(8)), actual);
+    }
+
+    @Test
+    public void removeShouldSupportConsecutiveRemovalInTheMiddleWithSameIndex() {
+        List<Key> actual = newListInstance();
+        actual.addAll(List.of(new Key(1), new Key(2), new Key(3), new Key(4), new Key(5), new Key(6), new Key(7), new Key(8)));
+
+        actual.remove(2);
+        assertEquals(List.of(new Key(1), new Key(2), new Key(4), new Key(5), new Key(6), new Key(7), new Key(8)), actual);
+
+        actual.remove(2);
+        assertEquals(List.of(new Key(1), new Key(2), new Key(5), new Key(6), new Key(7), new Key(8)), actual);
+
+        actual.remove(2);
+        assertEquals(List.of(new Key(1), new Key(2), new Key(6), new Key(7), new Key(8)), actual);
+
+        actual.remove(2);
+        assertEquals(List.of(new Key(1), new Key(2), new Key(7), new Key(8)), actual);
     }
 
 

@@ -7,8 +7,8 @@ import org.jhotdraw8.icollection.impl.iteration.ReverseMutableListIterator;
 import java.util.*;
 import java.util.function.IntSupplier;
 
-public class ReversedSequencedListView<E> extends AbstractList<E> implements SequencedList<E> {
-    private final @NonNull SequencedList<E> src;
+public class ReversedListView<E> extends AbstractList<E> implements List<E> {
+    private final @NonNull List<E> src;
     private final @NonNull IntSupplier modCount;
 
     /**
@@ -16,7 +16,7 @@ public class ReversedSequencedListView<E> extends AbstractList<E> implements Seq
      *
      * @param src the source set
      */
-    public ReversedSequencedListView(@NonNull SequencedList<E> src, @NonNull IntSupplier modCount) {
+    public ReversedListView(@NonNull List<E> src, @NonNull IntSupplier modCount) {
         this.src = src;
         this.modCount = modCount;
     }
@@ -63,7 +63,7 @@ public class ReversedSequencedListView<E> extends AbstractList<E> implements Seq
     }
 
     @Override
-    public @NonNull SequencedList<E> _reversed() {
+    public @NonNull List<E> reversed() {
         return src;
     }
 

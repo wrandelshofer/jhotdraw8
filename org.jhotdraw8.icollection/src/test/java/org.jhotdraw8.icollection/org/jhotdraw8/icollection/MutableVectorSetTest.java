@@ -8,8 +8,8 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
-import org.jhotdraw8.icollection.sequenced.SequencedSet;
 
+import java.util.SequencedSet;
 import java.util.Set;
 
 public class MutableVectorSetTest extends AbstractSequencedSetTest {

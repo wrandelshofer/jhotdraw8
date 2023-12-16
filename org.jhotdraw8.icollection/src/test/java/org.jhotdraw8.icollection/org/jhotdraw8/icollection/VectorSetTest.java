@@ -7,8 +7,8 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
-import org.jhotdraw8.icollection.sequenced.SequencedSet;
 
+import java.util.SequencedSet;
 import java.util.Set;
 
 public class VectorSetTest extends AbstractImmutableSequencedSetTest {

@@ -13,7 +13,6 @@ import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
-import org.jhotdraw8.icollection.sequenced.SequencedSet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
@@ -333,7 +332,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
 
     @Override
     public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(this._reversed());
+        return new ReadOnlySequencedSetFacade<>(this.reversed());
     }
 
     @SuppressWarnings("unchecked")
@@ -384,7 +383,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     }
 
     @Override
-    public @NonNull SequencedSet<E> _reversed() {
+    public @NonNull SequencedSet<E> reversed() {
         return new ReversedSequencedSetView<>(this, this::reverseIterator,
                 this::reverseSpliterator);
     }

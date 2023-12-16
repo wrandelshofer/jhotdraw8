@@ -1,9 +1,9 @@
 package org.jhotdraw8.icollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.sequenced.SequencedSet;
 
 import java.util.Iterator;
+import java.util.SequencedSet;
 import java.util.Spliterator;
 import java.util.function.Supplier;
 

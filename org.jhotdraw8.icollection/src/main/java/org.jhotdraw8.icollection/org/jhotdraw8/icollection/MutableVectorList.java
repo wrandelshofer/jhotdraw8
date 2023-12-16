@@ -10,8 +10,7 @@ import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
-import org.jhotdraw8.icollection.sequenced.ReversedSequencedListView;
-import org.jhotdraw8.icollection.sequenced.SequencedList;
+import org.jhotdraw8.icollection.sequenced.ReversedListView;
 import org.jhotdraw8.icollection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
@@ -52,7 +51,7 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, SequencedList<E>, Cloneable {
+public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, List<E>, Cloneable {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -90,8 +89,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull SequencedList<E> _reversed() {
-        return new ReversedSequencedListView<E>(this, this::modCount);
+    public @NonNull List<E> reversed() {
+        return new ReversedListView<E>(this, this::modCount);
     }
 
     private int modCount() {
@@ -289,15 +288,5 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         protected @NonNull Object readResolve() {
             return new MutableVectorList<>(deserialized);
         }
-    }
-
-    @Override
-    public E removeFirst() {
-        return SequencedList.super.removeFirst();
-    }
-
-    @Override
-    public E removeLast() {
-        return SequencedList.super.removeLast();
     }
 }

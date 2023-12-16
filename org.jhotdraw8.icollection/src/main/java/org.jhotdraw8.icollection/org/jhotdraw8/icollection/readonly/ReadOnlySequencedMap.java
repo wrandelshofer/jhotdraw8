@@ -10,15 +10,15 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
-import org.jhotdraw8.icollection.sequenced.SequencedMap;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.SequencedMap;
 import java.util.Spliterator;
 
 /**
- * Read-only interface for a map with a well-defined iteration order.
- * The state of the map may change.
+ * A read-only interface for a sequenced map. A sequenced map has a well-defined encounter order, that supports
+ * operations at both ends, and that is reversible.
  * <p>
  * References:
  * <dl>

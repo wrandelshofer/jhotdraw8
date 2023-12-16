@@ -6,12 +6,11 @@ package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.icollection.impl.iteration.ReverseListSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.sequenced.SequencedCollection;
 
 import java.util.AbstractList;
 import java.util.List;
+import java.util.SequencedCollection;
 import java.util.Spliterator;
 import java.util.function.BiConsumer;
 import java.util.function.IntFunction;
@@ -71,15 +70,6 @@ public class ListFacade<E> extends AbstractList<E>
         return getFunction.apply(index);
     }
 
-    @Override
-    public E getFirst() {
-        return SequencedCollection.super.getFirst();
-    }
-
-    @Override
-    public E getLast() {
-        return SequencedCollection.super.getLast();
-    }
 
     @Override
     public Spliterator<E> spliterator() {
@@ -112,28 +102,13 @@ public class ListFacade<E> extends AbstractList<E>
     }
 
     @Override
-    public @NonNull SequencedCollection<E> _reversed() {
-        return new SequencedCollectionFacade<>(
-                () -> new ReverseListSpliterator<>(this, 0, size()),
-                this::iterator,
+    public @NonNull List<E> reversed() {
+        return new ListFacade<>(
                 sizeFunction,
-                this::contains,
+                i -> get(size() - i - 1),
                 clearFunction,
-                this::remove,
-                this::getLast,
-                this::getFirst,
-                this::addLast,
-                this::addFirst
+                (i, e) -> add(size() - i, e),
+                (i) -> remove(size() - i - i)
         );
-    }
-
-    @Override
-    public E removeFirst() {
-        return SequencedCollection.super.removeFirst();
-    }
-
-    @Override
-    public E removeLast() {
-        return SequencedCollection.super.removeLast();
     }
 }
