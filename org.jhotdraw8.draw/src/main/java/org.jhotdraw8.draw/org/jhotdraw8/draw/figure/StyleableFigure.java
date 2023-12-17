@@ -8,14 +8,14 @@ import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ChampSet;
-import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.key.WordSetKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxcollection.facade.ObservableSetFacade;
+import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 /**
  * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,

@@ -9,9 +9,9 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.collection.ChampSet;
-import org.jhotdraw8.collection.VectorSet;
-import org.jhotdraw8.collection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.VectorSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSet;
 
 import java.io.IOException;
 import java.nio.CharBuffer;

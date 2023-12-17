@@ -5,9 +5,9 @@
 package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.VectorList;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.geom.AbstractPathBuilder;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;

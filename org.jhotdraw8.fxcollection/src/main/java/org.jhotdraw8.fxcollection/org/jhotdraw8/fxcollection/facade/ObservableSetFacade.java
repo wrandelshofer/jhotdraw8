@@ -8,8 +8,8 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.facade.SetFacade;
-import org.jhotdraw8.collection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.facade.SetFacade;
+import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 /**
  * Wraps a {@link ReadOnlySet} in the {@link ObservableSet} interface.

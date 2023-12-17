@@ -7,13 +7,23 @@ package org.jhotdraw8.fxcollection.indexedset;
 import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.collection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.collection.spliterator.ReverseListSpliterator;
 import org.jhotdraw8.fxcollection.precondition.Preconditions;
+import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
+import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
+import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.stream.Stream;
 
 import static java.lang.Math.max;
@@ -811,7 +821,8 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
                 this::size,
                 this::contains,
                 this::getLast,
-                this::getFirst
+                this::getFirst,
+                Spliterator.DISTINCT | Spliterator.SIZED
         );
     }
 }

@@ -12,8 +12,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.collection.ChampMap;
-import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
@@ -22,6 +20,8 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.io.IOException;
 import java.nio.file.Path;

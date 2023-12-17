@@ -7,12 +7,12 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.TriFunction;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.algo.AllWalksSpliterator;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;

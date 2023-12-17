@@ -15,8 +15,6 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.VectorList;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssKebabCaseEnumConverter;
@@ -34,6 +32,8 @@ import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.SvgPaintDefaulting;
 import org.jhotdraw8.svg.io.SvgFontFamilyConverter;
@@ -50,10 +50,10 @@ import org.jhotdraw8.svg.text.SvgVisibility;
 
 import java.util.Objects;
 
-import static org.jhotdraw8.collection.MapEntries.entry;
-import static org.jhotdraw8.collection.MapEntries.linkedHashMap;
-import static org.jhotdraw8.collection.MapEntries.of;
-import static org.jhotdraw8.collection.MapEntries.ofEntries;
+import static org.jhotdraw8.icollection.MapEntries.entry;
+import static org.jhotdraw8.icollection.MapEntries.linkedHashMap;
+import static org.jhotdraw8.icollection.MapEntries.of;
+import static org.jhotdraw8.icollection.MapEntries.ofEntries;
 import static org.jhotdraw8.svg.io.SvgFontFamilyConverter.GENERIC_FONT_FAMILY_SANS_SERIF;
 
 /**

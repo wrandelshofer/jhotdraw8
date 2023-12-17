@@ -6,13 +6,13 @@ package org.jhotdraw8.draw.css.model;
 
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
+import org.jhotdraw8.icollection.VectorList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

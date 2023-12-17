@@ -7,8 +7,8 @@ package org.jhotdraw8.fxcontrols.dock;
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.facade.ReadOnlyListFacade;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 /**
  * A DockParent provides screen space for one or more {@link DockChild}ren.

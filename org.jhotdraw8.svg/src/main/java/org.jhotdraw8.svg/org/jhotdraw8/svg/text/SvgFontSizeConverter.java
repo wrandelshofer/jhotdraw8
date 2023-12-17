@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
-import static org.jhotdraw8.collection.MapEntries.entry;
-import static org.jhotdraw8.collection.MapEntries.linkedHashMap;
-import static org.jhotdraw8.collection.MapEntries.ofEntries;
+import static org.jhotdraw8.icollection.MapEntries.entry;
+import static org.jhotdraw8.icollection.MapEntries.linkedHashMap;
+import static org.jhotdraw8.icollection.MapEntries.ofEntries;
 
 /**
  * Converts SVG font-size.

@@ -27,6 +27,7 @@ module org.jhotdraw8.draw {
     requires transitive org.jhotdraw8.geom;
     requires transitive org.jhotdraw8.graph;
     requires transitive org.jhotdraw8.xml;
+    requires org.jhotdraw8.icollection;
 
     opens org.jhotdraw8.draw.action.images;
     opens org.jhotdraw8.draw.gui to javafx.fxml;

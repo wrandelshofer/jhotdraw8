@@ -12,8 +12,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.ChampSet;
-import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
@@ -34,6 +32,8 @@ import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.util.ArrayList;
 import java.util.List;

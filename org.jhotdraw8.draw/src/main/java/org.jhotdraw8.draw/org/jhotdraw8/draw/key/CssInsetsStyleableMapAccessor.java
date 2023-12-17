@@ -7,12 +7,12 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.immutable.ImmutableMap;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.CssInsetsConverter;
 import org.jhotdraw8.draw.css.value.CssInsets;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.io.Serial;
 import java.util.Map;

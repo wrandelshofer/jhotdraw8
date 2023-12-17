@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.TriFunction;
 import org.jhotdraw8.collection.enumerator.Enumerator;
-import org.jhotdraw8.collection.facade.SetFacade;
+import org.jhotdraw8.icollection.facade.SetFacade;
 
 import java.util.ArrayList;
 import java.util.HashMap;

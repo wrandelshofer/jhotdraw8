@@ -6,7 +6,7 @@
 package org.jhotdraw8.os.macos;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.MapEntries;
+import org.jhotdraw8.icollection.MapEntries;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

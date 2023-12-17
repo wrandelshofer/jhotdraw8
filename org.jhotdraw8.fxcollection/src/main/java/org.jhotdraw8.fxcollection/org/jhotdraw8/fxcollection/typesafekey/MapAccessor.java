@@ -6,8 +6,8 @@ package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableMap;
-import org.jhotdraw8.collection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;

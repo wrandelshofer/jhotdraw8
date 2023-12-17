@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.ChampMap;
-import org.jhotdraw8.collection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.util.LinkedHashMap;
 import java.util.Map;

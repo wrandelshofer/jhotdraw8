@@ -10,6 +10,8 @@
 @SuppressWarnings("module")
 module org.jhotdraw8.icollection {
     requires static org.jhotdraw8.annotation;
+    exports org.jhotdraw8.icollection.exception;
+    exports org.jhotdraw8.icollection.facade;
     exports org.jhotdraw8.icollection.immutable;
     exports org.jhotdraw8.icollection.readonly;
     exports org.jhotdraw8.icollection.sequenced;

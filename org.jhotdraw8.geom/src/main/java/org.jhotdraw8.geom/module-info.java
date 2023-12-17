@@ -19,4 +19,5 @@ module org.jhotdraw8.geom {
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.base;
     requires java.logging;
+    requires org.jhotdraw8.icollection;
 }

@@ -6,7 +6,6 @@
 package org.jhotdraw8.css;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.function.AttrCssFunction;
 import org.jhotdraw8.css.function.CalcCssFunction;
 import org.jhotdraw8.css.function.ConcatCssFunction;
@@ -18,6 +17,7 @@ import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.manager.SimpleCssFunctionProcessor;
 import org.jhotdraw8.css.model.DocumentSelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Element;

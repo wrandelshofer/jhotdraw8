@@ -51,6 +51,10 @@
       <artifactId>org.jhotdraw8.collection</artifactId>
     </dependency>
     <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.icollection</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
     </dependency>

@@ -6,11 +6,11 @@ package org.jhotdraw8.styleable;
 
 import javafx.beans.property.ReadOnlyProperty;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
+import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

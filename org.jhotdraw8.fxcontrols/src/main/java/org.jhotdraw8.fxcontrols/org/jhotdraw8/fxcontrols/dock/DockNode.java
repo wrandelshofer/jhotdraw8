@@ -8,7 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 /**
  * Represents a node in a tree structure.

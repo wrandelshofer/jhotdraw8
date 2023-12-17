@@ -16,6 +16,7 @@ module org.jhotdraw8.xml {
     requires transitive org.jhotdraw8.css;
     requires transitive org.jhotdraw8.fxbase;
     requires transitive org.jhotdraw8.collection;
+    requires org.jhotdraw8.icollection;
 
     exports org.jhotdraw8.xml;
     exports org.jhotdraw8.xml.converter;

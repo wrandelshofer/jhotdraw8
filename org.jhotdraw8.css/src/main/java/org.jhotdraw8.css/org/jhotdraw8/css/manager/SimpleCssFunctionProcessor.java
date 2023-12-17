@@ -5,15 +5,15 @@
 package org.jhotdraw8.css.manager;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.VectorList;
-import org.jhotdraw8.collection.immutable.ImmutableList;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 import java.io.IOException;
 import java.text.ParseException;

@@ -20,6 +20,7 @@ module org.jhotdraw8.fxcontrols {
     requires transitive org.jhotdraw8.fxbase;
     requires transitive org.jhotdraw8.color;
     requires transitive org.jhotdraw8.geom;
+    requires org.jhotdraw8.icollection;
     exports org.jhotdraw8.fxcontrols.dock;
     exports org.jhotdraw8.fxcontrols.colorchooser;
     exports org.jhotdraw8.fxcontrols.spi;

@@ -29,8 +29,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.base.text.CachingCollator;
 import org.jhotdraw8.base.text.NaturalSortCollator;
-import org.jhotdraw8.collection.ChampSet;
-import org.jhotdraw8.collection.immutable.ImmutableSet;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -45,6 +43,8 @@ import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.fxbase.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.fxbase.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.fxbase.tree.TreePresentationModel;
+import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.xml.converter.XmlWordListConverter;
 import org.jhotdraw8.xml.converter.XmlWordSetConverter;
 

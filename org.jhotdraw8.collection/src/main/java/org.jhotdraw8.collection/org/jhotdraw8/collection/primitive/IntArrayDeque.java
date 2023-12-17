@@ -5,9 +5,13 @@
 package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.sequenced.SequencedCollection;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.ConcurrentModificationException;
+import java.util.Deque;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * A {@code int}-valued deque backed by a primitive array.
@@ -279,7 +283,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public @NonNull SequencedCollection<Integer> _reversed() {
+    public @NonNull Deque<Integer> reversed() {
         return null;
     }
 

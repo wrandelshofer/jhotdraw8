@@ -18,6 +18,7 @@ module org.jhotdraw8.svg {
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.css;
     requires transitive org.jhotdraw8.draw;
+    requires org.jhotdraw8.icollection;
 
     exports org.jhotdraw8.svg.io;
     exports org.jhotdraw8.svg.gui;

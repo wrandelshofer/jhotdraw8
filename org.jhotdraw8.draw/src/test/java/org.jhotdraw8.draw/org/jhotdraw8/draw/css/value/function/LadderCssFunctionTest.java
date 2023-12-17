@@ -6,7 +6,6 @@
 package org.jhotdraw8.draw.css.value.function;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.function.VarCssFunction;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
@@ -14,6 +13,7 @@ import org.jhotdraw8.css.manager.SimpleCssFunctionProcessor;
 import org.jhotdraw8.css.model.DocumentSelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.draw.css.function.LadderCssFunction;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Element;

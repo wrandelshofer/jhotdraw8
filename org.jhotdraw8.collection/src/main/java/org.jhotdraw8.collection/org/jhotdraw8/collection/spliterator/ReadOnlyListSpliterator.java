@@ -6,7 +6,7 @@ package org.jhotdraw8.collection.spliterator;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 import java.util.ListIterator;
 import java.util.Objects;

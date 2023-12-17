@@ -6,13 +6,13 @@ package org.jhotdraw8.geom.shape;
 
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;

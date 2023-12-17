@@ -6,11 +6,11 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.VectorList;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 import java.util.List;
 import java.util.Objects;

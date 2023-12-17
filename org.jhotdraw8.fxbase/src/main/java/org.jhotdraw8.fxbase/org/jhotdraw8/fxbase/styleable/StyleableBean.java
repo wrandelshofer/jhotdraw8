@@ -8,7 +8,7 @@ package org.jhotdraw8.fxbase.styleable;
 import javafx.beans.property.ReadOnlyProperty;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 /**
  * Styleable comprises the minimal interface required for a component (bean)

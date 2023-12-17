@@ -6,9 +6,9 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
-import org.jhotdraw8.collection.facade.ListFacade;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
+import org.jhotdraw8.icollection.facade.ListFacade;
 
 import java.util.Collection;
 import java.util.HashSet;

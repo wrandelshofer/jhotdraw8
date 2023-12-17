@@ -10,10 +10,10 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.collection.VectorList;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
+import org.jhotdraw8.icollection.VectorList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

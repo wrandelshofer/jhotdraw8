@@ -8,10 +8,10 @@ import javafx.beans.property.MapProperty;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
-import org.jhotdraw8.collection.readonly.ReadOnlySet;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.value.QualifiedName;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.text.ParseException;
 import java.util.List;

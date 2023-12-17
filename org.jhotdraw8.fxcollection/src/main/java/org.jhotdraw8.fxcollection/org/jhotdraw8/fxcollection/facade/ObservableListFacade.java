@@ -8,8 +8,8 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.facade.ListFacade;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.facade.ListFacade;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 import java.util.Collection;
 

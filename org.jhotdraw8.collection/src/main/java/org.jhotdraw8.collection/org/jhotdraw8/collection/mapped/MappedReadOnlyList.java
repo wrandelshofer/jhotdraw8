@@ -5,10 +5,10 @@
 package org.jhotdraw8.collection.mapped;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.facade.ReadOnlySequencedCollectionFacade;
-import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
-import org.jhotdraw8.collection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.icollection.facade.ReadOnlySequencedCollectionFacade;
+import org.jhotdraw8.icollection.readonly.AbstractReadOnlyList;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;

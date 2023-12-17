@@ -397,6 +397,11 @@
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
+          <artifactId>org.jhotdraw8.icollection</artifactId>
+          <version>${revision}</version>
+      </dependency>
+        <dependency>
+            <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.draw</artifactId>
         <version>${revision}</version>
       </dependency>

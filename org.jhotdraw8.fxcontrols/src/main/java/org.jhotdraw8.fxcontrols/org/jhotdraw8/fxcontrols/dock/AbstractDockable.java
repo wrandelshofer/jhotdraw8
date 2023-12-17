@@ -13,8 +13,8 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.VectorList;
-import org.jhotdraw8.collection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 /**
  * Abstract base class for implementations of {@link Dockable}.

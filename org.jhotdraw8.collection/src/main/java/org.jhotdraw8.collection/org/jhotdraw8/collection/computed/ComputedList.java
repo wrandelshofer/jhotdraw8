@@ -2,8 +2,8 @@
 package org.jhotdraw8.collection.computed;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.readonly.AbstractReadOnlyList;
-import org.jhotdraw8.collection.readonly.SizeLimitExceededException;
+import org.jhotdraw8.icollection.exception.SizeLimitExceededException;
+import org.jhotdraw8.icollection.readonly.AbstractReadOnlyList;
 
 import java.util.function.LongFunction;
 
@@ -78,7 +78,7 @@ public class ComputedList<E> extends AbstractReadOnlyList<E> {
         return size > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) size;
     }
 
-    @Override
+    //@Override
     public long sizeAsLong() {
         return size;
     }

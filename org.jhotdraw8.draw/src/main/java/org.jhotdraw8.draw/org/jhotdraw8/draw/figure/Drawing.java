@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.collection.reflect.TypeToken;
@@ -23,6 +22,7 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullListKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.net.URI;
 import java.nio.file.Paths;

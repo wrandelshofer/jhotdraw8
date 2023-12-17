@@ -7,12 +7,12 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.immutable.ImmutableList;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.algo.IndexedVertexPathSearchAlgo;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.Spliterator;
 import java.util.function.BiFunction;
