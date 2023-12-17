@@ -197,7 +197,6 @@ public class SelectionTool extends AbstractTool {
                         return;
                     }
                 } else if (!event.isShiftDown() && event.isMetaDown()) {
-                    System.out.println("no-op");
                     return;
                     // no-op
                 } else if (event.isShiftDown() && event.isMetaDown()) {

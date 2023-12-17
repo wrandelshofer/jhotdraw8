@@ -44,7 +44,7 @@ public class ReadOnlySets {
     /**
      * Returns a new read-only set with the specified elements.
      * <p>
-     * If the set can be cast to {@link ImmutableSet,
+     * If the set can be cast to {@link ImmutableSet},
      * it will be cast, otherwise a new set will be created.
      *
      * @param elements the specified elements

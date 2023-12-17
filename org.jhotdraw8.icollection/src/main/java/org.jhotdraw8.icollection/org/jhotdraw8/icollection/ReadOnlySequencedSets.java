@@ -44,7 +44,7 @@ public class ReadOnlySequencedSets {
     /**
      * Returns a new read-only sequenced set with the specified elements.
      * <p>
-     * If the set can be cast to {@link ImmutableSequencedSet,
+     * If the set can be cast to {@link ImmutableSequencedSet},
      * it will be cast, otherwise a new set will be created.
      *
      * @param elements the specified elements
