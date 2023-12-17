@@ -32,6 +32,7 @@
         <module name="org.jhotdraw8.grapher" />
         <module name="org.jhotdraw8.graph" />
         <module name="org.jhotdraw8.annotation" />
+        <module name="org.jhotdraw8.icollection" />
         <module name="org.jhotdraw8.color" />
         <module name="org.jhotdraw8.pcollection" />
         <module name="org.jhotdraw8.fxcollection" />
@@ -47,7 +48,6 @@
       <module name="org.jhotdraw8.dock" target="17" />
       <module name="org.jhotdraw8.dock (1)" target="17" />
       <module name="org.jhotdraw8.font" target="17" />
-      <module name="org.jhotdraw8.icollection" target="21" />
       <module name="org.jhotdraw8.precondition" target="17" />
     </bytecodeTargetLevel>
   </component>
