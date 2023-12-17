@@ -202,8 +202,15 @@ public interface DrawingView extends WritableRenderContext {
     /**
      * The selected figures.
      * <p>
-     * Note: The selection is represented by a {@code LinkedHasSet} because the
+     * Note: The selection is represented by a {@code SequencedSet} because the
      * sequence of the selection is important.
+     * <p>
+     * The first figure in the selection is the 'anchor' of the selection.
+     * <p>
+     * The last figure in the selection is the 'lead' of the selection.
+     * <p>
+     * Operations that act on multiple selected figures, typically use the
+     * 'lead' figure as the reference figure.
      *
      * @return the currently selected figures
      */
@@ -212,16 +219,21 @@ public interface DrawingView extends WritableRenderContext {
     /**
      * The handles.
      * <p>
-     * Note: The handles are represented by a {@code LinkedHasSet} because the
+     * Note: The handles are represented by a {@code SequencedSet} because the
      * sequence of the handles is important.
      *
-     * @return the handles that are currently being displayed on tihs drawing
+     * @return the handles that are currently being displayed on this drawing
      * view.
      */
     @NonNull ReadOnlySetProperty<Handle> handlesProperty();
 
     /**
      * The active handle.
+     * <p>
+     * This is the handle, on which the user has clicked the last time.
+     * <p>
+     * Tools that support keyboard input on handles, typically forward keyboard
+     * input to the active handle.
      *
      * @return the active handle if present
      */

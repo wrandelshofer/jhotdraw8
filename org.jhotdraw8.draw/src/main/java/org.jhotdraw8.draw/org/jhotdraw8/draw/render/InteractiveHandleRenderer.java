@@ -8,7 +8,13 @@ package org.jhotdraw8.draw.render;
 import javafx.animation.Transition;
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlySetProperty;
+import javafx.beans.property.ReadOnlySetWrapper;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleSetProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
@@ -30,7 +36,16 @@ import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class InteractiveHandleRenderer {
@@ -307,7 +322,7 @@ public class InteractiveHandleRenderer {
     /**
      * The selected figures.
      * <p>
-     * Note: The selection is represent by a {@code LinkedHasSet} because the
+     * Note: The selection is represented by a {@code SequencedSet} because the
      * sequence of the selection is important.
      *
      * @return a list of the selected figures
