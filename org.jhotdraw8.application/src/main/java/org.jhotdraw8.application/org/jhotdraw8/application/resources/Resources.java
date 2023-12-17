@@ -42,12 +42,12 @@ import java.util.ResourceBundle;
  * like this: <code>${imagedir}/editUndo.png</code>. This is resolved at
  * run-time as {@code /org/jhotdraw8/undo/images/editUndo.png}.
  * <p>
- * Property names in placeholders can contain modifiers. MLModifier are written
+ * Property names in placeholders can contain modifiers. Modifiers are written
  * between @code "[$"} and {@code "]"}. Each modifier has a fallback chain.
  * <p>
  * For example, if the property name modifier {@code "os"} has the value "win",
  * and its fallback chain is {@code "mac","default"}, then the property name
- * <code>${preferences.text.[$os]}</code> is first evaluted to {@code
+ * <code>${preferences.text.[$os]}</code> is first evaluated to {@code
  * preferences.text.win}, and - if no property with this name exists - it is
  * evaluated to {@code preferences.text.mac}, and then to
  * {@code preferences.text.default}.

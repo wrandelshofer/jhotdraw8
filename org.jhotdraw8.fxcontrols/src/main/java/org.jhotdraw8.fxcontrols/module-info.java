@@ -4,6 +4,7 @@
  */
 
 import org.jhotdraw8.fxcontrols.spi.FXControlsResourceBundleProvider;
+
 /**
  * Provides controls that are based on JavaFX controls.
  */
@@ -26,7 +27,8 @@ module org.jhotdraw8.fxcontrols {
     exports org.jhotdraw8.fxcontrols.spi;
     exports org.jhotdraw8.fxcontrols.fontchooser;
     opens org.jhotdraw8.fxcontrols.colorchooser to javafx.fxml;
+    opens org.jhotdraw8.fxcontrols.fontchooser to javafx.fxml;
 
     provides java.util.spi.ResourceBundleProvider with FXControlsResourceBundleProvider;
-
+    uses FXControlsResourceBundleProvider;
 }

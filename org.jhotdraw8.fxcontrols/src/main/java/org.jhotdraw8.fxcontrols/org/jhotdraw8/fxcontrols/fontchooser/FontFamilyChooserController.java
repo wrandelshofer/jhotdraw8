@@ -29,7 +29,7 @@ import javafx.scene.text.Font;
 import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.application.ApplicationLabels;
+import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
 
 import java.net.URL;
@@ -96,7 +96,7 @@ public class FontFamilyChooserController {
     }
 
     private @NonNull FontCollection createFontCollection() {
-        final Resources labels = ApplicationLabels.getGuiResources();
+        final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
         return new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
     }
 
@@ -240,7 +240,7 @@ public class FontFamilyChooserController {
     }
 
     private void initListSelectionBehavior() throws MissingResourceException {
-        final Resources labels = ApplicationLabels.getGuiResources();
+        final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
 
         collectionList.getSelectionModel().selectedItemProperty().addListener((o, oldv, newv) -> {
             familyList.setItems(newv == null ? null : newv.getFamilies());
@@ -277,7 +277,7 @@ public class FontFamilyChooserController {
 
     protected void updatePreviewTextArea() {
         String text = fontNameLabel.getText();
-        final Resources labels = ApplicationLabels.getGuiResources();
+        final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
         if (text == null || text.equals(labels.getString("FontChooser.nothingSelected"))) {
             previewTextArea.setFont(new Font("System Regular", getFontSize()));
         } else {

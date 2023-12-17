@@ -13,7 +13,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.application.ApplicationLabels;
+import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
 
 import java.io.IOException;
@@ -29,7 +29,7 @@ public class FontFamilyDialog extends Dialog<String> {
     private FontFamilyChooserController controller;
 
     public FontFamilyDialog() {
-        final Resources labels = ApplicationLabels.getGuiResources();
+        final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
         final DialogPane dialogPane = getDialogPane();
         try {
 

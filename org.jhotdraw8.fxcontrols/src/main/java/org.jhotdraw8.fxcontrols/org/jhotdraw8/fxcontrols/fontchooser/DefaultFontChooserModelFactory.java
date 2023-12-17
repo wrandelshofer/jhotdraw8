@@ -9,7 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.application.ApplicationLabels;
+import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
 
 import java.util.ArrayList;
@@ -95,7 +95,7 @@ public class DefaultFontChooserModelFactory {
     protected @NonNull ObservableList<FontCollection> generateCollections(@NonNull List<FontFamily> families) {
         ObservableList<FontCollection> root = FXCollections.observableArrayList();
 
-        final Resources labels = ApplicationLabels.getGuiResources();
+        final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
 
         // All fonts
         FontCollection allFonts = new FontCollection(labels.getString("FontCollection.allFonts"), true, families);
