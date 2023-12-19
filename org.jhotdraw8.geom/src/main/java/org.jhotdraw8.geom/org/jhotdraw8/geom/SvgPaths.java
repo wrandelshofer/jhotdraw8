@@ -360,7 +360,7 @@ public class SvgPaths {
 
         char next = 'Z'; // next instruction
         for (; !iter.isDone(); iter.next()) {
-            if (buf.length() != 0) {
+            if (!buf.isEmpty()) {
                 buf.append(' ');
             }
             switch (iter.currentSegment(coords)) {
@@ -382,7 +382,7 @@ public class SvgPaths {
                     reflectedX = reflectedY = Double.NaN;
                     break;
                 case PathIterator.SEG_QUADTO:
-                    if (false && Points.almostEqual(coords[0], coords[1], reflectedX, reflectedY)) {
+                    if ((next == 'Q' || next == 'T') && Points.almostEqual(coords[0], coords[1], reflectedX, reflectedY)) {
                         if (next != 'T') {
                             buf.append(next = 'T');
                         }
@@ -405,7 +405,7 @@ public class SvgPaths {
                     reflectedY = 2 * coords[3] - coords[1];
                     break;
                 case PathIterator.SEG_CUBICTO:
-                    if (false && Points.almostEqual(coords[0], coords[1], reflectedX, reflectedY)) {
+                    if ((next == 'C' || next == 'S') && Points.almostEqual(coords[0], coords[1], reflectedX, reflectedY)) {
                         if (next != 'S') {
                             buf.append(next = 'S');
                         }

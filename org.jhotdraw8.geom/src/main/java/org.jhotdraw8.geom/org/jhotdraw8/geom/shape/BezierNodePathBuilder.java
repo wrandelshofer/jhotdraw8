@@ -55,11 +55,16 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
         BezierNode last = getLast();
 
-        last = new BezierNode(last.getMask() | BezierNode.C2_MASK, last.isEquidistant(), last.isCollinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
-        if (last.computeIsCollinear()) {
-            last = last.setCollinear(true);
+        if (last != null) {
+            // Set the outgoing tangent on the last bezier node
+            last = new BezierNode(last.getMask() | BezierNode.C2_MASK, last.isEquidistant(), last.isCollinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
+            if (last.computeIsCollinear()) {
+                last = last.setCollinear(true);
+            }
+            setLast(last);
         }
-        setLast(last);
+
+        // Set the ingoing tangent on the new bezier node
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x2, y2, x - x2 + x, y - y2 + y));
     }
 
@@ -76,6 +81,16 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
 
     @Override
     protected void doQuadTo(double x1, double y1, double x, double y) {
+        BezierNode last = getLast();
+        if (last != null && last.isC1()) {
+            // Set the outgoing tangent on the last bezier node if it already has an ingoing tangent
+            last = new BezierNode(last.getMask() | BezierNode.C2_MASK, false, false, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
+            last = last.setCollinear(last.computeIsCollinear());
+            last = last.setEquidistant(last.computeIsEquidistant());
+            setLast(last);
+            add(new BezierNode(BezierNode.C0_MASK, false, false, x, y, x1, y1, x1, y1));
+            return;
+        }
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x1, y1, x1, y1));
     }
 
@@ -83,14 +98,14 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
     protected void doSmoothCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
         BezierNode last = getLast();
         setLast(new BezierNode(last.getMask() | BezierNode.C2_MASK, true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1));
-        add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x1, y1, x2, y2));
+        add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x2, y2, x2, y2));
     }
 
     @Override
     protected void doSmoothQuadTo(double x1, double y1, double x, double y) {
         BezierNode last = getLast();
-        setLast(new BezierNode(last.getMask(), true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), last.getX2(), last.getY2()));
-        add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x1, y1, x1, y1));
+        setLast(new BezierNode(last.getMask() | BezierNode.C2_MASK, true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1));
+        add(new BezierNode(BezierNode.C0_MASK, false, false, x, y, x1, y1, x1, y1));
     }
 
     private @Nullable BezierNode getLast() {

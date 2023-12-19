@@ -20,12 +20,7 @@ import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.css.converter.CssSizeConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.PageFigure;
-import org.jhotdraw8.draw.figure.Slice;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.AbstractExportOutputFormat;
 import org.jhotdraw8.draw.io.OutputFormat;
@@ -33,6 +28,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.TransformFlattener;
 import org.jhotdraw8.xml.XmlUtil;
@@ -62,6 +58,8 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
     private static final Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
+
+    public static final SimpleNonNullKey<Boolean> RELATIVIZE_PATHS = new SimpleNonNullKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
 
     public static final DataFormat SVG_FORMAT;
     public static final String SVG_MIME_TYPE = "image/svg+xml";
@@ -129,7 +127,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(external, selection, hints);
         final AbstractFXSvgWriter exporter = createExporter();
-        exporter.setRelativizePaths(true);
+        exporter.setRelativizePaths(isRelativizePaths());
         Document doc = exporter.toDocument(drawingNode,
                 new CssDimension2D(
                         external.getNonNull(Drawing.WIDTH),
@@ -147,7 +145,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         javafx.scene.Node drawingNode = toNode(drawing, selection, hints);
         final AbstractFXSvgWriter exporter = createExporter();
-        exporter.setRelativizePaths(true);
+        exporter.setRelativizePaths(isRelativizePaths());
         exporter.write(out, drawingNode,
                 new CssDimension2D(
                         drawing.getNonNull(Drawing.WIDTH),
@@ -165,7 +163,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
             RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
             try (OutputStream w = Files.newOutputStream(file)) {
                 final AbstractFXSvgWriter exporter = createExporter();
-                exporter.setRelativizePaths(true);
+                exporter.setRelativizePaths(isRelativizePaths());
                 javafx.scene.Node drawingNode = toNode(drawing, Collections.singletonList(drawing), hints);
                 exporter.write(w, drawingNode,
                         new CssDimension2D(drawing.getNonNull(Drawing.WIDTH), drawing.getNonNull(Drawing.HEIGHT)));
@@ -196,11 +194,15 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         Node drawingNode = toNode(drawing, selection, hints);
         final AbstractFXSvgWriter exporter = createExporter();
-        exporter.setRelativizePaths(true);
+        exporter.setRelativizePaths(isRelativizePaths());
         exporter.write(out, drawingNode,
                 new CssDimension2D(
                         drawing.getNonNull(Drawing.WIDTH),
                         drawing.getNonNull(Drawing.HEIGHT)));
+    }
+
+    private boolean isRelativizePaths() {
+        return RELATIVIZE_PATHS.getNonNull(getOptions());
     }
 
     private void writeDrawingElementAttributes(@NonNull Element docElement, @NonNull Drawing drawing) throws IOException {

@@ -17,13 +17,7 @@ import org.jhotdraw8.application.action.Action;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Formatter;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.NoSuchElementException;
-import java.util.ResourceBundle;
+import java.util.*;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a
@@ -154,7 +148,6 @@ public interface Resources {
      */
     default void configureMenu(@NonNull Menu menu, String argument) {
         menu.setText(getTextProperty(argument));
-        menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
         menu.setGraphic(getSmallIconProperty(argument, getBaseClass()));
     }
@@ -167,7 +160,6 @@ public interface Resources {
      * @param argument the argument
      */
     default void configureMenuItem(@NonNull MenuItem menu, String argument) {
-        menu.setText(getTextProperty(argument));
         menu.setText(getTextProperty(argument));
         menu.setAccelerator(getAcceleratorProperty(argument));
         menu.setGraphic(getSmallIconProperty(argument, getBaseClass()));

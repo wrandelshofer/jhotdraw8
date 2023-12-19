@@ -6,11 +6,7 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
@@ -94,11 +90,11 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<BezierNode> list = f.get(pointKey);
         if (list == null || pointIndex >= list.size()) {
+            node.setVisible(false);
             return;
         }
+        node.setVisible(true);
         BezierNode bn = getBezierNode();
-        BezierNode prev = list.get((pointIndex + list.size() - 1) % list.size());
-        BezierNode next = list.get((pointIndex + 1) % list.size());
         Point2D c0 = FXTransforms.transform(t, bn.getC0());
         Point2D c1 = FXTransforms.transform(t, bn.getC1());
         Point2D c2 = FXTransforms.transform(t, bn.getC2());
@@ -112,14 +108,6 @@ public class BezierNodeTangentHandle extends AbstractHandle {
                 points.add(c1.getY());
                 points.add(c0.getX());
                 points.add(c0.getY());
-            } else if (prev.isC2()) {
-                /*
-                c1 = Transforms.transform(t, prev.getC2());
-
-                points.add(c1.getX());
-                points.add(c1.getY());
-                points.add(c0.getX());
-                points.add(c0.getY());*/
             }
             if (bn.isC2()) {
                 if (points.isEmpty()) {
@@ -128,18 +116,6 @@ public class BezierNodeTangentHandle extends AbstractHandle {
                 }
                 points.add(c2.getX());
                 points.add(c2.getY());
-            } else if (next.isC1()) {
-                /*
-                c2 = Transforms.transform(t, next.getC1());
-
-                if (points.isEmpty()) {
-                    points.add(c0.getX());
-                    points.add(c0.getY());
-                }
-                points.add(c2.getX());
-                points.add(c2.getY());
-*/
-
             }
         }
 

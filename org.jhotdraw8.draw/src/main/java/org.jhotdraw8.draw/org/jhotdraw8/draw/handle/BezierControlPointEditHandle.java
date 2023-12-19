@@ -100,7 +100,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     @Override
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocationInView();
-        return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
+        return p != null && Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
     private BezierNode getBezierNode() {
@@ -339,8 +339,16 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
+        final ImmutableList<BezierNode> nodes = owner.get(pointKey);
+        if (nodes == null) {
+            node.setVisible(false);
+            return;
+        }
         ImmutableList<BezierNode> list = f.get(pointKey);
-        if (list == null || pointIndex >= list.size()) {
+        BezierNodePath path = new BezierNodePath(nodes);
+        BezierNode bnode = path.getNodes().get(pointIndex);
+        if (list == null || pointIndex >= list.size()
+                || (bnode.getMask() & controlPointMask) != controlPointMask) {
             node.setVisible(false);
             return;
         } else {

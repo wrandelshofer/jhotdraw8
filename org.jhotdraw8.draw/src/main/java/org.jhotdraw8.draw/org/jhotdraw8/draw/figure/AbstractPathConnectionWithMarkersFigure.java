@@ -81,9 +81,23 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
             list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
         } else if (handleType == HandleType.POINT) {
-            list.add(new LineOutlineHandle(this));
+            list.add(new BezierPathEditHandle(this, PATH));
             list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
             list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
+
+            ImmutableList<BezierNode> nodes = get(PATH);
+            for (int i = 0, n = nodes.size(); i < n; i++) {
+                list.add(new BezierNodeTangentHandle(this, PATH, i));
+                if (i > 0 && i < n - 1) {
+                    list.add(new BezierNodeEditHandle(this, PATH, i));
+                }
+                if (nodes.get(i).isC1()) {
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK));
+                }
+                if (nodes.get(i).isC2()) {
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK));
+                }
+            }
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new LineOutlineHandle(this));
         } else {
@@ -163,15 +177,18 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
         // If we have a path, set its end positions to START and END.
         ImmutableList<BezierNode> path = get(PATH);
-        if (path != null && !path.isEmpty()) {
+        if (path == null || path.isEmpty()) {
+            path = path.add(new BezierNode(start.getX(), start.getY()).setMask(BezierNode.MOVE_MASK));
+            path = path.add(new BezierNode(end.getX(), end.getY()));
+        } else {
             if (startPoint != null) {
                 path = path.set(0, path.getFirst().setX0(startPoint.getX()).setY0(startPoint.getY()));
             }
             if (endPoint != null) {
                 path = path.set(path.size() - 1, path.getLast().setX0(endPoint.getX()).setY0(endPoint.getY()));
             }
-            set(PATH, path);
         }
+        set(PATH, path);
     }
 
     @Override
@@ -183,6 +200,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     /**
      * This method can be overridden by a subclass to apply styles to the marker
      * node.
+     * <p>
+     * The implementation of this method in this class is empty.
+     * So no call to super is necessary.
      *
      * @param ctx  the context
      * @param node the node
@@ -276,7 +296,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
         updateLineNode(ctx, lineNode);
         updateMarkerNode(ctx, g, startMarkerNode, start, secondFirstPoint, startMarkerStr, getMarkerStartScaleFactor());
-        updateMarkerNode(ctx, g, endMarkerNode, secondLastPoint, start, endMarkerStr, getMarkerEndScaleFactor());
+        updateMarkerNode(ctx, g, endMarkerNode, end, secondLastPoint, endMarkerStr, getMarkerEndScaleFactor());
         updateStartMarkerNode(ctx, startMarkerNode);
         updateEndMarkerNode(ctx, endMarkerNode);
     }
@@ -284,6 +304,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     /**
      * This method can be overridden by a subclass to apply styles to the marker
      * node.
+     * <p>
+     * The implementation of this method in this class is empty.
+     * So no call to super is necessary.
      *
      * @param ctx  the context
      * @param node the node
