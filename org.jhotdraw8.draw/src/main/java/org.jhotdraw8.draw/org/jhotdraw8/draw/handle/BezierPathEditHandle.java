@@ -20,6 +20,8 @@ import org.jhotdraw8.geom.shape.BezierNodePath;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
+import java.util.List;
+
 public class BezierPathEditHandle extends BezierPathOutlineHandle {
     private final MapAccessor<ImmutableList<BezierNode>> pointKey;
 
@@ -39,26 +41,33 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
 
-        addPoint.setOnAction(actionEvent -> {
-            final ImmutableList<BezierNode> nodes = owner.get(pointKey);
-            BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
-            Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
-            IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
-            if (!intersectionResultEx.intersections().isEmpty()) {
-                IntersectionPoint intersectionPointEx = intersectionResultEx.intersections().get(0);
-                int segment = intersectionPointEx.getSegmentA();
-                path.getNodes().add(segment, new BezierNode(
-                        pointInLocal));
-                view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
-                view.recreateHandles();
-            }
-        });
-
-
+        addPoint.setOnAction(actionEvent -> addPoint(event, view));
         contextMenu.getItems().add(addPoint);
         contextMenu.show(getNode(view), event.getScreenX(), event.getScreenY());
         event.consume();
     }
+
+    private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView view) {
+        final ImmutableList<BezierNode> nodes = owner.get(pointKey);
+        BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
+        List<BezierNode> pathNodes = path.getNodes();
+
+        Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
+        IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
+        if (!intersectionResultEx.intersections().isEmpty()) {
+            IntersectionPoint intersectionPointEx = intersectionResultEx.intersections().get(0);
+            int segment = intersectionPointEx.getSegmentA();
+            BezierNode newNode = new BezierNode(pointInLocal);
+            if (segment > 0 && nodes.get(segment - 1).isClosePath()) {
+                pathNodes.set(segment - 1, pathNodes.get(segment - 1).clearMaskBits(BezierNode.CLOSE_MASK));
+                newNode = newNode.setMaskBits(BezierNode.CLOSE_MASK);
+            }
+            pathNodes.add(segment, newNode);
+            view.getModel().set(owner, pointKey, VectorList.copyOf(pathNodes));
+            view.recreateHandles();
+        }
+    }
+
 
     @Override
     public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {

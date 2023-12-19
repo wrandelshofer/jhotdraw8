@@ -6,6 +6,7 @@ package org.jhotdraw8.geom.shape;
 
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
@@ -15,11 +16,7 @@ import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
-import java.awt.geom.FlatteningPathIterator;
-import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
+import java.awt.geom.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,29 +30,27 @@ import java.util.List;
  */
 public class BezierNodePath implements Shape {
 
-    private final boolean closed;
     private List<BezierNode> nodes;
-    private final int windingRule;
+    private int windingRule;
 
     public BezierNodePath() {
-        this(new ArrayList<>(), false, PathIterator.WIND_EVEN_ODD);
+        this(new ArrayList<>(), PathIterator.WIND_EVEN_ODD);
     }
 
     public BezierNodePath(@NonNull Iterable<BezierNode> nodes) {
-        this(nodes, false, PathIterator.WIND_EVEN_ODD);
+        this(nodes, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, boolean closed, FillRule windingRule) {
-        this(nodes, closed, windingRule == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
+    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, FillRule windingRule) {
+        this(nodes, windingRule == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
 
     }
 
-    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, boolean closed, int windingRule) {
+    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, int windingRule) {
         this.nodes = new ArrayList<>();
         for (BezierNode n : nodes) {
             this.nodes.add(n);
         }
-        this.closed = closed;
         this.windingRule = windingRule;
     }
 
@@ -66,8 +61,8 @@ public class BezierNodePath implements Shape {
 
     public boolean contains(double x, double y, double tolerance) {
         final IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
-        return isect.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE && closed ||
-                isect.getStatus() == IntersectionStatus.INTERSECTION;
+        IntersectionStatus status = isect.getStatus();
+        return status == IntersectionStatus.NO_INTERSECTION_INSIDE || status == IntersectionStatus.INTERSECTION;
     }
 
     @Override
@@ -155,7 +150,7 @@ public class BezierNodePath implements Shape {
 
     @Override
     public @NonNull PathIterator getPathIterator(AffineTransform at) {
-        return new BezierNodePathIterator(nodes, closed, windingRule, at);
+        return new BezierNodePathIterator(nodes, windingRule, at);
     }
 
     @Override
@@ -286,6 +281,62 @@ public class BezierNodePath implements Shape {
             }
         }
         nodes.remove(segment);
+    }
 
+    /**
+     * Gets the outgoing tangent point for the bezier node
+     * at the specified index.
+     *
+     * @param index point of a bezier node
+     * @return outgoing tangent point
+     */
+    public @Nullable Point2D getOutgoingTangentPoint(int index) {
+        BezierNode node = nodes.get(index);
+        if (node.isC2()) {
+            return new Point2D.Double(node.getX2(), node.getY2());
+        }
+        return null;
+    }
+
+    public void setWindingRule(int newValue) {
+        this.windingRule = newValue;
+    }
+
+    /**
+     * Reverses the direction of the path.
+     */
+    public void reverse() {
+        int size = nodes.size();
+        ArrayList<BezierNode> temp = new ArrayList<>(size);
+        int lastMoveTo = -1;
+        for (int i = 0; i < size; i++) {
+            var n = nodes.get(i);
+            BezierNode reversed = n;
+            if (reversed.isMoveTo()) {
+                lastMoveTo = i;
+                if (i < size && !nodes.get(i + 1).isMoveTo()) {
+                    // keep a move to, if it is followed by another move to
+                    reversed = reversed.clearMaskBits(BezierNode.MOVE_MASK);
+                }
+            } else if (reversed.isClosePath()) {
+                temp.set(lastMoveTo, temp.get(lastMoveTo).setMaskBits(BezierNode.CLOSE_MASK));
+                reversed = reversed.clearMaskBits(BezierNode.CLOSE_MASK);
+            }
+            reversed = reversed.setX1(n.getX2()).setY1(n.getY2())
+                    .setX2(n.getX1()).setY2(n.getY1());
+            reversed = reversed.clearMaskBits(BezierNode.C1C2_MASK);
+            if (n.isC1()) {
+                reversed = reversed.setMaskBits(BezierNode.C2_MASK);
+            }
+            if (n.isC2()) {
+                reversed = reversed.setMaskBits(BezierNode.C1_MASK);
+            }
+            if (i == size - 1) {
+                reversed = reversed.setMaskBits(BezierNode.MOVE_MASK);
+            }
+            temp.add(reversed);
+        }
+        nodes.clear();
+        nodes.addAll(temp.reversed());
     }
 }

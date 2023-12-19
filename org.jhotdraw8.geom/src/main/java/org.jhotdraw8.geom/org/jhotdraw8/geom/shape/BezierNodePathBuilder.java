@@ -5,7 +5,9 @@
 package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.AbstractPathBuilder;
+import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -20,6 +22,7 @@ import java.util.List;
 public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<BezierNode>> {
 
     private final @NonNull List<BezierNode> nodes = new ArrayList<>();
+    private int moveIndex;
 
     public BezierNodePathBuilder() {
     }
@@ -30,8 +33,18 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
 
     @Override
     protected void doClosePath() {
-        BezierNode last = getLastNode();
+        BezierNode last = getLast();
         if (last != null) {
+            if (moveIndex != -1 && moveIndex != nodes.size() - 1) {
+                BezierNode moveNode = nodes.get(moveIndex);
+                if (Points.almostEqual(last.getX0(), last.getY0(), moveNode.getX0(), moveNode.getY0())) {
+                    moveNode = moveNode.setMaskBits(last.getMask() & BezierNode.C1_MASK)
+                            .setX1(last.getX1()).setY1(last.getY1());
+                    nodes.set(moveIndex, moveNode);
+                    nodes.removeLast();
+                    last = getLast();
+                }
+            }
             last = new BezierNode(last.getMask() | BezierNode.CLOSE_MASK, last.isEquidistant(), last.isCollinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(),
                     last.getX2(), last.getY2());
             setLast(last);
@@ -40,7 +53,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        BezierNode last = getLastNode();
+        BezierNode last = getLast();
 
         last = new BezierNode(last.getMask() | BezierNode.C2_MASK, last.isEquidistant(), last.isCollinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
         if (last.computeIsCollinear()) {
@@ -57,6 +70,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
 
     @Override
     protected void doMoveTo(double x, double y) {
+        moveIndex = nodes.size();
         add(new BezierNode(BezierNode.C0_MASK | BezierNode.MOVE_MASK, false, false, x, y, x, y, x, y));
     }
 
@@ -67,23 +81,23 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
 
     @Override
     protected void doSmoothCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        BezierNode last = getLastNode();
+        BezierNode last = getLast();
         setLast(new BezierNode(last.getMask() | BezierNode.C2_MASK, true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1));
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x1, y1, x2, y2));
     }
 
     @Override
     protected void doSmoothQuadTo(double x1, double y1, double x, double y) {
-        BezierNode last = getLastNode();
+        BezierNode last = getLast();
         setLast(new BezierNode(last.getMask(), true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), last.getX2(), last.getY2()));
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x1, y1, x1, y1));
     }
 
-    private BezierNode getLastNode() {
-        return nodes.get(nodes.size() - 1);
+    private @Nullable BezierNode getLast() {
+        return nodes.isEmpty() ? null : nodes.getLast();
     }
 
-    private void setLast(BezierNode newValue) {
+    private void setLast(@NonNull BezierNode newValue) {
         nodes.set(nodes.size() - 1, newValue);
     }
 

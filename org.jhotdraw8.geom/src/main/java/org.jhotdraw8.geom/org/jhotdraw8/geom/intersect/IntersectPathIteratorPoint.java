@@ -10,7 +10,6 @@ import org.jhotdraw8.geom.Rectangles;
 
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class IntersectPathIteratorPoint {
@@ -44,7 +43,8 @@ public class IntersectPathIteratorPoint {
      * @return the intersection
      */
     public static @NonNull IntersectionResult intersectPathIteratorPoint(@NonNull PathIterator pit, double px, double py, double tolerance) {
-        List<IntersectionPoint> result = new ArrayList<>();
+        List<IntersectionPoint> lineIntersections = new ArrayList<>();
+        List<IntersectionPoint> insideIntersections = new ArrayList<>();
         final double[] seg = new double[6];
         double firstx = 0, firsty = 0;
         double lastx = 0, lasty = 0;
@@ -52,7 +52,7 @@ public class IntersectPathIteratorPoint {
         int i = 0;
         int windingRule = pit.getWindingRule();
 
-        // Count clockwise and counter clockwise crossings of a ray
+        // Count clockwise and counterclockwise crossings of a ray
         // starting at px,py going to POSITIVE_INFINITY,py.
         int clockwiseCrossingsSum = 0;
         int counterClockwiseCrossingsSum = 0;
@@ -65,49 +65,49 @@ public class IntersectPathIteratorPoint {
             IntersectionResultEx rayCheck;
             int type = pit.currentSegment(seg);
             switch (type) {
-            case PathIterator.SEG_CLOSE:
-                boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
-                rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Rectangles.REAL_THRESHOLD);
-                break;
-            case PathIterator.SEG_CUBICTO:
-                x = seg[4];
-                y = seg[5];
-                boundaryCheck = IntersectCubicCurvePoint.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
-                rayCheck = IntersectCubicCurveRay.intersectRayCubicCurveEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Rectangles.REAL_THRESHOLD);
-                //IntersectCubicCurveRa
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_LINETO:
-                x = seg[0];
-                y = seg[1];
-                boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
-                rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Rectangles.REAL_THRESHOLD);
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_MOVETO:
-                lastx = firstx = seg[0];
-                lasty = firsty = seg[1];
-                boundaryCheck = null;
-                rayCheck = null;
-                break;
-            case PathIterator.SEG_QUADTO:
-                x = seg[2];
-                y = seg[3];
-                boundaryCheck = IntersectPointQuadCurve.intersectQuadCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
-                rayCheck = IntersectQuadCurveRay.intersectRayQuadCurveEx(px, py, 1, 0, Double.MAX_VALUE,
-                        lastx, lasty, seg[0], seg[1], x, y, Rectangles.REAL_THRESHOLD);
-                lastx = x;
-                lasty = y;
-                break;
-            default:
-                throw new UnsupportedOperationException("Unsupported segment type: " + type);
+                case PathIterator.SEG_CLOSE:
+                    boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
+                    rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Rectangles.REAL_THRESHOLD);
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    x = seg[4];
+                    y = seg[5];
+                    boundaryCheck = IntersectCubicCurvePoint.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
+                    rayCheck = IntersectCubicCurveRay.intersectRayCubicCurveEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Rectangles.REAL_THRESHOLD);
+                    //IntersectCubicCurveRa
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_LINETO:
+                    x = seg[0];
+                    y = seg[1];
+                    boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
+                    rayCheck = IntersectLineRay.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Rectangles.REAL_THRESHOLD);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    lastx = firstx = seg[0];
+                    lasty = firsty = seg[1];
+                    boundaryCheck = null;
+                    rayCheck = null;
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    x = seg[2];
+                    y = seg[3];
+                    boundaryCheck = IntersectPointQuadCurve.intersectQuadCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
+                    rayCheck = IntersectQuadCurveRay.intersectRayQuadCurveEx(px, py, 1, 0, Double.MAX_VALUE,
+                            lastx, lasty, seg[0], seg[1], x, y, Rectangles.REAL_THRESHOLD);
+                    lastx = x;
+                    lasty = y;
+                    break;
+                default:
+                    throw new UnsupportedOperationException("Unsupported segment type: " + type);
             }
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 final IntersectionPoint first = boundaryCheck.intersections().getFirst();
-                result.add(new IntersectionPoint(first.getX(), first.getY(), first.getArgumentA(), segment));
+                lineIntersections.add(new IntersectionPoint(first.getX(), first.getY(), first.getArgumentA(), segment));
                 break;
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
@@ -123,28 +123,33 @@ public class IntersectPathIteratorPoint {
                 }
             }
             switch (type) {
-            case PathIterator.SEG_CLOSE:
-                clockwiseCrossingsSum += clockwiseCrossings;
-                counterClockwiseCrossingsSum += counterClockwiseCrossings;
-                clockwiseCrossings = counterClockwiseCrossings = 0;
-                break;
-            case PathIterator.SEG_MOVETO:
-                clockwiseCrossings = counterClockwiseCrossings = 0;
-                break;
+                case PathIterator.SEG_CLOSE:
+                    clockwiseCrossingsSum += clockwiseCrossings;
+                    counterClockwiseCrossingsSum += counterClockwiseCrossings;
+                    clockwiseCrossings = counterClockwiseCrossings = 0;
+                    if (windingRule == PathIterator.WIND_EVEN_ODD) {
+                        if ((clockwiseCrossingsSum + counterClockwiseCrossingsSum) % 2 == 1) {
+                            insideIntersections.add(new IntersectionPoint(px, py, 0, segment));
+                        }
+                    } else if (windingRule == PathIterator.WIND_NON_ZERO) {
+                        if (clockwiseCrossingsSum != counterClockwiseCrossingsSum) {
+                            insideIntersections.add(new IntersectionPoint(px, py, 0, segment));
+                        }
+                    }
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    clockwiseCrossings = counterClockwiseCrossings = 0;
+                    break;
             }
             segment++;
         }
 
-        if (windingRule == PathIterator.WIND_EVEN_ODD) {
-            if ((clockwiseCrossingsSum + counterClockwiseCrossingsSum) % 2 == 1) {
-                return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, Collections.singletonList(new IntersectionPoint(px, py, 0)));
-            }
-        } else if (windingRule == PathIterator.WIND_NON_ZERO) {
-            if (clockwiseCrossingsSum != counterClockwiseCrossingsSum) {
-                return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, Collections.singletonList(new IntersectionPoint(px, py, 0)));
-            }
+        if (!lineIntersections.isEmpty()) {
+            return new IntersectionResult(lineIntersections);
         }
-
-        return new IntersectionResult(result);
+        if (!insideIntersections.isEmpty()) {
+            return new IntersectionResult(IntersectionStatus.NO_INTERSECTION_INSIDE, insideIntersections);
+        }
+        return new IntersectionResult(List.of());
     }
 }

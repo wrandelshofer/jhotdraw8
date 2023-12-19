@@ -7,25 +7,11 @@ package org.jhotdraw8.draw.handle;
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -42,12 +28,11 @@ import org.jhotdraw8.geom.shape.BezierNodePath;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
+import java.util.List;
+
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import static org.jhotdraw8.geom.shape.BezierNode.C0C1C2_MASK;
-import static org.jhotdraw8.geom.shape.BezierNode.C0C1_MASK;
-import static org.jhotdraw8.geom.shape.BezierNode.C0C2_MASK;
-import static org.jhotdraw8.geom.shape.BezierNode.C0_MASK;
+import static org.jhotdraw8.geom.shape.BezierNode.*;
 
 /**
  * Handle for the point ofCollection a figure.
@@ -80,14 +65,14 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     private final @NonNull Region node;
     private Point2D pickLocation;
-    private final int pointIndex;
-    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
+    private final int nodeIndex;
+    private final MapAccessor<ImmutableList<BezierNode>> nodeListKey;
 
 
-    public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> nodeListKey, int nodeIndex) {
         super(figure);
-        this.pointKey = pointKey;
-        this.pointIndex = pointIndex;
+        this.nodeListKey = nodeListKey;
+        this.nodeIndex = nodeIndex;
         node = new Region();
         node.setShape(REGION_SHAPE_LINEAR);
         node.setManaged(false);
@@ -105,8 +90,8 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableList<BezierNode> list = owner.get(pointKey);
-        return list.get(pointIndex);
+        ImmutableList<BezierNode> list = owner.get(nodeListKey);
+        return list.get(nodeIndex);
 
     }
 
@@ -143,51 +128,69 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     @Override
     public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (pointKey != null) {
+        if (nodeListKey != null) {
             if (event.getClickCount() == 1) {
                 if (event.isControlDown() || event.isAltDown()) {
-                    final ImmutableList<BezierNode> nodes = owner.get(pointKey);
+                    final ImmutableList<BezierNode> nodes = owner.get(nodeListKey);
                     if (nodes == null) {
                         return;
                     }
                     BezierNodePath path = new BezierNodePath(nodes);
-                    BezierNode node = path.getNodes().get(pointIndex);
+                    BezierNode node = path.getNodes().get(nodeIndex);
                     switch (node.getMask()) {
-                    case C0_MASK:
-                        node = node.setMask(C0C1_MASK);
-                        break;
-                    case C0C1_MASK:
-                        node = node.setMask(C0C2_MASK);
-                        break;
-                    case C0C2_MASK:
+                        case C0_MASK:
+                            node = node.setMask(C0C1_MASK);
+                            break;
+                        case C0C1_MASK:
+                            node = node.setMask(C0C2_MASK);
+                            break;
+                        case C0C2_MASK:
                             node = node.setMask(C0C1C2_MASK);
-                        break;
-                    case C0C1C2_MASK:
-                    default:
-                        node = node.setMask(C0_MASK);
-                        break;
-                    case BezierNode.MOVE_MASK:
-                        break;
+                            break;
+                        case C0C1C2_MASK:
+                        default:
+                            node = node.setMask(C0_MASK);
+                            break;
+                        case BezierNode.MOVE_MASK:
+                            break;
                     }
-                    path.getNodes().set(pointIndex, node);
-                    dv.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
+                    path.getNodes().set(nodeIndex, node);
+                    dv.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
                     dv.recreateHandles();
-                }
-            } else if (event.getClickCount() == 2) {
-                if (!event.isControlDown() && !event.isMetaDown() && !event.isAltDown()) {
-                    removePoint(dv);
                 }
             }
         }
     }
 
     private void removePoint(@NonNull DrawingView dv) {
-        if (owner.get(pointKey).size() > 2) {
-            BezierNodePath path = new BezierNodePath(owner.get(pointKey));
-            path.join(pointIndex, 1.0);
-            dv.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
+        if (owner.get(nodeListKey).size() > 2) {
+            BezierNodePath path = new BezierNodePath(owner.get(nodeListKey));
+            path.join(nodeIndex, 1.0);
+            dv.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             dv.recreateHandles();
         }
+    }
+
+    /**
+     * Insert a new node before the node at pointIndex.
+     *
+     * @param view
+     */
+    private void addPoint(@NonNull DrawingView view) {
+        final ImmutableList<BezierNode> nodes = owner.get(nodeListKey);
+        BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
+        List<BezierNode> pathNodes = path.getNodes();
+
+        BezierNode node = nodes.get(nodeIndex);
+
+        // If the oldNode was a MOVE_TO, convert it into a LINE_TO
+        pathNodes.set(nodeIndex, node.clearMaskBits(MOVE_MASK));
+
+        // Remove the CLOSE path mask from the new node
+        pathNodes.add(nodeIndex, node.clearMaskBits(CLOSE_MASK));
+
+        view.getModel().set(owner, nodeListKey, VectorList.copyOf(pathNodes));
+        view.recreateHandles();
     }
 
     @Override
@@ -199,13 +202,13 @@ public class BezierNodeEditHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(getOwner(), new CssPoint2D(newPoint)).getConvertedValue();
         }
 
-        ImmutableList<BezierNode> list = owner.get(pointKey);
-        if (pointIndex >= list.size()) {
+        ImmutableList<BezierNode> list = owner.get(nodeListKey);
+        if (nodeIndex >= list.size()) {
             return;
         }
-        BezierNode p = list.get(pointIndex);
-        view.getModel().set(getOwner(), pointKey,
-                list.set(pointIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
+        BezierNode p = list.get(nodeIndex);
+        view.getModel().set(getOwner(), nodeListKey,
+                list.set(nodeIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
     }
 
     @Override
@@ -217,63 +220,107 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
-        addPoint.setOnAction(actionEvent -> removePoint(view));
-        contextMenu.getItems().add(addPoint);
+        MenuItem reversePath = new MenuItem(DrawLabels.getResources().getString("handle.reversePath.text"));
+        MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
+        MenuItem removePoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
+        addPoint.setOnAction(actionEvent -> addPoint(view));
+        removePoint.setOnAction(actionEvent -> removePoint(view));
+        contextMenu.getItems().addAll(addPoint, removePoint);
 
-        Menu tangents = new Menu(DrawLabels.getResources().getString("handle.bezierNode.tangents.text"));
+        Menu tangentsMenu = new Menu(DrawLabels.getResources().getString("handle.bezierNode.tangents.text"));
         RadioMenuItem noneRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.noTangents.text"));
         RadioMenuItem inRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.incomingTangent.text"));
         RadioMenuItem outRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.outgoingTangent.text"));
         RadioMenuItem bothRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.incomingAndOutgoingTangent.text"));
 
-        BezierNodePath path = new BezierNodePath(owner.get(pointKey));
-        BezierNode bnode = path.getNodes().get(pointIndex);
-        switch (bnode.getMask()) {
-        case C0_MASK:
-        default:
-            noneRadio.setSelected(true);
-            break;
-        case C0C1_MASK:
-            inRadio.setSelected(true);
-            break;
-        case C0C2_MASK:
-            outRadio.setSelected(true);
-            break;
-        case C0C1C2_MASK:
-            bothRadio.setSelected(true);
-            break;
+        Menu pathMenu = new Menu(DrawLabels.getResources().getString("handle.bezierNode.path.text"));
+        RadioMenuItem moveToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.moveTo.text"));
+        RadioMenuItem lineToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.lineTo.text"));
+        RadioMenuItem closePathRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.closePath.text"));
+        closePathRadio.setDisable(nodeIndex == 0);
+
+        BezierNodePath path = new BezierNodePath(owner.get(nodeListKey));
+        BezierNode bnode = path.getNodes().get(nodeIndex);
+        switch (bnode.getMask() & C1C2_MASK) {
+            default:
+                noneRadio.setSelected(true);
+                break;
+            case C1_MASK:
+                inRadio.setSelected(true);
+                break;
+            case C2_MASK:
+                outRadio.setSelected(true);
+                break;
+            case C1C2_MASK:
+                bothRadio.setSelected(true);
+                break;
         }
+        if (nodeIndex == 0 || bnode.isMoveTo()) {
+            moveToRadio.setSelected(true);
+        } else if (bnode.isClosePath()) {
+            closePathRadio.setSelected(true);
+        } else {
+            lineToRadio.setSelected(true);
+        }
+
+        reversePath.setOnAction(actionEvent -> {
+            path.reverse();
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
+            view.recreateHandles();
+        });
         noneRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setMask(C0_MASK);
-            path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
+            BezierNode changedNode = bnode.clearMaskBits(C1C2_MASK).setMaskBits(C0_MASK);
+            path.getNodes().set(nodeIndex, changedNode);
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         inRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setMask(C0C1_MASK);
-            path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
+            BezierNode changedNode = bnode.setMaskBits(C0C1_MASK).clearMaskBits(C2_MASK);
+            path.getNodes().set(nodeIndex, changedNode);
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         outRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setMask(C0C2_MASK);
-            path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
+            BezierNode changedNode = bnode.clearMaskBits(C1_MASK).setMaskBits(C0C2_MASK);
+            path.getNodes().set(nodeIndex, changedNode);
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setMask(C0C1C2_MASK);
-            path.getNodes().set(pointIndex, changedNode);
-            view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
+            BezierNode changedNode = bnode.setMaskBits(C0C1C2_MASK);
+            path.getNodes().set(nodeIndex, changedNode);
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
+            view.recreateHandles();
+        });
+        moveToRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.clearMaskBits(CLOSE_MASK).setMaskBits(MOVE_MASK);
+            path.getNodes().set(nodeIndex, changedNode);
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
+            view.recreateHandles();
+        });
+        closePathRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.setMaskBits(CLOSE_MASK).clearMaskBits(MOVE_MASK);
+            path.getNodes().set(nodeIndex, changedNode);
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
+            view.recreateHandles();
+        });
+        lineToRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.clearMaskBits(MOVE_MASK | CLOSE_MASK);
+            path.getNodes().set(nodeIndex, changedNode);
+            view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
 
-        tangents.getItems().addAll(noneRadio, inRadio, outRadio, bothRadio);
-        contextMenu.getItems().add(tangents);
+        tangentsMenu.getItems().addAll(noneRadio, inRadio, outRadio, bothRadio);
+        pathMenu.getItems().addAll(moveToRadio, lineToRadio, closePathRadio);
+        contextMenu.getItems().add(tangentsMenu);
+        contextMenu.getItems().add(pathMenu);
+        contextMenu.getItems().addAll(new SeparatorMenuItem(), reversePath);
         contextMenu.show(node, event.getScreenX(), event.getScreenY());
         event.consume();
     }
+
+
 
     @Override
     public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
@@ -291,8 +338,8 @@ public class BezierNodeEditHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableList<BezierNode> list = f.get(pointKey);
-        if (list == null || pointIndex >= list.size()) {
+        ImmutableList<BezierNode> list = f.get(nodeListKey);
+        if (list == null || nodeIndex >= list.size()) {
             node.setVisible(false);
             return;
         } else {

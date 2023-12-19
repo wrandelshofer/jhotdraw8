@@ -16,9 +16,14 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.shape.BezierNode;
+import org.jhotdraw8.geom.shape.BezierNodePath;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -27,8 +32,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
+
 /**
- * AbstractStraightLineConnectionWithMarkersFigure draws a straight line from start to end.
+ * AbstractPathConnectionWithMarkersFigure draws a path from start to end.
  * <p>
  * A subclass can hardcode the markers, or can implement one or multiple "marker-able" interfaces
  * that allow user-definable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
@@ -36,25 +43,27 @@ import java.util.logging.Logger;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractStraightLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
+public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public AbstractStraightLineConnectionWithMarkersFigure() {
+    public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", VectorList.of());
+
+    public AbstractPathConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
     }
 
-    public AbstractStraightLineConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
+    public AbstractPathConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
-    public AbstractStraightLineConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
+    public AbstractPathConnectionWithMarkersFigure(double startX, double startY, double endX, double endY) {
         super(startX, startY, endX, endY);
     }
 
     @Override
     public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
         if (handleType == HandleType.SELECT) {
-            list.add(new LineOutlineHandle(this));
+            list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.MOVE) {
             list.add(new LineOutlineHandle(this));
             if (get(START_CONNECTOR) == null) {
@@ -85,7 +94,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
         javafx.scene.Group g = new javafx.scene.Group();
-        final Line line = new Line();
+        final Path line = new Path();
         final Path startMarker = new Path();
         final Path endMarker = new Path();
         startMarker.setStroke(null);
@@ -108,12 +117,16 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
-        // FIXME include markers in path
-        return FXShapes.awtShapeFromFX(new Line(
-                getNonNull(START_X).getConvertedValue(),
-                getNonNull(START_Y).getConvertedValue(),
-                getNonNull(END_X).getConvertedValue(),
-                getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
+        ImmutableList<BezierNode> path = get(PATH);
+        if (path == null || path.isEmpty()) {
+            // FIXME include markers in path
+            return FXShapes.awtShapeFromFX(new Line(
+                    getNonNull(START_X).getConvertedValue(),
+                    getNonNull(START_Y).getConvertedValue(),
+                    getNonNull(END_X).getConvertedValue(),
+                    getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
+        }
+        return new BezierNodePath(path).getPathIterator(tx);
     }
 
     public abstract double getStrokeCutEnd(RenderContext ctx);
@@ -135,15 +148,29 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
             end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
 
+        Point2D startPoint = null;
+        Point2D endPoint = null;
         if (startConnector != null && startTarget != null) {
             java.awt.geom.Point2D.Double chp = startConnector.chopStart(ctx, this, startTarget, start, end);
-            final Point2D p = worldToParent(chp.getX(), chp.getY());
-            set(START, new CssPoint2D(p));
+            startPoint = worldToParent(chp.getX(), chp.getY());
+            set(START, new CssPoint2D(startPoint));
         }
         if (endConnector != null && endTarget != null) {
             java.awt.geom.Point2D.Double chp = endConnector.chopEnd(ctx, this, endTarget, start, end);
-            final Point2D p = worldToParent(chp.getX(), chp.getY());
-            set(END, new CssPoint2D(p));
+            endPoint = worldToParent(chp.getX(), chp.getY());
+            set(END, new CssPoint2D(endPoint));
+        }
+
+        // If we have a path, set its end positions to START and END.
+        ImmutableList<BezierNode> path = get(PATH);
+        if (path != null && !path.isEmpty()) {
+            if (startPoint != null) {
+                path = path.set(0, path.getFirst().setX0(startPoint.getX()).setY0(startPoint.getY()));
+            }
+            if (endPoint != null) {
+                path = path.set(path.size() - 1, path.getLast().setX0(endPoint.getX()).setY0(endPoint.getY()));
+            }
+            set(PATH, path);
         }
     }
 
@@ -171,7 +198,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateLineNode(RenderContext ctx, Line node) {
+    protected void updateLineNode(RenderContext ctx, Path node) {
 
     }
 
@@ -190,7 +217,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
                     markerNode.getElements().setAll(nodes);
                 }
             } catch (ParseException e) {
-                Logger.getLogger(AbstractStraightLineConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
+                Logger.getLogger(AbstractPathConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
             }
             double angle = Angles.atan2(start.getY() - end.getY(), start.getX() - end.getX());
             markerNode.getTransforms().setAll(
@@ -205,13 +232,21 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        javafx.scene.Group g = (javafx.scene.Group) node;
-        Line lineNode = (Line) g.getChildren().get(0);
-        final Path startMarkerNode = (Path) g.getChildren().get(1);
-        final Path endMarkerNode = (Path) g.getChildren().get(2);
-
         Point2D start = getNonNull(START).getConvertedValue();
         Point2D end = getNonNull(END).getConvertedValue();
+        ImmutableList<BezierNode> path = get(PATH);
+        if (path == null || path.isEmpty()) {
+            path = VectorList.of(
+                    new BezierNode(start.getX(), start.getY()).setMask(BezierNode.MOVE_MASK),
+                    new BezierNode(end.getX(), end.getY()).setMask(BezierNode.C0_MASK)
+            );
+        }
+
+
+        javafx.scene.Group g = (javafx.scene.Group) node;
+        Path lineNode = (Path) g.getChildren().get(0);
+        final Path startMarkerNode = (Path) g.getChildren().get(1);
+        final Path endMarkerNode = (Path) g.getChildren().get(2);
 
         final double startInset = getStrokeCutStart(ctx);
         final double endInset = getStrokeCutEnd(ctx);
@@ -225,14 +260,23 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         if (endInset != 0) {
             end = end.add(dir.multiply(-endInset));
         }
-        lineNode.setStartX(start.getX());
-        lineNode.setStartY(start.getY());
-        lineNode.setEndX(end.getX());
-        lineNode.setEndY(end.getY());
+
+        var bezierNodePath = new BezierNodePath(path,
+                getStyledNonNull(FILL_RULE));
+        final List<PathElement> elements =
+                FXShapes.fxPathElementsFromAwt(
+                        bezierNodePath.getPathIterator(null));
+
+        if (!lineNode.getElements().equals(elements)) {
+            lineNode.getElements().setAll(elements);
+        }
+
+        Point2D secondFirstPoint = end;
+        Point2D secondLastPoint = start;
 
         updateLineNode(ctx, lineNode);
-        updateMarkerNode(ctx, g, startMarkerNode, start, end, startMarkerStr, getMarkerStartScaleFactor());
-        updateMarkerNode(ctx, g, endMarkerNode, end, start, endMarkerStr, getMarkerEndScaleFactor());
+        updateMarkerNode(ctx, g, startMarkerNode, start, secondFirstPoint, startMarkerStr, getMarkerStartScaleFactor());
+        updateMarkerNode(ctx, g, endMarkerNode, secondLastPoint, start, endMarkerStr, getMarkerEndScaleFactor());
         updateStartMarkerNode(ctx, startMarkerNode);
         updateEndMarkerNode(ctx, endMarkerNode);
     }

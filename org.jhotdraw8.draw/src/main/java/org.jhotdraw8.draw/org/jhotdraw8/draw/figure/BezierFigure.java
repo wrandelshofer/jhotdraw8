@@ -19,15 +19,8 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
-import org.jhotdraw8.draw.handle.BezierPathEditHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
-import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
@@ -51,8 +44,6 @@ public class BezierFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, FillRulableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
-
-    public static final BooleanStyleableKey CLOSED = new BooleanStyleableKey("closed", false);
 
     public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", VectorList.of());
     /**
@@ -125,7 +116,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
-        return new BezierNodePath(getStyledNonNull(PATH), getStyledNonNull(CLOSED), getStyled(FILL_RULE)).getPathIterator(tx);
+        return new BezierNodePath(getStyledNonNull(PATH), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
     public @NonNull Point2D getPoint(int index, int coord) {
@@ -182,7 +173,6 @@ public class BezierFigure extends AbstractLeafFigure
         final List<PathElement> elements =
                 FXShapes.fxPathElementsFromAwt(
                         new BezierNodePath(getStyledNonNull(PATH),
-                                getStyledNonNull(CLOSED),
                                 getStyledNonNull(FILL_RULE)).getPathIterator(null));
 
         if (!pathNode.getElements().equals(elements)) {

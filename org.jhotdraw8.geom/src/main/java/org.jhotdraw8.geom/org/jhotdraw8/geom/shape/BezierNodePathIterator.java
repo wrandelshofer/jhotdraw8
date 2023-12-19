@@ -24,23 +24,34 @@ public class BezierNodePathIterator implements PathIterator {
     private final int size;
     private final int windingRule;
 
-    private final BezierNode CLOSE_PATH = new BezierNode(0, 0);
+    private final static BezierNode CLOSE_PATH = new BezierNode(0, 0);
 
-    public BezierNodePathIterator(@NonNull List<BezierNode> nodes, boolean closed, int windingRule, AffineTransform affine) {
+    public BezierNodePathIterator(@NonNull List<BezierNode> nodes, int windingRule, AffineTransform affine) {
+        // We patch the list of bezier nodes, to make the iteration methods simpler.
         this.nodes = new ArrayList<BezierNode>();
+        boolean needsMoveTo = true;
+        BezierNode lastMoveTo = null;
         for (BezierNode n : nodes) {
-            this.nodes.add(n);
-            if ((n.getMask() & BezierNode.CLOSE_MASK) == BezierNode.CLOSE_MASK) {
+            // Ensure that all new path segments start with a MOVE_TO.
+            if (needsMoveTo) {
+                n = n.setMaskBits(BezierNode.MOVE_MASK);
+            }
+            needsMoveTo = n.isClosePath();
+
+            this.nodes.add(n.clearMaskBits(BezierNode.CLOSE_MASK));
+
+            if (n.isMoveTo()) {
+                // Remember the last moveTo, so that we can close the path with a curve if necessary
+                lastMoveTo = n;
+            } else if (n.isClosePath()) {
+                // We have to reinsert the lastMoveTo node, if the path is closed with a Bézier curve
+                if (n.isC2() || lastMoveTo != null && lastMoveTo.isC1()) {
+                    this.nodes.add(lastMoveTo.clearMaskBits(BezierNode.MOVE_MASK));
+                }
+                // We use a dedicated close path node instead of a node with the close mask being set.
                 this.nodes.add(CLOSE_PATH);
             }
-        }
-        if (closed && !nodes.isEmpty()) {
-            BezierNode n0 = nodes.get(0);
-            if ((n0.getMask() & BezierNode.MOVE_MASK) != 0) {
-                n0 = n0.setMask(n0.getMask() ^ BezierNode.MOVE_MASK);
-            }
-            this.nodes.add(n0);
-            this.nodes.add(CLOSE_PATH);
+
         }
         size = this.nodes.size();
         this.windingRule = windingRule;
@@ -137,10 +148,11 @@ public class BezierNodePathIterator implements PathIterator {
             numCoords = 1;
             type = SEG_MOVETO;
         } else {
-            BezierNode current = nodes.get((index) % size);
-            BezierNode previous = nodes.get((index + size - 1) % size);
+            BezierNode current = nodes.get(index);
+            BezierNode previous = nodes.get(index - 1);
 
             if (current == CLOSE_PATH) {
+                // Note: We use an explicit close path node, ignoring the CLOSE_PATH mask on the BezierNodes!
                 type = SEG_CLOSE;
             } else {
                 if (current.isMoveTo()) {

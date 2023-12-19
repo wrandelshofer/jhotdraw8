@@ -53,12 +53,12 @@ public class BezierNode {
      */
     public static final int C0C2_MASK = C0_MASK | C2_MASK;
     /**
-     * Constant for having control point C0 in effect, but we are only moving to
-     * this bezier node.
+     * Constant for moving to this bezier node.
      */
     public static final int MOVE_MASK = 8;
     /**
-     * Constant for closing the path.
+     * Constant for closing the path by drawing a line or curve from this bezier node
+     * to the last node with a {@link #MOVE_MASK}.
      */
     public static final int CLOSE_MASK = 16;
 
@@ -113,7 +113,6 @@ public class BezierNode {
         this.y0 = c0y;
         this.y1 = c0y;
         this.y2 = c0y;
-
     }
 
     public BezierNode(@NonNull Point2D c0) {
@@ -217,14 +216,14 @@ public class BezierNode {
 
     public @NonNull Point2D getC(int mask) {
         switch (mask) {
-        case C0_MASK:
-            return getC0();
-        case C1_MASK:
-            return getC1();
-        case C2_MASK:
-            return getC2();
-        default:
-            throw new IllegalArgumentException("illegal mask:" + mask);
+            case C0_MASK:
+                return getC0();
+            case C1_MASK:
+                return getC1();
+            case C2_MASK:
+                return getC2();
+            default:
+                throw new IllegalArgumentException("illegal mask:" + mask);
         }
     }
 
@@ -301,14 +300,14 @@ public class BezierNode {
 
     public double getX(int mask) {
         switch (mask) {
-        case C0_MASK:
-            return getX0();
-        case C1_MASK:
-            return getX1();
-        case C2_MASK:
-            return getX2();
-        default:
-            throw new IllegalArgumentException("illegal mask:" + mask);
+            case C0_MASK:
+                return getX0();
+            case C1_MASK:
+                return getX1();
+            case C2_MASK:
+                return getX2();
+            default:
+                throw new IllegalArgumentException("illegal mask:" + mask);
         }
     }
 
@@ -335,14 +334,14 @@ public class BezierNode {
 
     public double getY(int mask) {
         switch (mask) {
-        case C0_MASK:
-            return getY0();
-        case C1_MASK:
-            return getY1();
-        case C2_MASK:
-            return getY2();
-        default:
-            throw new IllegalArgumentException("illegal mask:" + mask);
+            case C0_MASK:
+                return getY0();
+            case C1_MASK:
+                return getY1();
+            case C2_MASK:
+                return getY2();
+            default:
+                throw new IllegalArgumentException("illegal mask:" + mask);
         }
     }
 
@@ -410,6 +409,10 @@ public class BezierNode {
 
     public boolean isMoveTo() {
         return (mask & MOVE_MASK) == MOVE_MASK;
+    }
+
+    public boolean isClosePath() {
+        return !isMoveTo() && (mask & CLOSE_MASK) == CLOSE_MASK;
     }
 
     /**
@@ -527,7 +530,29 @@ public class BezierNode {
      * @return a new instance
      */
     public @NonNull BezierNode setMask(int mask) {
-        return new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
+        return mask == this.mask ? this : new BezierNode(mask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
+    }
+
+    /**
+     * Sets all the bits in the specified mask.
+     *
+     * @param mask the mask to set
+     * @return a new instance
+     */
+    public @NonNull BezierNode setMaskBits(int mask) {
+        int newMask = this.mask | mask;
+        return newMask == this.mask ? this : new BezierNode(newMask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
+    }
+
+    /**
+     * Clears all the bits in the specified mask.
+     *
+     * @param mask the mask to set
+     * @return a new instance
+     */
+    public @NonNull BezierNode clearMaskBits(int mask) {
+        int newMask = this.mask & ~mask;
+        return newMask == this.mask ? this : new BezierNode(newMask, equidistant, collinear, x0, y0, x1, y1, x2, y2);
     }
 
     /**

@@ -11,20 +11,9 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.ClosePath;
-import javafx.scene.shape.LineTo;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.PathElement;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -209,6 +198,10 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                         dir = new Point2D(0, 1);// point down
                     }
                     p2 = c0.add(dir.multiply(r));
+                    Point2D constrainedPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(p2)).getConvertedValue();
+                    if (Points.almostEqual(p2.getX(), p2.getY(), constrainedPoint.getX(), constrainedPoint.getY())) {
+                        p2 = constrainedPoint;
+                    }
                     newBezierNode = newBezierNode.setC2(p2);
                 } else {
                     Point2D p2 = bn.getC1();
@@ -217,6 +210,10 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                         dir = new Point2D(0, 1);// point down
                     }
                     p2 = c0.add(dir.multiply(r));
+                    Point2D constrainedPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(p2)).getConvertedValue();
+                    if (Points.almostEqual(p2.getX(), p2.getY(), constrainedPoint.getX(), constrainedPoint.getY())) {
+                        p2 = constrainedPoint;
+                    }
                     newBezierNode = newBezierNode.setC1(p2);
                 }
 
@@ -249,10 +246,13 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             p2 = new Point2D(
                     Math.fma(r, cosa, c0.getX()),
                     Math.fma(r, sina, c0.getY()));
+            Point2D constrainedPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(p2)).getConvertedValue();
+            if (Points.almostEqual(p2.getX(), p2.getY(), constrainedPoint.getX(), constrainedPoint.getY())) {
+                p2 = constrainedPoint;
+            }
             BezierNode newBezierNode;
             if (controlPointMask == BezierNode.C1_MASK) {
                 newBezierNode = bn.setC1(p).setC2(p2);
-
             } else {
                 newBezierNode = bn.setC2(p).setC1(p2);
             }
