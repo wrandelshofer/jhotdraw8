@@ -43,7 +43,7 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
         ContourBuilder contourBuilder = new ContourBuilder();
         for (PolyArcPath path : papb.build()) {
             for (PolyArcPath contourPath : contourBuilder.parallelOffset(path, -offset)) {
-                SvgPaths.buildFromPathIterator(consumer, contourPath.getPathIterator(null), false);
+                AwtShapes.buildFromPathIterator(consumer, contourPath.getPathIterator(null), false);
             }
         }
         consumer.pathDone();

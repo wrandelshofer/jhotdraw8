@@ -25,7 +25,6 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,7 +195,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             BezierNodePathBuilder builder = new BezierNodePathBuilder();
             double error = 5 / dv.getZoomFactor();
             BezierFit.fitBezierPath(builder, digitized, error);
-            final ImmutableList<BezierNode> built = builder.build();
+            final List<BezierNode> built = builder.build().getNodes();
             ArrayList<BezierNode> newList = new ArrayList<>(dragStartIndex + built.size());
             for (int i = 0; i < dragStartIndex; i++) {
                 newList.add(points.get(i));
@@ -209,7 +208,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
                     newList.add(built.get(i));
                 }
             }
-            newList.add(points.get(points.size() - 1));
+            newList.add(points.getLast());
             points = newList;
 
             DrawingModel dm = dv.getModel();

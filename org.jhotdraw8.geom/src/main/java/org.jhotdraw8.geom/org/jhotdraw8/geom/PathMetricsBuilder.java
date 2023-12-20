@@ -14,11 +14,13 @@ import java.awt.geom.PathIterator;
 import java.util.DoubleSummaryStatistics;
 
 public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
-    private ByteArrayList commands = new ByteArrayList();
-    private IntArrayList offsets = new IntArrayList();
-    private DoubleArrayList coords = new DoubleArrayList();
-    private DoubleArrayList lengths = new DoubleArrayList();
-    private DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
+    private final ByteArrayList commands = new ByteArrayList();
+    private final IntArrayList offsets = new IntArrayList();
+    private int nextOffset = 0;
+    private final DoubleArrayList coords = new DoubleArrayList();
+    private final double[] temp = new double[8];
+    private final DoubleArrayList lengths = new DoubleArrayList();
+    private final DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
     private static final byte SEG_MOVETO = (int) PathIterator.SEG_MOVETO;
@@ -27,6 +29,8 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
 
+    public PathMetricsBuilder() {
+    }
 
     @Override
     protected void doClosePath() {
@@ -39,7 +43,8 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
             double length = Points.distance(lastMoveToX, lastMoveToY, getLastX(), getLastY());
             if (length > 0) {
                 commands.addAsByte(SEG_LINETO);
-                offsets.addAsInt(offsets.size() + 2);
+                offsets.addAsInt(nextOffset);
+                nextOffset += 2;
                 coords.addAsDouble(lastMoveToX);
                 coords.addAsDouble(lastMoveToY);
                 acc.accept(length);
@@ -47,7 +52,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
             }
 
             commands.addAsByte(SEG_CLOSE);
-            offsets.addAsInt(offsets.size());
+            offsets.addAsInt(nextOffset);
             lengths.addAsDouble(acc.getSum());
         }
     }
@@ -59,17 +64,26 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        double length = CubicCurves.arcLength(coords.getArray(), coords.size() - 8, 0.1);
-        if (length > 0) {
+        temp[0] = getLastX();
+        temp[1] = getLastY();
+        temp[2] = x1;
+        temp[3] = y1;
+        temp[4] = x2;
+        temp[5] = y2;
+        temp[6] = x;
+        temp[7] = y;
+        double arcLength = CubicCurves.arcLength(temp, 0);
+        if (arcLength > 0) {
             commands.addAsByte(SEG_CUBICTO);
-            offsets.addAsInt(offsets.size() + 6);
+            offsets.addAsInt(nextOffset);
+            nextOffset += 6;
             coords.addAsDouble(x1);
             coords.addAsDouble(y1);
             coords.addAsDouble(x2);
             coords.addAsDouble(y2);
             coords.addAsDouble(x);
             coords.addAsDouble(y);
-            acc.accept(length);
+            acc.accept(arcLength);
             lengths.addAsDouble(acc.getSum());
         }
     }
@@ -79,7 +93,8 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         double length = Points.distance(getLastX(), getLastY(), x, y);
         if (length > 0) {
             commands.addAsByte(SEG_LINETO);
-            offsets.addAsInt(offsets.size() + 2);
+            offsets.addAsInt(nextOffset);
+            nextOffset += 2;
             coords.addAsDouble(x);
             coords.addAsDouble(y);
             acc.accept(length);
@@ -95,7 +110,8 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
             coords.setAsDouble(coords.size() - 1, y);
         } else {
             commands.addAsByte(SEG_MOVETO);
-            offsets.addAsInt(offsets.size() + 2);
+            offsets.addAsInt(nextOffset);
+            nextOffset += 2;
             coords.addAsDouble(x);
             coords.addAsDouble(y);
             lengths.addAsDouble(acc.getSum());
@@ -104,15 +120,22 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
     @Override
     protected void doQuadTo(double x1, double y1, double x, double y) {
-        double length = QuadCurves.arcLength(coords.getArray(), coords.size() - 6);
-        if (length > 0) {
+        temp[0] = getLastX();
+        temp[1] = getLastY();
+        temp[2] = x1;
+        temp[3] = y1;
+        temp[4] = x;
+        temp[5] = y;
+        double arcLength = QuadCurves.arcLength(temp, 0);
+        if (arcLength > 0) {
             commands.addAsByte(SEG_QUADTO);
-            offsets.addAsInt(offsets.size() + 4);
+            offsets.addAsInt(nextOffset);
+            nextOffset += 4;
             coords.addAsDouble(x1);
             coords.addAsDouble(y1);
             coords.addAsDouble(x);
             coords.addAsDouble(y);
-            acc.accept(length);
+            acc.accept(arcLength);
             lengths.addAsDouble(acc.getSum());
         }
     }

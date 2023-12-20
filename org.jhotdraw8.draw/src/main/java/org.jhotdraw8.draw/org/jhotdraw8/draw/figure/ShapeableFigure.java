@@ -10,17 +10,9 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
-import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
-import org.jhotdraw8.geom.FXRectangles;
-import org.jhotdraw8.geom.NineRegionsScalingBuilder;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 
 import java.awt.geom.Path2D;
 import java.text.ParseException;
@@ -84,7 +76,7 @@ public interface ShapeableFigure extends Figure {
             FXPathElementsBuilder builder2 = new FXPathElementsBuilder();
             final NineRegionsScalingBuilder<List<PathElement>> nineRegionsScalingBuilder = new NineRegionsScalingBuilder<>(builder2, srcBounds, shapeSlice, b);
 
-            SvgPaths.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
+            AwtShapes.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
             List<PathElement> elements = nineRegionsScalingBuilder.build();
             node.getElements().setAll(elements);
             node.setVisible(true);

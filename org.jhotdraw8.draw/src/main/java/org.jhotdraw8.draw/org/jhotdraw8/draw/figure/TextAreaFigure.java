@@ -19,8 +19,8 @@ import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
+import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -125,6 +125,6 @@ public class TextAreaFigure extends AbstractLeafFigure
         if (path == null) {
             layout(new SimpleRenderContext());
         }
-        return path == null ? SvgPaths.emptyPathIterator() : FXShapes.awtShapeFromFX(path).getPathIterator(tx);
+        return path == null ? AwtShapes.emptyPathIterator() : FXShapes.awtShapeFromFX(path).getPathIterator(tx);
     }
 }

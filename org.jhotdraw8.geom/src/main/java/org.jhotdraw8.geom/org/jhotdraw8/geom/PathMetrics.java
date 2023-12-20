@@ -6,7 +6,9 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
+import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.Arrays;
 
@@ -44,7 +46,7 @@ public class PathMetrics {
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
 
 
-    public PathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] accumulatedLengths) {
+    PathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] accumulatedLengths) {
         this.commands = commands;
         this.offsets = offsets;
         this.coords = coords;
@@ -69,22 +71,27 @@ public class PathMetrics {
      */
     public @NonNull PointAndDerivative evalAtArcLength(double s) {
         int search = Arrays.binarySearch(accumulatedLengths, s);
-        int i = search < 0 ? ~search : search;
+        int i = search < 0 ? Math.min(commands.length - 1, ~search) : search;
 
         if (commands[i] == SEG_CLOSE) {
             // Use the last segment of the shape that is being closed
-            i--;
+            while (i > 0 && commands[i] == SEG_CLOSE) {
+                i--;
+            }
         } else if (commands[i] == SEG_MOVETO) {
             // Use the first segment of the shape that is being opened
-            i++;
+            while (i < commands.length - 1 && commands[i] == SEG_MOVETO) {
+                i++;
+            }
         }
 
-        int offset = offsets[i];
+        int offset = offsets[i] - 2;// at offset - 2 we have the x,y coordinates of the previous command
         double start = (i == 0 ? 0 : accumulatedLengths[i - 1]);
-        final double segmentS = s - start;
+        final double segmentS = s - start;// the s value inside the segment
+        // the
         return switch (commands[i]) {
             case SEG_CLOSE -> new PointAndDerivative(0, 0, 1, 0);
-            case SEG_MOVETO -> new PointAndDerivative(coords[offset], coords[offset + 1], 1, 0);
+            case SEG_MOVETO -> new PointAndDerivative(coords[offset + 2], coords[offset + 3], 1, 0);
             case SEG_LINETO -> Lines.eval(coords, offset, Lines.invArcLength(coords, offset, segmentS));
             case SEG_QUADTO -> QuadCurves.eval(coords, offset, QuadCurves.invArcLength(coords, offset, segmentS));
             case SEG_CUBICTO -> CubicCurves.eval(coords, offset, CubicCurves.invArcLength(coords, offset, segmentS));
@@ -103,12 +110,15 @@ public class PathMetrics {
 
     /**
      * Builds a sub-path from t0 to t1.
+     * <p>
+     * This method does not call {@link PathBuilder#build()}.
      *
      * @param t0 the start time in [0,1].
      * @param t1 the end time in [0,1].
      * @param b  the builder
+     * @return the same builder that was passed as an argument
      */
-    public void buildSubPath(double t0, double t1, @NonNull PathBuilder b, boolean skipFirstMoveTo) {
+    public <T> PathBuilder<T> buildSubPath(double t0, double t1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
         double totalArcLength = getArcLength();
         double s0 = t0 * totalArcLength;
         double s1 = t1 * totalArcLength;
@@ -118,13 +128,17 @@ public class PathMetrics {
         if (i0 == 0 && skipFirstMoveTo) {
             i0++;
         }
-        while (i0 < commands.length && commands[i0] == SEG_CLOSE) i0++;
+        while (i0 < commands.length && commands[i0] == SEG_CLOSE) {
+            i0++;
+        }
 
         int search1 = t1 == 1 ? commands.length - 1 : Arrays.binarySearch(accumulatedLengths, s1);
         boolean endsAtSegment = search1 >= 0;
         int i1 = search1 < 0 ? ~search1 : search1;
-        while (i1 >= 0 && commands[i1] == SEG_MOVETO) i1--;
-        if (i1 < i0) return;
+        while (i1 >= 0 && commands[i1] == SEG_MOVETO) {
+            i1--;
+        }
+        if (i1 < i0) return b;
 
         double[] splitCoords = new double[8];
         if (i0 == i1 && !startsAtSegment && !endsAtSegment) {
@@ -159,7 +173,7 @@ public class PathMetrics {
                 }
                 default -> throw new IllegalStateException("unexpected command=" + commands[i0] + " at index=" + i0);
             }
-            return;
+            return b;
         }
 
         if (!startsAtSegment) {
@@ -205,10 +219,12 @@ public class PathMetrics {
                 case SEG_MOVETO -> b.moveTo(coords[offset], coords[offset + 1]);
                 case SEG_LINETO -> b.lineTo(coords[offset], coords[offset + 1]);
                 case SEG_QUADTO -> b.quadTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3]);
-                case SEG_CUBICTO -> b.curveTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3], coords[offset + 4], coords[offset + 5]);
+                case SEG_CUBICTO ->
+                        b.curveTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3], coords[offset + 4], coords[offset + 5]);
                 default -> throw new IllegalStateException("unexpected command=" + commands[i] + " at index=" + i);
             }
         }
+
         if (!endsAtSegment) {
             int offset = offsets[i1];
             double s = s0 - accumulatedLengths[i1 - 1];
@@ -235,5 +251,69 @@ public class PathMetrics {
                 default -> throw new IllegalStateException("unexpected command=" + commands[i1] + " at index=" + i1);
             }
         }
+        return b;
+    }
+
+
+    public PathIterator getPathIterator(final @Nullable AffineTransform tx) {
+        final AffineTransform tt = tx == null ? AffineTransform.getTranslateInstance(0, 0) : tx;
+        return new PathIterator() {
+            int current = -1;
+
+            @Override
+            public int getWindingRule() {
+                return PathIterator.WIND_EVEN_ODD;
+            }
+
+            @Override
+            public boolean isDone() {
+                return current < commands.length - 1;
+            }
+
+            @Override
+            public void next() {
+                if (!isDone()) current++;
+            }
+
+            @Override
+            public int currentSegment(float[] coords) {
+                final int offset = offsets[current];
+                switch (commands[current]) {
+                    case PathMetrics.SEG_MOVETO, PathMetrics.SEG_LINETO -> {
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 2);
+                    }
+                    case PathMetrics.SEG_QUADTO -> {
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 4);
+                    }
+                    case PathMetrics.SEG_CUBICTO -> {
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 6);
+                    }
+                    default -> {//SEG CLOSE
+
+                    }
+                }
+                return commands[current];
+            }
+
+            @Override
+            public int currentSegment(double[] coords) {
+                final int offset = offsets[current];
+                switch (commands[current]) {
+                    case PathMetrics.SEG_MOVETO, PathMetrics.SEG_LINETO -> {
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 2);
+                    }
+                    case PathMetrics.SEG_QUADTO -> {
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 4);
+                    }
+                    case PathMetrics.SEG_CUBICTO -> {
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 6);
+                    }
+                    default -> {//SEG CLOSE
+
+                    }
+                }
+                return commands[current];
+            }
+        };
     }
 }

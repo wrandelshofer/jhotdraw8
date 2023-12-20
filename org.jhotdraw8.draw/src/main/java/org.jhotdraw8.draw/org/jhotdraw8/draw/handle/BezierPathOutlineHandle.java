@@ -86,7 +86,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
         List<PathElement> elements = new ArrayList<>();
         FXPathElementsBuilder builder = new FXPathElementsBuilder(elements);
         final BezierNodePath bnp = new BezierNodePath(bezierNodes);
-        SvgPaths.buildFromPathIterator(builder, bnp.getPathIterator(FXShapes.awtTransformFromFX(t)));
+        AwtShapes.buildFromPathIterator(builder, bnp.getPathIterator(FXShapes.awtTransformFromFX(t)));
 
         // draw a small arrow at the center of each segment, to visualize the direction of the path
         double arrowSize = 3;//Math.max(3,strokeWidth);

@@ -392,7 +392,7 @@ public class CubicCurves {
      *
      * @param v      a cubic bezier curve
      * @param offset offset into array v
-     * @return the
+     * @return the arc length integrand of a cubic Bézier curve
      */
     public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] v, int offset) {
         // Instead of the code below, we could evaluate the magnitude of the derivative
@@ -406,9 +406,9 @@ public class CubicCurves {
 
         // Calculate the coefficients of a Bezier derivative.
         double x0 = v[offset], y0 = v[offset + 1],
-                x1 = v[+2], y1 = v[+3],
-                x2 = v[+4], y2 = v[+5],
-                x3 = v[+6], y3 = v[+7],
+                x1 = v[offset + 2], y1 = v[offset + 3],
+                x2 = v[offset + 4], y2 = v[offset + 5],
+                x3 = v[offset + 6], y3 = v[offset + 7],
 
                 ax = 9 * (x1 - x2) + 3 * (x3 - x0),
                 bx = 6 * (x0 + x2) - 12 * x1,
@@ -422,7 +422,8 @@ public class CubicCurves {
             // Calculate quadratic equations of derivatives for x and y
             double dx = (ax * t + bx) * t + cx,
                     dy = (ay * t + by) * t + cy;
-            return Math.hypot(dx, dy);// consider using Math.sqrt(dx*dx+dy*dy); instead
+            return Math.hypot(dx, dy);// hypot does not run into intermediate overflows and underflows
+            //return Math.sqrt(dx*dx+dy*dy);
         };
     }
 
@@ -431,12 +432,23 @@ public class CubicCurves {
     }
 
     /**
-     * Computes the arc length s at the given time t.
+     * Computes the arc length s.
+     *
+     * @param p      points of the curve
+     * @param offset index of the first point in array {@code p}
+     * @return the arc length
+     */
+    public static double arcLength(double @NonNull [] p, int offset) {
+        return arcLength(p, offset, 1);
+    }
+
+    /**
+     * Computes the arc length s from time 0 to time t.
      *
      * @param p      points of the curve
      * @param offset index of the first point in array {@code p}
      * @param t      the time
-     * @return the point at time t
+     * @return the arc length
      */
     public static double arcLength(double @NonNull [] p, int offset, double t) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);

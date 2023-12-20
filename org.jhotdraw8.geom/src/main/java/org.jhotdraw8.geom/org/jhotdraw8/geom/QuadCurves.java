@@ -15,9 +15,7 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.log;
-import static java.lang.Math.sqrt;
+import static java.lang.Math.*;
 import static org.jhotdraw8.geom.Lines.lerp;
 
 /**
@@ -181,7 +179,7 @@ public class QuadCurves {
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
+     * Splits the provided Bézier curve into two parts.
      *
      * @param t      where to split
      * @param first  if not null, accepts the curve from x1,y1 to t

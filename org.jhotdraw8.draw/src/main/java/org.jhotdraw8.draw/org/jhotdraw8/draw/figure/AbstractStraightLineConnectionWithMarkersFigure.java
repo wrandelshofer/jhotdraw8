@@ -128,20 +128,22 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
+
+        // Find initial start and end points
         if (startConnector != null && startTarget != null) {
             start = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
             end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
-
+        // Chop start and end points
         if (startConnector != null && startTarget != null) {
             java.awt.geom.Point2D.Double chp = startConnector.chopStart(ctx, this, startTarget, start, end);
             final Point2D p = worldToParent(chp.getX(), chp.getY());
             set(START, new CssPoint2D(p));
         }
         if (endConnector != null && endTarget != null) {
-            java.awt.geom.Point2D.Double chp = endConnector.chopEnd(ctx, this, endTarget, start, end);
+            java.awt.geom.Point2D.Double chp = endConnector.chopStart(ctx, this, endTarget, end, start);
             final Point2D p = worldToParent(chp.getX(), chp.getY());
             set(END, new CssPoint2D(p));
         }
@@ -171,13 +173,13 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateLineNode(RenderContext ctx, Line node) {
 
+    protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Line node) {
     }
 
     protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
                                     @NonNull Path markerNode,
-                                    @NonNull Point2D start, @NonNull Point2D end, @Nullable String svgString, double markerScaleFactor) {
+                                    @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             try {
                 // Note: we must not add individual elements to the ObservableList
@@ -192,11 +194,13 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
             } catch (ParseException e) {
                 Logger.getLogger(AbstractStraightLineConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
             }
-            double angle = Angles.atan2(start.getY() - end.getY(), start.getX() - end.getX());
+            double angle = Math.PI + pd.getAngle();
+            double pdx = pd.x();
+            double pdy = pd.y();
             markerNode.getTransforms().setAll(
-                    new FXPreciseRotate(angle * 180 / Math.PI, start.getX(), start.getY()),
-                    new Scale(markerScaleFactor, markerScaleFactor, start.getX(), start.getY()),
-                    new Translate(start.getX(), start.getY()));
+                    new FXPreciseRotate(angle * 180 / Math.PI, pdx, pdy),
+                    new Scale(markerScaleFactor, markerScaleFactor, pdx, pdy),
+                    new Translate(pdx, pdy));
             markerNode.setVisible(true);
         } else {
             markerNode.setVisible(false);
@@ -218,7 +222,9 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         final String startMarkerStr = getMarkerStartShape();
         final String endMarkerStr = getMarkerEndShape();
 
-        Point2D dir = end.subtract(start).normalize();
+        Point2D endMinusStart = end.subtract(start);
+        Point2D startMinusEnd = start.subtract(end);
+        Point2D dir = endMinusStart.normalize();
         if (startInset != 0) {
             start = start.add(dir.multiply(startInset));
         }
@@ -231,8 +237,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         lineNode.setEndY(end.getY());
 
         updateLineNode(ctx, lineNode);
-        updateMarkerNode(ctx, g, startMarkerNode, start, end, startMarkerStr, getMarkerStartScaleFactor());
-        updateMarkerNode(ctx, g, endMarkerNode, end, start, endMarkerStr, getMarkerEndScaleFactor());
+        updateMarkerNode(ctx, g, startMarkerNode, new PointAndDerivative(start.getX(), start.getY(), endMinusStart.getX(), endMinusStart.getY()), startMarkerStr, getMarkerStartScaleFactor());
+        updateMarkerNode(ctx, g, endMarkerNode, new PointAndDerivative(end.getX(), end.getY(), startMinusEnd.getX(), startMinusEnd.getY()), endMarkerStr, getMarkerEndScaleFactor());
         updateStartMarkerNode(ctx, startMarkerNode);
         updateEndMarkerNode(ctx, endMarkerNode);
     }

@@ -302,6 +302,10 @@ public class BezierNodePath implements Shape {
         this.windingRule = newValue;
     }
 
+    public void setWindingRule(FillRule newValue) {
+        this.windingRule = newValue == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO;
+    }
+
     /**
      * Reverses the direction of the path.
      */

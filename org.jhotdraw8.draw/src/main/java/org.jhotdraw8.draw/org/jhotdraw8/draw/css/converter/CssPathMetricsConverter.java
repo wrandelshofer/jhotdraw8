@@ -12,12 +12,9 @@ import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.geom.PathMetrics;
+import org.jhotdraw8.geom.PathMetricsBuilder;
 import org.jhotdraw8.geom.SvgPaths;
-import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
-import org.jhotdraw8.icollection.ImmutableLists;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,30 +27,25 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableList<BezierNode>> {
+public class CssPathMetricsConverter extends AbstractCssConverter<PathMetrics> {
 
-    public CssBezierNodeListConverter(boolean nullable) {
+    public CssPathMetricsConverter(boolean nullable) {
         super(nullable);
     }
 
     @Override
-    public @NonNull ImmutableList<BezierNode> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull PathMetrics parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
         }
-        BezierNodePathBuilder builder = new BezierNodePathBuilder();
+        PathMetricsBuilder builder = new PathMetricsBuilder();
         SvgPaths.buildFromSvgString(builder, tt.currentStringNonNull());
-        return ImmutableLists.copyOf(builder.build().getNodes());
+        return builder.build();
     }
 
     @Override
-    protected <TT extends ImmutableList<BezierNode>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        if (value.isEmpty()) {
-            out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
-        } else {
-            // FIXME we lose smooth here! Use a PathBuilder instead.
-            out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(new BezierNodePath(value).getPathIterator(null))));
-        }
+    protected <TT extends PathMetrics> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null))));
     }
 
     @Override

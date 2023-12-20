@@ -74,6 +74,7 @@ public interface Connector {
         return chopStart(ctx, connection, target, new Point2D(sx, sy), new Point2D(ex, ey));
     }
 
+
     /**
      * Clips the start of the provided line at the bounds of the target figure.
      * The line must be given in world coordinates.
@@ -90,21 +91,6 @@ public interface Connector {
         Point2D derivative = end.subtract(start);
         return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, derivative.getX(), derivative.getY(), 0, derivative.getX(), derivative.getY()) :
                 new IntersectionPointEx(Lines.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getArgumentA()), ip.getArgumentA(), ip.getDerivativeA(), ip.getArgumentB(), ip.getDerivativeB());
-    }
-
-    /**
-     * Clips the end of the provided line at the bounds of the target figure.
-     * The line must be given in world coordinates.
-     *
-     * @param ctx the render context
-     * @param connection a connection figure
-     * @param target     the target
-     * @param start      the start of the line
-     * @param end        the end of the line
-     * @return the new end point in world coordinates
-     */
-    default IntersectionPointEx chopEnd(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
-        return chopStart(ctx, connection, target, end, start);
     }
 
     /**

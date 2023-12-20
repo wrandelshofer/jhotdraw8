@@ -42,13 +42,13 @@ public class FXShapes {
             return BasicStroke.CAP_BUTT;
         }
         switch (cap) {
-        case BUTT:
-        default:
-            return BasicStroke.CAP_BUTT;
-        case ROUND:
-            return BasicStroke.CAP_ROUND;
-        case SQUARE:
-            return BasicStroke.CAP_SQUARE;
+            case BUTT:
+            default:
+                return BasicStroke.CAP_BUTT;
+            case ROUND:
+                return BasicStroke.CAP_ROUND;
+            case SQUARE:
+                return BasicStroke.CAP_SQUARE;
         }
     }
 
@@ -57,13 +57,13 @@ public class FXShapes {
             return BasicStroke.JOIN_BEVEL;
         }
         switch (join) {
-        default:
-        case BEVEL:
-            return BasicStroke.JOIN_BEVEL;
-        case MITER:
-            return BasicStroke.JOIN_MITER;
-        case ROUND:
-            return BasicStroke.JOIN_ROUND;
+            default:
+            case BEVEL:
+                return BasicStroke.JOIN_BEVEL;
+            case MITER:
+                return BasicStroke.JOIN_MITER;
+            case ROUND:
+                return BasicStroke.JOIN_ROUND;
         }
     }
 
@@ -213,7 +213,7 @@ public class FXShapes {
             p.lineTo(startX, startY);
         }
 
-        p.arcTo(radiusX, radiusY, xAxisRot, largeArc, sweep, endX, endY);
+        p.arcTo(radiusX, radiusY, xAxisRot, endX, endY, largeArc, sweep);
 
         if (ArcType.CHORD == node.getType()
                 || ArcType.ROUND == node.getType()) {
@@ -264,9 +264,13 @@ public class FXShapes {
         return awtShapeFromFXPathElements(node.getElements(), node.getFillRule());
     }
 
-    public static @NonNull Shape awtShapeFromFXPathElements(@NonNull List<PathElement> pathElements, FillRule fillRule) {
-        SvgPath2D p = new SvgPath2D();
+    public static @NonNull Shape awtShapeFromFXPathElements(@NonNull Iterable<PathElement> pathElements, FillRule fillRule) {
+        Path2D.Double p = buildFromPathElements(new AwtPathBuilder(), pathElements).build();
         p.setWindingRule(fillRule == FillRule.NON_ZERO ? PathIterator.WIND_NON_ZERO : PathIterator.WIND_EVEN_ODD);
+        return p;
+    }
+
+    public static @NonNull <T extends PathBuilder<?>> T buildFromPathElements(@NonNull T p, @NonNull Iterable<PathElement> pathElements) {
         double x = 0;
         double y = 0;
         for (PathElement pe : pathElements) {
@@ -333,7 +337,7 @@ public class FXShapes {
                     x += e.getX();
                     y += e.getY();
                 }
-                p.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), e.isLargeArcFlag(), e.isSweepFlag(), x, y);
+                p.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), x, y, e.isLargeArcFlag(), e.isSweepFlag());
             } else if (pe instanceof HLineTo) {
                 HLineTo e = (HLineTo) pe;
                 if (e.isAbsolute()) {
@@ -455,21 +459,21 @@ public class FXShapes {
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
-            case PathIterator.SEG_CLOSE:
-                fxelem.add(new ClosePath());
-                break;
-            case PathIterator.SEG_CUBICTO:
-                fxelem.add(new CubicCurveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]));
-                break;
-            case PathIterator.SEG_LINETO:
-                fxelem.add(new LineTo(coords[0], coords[1]));
-                break;
-            case PathIterator.SEG_MOVETO:
-                fxelem.add(new MoveTo(coords[0], coords[1]));
-                break;
-            case PathIterator.SEG_QUADTO:
-                fxelem.add(new QuadCurveTo(coords[0], coords[1], coords[2], coords[3]));
-                break;
+                case PathIterator.SEG_CLOSE:
+                    fxelem.add(new ClosePath());
+                    break;
+                case PathIterator.SEG_CUBICTO:
+                    fxelem.add(new CubicCurveTo(coords[0], coords[1], coords[2], coords[3], coords[4], coords[5]));
+                    break;
+                case PathIterator.SEG_LINETO:
+                    fxelem.add(new LineTo(coords[0], coords[1]));
+                    break;
+                case PathIterator.SEG_MOVETO:
+                    fxelem.add(new MoveTo(coords[0], coords[1]));
+                    break;
+                case PathIterator.SEG_QUADTO:
+                    fxelem.add(new QuadCurveTo(coords[0], coords[1], coords[2], coords[3]));
+                    break;
             }
         }
         return fxelem;
@@ -524,7 +528,7 @@ public class FXShapes {
                 fxpath.setFillRule(javafx.scene.shape.FillRule.NON_ZERO);
                 break;
             default:
-            throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
+                throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
         }
 
         fxpath.getElements().addAll(fxPathElementsFromAwt(iter));

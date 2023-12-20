@@ -10,15 +10,10 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.FillRule;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
+import javafx.scene.shape.*;
 import javafx.stage.Stage;
+import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
-import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.*;
 import java.awt.geom.Line2D;
@@ -68,7 +63,7 @@ public class LineMain extends Application {
                 Line2D.Double line = new Line2D.Double(100, 100 + 20 * i, 200, 100 + 20 * i);
                 BasicStroke stroke = new BasicStroke(v, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
                 FXPathElementsBuilder builder = new FXPathElementsBuilder();
-                SvgPaths.buildFromPathIterator(builder, stroke.createStrokedShape(line).getPathIterator(null));
+                AwtShapes.buildFromPathIterator(builder, stroke.createStrokedShape(line).getPathIterator(null));
                 Path path = new Path();
                 path.getElements().setAll(builder.build());
                 System.out.println(path.getElements().stream().map(Object::toString).collect(Collectors.joining("\n")));

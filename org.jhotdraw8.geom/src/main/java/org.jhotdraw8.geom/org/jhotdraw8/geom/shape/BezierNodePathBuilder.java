@@ -8,8 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.AbstractPathBuilder;
 import org.jhotdraw8.geom.Points;
-import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +17,7 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<BezierNode>> {
+public class BezierNodePathBuilder extends AbstractPathBuilder<BezierNodePath> {
 
     private final @NonNull List<BezierNode> nodes = new ArrayList<>();
     private int moveIndex;
@@ -117,8 +115,8 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<ImmutableList<Bez
     }
 
     @Override
-    public @NonNull ImmutableList<BezierNode> build() {
-        return VectorList.copyOf(nodes);
+    public @NonNull BezierNodePath build() {
+        return new BezierNodePath(nodes);
     }
 
     @Override

@@ -17,11 +17,7 @@ import org.jhotdraw8.draw.css.value.CssTransforms;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.ConcatenatedPathIterator;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
@@ -105,7 +101,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue());
 
                     }
-                    iter = basicStroke.createStrokedShape(SvgPaths.buildFromPathIterator(new AwtPathBuilder(), iter).build()).getPathIterator(null);
+                    iter = basicStroke.createStrokedShape(AwtShapes.buildFromPathIterator(new AwtPathBuilder(), iter).build()).getPathIterator(null);
                 }
             }
         }
@@ -137,9 +133,9 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                 final PathIterator childPathIterator = getStyledPathIteratorInParent(ctx, (PathIterableFigure) child, tx);
                 if (first) {
                     first = false;
-                    area = new Area(SvgPaths.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
+                    area = new Area(AwtShapes.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
                 } else {
-                    Area area1 = new Area(SvgPaths.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
+                    Area area1 = new Area(AwtShapes.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
                     switch (op) {
                     case ADD:
                     default:
