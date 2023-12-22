@@ -24,6 +24,10 @@ public class MacOSPreferencesTest {
     @TestFactory
     public List<DynamicTest> dynamicTestsPreferences() {
         List<DynamicTest> list = new ArrayList<>();
+        if (!System.getProperty("os.name").startsWith("Mac")) {
+            return list;
+        }
+
         for (String file : Arrays.asList("SmallXmlPropertyList.plist",
                 "SmallBinaryPropertyList.plist")) {
             list.addAll(Arrays.asList(

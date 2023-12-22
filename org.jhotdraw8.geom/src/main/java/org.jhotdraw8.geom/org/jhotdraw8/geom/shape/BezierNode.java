@@ -227,14 +227,27 @@ public class BezierNode {
         }
     }
 
+    /**
+     * Gets the point through which the curve passes.
+     *
+     * @return curve point
+     */
     public @NonNull Point2D getC0() {
         return new Point2D(x0, y0);
     }
 
+    /**
+     * Gets the incoming tangent point.
+     * @return incoming tangent point
+     */
     public @NonNull Point2D getC1() {
         return new Point2D(x1, y1);
     }
 
+    /**
+     * Gets the outgoing tangent point.
+     * @return outgoing tangent point
+     */
     public @NonNull Point2D getC2() {
         return new Point2D(x2, y2);
     }
