@@ -10,7 +10,7 @@ import java.util.LinkedHashSet;
 import java.util.SequencedSet;
 
 /**
- * Provides factory methods for read-only sequenced sets.
+ * Provides factory methods for {@link ReadOnlySequencedSet}s.
  */
 public class ReadOnlySequencedSets {
     /**
@@ -44,7 +44,7 @@ public class ReadOnlySequencedSets {
     /**
      * Returns a new read-only sequenced set with the specified elements.
      * <p>
-     * If the set can be cast to {@link ImmutableSequencedSet},
+     * If the provided iterable can be cast to {@link ImmutableSequencedSet},
      * it will be cast, otherwise a new set will be created.
      *
      * @param elements the specified elements

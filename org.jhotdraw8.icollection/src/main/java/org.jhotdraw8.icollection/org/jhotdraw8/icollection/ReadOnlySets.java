@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Provides factory methods for immutable lists.
+ * Provides factory methods for {@link ReadOnlySet}s.
  */
 public class ReadOnlySets {
     /**
@@ -44,7 +44,7 @@ public class ReadOnlySets {
     /**
      * Returns a new read-only set with the specified elements.
      * <p>
-     * If the set can be cast to {@link ImmutableSet},
+     * If the provided iterable can be cast to {@link ImmutableSet},
      * it will be cast, otherwise a new set will be created.
      *
      * @param elements the specified elements

@@ -8,7 +8,14 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.icollection.impl.champ.*;
+import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
+import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.Node;
+import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.champ.SequencedData;
+import org.jhotdraw8.icollection.impl.champ.SequencedElement;
+import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
@@ -16,12 +23,17 @@ import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.SequencedSet;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 
 import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
 
 /**
- * Implements the {@code SequencedSet} interface using a Compressed
+ * Implements the {@link SequencedSet} interface using a Compressed
  * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:

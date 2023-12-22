@@ -7,12 +7,17 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.*;
+import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * Provides static methods for creating a list of map entries.
+ * Provides factory methods for creating a list of {@link Map.Entry}s.
  */
 public class MapEntries {
     /**

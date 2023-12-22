@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Provides factory methods for read-only maps.
+ * Provides factory methods for {@link ReadOnlyMap}s.
  */
 public class ReadOnlyMaps {
     /**

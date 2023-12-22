@@ -3,7 +3,7 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 /**
- * Provides factory methods for immutable lists.
+ * Provides factory methods for {@link ImmutableList}s.
  */
 public class ImmutableLists {
     /**

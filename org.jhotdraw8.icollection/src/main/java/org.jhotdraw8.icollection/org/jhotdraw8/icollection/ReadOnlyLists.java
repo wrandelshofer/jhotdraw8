@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Provides factory methods for read-only lists.
+ * Provides factory methods for {@link ReadOnlyList}s.
  */
 public class ReadOnlyLists {
     /**
@@ -44,7 +44,7 @@ public class ReadOnlyLists {
     /**
      * Returns a read-only list with the specified elements.
      * <p>
-     * If the list can be cast to {@link org.jhotdraw8.icollection.immutable.ImmutableList},
+     * If the provided iterable can be cast to {@link ImmutableList},
      * it will be cast, otherwise a new list will be created.
      *
      * @param elements the specified elements

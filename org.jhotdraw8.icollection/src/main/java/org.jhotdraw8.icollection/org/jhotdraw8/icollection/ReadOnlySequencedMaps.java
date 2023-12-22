@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.SequencedMap;
 
 /**
- * Provides factory methods for read-only sequenced maps.
+ * Provides factory methods for {@link ReadOnlySequencedMap}s.
  */
 public class ReadOnlySequencedMaps {
     /**

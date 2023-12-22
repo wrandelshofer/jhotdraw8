@@ -6,7 +6,7 @@ import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import java.util.Map;
 
 /**
- * Provides factory methods for immutable lists.
+ * Provides factory methods for {@link ImmutableMap}s.
  */
 public class ImmutableMaps {
     /**
