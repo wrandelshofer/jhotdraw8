@@ -7,6 +7,7 @@ package io;
 
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
@@ -24,27 +25,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class FXSvgTinyWriterTest {
+
+
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsExportToWriter() {
         return Arrays.asList(
                 dynamicTest("rect", () -> testExportToWriter(new Rectangle(10, 20, 100, 200),
                         """
-                                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                                <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                                  <rect fill="#000000" height="200" width="100" x="10" y="20"/>
-                                </svg>""")),
-                dynamicTest("text", () -> testExportToWriter(new Text(10, 20, "Hello"),
-                        """
-                                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                                <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                                  <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">Hello</text>
-                                </svg>""")),
-                dynamicTest("text escape", () -> testExportToWriter(new Text(10, 20, "&<>\""),
-                        """
-                                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                                <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                                  <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">&amp;&lt;&gt;"</text>
-                                </svg>"""))
+                        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                        <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+                          <rect fill="#000000" height="200" width="100" x="10" y="20"/>
+                        </svg>""")),
+                dynamicTest("text", () -> {
+                    Text text = new Text(10, 20, "Hello");
+                    text.setFont(Font.font("System", 13));
+                    testExportToWriter(text,
+                            """
+                            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                            <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+                              <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">Hello</text>
+                            </svg>""");
+                }),
+                dynamicTest("text escape", () -> {
+                    Text text = new Text(10, 20, "&<>\"");
+                    text.setFont(Font.font("System", 13));
+                    testExportToWriter(text,
+                            """
+                            <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                            <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+                              <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">&amp;&lt;&gt;"</text>
+                            </svg>""");
+                })
         );
     }
 
@@ -53,22 +64,22 @@ public class FXSvgTinyWriterTest {
         return Arrays.asList(
                 dynamicTest("rect", () -> testExportToDOM(new Rectangle(10, 20, 100, 200),
                         """
-                                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                                <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                                  <rect fill="#000000" height="200" width="100" x="10" y="20"/>
-                                </svg>""")),
+                        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                        <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+                          <rect fill="#000000" height="200" width="100" x="10" y="20"/>
+                        </svg>""")),
                 dynamicTest("text", () -> testExportToDOM(new Text(10, 20, "Hello"),
                         """
-                                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                                <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                                  <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">Hello</text>
-                                </svg>""")),
+                        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                        <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+                          <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">Hello</text>
+                        </svg>""")),
                 dynamicTest("text escape", () -> testExportToWriter(new Text(10, 20, "&<>\""),
                         """
-                                <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-                                <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-                                  <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">&amp;&lt;&gt;"</text>
-                                </svg>"""))
+                        <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+                        <svg baseProfile="tiny" version="1.2" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+                          <text fill="#000000" font-family="'System Regular', 'System'" font-size="13" x="10" y="20">&amp;&lt;&gt;"</text>
+                        </svg>"""))
         );
     }
 
