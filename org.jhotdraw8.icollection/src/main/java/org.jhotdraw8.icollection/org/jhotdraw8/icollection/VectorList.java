@@ -14,10 +14,19 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.serialization.ListSerializationProxy;
+import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.function.Function;
 
 /**
  * Implements the {@link ImmutableList} interface using a bit-mapped trie
@@ -59,6 +68,7 @@ import java.util.*;
  * @param <E> the element type
  */
 public class VectorList<E> implements ImmutableList<E>, Serializable {
+    private static final VectorList<?> EMPTY = new VectorList<>();
     final @NonNull BitMappedTrie<E> trie;
     final int size;
 
@@ -70,23 +80,20 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         size = 0;
     }
 
+
     VectorList(BitMappedTrie<E> trie, int size) {
         this.trie = trie;
         this.size = size;
     }
-
-
-    private static final VectorList<?> EMPTY = new VectorList<>();
 
     @SuppressWarnings("unchecked")
     public static <T> VectorList<T> of() {
         return (VectorList<T>) EMPTY;
     }
 
-    @SuppressWarnings("unchecked")
     @SafeVarargs
     public static <T> VectorList<T> of(T... t) {
-        return new VectorList<T>(BitMappedTrie.ofAll(t), t.length);
+        return new VectorList<>(BitMappedTrie.ofAll(t), t.length);
 
     }
 
@@ -104,10 +111,10 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
             return (VectorList<T>) mc.toImmutable();
         }
         if (iterable instanceof Collection<?> c) {
-            return new VectorList<T>(BitMappedTrie.ofAll(c.toArray()), c.size());
+            return new VectorList<>(BitMappedTrie.ofAll(c.toArray()), c.size());
         }
         BitMappedTrie<T> root = BitMappedTrie.<T>empty().appendAll(iterable);
-        return root.length() == 0 ? of() : new VectorList<T>(root, root.length);
+        return root.length() == 0 ? of() : new VectorList<>(root, root.length);
     }
 
     @Override
@@ -318,6 +325,11 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
+    public int hashCode() {
+        return ReadOnlyList.iteratorToHashCode(iterator());
+    }
+
+    @Override
     public @NonNull MutableVectorList<E> toMutable() {
         return new MutableVectorList<>(this);
     }
@@ -337,24 +349,13 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         return trie.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
     }
 
-    private static class SerializationProxy<E> extends ListSerializationProxy<E> {
-        @Serial
-        private static final long serialVersionUID = 0L;
-
-        protected SerializationProxy(@NonNull List<E> target) {
-            super(target);
-        }
-
-        @Serial
-        @Override
-        protected @NonNull Object readResolve() {
-            return VectorList.of().addAll(deserialized);
-        }
+    @Override
+    public Transformer<VectorList<E>> transformed() {
+        return this::transform;
     }
 
-    @Override
-    public int hashCode() {
-        return ReadOnlyList.iteratorToHashCode(iterator());
+    private <R> R transform(Function<? super VectorList<E>, ? extends R> f) {
+        return f.apply(this);
     }
 
     @Override
@@ -373,6 +374,21 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public String toString() {
         return ReadOnlyCollection.iterableToString(this);
+    }
+
+    private static class SerializationProxy<E> extends ListSerializationProxy<E> {
+        @Serial
+        private static final long serialVersionUID = 0L;
+
+        protected SerializationProxy(@NonNull List<E> target) {
+            super(target);
+        }
+
+        @Serial
+        @Override
+        protected @NonNull Object readResolve() {
+            return VectorList.of().addAll(deserialized);
+        }
     }
 
 

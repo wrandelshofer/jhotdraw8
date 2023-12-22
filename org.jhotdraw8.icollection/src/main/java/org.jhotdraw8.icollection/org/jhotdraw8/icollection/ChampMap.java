@@ -8,16 +8,26 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
-import org.jhotdraw8.icollection.impl.champ.*;
+import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champ.ChampIterator;
+import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
+import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
+import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleImmutableEntry;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Spliterator;
+import java.util.function.Function;
 
 /**
  * Implements the {@link ImmutableMap} interface using a Compressed Hash-Array
@@ -283,6 +293,15 @@ public class ChampMap<K, V>
     @Override
     public @NonNull MutableChampMap<K, V> toMutable() {
         return new MutableChampMap<>(this);
+    }
+
+    @Override
+    public Transformer<ChampMap<K, V>> transformed() {
+        return this::transform;
+    }
+
+    private <R> R transform(Function<? super ChampMap<K, V>, ? extends R> f) {
+        return f.apply(this);
     }
 
     @Override

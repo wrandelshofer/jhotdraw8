@@ -1,4 +1,4 @@
-package org.jhotdraw8.collection.transform;
+package org.jhotdraw8.icollection.transform;
 
 import java.util.function.Function;
 

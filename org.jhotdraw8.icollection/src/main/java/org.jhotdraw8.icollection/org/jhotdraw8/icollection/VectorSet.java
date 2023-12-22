@@ -10,15 +10,29 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.impl.champ.*;
+import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.Node;
+import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator;
+import org.jhotdraw8.icollection.impl.champ.SequencedData;
+import org.jhotdraw8.icollection.impl.champ.SequencedElement;
+import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
+import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.Function;
 
 
 /**
@@ -434,6 +448,15 @@ public class VectorSet<E>
     @Override
     public @NonNull String toString() {
         return ReadOnlyCollection.iterableToString(this);
+    }
+
+    @Override
+    public Transformer<VectorSet<E>> transformed() {
+        return this::transform;
+    }
+
+    private <R> R transform(Function<? super VectorSet<E>, ? extends R> f) {
+        return f.apply(this);
     }
 
     @Serial

@@ -6,4 +6,4 @@
 /**
  * Defines a fluent API for the transformation of objects.
  */
-package org.jhotdraw8.collection.transform;
+package org.jhotdraw8.icollection.transform;

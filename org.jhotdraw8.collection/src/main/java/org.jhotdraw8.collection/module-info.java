@@ -18,6 +18,5 @@ module org.jhotdraw8.collection {
     exports org.jhotdraw8.collection.reflect;
     exports org.jhotdraw8.collection.pair;
     exports org.jhotdraw8.collection.spliterator;
-    exports org.jhotdraw8.collection.transform;
     exports org.jhotdraw8.collection.util;
 }

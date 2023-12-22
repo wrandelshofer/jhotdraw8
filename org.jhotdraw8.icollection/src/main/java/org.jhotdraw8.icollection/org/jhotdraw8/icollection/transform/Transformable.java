@@ -1,4 +1,4 @@
-package org.jhotdraw8.collection.transform;
+package org.jhotdraw8.icollection.transform;
 
 /**
  * Interface for objects that can be transformed by a function using
