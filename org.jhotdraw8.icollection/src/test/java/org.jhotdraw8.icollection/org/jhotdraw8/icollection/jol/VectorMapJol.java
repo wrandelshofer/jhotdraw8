@@ -10,48 +10,29 @@ import java.util.Collections;
 
 /**
  * VectorMapJol.
- * <pre>
- * class org.jhotdraw8.icollection.VectorMap with 1000000 elements.
- * total size              : 99007984
- * element size            : 48
- * data size               : 48000000 48%
- * data structure size     : 51007984 51%
- * ----footprint---
- * org.jhotdraw8.icollection.VectorMap@37911f88d footprint:
- *      COUNT       AVG       SUM   DESCRIPTION
- *     376323        42  15998672   [Ljava.lang.Object;
- *          1        16        16   org.jhotdraw8.icollection.IdentityObject
- *          1        40        40   org.jhotdraw8.icollection.VectorList
- *          1        40        40   org.jhotdraw8.icollection.VectorMap
- *     343961        32  11006752   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
- *        102        24      2448   org.jhotdraw8.icollection.impl.champ.MutableHashCollisionNode
- *    1000000        24  24000000   org.jhotdraw8.icollection.impl.champ.SequencedEntry
- *          1        16        16   org.jhotdraw8.icollection.impl.vector.ArrayType$ObjectArrayType
- *    2000000        24  48000000   org.jhotdraw8.icollection.jmh.Key
- *    3720390            99007984   (total)
- * </pre>
  */
 public class VectorMapJol extends AbstractJol {
 
     /**
      * <pre>
      * class org.jhotdraw8.icollection.VectorMap with 1000 elements.
-     * total size              : 99464
+     * total size              : 99504
      * element size            : 48
      * data size               : 48000 48%
-     * data structure size     : 51464 51%
+     * data structure size     : 51504 51%
      * ----footprint---
-     * org.jhotdraw8.icollection.VectorMap@5669c5fbd footprint:
+     * org.jhotdraw8.icollection.VectorMap@6bc407fdd footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        383        42     16184   [Ljava.lang.Object;
-     *          1        16        16   org.jhotdraw8.icollection.IdentityObject
-     *          1        40        40   org.jhotdraw8.icollection.VectorList
-     *          1        40        40   org.jhotdraw8.icollection.VectorMap
-     *        349        32     11168   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *          1        24        24   org.jhotdraw8.icollection.VectorList
+     *          1        32        32   org.jhotdraw8.icollection.VectorMap
+     *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
+     *        350        32     11200   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
      *       1000        24     24000   org.jhotdraw8.icollection.impl.champ.SequencedEntry
      *          1        16        16   org.jhotdraw8.icollection.impl.vector.ArrayType$ObjectArrayType
+     *          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       3736               99464   (total)
+     *       3738               99504   (total)
      * </pre>
      */
     @Test
@@ -68,23 +49,24 @@ public class VectorMapJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.VectorMap with 250 elements.
-     * total size              : 29528
+     * total size              : 25824
      * element size            : 48
-     * data size               : 12000 40%
-     * data structure size     : 17528 59%
+     * data size               : 12000 46%
+     * data structure size     : 13824 53%
      * ----footprint---
-     * org.jhotdraw8.icollection.VectorMap@2d9caaebd footprint:
+     * org.jhotdraw8.icollection.VectorMap@1583741ed footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *         93        53      4936   [Ljava.lang.Object;
-     *          1        16        16   org.jhotdraw8.icollection.IdentityObject
-     *          1        40        40   org.jhotdraw8.icollection.VectorList
-     *          1        40        40   org.jhotdraw8.icollection.VectorMap
-     *         75        32      2400   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
-     *        252        24      6048   org.jhotdraw8.icollection.impl.champ.SequencedEntry
-     *        164        24      3936   org.jhotdraw8.icollection.impl.champ.VectorTombstone
+     *         90        54      4888   [Ljava.lang.Object;
+     *          1        24        24   org.jhotdraw8.icollection.VectorList
+     *          1        32        32   org.jhotdraw8.icollection.VectorMap
+     *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
+     *         73        32      2336   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *        250        24      6000   org.jhotdraw8.icollection.impl.champ.SequencedEntry
+     *         30        16       480   org.jhotdraw8.icollection.impl.champ.Tombstone
      *          1        16        16   org.jhotdraw8.icollection.impl.vector.ArrayType$ObjectArrayType
-     *        504        24     12096   org.jhotdraw8.icollection.jmh.Key
-     *       1092               29528   (total)
+     *          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
+     *        500        24     12000   org.jhotdraw8.icollection.jmh.Key
+     *        948               25824   (total)
      * </pre>
      */
     @Test

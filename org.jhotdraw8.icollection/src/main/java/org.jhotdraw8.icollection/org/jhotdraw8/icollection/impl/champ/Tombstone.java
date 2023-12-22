@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.VectorSet;
 
 /**
@@ -68,9 +69,37 @@ import org.jhotdraw8.icollection.VectorSet;
  *      </dd>
  * </dl>
  *
- * @param before minimal number of neighboring tombstones before this one
- * @param after  minimal number of neighboring tombstones after this one
+ * @param skip if negative: minimal number of neighboring tombstones before this one<br>
+ *             if positive: minimal number of neighboring tombstones after this one
  */
-public record VectorTombstone(int before, int after) {
+public record Tombstone(int skip) {
+    /**
+     * We allocate the most common tomb-stones only once in memory.
+     * <p>
+     * If we get lucky, and the tombstones do not cluster too much,
+     * we can save lots of memory by this.
+     */
+    private static final @NonNull Tombstone[] TOMBS = {
+            new Tombstone(-3),
+            new Tombstone(-2),
+            new Tombstone(-1),
+            new Tombstone(0),
+            new Tombstone(1),
+            new Tombstone(2),
+            new Tombstone(3),
+    };
 
+    public int after() {
+        return skip > 0 ? skip : 0;
+    }
+
+    public int before() {
+        return skip < 0 ? -skip : 0;
+    }
+
+    static @NonNull Tombstone create(int before, int after) {
+        if (before != 0 && after != 0) throw new IllegalArgumentException("one of before or after must be 0");
+        int skip = after - before;
+        return (Math.abs(skip) <= 3) ? TOMBS[skip + 3] : new Tombstone(skip);
+    }
 }

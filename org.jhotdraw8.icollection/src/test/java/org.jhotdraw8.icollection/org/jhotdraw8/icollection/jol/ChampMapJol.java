@@ -9,50 +9,33 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * <pre>
- * class org.jhotdraw8.icollection.champ.ChampMap with 1000000 elements.
- * total size              : 94362736
- * element size            : 48
- * data size               : 48000000 50%
- * data structure size     : 46362736 49%
- * ----footprint---
- * org.jhotdraw8.icollection.champ.ChampMap@723e88f9d footprint:
- *      COUNT       AVG       SUM   DESCRIPTION
- *     344064        32  11353488   [Ljava.lang.Object;
- *    1000000        24  24000000   java.util.AbstractMap$SimpleImmutableEntry
- *          1        16        16   org.jhotdraw8.icollection.IdentityObject
- *          1        32        32   org.jhotdraw8.icollection.champ.ChampMap
- *     343961        32  11006752   org.jhotdraw8.icollection.champ.MutableBitmapIndexedNode
- *        102        24      2448   org.jhotdraw8.icollection.champ.MutableHashCollisionNode
- *    2000000        24  48000000   org.jhotdraw8.icollection.jmh.Key
- *    3688129            94362736   (total)
- * </pre>
+ * ChampMapJol.
  */
 public class ChampMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class org.jhotdraw8.icollection.champ.ChampMap with 1000 elements.
-     * total size              : 94744
+     * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
+     * total size              : 94768
      * element size            : 48
      * data size               : 48000 50%
-     * data structure size     : 46744 49%
+     * data structure size     : 46768 49%
      * ----footprint---
-     * org.jhotdraw8.icollection.champ.ChampMap@7a3793c7d footprint:
+     * org.jhotdraw8.icollection.ChampMap@1e44b638d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        350        32     11528   [Ljava.lang.Object;
      *       1000        24     24000   java.util.AbstractMap$SimpleImmutableEntry
-     *          1        16        16   org.jhotdraw8.icollection.IdentityObject
-     *          1        32        32   org.jhotdraw8.icollection.champ.ChampMap
-     *        349        32     11168   org.jhotdraw8.icollection.champ.MutableBitmapIndexedNode
+     *          1        24        24   org.jhotdraw8.icollection.ChampMap
+     *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
+     *        350        32     11200   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       3701               94744   (total)
+     *       3702               94768   (total)
      * </pre>
      */
     @Test
     @Disabled
     public void estimateMemoryUsage() {
-        int size = 1_000;
+        int size = 1000;
         final int mask = ~64;
         var data = generateMap(size, mask);
         ChampMap<Key, Key> mapA = ChampMap.copyOf(data);

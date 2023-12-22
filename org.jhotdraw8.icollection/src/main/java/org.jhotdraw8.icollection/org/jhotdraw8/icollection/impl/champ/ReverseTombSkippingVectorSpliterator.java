@@ -36,7 +36,7 @@ public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.Abstra
             return false;
         }
         Object o = vector.get(index--);
-        if (o instanceof VectorTombstone t) {
+        if (o instanceof Tombstone t) {
             index -= t.before();
             o = vector.get(index--);
         }

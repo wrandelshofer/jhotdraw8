@@ -9,57 +9,26 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * <pre>
- * copyOf
- *
- * class org.jhotdraw8.icollection.champ.ChampSet with 1000000 elements.
- *
- * total size              : 46371840
- * element size            : 24
- * data size               : 24000000 51%
- * data structure size     : 22371840 48%
- * </pre>
- * <pre>
- * oneByOne
- *
- * class org.jhotdraw8.icollection.champ.ChampSet with 1000000 elements.
- *
- * total size              : 43618704
- * element size            : 24
- * data size               : 24000000 55%
- * data structure size     : 19618704 44%
- *
- * ----footprint---
- * org.jhotdraw8.icollection.champ.ChampSet@1130520dd footprint:
- *      COUNT       AVG       SUM   DESCRIPTION
- *     344264        32  11356360   [Ljava.lang.Object;
- *     344140        24   8259360   org.jhotdraw8.icollection.champ.BitmapIndexedNode
- *          1        32        32   org.jhotdraw8.icollection.champ.ChampSet
- *        123        24      2952   org.jhotdraw8.icollection.champ.HashCollisionNode
- *    1000000        24  24000000   org.jhotdraw8.icollection.jmh.Key
- *    1688528            43618704   (total)
- *
- * Addresses are stable after 1 tries.
- * </pre>
+ * ChampSetJol.
  */
 public class ChampSetJol extends AbstractJol {
 
     /**
      * <pre>
-     * class org.jhotdraw8.icollection.champ.ChampSet with 1000 elements.
-     * total size              : 47168
+     * class org.jhotdraw8.icollection.ChampSet with 1000 elements.
+     * total size              : 47192
      * element size            : 24
      * data size               : 24000 50%
-     * data structure size     : 23168 49%
+     * data structure size     : 23192 49%
      * ----footprint---
-     * org.jhotdraw8.icollection.champ.ChampSet@895e367d footprint:
+     * org.jhotdraw8.icollection.ChampSet@babafc2d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        359        32     11664   [Ljava.lang.Object;
-     *          1        16        16   org.jhotdraw8.icollection.IdentityObject
-     *          1        32        32   org.jhotdraw8.icollection.champ.ChampSet
-     *        358        32     11456   org.jhotdraw8.icollection.champ.MutableBitmapIndexedNode
+     *          1        24        24   org.jhotdraw8.icollection.ChampSet
+     *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
+     *        359        32     11488   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
-     *       1719               47168   (total)
+     *       1720               47192   (total)
      * </pre>
      */
     @Test

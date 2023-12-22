@@ -11,31 +11,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- * <pre>
- * class scala.collection.immutable.VectorMap with 1000000 elements.
- * total size              : 128419696
- * element size            : 48
- * data size               : 48000000 37%
- * data structure size     : 80419696 62%
- * ----footprint---
- * scala.collection.immutable.VectorMap@53dbe163d footprint:
- *      COUNT       AVG       SUM   DESCRIPTION
- *     301911        30   9139048   [I
- *     339672        55  18793600   [Ljava.lang.Object;
- *        977       143    140632   [[Ljava.lang.Object;
- *         31       141      4400   [[[Ljava.lang.Object;
- *          1       136       136   [[[[Ljava.lang.Object;
- *    1000000        16  16000000   java.lang.Integer
- *    2000000        24  48000000   org.jhotdraw8.icollection.jmh.Key
- *    1000204        24  24004896   scala.Tuple2
- *     308320        40  12332800   scala.collection.immutable.BitmapIndexedMapNode
- *        102        24      2448   scala.collection.immutable.HashCollisionMapNode
- *          1        16        16   scala.collection.immutable.HashMap
- *        102        16      1632   scala.collection.immutable.Vector1
- *          1        56        56   scala.collection.immutable.Vector4
- *          1        32        32   scala.collection.immutable.VectorMap
- *    4951323           128419696   (total)
- * </pre>
+ * ScalaVectorMapJol.
  */
 public class ScalaVectorMapJol extends AbstractJol {
 
@@ -79,26 +55,26 @@ public class ScalaVectorMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class scala.collection.immutable.VectorMap with 250 elements.
-     * total size              : 45792
+     * lass scala.collection.immutable.VectorMap with 250 elements.
+     * total size              : 45944
      * element size            : 48
      * data size               : 12000 26%
-     * data structure size     : 33792 73%
+     * data structure size     : 33944 73%
      * ----footprint---
-     * scala.collection.immutable.VectorMap@524f3b3ad footprint:
+     * scala.collection.immutable.VectorMap@eda25e5d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *         52        36      1896   [I
-     *         84        90      7600   [Ljava.lang.Object;
+     *         54        35      1936   [I
+     *         86        88      7632   [Ljava.lang.Object;
      *          1       136       136   [[Ljava.lang.Object;
      *        250        16      4000   java.lang.Integer
      *        500        24     12000   org.jhotdraw8.icollection.jmh.Key
      *        250        24      6000   scala.Tuple2
-     *         52        40      2080   scala.collection.immutable.BitmapIndexedMapNode
+     *         54        40      2160   scala.collection.immutable.BitmapIndexedMapNode
      *          1        16        16   scala.collection.immutable.HashMap
      *          1        32        32   scala.collection.immutable.Vector2
      *          1        32        32   scala.collection.immutable.VectorMap
      *        750        16     12000   scala.collection.immutable.VectorMap$Tombstone
-     *       1942               45792   (total)
+     *       1948               45944   (total)
      * </pre>
      */
     @Test

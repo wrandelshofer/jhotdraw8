@@ -4,10 +4,21 @@ import org.jhotdraw8.icollection.jmh.Key;
 import org.openjdk.jol.info.GraphLayout;
 import org.openjdk.jol.vm.VM;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
+/**
+ * Run the java command with the following option to prevent that the JVM hangs:
+ * <pre>
+ * -ea  -Djdk.attach.allowAttachSelf -XX:+EnableDynamicAgentLoading --add-modules jol.core,jdk.attach --add-reads org.jhotdraw8.icollection=jol.core
+ * </pre>
+ */
 public class AbstractJol {
-    private static final boolean PRINT = false;
+    private static final boolean PRINT = true;
 
     protected static Map<Key, Key> generateMap(int size, int mask) {
         Random rng = new Random(0);
