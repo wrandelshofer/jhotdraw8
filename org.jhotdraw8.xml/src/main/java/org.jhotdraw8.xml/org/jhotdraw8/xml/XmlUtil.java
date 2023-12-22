@@ -39,6 +39,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMResult;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
+import javax.xml.transform.stax.StAXResult;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -52,6 +53,7 @@ import java.io.Reader;
 import java.io.Writer;
 import java.net.URI;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -72,10 +74,17 @@ public class XmlUtil {
     private static final String SEPARATOR = "\0";
     private static final Properties DEFAULT_PROPERTIES = new Properties();
 
+    public static final String HTTP_XML_APACHE_ORG_XALAN_LINE_SEPARATOR = "{http://xml.apache.org/xalan}line-separator";
+
+    public static final String HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
+
+    public static final String CANONICAL_LINE_SEPARATOR = "\n";
+
     static {
         DEFAULT_PROPERTIES.put(OutputKeys.INDENT, "yes");
         DEFAULT_PROPERTIES.put(OutputKeys.ENCODING, "UTF-8");
-        DEFAULT_PROPERTIES.put("{http://xml.apache.org/xslt}indent-amount", "2");
+        DEFAULT_PROPERTIES.put(HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT, "2");
+        DEFAULT_PROPERTIES.put(HTTP_XML_APACHE_ORG_XALAN_LINE_SEPARATOR, CANONICAL_LINE_SEPARATOR);
     }
 
     private XmlUtil() {
@@ -246,12 +255,16 @@ public class XmlUtil {
         write(result, doc, outputProperties);
     }
 
-    public static void write(Result result, Document doc) throws IOException {
+    public static void write(@NonNull Result result, @NonNull Document doc) throws IOException {
         write(result, doc, DEFAULT_PROPERTIES);
     }
 
-    public static void write(Result result, Document doc, @Nullable Properties outputProperties) throws IOException {
+    public static void write(@NonNull Result result, @NonNull Document doc, @Nullable Properties outputProperties) throws IOException {
         try {
+            // We replace the StreamResult by a StAXResult,
+            // because with a StreamResult we would produce platform-dependent line-breaks.
+            result = replaceStreamResultByStAXResult(result, outputProperties);
+
             final TransformerFactory factory = TransformerFactory.newInstance();
             Transformer t = factory.newTransformer();
             if (outputProperties != null) {
@@ -262,6 +275,27 @@ public class XmlUtil {
         } catch (TransformerException ex) {
             throw new IOException(ex);
         }
+    }
+
+    private static Result replaceStreamResultByStAXResult(@NonNull Result result, @Nullable Properties outputProperties) {
+        if (result instanceof StreamResult sr) {
+            IndentingXMLStreamWriter w;
+            if (sr.getOutputStream() != null)
+                w = new IndentingXMLStreamWriter(sr.getOutputStream(), Charset.forName((String) outputProperties.getOrDefault(OutputKeys.ENCODING, "UTF-8")));
+            else {
+                w = new IndentingXMLStreamWriter(sr.getWriter());
+            }
+            //w.setSortAttributes(false);
+            try {
+                int indentation = Integer.parseInt((String) outputProperties.getOrDefault(HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT, "0"));
+                w.setIndentation(" ".repeat(indentation));
+            } catch (NumberFormatException e) {
+                // bail
+            }
+            w.setLineSeparator((String) outputProperties.getOrDefault(HTTP_XML_APACHE_ORG_XALAN_LINE_SEPARATOR, CANONICAL_LINE_SEPARATOR));
+            result = new StAXResult(w);
+        }
+        return result;
     }
 
     /**
@@ -361,38 +395,38 @@ public class XmlUtil {
             for (XMLStreamReader r = dbf.createXMLStreamReader(source); r.hasNext(); ) {
                 int next = r.next();
                 switch (next) {
-                case XMLStreamReader.START_ELEMENT:
-                    return r.getNamespaceURI();
-                case XMLStreamReader.END_ELEMENT:
-                    return null;
-                case XMLStreamReader.PROCESSING_INSTRUCTION:
-                    break;
-                case XMLStreamReader.CHARACTERS:
-                    break;
-                case XMLStreamReader.COMMENT:
-                    break;
-                case XMLStreamReader.SPACE:
-                    break;
-                case XMLStreamReader.START_DOCUMENT:
-                    break;
-                case XMLStreamReader.END_DOCUMENT:
-                    break;
-                case XMLStreamReader.ENTITY_REFERENCE:
-                    break;
-                case XMLStreamReader.ATTRIBUTE:
-                    break;
-                case XMLStreamReader.DTD:
-                    break;
-                case XMLStreamReader.CDATA:
-                    break;
-                case XMLStreamReader.NAMESPACE:
-                    break;
-                case XMLStreamReader.NOTATION_DECLARATION:
-                    break;
-                case XMLStreamReader.ENTITY_DECLARATION:
-                    break;
-                default:
-                    throw new IOException("unsupported XMLStream event: " + next);
+                    case XMLStreamReader.START_ELEMENT:
+                        return r.getNamespaceURI();
+                    case XMLStreamReader.END_ELEMENT:
+                        return null;
+                    case XMLStreamReader.PROCESSING_INSTRUCTION:
+                        break;
+                    case XMLStreamReader.CHARACTERS:
+                        break;
+                    case XMLStreamReader.COMMENT:
+                        break;
+                    case XMLStreamReader.SPACE:
+                        break;
+                    case XMLStreamReader.START_DOCUMENT:
+                        break;
+                    case XMLStreamReader.END_DOCUMENT:
+                        break;
+                    case XMLStreamReader.ENTITY_REFERENCE:
+                        break;
+                    case XMLStreamReader.ATTRIBUTE:
+                        break;
+                    case XMLStreamReader.DTD:
+                        break;
+                    case XMLStreamReader.CDATA:
+                        break;
+                    case XMLStreamReader.NAMESPACE:
+                        break;
+                    case XMLStreamReader.NOTATION_DECLARATION:
+                        break;
+                    case XMLStreamReader.ENTITY_DECLARATION:
+                        break;
+                    default:
+                        throw new IOException("unsupported XMLStream event: " + next);
                 }
             }
         } catch (XMLStreamException e) {

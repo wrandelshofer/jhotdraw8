@@ -462,7 +462,8 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
             Document doc = builder.newDocument();
             DOMResult result = new DOMResult(doc);
-            XMLStreamWriter w = XMLOutputFactory.newInstance().createXMLStreamWriter(result);
+            XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
+            XMLStreamWriter w = xmlOutputFactory.createXMLStreamWriter(result);
             writeDocument(w, drawingNode, size);
             w.close();
             return doc;
@@ -569,7 +570,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (!styleClass.isEmpty()) {
             StringBuilder buf = new StringBuilder();
             for (String clazz : styleClass) {
-                if (buf.length() != 0) {
+                if (!buf.isEmpty()) {
                     buf.append(' ');
                 }
                 buf.append(clazz);

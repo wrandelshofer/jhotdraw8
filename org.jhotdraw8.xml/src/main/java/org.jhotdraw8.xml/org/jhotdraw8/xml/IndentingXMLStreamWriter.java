@@ -26,9 +26,12 @@ import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -273,13 +276,13 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     private static final String XML_SPACE_PRESERVE_VALUE = "preserve";
     private static final String XMLNS_NAMESPACE = "https://www.w3.org/TR/REC-xml-names/";
     private String indentation = "  ";
-    private static final String LINE_BREAK = "\n";
+    private String lineSeparator = "\n";
     private final Writer w;
     /**
      * Invariant: this stack always contains at least the root element.
      */
     private final Deque<Element> stack = new ArrayDeque<>();
-    private final TreeSet<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName));
+    private Set<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName));
     private final CharsetEncoder encoder;
     private boolean isStartTagOpen = false;
     private boolean escapeClosingAngleBracket = true;
@@ -311,6 +314,15 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         return indentation;
     }
 
+    public void setSortAttributes(boolean b) {
+        attributes = b ? new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName))
+                : new LinkedHashSet<>();
+    }
+
+    public boolean isSortAttributes() {
+        return attributes instanceof SortedSet<Attribute>;
+    }
+
     /**
      * Whether to replace {@literal '<'} and {@literal '>} characters by
      * entity references.
@@ -330,6 +342,14 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
 
     public void setIndentation(String indentation) {
         this.indentation = indentation;
+    }
+
+    public String getLineSeparator() {
+        return lineSeparator;
+    }
+
+    public void setLineSeparator(String lineSeparator) {
+        this.lineSeparator = lineSeparator;
     }
 
     private void closeStartTagOrCloseEmptyElemTag() throws XMLStreamException {
@@ -548,7 +568,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
             return;
         } else {
             setHasContent(true);
-            if (charBuffer.length() > 0) {
+            if (!charBuffer.isEmpty()) {
                 writeXmlContent(charBuffer.toString(), false, false);
                 charBuffer.setLength(0);
             }
@@ -567,7 +587,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
             return;
         } else {
             setHasContent(true);
-            if (charBuffer.length() > 0) {
+            if (!charBuffer.isEmpty()) {
                 writeXmlContent(charBuffer.toString(), false, false);
                 charBuffer.setLength(0);
             }
@@ -685,7 +705,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     private void writeEndElementLineBreakAndIndentation() throws XMLStreamException {
-        write(LINE_BREAK);
+        write(lineSeparator);
         for (int i = stack.size() - 2; i >= 0; i--) {
             write(indentation);
         }
@@ -701,7 +721,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     private void writeLineBreakAndIndentation() throws XMLStreamException {
-        write(LINE_BREAK);
+        write(lineSeparator);
         for (int i = stack.size() - 3; i >= 0; i--) {
             write(indentation);
         }
@@ -712,7 +732,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         Objects.requireNonNull(prefix, "prefix");
         Objects.requireNonNull(namespaceURI, "namespaceURI");
         requireStartTagOpened();
-        attributes.add(new Attribute(prefix.isEmpty() ? "" : XMLNS_PREFIX,
+        attributes.add(new Attribute(prefix.isEmpty() || XMLNS_PREFIX.equals(prefix) ? "" : XMLNS_PREFIX,
                 XMLNS_NAMESPACE, prefix.isEmpty() ? XMLNS_PREFIX : prefix, namespaceURI));
     }
 
