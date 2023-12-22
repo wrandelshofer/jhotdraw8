@@ -15,18 +15,37 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
+import org.jhotdraw8.draw.handle.BezierPathEditHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.CutEndPathBuilder;
+import org.jhotdraw8.geom.CutStartPathBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.PathBuilder;
+import org.jhotdraw8.geom.PathMetrics;
+import org.jhotdraw8.geom.PathMetricsBuilder;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierNodePath;
 import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
-import org.jhotdraw8.icollection.ImmutableLists;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -72,7 +91,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.MOVE) {
-            list.add(new LineOutlineHandle(this));
+            list.add(new PathIterableOutlineHandle(this, true));
             if (get(START_CONNECTOR) == null) {
                 list.add(new MoveHandle(this, new PointLocator(START)));
             } else {
@@ -84,7 +103,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
                 list.add(new SelectionHandle(this, new PointLocator(END)));
             }
         } else if (handleType == HandleType.RESIZE) {
-            list.add(new LineOutlineHandle(this));
+            list.add(new PathIterableOutlineHandle(this, true));
             list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
             list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
         } else if (handleType == HandleType.POINT) {
@@ -195,7 +214,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
         // Update start and end positions of the path
         if (nodeList == null || nodeList.isEmpty()) {
-            nodeList = nodeList.add(new BezierNode(start.getX(), start.getY()).setMask(BezierNode.MOVE_MASK));
+            nodeList = nodeList.add(new BezierNode(start.getX(), start.getY()).withMask(BezierNode.MOVE_MASK));
             nodeList = nodeList.add(new BezierNode(end.getX(), end.getY()));
         } else {
             if (start != null) {
@@ -218,9 +237,32 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
+    public void transformInLocal(@NonNull Transform tx) {
+        set(START, new CssPoint2D(tx.transform(getNonNull(START).getConvertedValue())));
+        set(END, new CssPoint2D(tx.transform(getNonNull(END).getConvertedValue())));
+        ImmutableList<BezierNode> path = get(PATH);
+        if (path != null) {
+            for (int i = 0, n = path.size(); i < n; i++) {
+                var node = path.get(i);
+                path = path.set(i, node.transform(tx));
+            }
+            set(PATH, path);
+        }
+    }
+    @Override
     public void translateInLocal(@NonNull CssPoint2D t) {
         set(START, getNonNull(START).add(t));
         set(END, getNonNull(END).add(t));
+        ImmutableList<BezierNode> path = get(PATH);
+        if (path != null) {
+            Point2D tc = t.getConvertedValue();
+            Translate tx = new Translate(tc.getX(), tc.getY());
+            for (int i = 0, n = path.size(); i < n; i++) {
+                var node = path.get(i);
+                path = path.set(i, node.transform(tx));
+            }
+            set(PATH, path);
+        }
     }
 
     /**
@@ -280,8 +322,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        Point2D start = getNonNull(START).getConvertedValue();
-        Point2D end = getNonNull(END).getConvertedValue();
         ImmutableList<BezierNode> nodeList = get(PATH);
         PathMetrics pathMetrics = get(PATH_METRICS);
         if (nodeList == null || pathMetrics == null) {
@@ -295,18 +335,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);
 
-        final double startInset = getStrokeCutStart(ctx);
-        final double endInset = getStrokeCutEnd(ctx);
         final String startMarkerStr = getMarkerStartShape();
         final String endMarkerStr = getMarkerEndShape();
 
-        Point2D dir = end.subtract(start).normalize();
-        if (startInset != 0) {
-            start = start.add(dir.multiply(startInset));
-        }
-        if (endInset != 0) {
-            end = end.add(dir.multiply(-endInset));
-        }
 
         // Cut stroke at start and at end
         double strokeCutStart = getStrokeCutStart(ctx);
@@ -321,7 +352,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
                 out = new CutEndPathBuilder<>(out, strokeCutEnd);
             }
             bezierNodePath = AwtShapes.buildFromPathIterator(out, new BezierNodePath(nodeList).getPathIterator(null)).build();
-            nodeList = ImmutableLists.copyOf(bezierNodePath.getNodes());
         } else {
             bezierNodePath = new BezierNodePath(nodeList);
         }
@@ -330,7 +360,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         final List<PathElement> elements =
                 FXShapes.fxPathElementsFromAwt(
                         bezierNodePath.getPathIterator(null));
-
         if (!lineNode.getElements().equals(elements)) {
             lineNode.getElements().setAll(elements);
         }

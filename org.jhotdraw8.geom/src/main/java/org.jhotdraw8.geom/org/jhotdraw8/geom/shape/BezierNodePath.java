@@ -16,7 +16,11 @@ import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
-import java.awt.geom.*;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.FlatteningPathIterator;
+import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -210,7 +214,7 @@ public class BezierNodePath implements Shape {
                 } else {
                     // quadratic curve controlled by prev
                     middle = new BezierNode(BezierNode.C2_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                    prev.setCollinear(true);
+                    prev.withCollinear(true);
                     nodes.add(segment, middle);
                     QuadCurves.split(prev.getX0(), prev.getY0(),
                             next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
@@ -233,7 +237,7 @@ public class BezierNodePath implements Shape {
                             nodes.set(segment, middle.setX1(x1).setY1(y1).setX0(x2).setY0(y2));
                         },
                         (x1, y1, x2, y2) -> {
-                            nodes.set(segment + 1, next.setX1(x1).setY1(y1).setCollinear(true));
+                            nodes.set(segment + 1, next.setX1(x1).setY1(y1).withCollinear(true));
                         }
                 );
             } else {
@@ -320,23 +324,23 @@ public class BezierNodePath implements Shape {
                 lastMoveTo = i;
                 if (i < size && !nodes.get(i + 1).isMoveTo()) {
                     // keep a move to, if it is followed by another move to
-                    reversed = reversed.clearMaskBits(BezierNode.MOVE_MASK);
+                    reversed = reversed.withClearMaskBits(BezierNode.MOVE_MASK);
                 }
             } else if (reversed.isClosePath()) {
-                temp.set(lastMoveTo, temp.get(lastMoveTo).setMaskBits(BezierNode.CLOSE_MASK));
-                reversed = reversed.clearMaskBits(BezierNode.CLOSE_MASK);
+                temp.set(lastMoveTo, temp.get(lastMoveTo).withMaskBits(BezierNode.CLOSE_MASK));
+                reversed = reversed.withClearMaskBits(BezierNode.CLOSE_MASK);
             }
             reversed = reversed.setX1(n.getX2()).setY1(n.getY2())
                     .setX2(n.getX1()).setY2(n.getY1());
-            reversed = reversed.clearMaskBits(BezierNode.C1C2_MASK);
+            reversed = reversed.withClearMaskBits(BezierNode.C1C2_MASK);
             if (n.isC1()) {
-                reversed = reversed.setMaskBits(BezierNode.C2_MASK);
+                reversed = reversed.withMaskBits(BezierNode.C2_MASK);
             }
             if (n.isC2()) {
-                reversed = reversed.setMaskBits(BezierNode.C1_MASK);
+                reversed = reversed.withMaskBits(BezierNode.C1_MASK);
             }
             if (i == size - 1) {
-                reversed = reversed.setMaskBits(BezierNode.MOVE_MASK);
+                reversed = reversed.withMaskBits(BezierNode.MOVE_MASK);
             }
             temp.add(reversed);
         }

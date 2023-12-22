@@ -15,7 +15,9 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
+import static java.lang.Math.log;
+import static java.lang.Math.sqrt;
 import static org.jhotdraw8.geom.Lines.lerp;
 
 /**
@@ -31,7 +33,7 @@ import static org.jhotdraw8.geom.Lines.lerp;
  * <pre>
  * ∂B∂t(t) = 2*t*(P₀ − 2*P₁ + P₂) + 2*P₁ − 2*P₀
  * </pre>
- *
+ * <p>
  * References:
  * <dl>
  *     <dt>Quadratic Bezier curves, Copyright malczak</dt>
@@ -46,6 +48,19 @@ public class QuadCurves {
      * Don't let anyone instantiate this class.
      */
     private QuadCurves() {
+    }
+
+    /**
+     * Evaluates the given curve at the specified time.
+     *
+     * @param p0 point P0 of the curve
+     * @param p1 point P1 of the curve
+     * @param p2 point P2 of the curve
+     * @param t  the time
+     * @return the point at time t
+     */
+    public static @NonNull PointAndDerivative eval(Point2D p0, Point2D p1, Point2D p2, double t) {
+        return eval(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY(), t);
     }
 
     /**
@@ -146,7 +161,7 @@ public class QuadCurves {
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
+     * Splits the provided Bézier curve into two parts.
      *
      * @param x0     point 1 of the curve
      * @param y0     point 1 of the curve
@@ -334,8 +349,16 @@ public class QuadCurves {
         k = c - (b * b);
         E = sqrt((u * u) + k);
         F = sqrt((b * b) + k);
-        return 0.5 * sqrt(A)
+
+        double arcLength = 0.5 * sqrt(A)
                 * (u * E - b * F + (k * log(abs((u + E) / (b + F)))));
+
+        if (Double.isNaN(arcLength)) {
+            // the arc is degenerated to a line
+            return Lines.arcLength(q[offset], q[offset + 1], q[offset + 4], q[offset + 5]);
+        }
+
+        return arcLength;
 
     }
 

@@ -57,10 +57,10 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
         if (!intersectionResultEx.intersections().isEmpty()) {
             IntersectionPoint intersectionPointEx = intersectionResultEx.intersections().get(0);
             int segment = intersectionPointEx.getSegmentA();
-            BezierNode newNode = new BezierNode(pointInLocal);
+            BezierNode newNode = new BezierNode(intersectionPointEx.getX(), intersectionPointEx.getY());
             if (segment > 0 && nodes.get(segment - 1).isClosePath()) {
-                pathNodes.set(segment - 1, pathNodes.get(segment - 1).clearMaskBits(BezierNode.CLOSE_MASK));
-                newNode = newNode.setMaskBits(BezierNode.CLOSE_MASK);
+                pathNodes.set(segment - 1, pathNodes.get(segment - 1).withClearMaskBits(BezierNode.CLOSE_MASK));
+                newNode = newNode.withMaskBits(BezierNode.CLOSE_MASK);
             }
             pathNodes.add(segment, newNode);
             view.getModel().set(owner, pointKey, VectorList.copyOf(pathNodes));

@@ -14,6 +14,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     private byte @NonNull [] commands = new byte[10];
     private double @NonNull [] coords = new double[60];
     private final int windingRule;
+    private boolean needsMoveTo = true;
 
     public PathIteratorPathBuilder() {
         this(PathIterator.WIND_EVEN_ODD);
@@ -50,8 +51,12 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
 
     @Override
     protected void doClosePath() {
+        if (needsMoveTo) {
+            return;
+        }
         needRoom();
         commands[numCommands++] = PathIterator.SEG_CLOSE;
+        needsMoveTo = true;
     }
 
     @Override
@@ -61,8 +66,8 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
 
     @Override
     protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        if (numCommands == 0) {
-            throw new IllegalStateException("Missing initial moveto in path definition.");
+        if (needsMoveTo) {
+            doMoveTo(lastX, lastY);
         }
         needRoom();
         commands[numCommands++] = PathIterator.SEG_CUBICTO;
@@ -76,8 +81,8 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
 
     @Override
     protected void doLineTo(double x, double y) {
-        if (numCommands == 0) {
-            throw new IllegalStateException("Missing initial moveto in path definition.");
+        if (needsMoveTo) {
+            doMoveTo(lastX, lastY);
         }
         needRoom();
         commands[numCommands++] = PathIterator.SEG_LINETO;
@@ -91,12 +96,13 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
         commands[numCommands++] = PathIterator.SEG_MOVETO;
         coords[numCoords++] = x;
         coords[numCoords++] = y;
+        needsMoveTo = false;
     }
 
     @Override
     protected void doQuadTo(double x1, double y1, double x, double y) {
-        if (numCommands == 0) {
-            throw new IllegalStateException("Missing initial moveto in path definition.");
+        if (needsMoveTo) {
+            doMoveTo(lastX, lastY);
         }
         needRoom();
         commands[numCommands++] = PathIterator.SEG_QUADTO;

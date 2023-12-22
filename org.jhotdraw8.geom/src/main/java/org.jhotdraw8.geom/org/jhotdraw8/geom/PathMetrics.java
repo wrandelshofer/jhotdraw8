@@ -7,9 +7,15 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 
 /**
@@ -32,7 +38,7 @@ import java.util.Arrays;
  *     of the last segment of the closed path.</li>
  * </ul>
  */
-public class PathMetrics {
+public class PathMetrics implements Shape {
     private final byte @NonNull [] commands;
     private final int @NonNull [] offsets;
     private final double @NonNull [] coords;
@@ -44,13 +50,27 @@ public class PathMetrics {
     private static final byte SEG_QUADTO = (byte) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (byte) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
+    private final double minx, miny, maxx, maxy;
+    private final int windingRule;
 
-
-    PathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] accumulatedLengths) {
+    PathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] accumulatedLengths, int windingRule) {
         this.commands = commands;
         this.offsets = offsets;
         this.coords = coords;
         this.accumulatedLengths = accumulatedLengths;
+        this.windingRule = windingRule;
+
+        double mminx = Double.POSITIVE_INFINITY, mminy = Double.POSITIVE_INFINITY, mmaxx = Double.NEGATIVE_INFINITY, mmaxy = Double.NEGATIVE_INFINITY;
+        for (int i = 0; i < coords.length; i += 2) {
+            mminx = Math.min(mminx, coords[i]);
+            mmaxx = Math.max(mmaxx, coords[i]);
+            mminy = Math.min(mminy, coords[i + 1]);
+            mmaxy = Math.min(mmaxy, coords[i + 1]);
+        }
+        this.minx = mminx;
+        this.maxx = mmaxx;
+        this.miny = mminy;
+        this.maxy = mmaxy;
     }
 
     /**
@@ -122,59 +142,54 @@ public class PathMetrics {
         double totalArcLength = getArcLength();
         double s0 = t0 * totalArcLength;
         double s1 = t1 * totalArcLength;
-        int search0 = t0 == 0 ? 0 : Arrays.binarySearch(accumulatedLengths, s0);
-        boolean startsAtSegment = search0 >= 0;
-        int i0 = search0 < 0 ? ~search0 : search0;
-        if (i0 == 0 && skipFirstMoveTo) {
-            i0++;
-        }
-        while (i0 < commands.length && commands[i0] == SEG_CLOSE) {
-            i0++;
-        }
+        return buildSubPathAtArcLength(s0, s1, b, skipFirstMoveTo);
+    }
 
-        int search1 = t1 == 1 ? commands.length - 1 : Arrays.binarySearch(accumulatedLengths, s1);
-        boolean endsAtSegment = search1 >= 0;
-        int i1 = search1 < 0 ? ~search1 : search1;
-        while (i1 >= 0 && commands[i1] == SEG_MOVETO) {
-            i1--;
-        }
-        if (i1 < i0) return b;
-
-        double[] splitCoords = new double[8];
-        if (i0 == i1 && !startsAtSegment && !endsAtSegment) {
-            int offset = offsets[i0];
-            double sStart = s0 - accumulatedLengths[i0 - 1];
-            double sEnd = s1 - accumulatedLengths[i0 - 1];
-            double arcLength = accumulatedLengths[i0] - accumulatedLengths[i0 - 1];
-            switch (commands[i0]) {
-                case SEG_CLOSE -> b.closePath();
-                case SEG_MOVETO -> b.moveTo(coords[offset], coords[offset + 1]);
-                case SEG_LINETO -> {
-                    Lines.subLine(coords, offset - 2,
-                            sStart / arcLength, sEnd / arcLength, splitCoords, 0);
-                    b.moveTo(splitCoords[0], splitCoords[1]);
-                    b.lineTo(splitCoords[2], splitCoords[3]);
-                }
-                case SEG_QUADTO -> {
-                    QuadCurves.subCurve(coords, offset - 2,
-                            QuadCurves.invArcLength(coords, offset - 1, sStart),
-                            QuadCurves.invArcLength(coords, offset - 1, sEnd),
-                            splitCoords, 0);
-                    b.moveTo(splitCoords[0], splitCoords[1]);
-                    b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
-                }
-                case SEG_CUBICTO -> {
-                    CubicCurves.subCurve(coords, offset - 2,
-                            QuadCurves.invArcLength(coords, offset - 1, sStart),
-                            QuadCurves.invArcLength(coords, offset - 1, sEnd),
-                            splitCoords, 0);
-                    b.moveTo(splitCoords[0], splitCoords[1]);
-                    b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
-                }
-                default -> throw new IllegalStateException("unexpected command=" + commands[i0] + " at index=" + i0);
-            }
+    /**
+     * Builds a sub-path from arc-lengths s0 to s1.
+     * <p>
+     * This method does not call {@link PathBuilder#build()}.
+     *
+     * @param s0 the arc length at which the sub-path starts, in [0,getArcLength()].
+     * @param s1 the arc length at which the sub-path ends, in [0,getArcLength()].
+     * @param b  the builder
+     * @return the same builder that was passed as an argument
+     */
+    public <T> @NonNull PathBuilder<T> buildSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
+        double totalArcLength = getArcLength();
+        if (s0 > totalArcLength || s1 < s0) {
             return b;
         }
+        if (s0 < 0) {
+            s0 = 0;
+        }
+        if (s1 > totalArcLength) {
+            s1 = totalArcLength;
+        }
+
+        // Find the segment on which the sub-path starts
+        int search0 = s0 == 0 ? 0 : Arrays.binarySearch(accumulatedLengths, s0);
+        boolean startsAtSegment = search0 >= 0;
+        int i0 = search0 < 0 ? ~search0 : search0;
+        // Make sure that the start segment contains s0
+        if (!startsAtSegment) {
+            while (i0 < commands.length - 1 && accumulatedLengths[i0 + 1] < s0) {
+                i0++;
+            }
+        }
+
+        // Find the segment on which the sub-path ends
+        int search1 = s1 == totalArcLength ? commands.length - 1 : Arrays.binarySearch(accumulatedLengths, s1);
+        boolean endsAtSegment = search1 >= 0;
+        int i1 = search1 < 0 ? ~search1 : search1;
+        // Make sure that the end segment contains s1
+        if (!endsAtSegment) {
+            while (i0 < commands.length - 1 && accumulatedLengths[i0 + 1] < s1) {
+                i0++;
+            }
+        }
+
+        double[] splitCoords = new double[8];
 
         if (!startsAtSegment) {
             int offset = offsets[i0];
@@ -186,19 +201,25 @@ public class PathMetrics {
                 case SEG_LINETO -> {
                     Lines.split(coords, offset - 2,
                             s / arcLength, null, 0, splitCoords, 0);
-                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    if (!skipFirstMoveTo) {
+                        b.moveTo(splitCoords[0], splitCoords[1]);
+                    }
                     b.lineTo(splitCoords[2], splitCoords[3]);
                 }
                 case SEG_QUADTO -> {
                     QuadCurves.split(coords, offset - 2,
                             QuadCurves.invArcLength(coords, offset - 1, s), null, 0, splitCoords, 0);
-                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    if (!skipFirstMoveTo) {
+                        b.moveTo(splitCoords[0], splitCoords[1]);
+                    }
                     b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
                 }
                 case SEG_CUBICTO -> {
                     CubicCurves.split(coords, offset - 2,
                             CubicCurves.invArcLength(coords, offset - 1, s), null, 0, splitCoords, 0);
-                    b.moveTo(splitCoords[0], splitCoords[1]);
+                    if (!skipFirstMoveTo) {
+                        b.moveTo(splitCoords[0], splitCoords[1]);
+                    }
                     b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
                 }
                 default -> throw new IllegalStateException("unexpected command=" + commands[i0] + " at index=" + i0);
@@ -207,7 +228,9 @@ public class PathMetrics {
             if (commands[i0] != SEG_MOVETO) {
                 int offset = offsets[i0];
                 if (offset > 0) {
-                    b.moveTo(coords[offset - 2], coords[offset - 1]);
+                    if (!skipFirstMoveTo) {
+                        b.moveTo(coords[offset - 2], coords[offset - 1]);
+                    }
                 }
             }
         }
@@ -255,10 +278,54 @@ public class PathMetrics {
     }
 
 
+    @Override
+    public Rectangle getBounds() {
+        return new Rectangle((int) minx, (int) miny, (int) (maxx - minx), (int) (maxy - miny));
+    }
+
+    @Override
+    public Rectangle2D getBounds2D() {
+        return new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
+    }
+
+    @Override
+    public boolean contains(double x, double y) {
+        if (minx <= x && x <= maxx && miny <= y && y <= maxy) {
+            IntersectionResult result = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, 0);
+            return result.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE || result.getStatus() == IntersectionStatus.INTERSECTION;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean contains(Point2D p) {
+        return contains(p.getX(), p.getY());
+    }
+
+    @Override
+    public boolean intersects(double x, double y, double w, double h) {
+        return false;
+    }
+
+    @Override
+    public boolean intersects(Rectangle2D r) {
+        return false;
+    }
+
+    @Override
+    public boolean contains(double x, double y, double w, double h) {
+        return false;
+    }
+
+    @Override
+    public boolean contains(Rectangle2D r) {
+        return false;
+    }
+
     public PathIterator getPathIterator(final @Nullable AffineTransform tx) {
         final AffineTransform tt = tx == null ? AffineTransform.getTranslateInstance(0, 0) : tx;
         return new PathIterator() {
-            int current = -1;
+            int current = 0;
 
             @Override
             public int getWindingRule() {
@@ -267,12 +334,14 @@ public class PathMetrics {
 
             @Override
             public boolean isDone() {
-                return current < commands.length - 1;
+                return current >= commands.length;
             }
 
             @Override
             public void next() {
-                if (!isDone()) current++;
+                if (!isDone()) {
+                    current++;
+                }
             }
 
             @Override
@@ -300,13 +369,13 @@ public class PathMetrics {
                 final int offset = offsets[current];
                 switch (commands[current]) {
                     case PathMetrics.SEG_MOVETO, PathMetrics.SEG_LINETO -> {
-                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 2);
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 1);
                     }
                     case PathMetrics.SEG_QUADTO -> {
-                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 4);
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 2);
                     }
                     case PathMetrics.SEG_CUBICTO -> {
-                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 6);
+                        tt.transform(PathMetrics.this.coords, offset, coords, 0, 3);
                     }
                     default -> {//SEG CLOSE
 
@@ -315,5 +384,10 @@ public class PathMetrics {
                 return commands[current];
             }
         };
+    }
+
+    @Override
+    public PathIterator getPathIterator(AffineTransform at, double flatness) {
+        return null;
     }
 }

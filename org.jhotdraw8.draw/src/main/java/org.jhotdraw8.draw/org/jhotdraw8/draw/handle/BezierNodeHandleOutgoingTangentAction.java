@@ -33,7 +33,7 @@ public class BezierNodeHandleOutgoingTangentAction extends AbstractBezierNodeHan
     protected void onActionPerformed(@NonNull ActionEvent event) {
         BezierNodePath path = new BezierNodePath(figure.get(nodeListKey));
         BezierNode bnode = path.getNodes().get(nodeIndex);
-        BezierNode changedNode = bnode.clearMaskBits(C1C2_MASK).setMaskBits(C2_MASK);
+        BezierNode changedNode = bnode.withClearMaskBits(C1C2_MASK).withMaskBits(C2_MASK);
         path.getNodes().set(nodeIndex, changedNode);
         view.getModel().set(figure, nodeListKey, VectorList.copyOf(path.getNodes()));
         view.recreateHandles();

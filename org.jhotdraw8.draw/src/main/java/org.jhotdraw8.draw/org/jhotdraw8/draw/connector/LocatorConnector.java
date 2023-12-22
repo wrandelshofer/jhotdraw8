@@ -4,16 +4,11 @@
  */
 package org.jhotdraw8.draw.connector;
 
-import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
-import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 
 /**
  * LocatorConnector uses a {@link Locator} to compute its position.
@@ -47,6 +42,7 @@ public class LocatorConnector extends AbstractConnector {
         return new PointAndDerivative(locator.locate(target).getX(), locator.locate(target).getY(), new Point2D(1, 0).getX(), new Point2D(1, 0).getY());
     }
 
+    /*
     @Override
     public IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
         final Bounds b = target.getLayoutBounds();
@@ -68,5 +64,5 @@ public class LocatorConnector extends AbstractConnector {
                 targetP.getX(), targetP.getY(),
                 0, t1p.getX(), t1p.getY(),
                 0, t2p.getX(), t2p.getY());
-    }
+    }*/
 }

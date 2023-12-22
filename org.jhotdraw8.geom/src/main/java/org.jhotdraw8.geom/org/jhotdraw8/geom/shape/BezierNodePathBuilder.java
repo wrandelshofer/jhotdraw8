@@ -36,7 +36,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<BezierNodePath> {
             if (moveIndex != -1 && moveIndex != nodes.size() - 1) {
                 BezierNode moveNode = nodes.get(moveIndex);
                 if (Points.almostEqual(last.getX0(), last.getY0(), moveNode.getX0(), moveNode.getY0())) {
-                    moveNode = moveNode.setMaskBits(last.getMask() & BezierNode.C1_MASK)
+                    moveNode = moveNode.withMaskBits(last.getMask() & BezierNode.C1_MASK)
                             .setX1(last.getX1()).setY1(last.getY1());
                     nodes.set(moveIndex, moveNode);
                     nodes.removeLast();
@@ -57,7 +57,7 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<BezierNodePath> {
             // Set the outgoing tangent on the last bezier node
             last = new BezierNode(last.getMask() | BezierNode.C2_MASK, last.isEquidistant(), last.isCollinear(), last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
             if (last.computeIsCollinear()) {
-                last = last.setCollinear(true);
+                last = last.withCollinear(true);
             }
             setLast(last);
         }
@@ -83,8 +83,8 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<BezierNodePath> {
         if (last != null && last.isC1()) {
             // Set the outgoing tangent on the last bezier node if it already has an ingoing tangent
             last = new BezierNode(last.getMask() | BezierNode.C2_MASK, false, false, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1);
-            last = last.setCollinear(last.computeIsCollinear());
-            last = last.setEquidistant(last.computeIsEquidistant());
+            last = last.withCollinear(last.computeIsCollinear());
+            last = last.withEquidistant(last.computeIsEquidistant());
             setLast(last);
             add(new BezierNode(BezierNode.C0_MASK, false, false, x, y, x1, y1, x1, y1));
             return;

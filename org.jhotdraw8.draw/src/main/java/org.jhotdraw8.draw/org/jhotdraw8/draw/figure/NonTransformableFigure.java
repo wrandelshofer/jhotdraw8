@@ -18,7 +18,8 @@ public interface NonTransformableFigure extends TransformCachingFigure {
 
     @Override
     default void transformInParent(@NonNull Transform transform) {
-        // empty because non-transformable figures can not be transformed
+        // transformInParent is the same as transportInLocal for non-transformable figures
+        transformInLocal(transform);
     }
 
     @Override

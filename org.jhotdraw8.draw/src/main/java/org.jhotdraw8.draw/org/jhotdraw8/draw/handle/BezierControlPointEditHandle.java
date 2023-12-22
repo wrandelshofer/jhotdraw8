@@ -11,9 +11,20 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -149,12 +160,12 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     BezierNode newbn;
                     if (bn.isCollinear()) {
                         if (bn.isEquidistant()) {
-                            newbn = bn.setCollinear(false).setEquidistant(false);
+                            newbn = bn.withCollinear(false).withEquidistant(false);
                         } else {
-                            newbn = bn.setCollinear(true).setEquidistant(true);
+                            newbn = bn.withCollinear(true).withEquidistant(true);
                         }
                     } else {
-                        newbn = bn.setCollinear(true).setEquidistant(false);
+                        newbn = bn.withCollinear(true).withEquidistant(false);
                     }
                     dv.getModel().set(owner, pointKey,
                             list.set(pointIndex, newbn));
@@ -183,12 +194,12 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         if (!bn.isCollinear()) {
             if (!bn.isEquidistant()) {
                 // move control point independently
-                BezierNode newBezierNode = bn.setC(controlPointMask, p);
+                BezierNode newBezierNode = bn.withC(controlPointMask, p);
                 view.getModel().set(f, pointKey,
                         list.set(pointIndex, newBezierNode));
             } else {
                 // move control point and opposite control point to same distance
-                BezierNode newBezierNode = bn.setC(controlPointMask, p);
+                BezierNode newBezierNode = bn.withC(controlPointMask, p);
                 Point2D c0 = bn.getC0();
                 double r = p.distance(c0);
                 if (controlPointMask == BezierNode.C1_MASK) {
@@ -202,7 +213,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     if (Points.almostEqual(p2.getX(), p2.getY(), constrainedPoint.getX(), constrainedPoint.getY())) {
                         p2 = constrainedPoint;
                     }
-                    newBezierNode = newBezierNode.setC2(p2);
+                    newBezierNode = newBezierNode.withC2(p2);
                 } else {
                     Point2D p2 = bn.getC1();
                     Point2D dir = p2.subtract(c0).normalize();
@@ -214,7 +225,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     if (Points.almostEqual(p2.getX(), p2.getY(), constrainedPoint.getX(), constrainedPoint.getY())) {
                         p2 = constrainedPoint;
                     }
-                    newBezierNode = newBezierNode.setC1(p2);
+                    newBezierNode = newBezierNode.withC1(p2);
                 }
 
                 view.getModel().set(f, pointKey,
@@ -252,9 +263,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             }
             BezierNode newBezierNode;
             if (controlPointMask == BezierNode.C1_MASK) {
-                newBezierNode = bn.setC1(p).setC2(p2);
+                newBezierNode = bn.withC1(p).withC2(p2);
             } else {
-                newBezierNode = bn.setC2(p).setC1(p2);
+                newBezierNode = bn.withC2(p).withC1(p2);
             }
             view.getModel().set(f, pointKey,
                     list.set(pointIndex, newBezierNode));
@@ -293,25 +304,25 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             noneRadio.setSelected(true);
         }
         noneRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setCollinear(false).setEquidistant(false);
+            BezierNode changedNode = bnode.withCollinear(false).withEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         collinearRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setCollinear(true).setEquidistant(false);
+            BezierNode changedNode = bnode.withCollinear(true).withEquidistant(false);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         equidistantRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setCollinear(false).setEquidistant(true);
+            BezierNode changedNode = bnode.withCollinear(false).withEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         bothRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setCollinear(true).setEquidistant(true);
+            BezierNode changedNode = bnode.withCollinear(true).withEquidistant(true);
             path.getNodes().set(pointIndex, changedNode);
             view.getModel().set(owner, pointKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();

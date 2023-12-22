@@ -203,7 +203,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
             for (int i = 0, n = built.size(); i < n; i++) {
                 if (i == 0) {
-                    newList.add(built.get(i).setMask(built.get(i).getMask() & (~BezierNode.MOVE_MASK)));
+                    newList.add(built.get(i).withMask(built.get(i).getMask() & (~BezierNode.MOVE_MASK)));
                 } else {
                     newList.add(built.get(i));
                 }

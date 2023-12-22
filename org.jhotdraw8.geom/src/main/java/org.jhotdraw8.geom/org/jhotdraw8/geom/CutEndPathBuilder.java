@@ -24,8 +24,6 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
 
     private final @NonNull PathBuilder<T> out;
     private final double radius;
-    private double cx;
-    private double cy;
     private final @NonNull PathIteratorPathBuilder path;
 
     public CutEndPathBuilder(@NonNull PathBuilder<T> out, double radius) {
@@ -47,8 +45,8 @@ public class CutEndPathBuilder<T> extends AbstractPathBuilder<T> {
     @Override
     protected void doPathDone() {
         java.awt.geom.Point2D.Double currentPoint = getLastPoint();
-        cx = currentPoint.getX();
-        cy = currentPoint.getY();
+        double cx = currentPoint.getX();
+        double cy = currentPoint.getY();
         double[] seg = new double[6];
         double x = 0, y = 0;
         for (PathIterator i = path.build(); !i.isDone(); i.next()) {

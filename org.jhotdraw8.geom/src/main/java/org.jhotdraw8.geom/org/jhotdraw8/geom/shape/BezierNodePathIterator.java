@@ -34,11 +34,11 @@ public class BezierNodePathIterator implements PathIterator {
         for (BezierNode n : nodes) {
             // Ensure that all new path segments start with a MOVE_TO.
             if (needsMoveTo) {
-                n = n.setMaskBits(BezierNode.MOVE_MASK);
+                n = n.withMaskBits(BezierNode.MOVE_MASK);
             }
             needsMoveTo = n.isClosePath();
 
-            this.nodes.add(n.clearMaskBits(BezierNode.CLOSE_MASK));
+            this.nodes.add(n.withClearMaskBits(BezierNode.CLOSE_MASK));
 
             if (n.isMoveTo()) {
                 // Remember the last moveTo, so that we can close the path with a curve if necessary
@@ -46,7 +46,7 @@ public class BezierNodePathIterator implements PathIterator {
             } else if (n.isClosePath()) {
                 // We have to reinsert the lastMoveTo node, if the path is closed with a Bézier curve
                 if (n.isC2() || lastMoveTo != null && lastMoveTo.isC1()) {
-                    this.nodes.add(lastMoveTo.clearMaskBits(BezierNode.MOVE_MASK));
+                    this.nodes.add(lastMoveTo.withClearMaskBits(BezierNode.MOVE_MASK));
                 }
                 // We use a dedicated close path node instead of a node with the close mask being set.
                 this.nodes.add(CLOSE_PATH);

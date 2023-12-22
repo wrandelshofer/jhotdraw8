@@ -16,7 +16,7 @@ import java.util.DoubleSummaryStatistics;
 public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
     private final ByteArrayList commands = new ByteArrayList();
     private final IntArrayList offsets = new IntArrayList();
-    private int nextOffset = 0;
+
     private final DoubleArrayList coords = new DoubleArrayList();
     private final double[] temp = new double[8];
     private final DoubleArrayList lengths = new DoubleArrayList();
@@ -28,8 +28,17 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
     private static final byte SEG_QUADTO = (int) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
+    private int windingRule = PathIterator.WIND_EVEN_ODD;
 
     public PathMetricsBuilder() {
+    }
+
+    public int getWindingRule() {
+        return windingRule;
+    }
+
+    public void setWindingRule(int windingRule) {
+        this.windingRule = windingRule;
     }
 
     @Override
@@ -43,8 +52,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
             double length = Points.distance(lastMoveToX, lastMoveToY, getLastX(), getLastY());
             if (length > 0) {
                 commands.addAsByte(SEG_LINETO);
-                offsets.addAsInt(nextOffset);
-                nextOffset += 2;
+                offsets.addAsInt(coords.size());
                 coords.addAsDouble(lastMoveToX);
                 coords.addAsDouble(lastMoveToY);
                 acc.accept(length);
@@ -52,7 +60,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
             }
 
             commands.addAsByte(SEG_CLOSE);
-            offsets.addAsInt(nextOffset);
+            offsets.addAsInt(coords.size());
             lengths.addAsDouble(acc.getSum());
         }
     }
@@ -75,8 +83,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         double arcLength = CubicCurves.arcLength(temp, 0);
         if (arcLength > 0) {
             commands.addAsByte(SEG_CUBICTO);
-            offsets.addAsInt(nextOffset);
-            nextOffset += 6;
+            offsets.addAsInt(coords.size());
             coords.addAsDouble(x1);
             coords.addAsDouble(y1);
             coords.addAsDouble(x2);
@@ -93,8 +100,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         double length = Points.distance(getLastX(), getLastY(), x, y);
         if (length > 0) {
             commands.addAsByte(SEG_LINETO);
-            offsets.addAsInt(nextOffset);
-            nextOffset += 2;
+            offsets.addAsInt(coords.size());
             coords.addAsDouble(x);
             coords.addAsDouble(y);
             acc.accept(length);
@@ -104,18 +110,11 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
     @Override
     protected void doMoveTo(double x, double y) {
-        if (!commands.isEmpty() && commands.getLastAsByte() == SEG_MOVETO) {
-            // Coalesce multiple consecutive SEG_MOVETO into one
-            coords.setAsDouble(coords.size() - 2, x);
-            coords.setAsDouble(coords.size() - 1, y);
-        } else {
             commands.addAsByte(SEG_MOVETO);
-            offsets.addAsInt(nextOffset);
-            nextOffset += 2;
+        offsets.addAsInt(coords.size());
             coords.addAsDouble(x);
             coords.addAsDouble(y);
             lengths.addAsDouble(acc.getSum());
-        }
     }
 
     @Override
@@ -129,8 +128,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         double arcLength = QuadCurves.arcLength(temp, 0);
         if (arcLength > 0) {
             commands.addAsByte(SEG_QUADTO);
-            offsets.addAsInt(nextOffset);
-            nextOffset += 4;
+            offsets.addAsInt(coords.size());
             coords.addAsDouble(x1);
             coords.addAsDouble(y1);
             coords.addAsDouble(x);
@@ -145,6 +143,6 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         return new PathMetrics(commands.toByteArray(),
                 offsets.toIntArray(),
                 coords.toDoubleArray(),
-                lengths.toDoubleArray());
+                lengths.toDoubleArray(), windingRule);
     }
 }

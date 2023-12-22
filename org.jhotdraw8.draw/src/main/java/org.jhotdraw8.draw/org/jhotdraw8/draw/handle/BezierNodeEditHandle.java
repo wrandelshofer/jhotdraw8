@@ -12,9 +12,20 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -36,7 +47,8 @@ import java.util.List;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
-import static org.jhotdraw8.geom.shape.BezierNode.*;
+import static org.jhotdraw8.geom.shape.BezierNode.CLOSE_MASK;
+import static org.jhotdraw8.geom.shape.BezierNode.MOVE_MASK;
 
 /**
  * Handle for the point ofCollection a figure.
@@ -132,38 +144,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     @Override
     public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (nodeListKey != null) {
-            if (event.getClickCount() == 1) {
-                if (event.isControlDown() || event.isAltDown()) {
-                    final ImmutableList<BezierNode> nodes = owner.get(nodeListKey);
-                    if (nodes == null) {
-                        return;
-                    }
-                    BezierNodePath path = new BezierNodePath(nodes);
-                    BezierNode node = path.getNodes().get(nodeIndex);
-                    switch (node.getMask()) {
-                        case C0_MASK:
-                            node = node.setMask(C0C1_MASK);
-                            break;
-                        case C0C1_MASK:
-                            node = node.setMask(C0C2_MASK);
-                            break;
-                        case C0C2_MASK:
-                            node = node.setMask(C0C1C2_MASK);
-                            break;
-                        case C0C1C2_MASK:
-                        default:
-                            node = node.setMask(C0_MASK);
-                            break;
-                        case BezierNode.MOVE_MASK:
-                            break;
-                    }
-                    path.getNodes().set(nodeIndex, node);
-                    dv.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
-                    dv.recreateHandles();
-                }
-            }
-        }
+        // do nothing on mouse clicked, because it may happen accidentally
     }
 
     private void removePoint(@NonNull DrawingView dv) {
@@ -188,10 +169,10 @@ public class BezierNodeEditHandle extends AbstractHandle {
         BezierNode node = nodes.get(nodeIndex);
 
         // If the oldNode was a MOVE_TO, convert it into a LINE_TO
-        pathNodes.set(nodeIndex, node.clearMaskBits(MOVE_MASK));
+        pathNodes.set(nodeIndex, node.withClearMaskBits(MOVE_MASK));
 
         // Remove the CLOSE path mask from the new node
-        pathNodes.add(nodeIndex, node.clearMaskBits(CLOSE_MASK));
+        pathNodes.add(nodeIndex, node.withClearMaskBits(CLOSE_MASK));
 
         view.getModel().set(owner, nodeListKey, VectorList.copyOf(pathNodes));
         view.recreateHandles();
@@ -212,7 +193,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
         BezierNode p = list.get(nodeIndex);
         view.getModel().set(getOwner(), nodeListKey,
-                list.set(nodeIndex, p.setC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
+                list.set(nodeIndex, p.withC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
     }
 
     @Override
@@ -259,19 +240,19 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
 
         moveToRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.clearMaskBits(CLOSE_MASK).setMaskBits(MOVE_MASK);
+            BezierNode changedNode = bnode.withClearMaskBits(CLOSE_MASK).withMaskBits(MOVE_MASK);
             path.getNodes().set(nodeIndex, changedNode);
             view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         closePathRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.setMaskBits(CLOSE_MASK).clearMaskBits(MOVE_MASK);
+            BezierNode changedNode = bnode.withMaskBits(CLOSE_MASK).withClearMaskBits(MOVE_MASK);
             path.getNodes().set(nodeIndex, changedNode);
             view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
         });
         lineToRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.clearMaskBits(MOVE_MASK | CLOSE_MASK);
+            BezierNode changedNode = bnode.withClearMaskBits(MOVE_MASK | CLOSE_MASK);
             path.getNodes().set(nodeIndex, changedNode);
             view.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
             view.recreateHandles();
