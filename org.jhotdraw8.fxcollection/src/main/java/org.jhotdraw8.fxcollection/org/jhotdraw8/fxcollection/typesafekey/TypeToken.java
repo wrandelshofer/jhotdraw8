@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.collection.reflect;
+package org.jhotdraw8.fxcollection.typesafekey;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

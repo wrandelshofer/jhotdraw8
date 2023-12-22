@@ -6,9 +6,9 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
+import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 
 import java.lang.reflect.Type;
 

@@ -7,11 +7,11 @@ package org.jhotdraw8.svg.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.AbstractStyleableKey;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
 

@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 
 import java.io.Serial;

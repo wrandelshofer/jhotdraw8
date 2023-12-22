@@ -4,7 +4,7 @@
  */
 
 /**
- * Defines primitive collections, read-only collections and immutable collections.
+ * Defines primitive collections, and various utility classes for collections and iterators.
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.collection {
@@ -15,7 +15,6 @@ module org.jhotdraw8.collection {
     exports org.jhotdraw8.collection.iterator;
     exports org.jhotdraw8.collection.mapped;
     exports org.jhotdraw8.collection.primitive;
-    exports org.jhotdraw8.collection.reflect;
     exports org.jhotdraw8.collection.pair;
     exports org.jhotdraw8.collection.spliterator;
     exports org.jhotdraw8.collection.util;

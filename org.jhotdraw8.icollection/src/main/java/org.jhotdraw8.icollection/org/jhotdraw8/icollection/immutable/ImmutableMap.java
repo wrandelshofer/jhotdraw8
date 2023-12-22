@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
-import org.jhotdraw8.icollection.transform.Transformable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,7 +24,7 @@ import java.util.Map;
  * @param <K> the key type
  * @param <V> the value type
  */
-public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V>, Transformable {
+public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
 
     /**
      * Returns a copy of this map that is empty.

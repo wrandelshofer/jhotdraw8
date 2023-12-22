@@ -106,7 +106,7 @@ public interface MapAccessor<T> extends Serializable {
      * Returns the value type of this map accessor.
      * <p>
      * If the value type has type parameters, make sure to create it using
-     * {@link org.jhotdraw8.collection.reflect.TypeToken}.
+     * {@link TypeToken}.
      */
     @NonNull Type getValueType();
 

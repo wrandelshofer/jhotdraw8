@@ -53,13 +53,13 @@ import org.jhotdraw8.application.action.file.OpenRecentFileAction;
 import org.jhotdraw8.application.prefs.PreferencesUtil;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.text.NaturalSortCollator;
-import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
+import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.icollection.ChampMap;
 
 import java.lang.ref.WeakReference;

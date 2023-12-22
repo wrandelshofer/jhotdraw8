@@ -10,7 +10,6 @@ import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.iteration.Iterators;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlySet;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -110,15 +109,4 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     public @NonNull Set<E> toMutable() {
         return cloneFunction.apply(target);
     }
-
-    @Override
-    public Transformer<ImmutableSetFacade<E>> transformed() {
-        return this::transform;
-    }
-
-    private <R> R transform(Function<? super ImmutableSetFacade<E>, ? extends R> f) {
-        return f.apply(this);
-    }
-
-
 }

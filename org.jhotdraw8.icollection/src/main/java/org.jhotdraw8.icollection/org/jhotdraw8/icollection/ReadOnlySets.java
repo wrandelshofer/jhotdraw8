@@ -70,6 +70,7 @@ public class ReadOnlySets {
      * @param <E>      the element type
      * @return read-only set with the specified elements
      */
+    @SuppressWarnings("unchecked")
     public static <E> ReadOnlySet<E> asReadOnly(Set<E> elements) {
         return elements instanceof ReadOnlySet<?> ? (ReadOnlySet<E>) elements : new ReadOnlySetFacade<>(elements);
     }

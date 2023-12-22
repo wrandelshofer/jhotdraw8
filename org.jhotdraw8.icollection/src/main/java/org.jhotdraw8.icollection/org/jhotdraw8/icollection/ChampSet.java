@@ -16,7 +16,6 @@ import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
-import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,7 +25,6 @@ import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
 import java.util.Spliterator;
-import java.util.function.Function;
 
 
 /**
@@ -258,15 +256,6 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     @Override
     public @NonNull String toString() {
         return ReadOnlyCollection.iterableToString(this);
-    }
-
-    @Override
-    public Transformer<ChampSet<E>> transformed() {
-        return this::transform;
-    }
-
-    private <R> R transform(Function<? super ChampSet<E>, ? extends R> f) {
-        return f.apply(this);
     }
 
     @Serial

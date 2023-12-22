@@ -15,6 +15,5 @@ module org.jhotdraw8.icollection {
     exports org.jhotdraw8.icollection.immutable;
     exports org.jhotdraw8.icollection.readonly;
     exports org.jhotdraw8.icollection.sequenced;
-    exports org.jhotdraw8.icollection.transform;
     exports org.jhotdraw8.icollection;
 }

@@ -11,7 +11,6 @@ import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.impl.iteration.Iterators;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -153,15 +152,4 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     public @NonNull Map<K, V> toMutable() {
         return cloneFunction.apply(target);
     }
-
-    @Override
-    public Transformer<ImmutableMapFacade<K, V>> transformed() {
-        return this::transform;
-    }
-
-    private <R> R transform(Function<? super ImmutableMapFacade<K, V>, ? extends R> f) {
-        return f.apply(this);
-    }
-
-
 }

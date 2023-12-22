@@ -14,7 +14,6 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.serialization.ListSerializationProxy;
-import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -26,7 +25,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Spliterator;
-import java.util.function.Function;
 
 /**
  * Implements the {@link ImmutableList} interface using a bit-mapped trie
@@ -347,15 +345,6 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public @NonNull Spliterator<E> spliterator() {
         return trie.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
-    }
-
-    @Override
-    public Transformer<VectorList<E>> transformed() {
-        return this::transform;
-    }
-
-    private <R> R transform(Function<? super VectorList<E>, ? extends R> f) {
-        return f.apply(this);
     }
 
     @Override

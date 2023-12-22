@@ -5,7 +5,6 @@
 package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 

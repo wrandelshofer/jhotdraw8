@@ -6,7 +6,6 @@ package org.jhotdraw8.icollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.facade.SetFacade;
 
 import java.util.Iterator;
@@ -14,10 +13,6 @@ import java.util.Set;
 
 /**
  * A read-only interface to a set. A set is a collection that contains no duplicate elements.
- * <p>
- * Note: To compare a ReadOnlySet to a {@link Set}, you must either
- * wrap the ReadOnlySet into a Set using {@link SetFacade},
- * or wrap the Set into a ReadOnlySet using {@link ReadOnlySetFacade}.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees
  * 'readable'. We use the prefix 'ReadOnly' because this is the naming

@@ -6,11 +6,11 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.reflect.TypeToken;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 

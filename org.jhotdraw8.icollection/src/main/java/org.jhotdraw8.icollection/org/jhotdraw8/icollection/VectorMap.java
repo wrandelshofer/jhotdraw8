@@ -19,7 +19,6 @@ import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
-import org.jhotdraw8.icollection.transform.Transformer;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
@@ -30,7 +29,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.Function;
 
 /**
  * Implements the {@link ImmutableSequencedMap} interface using a Compressed
@@ -439,15 +437,6 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     @Override
     public @NonNull MutableVectorMap<K, V> toMutable() {
         return new MutableVectorMap<>(this);
-    }
-
-    @Override
-    public Transformer<VectorMap<K, V>> transformed() {
-        return this::transform;
-    }
-
-    private <R> R transform(Function<? super VectorMap<K, V>, ? extends R> f) {
-        return f.apply(this);
     }
 
     @Override
