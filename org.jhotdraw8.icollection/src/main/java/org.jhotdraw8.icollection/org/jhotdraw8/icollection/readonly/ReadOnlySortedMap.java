@@ -5,7 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Comparator;
 
 /**
- * A read-only interface for a sorted map. A sorted map is a map that  provides a total ordering on its keys.
+ * A read-only interface to a sorted map. A sorted map is a map that  provides a total ordering on its keys.
  *
  * @param <K> the key type
  * @param <V> the value type

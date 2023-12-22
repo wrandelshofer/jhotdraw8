@@ -15,10 +15,10 @@ import java.util.HashSet;
 import java.util.Map;
 
 /**
- * Interface for an immutable map; the implementation guarantees that the state
+ * An interface to an immutable map; the implementation guarantees that the state
  * of the map does not change.
  * <p>
- * An immutable map provides methods for creating a new immutable map with
+ * An interface to an immutable map provides methods for creating a new immutable map with
  * new, updated or deleted entries, without changing the original immutable map.
  *
  * @param <K> the key type

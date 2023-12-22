@@ -11,11 +11,23 @@ import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.SequencedCollection;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.IntSupplier;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
- * Wraps {@code Map} functions into the {@link SequencedMap} interface.
+ * Provides a {@link SequencedMap} facade to a set of {@code Map} functions.
  *
  * @param <K> the key type
  * @param <V> the value type

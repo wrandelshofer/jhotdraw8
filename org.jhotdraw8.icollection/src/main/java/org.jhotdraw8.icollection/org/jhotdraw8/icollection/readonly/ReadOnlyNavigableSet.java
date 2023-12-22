@@ -3,7 +3,7 @@ package org.jhotdraw8.icollection.readonly;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * Read-only interface for a navigable set.
+ * A read-only interface to a navigable set.
  *
  * @param <E> the element type
  */

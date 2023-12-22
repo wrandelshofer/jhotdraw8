@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Map} functions in the {@link ReadOnlyMap} interface.
+ * Provides a {@link ReadOnlyMap} facade to a set of {@code ReadOnlyMap} functions.
  *
  * @param <K> the key type
  * @param <V> the value type

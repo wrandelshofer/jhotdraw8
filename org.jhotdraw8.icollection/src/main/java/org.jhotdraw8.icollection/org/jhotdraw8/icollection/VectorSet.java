@@ -48,17 +48,17 @@ import java.util.Spliterators;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(log N) in an amortized sense, because we sometimes have to
+ *     <li>add: O(log₃₂ N) in an amortized sense, because we sometimes have to
  *     renumber the elements.</li>
- *     <li>remove: O(log N) in an amortized sense, because we sometimes have to
+ *     <li>remove: O(log₃₂ N) in an amortized sense, because we sometimes have to
  *     renumber the elements.</li>
- *     <li>contains: O(1)</li>
- *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in
+ *     <li>contains: O(log₃₂ N)</li>
+ *     <li>toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
  *     the mutable copy</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator creation: O(1)</li>
- *     <li>iterator.next: O(log N)</li>
- *     <li>getFirst(), getLast(): O(log N)</li>
+ *     <li>iterator creation: O(log₃₂ N)</li>
+ *     <li>iterator.next: O(1)</li>
+ *     <li>getFirst(), getLast(): O(log₃₂ N)</li>
  * </ul>
  * <p>
  * Implementation details:

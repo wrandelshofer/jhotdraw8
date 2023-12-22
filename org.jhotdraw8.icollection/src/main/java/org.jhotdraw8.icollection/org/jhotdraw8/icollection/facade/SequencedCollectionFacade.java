@@ -9,14 +9,18 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.SequencedCollection;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Collection} functions into the {@link SequencedCollection} interface.
+ * Provides a {@link SequencedCollection} facade to a set of {@code Collection} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

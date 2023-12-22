@@ -4,8 +4,6 @@
  */
 
 /**
- * Defines interfaces for sequenced collections. These interfaces will go away
- * once we have migrated to a JDK that implements
- * <a href="https://bugs.openjdk.org/browse/JDK-8280836">JDK-8280836</a>.
+ * Provides reversed views to sequenced collections.
  */
 package org.jhotdraw8.icollection.sequenced;

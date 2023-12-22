@@ -8282,7 +8282,7 @@
 														"$ref": "AAAAAAGMcm6HWr0dPvw="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a collection. A collection represents a group of objects, known as its elements. "
+													"specification": "A read-only interface to a collection. A collection represents a group of objects, known as its elements. "
 												},
 												{
 													"_type": "UMLGeneralization",
@@ -8327,7 +8327,7 @@
 														"$ref": "AAAAAAGMcm6HWr0iARU="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a list. A list is an ordered collection, which allows to access elements by their \nindex."
+													"specification": "A read-only interface to a list. A list is an ordered collection, which allows to access elements by their \nindex."
 												}
 											]
 										},
@@ -8359,7 +8359,7 @@
 														"$ref": "AAAAAAGMcm6HWr0l0c0="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a set. A set is a collection that contains no duplicate elements."
+													"specification": "A read-only interface to a set. A set is a collection that contains no duplicate elements."
 												}
 											]
 										},
@@ -8378,7 +8378,7 @@
 														"$ref": "AAAAAAGMcm6HWr0oobw="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a map. A map is an object that maps keys to values."
+													"specification": "A read-only interface to a map. A map is an object that maps keys to values."
 												},
 												{
 													"_type": "UMLGeneralization",
@@ -8436,7 +8436,7 @@
 														"$ref": "AAAAAAGMcm6HWr0qc6I="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a navigable map. A navigable map is a SortedMap extended with navigation methods returning the closest matches for given search targets. "
+													"specification": "A read-only interface to a navigable map. A navigable map is a SortedMap extended with navigation methods returning the closest matches for given search targets. "
 												}
 											]
 										},
@@ -8468,7 +8468,7 @@
 														"$ref": "AAAAAAGMcm6HWr0tfNs="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a sorted map. A sorted map is a map that  provides a total ordering on its keys."
+													"specification": "A read-only interface to a sorted map. A sorted map is a map that  provides a total ordering on its keys."
 												}
 											]
 										},
@@ -8500,7 +8500,7 @@
 														"$ref": "AAAAAAGMcm6HWr0wcN0="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a sequenced map. A sequenced map has a well-defined encounter order, that supports operations at both ends, and that is reversible."
+													"specification": "A read-only interface to a sequenced map. A sequenced map has a well-defined encounter order, that supports operations at both ends, and that is reversible."
 												}
 											]
 										},
@@ -8545,7 +8545,7 @@
 														"$ref": "AAAAAAGMcm6HWr0z2sE="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a sequenced set. A sequenced set is a collection that is both a ReadOnlySequencedCollection and a ReadOnlySet."
+													"specification": "A read-only interface to a sequenced set. A sequenced set is a collection that is both a ReadOnlySequencedCollection and a ReadOnlySet."
 												}
 											]
 										},
@@ -8577,7 +8577,7 @@
 														"$ref": "AAAAAAGMcm6HW7039Lo="
 													},
 													"name": "Constraint1",
-													"specification": "Read-only interface for a navigable set."
+													"specification": "Read-only interface to a navigable set."
 												}
 											]
 										},
@@ -8609,7 +8609,7 @@
 														"$ref": "AAAAAAGMcm6HW706fWE="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a sorted set. A sorted set is a set that  provides a total ordering on its elements."
+													"specification": "A read-only interface to a sorted set. A sorted set is a set that  provides a total ordering on its elements."
 												}
 											]
 										},
@@ -8641,7 +8641,7 @@
 														"$ref": "AAAAAAGMcm6HW7098C8="
 													},
 													"name": "Constraint1",
-													"specification": "A read-only interface for a sequenced collection. A sequenced collection has a well-defined encounter order, that supports operations at both ends, and that is reversible. "
+													"specification": "A read-only interface to a sequenced collection. A sequenced collection has a well-defined encounter order, that supports operations at both ends, and that is reversible. "
 												}
 											]
 										}

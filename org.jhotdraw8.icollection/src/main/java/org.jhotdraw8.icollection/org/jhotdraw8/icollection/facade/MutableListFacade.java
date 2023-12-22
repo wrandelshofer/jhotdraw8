@@ -14,11 +14,15 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedListView;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
- * Wraps {@link ImmutableList} functions into the {@link List} interface.
+ * Provides a {@link List} facade to a set of {@code ImmutableList} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

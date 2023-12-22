@@ -11,7 +11,7 @@ import org.jhotdraw8.icollection.facade.SequencedSetFacade;
 import java.util.SequencedSet;
 
 /**
- * A read-only interface for a sequenced set. A sequenced set is a collection that is both a
+ * A read-only interface to a sequenced set. A sequenced set is a collection that is both a
  * sequenced collection and a set.
  * <p>
  * References:

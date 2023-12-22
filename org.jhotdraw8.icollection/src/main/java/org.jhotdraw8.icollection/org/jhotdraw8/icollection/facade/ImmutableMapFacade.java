@@ -20,7 +20,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 /**
- * Wraps {@code Map} functions in the {@link ImmutableMap} interface.
+ * Provides a {@link ImmutableMap} facade to a set of {@code ImmutableMap} functions.
  *
  * @param <K> the key type
  * @param <V> the element type

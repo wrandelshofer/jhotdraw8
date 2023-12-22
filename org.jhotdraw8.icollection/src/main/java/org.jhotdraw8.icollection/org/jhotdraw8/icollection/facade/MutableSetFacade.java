@@ -17,7 +17,7 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
- * Wraps {@link ImmutableSet} functions into the {@link Set} interface.
+ * Provides a {@link Set} facade to a set of {@code ImmutableSet} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

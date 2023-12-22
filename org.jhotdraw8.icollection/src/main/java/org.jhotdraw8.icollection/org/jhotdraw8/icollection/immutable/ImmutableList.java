@@ -13,9 +13,9 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import java.util.List;
 
 /**
- * Interface for an immutable list; the implementation guarantees that the state of the collection does not change.
+ * An interface to an immutable list; the implementation guarantees that the state of the collection does not change.
  * <p>
- * An immutable list provides methods for creating a new immutable list with
+ * An interface to an immutable list provides methods for creating a new immutable list with
  * added or removed elements, without changing the original immutable list.
  *
  * @param <E> the element type

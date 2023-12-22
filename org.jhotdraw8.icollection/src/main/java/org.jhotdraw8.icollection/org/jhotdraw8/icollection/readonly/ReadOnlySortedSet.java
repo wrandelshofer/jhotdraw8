@@ -5,7 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Comparator;
 
 /**
- * A read-only interface for a sorted set. A sorted set is a set that  provides a total ordering on its elements.
+ * A read-only interface to a sorted set. A sorted set is a set that  provides a total ordering on its elements.
  *
  * @param <E> the element type
  */

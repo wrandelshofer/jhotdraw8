@@ -10,14 +10,18 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.SequencedSet;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Set} functions into the {@link SequencedSet} interface.
+ * Provides a {@link SequencedSet} facade to a set of {@code Set} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

@@ -5,7 +5,7 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.Map;
 
 /**
- * A read-only interface for a navigable map. A navigable map is a SortedMap
+ * A read-only interface to a navigable map. A navigable map is a SortedMap
  * extended with navigation methods returning the closest matches for given search
  * targets.
  *

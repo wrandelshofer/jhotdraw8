@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.function.Function;
 
 /**
- * Wraps {@code Set} functions in the {@link ImmutableSet} interface.
+ * Provides a {@link ImmutableSet} facade to a set of {@code ImmutableSet} functions.
  *
  * @param <E> the element type
  */

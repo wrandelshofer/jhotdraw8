@@ -12,11 +12,11 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import java.util.NoSuchElementException;
 
 /**
- * Interface for an immutable collection with a well-defined iteration order;
+ * An interface to an immutable collection with a well-defined iteration order;
  * the implementation guarantees that the state of the collection does not
  * change.
  * <p>
- * An immutable sequenced collection provides methods for creating a new
+ * An interface to an immutable sequenced collection provides methods for creating a new
  * immutable sequenced collection with added or removed elements, without
  * changing the original immutable sequenced collection.
  *

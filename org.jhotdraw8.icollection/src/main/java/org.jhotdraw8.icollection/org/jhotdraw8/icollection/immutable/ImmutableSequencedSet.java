@@ -13,10 +13,10 @@ import java.util.NoSuchElementException;
 import java.util.SequencedSet;
 
 /**
- * Interface for an immutable set with a well-defined iteration order; the
+ * An interface to an immutable set with a well-defined iteration order; the
  * implementation guarantees that the state of the collection does not change.
  * <p>
- * An immutable sequenced set provides methods for creating a new immutable sequenced set with
+ * An interface to an immutable sequenced set provides methods for creating a new immutable sequenced set with
  * added or removed elements, without changing the original immutable sequenced set.
  *
  * @param <E> the element type

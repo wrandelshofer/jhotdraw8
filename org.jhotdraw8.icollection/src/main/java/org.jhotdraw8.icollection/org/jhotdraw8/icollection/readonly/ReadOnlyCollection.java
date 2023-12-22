@@ -15,7 +15,8 @@ import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
 /**
- * A read-only interface for a collection.
+ * A read-only interface to a collection.
+ * <p>
  * A collection represents a group of objects, known as its elements.
  * <p>
  * This interface does not guarantee 'read-only', it actually guarantees

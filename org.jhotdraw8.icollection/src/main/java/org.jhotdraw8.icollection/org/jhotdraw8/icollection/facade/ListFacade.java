@@ -18,7 +18,7 @@ import java.util.function.IntSupplier;
 import java.util.stream.Stream;
 
 /**
- * Wraps {@code List} functions in the {@link List} interface.
+ * Provides a {@link List} facade to a set of {@code List} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

@@ -18,7 +18,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Set} functions into the {@link ReadOnlySet} interface.
+ * Provides a {@link ReadOnlySet} facade to a set of {@code Set} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

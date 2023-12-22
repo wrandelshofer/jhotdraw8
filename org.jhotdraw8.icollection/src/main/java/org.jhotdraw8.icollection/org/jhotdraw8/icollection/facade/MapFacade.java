@@ -8,11 +8,20 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 
-import java.util.*;
-import java.util.function.*;
+import java.util.AbstractMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.IntSupplier;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 /**
- * Wraps {@code Map} functions into the {@link java.util.Map} interface.
+ * Provides a {@link Map} facade to a set of {@code Map} functions.
  *
  * @param <K> the key type
  * @param <V> the value type

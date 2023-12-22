@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Wraps {@code Collection} functions in the {@link Collection} interface.
+ * Provides a {@link Collection} facade to a set of {@code Collection} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

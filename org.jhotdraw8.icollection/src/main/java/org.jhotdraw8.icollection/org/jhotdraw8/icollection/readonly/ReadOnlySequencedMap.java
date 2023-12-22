@@ -17,7 +17,7 @@ import java.util.SequencedMap;
 import java.util.Spliterator;
 
 /**
- * A read-only interface for a sequenced map. A sequenced map has a well-defined encounter order, that supports
+ * A read-only interface to a sequenced map. A sequenced map has a well-defined encounter order, that supports
  * operations at both ends, and that is reversible.
  * <p>
  * References:

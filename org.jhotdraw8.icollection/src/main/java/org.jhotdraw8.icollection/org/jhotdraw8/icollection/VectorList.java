@@ -42,15 +42,16 @@ import java.util.Spliterator;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>addLast: O(log N)</li>
- *     <li>set: O(log N)</li>
+ *     <li>addLast: O(log₃₂ N)</li>
+ *     <li>set: O(log₃₂ N)</li>
  *     <li>removeAt: O(N)</li>
- *     <li>removeFirst,removeLast: O(log N)</li>
+ *     <li>removeFirst,removeLast: O(log₃₂ N)</li>
  *     <li>contains: O(N)</li>
  *     <li>toMutable: O(1)</li>
  *     <li>clone: O(1)</li>
- *     <li>iterator.next(): O(log N)</li>
- *     <li>getFirst, getLast: O(log N)</li>
+ *     <li>iterator creation: O(log₃₂ N)</li>
+ *     <li>iterator.next: O(1)</li>
+ *     <li>getFirst, getLast: O(log₃₂ N)</li>
  *     <li>reversed: O(N)</li>
  * </ul>
  * <p>

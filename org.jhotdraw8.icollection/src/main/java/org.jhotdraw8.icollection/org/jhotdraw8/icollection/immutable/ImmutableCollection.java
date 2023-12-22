@@ -10,7 +10,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import java.util.Collection;
 
 /**
- * Interface for an immutable collection; the implementation
+ * An interface to an immutable collection; the implementation
  * guarantees that the state of the collection does not change.
  *
  * @param <E> the element type

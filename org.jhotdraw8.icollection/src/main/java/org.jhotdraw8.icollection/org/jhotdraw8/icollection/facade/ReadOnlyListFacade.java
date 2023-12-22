@@ -16,7 +16,7 @@ import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code List} functions in the {@link ReadOnlyList} interface.
+ * Provides a {@link ReadOnlyList} facade to a set of {@code ReadOnlyList} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

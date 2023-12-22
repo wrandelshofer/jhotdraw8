@@ -7,14 +7,25 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.icollection.impl.champ.*;
+import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
+import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champ.BulkChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.ChampIterator;
+import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
+import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Objects;
+import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
@@ -32,12 +43,12 @@ import java.util.function.Function;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>add: O(1)</li>
- *     <li>remove: O(1)</li>
- *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
+ *     <li>add: O(log₃₂ N)</li>
+ *     <li>remove: O(log₃₂ N)</li>
+ *     <li>contains: O(log₃₂ N)</li>
+ *     <li>toImmutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
  *     this set</li>
- *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
+ *     <li>clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
  *     set and in the clone</li>
  *     <li>iterator.next: O(1)</li>
  * </ul>

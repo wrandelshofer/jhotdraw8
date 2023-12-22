@@ -42,10 +42,10 @@ import java.util.Spliterator;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>put: O(1)</li>
- *     <li>remove: O(1)</li>
- *     <li>containsKey: O(1)</li>
- *     <li>toMutable: O(1) + O(log N) distributed across subsequent updates in the mutable copy</li>
+ *     <li>put: O(log₃₂ N)</li>
+ *     <li>remove: O(log₃₂ N)</li>
+ *     <li>containsKey: O(log₃₂ N)</li>
+ *     <li>toMutable: O(1) + O(log₃₂ N) distributed across subsequent updates in the mutable copy</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>

@@ -11,7 +11,7 @@ import org.jhotdraw8.icollection.facade.SequencedCollectionFacade;
 import java.util.SequencedCollection;
 
 /**
- * A read-only interface for o sequenced collection.
+ * A read-only interface to a sequenced collection.
  * A sequenced collection has a well-defined encounter order,
  * that supports operations at both ends, and that is reversible.
  *

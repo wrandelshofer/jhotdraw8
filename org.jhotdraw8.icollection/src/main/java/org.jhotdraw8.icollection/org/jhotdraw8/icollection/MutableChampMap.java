@@ -8,7 +8,13 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.SetFacade;
-import org.jhotdraw8.icollection.impl.champ.*;
+import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampMap;
+import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champ.BulkChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.ChampIterator;
+import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
+import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
@@ -16,7 +22,13 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.Spliterator;
 
 /**
  * Implements the {@link Map} interface using a Compressed Hash-Array Mapped
@@ -32,12 +44,12 @@ import java.util.*;
  * <p>
  * Performance characteristics:
  * <ul>
- *     <li>put: O(1)</li>
- *     <li>remove: O(1)</li>
- *     <li>containsKey: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
+ *     <li>put: O(log₃₂ N)</li>
+ *     <li>remove: O(log₃₂ N)</li>
+ *     <li>containsKey: O(log₃₂ N)</li>
+ *     <li>toImmutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
  *     this map</li>
- *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
+ *     <li>clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
  *     map and in the clone</li>
  *     <li>iterator.next: O(1)</li>
  * </ul>

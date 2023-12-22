@@ -4,6 +4,6 @@
  */
 
 /**
- * Defines interfaces for read-only collections and provides abstract base classes.
+ * Defines read-only interfaces to collections, and provides abstract base classes for them.
  */
 package org.jhotdraw8.icollection.readonly;

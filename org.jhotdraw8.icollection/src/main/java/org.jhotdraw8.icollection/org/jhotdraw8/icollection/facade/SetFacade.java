@@ -8,14 +8,18 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Iterator;
+import java.util.Set;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Wraps {@code Set} functions into the {@link Set} interface.
+ * Provides a {@link Set} facade to a set of {@code Set} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

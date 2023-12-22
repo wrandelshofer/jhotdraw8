@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Wraps {@code Collection} functions into the {@link ReadOnlyCollection} interface.
+ * Provides a {@link ReadOnlyCollection} facade to a set of {@code Collection} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

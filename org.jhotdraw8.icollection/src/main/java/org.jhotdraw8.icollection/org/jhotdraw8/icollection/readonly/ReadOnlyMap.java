@@ -11,10 +11,14 @@ import org.jhotdraw8.icollection.facade.ReadOnlyCollectionFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Spliterator;
 
 /**
- * A read-only interface for a map. A map is an object that maps keys to values.
+ * A read-only interface to a map. A map is an object that maps keys to values.
  *
  * @param <K> the key type
  * @param <V> the value type
