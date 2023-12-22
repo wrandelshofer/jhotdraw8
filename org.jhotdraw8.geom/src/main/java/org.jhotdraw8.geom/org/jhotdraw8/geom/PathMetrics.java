@@ -13,10 +13,15 @@ import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+
+import static java.lang.Double.NEGATIVE_INFINITY;
+import static java.lang.Double.POSITIVE_INFINITY;
+import static java.lang.Double.isNaN;
 
 /**
  * The {@code PathMetrics} class allows access to the
@@ -60,7 +65,7 @@ public class PathMetrics implements Shape {
         this.accumulatedLengths = accumulatedLengths;
         this.windingRule = windingRule;
 
-        double mminx = Double.POSITIVE_INFINITY, mminy = Double.POSITIVE_INFINITY, mmaxx = Double.NEGATIVE_INFINITY, mmaxy = Double.NEGATIVE_INFINITY;
+        double mminx = POSITIVE_INFINITY, mminy = POSITIVE_INFINITY, mmaxx = NEGATIVE_INFINITY, mmaxy = NEGATIVE_INFINITY;
         for (int i = 0; i < coords.length; i += 2) {
             mminx = Math.min(mminx, coords[i]);
             mmaxx = Math.max(mmaxx, coords[i]);
@@ -108,7 +113,7 @@ public class PathMetrics implements Shape {
         int offset = offsets[i] - 2;// at offset - 2 we have the x,y coordinates of the previous command
         double start = (i == 0 ? 0 : accumulatedLengths[i - 1]);
         final double segmentS = s - start;// the s value inside the segment
-        // the
+
         return switch (commands[i]) {
             case SEG_CLOSE -> new PointAndDerivative(0, 0, 1, 0);
             case SEG_MOVETO -> new PointAndDerivative(coords[offset + 2], coords[offset + 3], 1, 0);
@@ -297,29 +302,83 @@ public class PathMetrics implements Shape {
         return false;
     }
 
+    /**
+     * See {@link #contains(double, double)}.
+     *
+     * @param p the specified {@code Point2D}
+     * @return true if this shape contains p
+     */
     @Override
     public boolean contains(Point2D p) {
         return contains(p.getX(), p.getY());
     }
 
+    /**
+     * This implementation checks if the bounding box
+     * of this shape intersects with the specified rectangle.
+     *
+     * @param x the X coordinate of the upper-left corner
+     *          of the specified rectangular area
+     * @param y the Y coordinate of the upper-left corner
+     *          of the specified rectangular area
+     * @param w the width of the specified rectangular area
+     * @param h the height of the specified rectangular area
+     * @return true if the interior of the bounding box of this shape intersects
+     * with the interior of the specified rectangle.
+     */
     @Override
     public boolean intersects(double x, double y, double w, double h) {
-        return false;
+        if (isNaN(x + w) || isNaN(y + h) || w <= 0 || h <= 0
+                || !(maxx >= x) || !(x + w >= minx) || !(maxy >= y) || !(y + h >= miny)) {
+            return false;
+        }
+        // FIXME implement me
+        return true;
     }
 
+    /**
+     * See {@link #intersects(double, double, double, double)}.
+     *
+     * @param r the specified {@code Rectangle2D}
+     * @return true if this shape intersects with r
+     */
     @Override
-    public boolean intersects(Rectangle2D r) {
-        return false;
+    public boolean intersects(@NonNull Rectangle2D r) {
+        return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
+    /**
+     * This implementation checks if the bounding box
+     * of this shape contains the specified rectangle.
+     *
+     * @param x the X coordinate of the upper-left corner
+     *          of the specified rectangular area
+     * @param y the Y coordinate of the upper-left corner
+     *          of the specified rectangular area
+     * @param w the width of the specified rectangular area
+     * @param h the height of the specified rectangular area
+     * @return true if the interior of the bounding box of this shape contains
+     * the interior of the specified rectangle.
+     */
     @Override
     public boolean contains(double x, double y, double w, double h) {
-        return false;
+        if (isNaN(x + w) || isNaN(y + h) || w <= 0 || h <= 0
+                || !(minx <= x) || !(x + w <= maxx) || !(miny <= y) || !(y + h <= maxy)) {
+            return false;
+        }
+        // FIXME implement me
+        return true;
     }
 
+    /**
+     * See {@link #contains(double, double, double, double)}.
+     *
+     * @param r the specified {@code Rectangle2D}
+     * @return true if this shape contains r
+     */
     @Override
-    public boolean contains(Rectangle2D r) {
-        return false;
+    public boolean contains(@NonNull Rectangle2D r) {
+        return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
     public PathIterator getPathIterator(final @Nullable AffineTransform tx) {
@@ -329,7 +388,7 @@ public class PathMetrics implements Shape {
 
             @Override
             public int getWindingRule() {
-                return PathIterator.WIND_EVEN_ODD;
+                return windingRule;
             }
 
             @Override
@@ -387,7 +446,7 @@ public class PathMetrics implements Shape {
     }
 
     @Override
-    public PathIterator getPathIterator(AffineTransform at, double flatness) {
-        return null;
+    public PathIterator getPathIterator(@Nullable AffineTransform at, double flatness) {
+        return new FlatteningPathIterator(getPathIterator(at), flatness);
     }
 }
