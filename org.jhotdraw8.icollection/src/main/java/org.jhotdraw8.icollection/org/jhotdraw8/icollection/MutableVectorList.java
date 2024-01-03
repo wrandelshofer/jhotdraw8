@@ -15,7 +15,12 @@ import org.jhotdraw8.icollection.serialization.ListSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
@@ -23,6 +28,7 @@ import java.util.stream.Stream;
  * <p>
  * Features:
  * <ul>
+ *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
  *     <li>allows null elements</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>

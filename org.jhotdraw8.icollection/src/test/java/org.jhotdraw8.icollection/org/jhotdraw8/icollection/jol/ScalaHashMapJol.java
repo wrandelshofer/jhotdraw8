@@ -30,12 +30,13 @@ public class ScalaHashMapJol extends AbstractJol {
      *          1        16        16   scala.collection.immutable.HashMap
      *       2886               82864   (total)
      * </pre>
+     * With 1 Mio elements, memory overhead is 35.728536 bytes per entry.
      */
     @Test
     @Disabled
     public void estimateMemoryUsage() {
-        int size = 1000;
-        final int mask = ~64;
+        int size = 1_000;
+        final int mask = -1;//~64;
         var data = generateMap(size, mask);
         ReusableBuilder<Tuple2<Object, Object>, HashMap<Object, Object>> b = HashMap.newBuilder();
         for (var d : data.entrySet()) {

@@ -34,16 +34,19 @@ public class VectorMapJol extends AbstractJol {
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
      *       3738               99504   (total)
      * </pre>
+     * With 1 Mio elements, memory overhead is 48.952944 bytes per element.
      */
     @Test
     @Disabled
 
     public void estimateMemoryUsage() {
-        int size = 1_000;
-        final int mask = ~64;
-        var data = generateMap(size, mask);
-        VectorMap<Key, Key> mapA = VectorMap.copyOf(data);
-        estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+        for (int i = 1; i <= 1_000_000; i *= 10) {
+            int size = i;
+            final int mask = -1;//~64;
+            var data = generateMap(size, mask);
+            VectorMap<Key, Key> mapA = VectorMap.copyOf(data);
+            estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+        }
     }
 
     /**
@@ -73,7 +76,7 @@ public class VectorMapJol extends AbstractJol {
     @Disabled
 
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
-        int size = 1_000;
+        int size = 1;
         final int mask = ~64;
         var data = generateMap(size, mask);
         VectorMap<Key, Key> mapA = VectorMap.copyOf(data);

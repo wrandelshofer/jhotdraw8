@@ -5,6 +5,7 @@ import org.jhotdraw8.icollection.jmh.Key;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -16,30 +17,97 @@ public class ChampMapJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
-     * total size              : 94768
+     * total size              : 92480
      * element size            : 48
-     * data size               : 48000 50%
-     * data structure size     : 46768 49%
+     * data size               : 48000 51%
+     * data structure size     : 44480 48%
      * ----footprint---
-     * org.jhotdraw8.icollection.ChampMap@1e44b638d footprint:
+     * org.jhotdraw8.icollection.ChampMap@babafc2d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        350        32     11528   [Ljava.lang.Object;
+     *        310        33     10520   [Ljava.lang.Object;
      *       1000        24     24000   java.util.AbstractMap$SimpleImmutableEntry
      *          1        24        24   org.jhotdraw8.icollection.ChampMap
      *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *        350        32     11200   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *        310        32      9920   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       3702               94768   (total)
+     *       3622               92480   (total)
      * </pre>
+     * With 1 Mio elements, memory overhead is 44.307680 bytes per entry.
      */
     @Test
     @Disabled
     public void estimateMemoryUsage() {
-        int size = 1000;
-        final int mask = ~64;
+        int size = 1_000;
+        final int mask = -1;//~64;
         var data = generateMap(size, mask);
         ChampMap<Key, Key> mapA = ChampMap.copyOf(data);
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+    }
+
+    /**
+     * <pre>
+     * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
+     * total size              : 89984
+     * element size            : 48
+     * data size               : 48000 53%
+     * data structure size     : 41984 46%
+     * ----footprint---
+     * org.jhotdraw8.icollection.ChampMap@95e33ccd footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *        310        33     10520   [Ljava.lang.Object;
+     *       1000        24     24000   java.util.AbstractMap$SimpleImmutableEntry
+     *          1        24        24   org.jhotdraw8.icollection.ChampMap
+     *        310        24      7440   org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode
+     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
+     *       3621               89984   (total)
+     * </pre>
+     * With 1 Mio elements, memory overhead is 41.848104 bytes per entry.
+     */
+    @Test
+    @Disabled
+    public void estimateMemoryUsageNoBulkOperations() {
+        int size = 1_000;
+        final int mask = -1;//~64;
+        var data = generateMap(size, mask);
+        ChampMap<Key, Key> mapA = ChampMap.of();
+        for (var e : data.entrySet()) {
+            mapA = mapA.put(e.getKey(), e.getValue());
+        }
+        estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+    }
+
+    /**
+     * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
+     * <p>
+     * both versions:
+     * total size              : 92872
+     * element size            : 48
+     * <p>
+     * mapA:
+     * total size              : 92480
+     * <p>
+     * mapB:
+     * total size              : 92464
+     * element size            : 48
+     * <p>
+     * Difference: 92872 - 92480 = 392 bytes
+     */
+    @Test
+    @Disabled
+    public void estimateMemoryUsageForANewVersion() {
+        int size = 1_000;
+        final int mask = -1;//~64;
+        var data = generateMap(size, mask);
+        ChampMap<Key, Key> mapA = ChampMap.copyOf(data);
+        Key updatedKey = data.keySet().iterator().next();
+        ChampMap<Key, Key> mapB = mapA.put(updatedKey, new Key(mapA.get(updatedKey).value + 1, -1));
+        AbstractMap.SimpleImmutableEntry<ChampMap<Key, Key>, ChampMap<Key, Key>> twoVersions = new AbstractMap.SimpleImmutableEntry<>(mapA, mapB);
+        System.out.println("\nboth versions:");
+        estimateMemoryUsage(twoVersions, mapA.iterator().next(), mapA.size());
+        System.out.println("\nmapA:");
+        estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+        System.out.println("\nmapB:");
+        estimateMemoryUsage(mapB, mapA.iterator().next(), mapA.size());
     }
 
     /**
@@ -63,7 +131,7 @@ public class ChampMapJol extends AbstractJol {
      */
     @Test
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
-        int size = 1_000;
+        int size = 1_000_000;
         final int mask = ~64;
         var data = generateMap(size, mask);
         ChampMap<Key, Key> mapA = ChampMap.copyOf(data);

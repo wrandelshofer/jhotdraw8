@@ -33,7 +33,7 @@ import java.util.Spliterator;
  * <p>
  * Features:
  * <ul>
- *     <li>supports up to 2<sup>30</sup> entries</li>
+ *     <li>supports up to 2<sup>31</sup> - 1 entries</li>
  *     <li>allows null keys and null values</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>
@@ -52,14 +52,13 @@ import java.util.Spliterator;
  * <p>
  * Implementation details:
  * <p>
- * This map performs read and write operations of single elements in O(1) time,
- * and in O(1) space.
+ * This map performs read and write operations of single elements in O(log₃₂ N) time,
+ * and in O(log₃₂ N) space.
  * <p>
  * The CHAMP trie contains nodes that may be shared with other maps.
  * <p>
  * If a write operation is performed on a node, then this map creates a
  * copy of the node and of all parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
  * <p>
  * This map can create a mutable copy of itself in O(1) time and O(1) space
  * using method {@link #toMutable()}. The mutable copy shares its nodes
@@ -212,6 +211,11 @@ public class ChampMap<K, V>
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
         return new ChampIterator<>(root, null);
+    }
+
+    @Override
+    public int maxSize() {
+        return Integer.MAX_VALUE;
     }
 
     @Override

@@ -101,6 +101,11 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
+    public int maxSize() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public @NonNull Iterator<E> iterator() {
         return Iterators.unmodifiableIterator(target.iterator());
     }

@@ -36,6 +36,7 @@ import java.util.Spliterator;
  * <p>
  * Features:
  * <ul>
+ *     <li>supports up to 2<sup>31</sup> - 1 entries</li>
  *     <li>allows null keys and null values</li>
  *     <li>is mutable</li>
  *     <li>is not thread-safe</li>

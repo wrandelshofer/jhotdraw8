@@ -195,4 +195,11 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      */
     @NonNull Map<K, V> toMutable();
 
+    /**
+     * Returns the maximal number of entries that this map type can
+     * hold
+     *
+     * @return the maximal size
+     */
+    int maxSize();
 }

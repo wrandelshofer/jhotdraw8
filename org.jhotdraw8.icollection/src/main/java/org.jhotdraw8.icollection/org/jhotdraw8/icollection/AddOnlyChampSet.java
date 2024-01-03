@@ -14,6 +14,11 @@ import java.util.Objects;
  * Implements the {@link ImmutableAddOnlySet} interface using a Compressed
  * Hash-Array Mapped Prefix-tree (CHAMP).
  * <p>
+ * Performance characteristics:
+ * <ul>
+ *     <li>add: O(log₃₂ N)</li>
+ * </ul>
+ * <p>
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
@@ -30,7 +35,7 @@ import java.util.Objects;
 public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
     private static final int ENTRY_LENGTH = 1;
     private static final int HASH_CODE_LENGTH = 32;
-    private static final int BIT_PARTITION_SIZE = 4;
+    private static final int BIT_PARTITION_SIZE = 5;
     private static final int BIT_PARTITION_MASK = (1 << BIT_PARTITION_SIZE) - 1;
 
     /**

@@ -33,7 +33,7 @@ import java.util.Spliterator;
  * <p>
  * Features:
  * <ul>
- *     <li>supports up to 2<sup>30</sup> entries</li>
+ *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
  *     <li>allows null elements</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>
@@ -52,19 +52,21 @@ import java.util.Spliterator;
  * <p>
  * Implementation details:
  * <p>
- * This set performs read and write operations of single elements in O(1) time,
- * and in O(1) space.
+ * This set performs read and write operations of single elements in O(log₃₂ N) time,
+ * and in O(log₃₂ N) space.
  * <p>
  * The CHAMP trie contains nodes that may be shared with other sets.
  * <p>
  * If a write operation is performed on a node, then this set creates a
  * copy of the node and of all parent nodes up to the root (copy-path-on-write).
- * Since the CHAMP trie has a fixed maximal height, the cost is O(1).
  * <p>
- * The immutable version of this set extends from the non-public class
- * {@code ChampBitmapIndexNode}. This design safes 16 bytes for every instance,
- * and reduces the number of redirections for finding an element in the
- * collection by 1.
+ * This set can create a mutable copy of itself in O(1) time and O(1) space
+ * using method {@link #toMutable()}. The mutable copy shares its nodes
+ * with this set, until it has gradually replaced the nodes with exclusively
+ * owned nodes.
+ * <p>
+ * All operations on this set can be performed concurrently, without a need for
+ * synchronisation.
  * <p>
  * References:
  * <p>
@@ -211,6 +213,11 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
     static int keyHash(Object e) {
         return SALT ^ Objects.hashCode(e);
+    }
+
+    @Override
+    public int maxSize() {
+        return Integer.MAX_VALUE;
     }
 
     @Override

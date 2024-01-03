@@ -34,6 +34,7 @@ import java.util.Spliterator;
  * <p>
  * Features:
  * <ul>
+ *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
  *     <li>allows null elements</li>
  *     <li>is immutable</li>
  *     <li>is thread-safe</li>
@@ -57,8 +58,8 @@ import java.util.Spliterator;
  * <p>
  * References:
  * <p>
- * For a similar design, see 'Vector.java' in vavr. Note, that this code is not a derivative
- * of that code.
+ * For a similar design, see 'Vector.java' in vavr. The internal data structure of
+ * this class is licensed from vavr.
  * <dl>
  *     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
  *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/Vector.java">github.com</a></dd>
@@ -341,6 +342,11 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public @NonNull Iterator<E> iterator() {
         return trie.iterator(0, size());
+    }
+
+    @Override
+    public int maxSize() {
+        return Integer.MAX_VALUE;
     }
 
     @Override

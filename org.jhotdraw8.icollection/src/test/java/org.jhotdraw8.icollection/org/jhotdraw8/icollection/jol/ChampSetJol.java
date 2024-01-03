@@ -30,12 +30,13 @@ public class ChampSetJol extends AbstractJol {
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
      *       1720               47192   (total)
      * </pre>
+     * With 1 Mio elements, memory overhead is 20.333144 bytes per element.
      */
     @Test
     @Disabled
     public void estimateMemoryUsage() {
-        int size = 1_000;
-        final int mask = ~64;
+        int size = 1_000_000;
+        final int mask = -1;//~64;
         var data = generateSet(size, mask);
         ChampSet<Key> setA = ChampSet.copyOf(data);
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());

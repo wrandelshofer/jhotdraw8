@@ -132,6 +132,11 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
+    public int maxSize() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
     public int size() {
         return target.size();
     }

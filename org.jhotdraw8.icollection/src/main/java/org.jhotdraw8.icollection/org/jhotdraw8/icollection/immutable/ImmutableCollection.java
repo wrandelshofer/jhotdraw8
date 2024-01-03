@@ -85,11 +85,18 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
     @SuppressWarnings("unchecked")
     @NonNull ImmutableCollection<E> retainAll(@NonNull Iterable<?> c);
 
-
     /**
      * Returns a mutable copy of this collection.
      *
      * @return a mutable copy.
      */
     @NonNull Collection<E> toMutable();
+
+    /**
+     * Returns the maximal number of elements that this collection type can
+     * hold
+     *
+     * @return the maximal size
+     */
+    int maxSize();
 }

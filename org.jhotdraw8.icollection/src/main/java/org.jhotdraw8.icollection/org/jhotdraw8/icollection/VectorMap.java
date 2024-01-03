@@ -250,6 +250,11 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     }
 
     @Override
+    public int maxSize() {
+        return 1 << 30;
+    }
+
+    @Override
     public @NonNull VectorMap<K, V> put(@NonNull K key, @Nullable V value) {
         return putLast(key, value, false);
     }

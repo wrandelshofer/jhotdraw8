@@ -34,7 +34,7 @@ import java.util.function.Function;
  * <p>
  * Features:
  * <ul>
- *     <li>supports up to 2<sup>30</sup> elements</li>
+ *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
  *     <li>allows null elements</li>
  *     <li>is mutable</li>
  *     <li>is not thread-safe</li>

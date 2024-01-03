@@ -37,12 +37,13 @@ public class ScalaVectorMapJol extends AbstractJol {
      *          1        32        32   scala.collection.immutable.VectorMap
      *       4921              127576   (total)
      * </pre>
+     * With 1 Mio elements, memory overhead is 80.373792 bytes per entry.
      */
     @Test
     @Disabled
     public void estimateMemoryUsage() {
-        int size = 1_000;
-        final int mask = ~64;
+        int size = 1_000_000;
+        final int mask = -1;//~64;
         var data = generateMap(size, mask);
         var b = VectorMap.<Key, Key>newBuilder();
         for (var d : data.entrySet()) {
