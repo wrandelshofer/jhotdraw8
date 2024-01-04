@@ -62,6 +62,7 @@ public class AbstractJol {
             System.out.println("element size            : " + elementSize);
             System.out.println("data size               : " + dataSize + " " + (100 * dataSize / totalSize) + "%");
             System.out.println("data structure size     : " + dataStructureSize + " " + (100 * dataStructureSize / totalSize) + "%");
+            System.out.println("overhead per element    : " + (float) dataStructureSize / size + " bytes");
 
             System.out.println("----footprint---");
             System.out.println(graphLayout.toFootprint());

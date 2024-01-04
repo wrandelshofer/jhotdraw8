@@ -44,8 +44,8 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
     AddOnlyChampSet() {
     }
 
-    private static char bitpos(int mask) {
-        return (char) (1 << mask);
+    private static int bitpos(int mask) {
+        return (1 << mask);
     }
 
     private static int mask(int keyHash, int shift) {
@@ -66,19 +66,19 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
 
         if (mask0 != mask1) {
             // both nodes fit on same level
-            final char dataMap = (char) (bitpos(mask0) | bitpos(mask1));
+            final int dataMap = (bitpos(mask0) | bitpos(mask1));
 
             if (mask0 < mask1) {
-                return new BitmapIndexedNode<>((char) 0, dataMap, key0, key1);
+                return new BitmapIndexedNode<>(0, dataMap, key0, key1);
             } else {
-                return new BitmapIndexedNode<>((char) 0, dataMap, key1, key0);
+                return new BitmapIndexedNode<>(0, dataMap, key1, key0);
             }
         } else {
             final AddOnlyChampSet<K> node =
                     mergeTwoKeyValPairs(key0, keyHash0, key1, keyHash1, shift + BIT_PARTITION_SIZE);
             // values fit on next level
-            final char nodeMap = bitpos(mask0);
-            return new BitmapIndexedNode<>(nodeMap, (char) 0, node);
+            final int nodeMap = bitpos(mask0);
+            return new BitmapIndexedNode<>(nodeMap, 0, node);
         }
     }
 
@@ -118,20 +118,14 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
     abstract @NonNull AddOnlyChampSet<E> updated(@NonNull E key, int keyHash, int shift);
 
     private static final class BitmapIndexedNode<K> extends AddOnlyChampSet<K> {
-        private static final @NonNull AddOnlyChampSet<?> EMPTY_NODE = new BitmapIndexedNode<>((char) 0, (char) 0);
+        private static final @NonNull AddOnlyChampSet<?> EMPTY_NODE = new BitmapIndexedNode<>(0, 0);
         @NonNull
         final Object[] nodes;
-        /**
-         * We use char as an unsigned short.
-         */
-        private final char nodeMap;
-        /**
-         * We use char as an unsigned short.
-         */
-        private final char dataMap;
+        private final int nodeMap;
+        private final int dataMap;
 
-        BitmapIndexedNode(char nodeMap,
-                          char dataMap, @NonNull Object... nodes) {
+        BitmapIndexedNode(int nodeMap,
+                          int dataMap, @NonNull Object... nodes) {
             this.nodeMap = nodeMap;
             this.dataMap = dataMap;
             this.nodes = nodes;
@@ -148,7 +142,7 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             System.arraycopy(src, idx, dst, idx + 1, src.length - idx);
             dst[idx] = key;
 
-            return new BitmapIndexedNode<>(nodeMap, (char) (dataMap | bitpos), dst);
+            return new BitmapIndexedNode<>(nodeMap, (dataMap | bitpos), dst);
         }
 
         @NonNull AddOnlyChampSet<K> copyAndMigrateFromInlineToNode(int bitpos, @NonNull AddOnlyChampSet<K> node) {
@@ -166,7 +160,7 @@ public abstract class AddOnlyChampSet<E> implements ImmutableAddOnlySet<E> {
             System.arraycopy(src, idxNew + 1, dst, idxNew + 1, src.length - idxNew - 1);
             dst[idxNew] = node;
 
-            return new BitmapIndexedNode<>((char) (nodeMap | bitpos), (char) (dataMap ^ bitpos), dst);
+            return new BitmapIndexedNode<>((nodeMap | bitpos), (dataMap ^ bitpos), dst);
         }
 
         @NonNull AddOnlyChampSet<K> copyAndSetNode(int bitpos,

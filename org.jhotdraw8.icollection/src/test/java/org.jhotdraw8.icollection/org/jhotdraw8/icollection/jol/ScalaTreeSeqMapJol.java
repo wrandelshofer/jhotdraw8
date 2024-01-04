@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.jmh.Key;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Tuple2;
 import scala.collection.immutable.TreeSeqMap;
@@ -40,6 +41,7 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
      * With 1 Mio elements, memory overhead is 131.728552 bytes per element.
      */
     @Test
+    @Disabled
     public void estimateMemoryUsage() {
         for (int i = 1; i <= 1_000_000; i *= 10) {
             int size = i;
@@ -80,6 +82,7 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
      * </pre>
      */
     @Test
+    @Disabled
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

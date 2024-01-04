@@ -2,7 +2,17 @@ package org.jhotdraw8.icollection.jmh;
 
 import kotlinx.collections.immutable.ExtensionsKt;
 import kotlinx.collections.immutable.PersistentSet;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
@@ -40,6 +50,15 @@ public class KotlinxPersistentHashSetJmh {
     public void setup() {
         data = new BenchmarkData(size, mask);
         setA = ExtensionsKt.toPersistentHashSet(data.setA);
+    }
+
+    @Benchmark
+    public PersistentSet<Integer> mAddOneByOne() {
+        PersistentSet<Integer> set = ExtensionsKt.persistentHashSetOf();
+        for (int i = 0; i < size; i++) {
+            set = set.add(i);
+        }
+        return set;
     }
 
     @Benchmark

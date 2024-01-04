@@ -1,7 +1,14 @@
 package org.jhotdraw8.icollection.jmh;
 
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * This class provides collections that can be used in JMH benchmarks.
@@ -40,11 +47,12 @@ public class BenchmarkData {
     public BenchmarkData(int size, int mask) {
         this.size = size;
         Random rng = new Random(0);
-        Set<Integer> preventDuplicates = new HashSet<>(size * 2);
+        int initialCapacity = (int) Math.min(Integer.MAX_VALUE, size * 2L);
+        Set<Integer> preventDuplicates = new HashSet<>(initialCapacity);
         ArrayList<Key> keysInSet = new ArrayList<>(size);
-        mapA = new HashMap<>(size * 2);
+        mapA = new HashMap<>(initialCapacity);
         ArrayList<Key> keysNotInSet = new ArrayList<>(size);
-        Map<Key, Integer> indexMap = new HashMap<>(size * 2);
+        Map<Key, Integer> indexMap = new HashMap<>(initialCapacity);
         for (int i = 0; i < size; i++) {
             Key key = createKey(rng, preventDuplicates, mask);
             keysInSet.add(key);
