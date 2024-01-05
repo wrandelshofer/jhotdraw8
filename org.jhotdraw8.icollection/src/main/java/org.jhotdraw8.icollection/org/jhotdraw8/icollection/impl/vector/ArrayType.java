@@ -4,10 +4,6 @@
  */
 package org.jhotdraw8.icollection.impl.vector;
 
-/*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*\
-   G E N E R A T O R   C R A F T E D
-\*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*/
-
 import java.io.Serial;
 import java.io.Serializable;
 
