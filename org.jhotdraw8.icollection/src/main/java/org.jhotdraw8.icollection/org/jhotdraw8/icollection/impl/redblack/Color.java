@@ -1,11 +1,8 @@
 package org.jhotdraw8.icollection.impl.redblack;
 
-public enum Color {
+public class Color {
 
-    RED, BLACK;
+    public final static boolean RED = true;
+    public final static boolean BLACK = false;
 
-    @Override
-    public String toString() {
-        return (this == RED) ? "R" : "B";
-    }
 }

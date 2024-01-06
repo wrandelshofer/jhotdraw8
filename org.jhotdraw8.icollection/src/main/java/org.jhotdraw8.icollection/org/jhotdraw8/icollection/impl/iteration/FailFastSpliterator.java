@@ -6,7 +6,9 @@
 package org.jhotdraw8.icollection.impl.iteration;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
+import java.util.Comparator;
 import java.util.ConcurrentModificationException;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -23,12 +25,14 @@ public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
     private final @NonNull Spliterator<? extends E> s;
     private final int expectedModCount;
     private final @NonNull IntSupplier modCountSupplier;
+    private final @Nullable Comparator<E> comparator;
 
-    public FailFastSpliterator(@NonNull Spliterator<? extends E> s, @NonNull IntSupplier modCountSupplier) {
+    public FailFastSpliterator(@NonNull Spliterator<? extends E> s, @NonNull IntSupplier modCountSupplier, @Nullable Comparator<E> comparator) {
         super(s.estimateSize(), s.characteristics());
         this.s = s;
         this.modCountSupplier = modCountSupplier;
         this.expectedModCount = modCountSupplier.getAsInt();
+        this.comparator = comparator;
     }
 
     @Override
@@ -47,7 +51,7 @@ public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
     @Override
     public Spliterator<E> trySplit() {
         Spliterator<? extends E> split = s.trySplit();
-        return split == null ? null : new FailFastSpliterator<>(split, modCountSupplier);
+        return split == null ? null : new FailFastSpliterator<>(split, modCountSupplier, null);
     }
 
     @Override
@@ -58,5 +62,13 @@ public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
     @Override
     public int characteristics() {
         return s.characteristics() & ~Spliterator.IMMUTABLE;
+    }
+
+    @Override
+    public Comparator<? super E> getComparator() {
+        if (s.hasCharacteristics(Spliterator.SORTED)) {
+            return comparator;
+        }
+        throw new IllegalStateException();
     }
 }

@@ -2,16 +2,38 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSortedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractImmutableSetTest {
 
@@ -174,7 +196,12 @@ public abstract class AbstractImmutableSetTest {
         for (Key k : data.c()) {
             assertFalse(instance.contains(k));
         }
-        assertFalse(instance.contains(new Object()));
+        try {
+            boolean contains = instance.contains(new Object());
+            assertFalse(contains);
+        } catch (ClassCastException e) {
+            assertInstanceOf(ImmutableSortedSet.class, instance, "Only an ImmutableSortedSet may throw a ClassCastException");
+        }
     }
 
 

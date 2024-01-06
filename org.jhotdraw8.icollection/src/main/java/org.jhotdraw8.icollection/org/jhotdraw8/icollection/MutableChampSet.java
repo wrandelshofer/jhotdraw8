@@ -127,9 +127,6 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         if (c instanceof MutableChampSet<?> m) {
             c = (Iterable<? extends E>) m.toImmutable();
         }
-        if (c == root) {
-            return false;
-        }
         if (isEmpty() && (c instanceof ChampSet<?> cc)) {
             root = (BitmapIndexedNode<E>) cc.root;
             size = cc.size;
@@ -273,7 +270,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
 
     @Override
     public Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(new ChampSpliterator<>(root, Function.identity(), size, Spliterator.DISTINCT | Spliterator.SIZED), () -> this.modCount);
+        return new FailFastSpliterator<>(new ChampSpliterator<>(root, Function.identity(), size, Spliterator.DISTINCT | Spliterator.SIZED), () -> this.modCount, null);
     }
 
     private void iteratorRemove(E e) {

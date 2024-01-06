@@ -51,7 +51,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
 
     @Override
     public Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(backingSet.spliterator(), () -> this.modCount);
+        return new FailFastSpliterator<>(backingSet.spliterator(), () -> this.modCount, null);
     }
 
     @Override

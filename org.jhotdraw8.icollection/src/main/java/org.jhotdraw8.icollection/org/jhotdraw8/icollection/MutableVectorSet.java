@@ -326,7 +326,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     private @NonNull Spliterator<E> reverseSpliterator() {
         return new FailFastSpliterator<>(new ReverseTombSkippingVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(), size(),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
     }
 
     @SuppressWarnings("unchecked")
@@ -334,7 +334,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     public @NonNull Spliterator<E> spliterator() {
         return new FailFastSpliterator<>(new TombSkippingVectorSpliterator<>(vector.trie,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
-                0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount);
+                0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
     }
 
     private void iteratorRemove(E element) {

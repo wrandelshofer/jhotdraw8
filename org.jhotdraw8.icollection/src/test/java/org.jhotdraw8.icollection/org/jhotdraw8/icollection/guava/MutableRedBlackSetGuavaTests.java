@@ -13,7 +13,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.MutableVectorSet;
+import org.jhotdraw8.icollection.MutableRedBlackSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -21,16 +21,16 @@ import java.util.Collections;
 import java.util.Set;
 
 /**
- * Tests {@link MutableVectorSet} with the Guava test suite.
+ * Tests {@link MutableRedBlackSet} with the Guava test suite.
  */
-public class MutableVectorSetGuavaTests {
+public class MutableRedBlackSetGuavaTests {
 
     public static Test suite() {
-        return new MutableVectorSetGuavaTests().allTests();
+        return new MutableRedBlackSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(MutableVectorSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(MutableRedBlackSet.class.getSimpleName());
         suite.addTest(testsForSet());
         suite.addTest(testsForReversedSet());
         return suite;
@@ -41,16 +41,17 @@ public class MutableVectorSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new MutableVectorSet<>(MinimalCollection.of(elements));
+                                return new MutableRedBlackSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named(MutableVectorSet.class.getSimpleName())
+                .named(MutableRedBlackSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
-                        CollectionFeature.KNOWN_ORDER,
+                        CollectionFeature.DESCENDING_VIEW,
+                        CollectionFeature.SUBSET_VIEW,
+                        //CollectionFeature.KNOWN_ORDER,
                         CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
-                        CollectionFeature.SUPPORTS_ITERATOR_REMOVE,
                         CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
@@ -63,12 +64,14 @@ public class MutableVectorSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new MutableVectorSet<>(MinimalCollection.of(elements)).reversed();
+                                return new MutableRedBlackSet<>(MinimalCollection.of(elements)).reversed();
                             }
                         })
-                .named(MutableVectorSet.class.getSimpleName() + "Reversed")
+                .named(MutableRedBlackSet.class.getSimpleName() + "Reversed")
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
+                        CollectionFeature.DESCENDING_VIEW,
+                        CollectionFeature.SUBSET_VIEW,
                         //CollectionFeature.KNOWN_ORDER,
                         CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,

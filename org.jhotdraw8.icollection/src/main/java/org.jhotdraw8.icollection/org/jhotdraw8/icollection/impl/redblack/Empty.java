@@ -4,11 +4,13 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
 /**
- * The empty tree node. It can't be a singleton because it depends on a {@link Comparator}.
+ * The empty tree node.
  * <p>
  * This class has been derived from 'vavr' RedBlackTree.java.
  * <dl>
@@ -19,39 +21,55 @@ import java.util.NoSuchElementException;
  * @param <T> Component type
  */
 public final class Empty<T> implements RedBlackTree<T> {
+    public final static Empty<?> EMPTY = new Empty<>();
 
-
-    final Comparator<T> comparator;
-
-    // This is no public API! The RedBlackTree takes care of passing the correct Comparator.
     @SuppressWarnings("unchecked")
-    Empty(Comparator<? super T> comparator) {
-        this.comparator = (Comparator<T>) comparator;
+    public static <T> Empty<T> empty() {
+        return (Empty<T>) EMPTY;
+    }
+
+    private Empty() {
     }
 
     @Override
-    public Color color() {
+    public boolean color() {
         return Color.BLACK;
     }
 
     @Override
-    public Comparator<T> comparator() {
-        return comparator;
-    }
-
-    @Override
-    public boolean contains(T value) {
+    public boolean contains(T value, Comparator<? super T> comparator) {
         return false;
     }
 
+
     @Override
-    public Empty<T> emptyInstance() {
+    public RedBlackTree<T> find(T value, Comparator<? super T> comparator) {
         return this;
     }
 
     @Override
-    public Option<T> find(T value) {
-        return Option.none();
+    public @NonNull RedBlackTree<T> ceiling(T e, @NonNull Comparator<? super T> comparator) {
+        return this;
+    }
+
+    @Override
+    public @NonNull RedBlackTree<T> floor(T e, @NonNull Comparator<? super T> comparator) {
+        return this;
+    }
+
+    @Override
+    public @NonNull RedBlackTree<T> higher(T e, @NonNull Comparator<? super T> comparator) {
+        return this;
+    }
+
+    @Override
+    public RedBlackTree<T> orElse(RedBlackTree<T> other) {
+        return other;
+    }
+
+    @Override
+    public @NonNull RedBlackTree<T> lower(T e, @NonNull Comparator<? super T> comparator) {
+        return this;
     }
 
     @Override
@@ -77,6 +95,11 @@ public final class Empty<T> implements RedBlackTree<T> {
     @Override
     public T value() {
         throw new NoSuchElementException("value on empty");
+    }
+
+    @Override
+    public T orNull() {
+        return null;
     }
 
     @Override

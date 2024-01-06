@@ -91,7 +91,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public @NonNull Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(backingList.spliterator(), () -> this.modCount);
+        return new FailFastSpliterator<>(backingList.spliterator(), () -> this.modCount, null);
     }
 
     @Override

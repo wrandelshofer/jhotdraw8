@@ -108,10 +108,12 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      */
     @SuppressWarnings("unchecked")
     default @NonNull ImmutableSet<E> retainAll(@NonNull Iterable<?> c) {
-        if (isEmpty()
-                || c instanceof Collection<?> co && co.isEmpty()
-                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+        if (isEmpty()) {
             return this;
+        }
+        if (c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return clear();
         }
         if (c instanceof Collection<?> co) {
             var s = this;

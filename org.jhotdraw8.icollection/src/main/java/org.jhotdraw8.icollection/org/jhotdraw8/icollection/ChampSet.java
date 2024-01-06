@@ -85,17 +85,14 @@ import java.util.Spliterator;
  */
 @SuppressWarnings("exports")
 public class ChampSet<E> implements ImmutableSet<E>, Serializable {
-    private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
-    @Serial
-    private static final long serialVersionUID = 0L;
-    final @NonNull BitmapIndexedNode<E> root;
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
     static final int SALT = new Random().nextInt();
-    /**
-     * The size of the set.
-     */
+    private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
+    @Serial
+    private static final long serialVersionUID = 0L;
+    final @NonNull BitmapIndexedNode<E> root;
     final int size;
 
     ChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
@@ -141,6 +138,22 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         return ChampSet.<E>of().addAll(Arrays.asList(elements));
     }
 
+    /**
+     * Update function for a set: we always keep the old element.
+     *
+     * @param oldElement the old element
+     * @param newElement the new element
+     * @param <E>        the element type
+     * @return always returns the old element
+     */
+    static <E> E updateElement(E oldElement, E newElement) {
+        return oldElement;
+    }
+
+    static int keyHash(Object e) {
+        return SALT ^ Objects.hashCode(e);
+    }
+
     @Override
     public @NonNull ChampSet<E> add(@Nullable E element) {
         int keyHash = keyHash(element);
@@ -158,7 +171,6 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         var m = toMutable();
         return m.addAll(c) ? m.toImmutable() : this;
     }
-
 
     /**
      * {@inheritDoc}
@@ -189,18 +201,6 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         return ReadOnlySet.setEquals(this, other);
     }
 
-    /**
-     * Update function for a set: we always keep the old element.
-     *
-     * @param oldElement the old element
-     * @param newElement the new element
-     * @param <E>        the element type
-     * @return always returns the old element
-     */
-    static <E> E updateElement(E oldElement, E newElement) {
-        return oldElement;
-    }
-
     @Override
     public int hashCode() {
         return ReadOnlySet.iteratorToHashCode(iterator());
@@ -209,10 +209,6 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     @Override
     public @NonNull Iterator<E> iterator() {
         return new ChampIterator<E, E>(root, null);
-    }
-
-    static int keyHash(Object e) {
-        return SALT ^ Objects.hashCode(e);
     }
 
     @Override

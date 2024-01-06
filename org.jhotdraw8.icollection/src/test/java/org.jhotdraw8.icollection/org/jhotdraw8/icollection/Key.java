@@ -5,13 +5,15 @@
 
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.io.Serializable;
 
 /**
  * Elem has a configurable bit mask for its hash code.
  * Allowing to run the same test with many or few hash collisions.
  */
-public class Key implements Serializable, Cloneable {
+public class Key implements Serializable, Cloneable, Comparable<Key> {
     private static final long serialVersionUID = 0L;
     private final int value;
     private final int hash;
@@ -25,6 +27,11 @@ public class Key implements Serializable, Cloneable {
         this.value = value;
         this.hashBitMask = hashBitMask;
         this.hash = value & hashBitMask;
+    }
+
+    @Override
+    public int compareTo(@NonNull Key o) {
+        return Integer.compare(o.value, this.value);
     }
 
     @Override

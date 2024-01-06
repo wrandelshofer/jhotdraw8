@@ -6,12 +6,31 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.SortedSet;
+import java.util.Spliterator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractSetTest {
     private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
@@ -252,7 +271,11 @@ public abstract class AbstractSetTest {
         for (Key k : data.c()) {
             assertFalse(instance.contains(k));
         }
-        assertFalse(instance.contains(new Object()));
+        try {
+            assertFalse(instance.contains(new Object()));
+        } catch (ClassCastException e) {
+            assertInstanceOf(SortedSet.class, instance, "only sorted sets may throw ClassCastException");
+        }
 
         instance.addAll(data.someAPlusSomeB.asSet());
         for (Key k : data.a()) {

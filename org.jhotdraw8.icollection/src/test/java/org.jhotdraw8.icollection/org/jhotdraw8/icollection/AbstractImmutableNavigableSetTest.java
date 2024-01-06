@@ -1,0 +1,65 @@
+package org.jhotdraw8.icollection;
+
+import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.NoSuchElementException;
+import java.util.SequencedSet;
+import java.util.Set;
+import java.util.Spliterator;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+public abstract class AbstractImmutableNavigableSetTest extends AbstractImmutableSetTest {
+    @Override
+    protected abstract @NonNull <E> ImmutableNavigableSet<E> newInstance();
+
+    @Override
+    protected abstract @NonNull <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m);
+
+    @Override
+    protected abstract @NonNull <E> ImmutableNavigableSet<E> toImmutableInstance(Set<E> m);
+
+    @Override
+    protected abstract @NonNull <E> ImmutableNavigableSet<E> toClonedInstance(ImmutableSet<E> m);
+
+    @Override
+    protected abstract @NonNull <E> ImmutableNavigableSet<E> newInstance(Iterable<E> m);
+
+
+    @ParameterizedTest
+    @MethodSource("dataProvider")
+    public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+        ImmutableNavigableSet<Key> instance = newInstance(data.a());
+        instance = instance.removeAll(data.a().asSet());
+        assertThrows(NoSuchElementException.class, instance::removeLast);
+    }
+
+
+    protected <E> void assertEqualSequence(Collection<E> expected, ReadOnlySequencedSet<E> actual, String message) {
+        ArrayList<E> expectedList = new ArrayList<>(expected);
+        assertEquals(expectedList, new ArrayList<>(actual.asSet()), message);
+        if (!expected.isEmpty()) {
+            assertEquals(expectedList.get(0), actual.getFirst(), message);
+            assertEquals(expectedList.get(0), actual.iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.getLast(), message);
+            //assertEquals(expectedList.get(expectedList.size() - 1), actual.reversed().iterator().next(), message);
+        }
+        assertEquals(expected.toString(), actual.toString(), message);
+    }
+
+    @Test
+    public void spliteratorShouldSupportEncounterOrder() throws Exception {
+        ImmutableSet<Key> instance = newInstance();
+        assertEquals(instance.spliterator().characteristics() & Spliterator.ORDERED, Spliterator.ORDERED, "set should be ordered");
+    }
+
+}

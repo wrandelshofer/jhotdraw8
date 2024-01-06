@@ -159,7 +159,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
                 new ChampSpliterator<>(root,
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
                         size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.NONNULL),
-                this::getModCount);
+                this::getModCount, null);
     }
 
     /**

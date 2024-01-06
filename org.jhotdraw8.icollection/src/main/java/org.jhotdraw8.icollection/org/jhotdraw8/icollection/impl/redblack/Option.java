@@ -5,6 +5,7 @@
 package org.jhotdraw8.icollection.impl.redblack;
 
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -36,14 +37,118 @@ public interface Option<T> {
         return new Some<>(value);
     }
 
-    public record Some<T>(T value) implements Option<T> {
+    record Some<T>(T value) implements Option<T> {
+        @Override
+        public boolean isEmpty() {
+            return false;
+        }
 
+        @Override
+        public Option<T> orElse(Option<? extends T> other) {
+            return this;
+        }
+
+        @Override
+        public T orNull() {
+            return value;
+        }
+
+        @Override
+        public T orThrow() {
+            return value;
+        }
     }
 
-    public record None<T>() implements Option<T> {
+    record None<T>() implements Option<T> {
         /**
          * The singleton instance of None.
          */
         private static final None<?> INSTANCE = new None<>();
+
+        @Override
+        public boolean isEmpty() {
+            return true;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        public Option<T> orElse(Option<? extends T> other) {
+            return (Option<T>) other;
+        }
+
+        @Override
+        public T orNull() {
+            return null;
+        }
+
+        @Override
+        public T orThrow() {
+            throw new NoSuchElementException();
+        }
     }
+
+    /**
+     * Returns true, if this is {@code None}, otherwise false, if this is {@code Some}.
+     *
+     * <pre>{@code
+     * // Prints "false"
+     * System.out.println(Option.of(10).isEmpty());
+     *
+     * // Prints "true"
+     * System.out.println(Option.none().isEmpty());
+     * }</pre>
+     *
+     * @return true, if this {@code Option} is empty, false otherwise
+     */
+    boolean isEmpty();
+
+    /**
+     * Returns this {@code Option} if it is nonempty, otherwise return the alternative.
+     *
+     * <pre>{@code
+     * Option<String> other = Option.of("Other");
+     *
+     * // = Some("Hello World")
+     * Option.of("Hello World").orElse(other);
+     *
+     * // = Some("Other")
+     * Option.none().orElse(other);
+     * }</pre>
+     *
+     * @param other An alternative {@code Option}
+     * @return this {@code Option} if it is nonempty, otherwise return the alternative.
+     */
+    @SuppressWarnings("unchecked")
+    Option<T> orElse(Option<? extends T> other);
+
+    /**
+     * Returns this {@code Option} if this is defined, or {@code null} if it is empty.
+     *
+     * <pre>{@code
+     * // = Some("Hello World")
+     * Option.of("Hello World").orNull();
+     *
+     * // = null
+     * Option.none().orNull();
+     * }</pre>
+     *
+     * @return this value if it is defined, or {@code null} if it is empty.
+     */
+    T orNull();
+
+    /**
+     * Returns this {@code Option} if this is defined, or throws a {@code NoSuchElementException} if it is empty.
+     *
+     * <pre>{@code
+     * // = Some("Hello World")
+     * Option.of("Hello World").orThrow();
+     *
+     * // = null
+     * Option.none().orThrow();
+     * }</pre>
+     *
+     * @return this value if it is defined, or {@code null} if it is empty.
+     */
+    T orThrow();
+
 }

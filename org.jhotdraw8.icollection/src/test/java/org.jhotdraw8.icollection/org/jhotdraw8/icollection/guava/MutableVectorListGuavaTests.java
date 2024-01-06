@@ -51,6 +51,7 @@ public class MutableVectorListGuavaTests {
                         ListFeature.GENERAL_PURPOSE,
                         CollectionFeature.ALLOWS_NULL_VALUES,
                         CollectionFeature.ALLOWS_NULL_QUERIES,
+                        CollectionFeature.SUPPORTS_ITERATOR_REMOVE,
                         CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
