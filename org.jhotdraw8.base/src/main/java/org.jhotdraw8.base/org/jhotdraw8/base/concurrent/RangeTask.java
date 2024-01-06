@@ -17,7 +17,7 @@ import java.util.function.BiConsumer;
  * <p>
  * Usage:
  * <pre>
- * RangeTask.forEach(0,1000,10,(lo,hi)->{for(int i=lo;i<hi;i++) {....}; return result;}).get();
+ * RangeTask.forEach(0,1000,10,(lo,hi)->{for(int i=lo;i&lt;hi;i++) {....};});
  * </pre>
  */
 public class RangeTask extends CountedCompleter<Void> {
