@@ -208,7 +208,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Nullable
     @Override
     public E floor(E e) {
-        return null;
+        return root.floor(e, comparator).orNull();
     }
 
     /**
