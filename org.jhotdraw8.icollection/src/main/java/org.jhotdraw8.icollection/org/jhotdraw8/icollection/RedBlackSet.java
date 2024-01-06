@@ -124,7 +124,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      *
      * @param elements elements
      * @param <E>      the element type
-     * @return an immutable set of the provided elements
+     * @return an iterable of elements
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs

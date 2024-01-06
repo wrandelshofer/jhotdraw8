@@ -193,6 +193,16 @@ public class ChampMap<K, V>
         return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
     }
 
+    /**
+     * Update function for a map: we keep the old entry if it has the same
+     * value as the new entry.
+     *
+     * @param oldv the old entry
+     * @param newv the new entry
+     * @param <K>  the key type
+     * @param <V>  the value type
+     * @return the old or the new entry
+     */
     @Nullable
     static <K, V> SimpleImmutableEntry<K, V> updateEntry(@Nullable SimpleImmutableEntry<K, V> oldv, @Nullable SimpleImmutableEntry<K, V> newv) {
         return Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
