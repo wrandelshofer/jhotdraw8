@@ -22,7 +22,7 @@ public class ChangeEvent<V> {
         return oldValue;
     }
 
-    public boolean hasReplacedValue() {
+    public boolean isReplaced() {
         return isReplaced;
     }
 

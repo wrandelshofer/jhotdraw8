@@ -148,7 +148,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
     @Override
     public boolean containsKey(final @Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return findByKey(key, hashFunction.applyAsInt(key), 0) != Node.NO_VALUE;
+        return findByKey(key, hashFunction.applyAsInt(key), 0) != Node.NO_DATA;
     }
 
     @Override
@@ -165,7 +165,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
                 keyHash, 0, details);
 
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
+            if (details.isReplaced()) {
                 return new ImmutableChampMap<>(newRootNode,
                         size);
             }
@@ -214,7 +214,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         final BitmapIndexedNode<K, V> newRootNode =
                 remove(null, key, keyHash, 0, details);
         if (details.isModified()) {
-            assert details.hasReplacedValue();
+            assert details.isReplaced();
             return new ImmutableChampMap<>(newRootNode, size - 1);
         }
         return this;
@@ -293,7 +293,7 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
     public V get(final @NonNull Object o) {
         K key = (K) o;
         Object result = findByKey(key, hashFunction.applyAsInt(key), 0);
-        return result == Node.NO_VALUE ? null : (V) result;
+        return result == Node.NO_DATA ? null : (V) result;
     }
 
     @Override

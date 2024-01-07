@@ -137,7 +137,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    protected boolean equivalent(final @NonNull Object other) {
+    public boolean equivalent(final @NonNull Object other) {
         if (this == other) {
             return true;
         }
@@ -167,7 +167,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         } else if ((nodeMap & bitpos) != 0) {
             return nodeAt(bitpos).findByKey(key, keyHash, shift + BIT_PARTITION_SIZE);
         }
-        return NO_VALUE;
+        return NO_DATA;
     }
 
     @Override

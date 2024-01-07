@@ -31,6 +31,23 @@ public class ChampSetJol extends AbstractJol {
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
      *       1588               43608   (total)
      * </pre>
+     * <pre>
+     * class org.jhotdraw8.icollection.ChampSet with 1 elements.
+     * total size              : 120
+     * element size            : 24
+     * data size               : 24 20%
+     * data structure size     : 96 80%
+     * overhead per element    : 96.0 bytes
+     * ----footprint---
+     * org.jhotdraw8.icollection.ChampSet@95e33ccd footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *          1        24        24   [Ljava.lang.Object;
+     *          1        24        24   org.jhotdraw8.icollection.ChampSet
+     *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
+     *          1        32        32   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *          1        24        24   org.jhotdraw8.icollection.jmh.Key
+     *          5                 120   (total)
+     * </pre>
      */
     @Test
     @Disabled

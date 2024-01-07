@@ -36,7 +36,7 @@ public abstract class Node<K, V> {
      * We can not use {@code null}, because we allow storing null-keys and
      * null-values in the trie.
      */
-    public static final Object NO_VALUE = new Object();
+    public static final Object NO_DATA = new Object();
     /**
      * Indicates that no sequence number must be inserted.
      */
@@ -166,7 +166,7 @@ public abstract class Node<K, V> {
      * @param key     a key
      * @param keyHash the hash code of the key
      * @param shift   the shift for this node
-     * @return the value, returns {@link #NO_VALUE} if the value is not present.
+     * @return the value, returns {@link #NO_DATA} if the value is not present.
      */
     abstract Object findByKey(final K key, final int keyHash, final int shift);
 

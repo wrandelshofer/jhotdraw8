@@ -153,7 +153,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(@NonNull Object o) {
-        return root.findByKey((K) o, Objects.hashCode(o), 0) != Node.NO_VALUE;
+        return root.findByKey((K) o, Objects.hashCode(o), 0) != Node.NO_DATA;
     }
 
     /**
@@ -190,7 +190,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     public @Nullable V get(@NonNull Object o) {
         K key = (K) o;
         Object result = root.findByKey(key, Objects.hashCode(key), 0);
-        return result == Node.NO_VALUE ? null : (V) result;
+        return result == Node.NO_DATA ? null : (V) result;
     }
 
     private @NonNull IdentityObject getOrCreateMutator() {
@@ -211,7 +211,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         BitmapIndexedNode<K, V> newRootNode = root
                 .update(getOrCreateMutator(), key, val, keyHash, 0, details);
         if (details.isModified()) {
-            if (details.hasReplacedValue()) {
+            if (details.isReplaced()) {
                 root = newRootNode;
             } else {
                 root = newRootNode;
@@ -241,7 +241,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
         final BitmapIndexedNode<K, V> newRootNode =
                 root.remove(getOrCreateMutator(), key, keyHash, 0, details);
         if (details.isModified()) {
-            assert details.hasReplacedValue();
+            assert details.isReplaced();
             root = newRootNode;
             size = size - 1;
             modCount++;

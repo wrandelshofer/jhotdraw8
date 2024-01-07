@@ -26,6 +26,23 @@ public class KotlinPersistentHashMapJol extends AbstractJol {
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
      *       2701               74400   (total)
      * </pre>
+     * <pre>
+     * class kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap with 1 elements.
+     * total size              : 136
+     * element size            : 48
+     * data size               : 48 35%
+     * data structure size     : 88 64%
+     * overhead per element    : 88.0 bytes
+     * ----footprint---
+     * kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap@5be46f9dd footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *          1        24        24   [Ljava.lang.Object;
+     *          1        32        32   kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap
+     *          1        32        32   kotlinx.collections.immutable.implementations.immutableMap.TrieNode
+     *          2        24        48   org.jhotdraw8.icollection.jmh.Key
+     *          5                 136   (total)
+     * </pre>
+     *
      */
     @Test
     @Disabled
