@@ -106,6 +106,11 @@ public class ChampMap<K, V>
         this.size = size;
     }
 
+    @Override
+    public int characteristics() {
+        return Spliterator.IMMUTABLE | Spliterator.SIZED | Spliterator.DISTINCT;
+    }
+
     /**
      * Returns an immutable copy of the provided map.
      *
@@ -294,7 +299,7 @@ public class ChampMap<K, V>
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return new ChampSpliterator<>(root, null, size(), Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.NONNULL);
+        return new ChampSpliterator<>(root, null, size(), characteristics());
     }
 
     /**
@@ -341,7 +346,7 @@ public class ChampMap<K, V>
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return ChampMap.of().putAll(deserialized);
+            return ChampMap.of().putAll(deserializedEntries);
         }
     }
 }

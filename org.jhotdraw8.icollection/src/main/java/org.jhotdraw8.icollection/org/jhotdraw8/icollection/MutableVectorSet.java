@@ -428,7 +428,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableVectorSet<>(deserialized);
+            return new MutableVectorSet<>(deserializedElements);
         }
     }
 }

@@ -4,6 +4,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
+import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
@@ -15,6 +16,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.Spliterator;
@@ -39,10 +41,10 @@ import java.util.function.Consumer;
 public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
-    final @NonNull RedBlackTree<E> root;
+    final @NonNull RedBlackTree<E, Void> root;
     final @NonNull Comparator<E> comparator;
 
-    RedBlackSet(@NonNull Comparator<E> comparator, @NonNull RedBlackTree<E> root) {
+    RedBlackSet(@NonNull Comparator<E> comparator, @NonNull RedBlackTree<E, Void> root) {
         this.root = root;
         this.comparator = comparator;
     }
@@ -51,19 +53,21 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * Returns an immutable set that contains the provided elements, sorted according to the
      * specified comparator.
      *
+     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param c   an iterable
      * @param <E> the element type
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull RedBlackSet<E> copyOf(@NonNull Comparator<E> comparator, @NonNull Iterable<? extends E> c) {
+    public static <E> @NonNull RedBlackSet<E> copyOf(@Nullable Comparator<E> comparator, @NonNull Iterable<? extends E> c) {
+        if (comparator == null) comparator = NaturalComparator.instance();
         if (c instanceof RedBlackSet<? extends E> r && r.comparator.equals(comparator)) {
             return (RedBlackSet<E>) r;
         }
         if (c instanceof MutableRedBlackSet<? extends E> r && r.comparator.equals(comparator)) {
             return (RedBlackSet<E>) r.toImmutable();
         }
-        return RedBlackSet.<E>sortedOf(comparator).addAll(c);
+        return RedBlackSet.sortedOf(comparator).addAll(c);
     }
 
     /**
@@ -74,36 +78,38 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @param <E> the element type
      * @return an immutable set of the provided elements
      */
-    @SuppressWarnings("unchecked")
     public static <E> @NonNull RedBlackSet<E> copyOf(@NonNull Iterable<? extends E> c) {
-        return RedBlackSet.<E>copyOf(NaturalComparator.instance(), c);
+        return RedBlackSet.copyOf(NaturalComparator.instance(), c);
     }
 
     /**
      * Returns an empty immutable set, sorted according to the
      * specified comparator.
      *
+     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param <E> the element type
      * @return an empty immutable set
      */
-    @SuppressWarnings("unchecked")
-    public static <E> @NonNull RedBlackSet<E> sortedOf(@NonNull Comparator<E> comparator) {
-        return ((RedBlackSet<E>) new RedBlackSet<>(comparator, RedBlackTree.of(comparator, RedBlackSet::updateElement)));
+    public static <E> @NonNull RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator) {
+        if (comparator == null) comparator = NaturalComparator.instance();
+        return new RedBlackSet<>(comparator, RedBlackTree.of(comparator));
     }
 
     /**
      * Returns an immutable set that contains the provided elements, sorted according to the
      * specified comparator.
      *
+     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param elements elements
      * @param <E>      the element type
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
-    public static <E> @NonNull RedBlackSet<E> sortedOf(@NonNull Comparator<E> comparator, @NonNull E @Nullable ... elements) {
+    public static <E> @NonNull RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator, @NonNull E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return RedBlackSet.<E>sortedOf(comparator).addAll(Arrays.asList(elements));
+        if (comparator == null) comparator = NaturalComparator.instance();
+        return RedBlackSet.sortedOf(comparator).addAll(Arrays.asList(elements));
     }
 
     /**
@@ -113,9 +119,8 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @param <E> the element type
      * @return an empty immutable set
      */
-    @SuppressWarnings("unchecked")
     public static <E> @NonNull RedBlackSet<E> of() {
-        return ((RedBlackSet<E>) new RedBlackSet<>(NaturalComparator.instance(), RedBlackTree.of(NaturalComparator.instance(), RedBlackSet::updateElement)));
+        return new RedBlackSet<>(NaturalComparator.instance(), RedBlackTree.of(NaturalComparator.instance()));
     }
 
     /**
@@ -134,18 +139,18 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public @NonNull RedBlackSet<E> add(E element) {
-        RedBlackTree<E> newRoot = root.insert(element, comparator, RedBlackSet::updateElement);
+        RedBlackTree<E, Void> newRoot = root.insert(element, null, comparator);
         return newRoot == root ? this : new RedBlackSet<>(comparator, newRoot);
     }
 
     @Override
     public E getFirst() {
-        return root.min().orThrow();
+        return root.min().getKey();
     }
 
     @Override
     public E getLast() {
-        return root.max().orThrow();
+        return root.max().getKey();
     }
 
     @SuppressWarnings("unchecked")
@@ -155,7 +160,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
             c = m.toImmutable();
         }
         if (c instanceof RedBlackSet<? extends E> that && that.comparator == this.comparator) {
-            RedBlackTree<E> newRoot = root.addAll((RedBlackTree<E>) that.root, comparator, RedBlackSet::updateElement);
+            RedBlackTree<E, Void> newRoot = root.addAll((RedBlackTree<E, Void>) that.root, comparator);
             return newRoot.size() == root.size() ? this : new RedBlackSet<>(comparator, newRoot);
         }
         return (RedBlackSet<E>) ImmutableNavigableSet.super.addAll(c);
@@ -163,7 +168,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public @Nullable E ceiling(E e) {
-        return root.ceiling(e, comparator).orNull();
+        return root.ceiling(e, comparator).keyOrNull();
     }
 
     @Override
@@ -173,7 +178,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public @Nullable Comparator<? super E> comparator() {
-        return comparator;
+        return comparator == NaturalComparator.instance() ? null : comparator;
     }
 
     @SuppressWarnings("unchecked")
@@ -184,22 +189,23 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public @Nullable E floor(E e) {
-        return root.floor(e, comparator).orNull();
+        return root.floor(e, comparator).keyOrNull();
     }
 
     @Override
     public @Nullable E higher(E e) {
-        return root.higher(e, comparator).orNull();
+        return root.higher(e, comparator).keyOrNull();
     }
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return root.iterator();
+        return new MappedIterator<>(root.iterator(), Map.Entry::getKey);
     }
 
     @Override
     public Spliterator<E> spliterator() {
-        return new Spliterators.AbstractSpliterator<>(size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED | Spliterator.IMMUTABLE) {
+        return new Spliterators.AbstractSpliterator<>(size(),
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED | Spliterator.IMMUTABLE) {
             private final Iterator<E> iterator = iterator();
 
             @Override
@@ -212,14 +218,14 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
             @Override
             public Comparator<? super E> getComparator() {
-                return comparator;
+                return comparator();
             }
         };
     }
 
     @Override
     public @Nullable E lower(E e) {
-        return root.lower(e, comparator).orNull();
+        return root.lower(e, comparator).keyOrNull();
     }
 
     @Override
@@ -241,7 +247,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public @NonNull RedBlackSet<E> remove(E element) {
-        RedBlackTree<E> newRoot = root.delete(element, comparator);
+        RedBlackTree<E, Void> newRoot = root.delete(element, comparator);
         return newRoot.size() == root.size() ? this : new RedBlackSet<>(comparator, newRoot);
     }
 
@@ -256,7 +262,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @NonNull Iterator<E> reverseIterator() {
-        return root.reverseIterator();
+        return new MappedIterator<>(root.reverseIterator(), Map.Entry::getKey);
     }
 
     @Override
@@ -302,17 +308,5 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
         protected @NonNull Object readResolve() {
             return RedBlackSet.copyOf(deserializedComparator, deserializedElements);
         }
-    }
-
-    /**
-     * Update function for a set: we always keep the old element.
-     *
-     * @param oldElement the old element
-     * @param newElement the new element
-     * @param <E>        the element type
-     * @return always returns the old element
-     */
-    static <E> E updateElement(E oldElement, E newElement) {
-        return oldElement;
     }
 }

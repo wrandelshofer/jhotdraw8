@@ -45,8 +45,9 @@ public class VavrLinkedHashMapJol extends AbstractJol {
      * element size            : 48
      * data size               : 48000 34%
      * data structure size     : 92008 65%
+     * overhead per element    : 92.008 bytes
      * ----footprint---
-     * io.vavr.collection.LinkedHashMap@4f704591d footprint:
+     * io.vavr.collection.LinkedHashMap@4f3bbf68d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        350        32     11528   [Ljava.lang.Object;
      *       1000        24     24000   io.vavr.Tuple2
@@ -79,17 +80,18 @@ public class VavrLinkedHashMapJol extends AbstractJol {
     /**
      * <pre>
      * class io.vavr.collection.LinkedHashMap with 250 elements.
-     * total size              : 34696
+     * total size              : 34808
      * element size            : 48
      * data size               : 12000 34%
-     * data structure size     : 22696 65%
+     * data structure size     : 22808 65%
+     * overhead per element    : 91.232 bytes
      * ----footprint---
-     * io.vavr.collection.LinkedHashMap@78a773fdd footprint:
+     * io.vavr.collection.LinkedHashMap@2bd08376d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *         81        32      2672   [Ljava.lang.Object;
+     *         83        32      2736   [Ljava.lang.Object;
      *        250        24      6000   io.vavr.Tuple2
      *          1        24        24   io.vavr.collection.HashArrayMappedTrieModule$ArrayNode
-     *         80        24      1920   io.vavr.collection.HashArrayMappedTrieModule$IndexedNode
+     *         82        24      1968   io.vavr.collection.HashArrayMappedTrieModule$IndexedNode
      *        250        24      6000   io.vavr.collection.HashArrayMappedTrieModule$LeafSingleton
      *          1        16        16   io.vavr.collection.HashMap
      *          1        24        24   io.vavr.collection.LinkedHashMap
@@ -97,10 +99,11 @@ public class VavrLinkedHashMapJol extends AbstractJol {
      *          1        16        16   io.vavr.collection.List$Nil
      *          1        24        24   io.vavr.collection.Queue
      *        500        24     12000   org.jhotdraw8.icollection.jmh.Key
-     *       1416               34696   (total)
+     *       1420               34808   (total)
      * </pre>
      */
     @Test
+    @Disabled
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

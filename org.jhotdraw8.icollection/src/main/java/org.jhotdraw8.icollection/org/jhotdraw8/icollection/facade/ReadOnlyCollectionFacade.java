@@ -5,12 +5,14 @@
 package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -26,15 +28,17 @@ public class ReadOnlyCollectionFacade<E> extends AbstractReadOnlyCollection<E> {
     protected final Supplier<Iterator<E>> iteratorFunction;
     protected final IntSupplier sizeFunction;
     protected final Predicate<Object> containsFunction;
+    protected final int characteristics;
 
-    public ReadOnlyCollectionFacade(@NonNull Set<E> backingSet) {
-        this(backingSet::iterator, backingSet::size, backingSet::contains);
+    public ReadOnlyCollectionFacade(@NonNull Set<E> backingSet, int characteristics) {
+        this(backingSet::iterator, backingSet::size, backingSet::contains, characteristics);
     }
 
-    public ReadOnlyCollectionFacade(Supplier<Iterator<E>> iteratorFunction, IntSupplier sizeFunction, Predicate<Object> containsFunction) {
+    public ReadOnlyCollectionFacade(Supplier<Iterator<E>> iteratorFunction, IntSupplier sizeFunction, Predicate<Object> containsFunction, int characteristics) {
         this.iteratorFunction = iteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsFunction = containsFunction;
+        this.characteristics = characteristics;
     }
 
     @Override
@@ -67,6 +71,11 @@ public class ReadOnlyCollectionFacade<E> extends AbstractReadOnlyCollection<E> {
                 throw new UnsupportedOperationException();
             }
         };
+    }
+
+    @Override
+    public Spliterator<E> spliterator() {
+        return new IteratorSpliterator<>(iterator(), size(), characteristics, null);
     }
 
     @Override

@@ -5,9 +5,12 @@
 package org.jhotdraw8.icollection.impl.redblack;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Comparator;
+import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.function.BiFunction;
 
 /**
  * The empty tree node.
@@ -18,14 +21,14 @@ import java.util.NoSuchElementException;
  *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
  * </dl>
  *
- * @param <T> Component type
+ * @param <K> Component type
  */
-public final class Empty<T> implements RedBlackTree<T> {
-    public final static Empty<?> EMPTY = new Empty<>();
+public final class Empty<K, V> implements RedBlackTree<K, V> {
+    public final static Empty<?, ?> EMPTY = new Empty<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> Empty<T> empty() {
-        return (Empty<T>) EMPTY;
+    public static <K, V> Empty<K, V> empty() {
+        return (Empty<K, V>) EMPTY;
     }
 
     private Empty() {
@@ -37,38 +40,38 @@ public final class Empty<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public boolean contains(T value, Comparator<? super T> comparator) {
+    public boolean contains(K key, Comparator<? super K> comparator) {
         return false;
     }
 
 
     @Override
-    public RedBlackTree<T> find(T value, Comparator<? super T> comparator) {
+    public RedBlackTree<K, V> find(K key, Comparator<? super K> comparator) {
         return this;
     }
 
     @Override
-    public @NonNull RedBlackTree<T> ceiling(T e, @NonNull Comparator<? super T> comparator) {
+    public @NonNull RedBlackTree<K, V> ceiling(K e, @NonNull Comparator<? super K> comparator) {
         return this;
     }
 
     @Override
-    public @NonNull RedBlackTree<T> floor(T e, @NonNull Comparator<? super T> comparator) {
+    public @NonNull RedBlackTree<K, V> floor(K e, @NonNull Comparator<? super K> comparator) {
         return this;
     }
 
     @Override
-    public @NonNull RedBlackTree<T> higher(T e, @NonNull Comparator<? super T> comparator) {
+    public @NonNull RedBlackTree<K, V> higher(K e, @NonNull Comparator<? super K> comparator) {
         return this;
     }
 
     @Override
-    public RedBlackTree<T> orElse(RedBlackTree<T> other) {
+    public RedBlackTree<K, V> orElse(RedBlackTree<K, V> other) {
         return other;
     }
 
     @Override
-    public @NonNull RedBlackTree<T> lower(T e, @NonNull Comparator<? super T> comparator) {
+    public @NonNull RedBlackTree<K, V> lower(K e, @NonNull Comparator<? super K> comparator) {
         return this;
     }
 
@@ -78,12 +81,12 @@ public final class Empty<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public RedBlackTree<T> left() {
+    public RedBlackTree<K, V> left() {
         throw new UnsupportedOperationException("left on empty");
     }
 
     @Override
-    public RedBlackTree<T> right() {
+    public RedBlackTree<K, V> right() {
         throw new UnsupportedOperationException("right on empty");
     }
 
@@ -93,17 +96,47 @@ public final class Empty<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public T value() {
+    public K getKey() {
+        throw new NoSuchElementException("key on empty");
+    }
+
+    @Override
+    public V getValue() {
         throw new NoSuchElementException("value on empty");
     }
 
     @Override
-    public T orNull() {
+    public K keyOrNull() {
         return null;
     }
 
     @Override
+    public V valueOrNull() {
+        return null;
+    }
+
+    @Override
+    public <E> @Nullable E mapOrNull(@NonNull BiFunction<K, V, E> f) {
+        return null;
+    }
+
+    @Override
+    public Map.@Nullable Entry<K, V> entryOrNull() {
+        return null;
+    }
+
+    @Override
+    public boolean isRed() {
+        return false;
+    }
+
+    @Override
     public String toString() {
+        return "()";
+    }
+
+    @Override
+    public String toLispString() {
         return "()";
     }
 }

@@ -2,11 +2,15 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
+import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 import org.jhotdraw8.icollection.navigable.DescendingNavigableSetView;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableSet;
+import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.serialization.SortedSetSerializationProxy;
 
 import java.io.Serial;
@@ -15,9 +19,11 @@ import java.util.AbstractSet;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NavigableSet;
 import java.util.SortedSet;
 import java.util.Spliterator;
+import java.util.stream.Stream;
 
 /**
  * Implements the {@link NavigableSet} interface using a Red-Black tree.
@@ -33,7 +39,17 @@ import java.util.Spliterator;
  *
  * @param <E> the element type
  */
-public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSet<E>, Serializable, Cloneable {
+public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSet<E>, Serializable, Cloneable, ReadOnlyNavigableSet<E> {
+    @Override
+    public E getFirst() {
+        return first();
+    }
+
+    @Override
+    public E getLast() {
+        return last();
+    }
+
     @Serial
     private static final long serialVersionUID = 0L;
     /**
@@ -41,16 +57,16 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
      */
     protected transient int modCount;
     final @NonNull Comparator<E> comparator;
-    @NonNull RedBlackTree<E> root;
+    @NonNull RedBlackTree<E, Void> root;
 
     /**
      * Constructs a new, empty set, sorted according to the
      * specified comparator.
      *
-     * @param comparator the comparator
+     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      */
-    public MutableRedBlackSet(@NonNull Comparator<E> comparator) {
-        this.comparator = comparator;
+    public MutableRedBlackSet(@Nullable Comparator<E> comparator) {
+        this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = RedBlackTree.empty();
     }
 
@@ -58,11 +74,11 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
      * Constructs a new tree set containing the elements in the specified
      * collection, sorted according to the specified comparator.
      *
-     * @param comparator the comparator
+     * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param c          the collection
      */
-    public MutableRedBlackSet(@NonNull Comparator<E> comparator, Collection<? extends E> c) {
-        this.comparator = comparator;
+    public MutableRedBlackSet(@Nullable Comparator<E> comparator, Collection<? extends E> c) {
+        this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = RedBlackTree.empty();
         this.addAll(c);
     }
@@ -89,14 +105,14 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         this.addAll(c);
     }
 
-    MutableRedBlackSet(@NonNull Comparator<E> comparator, RedBlackTree<E> root) {
-        this.comparator = comparator;
+    MutableRedBlackSet(@Nullable Comparator<E> comparator, RedBlackTree<E, Void> root) {
+        this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = root;
     }
 
     @Override
     public boolean add(E e) {
-        RedBlackTree<E> newRoot = root.insert(e, comparator, RedBlackSet::updateElement);
+        RedBlackTree<E, Void> newRoot = root.insert(e, null, comparator);
         if (newRoot.size() != root.size()) {
             root = newRoot;
             modCount++;
@@ -109,7 +125,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Override
     public boolean addAll(@NonNull Collection<? extends E> c) {
         if (c instanceof MutableRedBlackSet<? extends E> r && r.comparator == this.comparator) {
-            RedBlackTree<E> newRoot = root.addAll((RedBlackTree<E>) r.root, comparator, RedBlackSet::updateElement);
+            RedBlackTree<E, Void> newRoot = root.addAll((RedBlackTree<E, Void>) r.root, comparator);
             if (newRoot.size() != root.size()) {
                 root = newRoot;
                 modCount++;
@@ -126,12 +142,12 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
             c = (Iterable<? extends E>) m.toImmutable();
         }
         if (isEmpty() && (c instanceof RedBlackSet<?> cc && cc.comparator == this.comparator)) {
-            root = (RedBlackTree<E>) cc.root;
+            root = (RedBlackTree<E, Void>) cc.root;
             modCount++;
             return true;
         }
         if (c instanceof RedBlackSet<?> that && that.comparator == this.comparator) {
-            RedBlackTree<E> newRoot = root.addAll((RedBlackTree<E>) that.root, comparator, RedBlackSet::updateElement);
+            RedBlackTree<E, Void> newRoot = root.addAll((RedBlackTree<E, Void>) that.root, comparator);
             if (newRoot.size() != root.size()) {
                 this.root = newRoot;
                 modCount++;
@@ -149,7 +165,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Nullable
     @Override
     public E ceiling(E e) {
-        return root.ceiling(e, comparator).orNull();
+        return root.ceiling(e, comparator).keyOrNull();
     }
 
     @Override
@@ -172,7 +188,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Nullable
     @Override
     public Comparator<? super E> comparator() {
-        return comparator;
+        return comparator == NaturalComparator.instance() ? null : comparator;
     }
 
     @Override
@@ -189,7 +205,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Override
     public Iterator<E> descendingIterator() {
         return new FailFastIterator<>(
-                root.reverseIterator(),
+                new MappedIterator<>(root.reverseIterator(), Map.Entry::getKey),
                 this::iteratorRemove, this::getModCount
         );
     }
@@ -202,13 +218,13 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
 
     @Override
     public E first() {
-        return root.min().orThrow();
+        return root.min().getKey();
     }
 
     @Nullable
     @Override
     public E floor(E e) {
-        return root.floor(e, comparator).orNull();
+        return root.floor(e, comparator).keyOrNull();
     }
 
     /**
@@ -235,7 +251,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Nullable
     @Override
     public E higher(E e) {
-        return root.higher(e, comparator).orNull();
+        return root.higher(e, comparator).keyOrNull();
     }
 
     @Override
@@ -247,9 +263,29 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Override
     public Iterator<E> iterator() {
         return new FailFastIterator<>(
-                root.iterator(),
+                new MappedIterator<>(root.iterator(), Map.Entry::getKey),
                 this::iteratorRemove, this::getModCount
         );
+    }
+
+    @NonNull
+    Iterator<E> reverseIterator() {
+        return new FailFastIterator<>(
+                new MappedIterator<>(root.reverseIterator(), Map.Entry::getKey),
+                this::iteratorRemove, this::getModCount
+        );
+    }
+
+    @Override
+    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+        return new ReadOnlySequencedSetFacade<>(
+                this::reverseIterator,
+                this::iterator,
+                this::size,
+                this::contains,
+                this::getLast,
+                this::getFirst,
+                Spliterator.IMMUTABLE);
     }
 
     @Override
@@ -261,20 +297,25 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     }
 
     @Override
+    public Stream<E> stream() {
+        return super.stream();
+    }
+
+    @Override
     public E last() {
-        return root.max().orThrow();
+        return root.max().getKey();
     }
 
     @Nullable
     @Override
     public E lower(E e) {
-        return root.lower(e, comparator).orNull();
+        return root.lower(e, comparator).keyOrNull();
     }
 
     @Nullable
     @Override
     public E pollFirst() {
-        E value = root.min().orNull();
+        E value = root.min().keyOrNull();
         root = root.delete(value, comparator);
         return value;
     }
@@ -282,7 +323,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Nullable
     @Override
     public E pollLast() {
-        E value = root.max().orNull();
+        E value = root.max().keyOrNull();
         root = root.delete(value, comparator);
         return value;
     }
@@ -290,7 +331,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
-        RedBlackTree<E> newRoot = root.delete((E) o, comparator);
+        RedBlackTree<E, Void> newRoot = root.delete((E) o, comparator);
         if (newRoot.size() != root.size()) {
             root = newRoot;
             modCount++;

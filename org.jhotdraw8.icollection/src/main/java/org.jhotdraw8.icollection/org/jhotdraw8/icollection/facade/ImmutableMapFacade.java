@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
@@ -156,5 +157,10 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     @Override
     public @NonNull Map<K, V> toMutable() {
         return cloneFunction.apply(target);
+    }
+
+    @Override
+    public int characteristics() {
+        return Spliterator.IMMUTABLE | super.characteristics();
     }
 }

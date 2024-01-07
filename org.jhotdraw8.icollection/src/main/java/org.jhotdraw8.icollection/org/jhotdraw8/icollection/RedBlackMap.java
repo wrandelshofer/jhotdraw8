@@ -2,12 +2,16 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableNavigableMap;
-import org.jhotdraw8.icollection.impl.KeyComparator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.icollection.readonly.ReadOnlySortedMap;
+import org.jhotdraw8.icollection.serialization.SortedMapSerializationProxy;
 
+import java.io.ObjectStreamException;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
@@ -16,17 +20,19 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SortedMap;
+import java.util.Spliterator;
 
 public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializable {
 
     @Serial
     private static final long serialVersionUID = 0L;
-    final @NonNull RedBlackTree<AbstractMap.SimpleImmutableEntry<K, V>> root;
-    final @NonNull KeyComparator<K, V> keyComparator;
+    final @NonNull RedBlackTree<K, V> root;
+    final @NonNull Comparator<? super K> comparator;
 
-    RedBlackMap(@NonNull KeyComparator<K, V> keyComparator, @NonNull RedBlackTree<AbstractMap.SimpleImmutableEntry<K, V>> root) {
+    RedBlackMap(@NonNull Comparator<? super K> comparator, @NonNull RedBlackTree<K, V> root) {
         this.root = root;
-        this.keyComparator = keyComparator;
+        this.comparator = comparator;
     }
 
     /**
@@ -39,12 +45,11 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      * @return an immutable map of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull RedBlackMap<K, V> copyOf(@NonNull Comparator<K> comparator, @NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        KeyComparator<K, V> keyComparator = new KeyComparator<>(comparator);
-        if (c instanceof RedBlackMap<?, ?> r && r.keyComparator.equals(keyComparator)) {
+    public static <K, V> @NonNull RedBlackMap<K, V> copyOf(@NonNull Comparator<? super K> comparator, @NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+        if (c instanceof RedBlackMap<?, ?> r && r.comparator.equals(comparator)) {
             return (RedBlackMap<K, V>) r;
         }
-        if (c instanceof MutableRedBlackMap<?, ?> r && r.keyComparator.equals(keyComparator)) {
+        if (c instanceof MutableRedBlackMap<?, ?> r && r.comparator.equals(comparator)) {
             return (RedBlackMap<K, V>) r.toImmutable();
         }
         return RedBlackMap.<K, V>sortedOf(comparator).putAll(c);
@@ -54,6 +59,7 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     public @NonNull RedBlackMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
         return (RedBlackMap<K, V>) ImmutableNavigableMap.super.putAll(m);
     }
+
 
     @Override
     public @NonNull RedBlackMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
@@ -89,11 +95,22 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      * @param <V> the value type
      * @return an immutable map of the provided elements
      */
-    @SuppressWarnings("unchecked")
     public static <K, V> @NonNull RedBlackMap<K, V> copyOf(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return RedBlackMap.<K, V>copyOf(NaturalComparator.instance(), c);
+        return RedBlackMap.copyOf(NaturalComparator.instance(), c);
     }
 
+    /**
+     * Returns an immutable copy of the provided map that contains the provided elements sorted according to the
+     * <i>natural ordering</i> of its elements.
+     *
+     * @param map a map
+     * @param <K> the key type
+     * @param <V> the value type
+     * @return an immutable copy
+     */
+    public static <K, V> @NonNull RedBlackMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return RedBlackMap.<K, V>of().putAll(map);
+    }
     /**
      * Returns an empty immutable map, sorted according to the
      * specified comparator.
@@ -102,10 +119,9 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      * @param <V> the value type
      * @return an empty immutable map
      */
-    @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull RedBlackMap<K, V> sortedOf(@NonNull Comparator<K> comparator) {
-        KeyComparator<K, V> keyComparator = new KeyComparator<>(comparator);
-        return ((RedBlackMap<K, V>) new RedBlackMap<>(keyComparator, RedBlackTree.of(keyComparator, RedBlackMap::updateEntry)));
+    public static <K, V> @NonNull RedBlackMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator) {
+        comparator = comparator == null ? NaturalComparator.instance() : comparator;
+        return new RedBlackMap<>(comparator, RedBlackTree.of(comparator));
     }
 
     /**
@@ -119,7 +135,7 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
-    public static <K, V> @NonNull RedBlackMap<K, V> sortedOf(@NonNull Comparator<K> comparator, Map.@NonNull Entry<K, V> @Nullable ... elements) {
+    public static <K, V> @NonNull RedBlackMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator, Map.@NonNull Entry<K, V> @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
         return RedBlackMap.<K, V>sortedOf(comparator).putAll(Arrays.asList(elements));
     }
@@ -132,10 +148,9 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      * @param <V> the value type
      * @return an empty immutable map
      */
-    @SuppressWarnings("unchecked")
     public static <K, V> @NonNull RedBlackMap<K, V> of() {
-        return ((RedBlackMap<K, V>) new RedBlackMap<>(new KeyComparator<>(NaturalComparator.instance()),
-                RedBlackTree.<AbstractMap.SimpleImmutableEntry<K, V>>of(NaturalComparator.instance(), RedBlackMap::updateEntry)));
+        return new RedBlackMap<>(NaturalComparator.instance(),
+                RedBlackTree.of(NaturalComparator.instance()));
     }
 
     /**
@@ -155,77 +170,104 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
 
     @Override
     public Map.@Nullable Entry<K, V> ceilingEntry(K k) {
-        return null;
+        return root.ceiling(k, comparator).mapOrNull(AbstractMap.SimpleImmutableEntry::new);
     }
 
     @Override
     public @Nullable Comparator<? super K> comparator() {
-        return keyComparator.getComparator();
+        return comparator == NaturalComparator.instance() ? null : comparator;
     }
 
     @Override
     public Map.@Nullable Entry<K, V> floorEntry(K k) {
-        return null;
+        return root.floor(k, comparator).mapOrNull(AbstractMap.SimpleImmutableEntry::new);
     }
 
     @Override
     public Map.@Nullable Entry<K, V> higherEntry(K k) {
-        return null;
+        return root.higher(k, comparator).mapOrNull(AbstractMap.SimpleImmutableEntry::new);
     }
 
     @Override
     public Map.@Nullable Entry<K, V> lowerEntry(K k) {
-        return null;
+        return root.lower(k, comparator).mapOrNull(AbstractMap.SimpleImmutableEntry::new);
+    }
+
+    @Override
+    public Map.@Nullable Entry<K, V> firstEntry() {
+        return root.min().mapOrNull(AbstractMap.SimpleImmutableEntry::new);
+    }
+
+    @Override
+    public Map.@Nullable Entry<K, V> lastEntry() {
+        return root.max().mapOrNull(AbstractMap.SimpleImmutableEntry::new);
     }
 
     @Override
     public @NonNull RedBlackMap<K, V> clear() {
-        return null;
+        return isEmpty() ? this : sortedOf(comparator);
     }
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return size() == 0;
     }
 
     @Override
     public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return null;
+        return new ReadOnlySequencedMapFacade<>(
+                this::reverseIterator,
+                this::iterator,
+                this::size,
+                this::containsKey,
+                this::get,
+                this::lastEntry,
+                this::firstEntry,
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, null);
     }
 
     @Override
     public int size() {
-        return 0;
+        return root.size();
     }
 
     @Override
     public @Nullable V get(Object key) {
-        return null;
+        return root.find((K) key, comparator).valueOrNull();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean containsKey(@Nullable Object key) {
-        return false;
+        return root.contains((K) key, comparator);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return null;
+        return (Iterator<Map.Entry<K, V>>) (Iterator<?>) root.iterator();
+    }
+
+    @SuppressWarnings("unchecked")
+    @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
+        return (Iterator<Map.Entry<K, V>>) (Iterator<?>) root.reverseIterator();
     }
 
     @Override
     public @NonNull RedBlackMap<K, V> put(@NonNull K key, @Nullable V value) {
-        return null;
+        RedBlackTree<K, V> newRoot = root.insert(key, value, comparator);
+        return newRoot == root ? this : new RedBlackMap<>(comparator, newRoot);
     }
 
     @Override
     public @NonNull RedBlackMap<K, V> remove(@NonNull K key) {
-        return null;
+        RedBlackTree<K, V> newRoot = root.delete(key, comparator);
+        return newRoot == root ? this : new RedBlackMap<>(comparator, newRoot);
     }
 
     @Override
     public @NonNull MutableRedBlackMap<K, V> toMutable() {
-        return null;
+        return new MutableRedBlackMap<>(root, comparator);
     }
 
     @Override
@@ -233,18 +275,45 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
         return Integer.MAX_VALUE;
     }
 
-
-    /**
-     * Update function for a map: we only keep the old entry if it has the same
-     * value as the new entry.
-     *
-     * @param oldv the old entry
-     * @param newv the new entry
-     * @param <K>  the key type
-     * @param <V>  the value type
-     * @return the old or the new entry
-     */
-    static <K, V> AbstractMap.@Nullable SimpleImmutableEntry<K, V> updateEntry(AbstractMap.@Nullable SimpleImmutableEntry<K, V> oldv, AbstractMap.@Nullable SimpleImmutableEntry<K, V> newv) {
-        return Objects.equals(oldv.getValue(), newv.getValue()) ? oldv : newv;
+    @Override
+    public boolean equals(Object o) {
+        return ReadOnlySortedMap.sortedMapEquals(this, o);
     }
+
+    @Override
+    public int hashCode() {
+        return ReadOnlyMap.iteratorToHashCode(iterator());
+    }
+
+    @Override
+    public String toString() {
+        return ReadOnlyMap.mapToString(this);
+    }
+
+    @Override
+    public int characteristics() {
+        return Spliterator.IMMUTABLE | Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.SORTED | Spliterator.ORDERED;
+    }
+
+    @Serial
+    private @NonNull Object writeReplace() throws ObjectStreamException {
+        return new RedBlackMap.SerializationProxy<>(this.toMutable());
+    }
+
+    private static class SerializationProxy<K, V> extends SortedMapSerializationProxy<K, V> {
+        @Serial
+        private static final long serialVersionUID = 0L;
+
+        protected SerializationProxy(SortedMap<K, V> target) {
+            super(target);
+        }
+
+        @Serial
+        @Override
+        protected @NonNull Object readResolve() {
+            return RedBlackMap.sortedOf(deserializedComparator).putAll(deserializedEntries);
+        }
+    }
+
+
 }

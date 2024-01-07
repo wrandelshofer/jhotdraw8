@@ -6,11 +6,15 @@ package org.jhotdraw8.icollection.facade;
 
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.SequencedSet;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -27,16 +31,16 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
     final @NonNull Supplier<E> getFirstFunction;
     final @NonNull Supplier<E> getLastFunction;
     final @NonNull Supplier<Iterator<E>> reverseIteratorFunction;
-
+    private final @Nullable Comparator<E> comparator;
     public ReadOnlySequencedCollectionFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(),
                 backingSet::size,
-                backingSet::contains, backingSet::getFirst, backingSet::getLast);
+                backingSet::contains, backingSet::getFirst, backingSet::getLast, Spliterator.SIZED, null);
     }
 
     public ReadOnlySequencedCollectionFacade(@NonNull SequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
-                backingSet::contains, backingSet::getFirst, backingSet::getLast);
+                backingSet::contains, backingSet::getFirst, backingSet::getLast, Spliterator.SIZED, null);
     }
 
     public ReadOnlySequencedCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
@@ -44,13 +48,19 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
                                              @NonNull IntSupplier sizeFunction,
                                              @NonNull Predicate<Object> containsFunction,
                                              @NonNull Supplier<E> getFirstFunction,
-                                             @NonNull Supplier<E> getLastFunction) {
-        super(iteratorFunction, sizeFunction, containsFunction);
+                                             @NonNull Supplier<E> getLastFunction, int spliteratorCharacteristics,
+                                             @Nullable Comparator<E> comparator) {
+        super(iteratorFunction, sizeFunction, containsFunction, spliteratorCharacteristics);
         this.getFirstFunction = getFirstFunction;
         this.getLastFunction = getLastFunction;
         this.reverseIteratorFunction = reverseIteratorFunction;
+        this.comparator = comparator;
     }
 
+    @Override
+    public Spliterator<E> spliterator() {
+        return Spliterators.spliterator(iterator(), size(), characteristics);
+    }
 
     @Override
     public E getFirst() {
@@ -70,7 +80,7 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
                 sizeFunction,
                 containsFunction,
                 getLastFunction,
-                getFirstFunction
-        );
+                getFirstFunction,
+                0, null);
     }
 }

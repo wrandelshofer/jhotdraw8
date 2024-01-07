@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Spliterator;
+import java.util.Spliterators;
 
 /**
  * A read-only interface to a map. A map is an object that maps keys to values.
@@ -143,7 +144,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
         return new ReadOnlyCollectionFacade<>(
                 () -> new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getValue),
                 this::size,
-                this::containsValue
+                this::containsValue, characteristics()
         );
     }
 
@@ -286,6 +287,16 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     @NonNull
     @Override
     default Spliterator<Map.Entry<K, V>> spliterator() {
-        return Iterable.super.spliterator();
+        return Spliterators.spliterator(iterator(), size(), characteristics());
+    }
+
+    /**
+     * Returns the spliterator characteristics of the key set.
+     * This implementation returns {@link Spliterator#SIZED}|{@link Spliterator#DISTINCT}.
+     *
+     * @return characteristics.
+     */
+    default int characteristics() {
+        return Spliterator.SIZED | Spliterator.DISTINCT;
     }
 }

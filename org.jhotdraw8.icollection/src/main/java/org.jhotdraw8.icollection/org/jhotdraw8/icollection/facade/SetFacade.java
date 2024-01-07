@@ -49,7 +49,7 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
                      @NonNull IntSupplier sizeFunction,
                      @NonNull Predicate<Object> containsFunction) {
         this(iteratorFunction,
-                () -> Spliterators.spliterator(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT),
+                () -> Spliterators.spliterator(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT | Spliterator.SIZED),
                 sizeFunction, containsFunction, null, null, null);
     }
 
@@ -73,6 +73,7 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
         this.addFunction = addFunction == null ? o -> {
             throw new UnsupportedOperationException();
         } : addFunction;
+
     }
 
     @Override
@@ -85,7 +86,6 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
         clearFunction.run();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public Spliterator<E> spliterator() {
         return spliteratorFunction.get();

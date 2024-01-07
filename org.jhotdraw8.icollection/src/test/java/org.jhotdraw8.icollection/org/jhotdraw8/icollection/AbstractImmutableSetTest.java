@@ -181,6 +181,11 @@ public abstract class AbstractImmutableSetTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void cloneShouldYieldEqualSet(@NonNull SetData data) {
+        //   io.vavr.collection.TreeSet<Key> vavrSet=    io.vavr.collection.TreeSet.empty();
+        //  vavrSet= vavrSet.addAll(data.a());
+        //  System.out.println("vavrSet="+vavrSet);
+
+
         ImmutableSet<Key> instance = newInstance(data.a());
         ImmutableSet<Key> clone = toClonedInstance(instance);
         assertEqualSet(data.a().asSet(), clone);
@@ -683,6 +688,14 @@ public abstract class AbstractImmutableSetTest {
         } else {
             assertEquals(instance.spliterator().characteristics() & Spliterator.NONNULL, Spliterator.NONNULL, "spliterator should be nullable");
         }
+    }
+
+    @Test
+    public void spliteratorShouldHaveImmutableSetCharacteristics() throws Exception {
+        ImmutableSet<Key> instance = newInstance();
+
+        assertEquals(Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED,
+                (Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.spliterator().characteristics());
     }
 
 }

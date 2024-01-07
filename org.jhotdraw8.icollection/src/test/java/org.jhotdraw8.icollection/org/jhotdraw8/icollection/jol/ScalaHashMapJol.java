@@ -16,21 +16,21 @@ public class ScalaHashMapJol extends AbstractJol {
     /**
      * <pre>
      * class scala.collection.immutable.HashMap with 1000 elements.
-     * total size              : 82864
+     * total size              : 82848
      * element size            : 48
      * data size               : 48000 57%
-     * data structure size     : 34864 42%
+     * data structure size     : 34848 42%
+     * overhead per element    : 34.848 bytes
      * ----footprint---
-     * scala.collection.immutable.HashMap@4ff8d125d footprint:
+     * scala.collection.immutable.HashMap@70f59913d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        293        30      8992   [I
-     *        296        47     14016   [Ljava.lang.Object;
+     *        292        30      8968   [I
+     *        296        47     14024   [Ljava.lang.Object;
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
      *        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
      *          1        16        16   scala.collection.immutable.HashMap
-     *       2886               82864   (total)
+     *       2885               82848   (total)
      * </pre>
-     * With 1 Mio elements, memory overhead is 35.728536 bytes per entry.
      */
     @Test
     @Disabled

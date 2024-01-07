@@ -29,12 +29,12 @@ public class ReadOnlySequencedSetFacade<E> extends ReadOnlySetFacade<E>
 
     public ReadOnlySequencedSetFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(), backingSet::size,
-                backingSet::contains, backingSet::getFirst, backingSet::getLast, 0);
+                backingSet::contains, backingSet::getFirst, backingSet::getLast, Spliterator.SIZED | Spliterator.DISTINCT);
     }
 
     public ReadOnlySequencedSetFacade(@NonNull SequencedSet<E> backingSet) {
         this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
-                backingSet::contains, backingSet::getFirst, backingSet::getLast, 0);
+                backingSet::contains, backingSet::getFirst, backingSet::getLast, Spliterator.SIZED | Spliterator.DISTINCT);
     }
 
     public ReadOnlySequencedSetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
@@ -43,7 +43,7 @@ public class ReadOnlySequencedSetFacade<E> extends ReadOnlySetFacade<E>
                                       @NonNull Predicate<Object> containsFunction,
                                       @NonNull Supplier<E> getFirstFunction,
                                       @NonNull Supplier<E> getLastFunction, int characteristics) {
-        super(iteratorFunction, sizeFunction, containsFunction, characteristics | Spliterator.SIZED | Spliterator.DISTINCT);
+        super(iteratorFunction, sizeFunction, containsFunction, characteristics);
         this.getFirstFunction = getFirstFunction;
         this.getLastFunction = getLastFunction;
         this.reverseIteratorFunction = reverseIteratorFunction;

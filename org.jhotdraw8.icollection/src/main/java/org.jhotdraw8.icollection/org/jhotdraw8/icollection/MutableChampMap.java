@@ -18,7 +18,6 @@ import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
@@ -85,6 +84,12 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         root = BitmapIndexedNode.emptyNode();
     }
 
+    /**
+     * Constructs a map containing the same entries as in the specified
+     * {@link Map}.
+     *
+     * @param m a map
+     */
     public MutableChampMap(@NonNull Map<? extends K, ? extends V> m) {
         if (m instanceof MutableChampMap) {
             @SuppressWarnings("unchecked")
@@ -98,14 +103,13 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         }
     }
 
+    /**
+     * Constructs a map containing the same entries as in the specified
+     * {@link Iterable}.
+     *
+     * @param m an iterable
+     */
     public MutableChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
-        this.root = BitmapIndexedNode.emptyNode();
-        for (Entry<? extends K, ? extends V> e : m) {
-            this.put(e.getKey(), e.getValue());
-        }
-    }
-
-    public MutableChampMap(@NonNull ReadOnlyMap<? extends K, ? extends V> m) {
         if (m instanceof ChampMap) {
             @SuppressWarnings("unchecked")
             ChampMap<K, V> that = (ChampMap<K, V>) m;
@@ -113,7 +117,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
             this.size = that.size;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
-            this.putAll(m.asMap());
+            for (Entry<? extends K, ? extends V> e : m) {
+                this.put(e.getKey(), e.getValue());
+            }
         }
     }
 
@@ -158,7 +164,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         return new FailFastSpliterator<>(
                 new ChampSpliterator<>(root,
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                        size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.NONNULL),
+                        size(), Spliterator.NONNULL | characteristics()),
                 this::getModCount, null);
     }
 
@@ -352,7 +358,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableChampMap<>(deserialized);
+            return new MutableChampMap<>(deserializedEntries);
         }
     }
 }

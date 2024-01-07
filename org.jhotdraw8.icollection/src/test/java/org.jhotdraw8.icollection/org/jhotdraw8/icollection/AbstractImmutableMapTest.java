@@ -4,15 +4,37 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readonly.ReadOnlySortedMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractImmutableMapTest {
 
@@ -73,7 +95,7 @@ public abstract class AbstractImmutableMapTest {
     }
 
     @Test
-    public void testNewInstanceNoArgsShouldBeEmpty() {
+    public void newInstanceNoArgsShouldBeEmpty() {
         ImmutableMap<Key, Key> actual = newInstance();
         LinkedHashMap<Key, Key> expected = new LinkedHashMap<>();
         assertEqualMap(expected, actual);
@@ -81,14 +103,14 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceMapArgsShouldBeEqualToArg(MapData data) {
+    public void newInstanceMapArgsShouldBeEqualToArg(MapData data) {
         ImmutableMap<Key, Key> actual = newInstance(data.a().asMap());
         assertEqualMap(data.a(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceMapArgsOfSameTypeShouldBeEqualToArg(MapData data) {
+    public void newInstanceMapArgsOfSameTypeShouldBeEqualToArg(MapData data) {
         ImmutableMap<Key, Key> actual1 = newInstance(data.a().asMap());
         ImmutableMap<Key, Key> actual = newInstance(actual1);
         assertEqualMap(data.a(), actual);
@@ -96,21 +118,21 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceReadOnlyMapArgShouldBeEqualToARg(MapData data) {
+    public void newInstanceReadOnlyMapArgShouldBeEqualToARg(MapData data) {
         ImmutableMap<Key, Key> actual = newInstance(data.a());
         assertEqualMap(data.a(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testNewInstanceIterableArgShouldBeEqualToArg(MapData data) {
+    public void newInstanceIterableArgShouldBeEqualToArg(MapData data) {
         ImmutableMap<Key, Key> actual = newInstance(data.a().readOnlyEntrySet());
         assertEqualMap(data.a(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyClearShouldYieldEmptyMap(MapData data) {
+    public void copyClearShouldYieldEmptyMap(MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
         ImmutableMap<Key, Key> instance2 = instance.clear();
@@ -120,7 +142,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyClearShouldBeIdempotent(MapData data) {
+    public void copyClearShouldBeIdempotent(MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
         instance = instance.clear();
@@ -132,7 +154,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCloneShouldYieldEqualMap(MapData data) {
+    public void cloneShouldYieldEqualMap(MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> clone = toClonedInstance(instance);
         assertEqualMap(data.a(), clone);
@@ -140,7 +162,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testContainsKeyShouldYieldExpectedValue(MapData data) {
+    public void containsKeyShouldYieldExpectedValue(MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         for (Key k : data.a().readOnlyKeySet()) {
             assertTrue(instance.containsKey(k));
@@ -148,12 +170,16 @@ public abstract class AbstractImmutableMapTest {
         for (Key k : data.c().readOnlyKeySet()) {
             assertFalse(instance.containsKey(k));
         }
-        assertFalse(instance.containsKey(new Object()));
+        try {
+            assertFalse(instance.containsKey(new Object()));
+        } catch (ClassCastException e) {
+            assertInstanceOf(ReadOnlySortedMap.class, instance, "only read-only sorted maps may throw ClassCastException");
+        }
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testReadOnlyEntrySetContainsShouldYieldExpectedValue(MapData data) {
+    public void readOnlyEntrySetContainsShouldYieldExpectedValue(MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         for (Map.Entry<Key, Key> e : data.a().readOnlyEntrySet()) {
             assertTrue(instance.readOnlyEntrySet().contains(e));
@@ -169,7 +195,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testIteratorRemoveShouldThrowException(MapData data) {
+    public void iteratorRemoveShouldThrowException(MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         Iterator<Key> i = instance.readOnlyKeySet().iterator();
         assertThrows(Exception.class, i::remove);
@@ -182,7 +208,7 @@ public abstract class AbstractImmutableMapTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testSerializationShouldYieldSameMap(MapData data) throws Exception {
+    public void serializationShouldYieldSameMap(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         assertEqualMap(data.a(), instance);
         if (instance instanceof Serializable) {
@@ -198,16 +224,30 @@ public abstract class AbstractImmutableMapTest {
         }
     }
 
+    @Test
+    public void spliteratorShouldHaveImmutableMapCharacteristics() throws Exception {
+        ImmutableMap<Key, Key> instance = newInstance();
+
+        assertEquals(Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED,
+                (Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.spliterator().characteristics());
+        assertEquals(Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED,
+                (Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyKeySet().spliterator().characteristics());
+        assertEquals(Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED,
+                (Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyEntrySet().spliterator().characteristics());
+        assertEquals(Spliterator.IMMUTABLE | Spliterator.SIZED,
+                (Spliterator.IMMUTABLE | Spliterator.SIZED) & instance.readOnlyValues().spliterator().characteristics());
+    }
+
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEqualWithThisShouldYieldTrue(MapData data) {
+    public void equalsWithThisShouldYieldTrue(MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         assertEquals(instance, instance);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEqualsWithCloneWithUpdatedEntriesShouldYieldFalse(MapData data) throws Exception {
+    public void equalsWithCloneWithUpdatedEntriesShouldYieldFalse(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = toClonedInstance(instance);
         assertEquals(instance, instance2);
@@ -227,7 +267,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutWithNewKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPutWithNewKeyShouldReturnNewInstance(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         LinkedHashMap<Key, Key> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Key> e : data.c) {
@@ -241,7 +281,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutWithContainedKeyButNewValueShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPutWithContainedKeyButNewValueShouldReturnNewInstance(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         LinkedHashMap<Key, Key> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Key> e : data.b) {
@@ -256,7 +296,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRemoveWithNewKeyShouldReturnThis(MapData data) throws Exception {
+    public void copyRemoveWithNewKeyShouldReturnThis(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         for (Map.Entry<Key, Key> e : data.c) {
             assertSame(instance, instance.remove(e.getKey()));
@@ -266,7 +306,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRemoveWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyRemoveWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         LinkedHashMap<Key, Key> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Key> e : data.a) {
@@ -281,7 +321,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEntrySetContainsExpectedEntries(MapData data) throws Exception {
+    public void entrySetContainsExpectedEntries(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         ReadOnlySet<Map.Entry<Key, Key>> entrySet = instance.readOnlyEntrySet();
         for (Map.Entry<Key, Key> e : data.a) {
@@ -304,7 +344,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEntryIteratorShouldYieldExpectedEntries(MapData data) throws Exception {
+    public void entryIteratorShouldYieldExpectedEntries(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         List<Map.Entry<Key, Key>> actualList = new ArrayList<>();
         LinkedHashMap<Key, Key> actualMap = new LinkedHashMap<>();
@@ -316,7 +356,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutWithContainedEntryShouldReturnThis(MapData data) throws Exception {
+    public void copyPutWithContainedEntryShouldReturnThis(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         LinkedHashMap<Key, Key> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Key> e : data.a) {
@@ -328,7 +368,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutAllWithContainedEntriesShouldReturnThis(MapData data) throws Exception {
+    public void copyPutAllWithContainedEntriesShouldReturnThis(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = instance.putAll(data.a().asMap());
         assertSame(instance, instance2);
@@ -337,7 +377,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutAllWithNewEntriesShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPutAllWithNewEntriesShouldReturnNewInstance(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = instance.putAll(data.c().asMap());
         assertNotSame(instance, instance2);
@@ -349,7 +389,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutAllWithContainedKeysButNewValuesShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPutAllWithContainedKeysButNewValuesShouldReturnNewInstance(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = instance.putAll(data.b().asMap());
         assertNotSame(instance, instance2);
@@ -361,7 +401,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutAllWithSelfShouldReturnThis(MapData data) throws Exception {
+    public void copyPutAllWithSelfShouldReturnThis(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = instance.putAll(instance);
         assertSame(instance, instance2);
@@ -370,14 +410,14 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEqualsWithObjectShouldYieldFalse(MapData data) throws Exception {
+    public void equalsWithObjectShouldYieldFalse(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         assertNotEquals(instance, new Object());
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testGetOrDefaultWithContainedKeyShouldYieldValue(MapData data) throws Exception {
+    public void getOrDefaultWithContainedKeyShouldYieldValue(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         Key defaultValue = new Key(7, -1);
         for (Map.Entry<Key, Key> e : data.a()) {
@@ -387,7 +427,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testGetOrDefaultWithNonContainedKeyShouldYieldDefault(MapData data) throws Exception {
+    public void getOrDefaultWithNonContainedKeyShouldYieldDefault(MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         Key defaultValue = new Key(7, -1);
         for (Map.Entry<Key, Key> e : data.c()) {
@@ -397,7 +437,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyPutAllWithSomeNewKeyShouldReturnNewInstance(MapData data) throws Exception {
+    public void copyPutAllWithSomeNewKeyShouldReturnNewInstance(MapData data) throws Exception {
         ArrayList<Map.Entry<Key, Key>> listB = new ArrayList<>(data.b.readOnlyEntrySet().asSet());
         ArrayList<Map.Entry<Key, Key>> listC = new ArrayList<>(data.c.readOnlyEntrySet().asSet());
         Map<Key, Key> m = new LinkedHashMap<>(data.a.asMap());
@@ -419,7 +459,7 @@ public abstract class AbstractImmutableMapTest {
     @SuppressWarnings("SimplifiableAssertion")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testEqualsWithNullShouldYieldFalse(@NonNull MapData data) {
+    public void equalsWithNullShouldYieldFalse(@NonNull MapData data) {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         assertFalse(instance.equals(null));
     }
@@ -427,7 +467,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testToStringShouldContainAllEntries(@NonNull MapData data) {
+    public void toStringShouldContainAllEntries(@NonNull MapData data) {
         ImmutableMap<Key, Key> instance = newInstance();
         assertEquals("{}", instance.toString());
 
@@ -444,7 +484,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRetainAllWithContainedKeysShouldReturnThis(@NonNull MapData data) throws Exception {
+    public void copyRetainAllWithContainedKeysShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = instance.retainAll(data.a().asMap().keySet());
         assertSame(instance, instance2);
@@ -453,7 +493,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRetainAllWithSomeContainedKeysShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+    public void copyRetainAllWithSomeContainedKeysShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = instance.retainAll(data.someAPlusSomeB().asMap().keySet());
         assertNotSame(instance, instance2);
@@ -464,7 +504,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRetainAllWithEmptySetShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+    public void copyRetainAllWithEmptySetShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         ImmutableMap<Key, Key> instance2 = instance.retainAll(Collections.emptySet());
         assertNotSame(instance, instance2);
@@ -474,7 +514,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRetainAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
+    public void copyRetainAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance();
         ImmutableMap<Key, Key> instance2 = instance.retainAll(data.a().asMap().keySet());
         assertSame(instance, instance2);
@@ -483,7 +523,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRemoveAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
+    public void copyRemoveAllOfEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance();
         assertSame(instance, instance.removeAll(data.a.readOnlyKeySet().asSet()));
         assertEqualMap(Collections.emptyMap(), instance);
@@ -491,7 +531,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRemoveAllWithEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
+    public void copyRemoveAllWithEmptyMapShouldReturnThis(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         assertSame(instance, instance.removeAll(Collections.emptySet()));
         assertEqualMap(data.a(), instance);
@@ -499,7 +539,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRemoveAllWithContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+    public void copyRemoveAllWithContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         ImmutableMap<Key, Key> instance2 = instance.removeAll(data.a.readOnlyKeySet().asSet());
         assertNotSame(instance, instance2);
@@ -509,7 +549,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testCopyRemoveAllWithSomeContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+    public void copyRemoveAllWithSomeContainedKeyShouldReturnNewInstance(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a);
         ImmutableMap<Key, Key> instance2 = instance.removeAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
         assertNotSame(instance, instance2);
@@ -521,7 +561,7 @@ public abstract class AbstractImmutableMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testGetOfEntryWithNullValueShouldYieldNull(@NonNull MapData data) throws Exception {
+    public void getOfEntryWithNullValueShouldYieldNull(@NonNull MapData data) throws Exception {
         ImmutableMap<Key, Key> instance = newInstance(data.a());
         LinkedHashMap<Key, Key> expected = new LinkedHashMap<>(data.a.asMap());
         Key key = new Key(42, -1);

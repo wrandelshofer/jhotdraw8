@@ -13,7 +13,12 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.Predicate;
 
 /**
@@ -188,7 +193,7 @@ public abstract class AbstractMutableChampMap<K, V, D> extends AbstractMap<K, V>
     }
 
     /**
-     * Removes the specified entry frm the map.
+     * Removes the specified entry from the map.
      *
      * @param o an entry (should be a {@link Map.Entry}).
      * @return true if the element was contained in the map

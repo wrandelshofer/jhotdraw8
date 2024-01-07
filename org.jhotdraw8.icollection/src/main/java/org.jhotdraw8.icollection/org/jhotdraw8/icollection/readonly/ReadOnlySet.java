@@ -10,6 +10,7 @@ import org.jhotdraw8.icollection.facade.SetFacade;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Spliterator;
 
 /**
  * A read-only interface to a set. A set is a collection that contains no duplicate elements.
@@ -96,4 +97,15 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * @see Set#hashCode()
      */
     int hashCode();
+
+    /**
+     * Returns the Spliterator characteristics of this collection.
+     * <p>
+     * The default implementation returns {@link Spliterator#SIZED}| {@link Spliterator#DISTINCT}.
+     *
+     * @return the characteristics
+     */
+    default int characteristics() {
+        return Spliterator.SIZED | Spliterator.DISTINCT;
+    }
 }

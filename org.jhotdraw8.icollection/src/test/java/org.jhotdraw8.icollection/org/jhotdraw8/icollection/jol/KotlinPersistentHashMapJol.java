@@ -5,24 +5,28 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 /**
- * <pre>
- * class kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap with 1000000 elements.
- * total size              : 74035176
- * element size            : 48
- * data size               : 48000000 64%
- * data structure size     : 26035176 35%
- *
- * kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap@5a37d3edd footprint:
- *      COUNT       AVG       SUM   DESCRIPTION
- *     344064        43  15025096   [Ljava.lang.Object;
- *          1        32        32   kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap
- *     344064        32  11010048   kotlinx.collections.immutable.implementations.immutableMap.TrieNode
- *    2000000        24  48000000   org.jhotdraw8.icollection.jmh.Key
- *    2688129            74035176   (total)
- * </pre>
+ * KotlinPersistentHashMapJol
  */
 public class KotlinPersistentHashMapJol extends AbstractJol {
 
+    /**
+     * <pre>
+     * class kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap with 1000 elements.
+     * total size              : 74400
+     * element size            : 48
+     * data size               : 48000 64%
+     * data structure size     : 26400 35%
+     * overhead per element    : 26.4 bytes
+     * ----footprint---
+     * kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap@5be46f9dd footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *        350        43     15168   [Ljava.lang.Object;
+     *          1        32        32   kotlinx.collections.immutable.implementations.immutableMap.PersistentHashMap
+     *        350        32     11200   kotlinx.collections.immutable.implementations.immutableMap.TrieNode
+     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
+     *       2701               74400   (total)
+     * </pre>
+     */
     @Test
     @Disabled
     public void estimateMemoryUsage() {

@@ -12,8 +12,10 @@ import java.io.Serial;
 import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
 
 /**
  * A serialization proxy that serializes a map independently of its internal
@@ -29,14 +31,14 @@ import java.util.Map;
  *   }
  *
  *   static class SerializationProxy&lt;K, V&gt;
- *                  extends MapSerializationProxy&lt;K, V&gt; {
+ *                  extends SortedMapSerializationProxy&lt;K, V&gt; {
  *      private final static long serialVersionUID = 0L;
  *      SerializationProxy(Map&lt;K, V&gt; target) {
  *          super(target);
  *      }
  *     {@literal @Override}
  *      protected Object readResolve() {
- *          return new MyMap&lt;&gt;(deserializedEntries);
+ *          return new MyMap&lt;&gt;(deserializedComparator,deserializedEntries);
  *      }
  *   }
  * }
@@ -56,19 +58,21 @@ import java.util.Map;
  * @param <K> the key type
  * @param <V> the value type
  */
-public abstract class MapSerializationProxy<K, V> implements Serializable {
-    private final transient Map<K, V> serialized;
+public abstract class SortedMapSerializationProxy<K, V> implements Serializable {
+    private final transient SortedMap<K, V> serialized;
     protected transient List<Map.Entry<K, V>> deserializedEntries;
+    protected transient Comparator<? super K> deserializedComparator;
     @Serial
     private static final long serialVersionUID = 0L;
 
-    protected MapSerializationProxy(Map<K, V> serialized) {
+    protected SortedMapSerializationProxy(SortedMap<K, V> serialized) {
         this.serialized = serialized;
     }
 
     @Serial
     private void writeObject(java.io.@NonNull ObjectOutputStream s)
             throws IOException {
+        s.writeObject(serialized.comparator());
         s.writeInt(serialized.size());
         for (Map.Entry<K, V> entry : serialized.entrySet()) {
             s.writeObject(entry.getKey());
@@ -76,9 +80,11 @@ public abstract class MapSerializationProxy<K, V> implements Serializable {
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Serial
     private void readObject(java.io.@NonNull ObjectInputStream s)
             throws IOException, ClassNotFoundException {
+        deserializedComparator = (Comparator<? super K>) s.readObject();
         int n = s.readInt();
         deserializedEntries = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {

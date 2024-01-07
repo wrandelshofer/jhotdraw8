@@ -320,7 +320,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableChampSet<>(deserialized);
+            return new MutableChampSet<>(deserializedElements);
         }
     }
 }

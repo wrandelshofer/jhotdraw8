@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -154,5 +155,17 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
             }
             sb.append(',').append(' ');
         }
+    }
+
+
+    /**
+     * Returns the Spliterator characteristics of this collection.
+     * <p>
+     * The default implementation returns {@link Spliterator#SIZED}.
+     *
+     * @return the characteristics
+     */
+    default int characteristics() {
+        return Spliterator.SIZED;
     }
 }

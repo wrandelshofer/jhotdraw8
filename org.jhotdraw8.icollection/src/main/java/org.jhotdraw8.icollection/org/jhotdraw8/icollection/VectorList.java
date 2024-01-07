@@ -383,7 +383,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return VectorList.of().addAll(deserialized);
+            return VectorList.of().addAll(deserializedElements);
         }
     }
 

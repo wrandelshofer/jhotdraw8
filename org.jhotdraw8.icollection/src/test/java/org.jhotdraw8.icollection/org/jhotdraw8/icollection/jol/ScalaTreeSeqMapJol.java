@@ -18,15 +18,16 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
     /**
      * <pre>
      * class scala.collection.immutable.TreeSeqMap with 1000 elements.
-     * total size              : 178880
+     * total size              : 178864
      * element size            : 48
      * data size               : 48000 26%
-     * data structure size     : 130880 73%
+     * data structure size     : 130864 73%
+     * overhead per element    : 130.864 bytes
      * ----footprint---
-     * scala.collection.immutable.TreeSeqMap@1c33c17bd footprint:
+     * scala.collection.immutable.TreeSeqMap@62727399d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        293        30      8992   [I
-     *        296        47     14016   [Ljava.lang.Object;
+     *        292        30      8968   [I
+     *        296        47     14024   [Ljava.lang.Object;
      *       1000        16     16000   java.lang.Integer
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
      *       1000        24     24000   scala.Tuple2
@@ -36,15 +37,14 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
      *          1        16        16   scala.collection.immutable.TreeSeqMap$OrderBy$Insertion$
      *        999        32     31968   scala.collection.immutable.TreeSeqMap$Ordering$Bin
      *       1000        24     24000   scala.collection.immutable.TreeSeqMap$Ordering$Tip
-     *       6887              178880   (total)
+     *       6886              178864   (total)
      * </pre>
-     * With 1 Mio elements, memory overhead is 131.728552 bytes per element.
      */
     @Test
     @Disabled
     public void estimateMemoryUsage() {
-        for (int i = 1; i <= 1_000_000; i *= 10) {
-            int size = i;
+
+        int size = 1_000;
             final int mask = -1;//~64;
             var data = generateMap(size, mask);
             var b = TreeSeqMap.<Key, Key>newBuilder();
@@ -54,7 +54,7 @@ public class ScalaTreeSeqMapJol extends AbstractJol {
             TreeSeqMap<Key, Key> mapA = b.result();
             Tuple2<Key, Key> head = mapA.head();
             estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
-        }
+
     }
 
     /**

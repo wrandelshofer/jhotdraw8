@@ -34,7 +34,7 @@ import java.util.List;
  *      }
  *     {@literal @Override}
  *      protected Object readResolve() {
- *          return new MyList&lt;&gt;(deserialized);
+ *          return new MyList&lt;&gt;(deserializedElements);
  *      }
  *   }
  * }
@@ -57,7 +57,7 @@ public abstract class ListSerializationProxy<E> implements Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     private final transient List<E> serialized;
-    protected transient List<E> deserialized;
+    protected transient List<E> deserializedElements;
 
     protected ListSerializationProxy(@NonNull List<E> serialized) {
         this.serialized = serialized;
@@ -76,11 +76,11 @@ public abstract class ListSerializationProxy<E> implements Serializable {
     private void readObject(java.io.@NonNull ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         int n = s.readInt();
-        deserialized = new ArrayList<>(n);
+        deserializedElements = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             @SuppressWarnings("unchecked")
             E e = (E) s.readObject();
-            deserialized.add(e);
+            deserializedElements.add(e);
         }
     }
 

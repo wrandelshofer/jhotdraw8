@@ -120,9 +120,11 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     public static <K, V> @NonNull SequencedSet<K> createKeySet(@NonNull SequencedMap<K, V> m) {
         return new SequencedSetFacade<>(
                 () -> new MappedIterator<>(m.sequencedEntrySet().iterator(), Entry::getKey),
-                () -> new MappedSpliterator<>(m.sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.ORDERED),
+                () -> new MappedSpliterator<>(m.sequencedEntrySet().spliterator(), Entry::getKey,
+                        Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.ORDERED, null),
                 () -> new MappedIterator<>(m.reversed().sequencedEntrySet().iterator(), Entry::getKey),
-                () -> new MappedSpliterator<>(m.reversed().sequencedEntrySet().spliterator(), Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.ORDERED),
+                () -> new MappedSpliterator<>(m.reversed().sequencedEntrySet().spliterator(), Entry::getKey,
+                        Spliterator.DISTINCT | Spliterator.SIZED | Spliterator.ORDERED, null),
                 m::size,
                 m::containsKey,
                 m::clear,
@@ -176,8 +178,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                     }
                     return entry.getValue();
                 },
-                null, null
-        );
+                null, null,
+                null);
     }
 
     @Override
@@ -202,9 +204,9 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     public @NonNull SequencedSet<K> sequencedKeySet() {
         return new SequencedSetFacade<>(
                 () -> new MappedIterator<>(iteratorFunction.get(), Map.Entry::getKey),
-                () -> new MappedSpliterator<>(spliteratorFunction.get(), Map.Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
+                () -> new MappedSpliterator<>(spliteratorFunction.get(), Map.Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED, null),
                 () -> new MappedIterator<>(reverseIteratorFunction.get(), Map.Entry::getKey),
-                () -> new MappedSpliterator<>(spliteratorFunction.get(), Map.Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED),
+                () -> new MappedSpliterator<>(spliteratorFunction.get(), Map.Entry::getKey, Spliterator.DISTINCT | Spliterator.SIZED, null),
                 sizeFunction,
                 this::containsKey,
                 clearFunction,
@@ -277,7 +279,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                         throw new NoSuchElementException();
                     }
                     return entry.getValue();
-                }, null, null
-        );
+                }, null, null,
+                null);
     }
 }

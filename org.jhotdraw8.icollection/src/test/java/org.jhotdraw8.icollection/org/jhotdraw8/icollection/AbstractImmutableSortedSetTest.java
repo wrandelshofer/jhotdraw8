@@ -1,8 +1,8 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSortedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,27 +19,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public abstract class AbstractImmutableNavigableSetTest extends AbstractImmutableSortedSetTest {
+public abstract class AbstractImmutableSortedSetTest extends AbstractImmutableSetTest {
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> newInstance();
+    protected abstract @NonNull <E> ImmutableSortedSet<E> newInstance();
 
     @Override
     protected abstract @NonNull <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> toImmutableInstance(Set<E> m);
+    protected abstract @NonNull <E> ImmutableSortedSet<E> toImmutableInstance(Set<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> toClonedInstance(ImmutableSet<E> m);
+    protected abstract @NonNull <E> ImmutableSortedSet<E> toClonedInstance(ImmutableSet<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> newInstance(Iterable<E> m);
+    protected abstract @NonNull <E> ImmutableSortedSet<E> newInstance(Iterable<E> m);
 
 
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
-        ImmutableNavigableSet<Key> instance = newInstance(data.a());
+        ImmutableSortedSet<Key> instance = newInstance(data.a());
         instance = instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeLast);
     }
@@ -57,15 +57,10 @@ public abstract class AbstractImmutableNavigableSetTest extends AbstractImmutabl
         assertEquals(expected.toString(), actual.toString(), message);
     }
 
-    @Test
-    public void spliteratorShouldSupportEncounterOrder() throws Exception {
-        ImmutableSet<Key> instance = newInstance();
-        assertEquals(instance.spliterator().characteristics() & Spliterator.ORDERED, Spliterator.ORDERED, "set should be ordered");
-    }
 
     @Test
-    public void spliteratorShouldHaveNavigableSetCharacteristics() throws Exception {
-        ImmutableNavigableSet<Key> instance = newInstance();
+    public void spliteratorShouldHaveSortedSetCharacteristics() throws Exception {
+        ImmutableSortedSet<Key> instance = newInstance();
 
         assertEquals(Spliterator.ORDERED | Spliterator.SORTED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.ORDERED | Spliterator.SORTED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.spliterator().characteristics());
         assertNull(instance.spliterator().getComparator());

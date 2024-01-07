@@ -469,7 +469,7 @@ public class VectorSet<E>
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return VectorSet.copyOf(deserialized);
+            return VectorSet.copyOf(deserializedElements);
         }
     }
 

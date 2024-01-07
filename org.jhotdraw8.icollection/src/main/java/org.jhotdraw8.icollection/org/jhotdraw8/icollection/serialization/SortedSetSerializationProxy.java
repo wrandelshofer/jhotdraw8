@@ -36,7 +36,7 @@ import java.util.SortedSet;
  *      }
  *     {@literal @Override}
  *      protected Object readResolve() {
- *          return new MySet&lt;&gt;(deserialized);
+ *          return new MySet&lt;&gt;(deserializedComparator,deserializedElements);
  *      }
  *   }
  * }

@@ -35,7 +35,7 @@ import java.util.Set;
  *      }
  *     {@literal @Override}
  *      protected Object readResolve() {
- *          return new MySet&lt;&gt;(deserialized);
+ *          return new MySet&lt;&gt;(deserializedElements);
  *      }
  *   }
  * }
@@ -58,7 +58,7 @@ public abstract class SetSerializationProxy<E> implements Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     private final transient Set<E> serialized;
-    protected transient List<E> deserialized;
+    protected transient List<E> deserializedElements;
 
     protected SetSerializationProxy(@NonNull Set<E> serialized) {
         this.serialized = serialized;
@@ -77,11 +77,11 @@ public abstract class SetSerializationProxy<E> implements Serializable {
     private void readObject(java.io.@NonNull ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         int n = s.readInt();
-        deserialized = new ArrayList<>(n);
+        deserializedElements = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             @SuppressWarnings("unchecked")
             E e = (E) s.readObject();
-            deserialized.add(e);
+            deserializedElements.add(e);
         }
     }
 

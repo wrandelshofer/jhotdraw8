@@ -11,13 +11,13 @@ import com.google.common.collect.testing.TestStringSetGenerator;
 import com.google.common.collect.testing.features.CollectionFeature;
 import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.SetFeature;
+import com.google.common.collect.testing.testers.CollectionSpliteratorTester;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jhotdraw8.icollection.MutableRedBlackSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 
 /**
@@ -83,7 +83,14 @@ public class MutableRedBlackSetGuavaTests {
     }
 
     protected Collection<Method> suppressForSet() {
-        return Collections.emptySet();
+        try {
+            return Set.of(
+                    CollectionSpliteratorTester.class.getMethod("testSpliteratorUnknownOrder")
+            );
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 

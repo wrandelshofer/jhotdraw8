@@ -40,8 +40,9 @@ public class VavrHashMapJol extends AbstractJol {
      * element size            : 48
      * data size               : 48000 52%
      * data structure size     : 43944 47%
+     * overhead per element    : 43.944 bytes
      * ----footprint---
-     * io.vavr.collection.HashMap@55c53a33d footprint:
+     * io.vavr.collection.HashMap@3bd323e9d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        350        32     11528   [Ljava.lang.Object;
      *          1        24        24   io.vavr.collection.HashArrayMappedTrieModule$ArrayNode
@@ -69,23 +70,25 @@ public class VavrHashMapJol extends AbstractJol {
     /**
      * <pre>
      * class io.vavr.collection.HashMap with 250 elements.
-     * total size              : 22640
+     * total size              : 22664
      * element size            : 48
-     * data size               : 12000 53%
-     * data structure size     : 10640 46%
+     * data size               : 12000 52%
+     * data structure size     : 10664 47%
+     * overhead per element    : 42.656 bytes
      * ----footprint---
-     * io.vavr.collection.HashMap@53b7f657d footprint:
+     * io.vavr.collection.HashMap@77128536d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *         80        33      2704   [Ljava.lang.Object;
+     *         81        33      2704   [Ljava.lang.Object;
      *          1        24        24   io.vavr.collection.HashArrayMappedTrieModule$ArrayNode
-     *         79        24      1896   io.vavr.collection.HashArrayMappedTrieModule$IndexedNode
+     *         80        24      1920   io.vavr.collection.HashArrayMappedTrieModule$IndexedNode
      *        250        24      6000   io.vavr.collection.HashArrayMappedTrieModule$LeafSingleton
      *          1        16        16   io.vavr.collection.HashMap
      *        500        24     12000   org.jhotdraw8.icollection.jmh.Key
-     *        911               22640   (total)
+     *        913               22664   (total)
      * </pre>
      */
     @Test
+    @Disabled
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

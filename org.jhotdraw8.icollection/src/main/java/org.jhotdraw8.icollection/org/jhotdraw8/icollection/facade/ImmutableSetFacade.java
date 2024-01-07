@@ -7,6 +7,7 @@ package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.Iterators;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlySet;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Spliterator;
 import java.util.function.Function;
 
 /**
@@ -111,7 +113,18 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
+    public Spliterator<E> spliterator() {
+        return new IteratorSpliterator<>(iterator(), size(), characteristics(), null);
+    }
+
+    @Override
     public @NonNull Set<E> toMutable() {
         return cloneFunction.apply(target);
+    }
+
+
+    @Override
+    public int characteristics() {
+        return Spliterator.IMMUTABLE | super.characteristics();
     }
 }

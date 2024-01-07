@@ -3,6 +3,13 @@ package org.jhotdraw8.icollection;
 import java.io.Serializable;
 import java.util.Comparator;
 
+/**
+ * Compares two objects using their natural order.
+ * <p>
+ * This class is similar to {@link Comparator#naturalOrder()} but it also supports null objects.
+ *
+ * @param <T> the object type
+ */
 class NaturalComparator<T> implements Comparator<T>, Serializable {
 
     private static final long serialVersionUID = 1L;

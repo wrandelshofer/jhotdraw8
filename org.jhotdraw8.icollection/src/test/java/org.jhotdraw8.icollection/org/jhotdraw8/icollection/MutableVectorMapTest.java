@@ -6,7 +6,6 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedMap;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -39,10 +38,6 @@ public class MutableVectorMapTest extends AbstractSequencedMapTest {
         return new MutableVectorMap<>(m);
     }
 
-    @Override
-    protected <K, V> @NonNull ImmutableSequencedMap<K, V> toImmutableInstance(@NonNull Map<K, V> m) {
-        return ((MutableVectorMap<K, V>) m).toImmutable();
-    }
 
     @Override
     protected <K, V> @NonNull SequencedMap<K, V> toClonedInstance(@NonNull Map<K, V> m) {

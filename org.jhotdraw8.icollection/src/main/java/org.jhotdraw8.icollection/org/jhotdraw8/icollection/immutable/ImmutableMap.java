@@ -141,10 +141,12 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      */
     @SuppressWarnings("unchecked")
     default @NonNull ImmutableMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
-        if (isEmpty()
-                || c instanceof Collection<?> co && co.isEmpty()
-                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+        if (isEmpty()) {
             return this;
+        }
+        if (c instanceof Collection<?> co && co.isEmpty()
+                || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            return clear();
         }
         if (c instanceof ReadOnlyCollection<?> co) {
             if (co.isEmpty()) {
@@ -168,9 +170,9 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
             return clear();
         }
         var s = this;
-        for (var e : this) {
+        for (var e : readOnlyKeySet()) {
             if (!cc.contains(e)) {
-                s = s.remove((K) e);
+                s = s.remove(e);
             }
         }
         return s;

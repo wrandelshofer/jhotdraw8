@@ -1,14 +1,23 @@
 package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.SequencedMap;
+import java.util.Spliterator;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     /**
@@ -28,7 +37,6 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     protected abstract <K, V> @NonNull SequencedMap<K, V> newInstance(@NonNull Map<K, V> m);
 
 
-    protected abstract <K, V> @NonNull ImmutableSequencedMap<K, V> toImmutableInstance(@NonNull Map<K, V> m);
 
     protected abstract <K, V> @NonNull SequencedMap<K, V> toClonedInstance(@NonNull Map<K, V> m);
 
@@ -242,14 +250,11 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     }
 
     @Test
-    public void spliteratorCharacteristicsShouldHaveOrdered() throws Exception {
+    public void testSpliteratorShouldHaveSequencedMapCharacteristics() throws Exception {
         SequencedMap<Key, Key> instance = newInstance();
-        assertTrue(instance.entrySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "entrySet should be ordered");
-        assertTrue(instance.keySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "keySet should be ordered");
-        assertTrue(instance.values().spliterator().hasCharacteristics(Spliterator.ORDERED), "valueSet should be ordered");
-        assertTrue(instance.reversed().entrySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "entrySet should be ordered");
-        assertTrue(instance.reversed().keySet().spliterator().hasCharacteristics(Spliterator.ORDERED), "keySet should be ordered");
-        assertTrue(instance.reversed().values().spliterator().hasCharacteristics(Spliterator.ORDERED), "valueSet should be ordered");
-    }
 
+        assertEquals(Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.keySet().spliterator().characteristics());
+        assertEquals(Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.entrySet().spliterator().characteristics());
+        assertEquals(Spliterator.ORDERED | Spliterator.SIZED, (Spliterator.ORDERED | Spliterator.SIZED) & instance.values().spliterator().characteristics());
+    }
 }

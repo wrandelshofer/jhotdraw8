@@ -7,6 +7,7 @@ package org.jhotdraw8.icollection.readonly;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.icollection.facade.ReadOnlySequencedCollectionFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
@@ -59,30 +60,14 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
         return isEmpty() ? null : readOnlyReversed().readOnlyEntrySet().iterator().next();
     }
 
-    @Override
-    @NonNull
-    default ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
-        return readOnlySequencedEntrySet();
-    }
-
-    @Override
-    @NonNull
-    default ReadOnlySet<K> readOnlyKeySet() {
-        return readOnlySequencedKeySet();
-    }
-
-    @Override
-    @NonNull
-    default ReadOnlyCollection<V> readOnlyValues() {
-        return readOnlySequencedValues();
-    }
 
     /**
      * Returns a {@link ReadOnlySequencedSet} view of the entries contained in this map.
      *
      * @return a {@link ReadOnlySequencedSet} view of the entries
      */
-    default @NonNull ReadOnlySequencedSet<Map.Entry<K, V>> readOnlySequencedEntrySet() {
+    @Override
+    default @NonNull ReadOnlySequencedSet<Map.Entry<K, V>> readOnlyEntrySet() {
         return new ReadOnlySequencedSetFacade<>(
                 this::iterator,
                 () -> readOnlyReversed().readOnlyEntrySet().iterator(),
@@ -90,15 +75,25 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
                 this::containsEntry,
                 this::firstEntry,
                 this::lastEntry,
-                Spliterator.NONNULL | Spliterator.ORDERED);
+                characteristics() | Spliterator.NONNULL);
     }
 
+    /**
+     * Returns the spliterator characteristics of the key set.
+     * This implementation returns {@link Spliterator#SIZED}|{@link Spliterator#DISTINCT}.
+     *
+     * @return characteristics.
+     */
+    default int characteristics() {
+        return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.DISTINCT;
+    }
     /**
      * Returns a {@link ReadOnlySequencedSet} view of the keys contained in this map.
      *
      * @return a {@link ReadOnlySequencedSet} view of the keys
      */
-    default @NonNull ReadOnlySequencedSet<K> readOnlySequencedKeySet() {
+    @Override
+    default @NonNull ReadOnlySequencedSet<K> readOnlyKeySet() {
         return new ReadOnlySequencedSetFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getKey),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getKey),
@@ -114,7 +109,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
                     if (e == null) throw new NoSuchElementException();
                     return e.getKey();
                 },
-                Spliterator.ORDERED);
+                characteristics());
     }
 
     /**
@@ -123,8 +118,9 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
      *
      * @return a {@link ReadOnlySequencedCollection} view of the values
      */
-    default @NonNull ReadOnlySequencedCollection<V> readOnlySequencedValues() {
-        return new ReadOnlySequencedSetFacade<>(
+    @Override
+    default @NonNull ReadOnlySequencedCollection<V> readOnlyValues() {
+        return new ReadOnlySequencedCollectionFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getValue),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getValue),
                 this::size,
@@ -139,7 +135,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
                     if (e == null) throw new NoSuchElementException();
                     return e.getValue();
                 },
-                Spliterator.ORDERED);
+                characteristics() & ~(Spliterator.DISTINCT | Spliterator.SORTED), null);
     }
 
     @Override

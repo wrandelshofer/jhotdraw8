@@ -292,7 +292,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableVectorList<>(deserialized);
+            return new MutableVectorList<>(deserializedElements);
         }
     }
 }

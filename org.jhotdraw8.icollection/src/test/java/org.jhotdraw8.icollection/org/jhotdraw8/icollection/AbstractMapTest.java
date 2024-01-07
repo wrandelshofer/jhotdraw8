@@ -6,11 +6,32 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.io.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.Spliterator;
 import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractMapTest {
 
@@ -112,9 +133,21 @@ public abstract class AbstractMapTest {
         for (Key k : data.c().readOnlyKeySet()) {
             assertFalse(instance.containsKey(k));
         }
-        assertFalse(instance.containsKey(new Object()));
+        try {
+            assertFalse(instance.containsKey(new Object()));
+        } catch (ClassCastException e) {
+            assertInstanceOf(SortedMap.class, instance, "only SortedMap may throw a ClassCastException");
+        }
     }
 
+    @Test
+    public void spliteratorShouldHaveMapCharacteristics() throws Exception {
+        Map<Key, Key> instance = newInstance();
+
+        assertEquals(Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.DISTINCT | Spliterator.SIZED) & instance.keySet().spliterator().characteristics());
+        assertEquals(Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.DISTINCT | Spliterator.SIZED) & instance.entrySet().spliterator().characteristics());
+        assertEquals(Spliterator.SIZED, (Spliterator.SIZED) & instance.values().spliterator().characteristics());
+    }
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void entryIteratorEntrySetValueShouldUpdateMap(@NonNull MapData data) {

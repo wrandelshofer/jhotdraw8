@@ -4,27 +4,29 @@ import org.jhotdraw8.icollection.jmh.Key;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Tuple2;
-import scala.collection.immutable.VectorMap;
+import scala.collection.immutable.TreeMap;
+import scala.math.Ordering;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 
 /**
- * ScalaVectorMapJol.
+ * ScalaTreeMapJol.
  */
-public class ScalaVectorMapJol extends AbstractJol {
+public class ScalaTreeMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class scala.collection.immutable.VectorMap with 1000 elements.
+     * class scala.collection.immutable.TreeMap with 1000 elements.
      * total size              : 127560
      * element size            : 48
      * data size               : 48000 37%
      * data structure size     : 79560 62%
      * overhead per element    : 79.56 bytes
      * ----footprint---
-     * scala.collection.immutable.VectorMap@46268f08d footprint:
+     * scala.collection.immutable.TreeMap@46268f08d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        292        30      8968   [I
      *        328        56     18536   [Ljava.lang.Object;
@@ -35,7 +37,7 @@ public class ScalaVectorMapJol extends AbstractJol {
      *        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
      *          1        16        16   scala.collection.immutable.HashMap
      *          1        32        32   scala.collection.immutable.Vector2
-     *          1        32        32   scala.collection.immutable.VectorMap
+     *          1        32        32   scala.collection.immutable.TreeMap
      *       4920              127560   (total)
      * </pre>
      */
@@ -45,25 +47,25 @@ public class ScalaVectorMapJol extends AbstractJol {
         int size = 1_000;
         final int mask = -1;//~64;
         var data = generateMap(size, mask);
-        var b = VectorMap.<Key, Key>newBuilder();
+        var b = TreeMap.<Key, Key>newBuilder(Ordering.comparatorToOrdering(Comparator.<Key>naturalOrder()));
         for (var d : data.entrySet()) {
             b.addOne(new Tuple2<>(d.getKey(), d.getValue()));
         }
-        VectorMap<Key, Key> mapA = b.result();
+        TreeMap<Key, Key> mapA = b.result();
         Tuple2<Key, Key> head = mapA.head();
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
     /**
      * <pre>
-     * class scala.collection.immutable.VectorMap with 250 elements.
+     * class scala.collection.immutable.TreeMap with 250 elements.
      * total size              : 46560
      * element size            : 48
      * data size               : 12000 25%
      * data structure size     : 34560 74%
      * overhead per element    : 138.24 bytes
      * ----footprint---
-     * scala.collection.immutable.VectorMap@2ceb80a1d footprint:
+     * scala.collection.immutable.TreeMap@2ceb80a1d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *         62        33      2056   [I
      *         94        83      7808   [Ljava.lang.Object;
@@ -74,8 +76,8 @@ public class ScalaVectorMapJol extends AbstractJol {
      *         62        40      2480   scala.collection.immutable.BitmapIndexedMapNode
      *          1        16        16   scala.collection.immutable.HashMap
      *          1        32        32   scala.collection.immutable.Vector2
-     *          1        32        32   scala.collection.immutable.VectorMap
-     *        750        16     12000   scala.collection.immutable.VectorMap$Tombstone
+     *          1        32        32   scala.collection.immutable.TreeMap
+     *        750        16     12000   scala.collection.immutable.TreeMap$Tombstone
      *       1972               46560   (total)
      * </pre>
      */
@@ -85,11 +87,11 @@ public class ScalaVectorMapJol extends AbstractJol {
         int size = 1_000;
         final int mask = ~64;
         var data = generateMap(size, mask);
-        var b = VectorMap.<Key, Key>newBuilder();
+        var b = TreeMap.<Key, Key>newBuilder(null);
         for (var d : data.entrySet()) {
             b.addOne(new Tuple2<>(d.getKey(), d.getValue()));
         }
-        VectorMap<Key, Key> mapA = b.result();
+        TreeMap<Key, Key> mapA = b.result();
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);

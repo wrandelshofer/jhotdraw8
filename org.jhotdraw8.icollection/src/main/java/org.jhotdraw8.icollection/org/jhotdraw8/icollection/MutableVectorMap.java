@@ -184,7 +184,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         return new ReverseTombSkippingVectorSpliterator<Entry<K, V>>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
-                size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.NONNULL);
+                size(), characteristics() | Spliterator.NONNULL);
     }
 
     @SuppressWarnings("unchecked")
@@ -193,7 +193,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         return new TombSkippingVectorSpliterator<Entry<K, V>>(vector.trie,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
-                0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.NONNULL);
+                0, size(), vector.size(), characteristics() | Spliterator.NONNULL);
     }
 
 
@@ -404,8 +404,8 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
                 this::containsKey,
                 this::get,
                 this::lastEntry,
-                this::firstEntry
-        );
+                this::firstEntry,
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, null);
     }
 
     @Override
@@ -489,7 +489,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableVectorMap<>(deserialized);
+            return new MutableVectorMap<>(deserializedEntries);
         }
     }
 }

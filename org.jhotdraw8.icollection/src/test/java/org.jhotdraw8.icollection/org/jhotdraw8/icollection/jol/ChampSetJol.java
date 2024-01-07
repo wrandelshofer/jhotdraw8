@@ -16,26 +16,26 @@ public class ChampSetJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.ChampSet with 1000 elements.
-     * total size              : 47192
+     * total size              : 43608
      * element size            : 24
-     * data size               : 24000 50%
-     * data structure size     : 23192 49%
+     * data size               : 24000 55%
+     * data structure size     : 19608 44%
+     * overhead per element    : 19.608 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.ChampSet@babafc2d footprint:
+     * org.jhotdraw8.icollection.ChampSet@60410cdd footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        359        32     11664   [Ljava.lang.Object;
+     *        293        34     10192   [Ljava.lang.Object;
      *          1        24        24   org.jhotdraw8.icollection.ChampSet
      *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *        359        32     11488   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *        293        32      9376   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
-     *       1720               47192   (total)
+     *       1588               43608   (total)
      * </pre>
-     * With 1 Mio elements, memory overhead is 20.333144 bytes per element.
      */
     @Test
     @Disabled
     public void estimateMemoryUsage() {
-        int size = 1_000_000;
+        int size = 1_000;
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
         ChampSet<Key> setA = ChampSet.copyOf(data);
@@ -44,20 +44,21 @@ public class ChampSetJol extends AbstractJol {
 
     /**
      * <pre>
-     * class org.jhotdraw8.icollection.champ.ChampSet with 250 elements.
-     * total size              : 11760
+     * class org.jhotdraw8.icollection.ChampSet with 250 elements.
+     * total size              : 11000
      * element size            : 24
-     * data size               : 6000 51%
-     * data structure size     : 5760 48%
+     * data size               : 6000 54%
+     * data structure size     : 5000 45%
+     * overhead per element    : 20.0 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.champ.ChampSet@1b266842d footprint:
+     * org.jhotdraw8.icollection.ChampSet@95e33ccd footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *         89        32      2880   [Ljava.lang.Object;
-     *          2        16        32   org.jhotdraw8.icollection.IdentityObject
-     *          1        32        32   org.jhotdraw8.icollection.champ.ChampSet
-     *         88        32      2816   org.jhotdraw8.icollection.champ.MutableBitmapIndexedNode
+     *         74        34      2576   [Ljava.lang.Object;
+     *          1        24        24   org.jhotdraw8.icollection.ChampSet
+     *          2        16        32   org.jhotdraw8.icollection.impl.IdentityObject
+     *         74        32      2368   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
      *        250        24      6000   org.jhotdraw8.icollection.jmh.Key
-     *        430               11760   (total)
+     *        401               11000   (total)
      * </pre>
      */
     @Test

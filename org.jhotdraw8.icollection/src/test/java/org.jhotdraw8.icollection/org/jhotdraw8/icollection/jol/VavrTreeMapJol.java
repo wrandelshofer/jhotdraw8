@@ -19,19 +19,20 @@ public class VavrTreeMapJol extends AbstractJol {
      * element size            : 48
      * data size               : 48000 42%
      * data structure size     : 64192 57%
+     * overhead per element    : 64.192 bytes
      * ----footprint---
-     * io.vavr.collection.TreeMap@1b75c2e3d footprint:
-     * COUNT       AVG       SUM   DESCRIPTION
-     * 2        24        48   [B
-     * 1000        24     24000   io.vavr.Tuple2
-     * 2        24        48   io.vavr.collection.RedBlackTree$Color
-     * 1        16        16   io.vavr.collection.RedBlackTreeModule$Empty
-     * 1000        40     40000   io.vavr.collection.RedBlackTreeModule$Node
-     * 1        16        16   io.vavr.collection.TreeMap
-     * 1        16        16   io.vavr.collection.TreeMap$EntryComparator$Natural
-     * 2        24        48   java.lang.String
-     * 2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     * 4009              112192   (total)
+     * io.vavr.collection.TreeMap@be68757d footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *          2        24        48   [B
+     *       1000        24     24000   io.vavr.Tuple2
+     *          2        24        48   io.vavr.collection.RedBlackTree$Color
+     *          1        16        16   io.vavr.collection.RedBlackTreeModule$Empty
+     *       1000        40     40000   io.vavr.collection.RedBlackTreeModule$Node
+     *          1        16        16   io.vavr.collection.TreeMap
+     *          1        16        16   io.vavr.collection.TreeMap$EntryComparator$Natural
+     *          2        24        48   java.lang.String
+     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
+     *       4009              112192   (total)
      */
     @Test
     @Disabled

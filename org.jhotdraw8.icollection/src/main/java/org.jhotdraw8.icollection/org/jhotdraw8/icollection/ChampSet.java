@@ -277,7 +277,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return ChampSet.copyOf(deserialized);
+            return ChampSet.copyOf(deserializedElements);
         }
     }
 }

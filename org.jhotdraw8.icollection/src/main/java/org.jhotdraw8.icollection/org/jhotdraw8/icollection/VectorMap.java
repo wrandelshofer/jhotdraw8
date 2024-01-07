@@ -361,8 +361,8 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
                 this::containsKey,
                 this::get,
                 this::lastEntry,
-                this::firstEntry
-        );
+                this::firstEntry,
+                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED, null);
     }
 
     @Override
@@ -419,7 +419,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     @NonNull Spliterator<Map.Entry<K, V>> reverseSpliterator() {
         return new ReverseTombSkippingVectorSpliterator<>(vector,
                 e -> ((SequencedEntry<K, V>) e),
-                Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
+                size(), Spliterator.NONNULL | characteristics());
     }
 
 
@@ -431,7 +431,8 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
         return new TombSkippingVectorSpliterator<>(vector.trie,
                 e -> ((Map.Entry<K, V>) e),
-                0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
+                0, size(), vector.size(),
+                Spliterator.NONNULL | characteristics());
     }
 
     /**
@@ -478,7 +479,13 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return VectorMap.of().putAll(deserialized);
+            return VectorMap.of().putAll(deserializedEntries);
         }
     }
+
+    @Override
+    public int characteristics() {
+        return Spliterator.IMMUTABLE | Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED;
+    }
+
 }

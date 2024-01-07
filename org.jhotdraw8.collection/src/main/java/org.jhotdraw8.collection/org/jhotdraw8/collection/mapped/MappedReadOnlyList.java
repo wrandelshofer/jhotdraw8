@@ -103,8 +103,8 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
                 this::size,
                 this::contains,
                 this::getLast,
-                this::getFirst
-        );
+                this::getFirst,
+                0, null);
     }
 
     @SuppressWarnings("unchecked")

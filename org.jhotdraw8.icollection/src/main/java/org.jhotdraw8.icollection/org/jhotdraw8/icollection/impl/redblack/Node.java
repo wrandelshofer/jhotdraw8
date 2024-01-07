@@ -8,6 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Comparator;
+import java.util.Map;
+import java.util.Objects;
 import java.util.function.BiFunction;
 
 /**
@@ -19,25 +21,62 @@ import java.util.function.BiFunction;
  *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
  * </dl>
  *
- * @param <T> Component type
+ * @param <K> Component type
  */
-public final class Node<T> implements RedBlackTree<T> {
+public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
+    @Override
+    public String toLispString() {
+        return isLeaf() ? "(" + (color ? 'R' : 'B') + ":" + key +
+                (value == null ? "" : "=" + value)
+                + ")" : toLispString(this);
+    }
+
+    private static String toLispString(RedBlackTree<?, ?> tree) {
+        if (tree.isEmpty()) {
+            return "";
+        } else {
+            final Node<?, ?> node = (Node<?, ?>) tree;
+            final String value = (node.color ? 'R' : 'B') + ":" + node.key +
+                    (node.value == null ? "" : "=" + node.value);
+            if (node.isLeaf()) {
+                return value;
+            } else {
+                final String left = node.left.isEmpty() ? "" : " " + toLispString(node.left);
+                final String right = node.right.isEmpty() ? "" : " " + toLispString(node.right);
+                return "(" + value + "," + left + "," + right + ")";
+            }
+        }
+    }
+
+    private boolean isLeaf() {
+        return left.isEmpty() && right.isEmpty();
+    }
 
     final boolean color;
     final byte blackHeight;
-    final RedBlackTree<T> left;
-    final T value;
-    final RedBlackTree<T> right;
+    final RedBlackTree<K, V> left;
+    final K key;
+    final V value;
+    final RedBlackTree<K, V> right;
     final int size;
 
     // This is no public API! The RedBlackTree takes care of passing the correct Comparator.
-    Node(boolean color, int blackHeight, RedBlackTree<T> left, T value, RedBlackTree<T> right) {
+    Node(boolean color, int blackHeight, RedBlackTree<K, V> left, K key, V value, RedBlackTree<K, V> right) {
         this.color = color;
         this.blackHeight = (byte) blackHeight;
         this.left = left;
+        this.key = key;
         this.value = value;
         this.right = right;
         this.size = left.size() + right.size() + 1;
+        /*
+        assert isRed() &&!left.isRed()&&!right.isRed()
+                || !isRed()&&!right.isRed()
+                :"a red node must only have black children," +
+                "a black node must not have a right child that is red: "
+                +toLispString();
+
+         */
     }
 
     @Override
@@ -47,43 +86,58 @@ public final class Node<T> implements RedBlackTree<T> {
 
 
     @Override
-    public boolean contains(T value, Comparator<? super T> comparator) {
-        final int result = comparator.compare(value, this.value);
+    public boolean contains(K key, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, key);
         if (result < 0) {
-            return left.contains(value, comparator);
-        } else if (result > 0) {
-            return right.contains(value, comparator);
-        } else {
-            return true;
+            return left.contains(key, comparator);
         }
+        if (result > 0) {
+            return right.contains(key, comparator);
+        }
+        return true;
     }
 
 
     @Override
-    public RedBlackTree<T> orElse(RedBlackTree<T> other) {
+    public RedBlackTree<K, V> orElse(RedBlackTree<K, V> other) {
         return this;
     }
 
     @Override
-    public @Nullable T orNull() {
+    public @Nullable K keyOrNull() {
+        return key;
+    }
+
+    @Override
+    public @Nullable V valueOrNull() {
         return value;
     }
 
     @Override
-    public RedBlackTree<T> find(T value, Comparator<? super T> comparator) {
-        final int result = comparator.compare(value, this.value);
+    public Map.@Nullable Entry<K, V> entryOrNull() {
+        return this;
+    }
+
+    @Override
+    public <E> @Nullable E mapOrNull(@NonNull BiFunction<K, V, E> f) {
+        return f.apply(key, value);
+    }
+
+    @Override
+    public RedBlackTree<K, V> find(K key, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, key);
         if (result < 0) {
-            return left.find(value, comparator);
+            return left.find(key, comparator);
         } else if (result > 0) {
-            return right.find(value, comparator);
+            return right.find(key, comparator);
         } else {
             return this;
         }
     }
 
     @Override
-    public @NonNull RedBlackTree<T> ceiling(T value, Comparator<? super T> comparator) {
-        final int result = comparator.compare(value, this.value);
+    public @NonNull RedBlackTree<K, V> ceiling(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
         if (result < 0) {
             return left.ceiling(value, comparator);
         } else if (result > 0) {
@@ -94,8 +148,8 @@ public final class Node<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public @NonNull RedBlackTree<T> floor(T value, Comparator<? super T> comparator) {
-        final int result = comparator.compare(value, this.value);
+    public @NonNull RedBlackTree<K, V> floor(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
         if (result < 0) {
             return left.floor(value, comparator).orElse(this);
         } else if (result > 0) {
@@ -106,8 +160,8 @@ public final class Node<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public @NonNull RedBlackTree<T> higher(T value, Comparator<? super T> comparator) {
-        final int result = comparator.compare(value, this.value);
+    public @NonNull RedBlackTree<K, V> higher(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
         if (result < 0) {
             return left.higher(value, comparator);
         } else if (result > 0) {
@@ -118,8 +172,8 @@ public final class Node<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public @NonNull RedBlackTree<T> lower(T value, Comparator<? super T> comparator) {
-        final int result = comparator.compare(value, this.value);
+    public @NonNull RedBlackTree<K, V> lower(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
         if (result < 0) {
             return left.lower(value, comparator).orElse(this);
         } else if (result > 0) {
@@ -135,12 +189,12 @@ public final class Node<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public RedBlackTree<T> left() {
+    public RedBlackTree<K, V> left() {
         return left;
     }
 
     @Override
-    public RedBlackTree<T> right() {
+    public RedBlackTree<K, V> right() {
         return right;
     }
 
@@ -150,106 +204,86 @@ public final class Node<T> implements RedBlackTree<T> {
     }
 
     @Override
-    public T value() {
-        return value;
+    public K getKey() {
+        return key;
     }
 
     @Override
-    public String toString() {
-        return isLeaf() ? "(" + (color ? 'R' : 'B') + ":" + value + ")" : toLispString(this);
+    public V getValue() {
+        return value;
     }
 
-    private static String toLispString(RedBlackTree<?> tree) {
-        if (tree.isEmpty()) {
-            return "";
-        } else {
-            final Node<?> node = (Node<?>) tree;
-            final String value = (node.color ? 'R' : 'B') + ":" + node.value;
-            if (node.isLeaf()) {
-                return value;
-            } else {
-                final String left = node.left.isEmpty() ? "" : " " + toLispString(node.left);
-                final String right = node.right.isEmpty() ? "" : " " + toLispString(node.right);
-                return "(" + value + left + right + ")";
-            }
-        }
+    Node<K, V> color(boolean color) {
+        return (this.color == color) ? this : new Node<>(color, blackHeight, left, key, value, right);
     }
 
-    private boolean isLeaf() {
-        return left.isEmpty() && right.isEmpty();
+    static <K, V> RedBlackTree<K, V> color(RedBlackTree<K, V> tree, boolean color) {
+        return tree.isEmpty() ? tree : ((Node<K, V>) tree).color(color);
     }
 
-    Node<T> color(boolean color) {
-        return (this.color == color) ? this : new Node<>(color, blackHeight, left, value, right);
-    }
-
-    static <T> RedBlackTree<T> color(RedBlackTree<T> tree, boolean color) {
-        return tree.isEmpty() ? tree : ((Node<T>) tree).color(color);
-    }
-
-    private static <T> Node<T> balanceLeft(boolean color, int blackHeight, RedBlackTree<T> left, T value,
-                                           RedBlackTree<T> right, Empty<T> empty) {
+    private static <K, V> Node<K, V> balanceLeft(boolean color, int blackHeight, RedBlackTree<K, V> left, K key,
+                                                 V value, RedBlackTree<K, V> right) {
         if (color == Color.BLACK) {
             if (!left.isEmpty()) {
-                final Node<T> ln = (Node<T>) left;
+                final Node<K, V> ln = (Node<K, V>) left;
                 if (ln.color == Color.RED) {
                     if (!ln.left.isEmpty()) {
-                        final Node<T> lln = (Node<T>) ln.left;
+                        final Node<K, V> lln = (Node<K, V>) ln.left;
                         if (lln.color == Color.RED) {
-                            final Node<T> newLeft = new Node<>(Color.BLACK, blackHeight, lln.left, lln.value, lln.right
+                            final Node<K, V> newLeft = new Node<>(Color.BLACK, blackHeight, lln.left, lln.key, lln.value, lln.right
                             );
-                            final Node<T> newRight = new Node<>(Color.BLACK, blackHeight, ln.right, value, right);
-                            return new Node<>(Color.RED, blackHeight + 1, newLeft, ln.value, newRight);
+                            final Node<K, V> newRight = new Node<>(Color.BLACK, blackHeight, ln.right, key, value, right);
+                            return new Node<>(Color.RED, blackHeight + 1, newLeft, ln.key, ln.value, newRight);
                         }
                     }
                     if (!ln.right.isEmpty()) {
-                        final Node<T> lrn = (Node<T>) ln.right;
+                        final Node<K, V> lrn = (Node<K, V>) ln.right;
                         if (lrn.color == Color.RED) {
-                            final Node<T> newLeft = new Node<>(Color.BLACK, blackHeight, ln.left, ln.value, lrn.left
+                            final Node<K, V> newLeft = new Node<>(Color.BLACK, blackHeight, ln.left, ln.key, ln.value, lrn.left
                             );
-                            final Node<T> newRight = new Node<>(Color.BLACK, blackHeight, lrn.right, value, right);
-                            return new Node<>(Color.RED, blackHeight + 1, newLeft, lrn.value, newRight);
+                            final Node<K, V> newRight = new Node<>(Color.BLACK, blackHeight, lrn.right, key, value, right);
+                            return new Node<>(Color.RED, blackHeight + 1, newLeft, lrn.key, lrn.value, newRight);
                         }
                     }
                 }
             }
         }
-        return new Node<>(color, blackHeight, left, value, right);
+        return new Node<>(color, blackHeight, left, key, value, right);
     }
 
-    private static <T> Node<T> balanceRight(boolean color, int blackHeight, RedBlackTree<T> left, T value,
-                                            RedBlackTree<T> right, Empty<T> empty) {
+    private static <K, V> Node<K, V> balanceRight(boolean color, int blackHeight, RedBlackTree<K, V> left, K key,
+                                                  V value, RedBlackTree<K, V> right) {
         if (color == Color.BLACK) {
             if (!right.isEmpty()) {
-                final Node<T> rn = (Node<T>) right;
+                final Node<K, V> rn = (Node<K, V>) right;
                 if (rn.color == Color.RED) {
                     if (!rn.right.isEmpty()) {
-                        final Node<T> rrn = (Node<T>) rn.right;
+                        final Node<K, V> rrn = (Node<K, V>) rn.right;
                         if (rrn.color == Color.RED) {
-                            final Node<T> newLeft = new Node<>(Color.BLACK, blackHeight, left, value, rn.left);
-                            final Node<T> newRight = new Node<>(Color.BLACK, blackHeight, rrn.left, rrn.value, rrn.right
+                            final Node<K, V> newLeft = new Node<>(Color.BLACK, blackHeight, left, key, value, rn.left);
+                            final Node<K, V> newRight = new Node<>(Color.BLACK, blackHeight, rrn.left, rrn.key, rrn.value, rrn.right
                             );
-                            return new Node<>(Color.RED, blackHeight + 1, newLeft, rn.value, newRight);
+                            return new Node<>(Color.RED, blackHeight + 1, newLeft, rn.key, rn.value, newRight);
                         }
                     }
                     if (!rn.left.isEmpty()) {
-                        final Node<T> rln = (Node<T>) rn.left;
+                        final Node<K, V> rln = (Node<K, V>) rn.left;
                         if (rln.color == Color.RED) {
-                            final Node<T> newLeft = new Node<>(Color.BLACK, blackHeight, left, value, rln.left);
-                            final Node<T> newRight = new Node<>(Color.BLACK, blackHeight, rln.right, rn.value, rn.right
+                            final Node<K, V> newLeft = new Node<>(Color.BLACK, blackHeight, left, key, value, rln.left);
+                            final Node<K, V> newRight = new Node<>(Color.BLACK, blackHeight, rln.right, rn.key, rn.value, rn.right
                             );
-                            return new Node<>(Color.RED, blackHeight + 1, newLeft, rln.value, newRight);
+                            return new Node<>(Color.RED, blackHeight + 1, newLeft, rln.key, rln.value, newRight);
                         }
                     }
                 }
             }
         }
-        return new Node<>(color, blackHeight, left, value, right);
+        return new Node<>(color, blackHeight, left, key, value, right);
     }
 
-    private static <T> Tuple2<? extends RedBlackTree<T>, Boolean> blackify(RedBlackTree<T> tree) {
+    private static <K, V> Tuple2<? extends RedBlackTree<K, V>, Boolean> blackify(RedBlackTree<K, V> tree) {
         if (tree instanceof Node) {
-            final Node<T> node = (Node<T>) tree;
+            final Node<K, V> node = (Node<K, V>) tree;
             if (node.color == Color.RED) {
                 return Tuple.of(node.color(Color.BLACK), false);
             }
@@ -257,33 +291,33 @@ public final class Node<T> implements RedBlackTree<T> {
         return Tuple.of(tree, true);
     }
 
-    static <T> Tuple2<? extends RedBlackTree<T>, Boolean> delete(RedBlackTree<T> tree, T value, Comparator<? super T> comparator) {
+    static <K, V> Tuple2<? extends RedBlackTree<K, V>, Boolean> delete(RedBlackTree<K, V> tree, K key, Comparator<? super K> comparator) {
         if (tree.isEmpty()) {
             return Tuple.of(tree, false);
         } else {
-            final Node<T> node = (Node<T>) tree;
-            final int comparison = comparator.compare(value, node.value);
+            final Node<K, V> node = (Node<K, V>) tree;
+            final int comparison = comparator.compare(node.key, key);
             if (comparison < 0) {
-                final Tuple2<? extends RedBlackTree<T>, Boolean> deleted = delete(node.left, value, comparator);
-                final RedBlackTree<T> l = deleted._1;
+                final Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.left, key, comparator);
+                final RedBlackTree<K, V> l = deleted._1;
                 final boolean d = deleted._2;
                 if (d) {
-                    return Node.unbalancedRight(node.color, node.blackHeight - 1, l, node.value, node.right,
+                    return Node.unbalancedRight(node.color, node.blackHeight - 1, l, node.key, node.value, node.right,
                             Empty.empty());
                 } else {
-                    final Node<T> newNode = new Node<>(node.color, node.blackHeight, l, node.value, node.right
+                    final Node<K, V> newNode = new Node<>(node.color, node.blackHeight, l, node.key, node.value, node.right
                     );
                     return Tuple.of(newNode, false);
                 }
             } else if (comparison > 0) {
-                final Tuple2<? extends RedBlackTree<T>, Boolean> deleted = delete(node.right, value, comparator);
-                final RedBlackTree<T> r = deleted._1;
+                final Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.right, key, comparator);
+                final RedBlackTree<K, V> r = deleted._1;
                 final boolean d = deleted._2;
                 if (d) {
-                    return Node.unbalancedLeft(node.color, node.blackHeight - 1, node.left, node.value, r,
+                    return Node.unbalancedLeft(node.color, node.blackHeight - 1, node.left, node.key, node.value, r,
                             Empty.empty());
                 } else {
-                    final Node<T> newNode = new Node<>(node.color, node.blackHeight, node.left, node.value, r
+                    final Node<K, V> newNode = new Node<>(node.color, node.blackHeight, node.left, node.key, node.value, r
                     );
                     return Tuple.of(newNode, false);
                 }
@@ -295,15 +329,16 @@ public final class Node<T> implements RedBlackTree<T> {
                         return Tuple.of(node.left, false);
                     }
                 } else {
-                    final Node<T> nodeRight = (Node<T>) node.right;
-                    final Tuple3<? extends RedBlackTree<T>, Boolean, T> newRight = deleteMin(nodeRight);
-                    final RedBlackTree<T> r = newRight._1;
+                    final Node<K, V> nodeRight = (Node<K, V>) node.right;
+                    final var newRight = deleteMin(nodeRight);
+                    final RedBlackTree<K, V> r = newRight._1;
                     final boolean d = newRight._2;
-                    final T m = newRight._3;
+                    final K m = newRight._3;
+                    final V mv = newRight._4;
                     if (d) {
-                        return Node.unbalancedLeft(node.color, node.blackHeight - 1, node.left, m, r, Empty.empty());
+                        return Node.unbalancedLeft(node.color, node.blackHeight - 1, node.left, m, mv, r, Empty.empty());
                     } else {
-                        final RedBlackTree<T> newNode = new Node<>(node.color, node.blackHeight, node.left, m, r
+                        final RedBlackTree<K, V> newNode = new Node<>(node.color, node.blackHeight, node.left, m, mv, r
                         );
                         return Tuple.of(newNode, false);
                     }
@@ -312,26 +347,27 @@ public final class Node<T> implements RedBlackTree<T> {
         }
     }
 
-    private static <T> Tuple3<? extends RedBlackTree<T>, Boolean, T> deleteMin(Node<T> node) {
+    private static <K, V> Tuple4<? extends RedBlackTree<K, V>, Boolean, K, V> deleteMin(Node<K, V> node) {
         if (node.color() == Color.BLACK && node.left().isEmpty() && node.right.isEmpty()) {
-            return Tuple.of(Empty.empty(), true, node.value());
+            return Tuple.of(Empty.empty(), true, node.getKey(), node.getValue());
         } else if (node.color() == Color.BLACK && node.left().isEmpty() && node.right().color() == Color.RED) {
-            return Tuple.of(((Node<T>) node.right()).color(Color.BLACK), false, node.value());
+            return Tuple.of(((Node<K, V>) node.right()).color(Color.BLACK), false, node.getKey(), node.getValue());
         } else if (node.color() == Color.RED && node.left().isEmpty()) {
-            return Tuple.of(node.right(), false, node.value());
+            return Tuple.of(node.right(), false, node.getKey(), node.getValue());
         } else {
-            final Node<T> nodeLeft = (Node<T>) node.left;
-            final Tuple3<? extends RedBlackTree<T>, Boolean, T> newNode = deleteMin(nodeLeft);
-            final RedBlackTree<T> l = newNode._1;
+            final Node<K, V> nodeLeft = (Node<K, V>) node.left;
+            final var newNode = deleteMin(nodeLeft);
+            final RedBlackTree<K, V> l = newNode._1;
             final boolean deleted = newNode._2;
-            final T m = newNode._3;
+            final K m = newNode._3;
+            final V mv = newNode._4;
             if (deleted) {
-                final Tuple2<Node<T>, Boolean> tD = Node.unbalancedRight(node.color, node.blackHeight - 1, l,
-                        node.value, node.right, Empty.empty());
-                return Tuple.of(tD._1, tD._2, m);
+                final Tuple2<Node<K, V>, Boolean> tD = Node.unbalancedRight(node.color, node.blackHeight - 1, l,
+                        node.key, node.value, node.right, Empty.empty());
+                return Tuple.of(tD._1, tD._2, m, mv);
             } else {
-                final Node<T> tD = new Node<>(node.color, node.blackHeight, l, node.value, node.right);
-                return Tuple.of(tD, false, m);
+                final Node<K, V> tD = new Node<>(node.color, node.blackHeight, l, node.key, node.value, node.right);
+                return Tuple.of(tD, false, m, mv);
             }
         }
     }
@@ -339,188 +375,192 @@ public final class Node<T> implements RedBlackTree<T> {
     /**
      * Inserts or updates an element in the tree.
      *
-     * @param tree           the tree
-     * @param value          the new element value
-     * @param comparator     the comparator on which the elements are sorted in the tree
-     * @param updateFunction the update function for the element value
-     * @param <T>            the element type
+     * @param <K>        the element type
+     * @param tree       the tree
+     * @param key        the new element value
+     * @param value      the new element value
+     * @param comparator the comparator on which the elements are sorted in the tree
      * @return the same tree instance if the element value is already in the tree, otherwise a new tree instance
      */
-    static <T> Node<T> insert(RedBlackTree<T> tree, T value, Comparator<? super T> comparator, BiFunction<T, T, T> updateFunction) {
+    static <K, V> Node<K, V> insert(RedBlackTree<K, V> tree, K key, V value, Comparator<? super K> comparator) {
         if (tree.isEmpty()) {
-            final Empty<T> empty = (Empty<T>) tree;
-            return new Node<>(Color.RED, 1, empty, value, empty);
+            final Empty<K, V> empty = (Empty<K, V>) tree;
+            return new Node<>(Color.RED, 1, empty, key, value, empty);
         } else {
-            final Node<T> node = (Node<T>) tree;
-            final int comparison = comparator.compare(value, node.value);
+            final Node<K, V> node = (Node<K, V>) tree;
+            final int comparison = comparator.compare(node.key, key);
             if (comparison < 0) {
-                final Node<T> newLeft = insert(node.left, value, comparator, updateFunction);
+                final Node<K, V> newLeft = insert(node.left, key, value, comparator);
                 return (newLeft == node.left)
                         ? node
-                        : Node.balanceLeft(node.color, node.blackHeight, newLeft, node.value, node.right,
-                        Empty.empty());
+                        : Node.balanceLeft(node.color, node.blackHeight, newLeft, node.key, node.value, node.right
+                );
             } else if (comparison > 0) {
-                final Node<T> newRight = insert(node.right, value, comparator, updateFunction);
+                final Node<K, V> newRight = insert(node.right, key, value, comparator);
                 return (newRight == node.right)
                         ? node
-                        : Node.balanceRight(node.color, node.blackHeight, node.left, node.value, newRight,
-                        Empty.empty());
+                        : Node.balanceRight(node.color, node.blackHeight, node.left, node.key, node.value, newRight
+                );
             } else {
-                T updatedValue = updateFunction.apply(node.value, value);
-                return updatedValue == value ? node : new Node<>(node.color, node.blackHeight, node.left, value, node.right);
+                return Objects.equals(node.getValue(), value) ? node : new Node<>(node.color, node.blackHeight, node.left, key, value, node.right);
             }
         }
     }
 
-    private static boolean isRed(RedBlackTree<?> tree) {
-        return !tree.isEmpty() && ((Node<?>) tree).color == Color.RED;
+    private static boolean isRed(RedBlackTree<?, ?> tree) {
+        return !tree.isEmpty() && ((Node<?, ?>) tree).color == Color.RED;
     }
 
-    static <T> RedBlackTree<T> join(RedBlackTree<T> t1, T value, RedBlackTree<T> t2, Comparator<? super T> comparator, BiFunction<T, T, T> updateFunction) {
+    @Override
+    public boolean isRed() {
+        return color == Color.RED;
+    }
+
+    static <K, V> RedBlackTree<K, V> join(RedBlackTree<K, V> t1, K key, V value, RedBlackTree<K, V> t2, Comparator<? super K> comparator) {
         if (t1.isEmpty()) {
-            return t2.insert(value, comparator, updateFunction);
+            return t2.insert(key, value, comparator);
         } else if (t2.isEmpty()) {
-            return t1.insert(value, comparator, updateFunction);
+            return t1.insert(key, value, comparator);
         } else {
-            final Node<T> n1 = (Node<T>) t1;
-            final Node<T> n2 = (Node<T>) t2;
+            final Node<K, V> n1 = (Node<K, V>) t1;
+            final Node<K, V> n2 = (Node<K, V>) t2;
             final int comparison = n1.blackHeight - n2.blackHeight;
             if (comparison < 0) {
-                return Node.joinLT(n1, value, n2, n1.blackHeight).color(Color.BLACK);
+                return Node.joinLT(n1, key, value, n2, n1.blackHeight).color(Color.BLACK);
             } else if (comparison > 0) {
-                return Node.joinGT(n1, value, n2, n2.blackHeight).color(Color.BLACK);
+                return Node.joinGT(n1, key, value, n2, n2.blackHeight).color(Color.BLACK);
             } else {
-                return new Node<>(Color.BLACK, n1.blackHeight + 1, n1, value, n2);
+                return new Node<>(Color.BLACK, n1.blackHeight + 1, n1, key, value, n2);
             }
         }
     }
 
-    private static <T> Node<T> joinGT(Node<T> n1, T value, Node<T> n2, int h2) {
+    private static <K, V> Node<K, V> joinGT(Node<K, V> n1, K key, V value, Node<K, V> n2, int h2) {
         if (n1.blackHeight == h2) {
-            return new Node<>(Color.RED, h2 + 1, n1, value, n2);
+            return new Node<>(Color.RED, h2 + 1, n1, key, value, n2);
         } else {
-            final Node<T> node = joinGT((Node<T>) n1.right, value, n2, h2);
-            return Node.balanceRight(n1.color, n1.blackHeight, n1.left, n1.value, node, Empty.empty());
+            final Node<K, V> node = joinGT((Node<K, V>) n1.right, key, value, n2, h2);
+            return Node.balanceRight(n1.color, n1.blackHeight, n1.left, n1.key, n1.value, node);
         }
     }
 
-    private static <T> Node<T> joinLT(Node<T> n1, T value, Node<T> n2, int h1) {
+    private static <K, V> Node<K, V> joinLT(Node<K, V> n1, K key, V value, Node<K, V> n2, int h1) {
         if (n2.blackHeight == h1) {
-            return new Node<>(Color.RED, h1 + 1, n1, value, n2);
+            return new Node<>(Color.RED, h1 + 1, n1, key, value, n2);
         } else {
-            final Node<T> node = joinLT(n1, value, (Node<T>) n2.left, h1);
-            return Node.balanceLeft(n2.color, n2.blackHeight, node, n2.value, n2.right, Empty.empty());
+            final Node<K, V> node = joinLT(n1, key, value, (Node<K, V>) n2.left, h1);
+            return Node.balanceLeft(n2.color, n2.blackHeight, node, n2.key, n2.value, n2.right);
         }
     }
 
-    static <T> RedBlackTree<T> merge(RedBlackTree<T> t1, RedBlackTree<T> t2) {
+    static <K, V> RedBlackTree<K, V> merge(RedBlackTree<K, V> t1, RedBlackTree<K, V> t2) {
         if (t1.isEmpty()) {
             return t2;
         } else if (t2.isEmpty()) {
             return t1;
         } else {
-            final Node<T> n1 = (Node<T>) t1;
-            final Node<T> n2 = (Node<T>) t2;
+            final Node<K, V> n1 = (Node<K, V>) t1;
+            final Node<K, V> n2 = (Node<K, V>) t2;
             final int comparison = n1.blackHeight - n2.blackHeight;
             if (comparison < 0) {
-                final Node<T> node = Node.mergeLT(n1, n2, n1.blackHeight);
+                final Node<K, V> node = Node.mergeLT(n1, n2, n1.blackHeight);
                 return Node.color(node, Color.BLACK);
             } else if (comparison > 0) {
-                final Node<T> node = Node.mergeGT(n1, n2, n2.blackHeight);
+                final Node<K, V> node = Node.mergeGT(n1, n2, n2.blackHeight);
                 return Node.color(node, Color.BLACK);
             } else {
-                final Node<T> node = Node.mergeEQ(n1, n2);
+                final Node<K, V> node = Node.mergeEQ(n1, n2);
                 return Node.color(node, Color.BLACK);
             }
         }
     }
 
-    private static <T> Node<T> mergeEQ(Node<T> n1, Node<T> n2) {
-        final T m = Node.minimum(n2);
-        final RedBlackTree<T> t2 = Node.deleteMin(n2)._1;
-        final int h2 = t2.isEmpty() ? 0 : ((Node<T>) t2).blackHeight;
+    private static <K, V> Node<K, V> mergeEQ(Node<K, V> n1, Node<K, V> n2) {
+        final Node<K, V> m = Node.minimum(n2);
+        final RedBlackTree<K, V> t2 = Node.deleteMin(n2)._1;
+        final int h2 = t2.isEmpty() ? 0 : ((Node<K, V>) t2).blackHeight;
         if (n1.blackHeight == h2) {
-            return new Node<>(Color.RED, n1.blackHeight + 1, n1, m, t2);
-        } else if (isRed(n1.left)) {
-            final Node<T> node = new Node<>(Color.BLACK, n1.blackHeight, n1.right, m, t2);
-            return new Node<>(Color.RED, n1.blackHeight + 1, Node.color(n1.left, Color.BLACK), n1.value, node);
-        } else if (isRed(n1.right)) {
-            final RedBlackTree<T> rl = ((Node<T>) n1.right).left;
-            final T rx = ((Node<T>) n1.right).value;
-            final RedBlackTree<T> rr = ((Node<T>) n1.right).right;
-            final Node<T> left = new Node<>(Color.RED, n1.blackHeight, n1.left, n1.value, rl);
-            final Node<T> right = new Node<>(Color.RED, n1.blackHeight, rr, m, t2);
-            return new Node<>(Color.BLACK, n1.blackHeight, left, rx, right);
+            return new Node<>(Color.RED, n1.blackHeight + 1, n1, m.key, m.value, t2);
+        } else if (n1.left.isRed()) {
+            final Node<K, V> node = new Node<>(Color.BLACK, n1.blackHeight, n1.right, m.key, m.value, t2);
+            return new Node<>(Color.RED, n1.blackHeight + 1, Node.color(n1.left, Color.BLACK), n1.key, n1.value, node);
+        } else if (n1.right.isRed()) {
+            final RedBlackTree<K, V> rl = ((Node<K, V>) n1.right).left;
+            final Node<K, V> rx = ((Node<K, V>) n1.right);
+            final RedBlackTree<K, V> rr = ((Node<K, V>) n1.right).right;
+            final Node<K, V> left = new Node<>(Color.RED, n1.blackHeight, n1.left, n1.key, n1.value, rl);
+            final Node<K, V> right = new Node<>(Color.RED, n1.blackHeight, rr, m.key, m.value, t2);
+            return new Node<>(Color.BLACK, n1.blackHeight, left, rx.key, rx.value, right);
         } else {
-            return new Node<>(Color.BLACK, n1.blackHeight, n1.color(Color.RED), m, t2);
+            return new Node<>(Color.BLACK, n1.blackHeight, n1.color(Color.RED), m.key, m.value, t2);
         }
     }
 
-    private static <T> Node<T> mergeGT(Node<T> n1, Node<T> n2, int h2) {
+    private static <K, V> Node<K, V> mergeGT(Node<K, V> n1, Node<K, V> n2, int h2) {
         if (n1.blackHeight == h2) {
             return Node.mergeEQ(n1, n2);
         } else {
-            final Node<T> node = Node.mergeGT((Node<T>) n1.right, n2, h2);
-            return Node.balanceRight(n1.color, n1.blackHeight, n1.left, n1.value, node, Empty.empty());
+            final Node<K, V> node = Node.mergeGT((Node<K, V>) n1.right, n2, h2);
+            return Node.balanceRight(n1.color, n1.blackHeight, n1.left, n1.key, n1.value, node);
         }
     }
 
-    private static <T> Node<T> mergeLT(Node<T> n1, Node<T> n2, int h1) {
+    private static <K, V> Node<K, V> mergeLT(Node<K, V> n1, Node<K, V> n2, int h1) {
         if (n2.blackHeight == h1) {
             return Node.mergeEQ(n1, n2);
         } else {
-            final Node<T> node = Node.mergeLT(n1, (Node<T>) n2.left, h1);
-            return Node.balanceLeft(n2.color, n2.blackHeight, node, n2.value, n2.right, Empty.empty());
+            final Node<K, V> node = Node.mergeLT(n1, (Node<K, V>) n2.left, h1);
+            return Node.balanceLeft(n2.color, n2.blackHeight, node, n2.key, n2.value, n2.right);
         }
     }
 
-    static <T> T maximum(Node<T> node) {
-        Node<T> curr = node;
+    static <K, V> Node<K, V> maximum(Node<K, V> node) {
+        Node<K, V> curr = node;
         while (!curr.right.isEmpty()) {
-            curr = (Node<T>) curr.right;
+            curr = (Node<K, V>) curr.right;
         }
-        return curr.value;
+        return curr;
     }
 
-    static <T> T minimum(Node<T> node) {
-        Node<T> curr = node;
+    static <K, V> Node<K, V> minimum(Node<K, V> node) {
+        Node<K, V> curr = node;
         while (!curr.left.isEmpty()) {
-            curr = (Node<T>) curr.left;
+            curr = (Node<K, V>) curr.left;
         }
-        return curr.value;
+        return curr;
     }
 
-    static <T> Tuple2<RedBlackTree<T>, RedBlackTree<T>> split(@NonNull RedBlackTree<T> tree, T value, @NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction) {
+    static <K, V> Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split(@NonNull RedBlackTree<K, V> tree, K key, V value, @NonNull Comparator<? super K> comparator) {
         if (tree.isEmpty()) {
             return Tuple.of(tree, tree);
         } else {
-            final Node<T> node = (Node<T>) tree;
-            final int comparison = comparator.compare(value, node.value);
+            final Node<K, V> node = (Node<K, V>) tree;
+            final int comparison = comparator.compare(node.key, key);
             if (comparison < 0) {
-                final Tuple2<RedBlackTree<T>, RedBlackTree<T>> split = Node.split(node.left, value, comparator, updateFunction);
-                return Tuple.of(split._1, Node.join(split._2, node.value, Node.color(node.right, Color.BLACK), comparator, updateFunction));
+                final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(node.left, key, value, comparator);
+                return Tuple.of(split._1, Node.join(split._2, node.key, node.value, Node.color(node.right, Color.BLACK), comparator));
             } else if (comparison > 0) {
-                final Tuple2<RedBlackTree<T>, RedBlackTree<T>> split = Node.split(node.right, value, comparator, updateFunction);
-                return Tuple.of(Node.join(Node.color(node.left, Color.BLACK), node.value, split._1, comparator, updateFunction), split._2);
+                final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(node.right, key, value, comparator);
+                return Tuple.of(Node.join(Node.color(node.left, Color.BLACK), node.key, node.value, split._1, comparator), split._2);
             } else {
                 return Tuple.of(Node.color(node.left, Color.BLACK), Node.color(node.right, Color.BLACK));
             }
         }
     }
 
-    private static <T> Tuple2<Node<T>, Boolean> unbalancedLeft(boolean color, int blackHeight, RedBlackTree<T> left,
-                                                               T value, RedBlackTree<T> right, Empty<T> empty) {
+    private static <K, V> Tuple2<Node<K, V>, Boolean> unbalancedLeft(boolean color, int blackHeight, RedBlackTree<K, V> left,
+                                                                     K key, V value, RedBlackTree<K, V> right, Empty<K, V> empty) {
         if (!left.isEmpty()) {
-            final Node<T> ln = (Node<T>) left;
+            final Node<K, V> ln = (Node<K, V>) left;
             if (ln.color == Color.BLACK) {
-                final Node<T> newNode = Node.balanceLeft(Color.BLACK, blackHeight, ln.color(Color.RED), value, right, empty);
+                final Node<K, V> newNode = Node.balanceLeft(Color.BLACK, blackHeight, ln.color(Color.RED), key, value, right);
                 return Tuple.of(newNode, color == Color.BLACK);
             } else if (color == Color.BLACK && !ln.right.isEmpty()) {
-                final Node<T> lrn = (Node<T>) ln.right;
+                final Node<K, V> lrn = (Node<K, V>) ln.right;
                 if (lrn.color == Color.BLACK) {
-                    final Node<T> newRightNode = Node.balanceLeft(Color.BLACK, blackHeight, lrn.color(Color.RED), value, right,
-                            empty);
-                    final Node<T> newNode = new Node<>(Color.BLACK, ln.blackHeight, ln.left, ln.value, newRightNode
+                    final Node<K, V> newRightNode = Node.balanceLeft(Color.BLACK, blackHeight, lrn.color(Color.RED), key, value, right
+                    );
+                    final Node<K, V> newNode = new Node<>(Color.BLACK, ln.blackHeight, ln.left, ln.key, ln.value, newRightNode
                     );
                     return Tuple.of(newNode, false);
                 }
@@ -529,24 +569,46 @@ public final class Node<T> implements RedBlackTree<T> {
         throw new IllegalStateException("unbalancedLeft(" + color + ", " + blackHeight + ", " + left + ", " + value + ", " + right + ")");
     }
 
-    private static <T> Tuple2<Node<T>, Boolean> unbalancedRight(boolean color, int blackHeight, RedBlackTree<T> left,
-                                                                T value, RedBlackTree<T> right, Empty<T> empty) {
+    private static <K, V> Tuple2<Node<K, V>, Boolean> unbalancedRight(boolean color, int blackHeight, RedBlackTree<K, V> left,
+                                                                      K key, V value, RedBlackTree<K, V> right, Empty<K, V> empty) {
         if (!right.isEmpty()) {
-            final Node<T> rn = (Node<T>) right;
+            final Node<K, V> rn = (Node<K, V>) right;
             if (rn.color == Color.BLACK) {
-                final Node<T> newNode = Node.balanceRight(Color.BLACK, blackHeight, left, value, rn.color(Color.RED), empty);
+                final Node<K, V> newNode = Node.balanceRight(Color.BLACK, blackHeight, left, key, value, rn.color(Color.RED));
                 return Tuple.of(newNode, color == Color.BLACK);
             } else if (color == Color.BLACK && !rn.left.isEmpty()) {
-                final Node<T> rln = (Node<T>) rn.left;
+                final Node<K, V> rln = (Node<K, V>) rn.left;
                 if (rln.color == Color.BLACK) {
-                    final Node<T> newLeftNode = Node.balanceRight(Color.BLACK, blackHeight, left, value, rln.color(Color.RED),
-                            empty);
-                    final Node<T> newNode = new Node<>(Color.BLACK, rn.blackHeight, newLeftNode, rn.value, rn.right
+                    final Node<K, V> newLeftNode = Node.balanceRight(Color.BLACK, blackHeight, left, key, value, rln.color(Color.RED)
+                    );
+                    final Node<K, V> newNode = new Node<>(Color.BLACK, rn.blackHeight, newLeftNode, rn.key, rn.value, rn.right
                     );
                     return Tuple.of(newNode, false);
                 }
             }
         }
         throw new IllegalStateException("unbalancedRight(" + color + ", " + blackHeight + ", " + left + ", " + value + ", " + right + ")");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Map.Entry<?, ?> e
+                && Objects.equals(key, e.getKey())
+                && Objects.equals(value, e.getValue());
+    }
+
+    @Override
+    public int hashCode() {
+        return (key == null ? 0 : key.hashCode()) ^
+                (value == null ? 0 : value.hashCode());
+    }
+
+    @Override
+    public V setValue(V value) {
+        throw new UnsupportedOperationException();
+    }
+
+    public String toString() {
+        return key + "=" + value;
     }
 }

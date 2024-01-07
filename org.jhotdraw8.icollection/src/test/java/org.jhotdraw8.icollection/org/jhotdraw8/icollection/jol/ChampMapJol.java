@@ -22,8 +22,9 @@ public class ChampMapJol extends AbstractJol {
      * element size            : 48
      * data size               : 48000 51%
      * data structure size     : 44480 48%
+     * overhead per element    : 44.48 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.ChampMap@babafc2d footprint:
+     * org.jhotdraw8.icollection.ChampMap@44d52de2d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        310        33     10520   [Ljava.lang.Object;
      *       1000        24     24000   java.util.AbstractMap$SimpleImmutableEntry
@@ -33,26 +34,6 @@ public class ChampMapJol extends AbstractJol {
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
      *       3622               92480   (total)
      * </pre>
-     * With 1 Mio elements, memory overhead is 44.307680 bytes per entry.
-     * <pre>
-     * # Compressed references (oops): disabled:
-     * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
-     * total size              : 107872
-     * element size            : 48
-     * data size               : 48000 44%
-     * data structure size     : 59872 55%
-     * ----footprint---
-     * org.jhotdraw8.icollection.ChampMap@3f57bcadd footprint:
-     *      COUNT       AVG       SUM   DESCRIPTION
-     *        310        49     15432   [Ljava.lang.Object;
-     *       1000        32     32000   java.util.AbstractMap$SimpleImmutableEntry
-     *          1        24        24   org.jhotdraw8.icollection.ChampMap
-     *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *        310        40     12400   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
-     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       3622              107872   (total)
-     * </pre>
-     *  With 1 Mio elements, memory overhead is 59.676512 bytes per entry.
      */
     @Test
     @Disabled

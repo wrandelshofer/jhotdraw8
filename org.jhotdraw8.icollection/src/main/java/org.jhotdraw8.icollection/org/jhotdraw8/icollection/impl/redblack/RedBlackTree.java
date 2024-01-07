@@ -13,6 +13,7 @@ import java.util.ArrayDeque;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -33,42 +34,44 @@ import java.util.function.BiFunction;
  *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
  * </dl>
  *
- * @param <T> Component type
+ * @param <K> the key type
+ * @param <V> the value type
  */
-public interface RedBlackTree<T> {
+public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
+    String toLispString();
 
-    static <T> RedBlackTree<T> empty() {
+    static <K, V> RedBlackTree<K, V> empty() {
         return Empty.empty();
     }
 
-    static <T> RedBlackTree<T> of(@NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction, T value) {
+    static <K, V> RedBlackTree<K, V> of(@NonNull Comparator<? super K> comparator, K key, V value) {
         Objects.requireNonNull(comparator, "comparator is null");
-        final Empty<T> empty = Empty.empty();
-        return new Node<>(Color.BLACK, 1, empty, value, empty);
+        final Empty<K, V> empty = Empty.empty();
+        return new Node<>(Color.BLACK, 1, empty, key, value, empty);
     }
 
     @SafeVarargs
-    static <T> RedBlackTree<T> of(@NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction, T... values) {
+    static <K, V> RedBlackTree<K, V> of(@NonNull Comparator<? super K> comparator, K... keys) {
         Objects.requireNonNull(comparator, "comparator is null");
-        Objects.requireNonNull(values, "values is null");
-        RedBlackTree<T> tree = empty();
-        for (T value : values) {
-            tree = tree.insert(value, comparator, updateFunction);
+        Objects.requireNonNull(keys, "values is null");
+        RedBlackTree<K, V> tree = empty();
+        for (K key : keys) {
+            tree = tree.insert(key, null, comparator);
         }
         return tree;
     }
 
     @SuppressWarnings("unchecked")
-    static <T> RedBlackTree<T> ofAll(@NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction, Iterable<? extends T> values) {
+    static <K, V> RedBlackTree<K, V> ofAll(@NonNull Comparator<? super K> comparator, Iterable<? extends K> keys) {
         Objects.requireNonNull(comparator, "comparator is null");
-        Objects.requireNonNull(values, "values is null");
+        Objects.requireNonNull(keys, "values is null");
         // function equality is not computable => same object check
-        //if (values instanceof RedBlackTree && ((RedBlackTree<T>) values).comparator() == comparator) {
-        //     return (RedBlackTree<T>) values;
+        //if (values instanceof RedBlackTree && ((RedBlackTree<K>) values).comparator() == comparator) {
+        //     return (RedBlackTree<K>) values;
         // } else {
-        RedBlackTree<T> tree = empty();
-        for (T value : values) {
-            tree = tree.insert(value, comparator, updateFunction);
+        RedBlackTree<K, V> tree = empty();
+        for (K key : keys) {
+            tree = tree.insert(key, null, comparator);
         }
         return tree;
         //}
@@ -77,13 +80,13 @@ public interface RedBlackTree<T> {
     /**
      * Inserts a new value into this tree.
      *
-     * @param value          A value.
+     * @param key        A key.
+     * @param value      A value.
      * @param comparator
-     * @param updateFunction
      * @return A new tree if this tree does not contain the given value, otherwise the same tree instance.
      */
-    default RedBlackTree<T> insert(T value, Comparator<? super T> comparator, BiFunction<T, T, T> updateFunction) {
-        return Node.insert(this, value, comparator, updateFunction).color(Color.BLACK);
+    default RedBlackTree<K, V> insert(K key, V value, Comparator<? super K> comparator) {
+        return Node.insert(this, key, value, comparator).color(Color.BLACK);
     }
 
     /**
@@ -97,34 +100,36 @@ public interface RedBlackTree<T> {
 
 
     /**
-     * Checks, if this {@code RedBlackTree} contains the given {@code value}.
+     * Checks, if this {@code RedBlackTree} contains the given {@code key}.
      *
-     * @param value      A value.
+     * @param key      A key.
      * @param comparator
      * @return true, if this tree contains the value, false otherwise.
      */
-    boolean contains(T value, Comparator<? super T> comparator);
+    boolean contains(K key, Comparator<? super K> comparator);
+
+    boolean isRed();
 
     /**
      * Deletes a value from this RedBlackTree.
      *
-     * @param value      A value
+     * @param key      A value
      * @param comparator
      * @return A new RedBlackTree if the value is present, otherwise this.
      */
-    default RedBlackTree<T> delete(T value, Comparator<? super T> comparator) {
-        final RedBlackTree<T> tree = Node.delete(this, value, comparator)._1;
+    default RedBlackTree<K, V> delete(K key, Comparator<? super K> comparator) {
+        final RedBlackTree<K, V> tree = Node.delete(this, key, comparator)._1;
         return tree.size() == this.size() ? this : Node.color(tree, Color.BLACK);
     }
 
-    default RedBlackTree<T> difference(@NonNull RedBlackTree<T> tree, @NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction) {
+    default RedBlackTree<K, V> difference(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
         Objects.requireNonNull(tree, "tree is null");
         if (isEmpty() || tree.isEmpty()) {
             return this;
         } else {
-            final Node<T> that = (Node<T>) tree;
-            final Tuple2<RedBlackTree<T>, RedBlackTree<T>> split = Node.split(this, that.value, comparator, updateFunction);
-            return Node.merge(split._1.difference(that.left, comparator, updateFunction), split._2.difference(that.right, comparator, updateFunction));
+            final Node<K, V> that = (Node<K, V>) tree;
+            final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(this, that.key, that.value, comparator);
+            return Node.merge(split._1.difference(that.left, comparator), split._2.difference(that.right, comparator));
         }
     }
 
@@ -136,25 +141,25 @@ public interface RedBlackTree<T> {
      * Especially the value returned may differ from the given value, even if the underlying comparator states that
      * both are equal.
      *
-     * @param value      A value
+     * @param key      A value
      * @param comparator
      * @return Some value, if this tree contains a value equal to the given value according to the underlying comparator. Otherwise None.
      */
-    RedBlackTree<T> find(T value, Comparator<? super T> comparator);
+    RedBlackTree<K, V> find(K key, Comparator<? super K> comparator);
 
-    default RedBlackTree<T> intersection(@NonNull RedBlackTree<T> tree, @NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction) {
+    default RedBlackTree<K, V> intersection(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
         Objects.requireNonNull(tree, "tree is null");
         if (isEmpty()) {
             return this;
         } else if (tree.isEmpty()) {
             return tree;
         } else {
-            final Node<T> that = (Node<T>) tree;
-            final Tuple2<RedBlackTree<T>, RedBlackTree<T>> split = Node.split(this, that.value, comparator, updateFunction);
-            if (contains(that.value, comparator)) {
-                return Node.join(split._1.intersection(that.left, comparator, updateFunction), that.value, split._2.intersection(that.right, comparator, updateFunction), comparator, updateFunction);
+            final Node<K, V> that = (Node<K, V>) tree;
+            final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(this, that.key, that.value, comparator);
+            if (contains(that.key, comparator)) {
+                return Node.join(split._1.intersection(that.left, comparator), that.key, that.value, split._2.intersection(that.right, comparator), comparator);
             } else {
-                return Node.merge(split._1.intersection(that.left, comparator, updateFunction), split._2.intersection(that.right, comparator, updateFunction));
+                return Node.merge(split._1.intersection(that.left, comparator), split._2.intersection(that.right, comparator));
             }
         }
     }
@@ -172,24 +177,24 @@ public interface RedBlackTree<T> {
      * @return The left child.
      * @throws UnsupportedOperationException if this RedBlackTree is empty
      */
-    RedBlackTree<T> left();
+    RedBlackTree<K, V> left();
 
     /**
      * Returns the maximum element of this tree according to the underlying comparator.
      *
-     * @return Some element, if this is not empty, otherwise None
+     * @return Node, if this is not empty, otherwise Empty
      */
-    default Option<T> max() {
-        return isEmpty() ? Option.none() : Option.some(Node.maximum((Node<T>) this));
+    default @NonNull RedBlackTree<K, V> max() {
+        return isEmpty() ? RedBlackTree.empty() : Node.maximum((Node<K, V>) this);
     }
 
     /**
      * Returns the minimum element of this tree according to the underlying comparator.
      *
-     * @return Some element, if this is not empty, otherwise None
+     * @return Node, if this is not empty, otherwise Empty
      */
-    default Option<T> min() {
-        return isEmpty() ? Option.none() : Option.some(Node.minimum((Node<T>) this));
+    default @NonNull RedBlackTree<K, V> min() {
+        return isEmpty() ? RedBlackTree.empty() : Node.minimum((Node<K, V>) this);
     }
 
     /**
@@ -198,7 +203,7 @@ public interface RedBlackTree<T> {
      * @return The right child.
      * @throws UnsupportedOperationException if this RedBlackTree is empty
      */
-    RedBlackTree<T> right();
+    @NonNull RedBlackTree<K, V> right();
 
     /**
      * Returns the size of this tree.
@@ -210,40 +215,38 @@ public interface RedBlackTree<T> {
     /**
      * Adds all the elements of the given {@code tree} to this tree, if not already present.
      *
-     * @param tree           The RedBlackTree to form the union with.
+     * @param tree       The RedBlackTree to form the union with.
      * @param comparator
-     * @param updateFunction
      * @return the same RedBlackTree, if it already contains all elements of the given {@code tree},
      * otherwise a new RedBlackTree
      */
-    default RedBlackTree<T> addAll(@NonNull RedBlackTree<T> tree, @NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction) {
-        RedBlackTree<T> newTree = union(tree, comparator, updateFunction);
+    default RedBlackTree<K, V> addAll(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
+        RedBlackTree<K, V> newTree = union(tree, comparator);
         return newTree.size() == this.size() ? this : newTree;
     }
 
     /**
      * Adds all the elements of the given {@code tree} to this tree, if not already present.
      *
-     * @param tree           The RedBlackTree to form the union with.
+     * @param tree       The RedBlackTree to form the union with.
      * @param comparator
-     * @param updateFunction
      * @return A new RedBlackTree that contains all distinct elements of this and the given {@code tree}.
      */
-    default RedBlackTree<T> union(@NonNull RedBlackTree<T> tree, @NonNull Comparator<? super T> comparator, @NonNull BiFunction<T, T, T> updateFunction) {
+    default RedBlackTree<K, V> union(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
         Objects.requireNonNull(tree, "tree is null");
         if (tree.isEmpty()) {
             return this;
         } else {
-            final Node<T> that = (Node<T>) tree;
+            final Node<K, V> that = (Node<K, V>) tree;
             if (isEmpty()) {
                 return that.color(Color.BLACK);
             } else {
-                final Tuple2<RedBlackTree<T>, RedBlackTree<T>> split = Node.split(this, that.value, comparator, updateFunction);
+                final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(this, that.key, that.value, comparator);
                 return Node.join(
-                        split._1.union(that.left, comparator, updateFunction),
-                        that.value,
-                        split._2.union(that.right, comparator, updateFunction),
-                        comparator, updateFunction);
+                        split._1.union(that.left, comparator),
+                        that.key, that.value,
+                        split._2.union(that.right, comparator),
+                        comparator);
             }
         }
     }
@@ -254,15 +257,15 @@ public interface RedBlackTree<T> {
      * @param tree the given tree
      * @return true if equal
      */
-    default boolean equals(@NonNull RedBlackTree<T> tree) {
+    default boolean equals(@NonNull RedBlackTree<K, V> tree) {
         if (this == tree) return true;
         if (!(this.size() == tree.size())) return false;
-        Iterator<T> a = this.iterator();
-        Iterator<T> b = tree.iterator();
+        Iterator<Node<K, V>> ia = this.iterator();
+        Iterator<Node<K, V>> ib = tree.iterator();
         for (int i = 0, n = this.size(); i < n; i++) {
-            T va = a.next();
-            T vb = b.next();
-            if (!Objects.equals(va, vb)) {
+            var a = ia.next();
+            var b = ib.next();
+            if (!Objects.equals(a, b)) {
                 return false;
             }
         }
@@ -270,12 +273,20 @@ public interface RedBlackTree<T> {
     }
 
     /**
+     * Returns the key of the current tree node or throws if this is empty.
+     *
+     * @return The value.
+     * @throws NoSuchElementException if this is the empty node.
+     */
+    K getKey();
+
+    /**
      * Returns the value of the current tree node or throws if this is empty.
      *
      * @return The value.
      * @throws NoSuchElementException if this is the empty node.
      */
-    T value();
+    V getValue();
 
     /**
      * Returns an Iterator that iterates elements in the order induced by the underlying Comparator.
@@ -296,14 +307,15 @@ public interface RedBlackTree<T> {
      * <p>
      * See also <a href="http://n00tc0d3r.blogspot.de/2013/08/implement-iterator-for-binarytree-i-in.html">Implement Iterator for BinaryTree I (In-order)</a>.
      */
-    default Iterator<T> iterator() {
-        if (isEmpty()) {
-            return ImmutableLists.<T>of().iterator();
-        } else {
-            final Node<T> that = (Node<T>) this;
-            return new Iterator<T>() {
 
-                Deque<Node<T>> stack = pushLeftChildren(new ArrayDeque<>(), that);
+    default Iterator<Node<K, V>> iterator() {
+        if (isEmpty()) {
+            return ImmutableLists.<Node<K, V>>of().iterator();
+        } else {
+            final Node<K, V> that = (Node<K, V>) this;
+            return new Iterator<Node<K, V>>() {
+
+                final Deque<Node<K, V>> stack = pushLeftChildren(new ArrayDeque<>(), that);
 
                 @Override
                 public boolean hasNext() {
@@ -311,19 +323,19 @@ public interface RedBlackTree<T> {
                 }
 
                 @Override
-                public T next() {
+                public Node<K, V> next() {
                     if (!hasNext()) {
                         throw new NoSuchElementException();
                     }
-                    Node<T> node = stack.pop();
-                    if (!node.right.isEmpty()) pushLeftChildren(stack, (Node<T>) node.right);
-                    return node.value;
+                    Node<K, V> node = stack.pop();
+                    if (!node.right.isEmpty()) pushLeftChildren(stack, (Node<K, V>) node.right);
+                    return node;
                 }
 
-                private Deque<Node<T>> pushLeftChildren(Deque<Node<T>> stack, Node<T> that) {
-                    RedBlackTree<T> tree = that;
+                private Deque<Node<K, V>> pushLeftChildren(Deque<Node<K, V>> stack, Node<K, V> that) {
+                    RedBlackTree<K, V> tree = that;
                     while (!tree.isEmpty()) {
-                        final Node<T> node = (Node<T>) tree;
+                        final Node<K, V> node = (Node<K, V>) tree;
                         stack.push(node);
                         tree = node.left;
                     }
@@ -352,15 +364,14 @@ public interface RedBlackTree<T> {
      * <p>
      * See also <a href="http://n00tc0d3r.blogspot.de/2013/08/implement-iterator-for-binarytree-i-in.html">Implement Iterator for BinaryTree I (In-order)</a>.
      */
-
-    default Iterator<T> reverseIterator() {
+    default Iterator<Node<K, V>> reverseIterator() {
         if (isEmpty()) {
-            return ImmutableLists.<T>of().iterator();
+            return ImmutableLists.<Node<K, V>>of().iterator();
         } else {
-            final Node<T> that = (Node<T>) this;
-            return new Iterator<T>() {
+            final Node<K, V> that = (Node<K, V>) this;
+            return new Iterator<Node<K, V>>() {
 
-                Deque<Node<T>> stack = pushRightChildren(new ArrayDeque<>(), that);
+                final Deque<Node<K, V>> stack = pushRightChildren(new ArrayDeque<>(), that);
 
                 @Override
                 public boolean hasNext() {
@@ -368,19 +379,19 @@ public interface RedBlackTree<T> {
                 }
 
                 @Override
-                public T next() {
+                public Node<K, V> next() {
                     if (!hasNext()) {
                         throw new NoSuchElementException();
                     }
-                    Node<T> node = stack.pop();
-                    if (!node.left.isEmpty()) pushRightChildren(stack, (Node<T>) node.left);
-                    return node.value;
+                    Node<K, V> node = stack.pop();
+                    if (!node.left.isEmpty()) pushRightChildren(stack, (Node<K, V>) node.left);
+                    return node;
                 }
 
-                private Deque<Node<T>> pushRightChildren(Deque<Node<T>> stack, Node<T> that) {
-                    RedBlackTree<T> tree = that;
+                private Deque<Node<K, V>> pushRightChildren(Deque<Node<K, V>> stack, Node<K, V> that) {
+                    RedBlackTree<K, V> tree = that;
                     while (!tree.isEmpty()) {
-                        final Node<T> node = (Node<T>) tree;
+                        final Node<K, V> node = (Node<K, V>) tree;
                         stack.push(node);
                         tree = node.right;
                     }
@@ -390,48 +401,57 @@ public interface RedBlackTree<T> {
         }
     }
 
-    /**
-     * Returns a Lisp like representation of this tree.
-     *
-     * @return This Tree as Lisp like String.
-     */
-    @Override
-    String toString();
+
 
     /**
      * Returns the least {@code Node} in this tree greater than or equal to
      * the given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<T> ceiling(T e, @NonNull Comparator<? super T> comparator);
+    @NonNull RedBlackTree<K, V> ceiling(K e, @NonNull Comparator<? super K> comparator);
 
     /**
      * Returns the greatest {@code Node} in this tree less than or equal to
      * the given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<T> floor(T e, @NonNull Comparator<? super T> comparator);
+    @NonNull RedBlackTree<K, V> floor(K e, @NonNull Comparator<? super K> comparator);
 
     /**
      * Returns the least {@code Node} in this tree strictly greater than the
      * given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<T> higher(T e, @NonNull Comparator<? super T> comparator);
+    @NonNull RedBlackTree<K, V> higher(K e, @NonNull Comparator<? super K> comparator);
 
     /**
      * Returns the greatest {@code Node} in this tree strictly less than the
      * given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<T> lower(T e, @NonNull Comparator<? super T> comparator);
+    @NonNull RedBlackTree<K, V> lower(K e, @NonNull Comparator<? super K> comparator);
 
     /**
      * Returns this {@code RedBlackTree} if it is nonempty, otherwise return the alternative.
      */
     @SuppressWarnings("unchecked")
-    RedBlackTree<T> orElse(RedBlackTree<T> other);
+    RedBlackTree<K, V> orElse(RedBlackTree<K, V> other);
 
+    /**
+     * Returns the key of this RedBlackTree or {@code null} if it is empty.
+     */
+    @Nullable K keyOrNull();
     /**
      * Returns the value of this RedBlackTree or {@code null} if it is empty.
      */
-    @Nullable T orNull();
+    @Nullable V valueOrNull();
+
+    /**
+     * Returns the map entry of this RedBlackTree or {@code null} if it is empty.
+     */
+    Map.@Nullable Entry<K, V> entryOrNull();
+
+    /*
+     * Returns the mapped value of this RedBlackTree or {@code null} if it is empty.
+     */
+    @Nullable <E> E mapOrNull(@NonNull BiFunction<K, V, E> f);
+
 
 }
 
