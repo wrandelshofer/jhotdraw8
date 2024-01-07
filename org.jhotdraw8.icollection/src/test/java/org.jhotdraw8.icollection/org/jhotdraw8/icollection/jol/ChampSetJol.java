@@ -34,11 +34,42 @@ public class ChampSetJol extends AbstractJol {
      */
     @Test
     @Disabled
-    public void estimateMemoryUsage() {
+    public void estimateMemoryUsageAddAll() {
         int size = 1_000;
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
         ChampSet<Key> setA = ChampSet.copyOf(data);
+        estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
+    }
+
+    /**
+     * <pre>
+     * class org.jhotdraw8.icollection.ChampSet with 1000 elements.
+     * total size              : 41248
+     * element size            : 24
+     * data size               : 24000 58%
+     * data structure size     : 17248 41%
+     * overhead per element    : 17.248 bytes
+     * ----footprint---
+     * org.jhotdraw8.icollection.ChampSet@4241e0f4d footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *        293        34     10192   [Ljava.lang.Object;
+     *          1        24        24   org.jhotdraw8.icollection.ChampSet
+     *        293        24      7032   org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
+     *       1587               41248   (total)
+     * </pre>
+     */
+    @Test
+    @Disabled
+    public void estimateMemoryUsageAddOneByOne() {
+        int size = 1_000;
+        final int mask = -1;//~64;
+        var data = generateSet(size, mask);
+        ChampSet<Key> setA = ChampSet.of();
+        for (var d : data) {
+            setA = setA.add(d);
+        }
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
