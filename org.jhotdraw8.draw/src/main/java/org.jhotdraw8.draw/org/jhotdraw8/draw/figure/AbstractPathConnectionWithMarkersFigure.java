@@ -17,6 +17,7 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeNonMovableEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
 import org.jhotdraw8.draw.handle.BezierPathEditHandle;
 import org.jhotdraw8.draw.handle.Handle;
@@ -114,7 +115,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             ImmutableList<BezierNode> nodes = get(PATH);
             for (int i = 0, n = nodes.size(); i < n; i++) {
                 list.add(new BezierNodeTangentHandle(this, PATH, i));
-                if (i > 0 && i < n - 1) {
+                if (i == 0 || i == n - 1) {
+                    list.add(new BezierNodeNonMovableEditHandle(this, PATH, i));
+                } else {
                     list.add(new BezierNodeEditHandle(this, PATH, i));
                 }
                 if (nodes.get(i).isC1()) {
