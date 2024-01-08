@@ -11,6 +11,7 @@ import org.jhotdraw8.icollection.impl.ArrayHelper;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 /**
  * Represents a hash-collision node in a CHAMP trie.
@@ -35,20 +36,6 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @Override
     boolean hasDataArityOne() {
         return false;
-    }
-
-    @Override
-    int dataIndex(K key, final int keyHash, final int shift) {
-        if (this.hash != keyHash) {
-            return -1;
-        }
-        for (int i = 0, index = 0; i < entries.length; i += ENTRY_LENGTH, index++) {
-            Object k = entries[i];
-            if (Objects.equals(k, key)) {
-                return index;
-            }
-        }
-        return -1;
     }
 
     @Override
@@ -116,11 +103,6 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @NonNull
     public K getKey(final int index) {
         return (K) entries[index * ENTRY_LENGTH];
-    }
-
-
-    public long getSequenceNumber(final int index, int entryLength, int numFields) {
-        return numFields < entryLength ? (Long) entries[index * entryLength] : 0L;
     }
 
     @SuppressWarnings("unchecked")
@@ -195,8 +177,8 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @Nullable
-    Node<K, V> update(final @Nullable IdentityObject mutator, final K key, final V val,
-                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details) {
+    Node<K, V> put(final @Nullable IdentityObject mutator, final K key, final V val,
+                   final int keyHash, final int shift, final @NonNull ChangeEvent<V> details, @NonNull ToIntFunction<K> hashFunction) {
         assert this.hash == keyHash;
 
         for (int idx = 0, i = 0; i < entries.length; i += ENTRY_LENGTH, idx++) {

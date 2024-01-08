@@ -47,18 +47,18 @@ public class MutableRedBlackMapTest extends AbstractSortedMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testNewInstanceReadOnlyArgOfDifferentTypeShouldBeEqualToArg(MapData data) {
-        Map<Key, Key> actual = new MutableRedBlackMap<>(data.a());
+        Map<Key, Value> actual = new MutableRedBlackMap<>(data.a());
         assertEqualMap(data.a(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testIteratorShouldYieldExpectedEntries(MapData data) throws Exception {
-        Map<Key, Key> instance = newInstance(data.a);
-        List<Map.Entry<Key, Key>> actualList = new ArrayList<>();
-        LinkedHashMap<Key, Key> actualMap = new LinkedHashMap<>();
-        ((MutableRedBlackMap<Key, Key>) instance).iterator().forEachRemaining(actualList::add);
-        ((MutableRedBlackMap<Key, Key>) instance).iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
+        Map<Key, Value> instance = newInstance(data.a);
+        List<Map.Entry<Key, Value>> actualList = new ArrayList<>();
+        LinkedHashMap<Key, Value> actualMap = new LinkedHashMap<>();
+        ((MutableRedBlackMap<Key, Value>) instance).iterator().forEachRemaining(actualList::add);
+        ((MutableRedBlackMap<Key, Value>) instance).iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
         assertEquals(data.a.size(), actualList.size());
         assertEqualMap(data.a, actualMap);
     }

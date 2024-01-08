@@ -147,13 +147,13 @@ public class MutableChampMap2<K, V> extends AbstractMutableChampMap<K, V> {
     public @NonNull Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
                 new EntryIterator<K, V>(root,
-                        this::removeKey, this::iteratorPutIfPresent), this::getModCount
+                        this::iteratorRemoveKey, this::iteratorPutIfPresent), this::getModCount
         );
     }
 
     @Override
     public @NonNull Spliterator<Entry<K, V>> spliterator() {
-        return new IteratorSpliterator<>(iterator(), size(), characteristics(), null);
+        return new IteratorSpliterator<>(iterator(), size(), Spliterator.NONNULL | characteristics(), null);
     }
 
     /**
@@ -186,7 +186,7 @@ public class MutableChampMap2<K, V> extends AbstractMutableChampMap<K, V> {
     public @Nullable V get(Object o) {
         Object result = root.findByKey((K) o,
                 ChampMap2.keyHash(o), 0);
-        return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
+        return result == Node.NO_DATA ? null : (V) result;
     }
 
     private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
@@ -196,10 +196,7 @@ public class MutableChampMap2<K, V> extends AbstractMutableChampMap<K, V> {
         }
     }
 
-    private void iteratorRemove(Entry<K, V> entry) {
-        owner = null;
-        remove(entry.getKey());
-    }
+
 
     @Override
     public V put(K key, V value) {
@@ -241,7 +238,7 @@ public class MutableChampMap2<K, V> extends AbstractMutableChampMap<K, V> {
     ChangeEvent<V> putEntry(@Nullable K key, @Nullable V val) {
         int keyHash = ChampMap2.keyHash(key);
         ChangeEvent<V> details = new ChangeEvent<>();
-        root = root.update(getOrCreateOwner(), key, val, keyHash, 0, details);
+        root = root.put(getOrCreateOwner(), key, val, keyHash, 0, details, ChampMap2::keyHash);
         if (details.isModified() && !details.isReplaced()) {
             size += 1;
             modCount++;
@@ -302,6 +299,17 @@ public class MutableChampMap2<K, V> extends AbstractMutableChampMap<K, V> {
             modCount++;
         }
         return details;
+    }
+
+    void iteratorRemoveKey(K key) {
+        // Note: mutator must be null, because we must not change the structure of the trie, while iterating over it.
+        int keyHash = ChampMap2.keyHash(key);
+        ChangeEvent<V> details = new ChangeEvent<>();
+        root = root.remove(null, key, keyHash, 0, details);
+        if (details.isModified()) {
+            size = size - 1;
+            modCount++;
+        }
     }
 
     @SuppressWarnings("unchecked")

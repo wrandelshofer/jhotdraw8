@@ -146,7 +146,7 @@ public class ChampMap2<K, V>
     }
 
     static <V, K> int entryKeyHash(SimpleImmutableEntry<K, V> e) {
-        return SALT ^ Objects.hashCode(e.getKey());
+        return SALT ^ keyHash(e.getKey());
     }
 
     /**
@@ -235,8 +235,8 @@ public class ChampMap2<K, V>
     @Override
     public @NonNull ChampMap2<K, V> put(@NonNull K key, @Nullable V value) {
         var details = new ChangeEvent<V>();
-        var newRootNode = root.update(null, key, value,
-                keyHash(key), 0, details);
+        var newRootNode = root.put(null, key, value,
+                keyHash(key), 0, details, ChampMap2::keyHash);
         if (details.isModified()) {
             return new ChampMap2<>(newRootNode, details.isReplaced() ? size : size + 1);
         }

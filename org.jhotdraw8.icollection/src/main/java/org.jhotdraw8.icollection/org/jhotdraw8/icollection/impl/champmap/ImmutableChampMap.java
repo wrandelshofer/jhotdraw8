@@ -161,8 +161,8 @@ public class ImmutableChampMap<K, V> extends BitmapIndexedNode<K, V>
         final int keyHash = hashFunction.applyAsInt(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
 
-        final BitmapIndexedNode<K, V> newRootNode = update(null, key, value,
-                keyHash, 0, details);
+        final BitmapIndexedNode<K, V> newRootNode = put(null, key, value,
+                keyHash, 0, details, hashFunction);
 
         if (details.isModified()) {
             if (details.isReplaced()) {

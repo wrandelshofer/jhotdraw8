@@ -11,6 +11,7 @@ import org.jhotdraw8.icollection.impl.ArrayHelper;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 /**
  * Represents a bitmap-indexed node in a CHAMP trie.
@@ -121,15 +122,6 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
 
     int dataIndex(final int bitpos) {
         return Integer.bitCount(dataMap & (bitpos - 1));
-    }
-
-    @Override
-    int dataIndex(K key, final int keyHash, final int shift) {
-        final int mask = mask(keyHash, shift);
-        final int bitpos = bitpos(mask);
-        return (this.dataMap & bitpos) != 0
-                ? index(this.dataMap, bitpos)
-                : -1;
     }
 
     public int dataMap() {
@@ -320,10 +312,11 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<K, V> update(final @Nullable IdentityObject mutator,
-                                                   final K key, final V val,
-                                                   final int keyHash, final int shift,
-                                                   final @NonNull ChangeEvent<V> details) {
+    public @NonNull BitmapIndexedNode<K, V> put(final @Nullable IdentityObject mutator,
+                                                final K key, final V val,
+                                                final int keyHash, final int shift,
+                                                final @NonNull ChangeEvent<V> details,
+                                                final @NonNull ToIntFunction<K> hashFunction) {
         final int mask = mask(keyHash, shift);
         final int bitpos = bitpos(mask);
 
@@ -342,7 +335,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
             } else {
                 final Node<K, V> subNodeNew =
                         mergeTwoDataEntriesIntoNode(mutator,
-                                currentKey, currentVal, Objects.hashCode(currentKey),
+                                currentKey, currentVal, hashFunction.applyAsInt(currentKey),
                                 key, val, keyHash, shift + BIT_PARTITION_SIZE
                         );
 
@@ -352,7 +345,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         } else if ((nodeMap & bitpos) != 0) { // node (not value)
             final Node<K, V> subNode = nodeAt(bitpos);
             final Node<K, V> subNodeNew =
-                    subNode.update(mutator, key, val, keyHash, shift + BIT_PARTITION_SIZE, details);
+                    subNode.put(mutator, key, val, keyHash, shift + BIT_PARTITION_SIZE, details, hashFunction);
 
             if (details.isModified()) {
                 return copyAndSetNode(mutator, bitpos, subNodeNew);

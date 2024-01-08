@@ -1,11 +1,40 @@
 package org.jhotdraw8.icollection.jmh;
 
 import org.jhotdraw8.icollection.ChampMap;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <pre>
+ * # JMH version: 1.37
+ * # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
+ * # Apple M2 Max
+ *                         (mask)  (size)  Mode  Cnt         Score   Error  Units
+ * mContainsFound             -65  100000  avgt    2        32.430          ns/op
+ * mContainsNotFound          -65  100000  avgt    2        46.091          ns/op
+ * mCopyOf                    -65  100000  avgt    2  11840928.351          ns/op
+ * mCopyOnyByOne              -65  100000  avgt    2  16799371.458          ns/op
+ * mHead                      -65  100000  avgt    2        12.991          ns/op
+ * mIterate                   -65  100000  avgt    2   1156799.094          ns/op
+ * mPut                       -65  100000  avgt    2       106.465          ns/op
+ * mRemoveAll                 -65  100000  avgt    2  14513054.267          ns/op
+ * mRemoveOneByOne            -65  100000  avgt    2  16917620.587          ns/op
+ * mRemoveThenAdd             -65  100000  avgt    2       222.654          ns/op
+ * mRetainAllAllRetained      -65  100000  avgt    2   2672274.663          ns/op
+ * mRetainAllNoneRetained     -65  100000  avgt    2   2667895.081          ns/op
+ * mTail                      -65  100000  avgt    2        74.986          ns/op
+ * </pre>
  * <pre>
  * # JMH version: 1.36
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
@@ -107,7 +136,7 @@ public class ChampMapJmh {
         return sum;
     }
 
-/*
+
     @Benchmark
     public ChampMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
@@ -190,6 +219,4 @@ public class ChampMapJmh {
         assert updated == mapA;
         return updated;
     }
-
- */
 }

@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 
 import java.util.Objects;
+import java.util.function.ToIntFunction;
 
 /**
  * Represents a node in a CHAMP trie.
@@ -140,16 +141,6 @@ public abstract class Node<K, V> {
     abstract boolean hasDataArityOne();
 
     /**
-     * Returns the data index for the given keyHash and shift, or -1.
-     *
-     * @param key     a key
-     * @param keyHash the key hash
-     * @param shift   the shift
-     * @return the data index or -1
-     */
-    abstract int dataIndex(@Nullable K key, final int keyHash, final int shift);
-
-    /**
      * Checks if this trie is equivalent to the specified other trie.
      *
      * @param other the other trie
@@ -196,8 +187,8 @@ public abstract class Node<K, V> {
     abstract Node<K, V> remove(final @Nullable IdentityObject mutator, final K key,
                                final int keyHash, final int shift, final ChangeEvent<V> details);
 
-    abstract Node<K, V> update(final @Nullable IdentityObject mutator, final K key, final V val,
-                               final int keyHash, final int shift, final ChangeEvent<V> details);
+    abstract Node<K, V> put(final @Nullable IdentityObject mutator, final K key, final V val,
+                            final int keyHash, final int shift, final ChangeEvent<V> details, @NonNull ToIntFunction<K> hashFunction);
 
 
 }

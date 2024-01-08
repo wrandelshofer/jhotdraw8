@@ -47,7 +47,7 @@ public class MutableVectorMapTest extends AbstractSequencedMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testConstructorWithReadOnlyArgYieldsExpectedMap(@NonNull MapData data) throws Exception {
-        Map<Key, Key> instance = new MutableVectorMap<>(data.a());
+        Map<Key, Value> instance = new MutableVectorMap<>(data.a());
         assertEqualMap(data.a(), instance);
     }
 }

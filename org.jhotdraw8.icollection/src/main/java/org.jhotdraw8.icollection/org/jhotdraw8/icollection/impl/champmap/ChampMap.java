@@ -82,7 +82,10 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     private transient @Nullable IdentityObject mutator;
     private transient @NonNull BitmapIndexedNode<K, V> root;
     private transient int size;
-    private transient int modCount;
+    /**
+     * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
+     */
+    static final int SALT = new java.util.Random().nextInt();
 
     public ChampMap() {
         this.root = BitmapIndexedNode.emptyNode();
@@ -96,7 +99,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
             that.mutator = null;
             this.root = that.root;
             this.size = that.size;
-            this.modCount = 0;
         } else {
             this.root = BitmapIndexedNode.emptyNode();
             this.putAll(m);
@@ -126,7 +128,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     public void clear() {
         root = BitmapIndexedNode.emptyNode();
         size = 0;
-        modCount++;
     }
 
     @Override
@@ -153,7 +154,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(@NonNull Object o) {
-        return root.findByKey((K) o, Objects.hashCode(o), 0) != Node.NO_DATA;
+        return root.findByKey((K) o, keyHash(o), 0) != Node.NO_DATA;
     }
 
     /**
@@ -189,10 +190,13 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     @SuppressWarnings("unchecked")
     public @Nullable V get(@NonNull Object o) {
         K key = (K) o;
-        Object result = root.findByKey(key, Objects.hashCode(key), 0);
+        Object result = root.findByKey(key, keyHash(key), 0);
         return result == Node.NO_DATA ? null : (V) result;
     }
 
+    static int keyHash(Object e) {
+        return SALT ^ Objects.hashCode(e);
+    }
     private @NonNull IdentityObject getOrCreateMutator() {
         if (mutator == null) {
             mutator = new IdentityObject();
@@ -206,17 +210,16 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     }
 
     @NonNull ChangeEvent<V> putAndGiveDetails(@Nullable K key, @Nullable V val) {
-        int keyHash = Objects.hashCode(key);
+        int keyHash = keyHash(key);
         ChangeEvent<V> details = new ChangeEvent<>();
         BitmapIndexedNode<K, V> newRootNode = root
-                .update(getOrCreateMutator(), key, val, keyHash, 0, details);
+                .put(getOrCreateMutator(), key, val, keyHash, 0, details, ChampMap::keyHash);
         if (details.isModified()) {
             if (details.isReplaced()) {
                 root = newRootNode;
             } else {
                 root = newRootNode;
                 size += 1;
-                modCount++;
             }
         }
         return details;
@@ -236,7 +239,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     }
 
     @NonNull ChangeEvent<V> removeAndGiveDetails(final K key) {
-        final int keyHash = Objects.hashCode(key);
+        final int keyHash = keyHash(key);
         final ChangeEvent<V> details = new ChangeEvent<>();
         final BitmapIndexedNode<K, V> newRootNode =
                 root.remove(getOrCreateMutator(), key, keyHash, 0, details);
@@ -244,7 +247,6 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
             assert details.isReplaced();
             root = newRootNode;
             size = size - 1;
-            modCount++;
         }
         return details;
     }

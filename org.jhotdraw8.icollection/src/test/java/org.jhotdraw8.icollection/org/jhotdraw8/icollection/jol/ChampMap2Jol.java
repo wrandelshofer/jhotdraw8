@@ -48,19 +48,20 @@ public class ChampMap2Jol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.ChampMap2 with 1000 elements.
-     * total size              : 69632
+     * total size              : 68528
      * element size            : 48
-     * data size               : 48000 68%
-     * data structure size     : 21632 31%
-     * overhead per element    : 21.632 bytes
+     * data size               : 48000 70%
+     * data structure size     : 20528 29%
+     * overhead per element    : 20.528 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.ChampMap2@6c2ed0cdd footprint:
+     * org.jhotdraw8.icollection.ChampMap2@95e33ccd footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        307        46     14240   [Ljava.lang.Object;
+     *        283        48     13712   [Ljava.lang.Object;
      *          1        24        24   org.jhotdraw8.icollection.ChampMap2
-     *        307        24      7368   org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode
-     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       2615               69632   (total)
+     *        283        24      6792   org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
+     *       2567               68528   (total)
      * </pre>
      * <pre>
      * class org.jhotdraw8.icollection.ChampMap2 with 1 elements.
@@ -96,22 +97,20 @@ public class ChampMap2Jol extends AbstractJol {
      * class org.jhotdraw8.icollection.ChampMap2 with 1000 elements.
      * <p>
      * both versions:
-     * total size              : 92872
-     * element size            : 48
+     * total size              : 71256
      * <p>
      * mapA:
-     * total size              : 92480
+     * total size              : 70808
      * <p>
      * mapB:
-     * total size              : 92464
-     * element size            : 48
+     * total size              : 70792
      * <p>
-     * Difference: 92872 - 92480 = 392 bytes
+     * Difference: 71256 - 70808 = 448 bytes
      */
     @Test
     @Disabled
     public void estimateMemoryUsageForANewVersion() {
-        int size = 1_00;
+        int size = 1_000;
         final int mask = -1;//~64;
         var data = generateMap(size, mask, size * 10L);
         ChampMap2<Key, Value> mapA = ChampMap2.copyOf(data);

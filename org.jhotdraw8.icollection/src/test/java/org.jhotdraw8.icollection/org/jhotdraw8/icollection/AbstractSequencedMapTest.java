@@ -46,9 +46,9 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void putFirstWithContainedEntryShouldMoveEntryToFirst(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
-        for (Map.Entry<Key, Key> e : data.a()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<Key, Value> e : data.a()) {
             instance.putFirst(e.getKey(), e.getValue());
             assertEquals(e, instance.firstEntry());
             expected.remove(e);
@@ -60,11 +60,11 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void putFirstWithNewElementShouldMoveElementToFirst(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
-        for (Map.Entry<Key, Key> e : data.c()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<Key, Value> e : data.c()) {
             instance.putFirst(e.getKey(), e.getValue());
-            Map.Entry<Key, Key> firstEntry = instance.firstEntry();
+            Map.Entry<Key, Value> firstEntry = instance.firstEntry();
             assertEquals(e, firstEntry);
             assertNotNull(firstEntry);
             assertEquals(e.getKey(), firstEntry.getKey());
@@ -77,11 +77,11 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void putLastWithContainedElementShouldMoveElementToLast(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
-        for (Map.Entry<Key, Key> e : data.a()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<Key, Value> e : data.a()) {
             instance.putLast(e.getKey(), e.getValue());
-            Map.Entry<Key, Key> lastEntry = instance.lastEntry();
+            Map.Entry<Key, Value> lastEntry = instance.lastEntry();
             assertEquals(e, lastEntry);
             assertNotNull(lastEntry);
             assertEquals(e.getKey(), lastEntry.getKey());
@@ -94,9 +94,9 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void putLastWithNewElementShouldMoveElementToLast(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
-        for (Map.Entry<Key, Key> e : data.c()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<Key, Value> e : data.c()) {
             instance.putLast(e.getKey(), e.getValue());
             assertEquals(e, instance.lastEntry());
             expected.remove(e);
@@ -108,9 +108,9 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void putWithContainedElementShouldNotMoveElementToLast(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
-        for (Map.Entry<Key, Key> e : data.a()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<Key, Value> e : data.a()) {
             instance.put(e.getKey(), e.getValue());
             assertEquals(expected.get(expected.size() - 1), instance.lastEntry());
             assertEqualSequence(expected, instance, "put");
@@ -120,10 +120,10 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void removeWithLastElementShouldNotChangeSequence(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
-            Map.Entry<Key, Key> e = expected.remove(expected.size() - 1);
+            Map.Entry<Key, Value> e = expected.remove(expected.size() - 1);
             assertEquals(e.getValue(), instance.remove(e.getKey()));
             assertEqualSequence(expected, instance, "remove(lastElement)");
         }
@@ -132,10 +132,10 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void pollFirstShouldNotChangeSequence(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
-            Map.Entry<Key, Key> e = expected.remove(0);
+            Map.Entry<Key, Value> e = expected.remove(0);
             assertEquals(instance.pollFirstEntry(), e);
             assertEqualSequence(expected, instance, "pollFirstEntry");
         }
@@ -144,8 +144,8 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void removeFirstWithEmptySetShouldReturnNull(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        for (Map.Entry<Key, Key> e : data.a()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        for (Map.Entry<Key, Value> e : data.a()) {
             instance.remove(e.getKey());
         }
         assertNull(instance.pollFirstEntry());
@@ -154,8 +154,8 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void pollLastWithEmptySetShouldReturnNull(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        for (Map.Entry<Key, Key> e : data.a()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        for (Map.Entry<Key, Value> e : data.a()) {
             instance.remove(e.getKey());
         }
         assertNull(instance.pollLastEntry());
@@ -164,8 +164,8 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void removeLastShouldNotChangeSequence(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
             assertEquals(instance.pollLastEntry(), expected.remove(expected.size() - 1));
             assertEqualSequence(expected, instance, "pollLastEntry");
@@ -175,10 +175,10 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void removeWithFirstElementShouldNotChangeSequence(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
-            Map.Entry<Key, Key> e = expected.remove(0);
+            Map.Entry<Key, Value> e = expected.remove(0);
             assertEquals(e.getValue(), instance.remove(e.getKey()));
             assertEqualSequence(expected, instance, "remove(firstElement)");
         }
@@ -187,10 +187,10 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void removeWithMiddleElementShouldNotChangeSequence(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         while (!expected.isEmpty()) {
-            Map.Entry<Key, Key> e = expected.remove(expected.size() / 2);
+            Map.Entry<Key, Value> e = expected.remove(expected.size() / 2);
             assertEquals(e.getValue(), instance.remove(e.getKey()));
             assertEqualSequence(expected, instance, "removeMiddle");
         }
@@ -199,9 +199,9 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void putWithNewElementShouldMoveElementToLast(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
-        for (Map.Entry<Key, Key> e : data.c()) {
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        for (Map.Entry<Key, Value> e : data.c()) {
             instance.put(e.getKey(), e.getValue());
             assertEquals(e, instance.lastEntry());
             expected.remove(e);
@@ -213,17 +213,17 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void putNewValueForExistingElementShouldNotChangeSequence(MapData data) throws Exception {
-        SequencedMap<Key, Key> instance = newInstance(data.a());
-        List<Map.Entry<Key, Key>> expected = new ArrayList<>(data.a().asMap().entrySet());
+        SequencedMap<Key, Value> instance = newInstance(data.a());
+        List<Map.Entry<Key, Value>> expected = new ArrayList<>(data.a().asMap().entrySet());
         ArrayList<Integer> indices = new ArrayList<>(data.a().size());
         for (int i = 0; i < data.a().size(); i++) {
             indices.add(i);
         }
         Collections.shuffle(indices);
         for (int i : indices) {
-            Key newValue = new Key(i, -1);
-            Map.Entry<Key, Key> oldEntry = expected.get(i);
-            var newEntry = (AbstractMap.SimpleImmutableEntry<Key, Key>) new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
+            Value newValue = new Value(i, -1);
+            Map.Entry<Key, Value> oldEntry = expected.get(i);
+            var newEntry = (AbstractMap.SimpleImmutableEntry<Key, Value>) new AbstractMap.SimpleImmutableEntry<>(oldEntry.getKey(), newValue);
 
             instance.put(oldEntry.getKey(), newValue);
             expected.set(i, newEntry);
@@ -251,7 +251,7 @@ public abstract class AbstractSequencedMapTest extends AbstractMapTest {
 
     @Test
     public void testSpliteratorShouldHaveSequencedMapCharacteristics() throws Exception {
-        SequencedMap<Key, Key> instance = newInstance();
+        SequencedMap<Key, Value> instance = newInstance();
 
         assertEquals(Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.keySet().spliterator().characteristics());
         assertEquals(Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.entrySet().spliterator().characteristics());

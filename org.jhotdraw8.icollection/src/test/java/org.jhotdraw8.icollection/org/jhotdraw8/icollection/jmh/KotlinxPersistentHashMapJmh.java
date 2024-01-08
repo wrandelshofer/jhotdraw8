@@ -2,11 +2,36 @@ package org.jhotdraw8.icollection.jmh;
 
 import kotlinx.collections.immutable.ExtensionsKt;
 import kotlinx.collections.immutable.PersistentMap;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <pre>
+ * # JMH version: 1.37
+ * # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
+ * # Apple M2 Max
+ *                    (mask)  (size)  Mode  Cnt         Score   Error  Units
+ * mContainsFound        -65  100000  avgt    2        38.214          ns/op
+ * mContainsNotFound     -65  100000  avgt    2        39.175          ns/op
+ * mCopyOf               -65  100000  avgt    2   9738079.390          ns/op
+ * mCopyOnyByOne         -65  100000  avgt    2  15165845.241          ns/op
+ * mHead                 -65  100000  avgt    2        29.194          ns/op
+ * mIterate              -65  100000  avgt    2    933066.347          ns/op
+ * mPut                  -65  100000  avgt    2       106.105          ns/op
+ * mRemoveThenAdd        -65  100000  avgt    2       216.574          ns/op
+ * mTail                 -65  100000  avgt    2        58.428          ns/op
+ * </pre>
  * <pre>
  * # JMH version: 1.28
  * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
@@ -24,16 +49,17 @@ import java.util.concurrent.TimeUnit;
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 1)
-@Warmup(iterations = 1)
-@Fork(value = 1)
+@Measurement(iterations = 2)
+@Warmup(iterations = 2)
+@Fork(value = 1, jvmArgsAppend = {"-Xmx28g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class KotlinxPersistentHashMapJmh {
-    @Param({"1000000"})
+    @Param({"100000"})
     private int size;
 
-    private final int mask = ~64;
+    @Param({"-65"})
+    private int mask;
 
     private BenchmarkData data;
     private PersistentMap<Key, Boolean> mapA;
@@ -92,7 +118,7 @@ public class KotlinxPersistentHashMapJmh {
     }
 
     @Benchmark
-    public PersistentMap<Key, Boolean> mCopyOf() {
+    public PersistentMap<Key, Boolean> mCopyOnyByOne() {
         PersistentMap<Key, Boolean> map = ExtensionsKt.persistentHashMapOf();
         for (Key key : data.setA) {
             map = map.put(key, Boolean.TRUE);
@@ -101,7 +127,7 @@ public class KotlinxPersistentHashMapJmh {
     }
 
     @Benchmark
-    public PersistentMap<Key, Boolean> mCopyOfX() {
+    public PersistentMap<Key, Boolean> mCopyOf() {
         return ExtensionsKt.toPersistentHashMap(data.mapA);
     }
 }
