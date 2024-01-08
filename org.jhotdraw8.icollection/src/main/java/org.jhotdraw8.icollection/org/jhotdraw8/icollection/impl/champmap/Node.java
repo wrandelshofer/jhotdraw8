@@ -36,11 +36,8 @@ public abstract class Node<K, V> {
      * We can not use {@code null}, because we allow storing null-keys and
      * null-values in the trie.
      */
-    public static final Object NO_DATA = new Object();
-    /**
-     * Indicates that no sequence number must be inserted.
-     */
-    public final static int NO_SEQUENCE_NUMBER = Integer.MAX_VALUE;
+    public static final Object NO_DATA = new IdentityObject();
+
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
     static final int ENTRY_LENGTH = 2;
 

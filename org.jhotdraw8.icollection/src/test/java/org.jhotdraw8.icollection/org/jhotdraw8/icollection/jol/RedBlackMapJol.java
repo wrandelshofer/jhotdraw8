@@ -2,6 +2,7 @@ package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.RedBlackMap;
 import org.jhotdraw8.icollection.jmh.Key;
+import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -38,8 +39,8 @@ public class RedBlackMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = -1;//~64;
-        var data = generateMap(size, mask);
-        RedBlackMap<Key, Key> mapA = RedBlackMap.copyOf(data);
+        var data = generateMap(size, mask, size * 10);
+        RedBlackMap<Key, Value> mapA = RedBlackMap.copyOf(data);
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
 
@@ -68,8 +69,8 @@ public class RedBlackMapJol extends AbstractJol {
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
-        RedBlackMap<Key, Key> mapA = RedBlackMap.copyOf(data);
+        var data = generateMap(size, mask, size * 10);
+        RedBlackMap<Key, Value> mapA = RedBlackMap.copyOf(data);
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);

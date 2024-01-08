@@ -2,6 +2,7 @@ package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.ChampMap2;
 import org.jhotdraw8.icollection.jmh.Key;
+import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -39,8 +40,8 @@ public class ChampMap2Jol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = -1;//~64;
-        var data = generateMap(size, mask);
-        ChampMap2<Key, Key> mapA = ChampMap2.copyOf(data);
+        var data = generateMap(size, mask, size * 10);
+        ChampMap2<Key, Value> mapA = ChampMap2.copyOf(data);
         estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
 
@@ -83,8 +84,8 @@ public class ChampMap2Jol extends AbstractJol {
     public void estimateMemoryUsageNoBulkOperations() {
         int size = 1_000;
         final int mask = -1;//~64;
-        var data = generateMap(size, mask);
-        ChampMap2<Key, Key> mapA = ChampMap2.of();
+        var data = generateMap(size, mask, size * 10);
+        ChampMap2<Key, Value> mapA = ChampMap2.of();
         for (var e : data.entrySet()) {
             mapA = mapA.put(e.getKey(), e.getValue());
         }
@@ -110,13 +111,13 @@ public class ChampMap2Jol extends AbstractJol {
     @Test
     @Disabled
     public void estimateMemoryUsageForANewVersion() {
-        int size = 1_000;
+        int size = 1_00;
         final int mask = -1;//~64;
-        var data = generateMap(size, mask);
-        ChampMap2<Key, Key> mapA = ChampMap2.copyOf(data);
+        var data = generateMap(size, mask, size * 10L);
+        ChampMap2<Key, Value> mapA = ChampMap2.copyOf(data);
         Key updatedKey = data.keySet().iterator().next();
-        ChampMap2<Key, Key> mapB = mapA.put(updatedKey, new Key(mapA.get(updatedKey).value + 1, -1));
-        AbstractMap.SimpleImmutableEntry<ChampMap2<Key, Key>, ChampMap2<Key, Key>> twoVersions = new AbstractMap.SimpleImmutableEntry<>(mapA, mapB);
+        ChampMap2<Key, Value> mapB = mapA.put(updatedKey, new Value(mapA.get(updatedKey).value + 1, -1));
+        AbstractMap.SimpleImmutableEntry<ChampMap2<Key, Value>, ChampMap2<Key, Value>> twoVersions = new AbstractMap.SimpleImmutableEntry<>(mapA, mapB);
         System.out.println("\nboth versions:");
         estimateMemoryUsage(twoVersions, mapA.iterator().next(), mapA.size());
         System.out.println("\nmapA:");
@@ -147,10 +148,10 @@ public class ChampMap2Jol extends AbstractJol {
     @Test
     @Disabled
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
-        int size = 1_000_000;
+        int size = 1_000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
-        ChampMap2<Key, Key> mapA = ChampMap2.copyOf(data);
+        var data = generateMap(size, mask, size * 10);
+        ChampMap2<Key, Value> mapA = ChampMap2.copyOf(data);
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);

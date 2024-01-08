@@ -3,6 +3,7 @@ package org.jhotdraw8.icollection.jol;
 import io.vavr.Tuple2;
 import io.vavr.collection.TreeMap;
 import org.jhotdraw8.icollection.jmh.Key;
+import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -39,12 +40,12 @@ public class VavrTreeMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
-        var mapA = TreeMap.<Key, Key>empty();
+        var data = generateMap(size, mask, size * 10);
+        var mapA = TreeMap.<Key, Value>empty();
         for (var d : data.entrySet()) {
             mapA = mapA.put(d.getKey(), d.getValue());
         }
-        Tuple2<Key, Key> head = mapA.head();
+        Tuple2<Key, Value> head = mapA.head();
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 

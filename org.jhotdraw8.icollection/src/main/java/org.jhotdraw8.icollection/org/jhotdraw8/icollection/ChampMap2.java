@@ -194,7 +194,7 @@ public class ChampMap2<K, V>
     @SuppressWarnings("unchecked")
     public V get(Object o) {
         Object result = root.findByKey((K) o, keyHash(o), 0);
-        return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
+        return result == Node.NO_DATA ? null : (V) result;
     }
 
     /**

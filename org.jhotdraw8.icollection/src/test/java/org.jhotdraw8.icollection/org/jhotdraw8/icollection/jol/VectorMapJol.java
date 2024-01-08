@@ -2,6 +2,7 @@ package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.VectorMap;
 import org.jhotdraw8.icollection.jmh.Key;
+import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -42,8 +43,8 @@ public class VectorMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
             final int mask = -1;//~64;
-            var data = generateMap(size, mask);
-            VectorMap<Key, Key> mapA = VectorMap.copyOf(data);
+        var data = generateMap(size, mask, size * 10);
+        VectorMap<Key, Value> mapA = VectorMap.copyOf(data);
             estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
     }
 
@@ -77,8 +78,8 @@ public class VectorMapJol extends AbstractJol {
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
-        VectorMap<Key, Key> mapA = VectorMap.copyOf(data);
+        var data = generateMap(size, mask, size * 10);
+        VectorMap<Key, Value> mapA = VectorMap.copyOf(data);
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);

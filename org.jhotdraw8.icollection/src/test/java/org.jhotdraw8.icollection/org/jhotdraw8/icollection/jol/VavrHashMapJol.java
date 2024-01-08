@@ -58,7 +58,7 @@ public class VavrHashMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
+        var data = generateMap(size, mask, size * 10);
         var mapA = HashMap.empty();
         for (var d : data.entrySet()) {
             mapA = mapA.put(d.getKey(), d.getValue());
@@ -92,7 +92,7 @@ public class VavrHashMapJol extends AbstractJol {
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
+        var data = generateMap(size, mask, size * 10);
         var mapA = HashMap.empty();
         for (var d : data.entrySet()) {
             mapA = mapA.put(d.getKey(), d.getValue());

@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.jmh.Key;
+import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
@@ -29,9 +30,9 @@ public class JavaUnmodifiableMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
+        var data = generateMap(size, mask, size * 10);
 
-        Map<Key, Key> mapA = Map.copyOf(data);
+        Map<Key, Value> mapA = Map.copyOf(data);
         estimateMemoryUsage(mapA, mapA.entrySet().iterator().next(), mapA.size());
     }
 }

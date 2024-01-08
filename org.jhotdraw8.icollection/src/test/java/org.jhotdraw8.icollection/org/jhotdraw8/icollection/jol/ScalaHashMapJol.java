@@ -37,7 +37,7 @@ public class ScalaHashMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = -1;//~64;
-        var data = generateMap(size, mask);
+        var data = generateMap(size, mask, size * 10);
         ReusableBuilder<Tuple2<Object, Object>, HashMap<Object, Object>> b = HashMap.newBuilder();
         for (var d : data.entrySet()) {
             b.addOne(new Tuple2<>(d.getKey(), d.getValue()));

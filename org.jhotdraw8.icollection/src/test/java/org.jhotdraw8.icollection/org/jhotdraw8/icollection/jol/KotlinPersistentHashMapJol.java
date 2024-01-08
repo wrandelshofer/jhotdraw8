@@ -49,7 +49,7 @@ public class KotlinPersistentHashMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
+        var data = generateMap(size, mask, size * 10);
 
         var mapA = ExtensionsKt.persistentHashMapOf();
         for (var d : data.entrySet()) {

@@ -159,13 +159,14 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     @Override
     public @Nullable Object findByKey(final K key, final int keyHash, final int shift) {
         final int bitpos = bitpos(mask(keyHash, shift));
+        if ((nodeMap & bitpos) != 0) {
+            return nodeAt(bitpos).findByKey(key, keyHash, shift + BIT_PARTITION_SIZE);
+        }
         if ((dataMap & bitpos) != 0) {
             final int index = dataIndex(bitpos);
             if (Objects.equals(getKey(index), key)) {
                 return getValue(index);
             }
-        } else if ((nodeMap & bitpos) != 0) {
-            return nodeAt(bitpos).findByKey(key, keyHash, shift + BIT_PARTITION_SIZE);
         }
         return NO_DATA;
     }

@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.jmh.Key;
+import org.jhotdraw8.icollection.jmh.Value;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import scala.Tuple2;
@@ -46,13 +47,13 @@ public class ScalaTreeMapJol extends AbstractJol {
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = -1;//~64;
-        var data = generateMap(size, mask);
-        var b = TreeMap.<Key, Key>newBuilder(Ordering.comparatorToOrdering(Comparator.<Key>naturalOrder()));
+        var data = generateMap(size, mask, size * 10);
+        var b = TreeMap.<Key, Value>newBuilder(Ordering.comparatorToOrdering(Comparator.<Key>naturalOrder()));
         for (var d : data.entrySet()) {
             b.addOne(new Tuple2<>(d.getKey(), d.getValue()));
         }
-        TreeMap<Key, Key> mapA = b.result();
-        Tuple2<Key, Key> head = mapA.head();
+        TreeMap<Key, Value> mapA = b.result();
+        Tuple2<Key, Value> head = mapA.head();
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 
@@ -86,12 +87,12 @@ public class ScalaTreeMapJol extends AbstractJol {
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;
-        var data = generateMap(size, mask);
-        var b = TreeMap.<Key, Key>newBuilder(null);
+        var data = generateMap(size, mask, size * 10);
+        var b = TreeMap.<Key, Value>newBuilder(null);
         for (var d : data.entrySet()) {
             b.addOne(new Tuple2<>(d.getKey(), d.getValue()));
         }
-        TreeMap<Key, Key> mapA = b.result();
+        TreeMap<Key, Value> mapA = b.result();
 
         ArrayList<Key> keys = new ArrayList<>(data.keySet());
         Collections.shuffle(keys);
@@ -100,7 +101,7 @@ public class ScalaTreeMapJol extends AbstractJol {
         }
 
 
-        Tuple2<Key, Key> head = mapA.head();
+        Tuple2<Key, Value> head = mapA.head();
         estimateMemoryUsage(mapA, new AbstractMap.SimpleImmutableEntry<>(head._1, head._2), mapA.size());
     }
 

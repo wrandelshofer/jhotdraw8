@@ -1,6 +1,7 @@
 package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.jmh.Key;
+import org.jhotdraw8.icollection.jmh.Value;
 import org.openjdk.jol.info.GraphLayout;
 import org.openjdk.jol.vm.VM;
 
@@ -20,12 +21,13 @@ import java.util.Set;
 public class AbstractJol {
     private static final boolean PRINT = true;
 
-    protected static Map<Key, Key> generateMap(int size, int mask) {
+    protected static Map<Key, Value> generateMap(int size, int mask, long bound) {
         Random rng = new Random(0);
-        Map<Key, Key> map = new LinkedHashMap<>();
+        Map<Key, Value> map = new LinkedHashMap<>();
         Set<Integer> preventDuplicates = new HashSet<>();
         for (int i = 0; i < size; i++) {
-            map.put(createKey(rng, preventDuplicates, mask), createKey(rng, preventDuplicates, mask));
+            map.put(createKey(rng, preventDuplicates, mask, bound),
+                    createValue(rng, preventDuplicates, mask, bound));
         }
         return map;
     }
@@ -35,17 +37,29 @@ public class AbstractJol {
         Set<Key> set = new LinkedHashSet<>();
         Set<Integer> preventDuplicates = new HashSet<>();
         for (int i = 0; i < size; i++) {
-            set.add(createKey(rng, preventDuplicates, mask));
+            set.add(createKey(rng, preventDuplicates, mask, Integer.MAX_VALUE));
         }
         return set;
     }
 
-    private static Key createKey(Random rng, Set<Integer> preventDuplicates, int mask) {
-        int candidate = rng.nextInt();
+    private static Key createKey(Random rng, Set<Integer> preventDuplicates, int mask, long bound) {
+        int candidate = createInt(rng, bound);
         while (!preventDuplicates.add(candidate)) {
-            candidate = rng.nextInt();
+            candidate = createInt(rng, bound);
         }
         return new Key(candidate, mask);
+    }
+
+    private static int createInt(Random rng, long bound) {
+        return bound <= 0 || bound > Integer.MAX_VALUE ? rng.nextInt() : rng.nextInt((int) bound);
+    }
+
+    private static Value createValue(Random rng, Set<Integer> preventDuplicates, int mask, long bound) {
+        int candidate = createInt(rng, bound);
+        while (!preventDuplicates.add(candidate)) {
+            candidate = createInt(rng, bound);
+        }
+        return new Value(candidate, mask);
     }
 
     protected static void estimateMemoryUsage(Object collection, Map.Entry<?, ?> head, int size) {
