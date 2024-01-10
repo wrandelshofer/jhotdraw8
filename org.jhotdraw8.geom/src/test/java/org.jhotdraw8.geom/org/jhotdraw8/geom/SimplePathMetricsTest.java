@@ -31,15 +31,17 @@ public class SimplePathMetricsTest {
                 dynamicTest("diagonal-line", () -> shouldReversePath("M0,0 1,1", "M1,1 0,0")),
                 dynamicTest("two-diagonal-lines", () -> shouldReversePath("M0,0 1,1 2,2", "M2,2 1,1 0,0")),
                 dynamicTest("rectangle", () -> shouldReversePath("M0,0 1,0 1,1 0,1 0,0", "M0,0 0,1 1,1 1,0 0,0")),
-                dynamicTest("rectangle-closed", () -> shouldReversePath("M0,0 1,0 1,1 0,1 0,0Z", "M0,0 0,1 1,1 1,0 0,0 Z")),
-                dynamicTest("rectangle-closed-with-gap", () -> shouldReversePath("M0,0 1,0 1,1 0,1Z", "M0,0 0,1 1,1 1,0 0,0 Z"))
+                dynamicTest("closed-rectangle", () -> shouldReversePath("M0,0 1,0 1,1 0,1 0,0Z", "M0,0 0,1 1,1 1,0 0,0 Z")),
+                dynamicTest("closed-rectangle-closed-with-gap", () -> shouldReversePath("M0,0 1,0 1,1 0,1Z", "M0,0 0,1 1,1 1,0 0,0 Z")),
+                dynamicTest("path-with-gap", () -> shouldReversePath("M0,0 1,0 M1,1 0,1", "M0,1 1,1 M1,0 0,0")),
+                dynamicTest("closed-path-with-gap", () -> shouldReversePath("M0,0 1,0 M1,1 0,1 1,1Z", "M1,1 0,1 1,1 Z M1,0 0,0"))
 
         );
     }
 
     private void shouldReversePath(String input, String expected) throws Exception {
         var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
-        var actual = SvgPaths.doubleSvgStringFromAwt(metrics.getReversePathIterator(null));
+        var actual = SvgPaths.doubleSvgStringFromAwt(metrics.reverse().getPathIterator(null));
         assertEquals(expected, actual);
 
     }

@@ -138,10 +138,6 @@ public class SimplePathMetrics implements Shape, PathMetrics {
      * @return the same builder that was passed as an argument
      */
     public <T> @NonNull PathBuilder<T> buildSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
-        return staticBuildSubPathAtArcLength(accumulatedLengths, commands, coords, epsilon, offsets, s0, s1, b, skipFirstMoveTo);
-    }
-
-    private static <T> PathBuilder<T> staticBuildSubPathAtArcLength(double @NonNull [] accumulatedLengths, byte @NonNull [] commands, double @NonNull [] coords, double epsilon, int @NonNull [] offsets, double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
         double totalArcLength = accumulatedLengths[accumulatedLengths.length - 1];
         if (commands.length == 0 || s0 > totalArcLength || s1 < s0) {
             return b;
@@ -268,17 +264,10 @@ public class SimplePathMetrics implements Shape, PathMetrics {
         return b;
     }
 
-
-    public @NonNull <T> PathBuilder<T> buildReverseSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
-        double totalArcLength = accumulatedLengths[accumulatedLengths.length - 1];
-        if (commands.length == 0 || s0 > totalArcLength || s1 < s0) {
-            return b;
-        }
-        if (s0 < 0) {
-            s0 = 0;
-        }
-        if (s1 > totalArcLength) {
-            s1 = totalArcLength;
+    @Override
+    public @NonNull PathMetrics reverse() {
+        if (commands.length == 0) {
+            return this;
         }
 
         byte @NonNull [] reverseCommands = new byte[commands.length];
@@ -291,20 +280,28 @@ public class SimplePathMetrics implements Shape, PathMetrics {
             reverseCoords[n - i - 2] = coords[i];
             reverseCoords[n - i - 1] = coords[i + 1];
         }
+
         // reverse commands, offsets and accumulated lengths
+        double arcLength = accumulatedLengths.length - 1;
         boolean pendingClose = false;
         int sr = 0;
+
+        // add initial moveto command
         reverseCommands[sr++] = SEG_MOVETO;
-        int offset = 0;
+        int offset = 2;
+
+        // add remaining commands
         for (int s = commands.length - 1; s > 0; --s) {
             switch (commands[s]) {
                 case SEG_MOVETO:
                     if (pendingClose) {
                         pendingClose = false;
                         reverseOffsets[sr] = offset;
+                        reverseAccumulatedLengths[sr] = arcLength - accumulatedLengths[sr];
                         reverseCommands[sr++] = SEG_CLOSE;
                     }
                     reverseOffsets[sr] = offset;
+                    reverseAccumulatedLengths[sr] = arcLength - accumulatedLengths[sr];
                     reverseCommands[sr] = SEG_MOVETO;
                     sr++;
                     offset += 2;
@@ -316,6 +313,7 @@ public class SimplePathMetrics implements Shape, PathMetrics {
 
                 default:
                     reverseOffsets[sr] = offset;
+                    reverseAccumulatedLengths[sr] = arcLength - accumulatedLengths[sr];
                     reverseCommands[sr++] = commands[s];
                     offset += switch (commands[s]) {
                         default -> 2;
@@ -329,8 +327,7 @@ public class SimplePathMetrics implements Shape, PathMetrics {
             reverseCommands[sr] = SEG_CLOSE;
             reverseOffsets[sr] = offset;
         }
-
-        return staticBuildSubPathAtArcLength(reverseAccumulatedLengths, reverseCommands, reverseCoords, epsilon, reverseOffsets, s0, s1, b, skipFirstMoveTo);
+        return new SimplePathMetrics(reverseCommands, reverseOffsets, reverseCoords, reverseAccumulatedLengths, windingRule);
     }
 
 
@@ -654,29 +651,6 @@ public class SimplePathMetrics implements Shape, PathMetrics {
          */
     }
 
-    @Override
-    public PathMetrics reverse() {
-        throw new UnsupportedOperationException();
-    }
-
-
-    public PathIterator getReverseSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
-        double totalArcLength = getArcLength();
-        if (s0 > totalArcLength || s1 < s0) {
-            return new EmptyPathIterator();
-        }
-
-        boolean startsAtFirstSegment = s0 <= 0;
-        boolean endsAtLastSegment = s1 >= totalArcLength;
-
-        if (startsAtFirstSegment && endsAtLastSegment) {
-            return getReversePathIterator(tx);
-        }
-
-        // XXX this is quite inefficient, we should directly implement a reverse sub-path iterator
-        return new ReversePathIterator(getSubPathIteratorAtArcLength(totalArcLength - s1, totalArcLength - s0, tx));
-    }
-
     /**
      * Returns a path iterator of the entire path.
      *
@@ -748,125 +722,6 @@ public class SimplePathMetrics implements Shape, PathMetrics {
         };
     }
 
-    /**
-     * Returns a path iterator of the entire path.
-     *
-     * @param tx an optional transformation for the path iterator
-     * @return the path iterator
-     */
-
-    public PathIterator getReversePathIterator(final @Nullable AffineTransform tx) {
-        final AffineTransform tt = tx == null ? AffineTransform.getTranslateInstance(0, 0) : tx;
-        return new PathIterator() {
-            int current = commands.length - 1;
-            int index = commands.length - 1;
-
-            enum State {
-                NEEDS_CLOSE,
-                NEEDS_MOVE_TO,
-                NEEDS_CLOSE_THEN_MOVETO,
-                NEEDS_PATH_SEGMENT,
-                NEEDS_PATH_SEGMENT_THEN_CLOSE
-            }
-
-            State state = State.NEEDS_MOVE_TO;
-
-            @Override
-            public int getWindingRule() {
-                return windingRule;
-            }
-
-            @Override
-            public boolean isDone() {
-                return current < 0;
-            }
-
-            @Override
-            public void next() {
-                if (!isDone()) {
-                    int command = commands[index];
-                    switch (state) {
-                        case NEEDS_CLOSE -> {
-                            state = State.NEEDS_MOVE_TO;
-                        }
-                        case NEEDS_MOVE_TO -> {
-                            if (command == SEG_CLOSE) {
-                                state = State.NEEDS_PATH_SEGMENT_THEN_CLOSE;
-                                index--;
-                            } else {
-                                state = State.NEEDS_PATH_SEGMENT;
-                            }
-                        }
-                        case NEEDS_CLOSE_THEN_MOVETO -> {
-                            state = State.NEEDS_MOVE_TO;
-                        }
-                        case NEEDS_PATH_SEGMENT -> {
-                            index--;
-                        }
-                        case NEEDS_PATH_SEGMENT_THEN_CLOSE -> {
-                            if (index == 1) {
-                                state = State.NEEDS_CLOSE;
-                            } else {
-                                index--;
-                            }
-                        }
-                    }
-
-                    current--;
-                }
-            }
-
-            @Override
-            public int currentSegment(float[] coords) {
-                return commands[current];
-            }
-
-            @Override
-            public int currentSegment(double[] coords) {
-                byte command = commands[index];
-                int offset = offsets[index];
-                return switch (state) {
-                    case NEEDS_CLOSE, NEEDS_CLOSE_THEN_MOVETO -> {
-                        yield SimplePathMetrics.SEG_CLOSE;
-                    }
-                    case NEEDS_MOVE_TO -> {
-                        switch (command) {
-                            case SEG_MOVETO, SEG_LINETO -> {
-                                tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 1);
-                            }
-                            case SEG_QUADTO -> {
-                                tt.transform(SimplePathMetrics.this.coords, offset + 2, coords, 0, 1);
-                            }
-                            case SEG_CUBICTO -> {
-                                tt.transform(SimplePathMetrics.this.coords, offset + 4, coords, 0, 1);
-                            }
-                            default -> {//SEG CLOSE
-                                tt.transform(SimplePathMetrics.this.coords, offset - 2, coords, 0, 1);
-                            }
-                        }
-                        yield SimplePathMetrics.SEG_MOVETO;
-                    }
-                    case NEEDS_PATH_SEGMENT, NEEDS_PATH_SEGMENT_THEN_CLOSE -> {
-                        switch (command) {
-                            case SEG_LINETO, SEG_MOVETO -> {
-                                tt.transform(SimplePathMetrics.this.coords, offset - 2, coords, 0, 1);
-                            }
-                            case SEG_QUADTO -> {
-                                tt.transform(SimplePathMetrics.this.coords, offset - 2, coords, 0, 2);
-                            }
-                            case SEG_CUBICTO -> {
-                                tt.transform(SimplePathMetrics.this.coords, offset - 2, coords, 0, 3);
-                            }
-                            default -> {//SEG CLOSE
-                                throw new IllegalStateException();
-                            }
-                        }
-                        yield command;
-                    }
-                };
-            }
-        };
-    }
 
     @Override
     public PathIterator getPathIterator(@Nullable AffineTransform at, double flatness) {

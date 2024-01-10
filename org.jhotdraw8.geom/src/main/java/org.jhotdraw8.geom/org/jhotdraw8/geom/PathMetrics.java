@@ -94,7 +94,7 @@ public interface PathMetrics {
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */
-    default PathIterator getSubPathIterator(double t0, double t1, final @Nullable AffineTransform tx) {
+    default @NonNull PathIterator getSubPathIterator(double t0, double t1, final @Nullable AffineTransform tx) {
         double totalArcLength = getArcLength();
         double s0 = t0 * totalArcLength;
         double s1 = t1 * totalArcLength;
@@ -109,13 +109,13 @@ public interface PathMetrics {
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */
-    PathIterator getSubPathIteratorAtArcLength(double s0, double s1, final @Nullable AffineTransform tx);
+    @NonNull PathIterator getSubPathIteratorAtArcLength(double s0, double s1, final @Nullable AffineTransform tx);
 
     /**
      * Gets path metrics for the reversed path.
      *
      * @return reverse path metrics
      */
-    PathMetrics reverse();
+    @NonNull PathMetrics reverse();
 
 }
