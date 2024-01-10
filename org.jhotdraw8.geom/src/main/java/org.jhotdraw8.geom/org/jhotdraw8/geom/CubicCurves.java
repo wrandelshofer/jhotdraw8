@@ -434,37 +434,40 @@ public class CubicCurves {
     /**
      * Computes the arc length s.
      *
-     * @param p      points of the curve
-     * @param offset index of the first point in array {@code p}
+     * @param p       points of the curve
+     * @param offset  index of the first point in array {@code p}
+     * @param epsilon
      * @return the arc length
      */
-    public static double arcLength(double @NonNull [] p, int offset) {
-        return arcLength(p, offset, 1);
+    public static double arcLength(double @NonNull [] p, int offset, double epsilon) {
+        return arcLength(p, offset, 1, epsilon);
     }
 
     /**
      * Computes the arc length s from time 0 to time t.
      *
-     * @param p      points of the curve
-     * @param offset index of the first point in array {@code p}
-     * @param t      the time
+     * @param p       points of the curve
+     * @param offset  index of the first point in array {@code p}
+     * @param t       the time
+     * @param epsilon
      * @return the arc length
      */
-    public static double arcLength(double @NonNull [] p, int offset, double t) {
+    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
-        return Integrals.rombergQuadrature(f, 0, t, 0.1);
+        return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
 
     /**
      * Computes time t at the given arc length s.
      *
-     * @param p      points of the curve
-     * @param offset index of the first point in array {@code p}
-     * @param s      arc length
+     * @param p       points of the curve
+     * @param offset  index of the first point in array {@code p}
+     * @param s       arc length
+     * @param epsilon
      * @return t at s
      */
-    public static double invArcLength(double @NonNull [] p, int offset, double s) {
+    public static double invArcLength(double @NonNull [] p, int offset, double s, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
-        return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / arcLength(p, offset, 1));
+        return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / arcLength(p, offset, 1, epsilon), epsilon);
     }
 }

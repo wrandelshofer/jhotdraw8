@@ -11,14 +11,28 @@ import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.CubicCurveCharacteristics;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.FXCubicCurves;
+import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXQuadCurves;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.Integrals;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.Solvers;
 
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
@@ -225,13 +239,13 @@ public class BezierArcLengthExampleMain extends Application {
 
     private void addApproximatedDistancePoints(Group distancePoints) {
         double[] b = FXCubicCurves.toArray(curve);
-
-        double totalLength = CubicCurves.arcLength(b, 0, 1.0);
+        double epsilon = 0.125;
+        double totalLength = CubicCurves.arcLength(b, 0, 1.0, epsilon);
 
 
         for (int i = 1, n = 10; i < n; i++) {
             double s = i / (double) n;
-            double t = CubicCurves.invArcLength(b, 0, s * totalLength);
+            double t = CubicCurves.invArcLength(b, 0, s * totalLength, epsilon);
             PointAndDerivative pat = CubicCurves.eval(b, 0, t);
             javafx.geometry.Point2D p = pat.getPoint(javafx.geometry.Point2D::new);
             Circle e = new Circle(p.getX(), p.getY(), 4);

@@ -5,7 +5,6 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 
 import java.awt.geom.Point2D;
 
@@ -280,7 +279,7 @@ public interface PathBuilder<T> {
      * <p>
      * Some implementations may guarantee a non-null return value.
      */
-    @Nullable T build();
+    T build();
 
     /**
      * Adds a circle to the path winding in clockwise direction.

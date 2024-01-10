@@ -29,6 +29,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
     private int windingRule = PathIterator.WIND_EVEN_ODD;
+    private final double epsilon = 0.125;
 
     public PathMetricsBuilder() {
     }
@@ -80,7 +81,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         temp[5] = y2;
         temp[6] = x;
         temp[7] = y;
-        double arcLength = CubicCurves.arcLength(temp, 0);
+        double arcLength = CubicCurves.arcLength(temp, 0, epsilon);
         if (arcLength > 0) {
             commands.addAsByte(SEG_CUBICTO);
             offsets.addAsInt(coords.size());
@@ -140,7 +141,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
     @Override
     public @Nullable PathMetrics build() {
-        return new PathMetrics(commands.toByteArray(),
+        return new SimplePathMetrics(commands.toByteArray(),
                 offsets.toIntArray(),
                 coords.toDoubleArray(),
                 lengths.toDoubleArray(), windingRule);

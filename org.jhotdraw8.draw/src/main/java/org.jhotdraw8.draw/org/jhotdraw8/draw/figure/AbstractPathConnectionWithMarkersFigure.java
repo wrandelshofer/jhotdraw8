@@ -42,6 +42,7 @@ import org.jhotdraw8.geom.PathBuilder;
 import org.jhotdraw8.geom.PathMetrics;
 import org.jhotdraw8.geom.PathMetricsBuilder;
 import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.SimplePathMetrics;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.shape.BezierNode;
@@ -73,7 +74,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", VectorList.of());
 
-    public static final NullableKey<PathMetrics> PATH_METRICS = new SimpleNullableKey<>("pathMetrics", PathMetrics.class);
+    public static final NullableKey<PathMetrics> PATH_METRICS = new SimpleNullableKey<>("pathMetrics", SimplePathMetrics.class);
 
     public AbstractPathConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);

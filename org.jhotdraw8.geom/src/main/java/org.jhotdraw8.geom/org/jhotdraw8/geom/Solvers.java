@@ -178,13 +178,14 @@ public class Solvers {
      * @param xmin               the start of the interval
      * @param xmax               the end of the interval
      * @param x0                 the initial approximation
+     * @param epsilon the tolerance
      * @return x the estimated x value
      */
     public static double hybridNewtonBisectionMethod(
             @NonNull TriFunction<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
-            @NonNull ToDoubleFunction<Double> f, double y, double xmin, double xmax, double x0) {
+            @NonNull ToDoubleFunction<Double> f, double y, double xmin, double xmax, double x0, double epsilon) {
 
-        return hybridNewtonBisectionMethod(x -> quadratureFunction.apply(f, 0.0, x), f, y, xmin, xmax, x0);
+        return hybridNewtonBisectionMethod(x -> quadratureFunction.apply(f, 0.0, x), f, y, xmin, xmax, x0, epsilon);
     }
 
     /**
@@ -204,19 +205,19 @@ public class Solvers {
      *     <dd><a href="https://medium.com/@ommand/movement-along-the-curve-with-constant-speed-4fa383941507">medium.com</a></dd>
      * </dl>
      *
-     * @param f    a function
-     * @param df   the derivative of the function
-     * @param y    the desired y value
-     * @param xmin the start of the interval
-     * @param xmax the end of the interval
-     * @param x0   the initial approximation
+     * @param f       a function
+     * @param df      the derivative of the function
+     * @param y       the desired y value
+     * @param xmin    the start of the interval
+     * @param xmax    the end of the interval
+     * @param x0      the initial approximation
+     * @param epsilon the tolerance
      * @return x the estimated x value
      */
     public static double hybridNewtonBisectionMethod(
             @NonNull ToDoubleFunction<Double> f,
-            @NonNull ToDoubleFunction<Double> df, double y, double xmin, double xmax, double x0) {
+            @NonNull ToDoubleFunction<Double> df, double y, double xmin, double xmax, double x0, double epsilon) {
         final int maxIterations = 100;
-        final double tolerance = 0.001; // 0.1%
 
         double x = x0;
         double lowerBound = xmin;
@@ -225,7 +226,7 @@ public class Solvers {
         for (int i = 0; i < maxIterations; ++i) {
             double dy = f.applyAsDouble(x) - y;
 
-            if (Math.abs(dy) < tolerance)
+            if (Math.abs(dy) < epsilon)
                 break;
 
             double derivative = df.applyAsDouble(x);
