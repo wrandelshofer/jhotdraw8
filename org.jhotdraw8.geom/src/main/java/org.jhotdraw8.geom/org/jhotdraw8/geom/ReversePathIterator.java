@@ -44,7 +44,7 @@ import java.awt.geom.PathIterator;
  *     This usage of this code is allowed without any restrictions.
  *     No guarantees are given whatsoever.
  * <p>
- *     <a href="https://caff.de/projects/ReversePathIterator/>/caff.de</a>
+ *     <a href="https://caff.de/projects/ReversePathIterator/">caff.de</a>
  *     </dd>
  * </dl>
  * <p>
