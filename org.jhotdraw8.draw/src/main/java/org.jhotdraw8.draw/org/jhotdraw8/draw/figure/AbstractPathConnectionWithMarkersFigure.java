@@ -30,8 +30,7 @@ import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
+import org.jhotdraw8.fxcollection.typesafekey.TransientKey;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.CutEndPathBuilder;
 import org.jhotdraw8.geom.CutStartPathBuilder;
@@ -42,7 +41,6 @@ import org.jhotdraw8.geom.PathBuilder;
 import org.jhotdraw8.geom.PathMetrics;
 import org.jhotdraw8.geom.PathMetricsBuilder;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.geom.SimplePathMetrics;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.shape.BezierNode;
@@ -72,9 +70,14 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", VectorList.of());
+    public static final @NonNull BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", VectorList.of());
 
-    public static final NullableKey<PathMetrics> PATH_METRICS = new SimpleNullableKey<>("pathMetrics", SimplePathMetrics.class);
+    /**
+     * PathMetrics is used to speed up the layout process
+     * of this figure and - potentially - of dependent figures
+     * that need to create sub-paths from this connection figure.
+     */
+    public static final @NonNull TransientKey<PathMetrics> PATH_METRICS = new TransientKey<>("pathMetrics", PathMetrics.class);
 
     public AbstractPathConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);

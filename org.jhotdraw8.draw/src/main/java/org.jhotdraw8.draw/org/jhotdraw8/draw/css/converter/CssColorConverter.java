@@ -10,7 +10,12 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.converter.NumberConverter;
-import org.jhotdraw8.color.*;
+import org.jhotdraw8.color.CssColorSpaces;
+import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.ParametricHlsColorSpace;
+import org.jhotdraw8.color.ParametricHsvColorSpace;
+import org.jhotdraw8.color.ParametricScaledColorSpace;
+import org.jhotdraw8.color.SrgbColorSpace;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -18,7 +23,13 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.value.*;
+import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.draw.css.value.NamedCssColor;
+import org.jhotdraw8.draw.css.value.ShsbaCssColor;
+import org.jhotdraw8.draw.css.value.SrgbaCssColor;
+import org.jhotdraw8.draw.css.value.SystemCssColor;
+import org.jhotdraw8.draw.css.value.Uint4HexSrgbaCssColor;
+import org.jhotdraw8.draw.css.value.Uint8HexSrgbaCssColor;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -97,9 +108,13 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * @author Werner Randelshofer
  */
 public class CssColorConverter implements CssConverter<CssColor> {
+    /**
+     * Configure the number convert so that it preserves 32-bit float values,
+     * which have a precision of 8 decimal digits.
+     */
     private final static @NonNull NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
-            new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
-            new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+            new DecimalFormat("#################0.########", new DecimalFormatSymbols(Locale.ENGLISH)),
+            new DecimalFormat("0.0#######E0", new DecimalFormatSymbols(Locale.ENGLISH)));
 
     boolean nullable;
 
@@ -156,7 +171,7 @@ public class CssColorConverter implements CssConverter<CssColor> {
             }
             case CssTokenType.TT_FUNCTION -> {
                 tt.pushBack();
-                yield switch (tt.currentStringNonNull()) {
+                yield switch (tt.currentStringNonNull().toLowerCase()) {
                     case "rgb", "rgba" -> {
                         yield parseRgbFunction(tt);
                     }
@@ -303,9 +318,11 @@ public class CssColorConverter implements CssConverter<CssColor> {
                 toPercentage(params.get(1), 1 / 100d, tt)
         };
         float[] rgb = clampColors(CSS_HLS_COLOR_SPACE.toRGB(hls));
+        float alpha = params.size() == 4 ? clamp(toPercentage(params.get(3), 0.01, tt), 0, 1) : 1;
         return new CssColor(
                 "hsl(" + colorParamToString(params) + ")",
-                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
+                new Color(rgb[0], rgb[1], rgb[2], alpha)
+        );
     }
 
     @NonNull
@@ -318,9 +335,10 @@ public class CssColorConverter implements CssConverter<CssColor> {
         };
         float[] rgb = JAVAFX_HSB_COLOR_SPACE.toRGB(hsb);
         float[] clamped = clampColors(rgb);
+        float alpha = params.size() == 4 ? clamp(toPercentage(params.get(3), 0.01, tt), 0, 1) : 1;
         return new CssColor(
                 "hsb(" + colorParamToString(params) + ")",
-                new Color(clamped[0], clamped[1], clamped[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
+                new Color(clamped[0], clamped[1], clamped[2], alpha));
     }
 
     private static float[] toFloat(double[] params) {

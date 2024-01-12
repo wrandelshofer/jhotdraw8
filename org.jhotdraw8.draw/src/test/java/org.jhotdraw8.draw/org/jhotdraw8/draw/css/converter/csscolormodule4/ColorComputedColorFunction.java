@@ -63,7 +63,7 @@ public class ColorComputedColorFunction {
             test_computed_value("color", "color(" + colorSpace + " 1.00 50% 0.2)", "color(" + colorSpace + " 1 50% 0.2)", "[mixed number and percent 2]");
         }
 
-// Tests basic parsing of the color function
+        // Tests basic parsing of the color function
         test_computed_value("color", "color(srgb 1 1 1)", "color(srgb 1 1 1)", "[Basic sRGB white]");
         test_computed_value("color", "color(    srgb         1      1 1       )", "color(srgb 1 1 1)", "[White with lots of space]");
         test_computed_value("color", "color(srgb 0.25 0.5 0.75)", "color(srgb 0.25 0.5 0.75)", "[sRGB color]");
@@ -83,6 +83,4 @@ public class ColorComputedColorFunction {
         test_computed_value("color", "color(srgb 0.1 0.2 0.3 / 1.9)", "color(srgb 0.1 0.2 0.3 / 1.9)", "[Alpha > 1 should clamp (but in an editor we want to preserve the input!)]");
         test_computed_value("color", "color(srgb 1 1 1 / -0.2)", "color(srgb 1 1 1 / -0.2)", "[Negative alpha should clamp  (but in an editor we want to preserve the input!)]");
     }
-
-
 }
