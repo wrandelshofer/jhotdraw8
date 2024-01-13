@@ -26,7 +26,6 @@ import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
 
 import java.net.URL;
-import java.util.Collections;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
@@ -61,10 +60,6 @@ public class FontFamilyChooserController {
     public FontFamilyChooserController() {
     }
 
-    private @NonNull FontCollection createFontCollection() {
-        final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
-        return new FontCollection(labels.getString("FontCollection.unnamed"), Collections.emptyList());
-    }
 
     public double getFontSize() {
         return fontSize.get();
@@ -105,7 +100,7 @@ public class FontFamilyChooserController {
         familyList.setOnMousePressed(onMouseHandler);
     }
 
-    private void initListCellsWithDragAndDropBehavior() {
+    private void initListCells() {
         familyList.setCellFactory(lv -> {
             final TextFieldListCell<FontFamily> listCell = new TextFieldListCell<>();
             return listCell;
@@ -171,8 +166,11 @@ public class FontFamilyChooserController {
 
     private void initUpdateViewFromModelBehavior() {
         model.addListener((o, oldv, newv) -> {
+            if (oldv != null) {
+                collectionList.itemsProperty().unbind();
+            }
             if (newv != null) {
-                collectionList.setItems(newv.getFontCollections());
+                collectionList.itemsProperty().bind(newv.fontCollectionsProperty());
             }
         });
     }
@@ -190,7 +188,11 @@ public class FontFamilyChooserController {
         initListSelectionBehavior();
         initDoubleClickBehavior();
         initPreferencesBehavior();
-        initListCellsWithDragAndDropBehavior();
+        initListCells();
+
+        collectionList.itemsProperty().addListener((o, oldv, newv) -> {
+            System.out.println("collectionList change=" + newv);
+        });
 
     }
 

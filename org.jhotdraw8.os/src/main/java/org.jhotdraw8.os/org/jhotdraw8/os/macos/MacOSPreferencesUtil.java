@@ -7,34 +7,17 @@ package org.jhotdraw8.os.macos;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.w3c.dom.Text;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.attribute.FileTime;
-import java.util.ArrayList;
-import java.util.Base64;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.StreamSupport;
 
 /**
  * Provides read methods for some well known macOS preferences files.
@@ -182,7 +165,7 @@ public class MacOSPreferencesUtil {
         }
     }
 
-    private static boolean isMacOs() {
+    public static boolean isMacOs() {
         final String osName = System.getProperty("os.name");
         return osName != null && osName.toLowerCase().startsWith("mac");
     }
@@ -192,179 +175,12 @@ public class MacOSPreferencesUtil {
 
         if (isMacOs()) {
             try {
-                Document plist = readPList(file);
-                cache.put("plist", readNode(plist.getDocumentElement()));
+                Document plist = PListParsers.readPList(file);
+                cache.putAll(PListParsers.toMap(plist));
             } catch (Throwable e) {
                 System.err.println("Warning: ch.randelshofer.quaqua.util.OSXPreferences failed to load " + file);
                 e.printStackTrace();
             }
         }
-    }
-
-    private static Object readNode(@NonNull Element node) throws IOException {
-        String name = node.getTagName();
-        Object value;
-        switch (name) {
-            case "plist":
-                value = readPList(node);
-                break;
-            case "dict":
-                value = readDict(node);
-                break;
-            case "array":
-                value = readArray(node);
-                break;
-            default:
-                value = readValue(node);
-                break;
-        }
-        return value;
-    }
-
-    private static @NonNull Iterable<Node> getChildren(final @NonNull Element elem) {
-        return () -> new Iterator<Node>() {
-            int index = 0;
-            final NodeList children = elem.getChildNodes();
-
-            @Override
-            public boolean hasNext() {
-                return index < children.getLength();
-            }
-
-            @Override
-            public Node next() {
-                return children.item(index++);
-            }
-        };
-    }
-
-    private static @NonNull Iterable<Element> getChildElements(final @NonNull Element elem) {
-        return () -> StreamSupport.stream(getChildren(elem).spliterator(), false)
-                .filter(e -> e instanceof Element).map(e -> (Element) e).iterator();
-    }
-
-    private static @NonNull List<Object> readPList(@NonNull Element plistElem) throws IOException {
-        List<Object> plist = new ArrayList<>();
-        for (Node child : getChildElements(plistElem)) {
-            plist.add(readNode((Element) child));
-        }
-        return plist;
-    }
-
-    private static @NonNull String getContent(@NonNull Element elem) {
-        StringBuilder buf = new StringBuilder();
-        for (Node child : getChildren(elem)) {
-            if (child instanceof Text) {
-                buf.append(child.getTextContent());
-            }
-        }
-        return buf.toString().trim();
-    }
-
-    private static @NonNull Map<String, Object> readDict(@NonNull Element dictElem) throws IOException {
-        LinkedHashMap<String, Object> dict = new LinkedHashMap<>();
-        for (Iterator<Element> iterator = getChildElements(dictElem).iterator(); iterator.hasNext(); ) {
-            Element keyElem = iterator.next();
-            if (!"key".equals(keyElem.getTagName())) {
-                throw new IOException("missing dictionary key at" + dictElem);
-            }
-            Element valueElem = iterator.next();
-            Object elemValue = readNode(valueElem);
-            dict.put(getContent(keyElem), elemValue);
-        }
-        return dict;
-    }
-
-    private static @NonNull List<Object> readArray(@NonNull Element arrayElem) throws IOException {
-        List<Object> array = new ArrayList<>();
-        for (Element child : getChildElements(arrayElem)) {
-            array.add(readNode(child));
-        }
-        return array;
-    }
-
-    private static Object readValue(@NonNull Element value) throws IOException {
-        Object parsedValue;
-        switch (value.getTagName()) {
-            case "true":
-                parsedValue = true;
-                break;
-            case "false":
-                parsedValue = false;
-                break;
-            case "data":
-                parsedValue = Base64.getDecoder().decode(getContent(value));
-                break;
-            case "date":
-                try {
-                    parsedValue = DatatypeFactory.newInstance().newXMLGregorianCalendar(getContent(value));
-                } catch (IllegalArgumentException |
-                         DatatypeConfigurationException e) {
-                    throw new IOException(e);
-                }
-                break;
-            case "real":
-                try {
-                    parsedValue = Double.valueOf(getContent(value));
-                } catch (NumberFormatException e) {
-                    throw new IOException(e);
-                }
-                break;
-            case "integer":
-                try {
-                    parsedValue = Long.valueOf(getContent(value));
-                } catch (NumberFormatException e) {
-                    throw new IOException(e);
-                }
-                break;
-            default:
-                parsedValue = getContent(value);
-                break;
-        }
-        return parsedValue;
-    }
-
-    private static Document readXmlPropertyList(@NonNull File file) throws IOException {
-        InputSource inputSource = new InputSource(file.toString());
-        DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
-        builderFactory.setNamespaceAware(true);
-        DocumentBuilder builder;
-        try {
-            builder = builderFactory.newDocumentBuilder();
-            // We do not want that the reader creates a socket connection!
-            builder.setEntityResolver((publicId, systemId) -> new InputSource(new StringReader("")));
-            return builder.parse(inputSource);
-        } catch (ParserConfigurationException e) {
-            throw new IOException("Cannot create document builder for file: " + file, e);
-        } catch (SAXException e) {
-            throw new IOException("Illegal file format in file: " + file, e);
-        }
-    }
-
-    private static Document readBinaryPropertyList(File file) throws IOException {
-        return new BinaryPListParser().parse(file);
-    }
-
-    /**
-     * Reads the specified PList file and returns it as a document.
-     * This method can deal with XML encoded and binary encoded PList files.
-     */
-    private static Document readPList(@NonNull File file) throws IOException {
-        Document doc;
-        try {
-            doc = readBinaryPropertyList(file);
-        } catch (FileNotFoundException e) {
-            throw e;
-        } catch (IOException e) {
-            try {
-                doc = readXmlPropertyList(file);
-            } catch (IOException e3) {
-                throw e3;
-            }
-        }
-        if (doc == null) {
-            throw new IOException("File is neither an XML PList nor a Binary PList. File: " + file);
-        }
-        return doc;
     }
 }

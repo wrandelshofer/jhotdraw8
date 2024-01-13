@@ -1,12 +1,11 @@
 /*
- * @(#)DefaultFontChooserModelFactory.java
+ * @(#)DefaultFontCollectionsFactory.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.fxcontrols.fontchooser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.scene.text.Font;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.ModulepathResources;
@@ -18,47 +17,33 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ForkJoinPool;
 
 /**
- * DefaultFontChooserModelFactory.
+ * DefaultFontCollectionsFactory.
  *
  * @author Werner Randelshofer
  */
-public class DefaultFontChooserModelFactory {
+public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
 
-    public DefaultFontChooserModelFactory() {
+    public DefaultFontCollectionsFactory() {
     }
 
-    public FontChooserModel create() {
-        final FontChooserModel model = new FontChooserModel();
-        model.setFontCollections(generateCollections(loadFonts()));
-        return model;
+    /**
+     * Creates a FontChooserModel.
+     * <p>
+     * This is an IO intensive operation and should therefore not be called on the JavaFX Application Thread.
+     *
+     * @return a FontChooserModel.
+     */
+    public List<FontCollection> create() {
+        return generateCollections(loadFonts());
     }
 
-    public @NonNull CompletableFuture<FontChooserModel> createAsync() {
-        CompletableFuture<FontChooserModel> future = new CompletableFuture<>();
-        Task<FontChooserModel> task = new Task<FontChooserModel>() {
-            @Override
-            protected FontChooserModel call() throws Exception {
-                return create();
-            }
-
-            @Override
-            protected void failed() {
-                future.completeExceptionally(getException());
-            }
-
-            @Override
-            protected void succeeded() {
-                future.complete(getValue());
-            }
-        };
-        ForkJoinPool.commonPool().execute(task);
-        return future;
-    }
-
+    /**
+     * Loads all Fonts that are available to JavaFX.
+     *
+     * @return the list of fonts
+     */
     protected @NonNull List<FontFamily> loadFonts() {
         List<FontFamily> allFamilies = new ArrayList<>();
 
@@ -92,18 +77,26 @@ public class DefaultFontChooserModelFactory {
         return allFamilies;
     }
 
+    /**
+     * Groups a list of font families into collections.
+     * <p>
+     * This implementation uses a hardcoded set of collections.
+     *
+     * @param families a list of font families
+     * @return a collection of font families
+     */
     protected @NonNull ObservableList<FontCollection> generateCollections(@NonNull List<FontFamily> families) {
-        ObservableList<FontCollection> root = FXCollections.observableArrayList();
+        ObservableList<FontCollection> collections = FXCollections.observableArrayList();
 
         final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
 
         // All fonts
         FontCollection allFonts = new FontCollection(labels.getString("FontCollection.allFonts"), true, families);
-        root.add(allFonts);
+        collections.add(allFonts);
 
         // Web core fonts
         // https://en.wikipedia.org/wiki/Core_fonts_for_the_Web
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.web"), true, collectFamiliesNamed(families,
                         "Arial",
                         "Arial Black",
@@ -119,7 +112,7 @@ public class DefaultFontChooserModelFactory {
 
         // PDF Standard Fonts
         // https://en.wikipedia.org/wiki/Portable_Document_Format#Standard_Type_1_Fonts_(Standard_14_Fonts)
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.pdf"), true, collectFamiliesNamed(families,
                         "Courier",
                         "Helvetica",
@@ -128,7 +121,7 @@ public class DefaultFontChooserModelFactory {
                         "Zapf Dingbats")));
 
         // Java System fonts
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.system"), true, collectFamiliesNamed(families,
                         "Dialog",
                         "DialogInput",
@@ -137,7 +130,7 @@ public class DefaultFontChooserModelFactory {
                         "Serif",
                         "System")));
         // Serif fonts
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.serif"), collectFamiliesNamed(families,
                         // Fonts on Mac OS X 10.5:
                         "Adobe Caslon Pro",
@@ -221,7 +214,7 @@ public class DefaultFontChooserModelFactory {
                         "KodchiangUPC",
                         "Narkisim")));
         // Sans Serif
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.sansSerif"), collectFamiliesNamed(families,
                         // Fonts on Mac OS X 10.5:
                         "Abadi MT Condensed Extra Bold",
@@ -308,7 +301,7 @@ public class DefaultFontChooserModelFactory {
                         "Segoe UI")));
 
         // Scripts
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.script"), collectFamiliesNamed(families,
                         // Fonts on Mac OS X 10.5:
                         "Apple Chancery",
@@ -386,7 +379,7 @@ public class DefaultFontChooserModelFactory {
                         "Segoe Script")));
 
         // Monospaced
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.monospaced"), collectFamiliesNamed(families,
                         // Fonts on Mac OS X 10.5:
                         "Andale Mono",
@@ -415,7 +408,7 @@ public class DefaultFontChooserModelFactory {
                         "Rod")));
 
         // Decorative
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.decorative"), collectFamiliesNamed(families,
                         // Fonts on Mac OS X 10.5:
                         "Academy Engraved LET",
@@ -509,7 +502,7 @@ public class DefaultFontChooserModelFactory {
                         "Slimbach-BlackItalic",
                         "Snap ITC" // Fonts on Windows Vista:
                 )));
-        root.add(
+        collections.add(
                 new FontCollection(labels.getString("FontCollection.symbols"), collectFamiliesNamed(families,
                         // Fonts on Mac OS X 10.5:
                         "Apple Symbols",
@@ -535,7 +528,7 @@ public class DefaultFontChooserModelFactory {
                         // Fonts on Windows Vista:
                 )));
 
-        return root;
+        return collections;
 
     }
 

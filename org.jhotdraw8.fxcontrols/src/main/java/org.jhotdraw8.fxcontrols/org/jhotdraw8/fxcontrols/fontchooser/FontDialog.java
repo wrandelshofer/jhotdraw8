@@ -67,13 +67,12 @@ public class FontDialog extends Dialog<FontFamilySize> {
 
     public static @Nullable FontChooserModel getModel() {
         if (model == null) {
-            model = new PreferencesFontChooserModelFactory().create();
+            model = FontChooserModelFactories.create();
         }
         return model;
     }
 
     private @Nullable FontFamilySize onButton(@Nullable ButtonType buttonType) {
-        new PreferencesFontChooserModelFactory().writeModelToPrefs(controller.getModel());
         if (buttonType != null && buttonType.getButtonData() == ButtonData.OK_DONE) {
             String selectedFontName = controller.getSelectedFontName();
             double fontSize = controller.getFontSize();

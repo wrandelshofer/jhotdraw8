@@ -6,6 +6,7 @@ package org.jhotdraw8.fxcontrols.fontchooser;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -17,7 +18,7 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public class FontChooserModel {
 
-    private final ListProperty<FontCollection> fontCollections = new SimpleListProperty<>();
+    private final ListProperty<FontCollection> fontCollections = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     public FontChooserModel() {
     }

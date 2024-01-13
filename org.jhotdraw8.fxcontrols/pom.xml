@@ -62,9 +62,17 @@
       <groupId>ch.randelshofer</groupId>
       <artifactId>org.jhotdraw8.geom</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.os</artifactId>
+    </dependency>
       <dependency>
           <groupId>ch.randelshofer</groupId>
           <artifactId>org.jhotdraw8.icollection</artifactId>
       </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.os</artifactId>
+    </dependency>
   </dependencies>
 </project>
