@@ -2,6 +2,7 @@ package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.RedBlackSet;
 import org.jhotdraw8.icollection.jmh.Key;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -30,9 +31,26 @@ public class RedBlackSetJol extends AbstractJol {
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
      *       2003               56056   (total)
      * </pre>
+     * <pre>
+     * class org.jhotdraw8.icollection.RedBlackSet with 1 elements.
+     * total size              : 112
+     * element size            : 24
+     * data size               : 24 21%
+     * data structure size     : 88 78%
+     * overhead per element    : 88.0 bytes
+     * ----footprint---
+     * org.jhotdraw8.icollection.RedBlackSet@51133c06d footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *          1        16        16   org.jhotdraw8.icollection.NaturalComparator
+     *          1        24        24   org.jhotdraw8.icollection.RedBlackSet
+     *          1        16        16   org.jhotdraw8.icollection.impl.redblack.Empty
+     *          1        32        32   org.jhotdraw8.icollection.impl.redblack.Node
+     *          1        24        24   org.jhotdraw8.icollection.jmh.Key
+     *          5                 112   (total)
+     * </pre>
      */
     @Test
-    //@Disabled
+    @Disabled
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = -1;//~64;
@@ -61,7 +79,7 @@ public class RedBlackSetJol extends AbstractJol {
      * </pre>
      */
     @Test
-    // @Disabled
+    @Disabled
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

@@ -50,7 +50,7 @@ public class ChampSetJol extends AbstractJol {
      * </pre>
      */
     @Test
-    @Disabled
+    // @Disabled
     public void estimateMemoryUsageAddAll() {
         int size = 1_000;
         final int mask = -1;//~64;
