@@ -27,9 +27,8 @@ public class FontChooserMain extends Application {
 
     @Override
     public void start(@NonNull Stage primaryStage) {
-        Label fontChooserLabel = new Label();
-        Button fontChooserButton = new Button();
-        fontChooserButton.setText("Open FontChooser");
+        Label fontChooserLabel = new Label("No font selected");
+        Button fontChooserButton = new Button("Open FontChooser");
         fontChooserButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -43,9 +42,8 @@ public class FontChooserMain extends Application {
             }
         });
 
-        Label fontFamilyLabel = new Label();
-        Button fontFamilyChooserButton = new Button();
-        fontFamilyChooserButton.setText("Open FontFamilyChooser");
+        Label fontFamilyLabel = new Label("No font family selected");
+        Button fontFamilyChooserButton = new Button("Open FontFamilyChooser");
         fontFamilyChooserButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override

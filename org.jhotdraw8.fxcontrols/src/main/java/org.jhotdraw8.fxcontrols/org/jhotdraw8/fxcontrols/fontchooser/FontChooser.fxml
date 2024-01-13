@@ -6,7 +6,6 @@
   -->
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.Slider?>
@@ -19,7 +18,9 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<SplitPane dividerPositions="0.1" orientation="VERTICAL" prefWidth="500.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.jhotdraw8.fxcontrols.fontchooser.FontChooserController">
+<SplitPane dividerPositions="0.1" orientation="VERTICAL" prefWidth="500.0" xmlns="http://javafx.com/javafx/18"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="org.jhotdraw8.fxcontrols.fontchooser.FontChooserController">
   <items>
     <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" SplitPane.resizableWithParent="false">
       <children>
@@ -48,10 +49,6 @@
         <HBox alignment="CENTER_LEFT">
           <children>
             <Label maxWidth="1.7976931348623157E308" text="%FontCollection.collection" HBox.hgrow="ALWAYS"/>
-            <Button fx:id="addCollectionButton" mnemonicParsing="false" onAction="#onAddCollectionPerformed"
-                    styleClass="placardButton" text="+"/>
-            <Button fx:id="removeCollectionButton" mnemonicParsing="false" onAction="#onRemoveCollectionPerformed"
-                    styleClass="placardButton" text="-"/>
           </children>
           <GridPane.margin>
             <Insets left="4.0" right="4.0"/>
@@ -60,8 +57,6 @@
         <HBox alignment="CENTER_LEFT" GridPane.columnIndex="1">
           <children>
             <Label maxWidth="1.7976931348623157E308" text="%FontCollection.family" HBox.hgrow="ALWAYS"/>
-            <Button fx:id="removeFamilyButton" mnemonicParsing="false" onAction="#onRemoveFamilyPerformed"
-                    styleClass="placardButton" text="-"/>
           </children>
           <opaqueInsets>
             <Insets/>
@@ -94,8 +89,8 @@
             <HBox VBox.vgrow="ALWAYS">
               <children>
                 <ListView fx:id="fontSizeList" prefHeight="200.0" prefWidth="200.0"/>
-                <Slider fx:id="fontSizeSlider" max="200.0" min="0.0" orientation="VERTICAL"
-                        snapToTicks="true" minorTickCount="0" majorTickUnit="1">
+                <Slider fx:id="fontSizeSlider" majorTickUnit="1" max="200.0" min="0.0" minorTickCount="0"
+                        orientation="VERTICAL" snapToTicks="true">
                   <HBox.margin>
                     <Insets bottom="8.0" left="4.0" right="4.0" top="4.0"/>
                   </HBox.margin>

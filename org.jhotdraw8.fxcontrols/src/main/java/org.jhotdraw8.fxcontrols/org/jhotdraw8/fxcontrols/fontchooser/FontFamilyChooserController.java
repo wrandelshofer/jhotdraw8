@@ -5,7 +5,6 @@
 package org.jhotdraw8.fxcontrols.fontchooser;
 
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
@@ -19,14 +18,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TextFieldListCell;
-import javafx.scene.input.ClipboardContent;
-import javafx.scene.input.DataFormat;
-import javafx.scene.input.Dragboard;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.TransferMode;
 import javafx.scene.text.Font;
-import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.ModulepathResources;
@@ -34,12 +27,9 @@ import org.jhotdraw8.application.resources.Resources;
 
 import java.net.URL;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.prefs.Preferences;
-import java.util.stream.Collectors;
 
 public class FontFamilyChooserController {
 
@@ -63,36 +53,12 @@ public class FontFamilyChooserController {
     @FXML
     private TextArea previewTextArea;
     @FXML
-    private Button removeCollectionButton;
-    @FXML
-    private Button removeFamilyButton;
-    @FXML
     private ResourceBundle resources;
 
     @FXML
     private ListView<FontTypeface> typefaceList;
 
     public FontFamilyChooserController() {
-    }
-
-    private void addDroppedFamiliesToCollection(@Nullable FontCollection collection, String[] familyNames) {
-        final FontChooserModel model = getModel();
-        FontCollection allFonts = model.getAllFonts();
-        if (collection == null) {
-            collection = createFontCollection();
-            getModel().getFontCollections().add(collection);
-        }
-        if (collection.isSmartCollection()) {
-            return;
-        }
-        final ObservableList<FontFamily> existing = collection.getFamilies();
-        final List<FontFamily> collected = allFonts == null ? Collections.emptyList() : DefaultFontChooserModelFactory.collectFamiliesNamed(allFonts.getFamilies(), familyNames);
-        for (FontFamily family : collected) {
-            if (!existing.contains(family)) {
-                existing.add(family);
-            }
-        }
-        existing.sort(Comparator.comparing(FontFamily::getName));
     }
 
     private @NonNull FontCollection createFontCollection() {
@@ -129,42 +95,6 @@ public class FontFamilyChooserController {
         return typeface == null ? null : typeface.getName();
     }
 
-    private void initButtonDisableBehavior() {
-        removeCollectionButton.disableProperty().bind(Bindings.createBooleanBinding(() -> {
-            FontCollection newv = collectionList.getSelectionModel().getSelectedItem();
-            return newv == null || newv.isSmartCollection();
-        }, collectionList.getSelectionModel().selectedItemProperty()));
-
-        removeFamilyButton.disableProperty().bind(
-                Bindings.createBooleanBinding(() -> {
-                    FontCollection selectedCollection = collectionList.getSelectionModel().getSelectedItem();
-                    FontFamily selectedFamily = familyList.getSelectionModel().getSelectedItem();
-                    return selectedFamily == null || selectedCollection == null || selectedCollection.isSmartCollection();
-                }, collectionList.getSelectionModel().selectedItemProperty(), familyList.getSelectionModel().selectedItemProperty())
-        );
-    }
-
-    private void initDeleteKeyBehavior() {
-        familyList.setOnKeyReleased(evt -> {
-            if (evt.getCode() == KeyCode.DELETE) {
-                FontCollection fontCollection = collectionList.getSelectionModel().getSelectedItem();
-                if (!fontCollection.isSmartCollection()) {
-                    fontCollection.getFamilies().remove(familyList.getSelectionModel().getSelectedItem());
-                }
-                evt.consume();
-            }
-        });
-        collectionList.setOnKeyReleased(evt -> {
-            if (evt.getCode() == KeyCode.DELETE) {
-                FontCollection fontCollection = collectionList.getSelectionModel().getSelectedItem();
-                if (!fontCollection.isSmartCollection()) {
-                    collectionList.getItems().remove(collectionList.getSelectionModel().getSelectedIndex());
-                }
-                evt.consume();
-            }
-        });
-    }
-
     private void initDoubleClickBehavior() {
         final EventHandler<MouseEvent> onMouseHandler = evt -> {
             if (evt.getClickCount() == 2 && getOnAction() != null && getSelectedFontName() != null) {
@@ -178,63 +108,11 @@ public class FontFamilyChooserController {
     private void initListCellsWithDragAndDropBehavior() {
         familyList.setCellFactory(lv -> {
             final TextFieldListCell<FontFamily> listCell = new TextFieldListCell<>();
-            listCell.setOnDragDetected(evt -> {
-                Dragboard dragBoard = familyList.startDragAndDrop(TransferMode.COPY);
-                ClipboardContent content = new ClipboardContent();
-                String familyNames
-                        = familyList.getSelectionModel().getSelectedItems().stream().map(FontFamily::getName).collect(Collectors.joining("\n"));
-                content.put(DataFormat.PLAIN_TEXT, familyNames);
-                dragBoard.setDragView(listCell.snapshot(null, null));
-                dragBoard.setContent(content);
-                evt.consume();
-            });
             return listCell;
         });
 
         collectionList.setCellFactory(lv -> {
-            final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<FontCollection>() {
-                @Override
-                public void updateItem(@Nullable FontCollection item, boolean empty) {
-                    super.updateItem(item, empty);
-                    setEditable(item != null && !item.isSmartCollection());
-                }
-
-            };
-            listCell.setConverter(new StringConverter<FontCollection>() {
-                @Override
-                public FontCollection fromString(String string) {
-                    final FontCollection item = listCell.getItem();
-                    item.setName(string);
-                    return item;
-                }
-
-                @Override
-                public @NonNull String toString(@NonNull FontCollection item) {
-                    return (item.isSmartCollection()) ? item.getName() + "•" : item.getName();
-                }
-
-            });
-            listCell.setOnDragOver(evt -> {
-                if ((listCell.getItem() == null || !listCell.getItem().isSmartCollection())
-                        && evt.getDragboard().hasString()) {
-                    evt.acceptTransferModes(TransferMode.COPY);
-                }
-                evt.consume();
-            });
-
-            listCell.setOnDragDropped(evt -> {
-                boolean success = false;
-                if ((listCell.getItem() == null || !listCell.getItem().isSmartCollection())
-                        && evt.getDragboard().hasString()) {
-                    String droppedString = evt.getDragboard().getString();
-                    addDroppedFamiliesToCollection(listCell.getItem(),
-                            droppedString.split("\n")
-                    );
-                    success = true;
-                }
-                evt.setDropCompleted(success);
-                evt.consume();
-            });
+            final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<FontCollection>();
             return listCell;
         });
     }
@@ -304,20 +182,15 @@ public class FontFamilyChooserController {
         assert previewTextArea != null : "fx:id=\"previewTextArea\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert fontNameLabel != null : "fx:id=\"fontNameLabel\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert addCollectionButton != null : "fx:id=\"addCollectionButton\" was not injected: check your FXML file 'FontChooser.fxml'.";
-        assert removeCollectionButton != null : "fx:id=\"removeCollectionButton\" was not injected: check your FXML file 'FontChooser.fxml'.";
-        assert removeFamilyButton != null : "fx:id=\"removeFamilyButton\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert collectionList != null : "fx:id=\"collectionList\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert familyList != null : "fx:id=\"familyList\" was not injected: check your FXML file 'FontChooser.fxml'.";
         assert typefaceList != null : "fx:id=\"typefaceList\" was not injected: check your FXML file 'FontChooser.fxml'.";
 
         initUpdateViewFromModelBehavior();
         initListSelectionBehavior();
-        initButtonDisableBehavior();
         initDoubleClickBehavior();
         initPreferencesBehavior();
         initListCellsWithDragAndDropBehavior();
-
-        initDeleteKeyBehavior();
 
     }
 
@@ -327,31 +200,6 @@ public class FontFamilyChooserController {
 
     public @NonNull ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
         return onAction;
-    }
-
-    @FXML
-    void onAddCollectionPerformed(ActionEvent event) {
-        FontCollection collection = createFontCollection();
-        getModel().getFontCollections().add(collection);
-        collectionList.getSelectionModel().select(collection);
-    }
-
-    @FXML
-    void onRemoveCollectionPerformed(ActionEvent event) {
-        FontCollection collection = collectionList.getSelectionModel().getSelectedItem();
-        if (collection != null && !collection.isSmartCollection()) {
-            getModel().getFontCollections().remove(collection);
-        }
-    }
-
-    @FXML
-    void onRemoveFamilyPerformed(ActionEvent event) {
-        FontCollection collection = collectionList.getSelectionModel().getSelectedItem();
-        FontFamily family = familyList.getSelectionModel().getSelectedItem();
-        if (collection != null && !collection.isSmartCollection() && family != null) {
-            collection.getFamilies().remove(family);
-        }
-
     }
 
     public void setFontName(String fontName) {
