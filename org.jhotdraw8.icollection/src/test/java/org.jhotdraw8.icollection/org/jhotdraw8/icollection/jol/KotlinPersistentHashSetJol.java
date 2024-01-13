@@ -53,9 +53,9 @@ public class KotlinPersistentHashSetJol extends AbstractJol {
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
 
-        var mapA = ExtensionsKt.<Key>persistentHashSetOf();
-        mapA = mapA.addAll(data);
-        estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
+        var setA = ExtensionsKt.<Key>persistentHashSetOf();
+        setA = setA.addAll(data);
+        estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
 

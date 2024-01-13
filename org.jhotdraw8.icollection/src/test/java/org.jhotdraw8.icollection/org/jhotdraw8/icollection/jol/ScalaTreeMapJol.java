@@ -21,25 +21,23 @@ public class ScalaTreeMapJol extends AbstractJol {
     /**
      * <pre>
      * class scala.collection.immutable.TreeMap with 1000 elements.
-     * total size              : 127560
+     * total size              : 80112
      * element size            : 48
-     * data size               : 48000 37%
-     * data structure size     : 79560 62%
-     * overhead per element    : 79.56 bytes
+     * data size               : 48000 59%
+     * data structure size     : 32112 40%
+     * overhead per element    : 32.112 bytes
      * ----footprint---
-     * scala.collection.immutable.TreeMap@46268f08d footprint:
+     * scala.collection.immutable.TreeMap@4ed5eb72d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        292        30      8968   [I
-     *        328        56     18536   [Ljava.lang.Object;
-     *          1       136       136   [[Ljava.lang.Object;
-     *       1000        16     16000   java.lang.Integer
-     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       1000        24     24000   scala.Tuple2
-     *        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
-     *          1        16        16   scala.collection.immutable.HashMap
-     *          1        32        32   scala.collection.immutable.Vector2
-     *          1        32        32   scala.collection.immutable.TreeMap
-     *       4920              127560   (total)
+     *          1        24        24   [B
+     *          1        24        24   java.lang.String
+     *          1        24        24   java.util.Comparators$NaturalOrderComparator
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
+     *       1000        32     32000   scala.collection.immutable.RedBlackTree$Tree
+     *          1        24        24   scala.collection.immutable.TreeMap
+     *          1        16        16   scala.math.LowPriorityOrderingImplicits$$anon$3
+     *       3005               80112   (total)
      * </pre>
      */
     @Test

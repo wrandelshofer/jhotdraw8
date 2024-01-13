@@ -24,34 +24,6 @@ import java.util.function.BiFunction;
  * @param <K> Component type
  */
 public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
-    @Override
-    public String toLispString() {
-        return isLeaf() ? "(" + (color ? 'R' : 'B') + ":" + key +
-                (value == null ? "" : "=" + value)
-                + ")" : toLispString(this);
-    }
-
-    private static String toLispString(RedBlackTree<?, ?> tree) {
-        if (tree.isEmpty()) {
-            return "";
-        } else {
-            final Node<?, ?> node = (Node<?, ?>) tree;
-            final String value = (node.color ? 'R' : 'B') + ":" + node.key +
-                    (node.value == null ? "" : "=" + node.value);
-            if (node.isLeaf()) {
-                return value;
-            } else {
-                final String left = node.left.isEmpty() ? "" : " " + toLispString(node.left);
-                final String right = node.right.isEmpty() ? "" : " " + toLispString(node.right);
-                return "(" + value + "," + left + "," + right + ")";
-            }
-        }
-    }
-
-    private boolean isLeaf() {
-        return left.isEmpty() && right.isEmpty();
-    }
-
     final boolean color;
     final byte blackHeight;
     final RedBlackTree<K, V> left;
@@ -59,7 +31,6 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     final V value;
     final RedBlackTree<K, V> right;
     final int size;
-
     // This is no public API! The RedBlackTree takes care of passing the correct Comparator.
     Node(boolean color, int blackHeight, RedBlackTree<K, V> left, K key, V value, RedBlackTree<K, V> right) {
         this.color = color;
@@ -77,148 +48,6 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
                 +toLispString();
 
          */
-    }
-
-    @Override
-    public boolean color() {
-        return color;
-    }
-
-
-    @Override
-    public boolean contains(K key, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, key);
-        if (result < 0) {
-            return left.contains(key, comparator);
-        }
-        if (result > 0) {
-            return right.contains(key, comparator);
-        }
-        return true;
-    }
-
-
-    @Override
-    public RedBlackTree<K, V> orElse(RedBlackTree<K, V> other) {
-        return this;
-    }
-
-    @Override
-    public @Nullable K keyOrNull() {
-        return key;
-    }
-
-    @Override
-    public @Nullable V valueOrNull() {
-        return value;
-    }
-
-    @Override
-    public Map.@Nullable Entry<K, V> entryOrNull() {
-        return this;
-    }
-
-    @Override
-    public <E> @Nullable E mapOrNull(@NonNull BiFunction<K, V, E> f) {
-        return f.apply(key, value);
-    }
-
-    @Override
-    public RedBlackTree<K, V> find(K key, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, key);
-        if (result < 0) {
-            return left.find(key, comparator);
-        } else if (result > 0) {
-            return right.find(key, comparator);
-        } else {
-            return this;
-        }
-    }
-
-    @Override
-    public @NonNull RedBlackTree<K, V> ceiling(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
-        if (result < 0) {
-            return left.ceiling(value, comparator);
-        } else if (result > 0) {
-            return right.ceiling(value, comparator).orElse(this);
-        } else {
-            return this;
-        }
-    }
-
-    @Override
-    public @NonNull RedBlackTree<K, V> floor(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
-        if (result < 0) {
-            return left.floor(value, comparator).orElse(this);
-        } else if (result > 0) {
-            return right.floor(value, comparator);
-        } else {
-            return this;
-        }
-    }
-
-    @Override
-    public @NonNull RedBlackTree<K, V> higher(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
-        if (result < 0) {
-            return left.higher(value, comparator);
-        } else if (result > 0) {
-            return right.higher(value, comparator).orElse(this);
-        } else {
-            return right.higher(value, comparator);
-        }
-    }
-
-    @Override
-    public @NonNull RedBlackTree<K, V> lower(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
-        if (result < 0) {
-            return left.lower(value, comparator).orElse(this);
-        } else if (result > 0) {
-            return right.lower(value, comparator);
-        } else {
-            return left.lower(value, comparator);
-        }
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return false;
-    }
-
-    @Override
-    public RedBlackTree<K, V> left() {
-        return left;
-    }
-
-    @Override
-    public RedBlackTree<K, V> right() {
-        return right;
-    }
-
-    @Override
-    public int size() {
-        return size;
-    }
-
-    @Override
-    public K getKey() {
-        return key;
-    }
-
-    @Override
-    public V getValue() {
-        return value;
-    }
-
-    Node<K, V> color(boolean color) {
-        return (this.color == color) ? this : new Node<>(color, blackHeight, left, key, value, right);
-    }
-
-    static <K, V> RedBlackTree<K, V> color(RedBlackTree<K, V> tree, boolean color) {
-        return tree.isEmpty() ? tree : ((Node<K, V>) tree).color(color);
     }
 
     private static <K, V> Node<K, V> balanceLeft(boolean color, int blackHeight, RedBlackTree<K, V> left, K key,
@@ -289,6 +118,10 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
             }
         }
         return Tuple.of(tree, true);
+    }
+
+    static <K, V> RedBlackTree<K, V> color(RedBlackTree<K, V> tree, boolean color) {
+        return tree.isEmpty() ? tree : ((Node<K, V>) tree).color(color);
     }
 
     static <K, V> Tuple2<? extends RedBlackTree<K, V>, Boolean> delete(RedBlackTree<K, V> tree, K key, Comparator<? super K> comparator) {
@@ -407,14 +240,6 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
         }
     }
 
-    private static boolean isRed(RedBlackTree<?, ?> tree) {
-        return !tree.isEmpty() && ((Node<?, ?>) tree).color == Color.RED;
-    }
-
-    @Override
-    public boolean isRed() {
-        return color == Color.RED;
-    }
 
     static <K, V> RedBlackTree<K, V> join(RedBlackTree<K, V> t1, K key, V value, RedBlackTree<K, V> t2, Comparator<? super K> comparator) {
         if (t1.isEmpty()) {
@@ -451,6 +276,14 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
             final Node<K, V> node = joinLT(n1, key, value, (Node<K, V>) n2.left, h1);
             return Node.balanceLeft(n2.color, n2.blackHeight, node, n2.key, n2.value, n2.right);
         }
+    }
+
+    static <K, V> Node<K, V> maximum(Node<K, V> node) {
+        Node<K, V> curr = node;
+        while (!curr.right.isEmpty()) {
+            curr = (Node<K, V>) curr.right;
+        }
+        return curr;
     }
 
     static <K, V> RedBlackTree<K, V> merge(RedBlackTree<K, V> t1, RedBlackTree<K, V> t2) {
@@ -514,14 +347,6 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
         }
     }
 
-    static <K, V> Node<K, V> maximum(Node<K, V> node) {
-        Node<K, V> curr = node;
-        while (!curr.right.isEmpty()) {
-            curr = (Node<K, V>) curr.right;
-        }
-        return curr;
-    }
-
     static <K, V> Node<K, V> minimum(Node<K, V> node) {
         Node<K, V> curr = node;
         while (!curr.left.isEmpty()) {
@@ -544,6 +369,23 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
                 return Tuple.of(Node.join(Node.color(node.left, Color.BLACK), node.key, node.value, split._1, comparator), split._2);
             } else {
                 return Tuple.of(Node.color(node.left, Color.BLACK), Node.color(node.right, Color.BLACK));
+            }
+        }
+    }
+
+    private static String toLispString(RedBlackTree<?, ?> tree) {
+        if (tree.isEmpty()) {
+            return "";
+        } else {
+            final Node<?, ?> node = (Node<?, ?>) tree;
+            final String value = (node.color ? 'R' : 'B') + ":" + node.key +
+                    (node.value == null ? "" : "=" + node.value);
+            if (node.isLeaf()) {
+                return value;
+            } else {
+                final String left = node.left.isEmpty() ? "" : " " + toLispString(node.left);
+                final String right = node.right.isEmpty() ? "" : " " + toLispString(node.right);
+                return "(" + value + "," + left + "," + right + ")";
             }
         }
     }
@@ -591,10 +433,82 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
+    public @NonNull RedBlackTree<K, V> ceiling(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
+        if (result < 0) {
+            return left.ceiling(value, comparator);
+        } else if (result > 0) {
+            return right.ceiling(value, comparator).orElse(this);
+        } else {
+            return this;
+        }
+    }
+
+    @Override
+    public boolean color() {
+        return color;
+    }
+
+    Node<K, V> color(boolean color) {
+        return (this.color == color) ? this : new Node<>(color, blackHeight, left, key, value, right);
+    }
+
+    @Override
+    public boolean contains(K key, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, key);
+        if (result < 0) {
+            return left.contains(key, comparator);
+        }
+        if (result > 0) {
+            return right.contains(key, comparator);
+        }
+        return true;
+    }
+
+    @Override
+    public Map.@Nullable Entry<K, V> entryOrNull() {
+        return this;
+    }
+
+    @Override
     public boolean equals(Object o) {
         return o instanceof Map.Entry<?, ?> e
                 && Objects.equals(key, e.getKey())
                 && Objects.equals(value, e.getValue());
+    }
+
+    @Override
+    public RedBlackTree<K, V> find(K key, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, key);
+        if (result < 0) {
+            return left.find(key, comparator);
+        } else if (result > 0) {
+            return right.find(key, comparator);
+        } else {
+            return this;
+        }
+    }
+
+    @Override
+    public @NonNull RedBlackTree<K, V> floor(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
+        if (result < 0) {
+            return left.floor(value, comparator).orElse(this);
+        } else if (result > 0) {
+            return right.floor(value, comparator);
+        } else {
+            return this;
+        }
+    }
+
+    @Override
+    public K getKey() {
+        return key;
+    }
+
+    @Override
+    public V getValue() {
+        return value;
     }
 
     @Override
@@ -604,11 +518,91 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
+    public @NonNull RedBlackTree<K, V> higher(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
+        if (result < 0) {
+            return left.higher(value, comparator);
+        } else if (result > 0) {
+            return right.higher(value, comparator).orElse(this);
+        } else {
+            return right.higher(value, comparator);
+        }
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return false;
+    }
+
+    private boolean isLeaf() {
+        return left.isEmpty() && right.isEmpty();
+    }
+
+    @Override
+    public boolean isRed() {
+        return color == Color.RED;
+    }
+
+    @Override
+    public @Nullable K keyOrNull() {
+        return key;
+    }
+
+    @Override
+    public RedBlackTree<K, V> left() {
+        return left;
+    }
+
+    @Override
+    public @NonNull RedBlackTree<K, V> lower(K value, Comparator<? super K> comparator) {
+        final int result = comparator.compare(this.key, value);
+        if (result < 0) {
+            return left.lower(value, comparator).orElse(this);
+        } else if (result > 0) {
+            return right.lower(value, comparator);
+        } else {
+            return left.lower(value, comparator);
+        }
+    }
+
+    @Override
+    public <E> @Nullable E mapOrNull(@NonNull BiFunction<K, V, E> f) {
+        return f.apply(key, value);
+    }
+
+    @Override
+    public RedBlackTree<K, V> orElse(RedBlackTree<K, V> other) {
+        return this;
+    }
+
+    @Override
+    public RedBlackTree<K, V> right() {
+        return right;
+    }
+
+    @Override
     public V setValue(V value) {
         throw new UnsupportedOperationException();
     }
 
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
+    public String toLispString() {
+        return isLeaf() ? "(" + (color ? 'R' : 'B') + ":" + key +
+                (value == null ? "" : "=" + value)
+                + ")" : toLispString(this);
+    }
+
     public String toString() {
         return key + "=" + value;
+    }
+
+    @Override
+    public @Nullable V valueOrNull() {
+        return value;
     }
 }

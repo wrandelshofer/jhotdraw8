@@ -54,8 +54,8 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * specified comparator.
      *
      * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     * @param c   an iterable
-     * @param <E> the element type
+     * @param c          an iterable
+     * @param <E>        the element type
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
@@ -87,7 +87,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * specified comparator.
      *
      * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     * @param <E> the element type
+     * @param <E>        the element type
      * @return an empty immutable set
      */
     public static <E> @NonNull RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator) {
@@ -100,8 +100,8 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * specified comparator.
      *
      * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
-     * @param elements elements
-     * @param <E>      the element type
+     * @param elements   elements
+     * @param <E>        the element type
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings({"varargs"})
@@ -258,6 +258,12 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public @NonNull RedBlackSet<E> retainAll(@NonNull Iterable<?> c) {
+        /*
+        if (c instanceof RedBlackSet<?> that && Objects.equals(that.comparator, comparator)) {
+            @SuppressWarnings("unchecked")
+            RedBlackTree<E, Void> newRoot = root.intersection((RedBlackTree<E, Void>) that.root, comparator);
+            return newRoot.size() == root.size() ? this : new RedBlackSet<>(comparator, newRoot);
+        }*/
         return (RedBlackSet<E>) ImmutableNavigableSet.super.retainAll(c);
     }
 
