@@ -6,21 +6,15 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.collection.primitive.ByteArrayList;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.collection.primitive.IntArrayList;
 
 import java.awt.geom.PathIterator;
 import java.util.DoubleSummaryStatistics;
 
-public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
-    private final ByteArrayList commands = new ByteArrayList();
-    private final IntArrayList offsets = new IntArrayList();
-
-    private final DoubleArrayList coords = new DoubleArrayList();
-    private final double[] temp = new double[8];
+public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     private final DoubleArrayList lengths = new DoubleArrayList();
     private final DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
+    private final double epsilon = 0.125;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
     private static final byte SEG_MOVETO = (int) PathIterator.SEG_MOVETO;
@@ -28,18 +22,8 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
     private static final byte SEG_QUADTO = (int) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
-    private int windingRule = PathIterator.WIND_EVEN_ODD;
-    private final double epsilon = 0.125;
 
     public PathMetricsBuilder() {
-    }
-
-    public int getWindingRule() {
-        return windingRule;
-    }
-
-    public void setWindingRule(int windingRule) {
-        this.windingRule = windingRule;
     }
 
     @Override
@@ -51,7 +35,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
             // Add a missing SEG_LINETO if necessary
             double length = Points.distance(lastMoveToX, lastMoveToY, getLastX(), getLastY());
-            if (length > 0) {
+            if (length > epsilon) {
                 commands.addAsByte(SEG_LINETO);
                 offsets.addAsInt(coords.size());
                 coords.addAsDouble(lastMoveToX);
@@ -82,7 +66,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         temp[6] = x;
         temp[7] = y;
         double arcLength = CubicCurves.arcLength(temp, 0, epsilon);
-        if (arcLength > 0) {
+        if (arcLength > epsilon) {
             commands.addAsByte(SEG_CUBICTO);
             offsets.addAsInt(coords.size());
             coords.addAsDouble(x1);
@@ -99,7 +83,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
     @Override
     protected void doLineTo(double x, double y) {
         double length = Points.distance(getLastX(), getLastY(), x, y);
-        if (length > 0) {
+        if (length > epsilon) {
             commands.addAsByte(SEG_LINETO);
             offsets.addAsInt(coords.size());
             coords.addAsDouble(x);
@@ -111,11 +95,11 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
 
     @Override
     protected void doMoveTo(double x, double y) {
-            commands.addAsByte(SEG_MOVETO);
+        commands.addAsByte(SEG_MOVETO);
         offsets.addAsInt(coords.size());
-            coords.addAsDouble(x);
-            coords.addAsDouble(y);
-            lengths.addAsDouble(acc.getSum());
+        coords.addAsDouble(x);
+        coords.addAsDouble(y);
+        lengths.addAsDouble(acc.getSum());
     }
 
     @Override
@@ -127,7 +111,7 @@ public class PathMetricsBuilder extends AbstractPathBuilder<PathMetrics> {
         temp[4] = x;
         temp[5] = y;
         double arcLength = QuadCurves.arcLength(temp, 0);
-        if (arcLength > 0) {
+        if (arcLength > epsilon) {
             commands.addAsByte(SEG_QUADTO);
             offsets.addAsInt(coords.size());
             coords.addAsDouble(x1);

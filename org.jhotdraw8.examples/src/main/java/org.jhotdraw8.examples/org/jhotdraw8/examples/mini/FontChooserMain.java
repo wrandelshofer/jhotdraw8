@@ -9,11 +9,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcontrols.fontchooser.FontDialog;
+import org.jhotdraw8.fxcontrols.fontchooser.FontFamilyDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
 
 /**
@@ -25,23 +27,40 @@ public class FontChooserMain extends Application {
 
     @Override
     public void start(@NonNull Stage primaryStage) {
-        FontDialog fd = new FontDialog();
-        Button btn = new Button();
-        btn.setText("Open FontChooser");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
+        Label fontChooserLabel = new Label();
+        Button fontChooserButton = new Button();
+        fontChooserButton.setText("Open FontChooser");
+        fontChooserButton.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
             public void handle(ActionEvent event) {
+                FontDialog fd = new FontDialog();
                 FontFamilySize fontName = fd.showAndWait().orElse(null);
                 if (fontName != null) {
-                    btn.setText(fontName.getFamily() + " " + fontName.getSize());
-                    btn.setFont(new Font(fontName.getFamily(), fontName.getSize()));
+                    fontChooserLabel.setText(fontName.getFamily() + " " + fontName.getSize());
+                    fontChooserLabel.setFont(new Font(fontName.getFamily(), fontName.getSize()));
                 }
             }
         });
 
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
+        Label fontFamilyLabel = new Label();
+        Button fontFamilyChooserButton = new Button();
+        fontFamilyChooserButton.setText("Open FontFamilyChooser");
+        fontFamilyChooserButton.setOnAction(new EventHandler<ActionEvent>() {
+
+            @Override
+            public void handle(ActionEvent event) {
+                FontFamilyDialog fd = new FontFamilyDialog();
+                String fontFamily = fd.showAndWait().orElse(null);
+                if (fontFamily != null) {
+                    fontFamilyLabel.setText(fontFamily);
+                    fontFamilyLabel.setFont(new Font(fontFamily, 13f));
+                }
+            }
+        });
+
+        VBox root = new VBox();
+        root.getChildren().addAll(fontChooserLabel, fontChooserButton, fontFamilyLabel, fontFamilyChooserButton);
 
         Scene scene = new Scene(root, 300, 250);
 

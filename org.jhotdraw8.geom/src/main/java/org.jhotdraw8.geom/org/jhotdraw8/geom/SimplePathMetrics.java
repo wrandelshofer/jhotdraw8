@@ -13,9 +13,7 @@ import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
 
@@ -43,7 +41,7 @@ import static java.lang.Double.isNaN;
  *     of the last segment of the closed path.</li>
  * </ul>
  */
-public class SimplePathMetrics implements Shape, PathMetrics {
+public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     private final byte @NonNull [] commands;
     private final int @NonNull [] offsets;
     private final double @NonNull [] coords;
@@ -350,50 +348,7 @@ public class SimplePathMetrics implements Shape, PathMetrics {
         return false;
     }
 
-    /**
-     * See {@link #contains(double, double)}.
-     *
-     * @param p the specified {@code Point2D}
-     * @return true if this shape contains p
-     */
-    @Override
-    public boolean contains(Point2D p) {
-        return contains(p.getX(), p.getY());
-    }
 
-    /**
-     * This implementation checks if the bounding box
-     * of this shape intersects with the specified rectangle.
-     *
-     * @param x the X coordinate of the upper-left corner
-     *          of the specified rectangular area
-     * @param y the Y coordinate of the upper-left corner
-     *          of the specified rectangular area
-     * @param w the width of the specified rectangular area
-     * @param h the height of the specified rectangular area
-     * @return true if the interior of the bounding box of this shape intersects
-     * with the interior of the specified rectangle.
-     */
-    @Override
-    public boolean intersects(double x, double y, double w, double h) {
-        if (isNaN(x + w) || isNaN(y + h) || w <= 0 || h <= 0
-                || !(maxx >= x) || !(x + w >= minx) || !(maxy >= y) || !(y + h >= miny)) {
-            return false;
-        }
-        // FIXME implement me
-        return true;
-    }
-
-    /**
-     * See {@link #intersects(double, double, double, double)}.
-     *
-     * @param r the specified {@code Rectangle2D}
-     * @return true if this shape intersects with r
-     */
-    @Override
-    public boolean intersects(@NonNull Rectangle2D r) {
-        return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-    }
 
     /**
      * This implementation checks if the bounding box
@@ -720,11 +675,5 @@ public class SimplePathMetrics implements Shape, PathMetrics {
                 return commands[current];
             }
         };
-    }
-
-
-    @Override
-    public PathIterator getPathIterator(@Nullable AffineTransform at, double flatness) {
-        return new FlatteningPathIterator(getPathIterator(at), flatness);
     }
 }

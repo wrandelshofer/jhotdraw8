@@ -43,6 +43,7 @@ public class IntersectPathIteratorPoint {
      * @return the intersection
      */
     public static @NonNull IntersectionResult intersectPathIteratorPoint(@NonNull PathIterator pit, double px, double py, double tolerance) {
+        // FIXME we must take the winding rule into account!
         List<IntersectionPoint> lineIntersections = new ArrayList<>();
         List<IntersectionPoint> insideIntersections = new ArrayList<>();
         final double[] seg = new double[6];
