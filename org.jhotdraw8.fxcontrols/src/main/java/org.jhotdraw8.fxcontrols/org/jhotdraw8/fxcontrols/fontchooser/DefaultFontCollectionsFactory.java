@@ -132,6 +132,15 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
         // Serif fonts
         collections.add(
                 new FontCollection(labels.getString("FontCollection.serif"), collectFamiliesNamed(families,
+                        //
+                        // Fonts on Mac OS X 10.10:
+                        "Bodoni 72",
+                        "Bodoni 72 Oldstyle",
+                        "Bodoni 72 Smallcaps",
+                        //
+                        // Fonts on Mac OS X 10.6:
+                        "Didot",
+                        //
                         // Fonts on Mac OS X 10.5:
                         "Adobe Caslon Pro",
                         "Adobe Garamond Pro",
@@ -164,13 +173,24 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
                         "Times",
                         "Times New Roman",
                         //
-                        // Fonts on Mac OS X 10.6:
-                        "Didot",
-                        //
-                        // Fonts on Mac OS X 10.10:
-                        "Bodoni 72",
-                        "Bodoni 72 Oldstyle",
-                        "Bodoni 72 Smallcaps",
+                        // Fonts on Windows Vista
+                        "Andalus",
+                        "Angsana New",
+                        "AngsanaUPC",
+                        "Arabic Typesetting",
+                        "Cambria",
+                        "Cambria Math",
+                        "Constantia",
+                        "DaunPenh",
+                        "David",
+                        "DilleniaUPC",
+                        "EucrosiaUPC",
+                        "Frank Ruehl",
+                        "IrisUPC",
+                        "Iskoola Pota",
+                        "JasmineUPC",
+                        "KodchiangUPC",
+                        "Narkisim",
                         //
                         // Fonts on Windows XP:
                         "Palatino Linotype",
@@ -194,28 +214,16 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
                         "Slimbach-BookItalic",
                         "Slimbach-Medium",
                         "Slimbach-MediumItalic",
-                        "Sylfaen",
-                        // Fonts on Windows Vista
-                        "Andalus",
-                        "Angsana New",
-                        "AngsanaUPC",
-                        "Arabic Typesetting",
-                        "Cambria",
-                        "Cambria Math",
-                        "Constantia",
-                        "DaunPenh",
-                        "David",
-                        "DilleniaUPC",
-                        "EucrosiaUPC",
-                        "Frank Ruehl",
-                        "IrisUPC",
-                        "Iskoola Pota",
-                        "JasmineUPC",
-                        "KodchiangUPC",
-                        "Narkisim")));
+                        "Sylfaen"
+                )));
         // Sans Serif
         collections.add(
                 new FontCollection(labels.getString("FontCollection.sansSerif"), collectFamiliesNamed(families,
+                        //
+                        // Fonts on Mac OS X 10.6:
+                        "Charcoal",
+                        "Euphemia UCAS",
+
                         // Fonts on Mac OS X 10.5:
                         "Abadi MT Condensed Extra Bold",
                         "Abadi MT Condensed Light",
@@ -244,36 +252,8 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
                         "Trebuchet MS",
                         "Verdana",
                         //
-                        // Fonts on Mac OS X 10.6:
-                        "Charcoal",
-                        "Euphemia UCAS",
-                        //
-                        // Fonts on Windows XP:
-                        "Franklin Gothic Medium",
-                        "Lucida Sans Unicode",
-                        "Agency FB",
-                        "Berlin Sans FB",
-                        "Berlin Sans FB Demi Bold",
-                        "Bitstream Vera Sans Bold",
-                        "Corbel",
-                        "Estrangelo Edessa",
-                        "Eras Bold ITC",
-                        "Eras Demi ITC",
-                        "Eras Light ITC",
-                        "Eras Medium ITC",
-                        "Franklin Gothic Book",
-                        "Franklin Gothic Demi",
-                        "Franklin Gothic Demi Cond",
-                        "Franklin Gothic Heavy",
-                        "Franklin Gothic Medium Cond",
-                        "Gill Sans MT",
-                        "Gill Sans MT Condensed",
-                        "Gill Sans MT Ext Condensed Bold",
-                        "Maiandra GD",
-                        "MS Reference Sans...",
-                        "Tw Cen MT",
-                        "Tw Cen MT Condensed",
-                        "Tw Cen MT Condensed Extra Bold",
+                        // Fonts on Windows 10
+                        "Bahnschrift",
                         //
                         // Fonts on Windows Vista:
                         "Aharoni",
@@ -298,7 +278,35 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
                         "Malgun Gothic",
                         "Meiryo",
                         "Miriam",
-                        "Segoe UI")));
+                        "Segoe UI",
+                        //
+                        // Fonts on Windows XP:
+                        "Agency FB",
+                        "Berlin Sans FB Demi Bold",
+                        "Berlin Sans FB",
+                        "Bitstream Vera Sans Bold",
+                        "Corbel",
+                        "Eras Bold ITC",
+                        "Eras Demi ITC",
+                        "Eras Light ITC",
+                        "Eras Medium ITC",
+                        "Estrangelo Edessa",
+                        "Franklin Gothic Book",
+                        "Franklin Gothic Demi Cond",
+                        "Franklin Gothic Demi",
+                        "Franklin Gothic Heavy",
+                        "Franklin Gothic Medium Cond",
+                        "Franklin Gothic Medium",
+                        "Gill Sans MT Condensed",
+                        "Gill Sans MT Ext Condensed Bold",
+                        "Gill Sans MT",
+                        "Lucida Sans Unicode",
+                        "MS Reference Sans",
+                        "Maiandra GD",
+                        "Tw Cen MT Condensed Extra Bold",
+                        "Tw Cen MT Condensed",
+                        "Tw Cen MT"
+                )));
 
         // Scripts
         collections.add(
@@ -349,6 +357,13 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
                         "Noteworthy",
                         "Trattatello",
                         //
+                        // Fonts on Windows 10
+                        "Ink Free",
+                        //
+                        // Fonts on Windows Vista
+                        "Segoe Print",
+                        "Segoe Script",
+                        //
                         // Fonts on Windows XP:
                         "Blackadder ITC",
                         "Bradley Hand ITC",
@@ -373,10 +388,8 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
                         "Tempus Sans ITC",
                         "Viner Hand ITC",
                         "Vivaldi Italic",
-                        "Vladimir Script",
-                        // Fonts on Windows Vista
-                        "Segoe Print",
-                        "Segoe Script")));
+                        "Vladimir Script"
+                )));
 
         // Monospaced
         collections.add(
@@ -405,7 +418,8 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
                         "Consolas",
                         "DotumChe",
                         "Miriam Fixed",
-                        "Rod")));
+                        "Rod"
+                )));
 
         // Decorative
         collections.add(
