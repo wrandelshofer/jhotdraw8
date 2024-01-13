@@ -26,10 +26,21 @@ import java.util.concurrent.TimeUnit;
  * without specialized retainAll method
  *
  * Benchmark                                               (mask)  (size)  Mode  Cnt         Score   Error  Units
- * RedBlackSetJmh.mRetainAllFromDifferentTypeAllRetained      -65  100000  avgt    2   7353669.089          ns/op
- * RedBlackSetJmh.mRetainAllFromDifferentTypeNoneRetained     -65  100000  avgt    2  27777996.572          ns/op
- * RedBlackSetJmh.mRetainAllFromSameTypeAllRetained           -65  100000  avgt    2  14141515.643          ns/op
- * RedBlackSetJmh.mRetainAllFromSameTypeNoneRetained          -65  100000  avgt    2  31879471.313          ns/op
+ * RedBlackSetJmh.mContainsFound                              -65  100000  avgt    2       259.198          ns/op
+ * RedBlackSetJmh.mContainsNotFound                           -65  100000  avgt    2       255.548          ns/op
+ * RedBlackSetJmh.mCopyOf                                     -65  100000  avgt    2  51774003.130          ns/op
+ * RedBlackSetJmh.mCopyOnyByOne                               -65  100000  avgt    2  51899354.844          ns/op
+ * RedBlackSetJmh.mHead                                       -65  100000  avgt    2        97.218          ns/op
+ * RedBlackSetJmh.mIterate                                    -65  100000  avgt    2   1324875.033          ns/op
+ * RedBlackSetJmh.mRemoveAllFromDifferentType                 -65  100000  avgt    2  62601911.900          ns/op
+ * RedBlackSetJmh.mRemoveAllFromSameType                      -65  100000  avgt    2  29508201.168          ns/op
+ * RedBlackSetJmh.mRemoveOneByOne                             -65  100000  avgt    2  65430328.871          ns/op
+ * RedBlackSetJmh.mRemoveThenAdd                              -65  100000  avgt    2       980.659          ns/op
+ * RedBlackSetJmh.mRetainAllFromDifferentTypeAllRetained      -65  100000  avgt    2   4899701.739          ns/op
+ * RedBlackSetJmh.mRetainAllFromDifferentTypeNoneRetained     -65  100000  avgt    2  36681930.828          ns/op
+ * RedBlackSetJmh.mRetainAllFromSameTypeAllRetained           -65  100000  avgt    2  13563797.557          ns/op
+ * RedBlackSetJmh.mRetainAllFromSameTypeNoneRetained          -65  100000  avgt    2  41174937.247          ns/op
+ * RedBlackSetJmh.mTail                                       -65  100000  avgt    2       309.179          ns/op
  * </pre>
  * <pre>
  * with speciaized retainAll method
@@ -55,7 +66,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)
-@Fork(value = 1, jvmArgsAppend = {"-ea", "-Xmx128g",})
+@Fork(value = 1, jvmArgsAppend = {"-Xmx15g",})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class RedBlackSetJmh {
@@ -81,9 +92,8 @@ public class RedBlackSetJmh {
         assert setAA.size() == size;
     }
 
-    /*
 
-            @Benchmark
+    @Benchmark
             public RedBlackSet<Key> mCopyOf() {
                 RedBlackSet<Key> set = RedBlackSet.copyOf(data.listA);
                 assert set.size() == data.listA.size();
@@ -127,7 +137,7 @@ public class RedBlackSetJmh {
                 return updated;
             }
 
-    */
+
     @Benchmark
     public RedBlackSet<Key> mRetainAllFromDifferentTypeAllRetained() {
         RedBlackSet<Key> set = setA;
@@ -160,7 +170,7 @@ public class RedBlackSetJmh {
         assert updated.isEmpty();
         return updated;
     }
-/*
+
     @Benchmark
     public int mIterate() {
         int sum = 0;
@@ -199,5 +209,5 @@ public class RedBlackSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
-*/
+
 }

@@ -47,7 +47,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     static <K, V> RedBlackTree<K, V> of(@NonNull Comparator<? super K> comparator, K key, V value) {
         Objects.requireNonNull(comparator, "comparator is null");
         final Empty<K, V> empty = Empty.empty();
-        return new Node<>(Color.BLACK, 1, empty, key, value, empty);
+        return new Node<>(Color.BLACK, empty, key, value, empty);
     }
 
     @SafeVarargs
@@ -122,16 +122,6 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
         return tree.size() == this.size() ? this : Node.color(tree, Color.BLACK);
     }
 
-    default RedBlackTree<K, V> difference(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
-        Objects.requireNonNull(tree, "tree is null");
-        if (isEmpty() || tree.isEmpty()) {
-            return this;
-        } else {
-            final Node<K, V> that = (Node<K, V>) tree;
-            final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(this, that.key, that.value, comparator);
-            return Node.merge(split._1.difference(that.left, comparator), split._2.difference(that.right, comparator));
-        }
-    }
 
 
     /**
@@ -147,22 +137,6 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      */
     RedBlackTree<K, V> find(K key, Comparator<? super K> comparator);
 
-    default RedBlackTree<K, V> intersection(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
-        Objects.requireNonNull(tree, "tree is null");
-        if (isEmpty()) {
-            return this;
-        } else if (tree.isEmpty()) {
-            return tree;
-        } else {
-            final Node<K, V> that = (Node<K, V>) tree;
-            final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(this, that.key, that.value, comparator);
-            if (contains(that.key, comparator)) {
-                return Node.join(split._1.intersection(that.left, comparator), that.key, that.value, split._2.intersection(that.right, comparator), comparator);
-            } else {
-                return Node.merge(split._1.intersection(that.left, comparator), split._2.intersection(that.right, comparator));
-            }
-        }
-    }
 
     /**
      * Checks if this {@code RedBlackTree} is empty, i.e. an instance of {@code Leaf}.
@@ -212,18 +186,6 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      */
     int size();
 
-    /**
-     * Adds all the elements of the given {@code tree} to this tree, if not already present.
-     *
-     * @param tree       The RedBlackTree to form the union with.
-     * @param comparator
-     * @return the same RedBlackTree, if it already contains all elements of the given {@code tree},
-     * otherwise a new RedBlackTree
-     */
-    default RedBlackTree<K, V> addAll(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
-        RedBlackTree<K, V> newTree = union(tree, comparator);
-        return newTree.size() == this.size() ? this : newTree;
-    }
 
     /**
      * Adds all the elements of the given {@code tree} to this tree, if not already present.
@@ -232,24 +194,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      * @param comparator
      * @return A new RedBlackTree that contains all distinct elements of this and the given {@code tree}.
      */
-    default RedBlackTree<K, V> union(@NonNull RedBlackTree<K, V> tree, @NonNull Comparator<? super K> comparator) {
-        Objects.requireNonNull(tree, "tree is null");
-        if (tree.isEmpty()) {
-            return this;
-        } else {
-            final Node<K, V> that = (Node<K, V>) tree;
-            if (isEmpty()) {
-                return that.color(Color.BLACK);
-            } else {
-                final Tuple2<RedBlackTree<K, V>, RedBlackTree<K, V>> split = Node.split(this, that.key, that.value, comparator);
-                return Node.join(
-                        split._1.union(that.left, comparator),
-                        that.key, that.value,
-                        split._2.union(that.right, comparator),
-                        comparator);
-            }
-        }
-    }
+
 
     /**
      * Returns true if the given tree has the same size and the same elements in the same sequence as this tree.

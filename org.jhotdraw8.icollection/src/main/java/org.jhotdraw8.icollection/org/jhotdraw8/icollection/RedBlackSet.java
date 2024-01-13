@@ -156,13 +156,6 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull RedBlackSet<E> addAll(@NonNull Iterable<? extends E> c) {
-        if (c instanceof MutableRedBlackSet<? extends E> m) {
-            c = m.toImmutable();
-        }
-        if (c instanceof RedBlackSet<? extends E> that && that.comparator == this.comparator) {
-            RedBlackTree<E, Void> newRoot = root.addAll((RedBlackTree<E, Void>) that.root, comparator);
-            return newRoot.size() == root.size() ? this : new RedBlackSet<>(comparator, newRoot);
-        }
         return (RedBlackSet<E>) ImmutableNavigableSet.super.addAll(c);
     }
 
@@ -258,12 +251,6 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public @NonNull RedBlackSet<E> retainAll(@NonNull Iterable<?> c) {
-        /*
-        if (c instanceof RedBlackSet<?> that && Objects.equals(that.comparator, comparator)) {
-            @SuppressWarnings("unchecked")
-            RedBlackTree<E, Void> newRoot = root.intersection((RedBlackTree<E, Void>) that.root, comparator);
-            return newRoot.size() == root.size() ? this : new RedBlackSet<>(comparator, newRoot);
-        }*/
         return (RedBlackSet<E>) ImmutableNavigableSet.super.retainAll(c);
     }
 

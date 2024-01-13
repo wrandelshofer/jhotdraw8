@@ -121,40 +121,9 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return false;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public boolean addAll(@NonNull Collection<? extends E> c) {
-        if (c instanceof MutableRedBlackSet<? extends E> r && r.comparator == this.comparator) {
-            RedBlackTree<E, Void> newRoot = root.addAll((RedBlackTree<E, Void>) r.root, comparator);
-            if (newRoot.size() != root.size()) {
-                root = newRoot;
-                modCount++;
-                return true;
-            }
-            return false;
-        }
-        return super.addAll(c);
-    }
 
     @SuppressWarnings("unchecked")
     public boolean addAll(@NonNull Iterable<? extends E> c) {
-        if (c instanceof MutableRedBlackSet<?> m) {
-            c = (Iterable<? extends E>) m.toImmutable();
-        }
-        if (isEmpty() && (c instanceof RedBlackSet<?> cc && cc.comparator == this.comparator)) {
-            root = (RedBlackTree<E, Void>) cc.root;
-            modCount++;
-            return true;
-        }
-        if (c instanceof RedBlackSet<?> that && that.comparator == this.comparator) {
-            RedBlackTree<E, Void> newRoot = root.addAll((RedBlackTree<E, Void>) that.root, comparator);
-            if (newRoot.size() != root.size()) {
-                this.root = newRoot;
-                modCount++;
-                return true;
-            }
-            return false;
-        }
         boolean modified = false;
         for (E e : c)
             if (add(e))

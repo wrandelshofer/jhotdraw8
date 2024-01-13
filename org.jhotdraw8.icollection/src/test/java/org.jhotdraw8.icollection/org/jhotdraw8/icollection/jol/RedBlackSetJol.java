@@ -2,7 +2,6 @@ package org.jhotdraw8.icollection.jol;
 
 import org.jhotdraw8.icollection.RedBlackSet;
 import org.jhotdraw8.icollection.jmh.Key;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -16,24 +15,24 @@ public class RedBlackSetJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.RedBlackSet with 1000 elements.
-     * total size              : 64056
+     * total size              : 56056
      * element size            : 24
-     * data size               : 24000 37%
-     * data structure size     : 40056 62%
-     * overhead per element    : 40.056 bytes
+     * data size               : 24000 42%
+     * data structure size     : 32056 57%
+     * overhead per element    : 32.056 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.RedBlackSet@4ebff610d footprint:
+     * org.jhotdraw8.icollection.RedBlackSet@67304a40d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *          1        16        16   org.jhotdraw8.icollection.NaturalComparator
      *          1        24        24   org.jhotdraw8.icollection.RedBlackSet
      *          1        16        16   org.jhotdraw8.icollection.impl.redblack.Empty
-     *       1000        40     40000   org.jhotdraw8.icollection.impl.redblack.Node
+     *       1000        32     32000   org.jhotdraw8.icollection.impl.redblack.Node
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
-     *       2003               64056   (total)
+     *       2003               56056   (total)
      * </pre>
      */
     @Test
-    @Disabled
+    //@Disabled
     public void estimateMemoryUsage() {
         int size = 1_000;
         final int mask = -1;//~64;
@@ -45,24 +44,24 @@ public class RedBlackSetJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.RedBlackSet with 250 elements.
-     * total size              : 16056
+     * total size              : 14056
      * element size            : 24
-     * data size               : 6000 37%
-     * data structure size     : 10056 62%
-     * overhead per element    : 40.224 bytes
+     * data size               : 6000 42%
+     * data structure size     : 8056 57%
+     * overhead per element    : 32.224 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.RedBlackSet@95e33ccd footprint:
+     * org.jhotdraw8.icollection.RedBlackSet@f107c50d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *          1        16        16   org.jhotdraw8.icollection.NaturalComparator
      *          1        24        24   org.jhotdraw8.icollection.RedBlackSet
      *          1        16        16   org.jhotdraw8.icollection.impl.redblack.Empty
-     *        250        40     10000   org.jhotdraw8.icollection.impl.redblack.Node
+     *        250        32      8000   org.jhotdraw8.icollection.impl.redblack.Node
      *        250        24      6000   org.jhotdraw8.icollection.jmh.Key
-     *        503               16056   (total)
+     *        503               14056   (total)
      * </pre>
      */
     @Test
-    @Disabled
+    // @Disabled
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1_000;
         final int mask = ~64;

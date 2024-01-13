@@ -40,7 +40,7 @@ import java.util.concurrent.TimeUnit;
 @State(Scope.Benchmark)
 @Measurement(iterations = 2)
 @Warmup(iterations = 2)
-@Fork(value = 1, jvmArgsAppend = {"-Xmx28g"})
+@Fork(value = 1, jvmArgsAppend = {"-Xmx15g"})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampMap2Jmh {
