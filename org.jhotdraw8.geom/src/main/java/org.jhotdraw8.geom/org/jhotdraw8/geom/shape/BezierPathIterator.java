@@ -1,5 +1,5 @@
 /*
- * @(#)BezierNodePathIterator.java
+ * @(#)BezierPathIterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.shape;
@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * BezierNodePathIterator.
+ * BezierPathIterator.
  *
  * @author Werner Randelshofer
  */
-public class BezierNodePathIterator implements PathIterator {
+public class BezierPathIterator implements PathIterator {
 
     private final @NonNull List<BezierNode> nodes;
     private int index;
@@ -26,7 +26,7 @@ public class BezierNodePathIterator implements PathIterator {
 
     private final static BezierNode CLOSE_PATH = new BezierNode(0, 0);
 
-    public BezierNodePathIterator(@NonNull List<BezierNode> nodes, int windingRule, AffineTransform affine) {
+    public BezierPathIterator(@NonNull Iterable<BezierNode> nodes, int windingRule, AffineTransform affine) {
         // We patch the list of bezier nodes, to make the iteration methods simpler.
         this.nodes = new ArrayList<BezierNode>();
         boolean needsMoveTo = true;

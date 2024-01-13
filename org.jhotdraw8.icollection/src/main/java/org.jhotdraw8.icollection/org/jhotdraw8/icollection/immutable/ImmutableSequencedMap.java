@@ -100,4 +100,19 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
 
     @Override
     @NonNull Map<K, V> toMutable();
+
+    /**
+     * Returns a reversed copy of this map.
+     * <p>
+     * This operation may be implemented in O(N).
+     * <p>
+     * Use {@link #readOnlyReversed()} if you only
+     * need to iterate in the reversed sequence over this set.
+     *
+     * @return a reversed copy of this set.
+     */
+    default @NonNull ImmutableSequencedMap<K, V> reverse() {
+        if (size() < 2) return this;
+        return clear().putAll(readOnlyReversed());
+    }
 }

@@ -18,13 +18,13 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
+import org.jhotdraw8.draw.key.BezierPathStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.BezierFit;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.geom.shape.BezierPath;
+import org.jhotdraw8.geom.shape.BezierPathBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,21 +44,21 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
      */
     private int dragStartIndex;
 
-    private final BezierNodeListStyleableKey key;
+    private final BezierPathStyleableKey key;
     /**
      * The bezier nodes being created.
      */
-    private @Nullable ArrayList<BezierNode> points;
+    private @Nullable BezierPath path;
     /**
      * The rubber band shows where the next point will be added.
      */
     private final @NonNull Line rubberBand = new Line();
 
-    public BezierCreationTool(String name, Resources rsrc, BezierNodeListStyleableKey key, Supplier<Figure> factory) {
+    public BezierCreationTool(String name, Resources rsrc, BezierPathStyleableKey key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);
     }
 
-    public BezierCreationTool(String name, Resources rsrc, BezierNodeListStyleableKey key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
+    public BezierCreationTool(String name, Resources rsrc, BezierPathStyleableKey key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc, figureFactory, layerFactory);
         this.key = key;
         node.setCursor(Cursor.CROSSHAIR);
@@ -84,22 +84,22 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (event.getClickCount() > 1) {
             if (createdFigure != null) {
-                for (int i = points.size() - 1; i > 0; i--) {
-                    if (Objects.equals(points.get(i), points.get(i - 1))) {
-                        points.remove(i);
+                for (int i = path.size() - 1; i > 0; i--) {
+                    if (Objects.equals(path.get(i), path.get(i - 1))) {
+                        path = path.removeAt(i);
                     }
                 }
                 DrawingModel dm = dv.getModel();
-                if (points.size() < 2) {
+                if (path.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, VectorList.copyOf(points));
+                    dm.set(createdFigure, key, path);
                     dv.getSelectedFigures().clear();
                     dv.getEditor().setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);
                 }
                 createdFigure = null;
-                points = null;
+                path = null;
                 fireToolDone();
             }
         }
@@ -107,25 +107,25 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (createdFigure != null && points != null) {
+        if (createdFigure != null && path != null) {
             double x2 = event.getX();
             double y2 = event.getY();
             Point2D c2 = createdFigure.worldToParent(dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
             if (dragStartIndex < 0) {
-                points.add(new BezierNode(c2));
-                dragStartIndex = points.size() - 1;
+                path = path.add(new BezierNode(c2));
+                dragStartIndex = path.size() - 1;
             } else {
-                points.add(new BezierNode(c2));
+                path = path.add(new BezierNode(c2));
             }
-            dm.set(createdFigure, key, VectorList.copyOf(points));
+            dm.set(createdFigure, key, path);
         }
         event.consume();
     }
 
     @Override
     protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (createdFigure != null && points != null) {
+        if (createdFigure != null && path != null) {
             /*
             dragStartIndex = -1;
             double x2 = event.getX();
@@ -135,8 +135,8 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             points.set(points.size() - 1, new BezierNode(c2));
             dm.set(createdFigure, key, ImmutableList.ofCollection(points));
              */
-            if (!points.isEmpty()) {
-                BezierNode lastNode = points.get(points.size() - 1);
+            if (!path.isEmpty()) {
+                BezierNode lastNode = path.get(path.size() - 1);
                 Point2D start = FXTransforms.transform(FXTransforms.concat(dv.getWorldToView(), createdFigure.getLocalToWorld()), lastNode.getX0(), lastNode.getY0());
                 rubberBand.setStartX(start.getX());
                 rubberBand.setStartY(start.getY());
@@ -162,20 +162,20 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             Figure parent = createdFigure == null ? null : getOrCreateParent(view, createdFigure);
             if (parent == null) {
                 createdFigure = null;
-                points = null;
+                path = null;
                 return;
             }
-            points = new ArrayList<>();
+            path = BezierPath.of();
             view.setActiveParent(parent);
 
             dm.addChildTo(createdFigure, parent);
 
         }
-        assert points != null;
+        assert path != null;
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(
                 createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1)))));
-        points.add(new BezierNode(c.getConvertedValue()));
-        dm.set(createdFigure, key, VectorList.copyOf(points));
+        path = path.add(new BezierNode(c.getConvertedValue()));
+        dm.set(createdFigure, key, path);
 
         rubberBand.setVisible(false);
         dragStartIndex = -1;
@@ -184,35 +184,36 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (createdFigure == null || points == null) {
+        if (createdFigure == null || path == null) {
             return;
         }
         if (dragStartIndex != -1) {
-            List<Point2D> digitized = new ArrayList<>(points.size() - dragStartIndex);
-            for (int i = dragStartIndex, n = points.size(); i < n; i++) {
-                digitized.add(points.get(i).getC0());
+            List<Point2D> digitized = new ArrayList<>(path.size() - dragStartIndex);
+            for (int i = dragStartIndex, n = path.size(); i < n; i++) {
+                digitized.add(path.get(i).getC0());
             }
-            BezierNodePathBuilder builder = new BezierNodePathBuilder();
+            BezierPathBuilder builder = new BezierPathBuilder();
             double error = 5 / dv.getZoomFactor();
             BezierFit.fitBezierPath(builder, digitized, error);
-            final List<BezierNode> built = builder.build().getNodes();
-            ArrayList<BezierNode> newList = new ArrayList<>(dragStartIndex + built.size());
+            BezierPath built = builder.build();
+
+            BezierPath newList = BezierPath.of();
             for (int i = 0; i < dragStartIndex; i++) {
-                newList.add(points.get(i));
+                newList = newList.add(path.get(i));
             }
 
             for (int i = 0, n = built.size(); i < n; i++) {
                 if (i == 0) {
-                    newList.add(built.get(i).withMask(built.get(i).getMask() & (~BezierNode.MOVE_MASK)));
+                    newList = newList.add(built.get(i).withMask(built.get(i).getMask() & (~BezierNode.MOVE_MASK)));
                 } else {
-                    newList.add(built.get(i));
+                    newList = newList.add(built.get(i));
                 }
             }
-            newList.add(points.getLast());
-            points = newList;
+            newList = newList.add(path.getLast());
+            path = newList;
 
             DrawingModel dm = dv.getModel();
-            dm.set(createdFigure, key, VectorList.copyOf(points));
+            dm.set(createdFigure, key, path);
             dragStartIndex = -1;
         }
     }
@@ -223,7 +224,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             rubberBand.setVisible(false);
 
             createdFigure = null;
-            points = null;
+            path = null;
         }
     }
 

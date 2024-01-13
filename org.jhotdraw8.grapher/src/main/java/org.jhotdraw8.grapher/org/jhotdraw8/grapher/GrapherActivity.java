@@ -58,7 +58,7 @@ import org.jhotdraw8.draw.constrain.GridConstrainer;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.draw.css.value.CssInsets;
 import org.jhotdraw8.draw.figure.AbstractDrawing;
-import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.BezierPathFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.EllipseFigure;
@@ -309,7 +309,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
                         PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory),
                 15, 0, 0);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels,
-                        BezierFigure.PATH, () -> createFigure(BezierFigure::new), layerFactory),
+                        BezierPathFigure.PATH, () -> createFigure(BezierPathFigure::new), layerFactory),
                 16, 1);
         ttbar.addTool(new TextCreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //

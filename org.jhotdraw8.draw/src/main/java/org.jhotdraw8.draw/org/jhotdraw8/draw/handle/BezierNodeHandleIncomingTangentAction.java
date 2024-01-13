@@ -6,9 +6,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import static org.jhotdraw8.geom.shape.BezierNode.C1C2_MASK;
 import static org.jhotdraw8.geom.shape.BezierNode.C1_MASK;
@@ -21,21 +19,24 @@ import static org.jhotdraw8.geom.shape.BezierNode.C1_MASK;
 public class BezierNodeHandleIncomingTangentAction extends AbstractBezierNodeHandleAction {
     public final static String ID = "handle.bezierNode.incomingTangent";
 
-    public BezierNodeHandleIncomingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<ImmutableList<BezierNode>> nodeListKey, @NonNull int nodeIndex, @NonNull DrawingView model) {
+    public BezierNodeHandleIncomingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> nodeListKey, @NonNull int nodeIndex, @NonNull DrawingView model) {
         super(ID, figure, nodeListKey, nodeIndex, model);
 
-        BezierNodePath path = new BezierNodePath(figure.get(nodeListKey));
-        BezierNode bnode = path.getNodes().get(nodeIndex);
-        setSelected((bnode.getMask() & BezierNode.C1C2_MASK) == BezierNode.C1_MASK);
+        BezierPath path = figure.get(nodeListKey);
+        if (path != null && path.size() > nodeIndex) {
+            BezierNode bnode = path.get(nodeIndex);
+            setSelected((bnode.getMask() & BezierNode.C1C2_MASK) == BezierNode.C1_MASK);
+        }
     }
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event) {
-        BezierNodePath path = new BezierNodePath(figure.get(nodeListKey));
-        BezierNode bnode = path.getNodes().get(nodeIndex);
+        BezierPath path = figure.get(pathKey);
+        if (path == null) return;
+        BezierNode bnode = path.get(nodeIndex);
         BezierNode changedNode = bnode.withClearMaskBits(C1C2_MASK).withMaskBits(C1_MASK);
-        path.getNodes().set(nodeIndex, changedNode);
-        view.getModel().set(figure, nodeListKey, VectorList.copyOf(path.getNodes()));
+        path = path.set(nodeIndex, changedNode);
+        view.getModel().set(figure, pathKey, path);
         view.recreateHandles();
     }
 }

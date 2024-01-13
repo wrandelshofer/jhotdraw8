@@ -6,7 +6,11 @@ package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.layout.*;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
@@ -19,7 +23,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.util.List;
 
@@ -36,9 +40,9 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
+    private final MapAccessor<BezierPath> pointKey;
 
-    public BezierNodeTangentHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeTangentHandle(Figure figure, MapAccessor<BezierPath> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -53,7 +57,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableList<BezierNode> list = owner.get(pointKey);
+        BezierPath list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }
@@ -88,7 +92,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableList<BezierNode> list = f.get(pointKey);
+        BezierPath list = f.get(pointKey);
         if (list == null || pointIndex >= list.size()) {
             node.setVisible(false);
             return;

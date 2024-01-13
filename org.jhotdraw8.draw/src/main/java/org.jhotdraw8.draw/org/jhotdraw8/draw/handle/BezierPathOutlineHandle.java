@@ -9,7 +9,12 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.CubicCurveTo;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -18,10 +23,16 @@ import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.geom.*;
-import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXLines;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,12 +43,12 @@ public class BezierPathOutlineHandle extends AbstractHandle {
     private final @NonNull Path path1;
     private double strokeWidth = 1;
 
-    private final MapAccessor<ImmutableList<BezierNode>> bezierNodeListKey;
+    private final MapAccessor<BezierPath> bezierPathKey;
     private final boolean selectable;
 
-    public BezierPathOutlineHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, boolean selectable) {
+    public BezierPathOutlineHandle(Figure figure, MapAccessor<BezierPath> pointKey, boolean selectable) {
         super(figure);
-        this.bezierNodeListKey = pointKey;
+        this.bezierPathKey = pointKey;
         node = new Group();
         path2 = new Path();
         path1 = new Path();
@@ -52,10 +63,10 @@ public class BezierPathOutlineHandle extends AbstractHandle {
 
     @Override
     public boolean contains(DrawingView drawingView, double x, double y, double tolerance) {
-        final ImmutableList<BezierNode> bezierNodes = getOwner().get(bezierNodeListKey);
-        if (bezierNodes != null) {
+        final BezierPath path = getOwner().get(bezierPathKey);
+        if (path != null) {
             final Point2D p = drawingView.viewToWorld(x, y);
-            return new BezierNodePath(bezierNodes).contains(p.getX(), p.getY(), tolerance);
+            return path.contains(p.getX(), p.getY(), tolerance);
         }
         return false;
 
@@ -76,8 +87,8 @@ public class BezierPathOutlineHandle extends AbstractHandle {
     @Override
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
-        final ImmutableList<BezierNode> bezierNodes = f.get(bezierNodeListKey);
-        if (bezierNodes == null) {
+        final BezierPath path = f.get(bezierPathKey);
+        if (path == null) {
             path1.getElements().clear();
             path2.getElements().clear();
             return;
@@ -85,8 +96,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();
         FXPathElementsBuilder builder = new FXPathElementsBuilder(elements);
-        final BezierNodePath bnp = new BezierNodePath(bezierNodes);
-        AwtShapes.buildFromPathIterator(builder, bnp.getPathIterator(FXShapes.awtTransformFromFX(t)));
+        AwtShapes.buildFromPathIterator(builder, path.getPathIterator(FXShapes.awtTransformFromFX(t)));
 
         // draw a small arrow at the center of each segment, to visualize the direction of the path
         double arrowSize = 3;//Math.max(3,strokeWidth);

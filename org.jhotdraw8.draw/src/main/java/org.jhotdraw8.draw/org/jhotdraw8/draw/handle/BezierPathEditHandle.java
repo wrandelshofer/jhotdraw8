@@ -16,16 +16,12 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-
-import java.util.List;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 public class BezierPathEditHandle extends BezierPathOutlineHandle {
-    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
+    private final MapAccessor<BezierPath> pointKey;
 
-    public BezierPathEditHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey) {
+    public BezierPathEditHandle(Figure figure, MapAccessor<BezierPath> pointKey) {
         super(figure, pointKey, true);
         this.pointKey = pointKey;
     }
@@ -48,22 +44,20 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
     }
 
     private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView view) {
-        final ImmutableList<BezierNode> nodes = owner.get(pointKey);
-        BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
-        List<BezierNode> pathNodes = path.getNodes();
-
+        BezierPath path = owner.get(pointKey);
+        if (path == null) path = BezierPath.of();
         Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
         IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
         if (!intersectionResultEx.intersections().isEmpty()) {
             IntersectionPoint intersectionPointEx = intersectionResultEx.intersections().get(0);
             int segment = intersectionPointEx.getSegmentA();
             BezierNode newNode = new BezierNode(intersectionPointEx.getX(), intersectionPointEx.getY());
-            if (segment > 0 && nodes.get(segment - 1).isClosePath()) {
-                pathNodes.set(segment - 1, pathNodes.get(segment - 1).withClearMaskBits(BezierNode.CLOSE_MASK));
+            if (segment > 0 && path.get(segment - 1).isClosePath()) {
+                path = path.set(segment - 1, path.get(segment - 1).withClearMaskBits(BezierNode.CLOSE_MASK));
                 newNode = newNode.withMaskBits(BezierNode.CLOSE_MASK);
             }
-            pathNodes.add(segment, newNode);
-            view.getModel().set(owner, pointKey, VectorList.copyOf(pathNodes));
+            path = path.add(segment, newNode);
+            view.getModel().set(owner, pointKey, path);
             view.recreateHandles();
         }
     }

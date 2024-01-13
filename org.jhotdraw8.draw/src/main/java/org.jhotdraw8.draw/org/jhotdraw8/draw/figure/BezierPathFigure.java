@@ -1,5 +1,5 @@
 /*
- * @(#)BezierFigure.java
+ * @(#)BezierPathFigure.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.figure;
@@ -19,39 +19,42 @@ import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.handle.*;
-import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
+import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
+import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
+import org.jhotdraw8.draw.handle.BezierPathEditHandle;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
+import org.jhotdraw8.draw.key.BezierPathStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A {@link Figure} which draws a {@link BezierNodePath}.
+ * A {@link Figure} which draws a {@link BezierPath}.
  *
  * @author Werner Randelshofer
  */
-public class BezierFigure extends AbstractLeafFigure
+public class BezierPathFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, FillRulableFigure, TransformableFigure, HideableFigure,
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
-    public static final BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", VectorList.of());
+    public static final BezierPathStyleableKey PATH = new BezierPathStyleableKey("path", BezierPath.of());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
     public static final String TYPE_SELECTOR = "Bezier";
 
-    public BezierFigure() {
+    public BezierPathFigure() {
         setStyled(StyleOrigin.USER_AGENT, FILL, null);
     }
 
@@ -61,7 +64,7 @@ public class BezierFigure extends AbstractLeafFigure
             list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.POINT) {
             list.add(new BezierPathEditHandle(this, PATH));
-            ImmutableList<BezierNode> nodes = get(PATH);
+            BezierPath nodes = get(PATH);
             for (int i = 0, n = nodes.size(); i < n; i++) {
                 list.add(new BezierNodeTangentHandle(this, PATH, i));
                 list.add(new BezierNodeEditHandle(this, PATH, i));
@@ -112,7 +115,7 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
-        return new BezierNodePath(getStyledNonNull(PATH), getStyled(FILL_RULE)).getPathIterator(tx);
+        return new BezierPath(getStyledNonNull(PATH), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
     public @NonNull Point2D getPoint(int index, int coord) {
@@ -140,11 +143,11 @@ public class BezierFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
-        ArrayList<BezierNode> newP = getNonNull(PATH).toArrayList();
+        BezierPath newP = getNonNull(PATH);
         for (int i = 0, n = newP.size(); i < n; i++) {
-            newP.set(i, newP.get(i).transform(transform));
+            newP = newP.set(i, newP.get(i).transform(transform));
         }
-        set(PATH, VectorList.copyOf(newP));
+        set(PATH, newP);
     }
 
     @Override
@@ -168,7 +171,7 @@ public class BezierFigure extends AbstractLeafFigure
         pathNode.setFillRule(getStyled(FILL_RULE));
         final List<PathElement> elements =
                 FXShapes.fxPathElementsFromAwt(
-                        new BezierNodePath(getStyledNonNull(PATH),
+                        new BezierPath(getStyledNonNull(PATH),
                                 getStyledNonNull(FILL_RULE)).getPathIterator(null));
 
         if (!pathNode.getElements().equals(elements)) {

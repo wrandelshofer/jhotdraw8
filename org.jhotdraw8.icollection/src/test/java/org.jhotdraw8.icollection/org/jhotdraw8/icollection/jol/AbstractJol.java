@@ -15,10 +15,12 @@ import java.util.Set;
 /**
  * Run the java command with the following option to prevent that the JVM hangs:
  * <pre>
- * -ea  -Djdk.attach.allowAttachSelf -XX:+EnableDynamicAgentLoading --add-modules jol.core,jdk.attach --add-reads org.jhotdraw8.icollection=jol.core
+ * {@value #REQUIRED_VM_OPTIONS}
  * </pre>
  */
 public class AbstractJol {
+    private final static String REQUIRED_VM_OPTIONS = "-Djdk.attach.allowAttachSelf -XX:+EnableDynamicAgentLoading --add-modules jol.core,jdk.attach --add-reads org.jhotdraw8.icollection=jol.core";
+
     private static final boolean PRINT = true;
 
     protected static Map<Key, Value> generateMap(int size, int mask, long bound) {
@@ -63,6 +65,9 @@ public class AbstractJol {
     }
 
     protected static void estimateMemoryUsage(Object collection, Map.Entry<?, ?> head, int size) {
+        if (!System.getProperties().containsKey("jdk.attach.allowAttachSelf")) {
+            throw new RuntimeException("VM must be started with the following options: " + REQUIRED_VM_OPTIONS);
+        }
         if (PRINT) {
             System.out.println(VM.current().details());
             GraphLayout graphLayout = GraphLayout.parseInstance(collection);
@@ -88,6 +93,9 @@ public class AbstractJol {
     }
 
     protected static void estimateMemoryUsage(Object collection, Key head, int size) {
+        if (!System.getProperties().containsKey("jdk.attach.allowAttachSelf")) {
+            throw new RuntimeException("VM must be started with the following options: " + REQUIRED_VM_OPTIONS);
+        }
         System.out.println(VM.current().details());
         GraphLayout graphLayout = GraphLayout.parseInstance(collection);
         long totalSize = graphLayout.totalSize();

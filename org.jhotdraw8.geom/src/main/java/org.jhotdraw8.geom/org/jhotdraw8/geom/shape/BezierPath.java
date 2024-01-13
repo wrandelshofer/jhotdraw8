@@ -1,5 +1,5 @@
 /*
- * @(#)BezierNodePath.java
+ * @(#)BezierPath.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.shape;
@@ -13,6 +13,7 @@ import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
@@ -22,39 +23,35 @@ import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * A BezierNodePath is defined by its nodes. Each node has three control points:
+ * A BezierPath is defined by its nodes. Each node has three control points:
  * C0, C1, C2. A mask defines which control points are in use. At a node, the path
  * passes through C0. C1 controls the curve going towards C0. C2 controls the
  * curve going away from C0.
  *
  * @author Werner Randelshofer
  */
-public class BezierNodePath implements Shape {
+public class BezierPath extends VectorList<BezierNode> implements Shape {
 
-    private List<BezierNode> nodes;
-    private int windingRule;
+    private final int windingRule;
 
-    public BezierNodePath() {
-        this(new ArrayList<>(), PathIterator.WIND_EVEN_ODD);
+    private BezierPath() {
+        super();
+        this.windingRule = PathIterator.WIND_EVEN_ODD;
     }
 
-    public BezierNodePath(@NonNull Iterable<BezierNode> nodes) {
+    public BezierPath(@Nullable Iterable<BezierNode> nodes) {
         this(nodes, PathIterator.WIND_EVEN_ODD);
     }
 
-    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, FillRule windingRule) {
+    public BezierPath(@Nullable Iterable<BezierNode> nodes, FillRule windingRule) {
         this(nodes, windingRule == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
 
     }
 
-    public BezierNodePath(@NonNull Iterable<BezierNode> nodes, int windingRule) {
-        this.nodes = new ArrayList<>();
-        for (BezierNode n : nodes) {
-            this.nodes.add(n);
-        }
+    public BezierPath(@Nullable Iterable<BezierNode> nodes, int windingRule) {
+        super(nodes);
         this.windingRule = windingRule;
     }
 
@@ -93,7 +90,7 @@ public class BezierNodePath implements Shape {
     public @NonNull Rectangle2D getBounds2D() {
         double x1 = Double.POSITIVE_INFINITY, y1 = Double.POSITIVE_INFINITY,
                 x2 = Double.NEGATIVE_INFINITY, y2 = Double.NEGATIVE_INFINITY;
-        for (BezierNode n : nodes) {
+        for (BezierNode n : this) {
             double y = n.getY0();
             double x = n.getX0();
             if (x < x1) {
@@ -144,17 +141,9 @@ public class BezierNodePath implements Shape {
         return new Rectangle2D.Double(x1, y1, x2 - x1, y2 - y1);
     }
 
-    public List<BezierNode> getNodes() {
-        return nodes;
-    }
-
-    public void setNodes(List<BezierNode> nodes) {
-        this.nodes = nodes;
-    }
-
     @Override
     public @NonNull PathIterator getPathIterator(AffineTransform at) {
-        return new BezierNodePathIterator(nodes, windingRule, at);
+        return new BezierPathIterator(this, windingRule, at);
     }
 
     @Override
@@ -182,16 +171,17 @@ public class BezierNodePath implements Shape {
         return isect;
     }
 
-    public boolean split(double x, double y, double tolerance) {
+    public BezierPath split(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         ImmutableList<IntersectionPoint> intersections = isect.intersections();
+        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
         if (intersections.size() == 1) {
             int segment = (int) intersections.getFirst().getArgumentA();
             final BezierNode middle;
             Point2D.Double p = intersections.get(0);
-            final int prevSegment = (segment - 1 + nodes.size()) % nodes.size();
-            BezierNode prev = nodes.get(prevSegment);
-            BezierNode next = nodes.get(segment);
+            final int prevSegment = (segment - 1 + size()) % size();
+            BezierNode prev = get(prevSegment);
+            BezierNode next = get(segment);
             double t = intersections.getFirst().getArgumentA() - segment;
             boolean pc2 = prev.isC2();
             boolean nc1 = next.isC1();
@@ -199,64 +189,64 @@ public class BezierNodePath implements Shape {
                 if (nc1) {
                     // cubic curve
                     middle = new BezierNode(BezierNode.C1C2_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                    nodes.add(segment, middle);
+                    result[0] = result[0].add(segment, middle);
                     CubicCurves.splitCubicCurveTo(prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(),
                             next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
                             (x1, y1, x2, y2, x3, y3) -> {
-                                nodes.set(prevSegment, prev.setX2(x1).setY2(y1));
-                                nodes.set(segment, nodes.get(segment).setX1(x2).setY1(y2));
+                                result[0] = result[0].set(prevSegment, prev.setX2(x1).setY2(y1));
+                                result[0] = result[0].set(segment, result[0].get(segment).setX1(x2).setY1(y2));
                             },
                             (x1, y1, x2, y2, x3, y3) -> {
-                                nodes.set(segment, nodes.get(segment).setX2(x1).setY2(y1));
-                                nodes.set(segment + 1, next.setX1(x2).setY1(y2));
+                                result[0] = result[0].set(segment, result[0].get(segment).setX2(x1).setY2(y1));
+                                result[0] = result[0].set(segment + 1, next.setX1(x2).setY1(y2));
                             }
                     );
                 } else {
                     // quadratic curve controlled by prev
                     middle = new BezierNode(BezierNode.C2_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
                     prev.withCollinear(true);
-                    nodes.add(segment, middle);
+                    result[0] = result[0].add(segment, middle);
                     QuadCurves.split(prev.getX0(), prev.getY0(),
                             next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
                             (x1, y1, x2, y2) -> {
-                                nodes.set(prevSegment, middle.setX2(x1).setY2(y1));
-                                nodes.set(segment, nodes.get(segment).setX0(x2).setY0(y2));
+                                result[0] = result[0].set(prevSegment, middle.setX2(x1).setY2(y1));
+                                result[0] = result[0].set(segment, result[0].get(segment).setX0(x2).setY0(y2));
                             },
                             (x1, y1, x2, y2) -> {
-                                nodes.set(segment, nodes.get(segment).setX2(x1).setY2(y1));
+                                result[0] = result[0].set(segment, result[0].get(segment).setX2(x1).setY2(y1));
                             }
                     );
                 }
             } else if (nc1) {
                 // quadratic curve controlled by next
                 middle = new BezierNode(BezierNode.C1_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                nodes.add(segment, middle);
+                result[0] = result[0].add(segment, middle);
                 QuadCurves.split(prev.getX0(), prev.getY0(),
                         next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
                         (x1, y1, x2, y2) -> {
-                            nodes.set(segment, middle.setX1(x1).setY1(y1).setX0(x2).setY0(y2));
+                            result[0] = result[0].set(segment, middle.setX1(x1).setY1(y1).setX0(x2).setY0(y2));
                         },
                         (x1, y1, x2, y2) -> {
-                            nodes.set(segment + 1, next.setX1(x1).setY1(y1).withCollinear(true));
+                            result[0] = result[0].set(segment + 1, next.setX1(x1).setY1(y1).withCollinear(true));
                         }
                 );
             } else {
                 // line
                 middle = new BezierNode(BezierNode.C0_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
-                nodes.add(segment, middle);
+                result[0] = result[0].add(segment, middle);
             }
-
-            return true;
         }
-        return false;
+        return (BezierPath) result[0];
     }
 
-    public void join(int segment, double tolerance) {
-        final int prevSegment = (segment - 1 + nodes.size()) % nodes.size();
-        final int nextSegment = (segment + 1) % nodes.size();
-        BezierNode prev = nodes.get(prevSegment);
-        BezierNode middle = nodes.get(segment);
-        BezierNode next = nodes.get(nextSegment);
+    public BezierPath join(int segment, double tolerance) {
+        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
+
+        final int prevSegment = (segment - 1 + size()) % size();
+        final int nextSegment = (segment + 1) % size();
+        BezierNode prev = get(prevSegment);
+        BezierNode middle = get(segment);
+        BezierNode next = get(nextSegment);
         boolean pc2 = prev.isC2();
         boolean mc2 = middle.isC2();
         boolean mc1 = middle.isC1();
@@ -266,25 +256,26 @@ public class BezierNodePath implements Shape {
                     prev.getX0(), prev.getY0(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
                     next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);
             if (p != null) {
-                nodes.set(nextSegment, next.setX1(p[2]).setY1(p[3]));
+                result[0] = result[0].set(nextSegment, next.setX1(p[2]).setY1(p[3]));
             }
         } else if (pc2 && mc2 && !nc1) {
             double[] p = QuadCurves.merge(
                     prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX0(), middle.getY0(),
                     middle.getX2(), middle.getY2(), next.getX0(), next.getY0(), tolerance);
             if (p != null) {
-                nodes.set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
+                result[0] = result[0].set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
             }
         } else if (pc2 && mc1 && mc2 && nc1) {
             double[] p = CubicCurves.merge(
                     prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
                     middle.getX2(), middle.getY2(), next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);
             if (p != null) {
-                nodes.set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
-                nodes.set(nextSegment, next.setX1(p[4]).setY1(p[5]));
+                result[0] = result[0].set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
+                result[0] = result[0].set(nextSegment, next.setX1(p[4]).setY1(p[5]));
             }
         }
-        nodes.remove(segment);
+        result[0] = result[0].removeAt(segment);
+        return (BezierPath) result[0];
     }
 
     /**
@@ -295,34 +286,34 @@ public class BezierNodePath implements Shape {
      * @return outgoing tangent point
      */
     public @Nullable Point2D getOutgoingTangentPoint(int index) {
-        BezierNode node = nodes.get(index);
+        BezierNode node = get(index);
         if (node.isC2()) {
             return new Point2D.Double(node.getX2(), node.getY2());
         }
         return null;
     }
 
-    public void setWindingRule(int newValue) {
-        this.windingRule = newValue;
+    public BezierPath setWindingRule(int newValue) {
+        return this.windingRule == newValue ? this : new BezierPath(this, newValue);
     }
 
-    public void setWindingRule(FillRule newValue) {
-        this.windingRule = newValue == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO;
+    public BezierPath setWindingRule(FillRule newValue) {
+        return setWindingRule(newValue == FillRule.EVEN_ODD ? PathIterator.WIND_EVEN_ODD : PathIterator.WIND_NON_ZERO);
     }
 
     /**
      * Reverses the direction of the path.
      */
-    public void reverse() {
-        int size = nodes.size();
+    public BezierPath reverse() {
+        int size = size();
         ArrayList<BezierNode> temp = new ArrayList<>(size);
         int lastMoveTo = -1;
         for (int i = 0; i < size; i++) {
-            var n = nodes.get(i);
+            var n = get(i);
             BezierNode reversed = n;
             if (reversed.isMoveTo()) {
                 lastMoveTo = i;
-                if (i < size && !nodes.get(i + 1).isMoveTo()) {
+                if (i < size && !get(i + 1).isMoveTo()) {
                     // keep a move to, if it is followed by another move to
                     reversed = reversed.withClearMaskBits(BezierNode.MOVE_MASK);
                 }
@@ -344,7 +335,104 @@ public class BezierNodePath implements Shape {
             }
             temp.add(reversed);
         }
-        nodes.clear();
-        nodes.addAll(temp.reversed());
+        return new BezierPath(temp, windingRule);
+    }
+
+    private static final BezierPath EMPTY = new BezierPath();
+
+
+    public static @NonNull BezierPath of() {
+        return EMPTY;
+    }
+
+    @Override
+    public @NonNull BezierPath clear() {
+        return isEmpty() ? this : EMPTY;
+    }
+
+    @Override
+    public @NonNull BezierPath add(@NonNull BezierNode element) {
+        return (BezierPath) super.add(element);
+    }
+
+    @Override
+    public @NonNull BezierPath add(int index, @NonNull BezierNode element) {
+        return (BezierPath) super.add(index, element);
+    }
+
+    @Override
+    public @NonNull BezierPath addAll(@NonNull Iterable<? extends BezierNode> c) {
+        return (BezierPath) super.addAll(c);
+    }
+
+    @Override
+    public @NonNull BezierPath addFirst(@Nullable BezierNode element) {
+        return (BezierPath) super.addFirst(element);
+    }
+
+    @Override
+    public @NonNull BezierPath addLast(@Nullable BezierNode element) {
+        return (BezierPath) super.addLast(element);
+    }
+
+    @Override
+    public @NonNull BezierPath addAll(int index, @NonNull Iterable<? extends BezierNode> c) {
+        return (BezierPath) super.addAll(index, c);
+    }
+
+
+    @Override
+    public @NonNull BezierPath remove(@NonNull BezierNode element) {
+        return (BezierPath) super.remove(element);
+    }
+
+    @Override
+    public @NonNull BezierPath removeAt(int index) {
+        return (BezierPath) super.removeAt(index);
+    }
+
+    @Override
+    public @NonNull BezierPath removeFirst() {
+        return (BezierPath) super.removeFirst();
+    }
+
+    @Override
+    public @NonNull BezierPath removeLast() {
+        return (BezierPath) super.removeLast();
+    }
+
+    @Override
+    public @NonNull BezierPath retainAll(@NonNull Iterable<?> c) {
+        return (BezierPath) super.retainAll(c);
+    }
+
+    @Override
+    public @NonNull BezierPath removeRange(int fromIndex, int toIndex) {
+        return (BezierPath) super.removeRange(fromIndex, toIndex);
+    }
+
+    @Override
+    public @NonNull BezierPath removeAll(@NonNull Iterable<?> c) {
+        return (BezierPath) super.removeAll(c);
+    }
+
+    @Override
+    public @NonNull BezierPath set(int index, @NonNull BezierNode element) {
+        return (BezierPath) super.set(index, element);
+    }
+
+    @Override
+    public BezierNode get(int index) {
+        return super.get(index);
+    }
+
+    @Override
+    public @NonNull BezierPath readOnlySubList(int fromIndex, int toIndex) {
+        return (BezierPath) super.readOnlySubList(fromIndex, toIndex);
+    }
+
+    @Override
+    public int size() {
+        return super.size();
     }
 }

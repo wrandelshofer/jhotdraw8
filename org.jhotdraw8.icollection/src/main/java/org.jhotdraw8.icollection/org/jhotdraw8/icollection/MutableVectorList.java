@@ -62,7 +62,6 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     private static final long serialVersionUID = 0L;
 
     private @NonNull BitMappedTrie<E> root;
-    private int size;
 
     /**
      * Constructs a new empty list.
@@ -74,14 +73,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public void addFirst(E e) {
         root = root.prepend(Collections.singleton(e).iterator(), 1);
-        size++;
         modCount++;
     }
 
     @Override
     public void addLast(E e) {
         root = root.append(e);
-        size++;
         modCount++;
     }
 
@@ -89,7 +86,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlyListFacade<>(
                 this::size,
-                index -> get(size - 1 - index),
+                index -> get(root.length - 1 - index),
                 () -> this
         );
     }
@@ -105,12 +102,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public int size() {
-        return size;
+        return root.length;
     }
 
     @Override
     public E get(int index) {
-        Objects.checkIndex(index, size);
+        Objects.checkIndex(index, root.length);
         return root.get(index);
     }
 
@@ -131,13 +128,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
-        Objects.checkIndex(index, size + 1);
-        int oldSize = size;
+        Objects.checkIndex(index, root.length + 1);
+        int oldSize = root.length;
         VectorList<E> immutable = toImmutable().addAll(index, c);
-        if (oldSize != immutable.size) {
+        if (oldSize != immutable.size()) {
             root = immutable.trie;
             modCount++;
-            size = immutable.size;
             return true;
         }
         return false;
@@ -145,13 +141,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
 
     public boolean addAll(int index, @NonNull Iterable<? extends E> c) {
-        Objects.checkIndex(index, size + 1);
-        int oldSize = size;
+        Objects.checkIndex(index, root.length + 1);
+        int oldSize = root.length;
         VectorList<E> immutable = toImmutable().addAll(index, c);
-        if (oldSize != immutable.size) {
+        if (oldSize != immutable.size()) {
             root = immutable.trie;
             modCount++;
-            size = immutable.size;
             return true;
         }
         return false;
@@ -159,12 +154,11 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean removeAll(@NonNull Collection<?> c) {
-        int oldSize = size;
+        int oldSize = root.length;
         VectorList<E> immutable = toImmutable().removeAll(c);
-        if (oldSize != immutable.size) {
+        if (oldSize != immutable.size()) {
             root = immutable.trie;
             modCount++;
-            size = immutable.size;
             return true;
         }
         return false;
@@ -172,12 +166,11 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public boolean retainAll(@NonNull Collection<?> c) {
-        int oldSize = size;
+        int oldSize = root.length;
         VectorList<E> immutable = toImmutable().retainAll(c);
-        if (oldSize != immutable.size) {
+        if (oldSize != immutable.size()) {
             root = immutable.trie;
             modCount++;
-            size = immutable.size;
             return true;
         }
         return false;
@@ -196,7 +189,6 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         if (c instanceof VectorList<?>) {
             VectorList<E> that = (VectorList<E>) c;
             this.root = that.trie;
-            this.size = that.size;
         } else {
             this.root = BitMappedTrie.empty();
             addAll(0, c);
@@ -205,7 +197,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @NonNull
     public VectorList<E> toImmutable() {
-        return size == 0 ? VectorList.of() : new VectorList<>(root, size);
+        return root.length == 0 ? VectorList.of() : new VectorList<>(root);
     }
 
     @Serial
@@ -216,7 +208,6 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean add(E e) {
         root = root.append(e);
-        size++;
         modCount++;
         return true;
 
@@ -224,7 +215,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public E set(int index, E element) {
-        Objects.checkIndex(index, size);
+        Objects.checkIndex(index, root.length);
         E oldValue = get(index);
         root = root.update(index, element);
 
@@ -236,8 +227,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public void add(int index, E element) {
-        Objects.checkIndex(index, size + 1);
-        if (index == size) {
+        Objects.checkIndex(index, root.length + 1);
+        if (index == root.length) {
             add(element);
         } else {
             addAll(index, Collections.singleton(element));
@@ -246,7 +237,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public E remove(int index) {
-        Objects.checkIndex(index, size);
+        Objects.checkIndex(index, root.length);
         E removed = get(index);
         removeRange(index, index + 1);
         return removed;
@@ -265,7 +256,6 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     protected void removeRange(int fromIndex, int toIndex) {
         root = toImmutable().removeRange(fromIndex, toIndex).trie;
-        size -= toIndex - fromIndex;
         modCount++;
     }
 

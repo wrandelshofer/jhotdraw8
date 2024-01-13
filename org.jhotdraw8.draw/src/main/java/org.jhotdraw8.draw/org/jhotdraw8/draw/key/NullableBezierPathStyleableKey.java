@@ -1,5 +1,5 @@
 /*
- * @(#)NullableBezierNodeListStyleableKey.java
+ * @(#)NullableBezierPathStyleableKey.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -7,22 +7,21 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssBezierNodeListConverter;
+import org.jhotdraw8.draw.css.converter.CssBezierPathConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.io.Serial;
 
 /**
- * BezierNodeListStyleableKey.
+ * BezierPathStyleableKey.
  *
  * @author Werner Randelshofer
  */
-public class NullableBezierNodeListStyleableKey
-        extends AbstractStyleableKey<@NonNull ImmutableList<BezierNode>>
-        implements WritableStyleableMapAccessor<@NonNull ImmutableList<BezierNode>> {
+public class NullableBezierPathStyleableKey
+        extends AbstractStyleableKey<BezierPath>
+        implements WritableStyleableMapAccessor<BezierPath> {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -34,7 +33,7 @@ public class NullableBezierNodeListStyleableKey
      *
      * @param name The name of the key.
      */
-    public NullableBezierNodeListStyleableKey(@NonNull String name) {
+    public NullableBezierPathStyleableKey(@NonNull String name) {
         this(name, null);
     }
 
@@ -44,16 +43,16 @@ public class NullableBezierNodeListStyleableKey
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public NullableBezierNodeListStyleableKey(@NonNull String name, @Nullable ImmutableList<BezierNode> defaultValue) {
-        super(name, new TypeToken<ImmutableList<BezierNode>>() {
+    public NullableBezierPathStyleableKey(@NonNull String name, @Nullable BezierPath defaultValue) {
+        super(name, new TypeToken<BezierPath>() {
         }, defaultValue);
 
     }
 
-    private final Converter<ImmutableList<BezierNode>> converter = new CssBezierNodeListConverter(false);
+    private final Converter<BezierPath> converter = new CssBezierPathConverter(false);
 
     @Override
-    public @NonNull Converter<ImmutableList<BezierNode>> getCssConverter() {
+    public @NonNull Converter<BezierPath> getCssConverter() {
         return converter;
     }
 

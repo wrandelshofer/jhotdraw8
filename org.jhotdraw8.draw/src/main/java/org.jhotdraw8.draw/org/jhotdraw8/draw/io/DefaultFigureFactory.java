@@ -57,7 +57,7 @@ import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.AbstractDrawing;
-import org.jhotdraw8.draw.figure.BezierFigure;
+import org.jhotdraw8.draw.figure.BezierPathFigure;
 import org.jhotdraw8.draw.figure.ClippingFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -87,7 +87,7 @@ import org.jhotdraw8.draw.figure.TextAreaFigure;
 import org.jhotdraw8.draw.figure.TextFigure;
 import org.jhotdraw8.draw.figure.TextStrokeableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
-import org.jhotdraw8.draw.xml.converter.XmlBezierNodeListConverter;
+import org.jhotdraw8.draw.xml.converter.XmlBezierPathConverter;
 import org.jhotdraw8.draw.xml.converter.XmlConnectorConverter;
 import org.jhotdraw8.draw.xml.converter.XmlFXSvgPathConverter;
 import org.jhotdraw8.draw.xml.converter.XmlPoint2DConverter;
@@ -153,7 +153,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class);
         addFigureKeysAndNames("LineConnectionWithMarkers", LineConnectionWithMarkersFigure.class);
         addFigureKeysAndNames("Image", ImageFigure.class);
-        addFigureKeysAndNames("BezierPath", BezierFigure.class);
+        addFigureKeysAndNames("BezierPath", BezierPathFigure.class);
 
         addConverterForType(BlendMode.class, new CssKebabCaseEnumConverter<>(BlendMode.class));
         addConverterForType(Boolean.class, new XmlBooleanConverter());
@@ -202,7 +202,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverter(StrokableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(TransformableFigure.TRANSFORMS, new CssListConverter<>(new CssTransformConverter(false)));
         addConverter(PolylineFigure.POINTS, new CssListConverter<>(new Point2DConverter(false)));
-        addConverter(BezierFigure.PATH, new XmlBezierNodeListConverter(true));
+        addConverter(BezierPathFigure.PATH, new XmlBezierPathConverter(true));
         addConverter(StrokableFigure.STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
         addConverter(MarkerStrokableFigure.MARKER_STROKE_DASH_ARRAY, new CssListConverter<>(new CssSizeConverter(false)));
 

@@ -7,7 +7,6 @@ package org.jhotdraw8.icollection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 import java.util.List;
@@ -37,12 +36,12 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
     @NonNull ImmutableList<E> addLast(@Nullable final E element);
 
     @Override
-    default ImmutableList<E> removeFirst() {
+    default @NonNull ImmutableList<E> removeFirst() {
         return (ImmutableList<E>) ImmutableSequencedCollection.super.removeFirst();
     }
 
     @Override
-    default ImmutableList<E> removeLast() {
+    default @NonNull ImmutableList<E> removeLast() {
         return (ImmutableList<E>) ImmutableSequencedCollection.super.removeLast();
     }
 
@@ -153,7 +152,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      *
      * @return a reversed copy of this list.
      */
-    @NonNull VectorList<E> reversed();
+    @NonNull ImmutableList<E> reverse();
 
     /**
      * Returns a copy of this list that contains all elements

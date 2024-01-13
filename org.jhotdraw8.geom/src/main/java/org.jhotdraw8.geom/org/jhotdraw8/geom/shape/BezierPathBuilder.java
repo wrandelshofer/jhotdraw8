@@ -1,5 +1,5 @@
 /*
- * @(#)BezierNodePathBuilder.java
+ * @(#)BezierPathBuilder.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.shape;
@@ -13,16 +13,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * BezierNodePathBuilder.
+ * BezierPathBuilder.
  *
  * @author Werner Randelshofer
  */
-public class BezierNodePathBuilder extends AbstractPathBuilder<BezierNodePath> {
+public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
 
     private final @NonNull List<BezierNode> nodes = new ArrayList<>();
     private int moveIndex;
 
-    public BezierNodePathBuilder() {
+    public BezierPathBuilder() {
     }
 
     private void add(BezierNode newValue) {
@@ -115,8 +115,8 @@ public class BezierNodePathBuilder extends AbstractPathBuilder<BezierNodePath> {
     }
 
     @Override
-    public @NonNull BezierNodePath build() {
-        return new BezierNodePath(nodes);
+    public @NonNull BezierPath build() {
+        return new BezierPath(nodes);
     }
 
     @Override

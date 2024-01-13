@@ -1,5 +1,5 @@
 /*
- * @(#)CssBezierNodeListConverter.java
+ * @(#)CssBezierPathConverter.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.css.converter;
@@ -36,7 +36,7 @@ public class CssPathMetricsConverter extends AbstractCssConverter<PathMetrics> {
     @Override
     public @NonNull PathMetrics parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
-            throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
+            throw new ParseException("⟨BezierPath⟩ String expected.", tt.getStartPosition());
         }
         PathMetricsBuilder builder = new PathMetricsBuilder();
         SvgPaths.buildFromSvgString(builder, tt.currentStringNonNull());
@@ -50,6 +50,6 @@ public class CssPathMetricsConverter extends AbstractCssConverter<PathMetrics> {
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨BezierNodePath⟩: \"⟨SvgPath⟩\"";
+        return "Format of ⟨BezierPath⟩: \"⟨SvgPath⟩\"";
     }
 }

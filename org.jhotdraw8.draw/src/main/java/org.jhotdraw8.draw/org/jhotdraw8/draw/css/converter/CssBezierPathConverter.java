@@ -1,5 +1,5 @@
 /*
- * @(#)CssBezierNodeListConverter.java
+ * @(#)CssBezierPathConverter.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.css.converter;
@@ -13,11 +13,8 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.geom.SvgPaths;
-import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
-import org.jhotdraw8.icollection.ImmutableLists;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.shape.BezierPath;
+import org.jhotdraw8.geom.shape.BezierPathBuilder;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,34 +27,34 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class CssBezierNodeListConverter extends AbstractCssConverter<ImmutableList<BezierNode>> {
+public class CssBezierPathConverter extends AbstractCssConverter<BezierPath> {
 
-    public CssBezierNodeListConverter(boolean nullable) {
+    public CssBezierPathConverter(boolean nullable) {
         super(nullable);
     }
 
     @Override
-    public @NonNull ImmutableList<BezierNode> parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @NonNull BezierPath parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
-            throw new ParseException("⟨BezierNodePath⟩ String expected.", tt.getStartPosition());
+            throw new ParseException("⟨BezierPath⟩ String expected.", tt.getStartPosition());
         }
-        BezierNodePathBuilder builder = new BezierNodePathBuilder();
+        BezierPathBuilder builder = new BezierPathBuilder();
         SvgPaths.buildFromSvgString(builder, tt.currentStringNonNull());
-        return ImmutableLists.copyOf(builder.build().getNodes());
+        return builder.build();
     }
 
     @Override
-    protected <TT extends ImmutableList<BezierNode>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends BezierPath> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
             // FIXME we lose smooth here! Use a PathBuilder instead.
-            out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(new BezierNodePath(value).getPathIterator(null))));
+            out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null))));
         }
     }
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨BezierNodePath⟩: \"⟨SvgPath⟩\"";
+        return "Format of ⟨BezierPath⟩: \"⟨SvgPath⟩\"";
     }
 }

@@ -38,11 +38,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-
-import java.util.List;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -81,12 +77,12 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     private final @NonNull Region node;
     private @Nullable Point2D pickLocation;
     private final int nodeIndex;
-    private final MapAccessor<ImmutableList<BezierNode>> nodeListKey;
+    private final MapAccessor<BezierPath> pathKey;
 
 
-    public BezierNodeNonMovableEditHandle(@NonNull Figure figure, @NonNull MapAccessor<ImmutableList<BezierNode>> nodeListKey, @NonNull int nodeIndex) {
+    public BezierNodeNonMovableEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, @NonNull int nodeIndex) {
         super(figure);
-        this.nodeListKey = nodeListKey;
+        this.pathKey = pathKey;
         this.nodeIndex = nodeIndex;
         node = new Region();
         node.setShape(REGION_SHAPE_LINEAR);
@@ -105,7 +101,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableList<BezierNode> list = owner.get(nodeListKey);
+        BezierPath list = owner.get(pathKey);
         return list.get(nodeIndex);
 
     }
@@ -146,14 +142,6 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         // do nothing on mouse clicked, because it may happen accidentally
     }
 
-    private void removePoint(@NonNull DrawingView dv) {
-        if (owner.get(nodeListKey).size() > 2) {
-            BezierNodePath path = new BezierNodePath(owner.get(nodeListKey));
-            path.join(nodeIndex, 1.0);
-            dv.getModel().set(owner, nodeListKey, VectorList.copyOf(path.getNodes()));
-            dv.recreateHandles();
-        }
-    }
 
     /**
      * Insert a new node before the node at pointIndex.
@@ -161,19 +149,18 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
      * @param view
      */
     private void addPoint(@NonNull DrawingView view) {
-        final ImmutableList<BezierNode> nodes = owner.get(nodeListKey);
-        BezierNodePath path = nodes == null ? new BezierNodePath() : new BezierNodePath(nodes);
-        List<BezierNode> pathNodes = path.getNodes();
+        BezierPath path = owner.get(pathKey);
+        if (path == null) path = BezierPath.of();
 
-        BezierNode node = nodes.get(nodeIndex);
+        BezierNode node = path.get(nodeIndex);
 
         // If the oldNode was a MOVE_TO, convert it into a LINE_TO
-        pathNodes.set(nodeIndex, node.withClearMaskBits(MOVE_MASK));
+        path = path.set(nodeIndex, node.withClearMaskBits(MOVE_MASK));
 
         // Remove the CLOSE path mask from the new node
-        pathNodes.add(nodeIndex, node.withClearMaskBits(CLOSE_MASK));
+        path = path.add(nodeIndex, node.withClearMaskBits(CLOSE_MASK));
 
-        view.getModel().set(owner, nodeListKey, VectorList.copyOf(pathNodes));
+        view.getModel().set(owner, pathKey, path);
         view.recreateHandles();
     }
 
@@ -195,33 +182,29 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         Menu tangentsMenu = new Menu(DrawLabels.getResources().getString("handle.bezierNode.tangents.text"));
 
         RadioMenuItem noneRadio = new RadioMenuItem();
-        Actions.bindMenuItem(noneRadio, new BezierNodeHandleNoTangentsAction(owner, nodeListKey, nodeIndex, view));
+        Actions.bindMenuItem(noneRadio, new BezierNodeHandleNoTangentsAction(owner, pathKey, nodeIndex, view));
         RadioMenuItem inRadio;
         if (nodeIndex > 0) {
             inRadio = new RadioMenuItem();
-            Actions.bindMenuItem(inRadio, new BezierNodeHandleIncomingTangentAction(owner, nodeListKey, nodeIndex, view));
+            Actions.bindMenuItem(inRadio, new BezierNodeHandleIncomingTangentAction(owner, pathKey, nodeIndex, view));
         } else {
             inRadio = null;
         }
         RadioMenuItem outRadio;
-        int nodeListSize = owner.get(nodeListKey).size();
+        int nodeListSize = owner.get(pathKey).size();
         if (nodeIndex < nodeListSize - 1) {
             outRadio = new RadioMenuItem();
-            Actions.bindMenuItem(outRadio, new BezierNodeHandleOutgoingTangentAction(owner, nodeListKey, nodeIndex, view));
+            Actions.bindMenuItem(outRadio, new BezierNodeHandleOutgoingTangentAction(owner, pathKey, nodeIndex, view));
         } else {
             outRadio = null;
         }
         RadioMenuItem bothRadio;
         if (nodeIndex > 0 && nodeIndex < nodeListSize - 1) {
             bothRadio = new RadioMenuItem();
-            Actions.bindMenuItem(bothRadio, new BezierNodeHandleIncomingAndOutgoingTangentAction(owner, nodeListKey, nodeIndex, view));
+            Actions.bindMenuItem(bothRadio, new BezierNodeHandleIncomingAndOutgoingTangentAction(owner, pathKey, nodeIndex, view));
         } else {
             bothRadio = null;
         }
-
-        BezierNodePath path = new BezierNodePath(owner.get(nodeListKey));
-        BezierNode bnode = path.getNodes().get(nodeIndex);
-
 
         tangentsMenu.getItems().add(noneRadio);
         if (inRadio != null)
@@ -230,9 +213,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
             tangentsMenu.getItems().add(outRadio);
         if (bothRadio != null)
             tangentsMenu.getItems().add(bothRadio);
-        //  pathMenu.getItems().addAll(moveToRadio, lineToRadio, closePathRadio);
         contextMenu.getItems().add(tangentsMenu);
-        // contextMenu.getItems().add(pathMenu);
         contextMenu.show(node, event.getScreenX(), event.getScreenY());
         event.consume();
     }
@@ -254,7 +235,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableList<BezierNode> list = f.get(nodeListKey);
+        BezierPath list = f.get(pathKey);
         if (list == null || nodeIndex >= list.size()) {
             node.setVisible(false);
             return;

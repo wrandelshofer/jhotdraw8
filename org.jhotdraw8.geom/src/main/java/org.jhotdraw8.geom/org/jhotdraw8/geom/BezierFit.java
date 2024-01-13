@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -143,9 +143,9 @@ public class BezierFit {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull BezierNodePath digitizedPoints, double error) {
+    public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull BezierPath digitizedPoints, double error) {
         List<Point2D> d = new ArrayList<>();
-        for (BezierNode n : digitizedPoints.getNodes()) {
+        for (BezierNode n : digitizedPoints) {
             d.add(new Point2D(n.getX0(), n.getY0()));
         }
         fitBezierPath(builder, d, error);

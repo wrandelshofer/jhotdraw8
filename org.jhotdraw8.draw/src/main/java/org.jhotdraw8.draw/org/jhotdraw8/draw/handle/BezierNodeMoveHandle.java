@@ -34,7 +34,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -69,10 +69,10 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     private Point2D oldPoint;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableList<BezierNode>> pointKey;
+    private final MapAccessor<BezierPath> pointKey;
 
 
-    public BezierNodeMoveHandle(Figure figure, MapAccessor<ImmutableList<BezierNode>> pointKey, int pointIndex) {
+    public BezierNodeMoveHandle(Figure figure, MapAccessor<BezierPath> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -94,7 +94,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        ImmutableList<BezierNode> list = owner.get(pointKey);
+        BezierPath list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }

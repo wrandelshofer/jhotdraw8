@@ -70,20 +70,43 @@ import java.util.Spliterator;
 public class VectorList<E> implements ImmutableList<E>, Serializable {
     private static final VectorList<?> EMPTY = new VectorList<>();
     final @NonNull BitMappedTrie<E> trie;
-    final int size;
 
     /**
      * Constructs a new empty list.
      */
-    private VectorList() {
+    protected VectorList() {
         this.trie = BitMappedTrie.empty();
-        size = 0;
+    }
+
+    /**
+     * Constructs a new list that contains all the elements of
+     * the specified iterable.
+     *
+     * @param iterable an iterable
+     */
+    @SuppressWarnings("unchecked")
+    protected VectorList(final @Nullable Iterable<? extends E> iterable) {
+        if (iterable == null) {
+            this.trie = BitMappedTrie.empty();
+        } else if (iterable instanceof Collection<?> c && c.isEmpty()
+                || iterable instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+            this.trie = BitMappedTrie.empty();
+        } else if (iterable instanceof VectorList<? extends E> that) {
+            this.trie = (BitMappedTrie<E>) that.trie;
+        } else if (iterable instanceof MutableVectorList<? extends E> mc) {
+            VectorList<? extends E> that = mc.toImmutable();
+            this.trie = (BitMappedTrie<E>) that.trie;
+        } else if (iterable instanceof Collection<?> c) {
+            this.trie = BitMappedTrie.ofAll(c.toArray());
+        } else {
+            BitMappedTrie<E> root = BitMappedTrie.<E>empty().appendAll(iterable);
+            this.trie = root.length() == 0 ? BitMappedTrie.empty() : root;
+        }
     }
 
 
-    VectorList(BitMappedTrie<E> trie, int size) {
+    VectorList(BitMappedTrie<E> trie) {
         this.trie = trie;
-        this.size = size;
     }
 
     @SuppressWarnings("unchecked")
@@ -93,7 +116,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @SafeVarargs
     public static <T> VectorList<T> of(T... t) {
-        return new VectorList<>(BitMappedTrie.ofAll(t), t.length);
+        return new VectorList<>(BitMappedTrie.ofAll(t));
 
     }
 
@@ -111,10 +134,10 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
             return (VectorList<T>) mc.toImmutable();
         }
         if (iterable instanceof Collection<?> c) {
-            return new VectorList<>(BitMappedTrie.ofAll(c.toArray()), c.size());
+            return new VectorList<>(BitMappedTrie.ofAll(c.toArray()));
         }
         BitMappedTrie<T> root = BitMappedTrie.<T>empty().appendAll(iterable);
-        return root.length() == 0 ? of() : new VectorList<>(root, root.length);
+        return root.length() == 0 ? of() : new VectorList<>(root);
     }
 
     @Override
@@ -124,15 +147,15 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public @NonNull VectorList<E> add(@NonNull E element) {
-        return new VectorList<>(trie.append(element), size + 1);
+        return new VectorList<>(trie.append(element));
     }
 
     @Override
     public @NonNull VectorList<E> add(int index, @NonNull E element) {
         if (index == 0) {
-            return new VectorList<>(trie.prepend(element), size + 1);
+            return new VectorList<>(trie.prepend(element));
         }
-        return index == size ? add(element) : addAll(index, Collections.singleton(element));
+        return index == size() ? add(element) : addAll(index, Collections.singleton(element));
     }
 
     @Override
@@ -148,14 +171,14 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         }
         if (cSize < 0) {
             BitMappedTrie<E> newRoot = this.trie;
-            int newSize = size;
+            int newSize = size();
             for (E e : c) {
                 newRoot = newRoot.append(e);
                 newSize++;
             }
-            return new VectorList<>(newRoot, newSize);
+            return new VectorList<>(newRoot);
         }
-        return new VectorList<>(trie.appendAll(c), size + cSize);
+        return new VectorList<>(trie.appendAll(c));
     }
 
     @Override
@@ -165,31 +188,31 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public @NonNull VectorList<E> addLast(@Nullable E element) {
-        return new VectorList<>(trie.append(element), size + 1);
+        return new VectorList<>(trie.append(element));
     }
 
     @Override
     public @NonNull VectorList<E> addAll(int index, @NonNull Iterable<? extends E> c) {
         Objects.requireNonNull(c, "c is null");
-        if (index >= 0 && index <= size) {
+        if (index >= 0 && index <= size()) {
             final VectorList<E> begin = readOnlySubList(0, index).addAll(c);
-            final VectorList<E> end = readOnlySubList(index, size);
+            final VectorList<E> end = readOnlySubList(index, size());
             return begin.addAll(end);
         } else {
-            throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size);
+            throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size());
         }
     }
 
     @Override
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlyListFacade<>(
-                () -> size,
-                index -> get(size - 1 - index),
+                () -> size(),
+                index -> get(size() - 1 - index),
                 () -> this);
     }
 
-    public @NonNull VectorList<E> reversed() {
-        return size < 2 ? this : VectorList.copyOf(readOnlyReversed());
+    public @NonNull VectorList<E> reverse() {
+        return size() < 2 ? this : VectorList.copyOf(readOnlyReversed());
     }
 
     @Override
@@ -204,7 +227,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public VectorList<E> removeFirst() {
+    public @NonNull VectorList<E> removeFirst() {
         return (VectorList<E>) ImmutableList.super.removeFirst();
     }
 
@@ -243,10 +266,10 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public @NonNull VectorList<E> removeRange(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
-        Objects.checkIndex(toIndex, size + 1);
+        Objects.checkIndex(toIndex, size() + 1);
         var begin = trie.take(fromIndex);
         var end = trie.drop(toIndex);
-        return new VectorList<>(begin.append(end.iterator(), end.length), size - (toIndex - fromIndex));
+        return new VectorList<>(begin.append(end.iterator(), end.length));
 
         // The following code does not work as expected, because prepend inserts
         // elements in reverse sequence.
@@ -277,7 +300,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public @NonNull VectorList<E> set(int index, @NonNull E element) {
         BitMappedTrie<E> newRoot = trie.update(index, element);
-        return newRoot == this.trie ? this : new VectorList<>(newRoot, size);
+        return newRoot == this.trie ? this : new VectorList<>(newRoot);
     }
 
     @Override
@@ -288,24 +311,24 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public @NonNull VectorList<E> readOnlySubList(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
-        Objects.checkIndex(toIndex, size + 1);
+        Objects.checkIndex(toIndex, size() + 1);
         BitMappedTrie<E> newRoot = this.trie;
-        if (toIndex < size) {
+        if (toIndex < size()) {
             newRoot = newRoot.take(toIndex);
         }
         if (fromIndex > 0) {
             newRoot = newRoot.drop(fromIndex);
         }
-        return newRoot == this.trie ? this : new VectorList<>(newRoot, toIndex - fromIndex);
+        return newRoot == this.trie ? this : new VectorList<>(newRoot);
     }
 
     @Override
     public int size() {
-        return size;
+        return trie.length;
     }
 
     public int indexOf(Object o, int fromIndex) {
-        if (fromIndex < size) {
+        if (fromIndex < size()) {
             for (Iterator<E> i = trie.iterator(fromIndex, size()); i.hasNext(); fromIndex++) {
                 E e = i.next();
                 if (Objects.equals(o, e)) {

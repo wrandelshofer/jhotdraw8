@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
-import org.jhotdraw8.draw.key.BezierNodeListStyleableKey;
+import org.jhotdraw8.draw.key.BezierPathStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.TransientKey;
@@ -44,10 +44,8 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.shape.BezierNode;
-import org.jhotdraw8.geom.shape.BezierNodePath;
-import org.jhotdraw8.geom.shape.BezierNodePathBuilder;
-import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.geom.shape.BezierPath;
+import org.jhotdraw8.geom.shape.BezierPathBuilder;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -70,7 +68,7 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public static final @NonNull BezierNodeListStyleableKey PATH = new BezierNodeListStyleableKey("path", VectorList.of());
+    public static final @NonNull BezierPathStyleableKey PATH = new BezierPathStyleableKey("path", BezierPath.of());
 
     /**
      * PathMetrics is used to speed up the layout process
@@ -116,7 +114,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             list.add(new LineConnectorHandle(this, START, START_CONNECTOR, START_TARGET));
             list.add(new LineConnectorHandle(this, END, END_CONNECTOR, END_TARGET));
 
-            ImmutableList<BezierNode> nodes = get(PATH);
+            BezierPath nodes = get(PATH);
             for (int i = 0, n = nodes.size(); i < n; i++) {
                 list.add(new BezierNodeTangentHandle(this, PATH, i));
                 if (i == 0 || i == n - 1) {
@@ -183,7 +181,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
-        ImmutableList<BezierNode> nodeList = get(PATH);
+        BezierPath path = get(PATH);
 
         // Find initial start and end points
         if (startConnector != null && startTarget != null) {
@@ -195,8 +193,8 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         // Chop start and end points
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx chp;
-            if (nodeList.size() > 2) {
-                BezierNode secondPoint = nodeList.get(1);
+            if (path.size() > 2) {
+                BezierNode secondPoint = path.get(1);
                 chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), secondPoint.getX0(), secondPoint.getY0());
             } else {
                 chp = startConnector.chopStart(ctx, this, startTarget, start, end);
@@ -206,8 +204,8 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
         if (endConnector != null && endTarget != null) {
             IntersectionPointEx chp;
-            if (nodeList.size() > 2) {
-                BezierNode secondLastPoint = nodeList.get(nodeList.size() - 2);
+            if (path.size() > 2) {
+                BezierNode secondLastPoint = path.get(path.size() - 2);
                 chp = endConnector.chopStart(ctx, this, endTarget,
                         end.getX(), end.getY(),
                         secondLastPoint.getX0(), secondLastPoint.getY0()
@@ -220,26 +218,26 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
 
         // Update start and end positions of the path
-        if (nodeList == null || nodeList.isEmpty()) {
-            nodeList = nodeList.add(new BezierNode(start.getX(), start.getY()).withMask(BezierNode.MOVE_MASK));
-            nodeList = nodeList.add(new BezierNode(end.getX(), end.getY()));
+        if (path == null || path.isEmpty()) {
+            path = path.add(new BezierNode(start.getX(), start.getY()).withMask(BezierNode.MOVE_MASK));
+            path = path.add(new BezierNode(end.getX(), end.getY()));
         } else {
             if (start != null) {
-                BezierNode first = nodeList.getFirst();
-                nodeList = nodeList.set(0,
+                BezierNode first = path.getFirst();
+                path = path.set(0,
                         first.transform(Transform.translate(start.getX() - first.getX0(), start.getY() - first.getY0())));
             }
             if (end != null) {
-                BezierNode last = nodeList.getLast();
-                nodeList = nodeList.set(nodeList.size() - 1,
+                BezierNode last = path.getLast();
+                path = path.set(path.size() - 1,
                         last.transform(Transform.translate(end.getX() - last.getX0(), end.getY() - last.getY0())));
             }
         }
 
 
         // store the path and compute path metrics
-        set(PATH, nodeList);
-        PathMetrics pm = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), new BezierNodePath(nodeList).getPathIterator(null)).build();
+        set(PATH, path);
+        PathMetrics pm = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), path.getPathIterator(null)).build();
         set(PATH_METRICS, pm);
     }
 
@@ -247,7 +245,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     public void transformInLocal(@NonNull Transform tx) {
         set(START, new CssPoint2D(tx.transform(getNonNull(START).getConvertedValue())));
         set(END, new CssPoint2D(tx.transform(getNonNull(END).getConvertedValue())));
-        ImmutableList<BezierNode> path = get(PATH);
+        BezierPath path = get(PATH);
         if (path != null) {
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
@@ -260,7 +258,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     public void translateInLocal(@NonNull CssPoint2D t) {
         set(START, getNonNull(START).add(t));
         set(END, getNonNull(END).add(t));
-        ImmutableList<BezierNode> path = get(PATH);
+        BezierPath path = get(PATH);
         if (path != null) {
             Point2D tc = t.getConvertedValue();
             Translate tx = new Translate(tc.getX(), tc.getY());
@@ -329,9 +327,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        ImmutableList<BezierNode> nodeList = get(PATH);
+        BezierPath path = get(PATH);
         PathMetrics pathMetrics = get(PATH_METRICS);
-        if (nodeList == null || pathMetrics == null) {
+        if (path == null || pathMetrics == null) {
             node.setVisible(false);
             return;
         }
@@ -349,24 +347,21 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         // Cut stroke at start and at end
         double strokeCutStart = getStrokeCutStart(ctx);
         double strokeCutEnd = getStrokeCutEnd(ctx);
-        BezierNodePath bezierNodePath;
         if (strokeCutStart > 0 || strokeCutEnd > 0) {
-            PathBuilder<BezierNodePath> out = new BezierNodePathBuilder();
+            PathBuilder<BezierPath> out = new BezierPathBuilder();
             if (strokeCutStart > 0) {
                 out = new CutStartPathBuilder<>(out, strokeCutStart);
             }
             if (strokeCutEnd > 0) {
                 out = new CutEndPathBuilder<>(out, strokeCutEnd);
             }
-            bezierNodePath = AwtShapes.buildFromPathIterator(out, new BezierNodePath(nodeList).getPathIterator(null)).build();
-        } else {
-            bezierNodePath = new BezierNodePath(nodeList);
+            path = AwtShapes.buildFromPathIterator(out, path.getPathIterator(null)).build();
         }
 
-        bezierNodePath.setWindingRule(getStyledNonNull(FILL_RULE));
+        lineNode.setFillRule(getStyledNonNull(FILL_RULE));
         final List<PathElement> elements =
                 FXShapes.fxPathElementsFromAwt(
-                        bezierNodePath.getPathIterator(null));
+                        path.getPathIterator(null));
         if (!lineNode.getElements().equals(elements)) {
             lineNode.getElements().setAll(elements);
         }
