@@ -8,11 +8,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
-import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champ.ChampIterator;
-import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.Node;
+import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champmap.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
+import org.jhotdraw8.icollection.impl.champmap.Node;
+import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
+import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
@@ -98,10 +99,10 @@ public class ChampMap<K, V>
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
     static final int SALT = new java.util.Random().nextInt();
-    final @NonNull BitmapIndexedNode<SimpleImmutableEntry<K, V>> root;
+    final @NonNull BitmapIndexedNode<K, V> root;
     final int size;
 
-    ChampMap(@NonNull BitmapIndexedNode<SimpleImmutableEntry<K, V>> root, int size) {
+    ChampMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
         this.root = root;
         this.size = size;
     }
@@ -145,7 +146,7 @@ public class ChampMap<K, V>
     }
 
     static <V, K> int entryKeyHash(SimpleImmutableEntry<K, V> e) {
-        return SALT ^ Objects.hashCode(e.getKey());
+        return SALT ^ keyHash(e.getKey());
     }
 
     /**
@@ -174,8 +175,7 @@ public class ChampMap<K, V>
     @Override
     public boolean containsKey(@Nullable Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        return root.find(new SimpleImmutableEntry<>(key, null), keyHash(key), 0,
-                ChampMap::entryKeyEquals) != Node.NO_DATA;
+        return root.findByKey(key, keyHash(key), 0) != Node.NO_DATA;
     }
 
     @Override
@@ -193,9 +193,8 @@ public class ChampMap<K, V>
     @Override
     @SuppressWarnings("unchecked")
     public V get(Object o) {
-        Object result = root.find(
-                new SimpleImmutableEntry<>((K) o, null), keyHash(o), 0, ChampMap::entryKeyEquals);
-        return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
+        Object result = root.findByKey((K) o, keyHash(o), 0);
+        return result == Node.NO_DATA ? null : (V) result;
     }
 
     /**
@@ -225,7 +224,7 @@ public class ChampMap<K, V>
 
     @Override
     public @NonNull Iterator<Map.Entry<K, V>> iterator() {
-        return new ChampIterator<>(root, null);
+        return new EntryIterator<>(root, null, null);
     }
 
     @Override
@@ -235,10 +234,9 @@ public class ChampMap<K, V>
 
     @Override
     public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
-        var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
-        var newRootNode = root.put(null, new SimpleImmutableEntry<>(key, value),
-                keyHash(key), 0, details,
-                ChampMap::updateEntry, ChampMap::entryKeyEquals, ChampMap::entryKeyHash);
+        var details = new ChangeEvent<V>();
+        var newRootNode = root.put(null, key, value,
+                keyHash(key), 0, details, ChampMap::keyHash);
         if (details.isModified()) {
             return new ChampMap<>(newRootNode, details.isReplaced() ? size : size + 1);
         }
@@ -260,10 +258,8 @@ public class ChampMap<K, V>
     @Override
     public @NonNull ChampMap<K, V> remove(@NonNull K key) {
         int keyHash = keyHash(key);
-        var details = new ChangeEvent<SimpleImmutableEntry<K, V>>();
-        var newRootNode =
-                root.remove(null, new SimpleImmutableEntry<>(key, null), keyHash, 0, details,
-                        ChampMap::entryKeyEquals);
+        var details = new ChangeEvent<V>();
+        var newRootNode = root.remove(null, key, keyHash, 0, details);
         if (details.isModified()) {
             return size == 1 ? ChampMap.of() : new ChampMap<>(newRootNode, size - 1);
         }
@@ -287,7 +283,7 @@ public class ChampMap<K, V>
     @Override
     public @NonNull ReadOnlySet<K> readOnlyKeySet() {
         return new ReadOnlySetFacade<>(
-                () -> new ChampIterator<>(root, Map.Entry::getKey),
+                () -> new MappedIterator<>(new EntryIterator<>(root, null, null), Map.Entry::getKey),
                 this::size,
                 this::containsKey,
                 Spliterator.IMMUTABLE);
@@ -299,7 +295,7 @@ public class ChampMap<K, V>
     }
 
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
-        return new ChampSpliterator<>(root, null, size(), characteristics());
+        return new IteratorSpliterator<>(iterator(), size(), characteristics(), null);
     }
 
     /**

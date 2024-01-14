@@ -20,85 +20,21 @@ import java.util.concurrent.TimeUnit;
  * # JMH version: 1.37
  * # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
  * # Apple M2 Max
- *                         (mask)  (size)  Mode  Cnt         Score   Error  Units
- * mContainsFound             -65  100000  avgt    2        32.430          ns/op
- * mContainsNotFound          -65  100000  avgt    2        46.091          ns/op
- * mCopyOf                    -65  100000  avgt    2  11840928.351          ns/op
- * mCopyOnyByOne              -65  100000  avgt    2  16799371.458          ns/op
- * mHead                      -65  100000  avgt    2        12.991          ns/op
- * mIterate                   -65  100000  avgt    2   1156799.094          ns/op
- * mPut                       -65  100000  avgt    2       106.465          ns/op
- * mRemoveAll                 -65  100000  avgt    2  14513054.267          ns/op
- * mRemoveOneByOne            -65  100000  avgt    2  16917620.587          ns/op
- * mRemoveThenAdd             -65  100000  avgt    2       222.654          ns/op
- * mRetainAllAllRetained      -65  100000  avgt    2   2672274.663          ns/op
- * mRetainAllNoneRetained     -65  100000  avgt    2   2667895.081          ns/op
- * mTail                      -65  100000  avgt    2        74.986          ns/op
- * </pre>
- * <pre>
- * # JMH version: 1.36
- * # VM version: JDK 17, OpenJDK 64-Bit Server VM, 17+35-2724
- * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  *
- * Benchmark                           (mask)    (size)  Mode  Cnt           Score   Error  Units
- * ChampMapJmh.mContainsFound             -65        10  avgt                8.135          ns/op
- * ChampMapJmh.mContainsFound             -65      1000  avgt               16.979          ns/op
- * ChampMapJmh.mContainsFound             -65    100000  avgt               57.673          ns/op
- * ChampMapJmh.mContainsFound             -65  10000000  avgt              260.768          ns/op
- * ChampMapJmh.mContainsNotFound          -65        10  avgt                6.709          ns/op
- * ChampMapJmh.mContainsNotFound          -65      1000  avgt               16.938          ns/op
- * ChampMapJmh.mContainsNotFound          -65    100000  avgt               59.807          ns/op
- * ChampMapJmh.mContainsNotFound          -65  10000000  avgt              262.135          ns/op
- * ChampMapJmh.mCopyOf                    -65        10  avgt              477.720          ns/op
- * ChampMapJmh.mCopyOf                    -65      1000  avgt           104483.164          ns/op
- * ChampMapJmh.mCopyOf                    -65    100000  avgt         16088857.957          ns/op
- * ChampMapJmh.mCopyOf                    -65  10000000  avgt       4313203539.000          ns/op
- * ChampMapJmh.mCopyOnyByOne              -65        10  avgt              318.818          ns/op
- * ChampMapJmh.mCopyOnyByOne              -65      1000  avgt            93286.049          ns/op
- * ChampMapJmh.mCopyOnyByOne              -65    100000  avgt         24708346.472          ns/op
- * ChampMapJmh.mCopyOnyByOne              -65  10000000  avgt       5741029507.000          ns/op
- * ChampMapJmh.mHead                      -65        10  avgt                9.839          ns/op
- * ChampMapJmh.mHead                      -65      1000  avgt               12.357          ns/op
- * ChampMapJmh.mHead                      -65    100000  avgt               18.366          ns/op
- * ChampMapJmh.mHead                      -65  10000000  avgt               29.306          ns/op
- * ChampMapJmh.mIterate                   -65        10  avgt              36.719          ns/op
- * ChampMapJmh.mIterate                   -65      1000  avgt             5458.660          ns/op
- * ChampMapJmh.mIterate                   -65    100000  avgt          3442606.147          ns/op
- * ChampMapJmh.mIterate                   -65  10000000  avgt        465335856.500          ns/op
- * ChampMapJmh.mIterateEnumerator         -65        10  avgt               18.694          ns/op
- * ChampMapJmh.mIterateEnumerator         -65      1000  avgt             6114.990          ns/op
- * ChampMapJmh.mIterateEnumerator         -65    100000  avgt          3622574.584          ns/op
- * ChampMapJmh.mIterateEnumerator         -65  10000000  avgt        497013579.095          ns/op
- * ChampMapJmh.mPut                       -65        10  avgt               30.346          ns/op
- * ChampMapJmh.mPut                       -65      1000  avgt               71.152          ns/op
- * ChampMapJmh.mPut                       -65    100000  avgt              151.594          ns/op
- * ChampMapJmh.mPut                       -65  10000000  avgt              657.308          ns/op
- * ChampMapJmh.mRemoveAll                 -65        10  avgt              359.833          ns/op
- * ChampMapJmh.mRemoveAll                 -65      1000  avgt           116705.160          ns/op
- * ChampMapJmh.mRemoveAll                 -65    100000  avgt         23554134.598          ns/op
- * ChampMapJmh.mRemoveAll                 -65  10000000  avgt       4903560584.333          ns/op
- * ChampMapJmh.mRemoveOneByOne            -65        10  avgt              326.347          ns/op
- * ChampMapJmh.mRemoveOneByOne            -65      1000  avgt            97945.848          ns/op
- * ChampMapJmh.mRemoveOneByOne            -65    100000  avgt         26517407.447          ns/op
- * ChampMapJmh.mRemoveOneByOne            -65  10000000  avgt       7446733856.500          ns/op
- * ChampMapJmh.mRemoveThenAdd             -65        10  avgt               68.077          ns/op
- * ChampMapJmh.mRemoveThenAdd             -65      1000  avgt              185.762          ns/op
- * ChampMapJmh.mRemoveThenAdd             -65    100000  avgt              328.524          ns/op
- * ChampMapJmh.mRemoveThenAdd             -65  10000000  avgt              823.737          ns/op
- * ChampMapJmh.mRetainAllAllRetained      -65        10  avgt              131.176          ns/op
- * ChampMapJmh.mRetainAllAllRetained      -65      1000  avgt            18451.559          ns/op
- * ChampMapJmh.mRetainAllAllRetained      -65    100000  avgt          5670748.948          ns/op
- * ChampMapJmh.mRetainAllAllRetained      -65  10000000  avgt       1811336749.167          ns/op
- * ChampMapJmh.mRetainAllNoneRetained     -65        10  avgt              115.168          ns/op
- * ChampMapJmh.mRetainAllNoneRetained     -65      1000  avgt            17648.255          ns/op
- * ChampMapJmh.mRetainAllNoneRetained     -65    100000  avgt          5040221.174          ns/op
- * ChampMapJmh.mRetainAllNoneRetained     -65  10000000  avgt       1759449465.000          ns/op
- * ChampMapJmh.mTail                      -65        10  avgt               29.769          ns/op
- * ChampMapJmh.mTail                      -65      1000  avgt               50.720          ns/op
- * ChampMapJmh.mTail                      -65    100000  avgt               92.446          ns/op
- * ChampMapJmh.mTail                      -65  10000000  avgt              110.721          ns/op
- *
- * Process finished with exit code 0
+ * Benchmark                (mask)  (size)  Mode  Cnt         Score   Error  Units
+ * mContainsFound             -65  100000  avgt    2        32.075          ns/op
+ * mContainsNotFound          -65  100000  avgt    2        31.649          ns/op
+ * mCopyOf                    -65  100000  avgt    2  11764743.641          ns/op
+ * mCopyOnyByOne              -65  100000  avgt    2  16341700.025          ns/op
+ * mHead                      -65  100000  avgt    2        26.465          ns/op
+ * mIterate                   -65  100000  avgt    2   1284574.355          ns/op
+ * mPut                       -65  100000  avgt    2       107.241          ns/op
+ * mRemoveAll                 -65  100000  avgt    2  14470914.017          ns/op
+ * mRemoveOneByOne            -65  100000  avgt    2  18262681.706          ns/op
+ * mRemoveThenAdd             -65  100000  avgt    2       231.794          ns/op
+ * mRetainAllAllRetained      -65  100000  avgt    2   2880248.290          ns/op
+ * mRetainAllNoneRetained     -65  100000  avgt    2   8823159.716          ns/op
+ * mTail                      -65  100000  avgt    2        81.924          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)

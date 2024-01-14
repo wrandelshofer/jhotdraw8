@@ -8,22 +8,16 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.SetFacade;
-import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampMap;
-import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
-import org.jhotdraw8.icollection.impl.champ.BulkChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.ChampIterator;
-import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
-import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
-import org.jhotdraw8.icollection.impl.champ.Node;
+import org.jhotdraw8.icollection.impl.champmap.AbstractMutableChampMap;
+import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
+import org.jhotdraw8.icollection.impl.champmap.ChangeEvent;
+import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
+import org.jhotdraw8.icollection.impl.champmap.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
-import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
 
 import java.io.Serial;
-import java.util.AbstractMap;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -73,7 +67,7 @@ import java.util.Spliterator;
  * @param <K> the key type
  * @param <V> the value type
  */
-public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, AbstractMap.SimpleImmutableEntry<K, V>> {
+public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -145,27 +139,21 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     @Override
     @SuppressWarnings("unchecked")
     public boolean containsKey(@Nullable Object o) {
-        return root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
-                ChampMap.keyHash(o), 0,
-                ChampMap::entryKeyEquals) != Node.NO_DATA;
+        return root.findByKey((K) o,
+                ChampMap.keyHash(o), 0) != Node.NO_DATA;
     }
 
     @Override
     public @NonNull Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
-                new ChampIterator<SimpleImmutableEntry<K, V>, Entry<K, V>>(root,
-                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
-                this::iteratorRemove, this::getModCount
+                new EntryIterator<K, V>(root,
+                        this::iteratorRemoveKey, this::iteratorPutIfPresent), this::getModCount
         );
     }
 
     @Override
     public @NonNull Spliterator<Entry<K, V>> spliterator() {
-        return new FailFastSpliterator<>(
-                new ChampSpliterator<>(root,
-                        e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue()),
-                        size(), Spliterator.NONNULL | characteristics()),
-                this::getModCount, null);
+        return new IteratorSpliterator<>(iterator(), size(), Spliterator.NONNULL | characteristics(), null);
     }
 
     /**
@@ -196,9 +184,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     @Override
     @SuppressWarnings("unchecked")
     public @Nullable V get(Object o) {
-        Object result = root.find(new AbstractMap.SimpleImmutableEntry<>((K) o, null),
-                ChampMap.keyHash(o), 0, ChampMap::entryKeyEquals);
-        return result == Node.NO_DATA || result == null ? null : ((SimpleImmutableEntry<K, V>) result).getValue();
+        Object result = root.findByKey((K) o,
+                ChampMap.keyHash(o), 0);
+        return result == Node.NO_DATA ? null : (V) result;
     }
 
     private void iteratorPutIfPresent(@Nullable K k, @Nullable V v) {
@@ -208,17 +196,14 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         }
     }
 
-    private void iteratorRemove(Map.Entry<K, V> entry) {
-        owner = null;
-        remove(entry.getKey());
-    }
+
 
     @Override
     public V put(K key, V value) {
-        SimpleImmutableEntry<K, V> oldValue = putEntry(key, value).getOldData();
-        return oldValue == null ? null : oldValue.getValue();
+        return putEntry(key, value).getOldValue();
     }
 
+    /*
     @Override
     @SuppressWarnings("unchecked")
     public boolean putAll(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
@@ -229,7 +214,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
             if (that.isEmpty()) {
                 return false;
             }
-            root = (BitmapIndexedNode<SimpleImmutableEntry<K, V>>) (BitmapIndexedNode<?>) that.root;
+            root = (BitmapIndexedNode<K, V>) (BitmapIndexedNode<?>) that.root;
             size = that.size;
             modCount++;
             return true;
@@ -247,16 +232,13 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
             return true;
         }
         return super.putAll(c);
-    }
+    }*/
 
     @NonNull
-    ChangeEvent<SimpleImmutableEntry<K, V>> putEntry(@Nullable K key, @Nullable V val) {
+    ChangeEvent<V> putEntry(@Nullable K key, @Nullable V val) {
         int keyHash = ChampMap.keyHash(key);
-        ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.put(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, val), keyHash, 0, details,
-                ChampMap::updateEntry,
-                ChampMap::entryKeyEquals,
-                ChampMap::entryKeyHash);
+        ChangeEvent<V> details = new ChangeEvent<>();
+        root = root.put(getOrCreateOwner(), key, val, keyHash, 0, details, ChampMap::keyHash);
         if (details.isModified() && !details.isReplaced()) {
             size += 1;
             modCount++;
@@ -267,8 +249,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
     @Override
     public V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
-        SimpleImmutableEntry<K, V> oldValue = removeKey(key).getOldData();
-        return oldValue == null ? null : oldValue.getValue();
+        return removeKey(key).getOldValue();
     }
 
     @Override
@@ -276,6 +257,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         return super.removeAll(c);
     }
 
+    /*
     @SuppressWarnings("unchecked")
     @Override
     public boolean retainAll(@NonNull Iterable<?> c) {
@@ -288,7 +270,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
             return true;
         }
         BulkChangeEvent bulkChange = new BulkChangeEvent();
-        BitmapIndexedNode<SimpleImmutableEntry<K, V>> newRootNode;
+        BitmapIndexedNode<K, V> newRootNode;
         if (c instanceof Collection<?> that) {
             newRootNode = root.filterAll(getOrCreateOwner(), e -> that.contains(e.getKey()), 0, bulkChange);
         } else if (c instanceof ReadOnlyCollection<?> that) {
@@ -305,19 +287,29 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V, Abstrac
         size -= bulkChange.removed;
         modCount++;
         return true;
-    }
+    }*/
 
     @NonNull
-    ChangeEvent<SimpleImmutableEntry<K, V>> removeKey(K key) {
+    ChangeEvent<V> removeKey(K key) {
         int keyHash = ChampMap.keyHash(key);
-        ChangeEvent<SimpleImmutableEntry<K, V>> details = new ChangeEvent<>();
-        root = root.remove(getOrCreateOwner(), new AbstractMap.SimpleImmutableEntry<>(key, null), keyHash, 0, details,
-                ChampMap::entryKeyEquals);
+        ChangeEvent<V> details = new ChangeEvent<>();
+        root = root.remove(getOrCreateOwner(), key, keyHash, 0, details);
         if (details.isModified()) {
             size = size - 1;
             modCount++;
         }
         return details;
+    }
+
+    void iteratorRemoveKey(K key) {
+        // Note: mutator must be null, because we must not change the structure of the trie, while iterating over it.
+        int keyHash = ChampMap.keyHash(key);
+        ChangeEvent<V> details = new ChangeEvent<>();
+        root = root.remove(null, key, keyHash, 0, details);
+        if (details.isModified()) {
+            size = size - 1;
+            modCount++;
+        }
     }
 
     @SuppressWarnings("unchecked")

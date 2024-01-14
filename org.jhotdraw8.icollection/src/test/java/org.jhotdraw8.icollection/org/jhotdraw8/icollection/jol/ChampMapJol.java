@@ -19,21 +19,20 @@ public class ChampMapJol extends AbstractJol {
      * <pre>
      *  # Compressed references (oops): enabled:
      * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
-     * total size              : 92480
+     * total size              : 72280
      * element size            : 48
-     * data size               : 48000 51%
-     * data structure size     : 44480 48%
-     * overhead per element    : 44.48 bytes
+     * data size               : 48000 66%
+     * data structure size     : 24280 33%
+     * overhead per element    : 24.28 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.ChampMap@44d52de2d footprint:
+     * org.jhotdraw8.icollection.ChampMap@4b213651d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        310        33     10520   [Ljava.lang.Object;
-     *       1000        24     24000   java.util.AbstractMap$SimpleImmutableEntry
+     *        310        46     14320   [Ljava.lang.Object;
      *          1        24        24   org.jhotdraw8.icollection.ChampMap
      *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *        310        32      9920   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *        310        32      9920   org.jhotdraw8.icollection.impl.champmap.MutableBitmapIndexedNode
      *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       3622               92480   (total)
+     *       2622               72280   (total)
      * </pre>
      */
     @Test
@@ -49,20 +48,36 @@ public class ChampMapJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
-     * total size              : 89984
+     * total size              : 68528
      * element size            : 48
-     * data size               : 48000 53%
-     * data structure size     : 41984 46%
-     * overhead per element    : 41.984 bytes
+     * data size               : 48000 70%
+     * data structure size     : 20528 29%
+     * overhead per element    : 20.528 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.ChampMap@4b213651d footprint:
+     * org.jhotdraw8.icollection.ChampMap@95e33ccd footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        310        33     10520   [Ljava.lang.Object;
-     *       1000        24     24000   java.util.AbstractMap$SimpleImmutableEntry
+     *        283        48     13712   [Ljava.lang.Object;
      *          1        24        24   org.jhotdraw8.icollection.ChampMap
-     *        310        24      7440   org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode
-     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       3621               89984   (total)
+     *        283        24      6792   org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
+     *       2567               68528   (total)
+     * </pre>
+     * <pre>
+     * class org.jhotdraw8.icollection.ChampMap with 1 elements.
+     * total size              : 120
+     * element size            : 48
+     * data size               : 48 40%
+     * data structure size     : 72 60%
+     * overhead per element    : 72.0 bytes
+     * ----footprint---
+     * org.jhotdraw8.icollection.ChampMap@6c2ed0cdd footprint:
+     *      COUNT       AVG       SUM   DESCRIPTION
+     *          1        24        24   [Ljava.lang.Object;
+     *          1        24        24   org.jhotdraw8.icollection.ChampMap
+     *          1        24        24   org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode
+     *          2        24        48   org.jhotdraw8.icollection.jmh.Key
+     *          5                 120   (total)
      * </pre>
      */
     @Test
@@ -82,24 +97,22 @@ public class ChampMapJol extends AbstractJol {
      * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
      * <p>
      * both versions:
-     * total size              : 92872
-     * element size            : 48
+     * total size              : 71256
      * <p>
      * mapA:
-     * total size              : 92480
+     * total size              : 70808
      * <p>
      * mapB:
-     * total size              : 92464
-     * element size            : 48
+     * total size              : 70792
      * <p>
-     * Difference: 92872 - 92480 = 392 bytes
+     * Difference: 71256 - 70808 = 448 bytes
      */
     @Test
     @Disabled
     public void estimateMemoryUsageForANewVersion() {
         int size = 1_000;
         final int mask = -1;//~64;
-        var data = generateMap(size, mask, size * 10);
+        var data = generateMap(size, mask, size * 10L);
         ChampMap<Key, Value> mapA = ChampMap.copyOf(data);
         Key updatedKey = data.keySet().iterator().next();
         ChampMap<Key, Value> mapB = mapA.put(updatedKey, new Value(mapA.get(updatedKey).value + 1, -1));
@@ -134,7 +147,7 @@ public class ChampMapJol extends AbstractJol {
     @Test
     @Disabled
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
-        int size = 1_000_000;
+        int size = 1_000;
         final int mask = ~64;
         var data = generateMap(size, mask, size * 10);
         ChampMap<Key, Value> mapA = ChampMap.copyOf(data);
