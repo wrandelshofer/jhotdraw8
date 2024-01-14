@@ -4,7 +4,7 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 /**
- * Provides factory methods for {@link ImmutableSequencedSet}s.
+ * Provides static factory methods for {@link ImmutableSequencedSet}s.
  */
 public class ImmutableSequencedSets {
     /**

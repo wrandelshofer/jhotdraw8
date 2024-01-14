@@ -4,7 +4,7 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 
 /**
- * Provides factory methods for {@link ImmutableSet}s.
+ * Provides static factory methods for {@link ImmutableSet}s.
  */
 public class ImmutableSets {
     /**

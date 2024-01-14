@@ -7,7 +7,7 @@ import org.jhotdraw8.icollection.immutable.ImmutableSequencedMap;
 import java.util.Map;
 
 /**
- * Provides factory methods for {@link ImmutableSequencedMap}s.
+ * Provides static factory methods for {@link ImmutableSequencedMap}s.
  */
 public class ImmutableSequencedMaps {
     /**
