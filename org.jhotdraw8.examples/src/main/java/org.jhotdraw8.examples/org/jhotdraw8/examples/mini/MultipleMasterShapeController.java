@@ -16,7 +16,6 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.draw.inspector.InspectorLabels;
 import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.MultipleMasterShape;
 import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;

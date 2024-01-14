@@ -26,9 +26,9 @@ public class BezierPathIterator implements PathIterator {
 
     private final static BezierNode CLOSE_PATH = new BezierNode(0, 0);
 
-    public BezierPathIterator(@NonNull Iterable<BezierNode> nodes, int windingRule, AffineTransform affine) {
+    public BezierPathIterator(@NonNull BezierPath nodes, int windingRule, AffineTransform affine) {
         // We patch the list of bezier nodes, to make the iteration methods simpler.
-        this.nodes = new ArrayList<BezierNode>();
+        this.nodes = new ArrayList<BezierNode>(nodes.size());
         boolean needsMoveTo = true;
         BezierNode lastMoveTo = null;
         for (BezierNode n : nodes) {

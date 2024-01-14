@@ -1,7 +1,11 @@
-package org.jhotdraw8.geom;
+package org.jhotdraw8.examples.mini;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.AbstractShape;
+import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.PathData;
+import org.jhotdraw8.geom.PathDataBuilder;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;

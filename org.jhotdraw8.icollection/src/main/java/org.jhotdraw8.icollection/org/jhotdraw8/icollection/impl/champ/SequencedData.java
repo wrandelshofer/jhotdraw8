@@ -106,7 +106,7 @@ public interface SequencedData {
             return new OrderedPair<>(vector.removeFirst(), offset - 1);
         }
 
-        // If the element is the last , we can remove it and its neighboring tombstones from the vector.
+        // If the element is the last, we can remove it and its neighboring tombstones from the vector.
         if (index == size - 1) {
             Object o = vector.get(size - 2);
             if (o instanceof Tombstone t) {
@@ -115,8 +115,8 @@ public interface SequencedData {
             return new OrderedPair<>(vector.removeLast(), offset);
         }
 
-        // Otherwise, we replace the element with a tombstone, if the element before or after are
-        // already tombstones we have to replace the boundary tombstones with updated skip counts
+        // Otherwise, we replace the element with a tombstone. If the elements before or after are
+        // already tombstones, we have to replace the boundary tombstones with updated skip counts.
         assert index > 0 && index < size - 1;
         Object before = vector.get(index - 1);
         Object after = vector.get(index + 1);
