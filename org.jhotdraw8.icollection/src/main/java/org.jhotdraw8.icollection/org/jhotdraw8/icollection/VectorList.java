@@ -109,6 +109,28 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         this.trie = trie;
     }
 
+    protected VectorList(@NonNull Opaque opaque) {
+        this.trie = opaque.get();
+    }
+
+    /**
+     * Creates a new instance with the provided object as its internal data structure.
+     * <p>
+     * Subclasses must override this method, and return a new instance of their subclass!
+     *
+     * @param trie the internal data structure needed by this class for creating the instance.
+     * @return a new instance of the subclass
+     */
+    @SuppressWarnings("unchecked")
+    protected VectorList<E> newInstance(@NonNull Opaque trie) {
+        return new VectorList<>(trie);
+    }
+
+    @SuppressWarnings("unchecked")
+    private VectorList<E> newInstance(@NonNull BitMappedTrie<E> trie) {
+        return newInstance(new Opaque(trie));
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> VectorList<T> of() {
         return (VectorList<T>) EMPTY;
@@ -147,13 +169,13 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public @NonNull VectorList<E> add(@NonNull E element) {
-        return new VectorList<>(trie.append(element));
+        return newInstance(trie.append(element));
     }
 
     @Override
     public @NonNull VectorList<E> add(int index, @NonNull E element) {
         if (index == 0) {
-            return new VectorList<>(trie.prepend(element));
+            return newInstance(trie.prepend(element));
         }
         return index == size() ? add(element) : addAll(index, Collections.singleton(element));
     }
@@ -176,9 +198,9 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
                 newRoot = newRoot.append(e);
                 newSize++;
             }
-            return new VectorList<>(newRoot);
+            return newInstance(newRoot);
         }
-        return new VectorList<>(trie.appendAll(c));
+        return newInstance(trie.appendAll(c));
     }
 
     @Override
@@ -188,7 +210,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public @NonNull VectorList<E> addLast(@Nullable E element) {
-        return new VectorList<>(trie.append(element));
+        return newInstance(trie.append(element));
     }
 
     @Override
@@ -269,12 +291,12 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         Objects.checkIndex(toIndex, size() + 1);
         var begin = trie.take(fromIndex);
         var end = trie.drop(toIndex);
-        return new VectorList<>(begin.append(end.iterator(), end.length));
+        return newInstance(begin.append(end.iterator(), end.length));
 
         // The following code does not work as expected, because prepend inserts
         // elements in reverse sequence.
         /*
-        return new VectorList<>(begin.length > end.length
+        return newInstance(begin.length > end.length
                 ? begin.append(end.iterator(), end.length)
                 : end.prepend(begin.iterator(), begin.length),
                 size - (toIndex - fromIndex));
@@ -300,7 +322,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public @NonNull VectorList<E> set(int index, @NonNull E element) {
         BitMappedTrie<E> newRoot = trie.update(index, element);
-        return newRoot == this.trie ? this : new VectorList<>(newRoot);
+        return newRoot == this.trie ? this : newInstance(newRoot);
     }
 
     @Override
@@ -319,7 +341,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         if (fromIndex > 0) {
             newRoot = newRoot.drop(fromIndex);
         }
-        return newRoot == this.trie ? this : new VectorList<>(newRoot);
+        return newRoot == this.trie ? this : newInstance(newRoot);
     }
 
     @Override

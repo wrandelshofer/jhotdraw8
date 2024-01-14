@@ -202,7 +202,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
 
-    private @NonNull XMLStreamWriter createXmlStreamWriter(Writer sw) throws IOException {
+    private @NonNull XMLStreamWriter createXmlStreamWriter(@NonNull Writer sw) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
         w.setIndentation(" ".repeat(INDENT_AMOUNT.get(options)));
         return w;

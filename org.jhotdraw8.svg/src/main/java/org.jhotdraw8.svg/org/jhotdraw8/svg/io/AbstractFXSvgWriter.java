@@ -472,7 +472,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    public void write(OutputStream out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public void write(@NonNull OutputStream out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
             writeDocument(w, drawingNode, size);
@@ -482,7 +482,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    public void write(Writer out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public void write(@NonNull Writer out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
             writeDocument(w, drawingNode, size);

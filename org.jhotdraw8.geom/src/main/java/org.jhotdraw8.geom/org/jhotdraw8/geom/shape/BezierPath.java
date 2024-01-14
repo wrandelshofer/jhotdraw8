@@ -13,6 +13,7 @@ import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jhotdraw8.icollection.Opaque;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -36,9 +37,14 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
 
     private final int windingRule;
 
-    private BezierPath() {
+    private BezierPath(int windingRule) {
         super();
-        this.windingRule = PathIterator.WIND_EVEN_ODD;
+        this.windingRule = windingRule;
+    }
+
+    public BezierPath(@NonNull Opaque opaque, int windingRule) {
+        super(opaque);
+        this.windingRule = windingRule;
     }
 
     public BezierPath(@Nullable Iterable<BezierNode> nodes) {
@@ -338,7 +344,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return new BezierPath(temp, windingRule);
     }
 
-    private static final BezierPath EMPTY = new BezierPath();
+    private static final BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);
 
 
     public static @NonNull BezierPath of() {
@@ -347,7 +353,12 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
 
     @Override
     public @NonNull BezierPath clear() {
-        return isEmpty() ? this : EMPTY;
+        return isEmpty() ? this : new BezierPath(windingRule);
+    }
+
+    @Override
+    protected VectorList<BezierNode> newInstance(@NonNull Opaque trie) {
+        return new BezierPath(trie, windingRule);
     }
 
     @Override

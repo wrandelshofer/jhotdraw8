@@ -289,7 +289,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     private boolean hasContent;
     private final StringBuffer charBuffer = new StringBuffer();
 
-    public IndentingXMLStreamWriter(Writer w) {
+    public IndentingXMLStreamWriter(@NonNull Writer w) {
         this.w = w;
         this.encoder = StandardCharsets.UTF_8.newEncoder();
         stack.push(new Element("", "", "<root>", false));

@@ -277,13 +277,22 @@ public class XmlUtil {
         }
     }
 
+    /**
+     * Attempts to replace the provided result by a StaxResult.
+     *
+     * @param result           a result
+     * @param outputProperties the desired output properties of the StaxResult
+     * @return the StaxResult if replacement was successful, the provided result otherwise
+     */
     private static Result replaceStreamResultByStAXResult(@NonNull Result result, @Nullable Properties outputProperties) {
         if (result instanceof StreamResult sr) {
             IndentingXMLStreamWriter w;
             if (sr.getOutputStream() != null)
                 w = new IndentingXMLStreamWriter(sr.getOutputStream(), Charset.forName((String) outputProperties.getOrDefault(OutputKeys.ENCODING, "UTF-8")));
-            else {
+            else if (sr.getWriter()!=null){
                 w = new IndentingXMLStreamWriter(sr.getWriter());
+            } else {
+                return result;
             }
             //w.setSortAttributes(false);
             try {
