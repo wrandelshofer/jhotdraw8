@@ -102,6 +102,34 @@ public class SimpleImmutableMap<K, V>
     final @NonNull BitmapIndexedNode<K, V> root;
     final int size;
 
+    /**
+     * Creates a new instance with the provided opaque data object.
+     * <p>
+     * This constructor is intended to be called from a constructor
+     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     *
+     * @param opaque an opaque data object
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleImmutableMap(@NonNull Opaque opaque) {
+        this(((Map.Entry<BitmapIndexedNode<K, V>, ?>) opaque.get()).getKey(), ((Map.Entry<?, Integer>) opaque.get()).getValue());
+    }
+
+    /**
+     * Creates a new instance with the provided opaque object as its internal data structure.
+     * <p>
+     * Subclasses must override this method, and return a new instance of their subclass!
+     *
+     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @return a new instance of the subclass
+     */
+    protected @NonNull SimpleImmutableMap<K, V> newInstance(@NonNull Opaque opaque) {
+        return new SimpleImmutableMap<>(opaque);
+    }
+
+    private @NonNull SimpleImmutableMap<K, V> newInstance(@NonNull BitmapIndexedNode<K, V> root, int size) {
+        return newInstance(new Opaque(new AbstractMap.SimpleImmutableEntry<>(root, size)));
+    }
     SimpleImmutableMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
         this.root = root;
         this.size = size;
@@ -238,7 +266,7 @@ public class SimpleImmutableMap<K, V>
         var newRootNode = root.put(null, key, value,
                 keyHash(key), 0, details, SimpleImmutableMap::keyHash);
         if (details.isModified()) {
-            return new SimpleImmutableMap<>(newRootNode, details.isReplaced() ? size : size + 1);
+            return newInstance(newRootNode, details.isReplaced() ? size : size + 1);
         }
         return this;
     }
@@ -261,7 +289,7 @@ public class SimpleImmutableMap<K, V>
         var details = new ChangeEvent<V>();
         var newRootNode = root.remove(null, key, keyHash, 0, details);
         if (details.isModified()) {
-            return size == 1 ? SimpleImmutableMap.of() : new SimpleImmutableMap<>(newRootNode, size - 1);
+            return size == 1 ? SimpleImmutableMap.of() : newInstance(newRootNode, size - 1);
         }
         return this;
     }

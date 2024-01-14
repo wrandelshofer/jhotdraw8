@@ -141,10 +141,52 @@ public class SimpleImmutableSequencedSet<E>
      * The size of the set.
      */
     final int size;
+
     /**
      * In this vector we store the elements in the order in which they were inserted.
      */
     final @NonNull SimpleImmutableList<Object> vector;
+
+    private record OpaqueRecord<E>(@NonNull BitmapIndexedNode<SequencedElement<E>> root,
+                                   @NonNull SimpleImmutableList<Object> vector,
+                                   int size, int offset) {
+    }
+
+    ;
+
+    /**
+     * Creates a new instance with the provided opaque data object.
+     * <p>
+     * This constructor is intended to be called from a constructor
+     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     *
+     * @param opaque an opaque data object
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleImmutableSequencedSet(@NonNull Opaque opaque) {
+        this(((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).root,
+                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).vector,
+                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).size,
+                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).offset);
+    }
+
+    /**
+     * Creates a new instance with the provided opaque object as its internal data structure.
+     * <p>
+     * Subclasses must override this method, and return a new instance of their subclass!
+     *
+     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @return a new instance of the subclass
+     */
+    protected @NonNull SimpleImmutableSequencedSet<E> newInstance(@NonNull Opaque opaque) {
+        return new SimpleImmutableSequencedSet<>(opaque);
+    }
+
+    private @NonNull SimpleImmutableSequencedSet<E> newInstance(@NonNull BitmapIndexedNode<SequencedElement<E>> root,
+                                                                @NonNull SimpleImmutableList<Object> vector,
+                                                                int size, int offset) {
+        return new SimpleImmutableSequencedSet<>(new Opaque(new OpaqueRecord<>(root, vector, size, offset)));
+    }
 
     SimpleImmutableSequencedSet(
             @NonNull BitmapIndexedNode<SequencedElement<E>> root,
@@ -397,11 +439,11 @@ public class SimpleImmutableSequencedSet<E>
             var result = SequencedData.vecRenumber(
                     new IdentityObject(), size, vector.size(), root, vector.trie, SequencedElement::elementKeyHash, Objects::equals,
                     (e, seq) -> new SequencedElement<>(e.getElement(), seq));
-            return new SimpleImmutableSequencedSet<>(
+            return newInstance(
                     result.first(), result.second(),
                     size, 0);
         }
-        return new SimpleImmutableSequencedSet<>(root, vector, size, offset);
+        return newInstance(root, vector, size, offset);
     }
 
     @SuppressWarnings("unchecked")

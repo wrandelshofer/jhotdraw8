@@ -109,25 +109,32 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
         this.trie = trie;
     }
 
+    /**
+     * Creates a new instance with the provided opaque data object.
+     * <p>
+     * This constructor is intended to be called from a constructor
+     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     *
+     * @param opaque an opaque data object
+     */
     protected SimpleImmutableList(@NonNull Opaque opaque) {
         this.trie = opaque.get();
     }
 
     /**
-     * Creates a new instance with the provided object as its internal data structure.
+     * Creates a new instance with the provided opaque object as its internal data structure.
      * <p>
      * Subclasses must override this method, and return a new instance of their subclass!
      *
-     * @param trie the internal data structure needed by this class for creating the instance.
+     * @param opaque the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    @SuppressWarnings("unchecked")
-    protected SimpleImmutableList<E> newInstance(@NonNull Opaque trie) {
-        return new SimpleImmutableList<>(trie);
+    protected @NonNull SimpleImmutableList<E> newInstance(@NonNull Opaque opaque) {
+        return new SimpleImmutableList<>(opaque);
     }
 
     @SuppressWarnings("unchecked")
-    private SimpleImmutableList<E> newInstance(@NonNull BitMappedTrie<E> trie) {
+    private @NonNull SimpleImmutableList<E> newInstance(@NonNull BitMappedTrie<E> trie) {
         return newInstance(new Opaque(trie));
     }
 

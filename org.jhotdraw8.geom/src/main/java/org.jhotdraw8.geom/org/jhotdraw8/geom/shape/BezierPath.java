@@ -357,8 +357,8 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     }
 
     @Override
-    protected SimpleImmutableList<BezierNode> newInstance(@NonNull Opaque trie) {
-        return new BezierPath(trie, windingRule);
+    protected SimpleImmutableList<BezierNode> newInstance(@NonNull Opaque opaque) {
+        return new BezierPath(opaque, windingRule);
     }
 
     @Override

@@ -141,6 +141,47 @@ public class SimpleImmutableSequencedMap<K, V> implements ImmutableSequencedMap<
      */
     final @NonNull SimpleImmutableList<Object> vector;
 
+    private record OpaqueRecord<K, V>(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
+                                      @NonNull SimpleImmutableList<Object> vector,
+                                      int size, int offset) {
+    }
+
+    ;
+
+    /**
+     * Creates a new instance with the provided opaque data object.
+     * <p>
+     * This constructor is intended to be called from a constructor
+     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     *
+     * @param opaque an opaque data object
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleImmutableSequencedMap(@NonNull Opaque opaque) {
+        this(((OpaqueRecord<K, V>) opaque.get()).root,
+                ((OpaqueRecord<K, V>) opaque.get()).vector,
+                ((OpaqueRecord<K, V>) opaque.get()).size,
+                ((OpaqueRecord<K, V>) opaque.get()).offset);
+    }
+
+    /**
+     * Creates a new instance with the provided opaque object as its internal data structure.
+     * <p>
+     * Subclasses must override this method, and return a new instance of their subclass!
+     *
+     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @return a new instance of the subclass
+     */
+    protected @NonNull SimpleImmutableSequencedMap<K, V> newInstance(@NonNull Opaque opaque) {
+        return new SimpleImmutableSequencedMap<>(opaque);
+    }
+
+    private @NonNull SimpleImmutableSequencedMap<K, V> newInstance(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
+                                                                   @NonNull SimpleImmutableList<Object> vector,
+                                                                   int size, int offset) {
+        return new SimpleImmutableSequencedMap<>(new Opaque(new OpaqueRecord<>(root, vector, size, offset)));
+    }
+
     SimpleImmutableSequencedMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
                                 @NonNull SimpleImmutableList<Object> vector,
                                 int size, int offset) {
@@ -289,7 +330,7 @@ public class SimpleImmutableSequencedMap<K, V> implements ImmutableSequencedMap<
             // If we have replaced the entry in the tree, but the sequence number is still the same.
             // Then we replace the entry in the vector.
             var newVector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
-            return new SimpleImmutableSequencedMap<>(newRoot, newVector, size, offset);
+            return newInstance(newRoot, newVector, size, offset);
         }
         if (details.isModified()) {
             var newVector = vector;
@@ -325,7 +366,7 @@ public class SimpleImmutableSequencedMap<K, V> implements ImmutableSequencedMap<
         if (details.isReplaced()
                 && details.getOldDataNonNull().getSequenceNumber() == details.getNewDataNonNull().getSequenceNumber()) {
             var newVector = vector.set(details.getNewDataNonNull().getSequenceNumber() - offset, details.getNewDataNonNull());
-            return new SimpleImmutableSequencedMap<>(newRoot, newVector, size, offset);
+            return newInstance(newRoot, newVector, size, offset);
         }
         if (details.isModified()) {
             var newVector = vector;
@@ -398,11 +439,11 @@ public class SimpleImmutableSequencedMap<K, V> implements ImmutableSequencedMap<
             var result = SequencedData.vecRenumber(
                     owner, size, vector.size(), root, vector.trie, SequencedEntry::entryKeyHash, SequencedEntry::keyEquals,
                     (e, seq) -> new SequencedEntry<>(e.getKey(), e.getValue(), seq));
-            return new SimpleImmutableSequencedMap<>(
+            return newInstance(
                     result.first(), result.second(),
                     size, 0);
         }
-        return new SimpleImmutableSequencedMap<>(root, vector, size, offset);
+        return newInstance(root, vector, size, offset);
     }
 
     @Override

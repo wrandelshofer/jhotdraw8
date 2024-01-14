@@ -19,8 +19,10 @@ import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
@@ -95,6 +97,34 @@ public class SimpleImmutableSet<E> implements ImmutableSet<E>, Serializable {
     final @NonNull BitmapIndexedNode<E> root;
     final int size;
 
+    /**
+     * Creates a new instance with the provided opaque data object.
+     * <p>
+     * This constructor is intended to be called from a constructor
+     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     *
+     * @param opaque an opaque data object
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleImmutableSet(@NonNull Opaque opaque) {
+        this(((Map.Entry<BitmapIndexedNode<E>, ?>) opaque.get()).getKey(), ((Map.Entry<?, Integer>) opaque.get()).getValue());
+    }
+
+    /**
+     * Creates a new instance with the provided opaque object as its internal data structure.
+     * <p>
+     * Subclasses must override this method, and return a new instance of their subclass!
+     *
+     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @return a new instance of the subclass
+     */
+    protected @NonNull SimpleImmutableSet<E> newInstance(@NonNull Opaque opaque) {
+        return new SimpleImmutableSet<>(opaque);
+    }
+
+    private @NonNull SimpleImmutableSet<E> newInstance(@NonNull BitmapIndexedNode<E> root, int size) {
+        return new SimpleImmutableSet<>(new Opaque(new AbstractMap.SimpleImmutableEntry<>(root, size)));
+    }
     SimpleImmutableSet(@NonNull BitmapIndexedNode<E> root, int size) {
         this.root = root;
         this.size = size;
@@ -160,7 +190,7 @@ public class SimpleImmutableSet<E> implements ImmutableSet<E>, Serializable {
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details, SimpleImmutableSet::updateElement, Objects::equals, SimpleImmutableSet::keyHash);
         if (details.isModified()) {
-            return new SimpleImmutableSet<>(newRootNode, size + 1);
+            return newInstance(newRootNode, size + 1);
         }
         return this;
     }
@@ -222,7 +252,7 @@ public class SimpleImmutableSet<E> implements ImmutableSet<E>, Serializable {
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = root.remove(null, key, keyHash, 0, details, Objects::equals);
         if (details.isModified()) {
-            return size == 1 ? SimpleImmutableSet.of() : new SimpleImmutableSet<>(newRootNode, size - 1);
+            return size == 1 ? SimpleImmutableSet.of() : newInstance(newRootNode, size - 1);
         }
         return this;
     }

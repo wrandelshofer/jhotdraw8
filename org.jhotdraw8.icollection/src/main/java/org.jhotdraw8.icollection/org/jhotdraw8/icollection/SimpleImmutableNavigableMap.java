@@ -30,6 +30,34 @@ public class SimpleImmutableNavigableMap<K, V> implements ImmutableNavigableMap<
     final @NonNull RedBlackTree<K, V> root;
     final @NonNull Comparator<? super K> comparator;
 
+    /**
+     * Creates a new instance with the provided opaque data object.
+     * <p>
+     * This constructor is intended to be called from a constructor
+     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     *
+     * @param opaque an opaque data object
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleImmutableNavigableMap(@NonNull Opaque opaque) {
+        this(((Map.Entry<Comparator<? super K>, ?>) opaque.get()).getKey(), ((Map.Entry<?, RedBlackTree<K, V>>) opaque.get()).getValue());
+    }
+
+    /**
+     * Creates a new instance with the provided opaque object as its internal data structure.
+     * <p>
+     * Subclasses must override this method, and return a new instance of their subclass!
+     *
+     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @return a new instance of the subclass
+     */
+    protected @NonNull SimpleImmutableNavigableMap<K, V> newInstance(@NonNull Opaque opaque) {
+        return new SimpleImmutableNavigableMap<>(opaque);
+    }
+
+    private @NonNull SimpleImmutableNavigableMap<K, V> newInstance(@NonNull Comparator<? super K> comparator, @NonNull RedBlackTree<K, V> root) {
+        return newInstance(new Opaque(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
+    }
     SimpleImmutableNavigableMap(@NonNull Comparator<? super K> comparator, @NonNull RedBlackTree<K, V> root) {
         this.root = root;
         this.comparator = comparator;
@@ -256,13 +284,13 @@ public class SimpleImmutableNavigableMap<K, V> implements ImmutableNavigableMap<
     @Override
     public @NonNull SimpleImmutableNavigableMap<K, V> put(@NonNull K key, @Nullable V value) {
         RedBlackTree<K, V> newRoot = root.insert(key, value, comparator);
-        return newRoot == root ? this : new SimpleImmutableNavigableMap<>(comparator, newRoot);
+        return newRoot == root ? this : newInstance(comparator, newRoot);
     }
 
     @Override
     public @NonNull SimpleImmutableNavigableMap<K, V> remove(@NonNull K key) {
         RedBlackTree<K, V> newRoot = root.delete(key, comparator);
-        return newRoot == root ? this : new SimpleImmutableNavigableMap<>(comparator, newRoot);
+        return newRoot == root ? this : newInstance(comparator, newRoot);
     }
 
     @Override

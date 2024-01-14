@@ -13,6 +13,7 @@ import org.jhotdraw8.icollection.serialization.SortedSetSerializationProxy;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -43,6 +44,35 @@ public class SimpleImmutableNavigableSet<E> implements ImmutableNavigableSet<E>,
     private static final long serialVersionUID = 0L;
     final @NonNull RedBlackTree<E, Void> root;
     final @NonNull Comparator<E> comparator;
+
+    /**
+     * Creates a new instance with the provided opaque data object.
+     * <p>
+     * This constructor is intended to be called from a constructor
+     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     *
+     * @param opaque an opaque data object
+     */
+    @SuppressWarnings("unchecked")
+    protected SimpleImmutableNavigableSet(@NonNull Opaque opaque) {
+        this(((Map.Entry<Comparator<E>, ?>) opaque.get()).getKey(), ((Map.Entry<?, RedBlackTree<E, Void>>) opaque.get()).getValue());
+    }
+
+    /**
+     * Creates a new instance with the provided opaque object as its internal data structure.
+     * <p>
+     * Subclasses must override this method, and return a new instance of their subclass!
+     *
+     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @return a new instance of the subclass
+     */
+    protected @NonNull SimpleImmutableNavigableSet<E> newInstance(@NonNull Opaque opaque) {
+        return new SimpleImmutableNavigableSet<>(opaque);
+    }
+
+    private @NonNull SimpleImmutableNavigableSet<E> newInstance(@NonNull Comparator<E> comparator, @NonNull RedBlackTree<E, Void> root) {
+        return newInstance(new Opaque(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
+    }
 
     SimpleImmutableNavigableSet(@NonNull Comparator<E> comparator, @NonNull RedBlackTree<E, Void> root) {
         this.root = root;
@@ -140,7 +170,7 @@ public class SimpleImmutableNavigableSet<E> implements ImmutableNavigableSet<E>,
     @Override
     public @NonNull SimpleImmutableNavigableSet<E> add(E element) {
         RedBlackTree<E, Void> newRoot = root.insert(element, null, comparator);
-        return newRoot == root ? this : new SimpleImmutableNavigableSet<>(comparator, newRoot);
+        return newRoot == root ? this : newInstance(comparator, newRoot);
     }
 
     @Override
@@ -153,7 +183,6 @@ public class SimpleImmutableNavigableSet<E> implements ImmutableNavigableSet<E>,
         return root.max().getKey();
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public @NonNull SimpleImmutableNavigableSet<E> addAll(@NonNull Iterable<? extends E> c) {
         return (SimpleImmutableNavigableSet<E>) ImmutableNavigableSet.super.addAll(c);
@@ -241,7 +270,7 @@ public class SimpleImmutableNavigableSet<E> implements ImmutableNavigableSet<E>,
     @Override
     public @NonNull SimpleImmutableNavigableSet<E> remove(E element) {
         RedBlackTree<E, Void> newRoot = root.delete(element, comparator);
-        return newRoot.size() == root.size() ? this : new SimpleImmutableNavigableSet<>(comparator, newRoot);
+        return newRoot.size() == root.size() ? this : newInstance(comparator, newRoot);
     }
 
     @Override
