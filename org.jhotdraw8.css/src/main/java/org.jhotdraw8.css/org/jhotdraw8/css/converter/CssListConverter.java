@@ -12,7 +12,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.IOException;
@@ -127,9 +127,9 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
                             @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = VectorList.copyOf(delimiter);
-        this.prefix = VectorList.copyOf(prefix);
-        this.suffix = VectorList.copyOf(suffix);
+        this.delimiter = SimpleImmutableList.copyOf(delimiter);
+        this.prefix = SimpleImmutableList.copyOf(prefix);
+        this.suffix = SimpleImmutableList.copyOf(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {
@@ -143,7 +143,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
     @Override
     public ImmutableList<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return VectorList.of();
+            return SimpleImmutableList.of();
         } else {
             tt.pushBack();
         }
@@ -179,7 +179,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return VectorList.copyOf(list);
+        return SimpleImmutableList.copyOf(list);
     }
 
     @Override
@@ -220,7 +220,7 @@ public class CssListConverter<T> implements CssConverter<ImmutableList<T>> {
 
     @Override
     public @Nullable ImmutableList<T> getDefaultValue() {
-        return VectorList.of();
+        return SimpleImmutableList.of();
     }
 
     @Override

@@ -30,7 +30,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
@@ -76,7 +76,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
 
     public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new SimpleNonNullKey<ImmutableList<SvgStop>>("stops",
             new TypeToken<ImmutableList<SvgStop>>() {
-            }, VectorList.of());
+            }, SimpleImmutableList.of());
 
     public AbstractSvgGradientFigure() {
         set(VISIBLE, false);

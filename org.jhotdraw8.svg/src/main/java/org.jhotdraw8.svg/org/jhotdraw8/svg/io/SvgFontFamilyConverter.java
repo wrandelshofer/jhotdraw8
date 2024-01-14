@@ -13,7 +13,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.IOException;
@@ -91,7 +91,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
             throw tt.createParseException("<font-family>: <font-family> or <generic-family> expected.");
         }
         tt.requireNextToken(CssTokenType.TT_EOF, "<font-family>: EOF expected.");
-        return VectorList.copyOf(list);
+        return SimpleImmutableList.copyOf(list);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
 
     @Override
     public @Nullable ImmutableList<String> getDefaultValue() {
-        return VectorList.of("serif");
+        return SimpleImmutableList.of("serif");
     }
 
     @Override

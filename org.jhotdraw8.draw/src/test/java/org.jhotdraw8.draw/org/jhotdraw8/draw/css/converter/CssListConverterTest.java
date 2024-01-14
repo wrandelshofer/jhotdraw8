@@ -11,7 +11,7 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.css.converter.CssStringConverter;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -41,7 +41,7 @@ public class CssListConverterTest {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
         CssListConverter<Double> instance = new CssListConverter<>(new CssDoubleConverter(false), null);
-        instance.toString(out, idFactory, value == null ? null : VectorList.copyOf(value));
+        instance.toString(out, idFactory, value == null ? null : SimpleImmutableList.copyOf(value));
         String actual = out.toString();
         assertEquals(expected, actual);
     }

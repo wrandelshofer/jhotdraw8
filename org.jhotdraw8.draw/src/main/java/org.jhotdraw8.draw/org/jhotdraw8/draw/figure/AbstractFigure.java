@@ -19,7 +19,7 @@ import org.jhotdraw8.fxcollection.sharedkeys.KeyMap;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.SimpleImmutableSet;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
@@ -115,7 +115,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     @Override
     public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
         if (layoutObservers == null) {
-            return ChampSet.of();
+            return SimpleImmutableSet.of();
         }
         return new ReadOnlySetFacade<>(layoutObservers);
     }

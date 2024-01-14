@@ -14,7 +14,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * A spliterator for a {@code VectorMap} or {@code VectorSet} that skips
+ * A spliterator for a {@code SimpleImmutableSequencedMap} or {@code SimpleImmutableSequencedSet} that skips
  * tombstones.
  *
  * @param <K> the key type

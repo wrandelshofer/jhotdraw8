@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.css.converter.CssTransformConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.Serial;
@@ -37,7 +37,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param name The name of the key.
      */
     public TransformListStyleableKey(@NonNull String name) {
-        this(name, VectorList.of());
+        this(name, SimpleImmutableList.of());
     }
 
     /**

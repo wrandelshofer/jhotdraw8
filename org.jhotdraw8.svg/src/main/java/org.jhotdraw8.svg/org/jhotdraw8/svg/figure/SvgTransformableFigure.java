@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
@@ -96,7 +96,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (p2l == null || p2l.isIdentity()) {
             remove(TRANSFORMS);
         } else {
-            set(TRANSFORMS, VectorList.of(p2l));
+            set(TRANSFORMS, SimpleImmutableList.of(p2l));
         }
     }
 
@@ -266,9 +266,9 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
      */
     default void setTransforms(@NonNull Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
-            set(TRANSFORMS, VectorList.of());
+            set(TRANSFORMS, SimpleImmutableList.of());
         } else {
-            set(TRANSFORMS, VectorList.of(transforms));
+            set(TRANSFORMS, SimpleImmutableList.of(transforms));
         }
     }
 

@@ -20,7 +20,7 @@ public class ImmutableSequencedSets {
      * @return empty set
      */
     public static <E> ImmutableSequencedSet<E> of() {
-        return VectorSet.of();
+        return SimpleImmutableSequencedSet.of();
     }
 
     /**
@@ -32,7 +32,7 @@ public class ImmutableSequencedSets {
      */
     @SafeVarargs
     public static <E> ImmutableSequencedSet<E> of(E... elements) {
-        return VectorSet.of(elements);
+        return SimpleImmutableSequencedSet.of(elements);
     }
 
     /**
@@ -48,7 +48,7 @@ public class ImmutableSequencedSets {
     public static <E> ImmutableSequencedSet<E> copyOf(Iterable<E> elements) {
         return elements instanceof ImmutableSequencedSet<?>
                 ? (ImmutableSequencedSet<E>) elements :
-                VectorSet.<E>of().addAll(elements);
+                SimpleImmutableSequencedSet.<E>of().addAll(elements);
     }
 
 }

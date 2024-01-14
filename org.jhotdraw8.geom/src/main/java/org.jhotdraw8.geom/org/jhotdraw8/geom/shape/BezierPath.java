@@ -14,7 +14,7 @@ import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.Opaque;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
  *
  * @author Werner Randelshofer
  */
-public class BezierPath extends VectorList<BezierNode> implements Shape {
+public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape {
 
     private final int windingRule;
 
@@ -180,7 +180,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     public BezierPath split(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         ImmutableList<IntersectionPoint> intersections = isect.intersections();
-        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
+        @SuppressWarnings("unchecked") SimpleImmutableList<BezierNode>[] result = new SimpleImmutableList[]{this};
         if (intersections.size() == 1) {
             int segment = (int) intersections.getFirst().getArgumentA();
             final BezierNode middle;
@@ -246,7 +246,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     public BezierPath join(int segment, double tolerance) {
-        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
+        @SuppressWarnings("unchecked") SimpleImmutableList<BezierNode>[] result = new SimpleImmutableList[]{this};
 
         final int prevSegment = (segment - 1 + size()) % size();
         final int nextSegment = (segment + 1) % size();
@@ -357,7 +357,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    protected VectorList<BezierNode> newInstance(@NonNull Opaque trie) {
+    protected SimpleImmutableList<BezierNode> newInstance(@NonNull Opaque trie) {
         return new BezierPath(trie, windingRule);
     }
 

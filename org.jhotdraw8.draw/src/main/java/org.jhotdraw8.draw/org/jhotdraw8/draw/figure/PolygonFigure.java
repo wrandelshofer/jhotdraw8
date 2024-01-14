@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.AffineTransform;
@@ -55,11 +55,11 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     public PolygonFigure(double startX, double startY, double endX, double endY) {
-        set(POINTS, VectorList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
+        set(POINTS, SimpleImmutableList.of(new Point2D(startX, startY), new Point2D(endX, endY)));
     }
 
     public PolygonFigure(Point2D... points) {
-        set(POINTS, VectorList.of(points));
+        set(POINTS, SimpleImmutableList.of(points));
     }
 
     @Override
@@ -93,7 +93,7 @@ public class PolygonFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, FXTransforms.transform(transform, newP.get(i)));
         }
-        set(POINTS, VectorList.copyOf(newP));
+        set(POINTS, SimpleImmutableList.copyOf(newP));
     }
 
     @Override
@@ -102,7 +102,7 @@ public class PolygonFigure extends AbstractLeafFigure
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }
-        set(POINTS, VectorList.copyOf(newP));
+        set(POINTS, SimpleImmutableList.copyOf(newP));
     }
 
     @Override

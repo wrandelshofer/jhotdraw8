@@ -26,7 +26,7 @@ public class ReadOnlySets {
      * @return empty read-only set
      */
     public static <E> ReadOnlySet<E> of() {
-        return ChampSet.of();
+        return SimpleImmutableSet.of();
     }
 
     /**

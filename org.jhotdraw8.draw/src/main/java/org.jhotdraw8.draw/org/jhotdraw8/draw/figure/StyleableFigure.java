@@ -14,7 +14,7 @@ import org.jhotdraw8.draw.key.WordSetKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxcollection.facade.ObservableSetFacade;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.SimpleImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 /**
@@ -39,7 +39,7 @@ public interface StyleableFigure extends Figure {
      * Default value: empty set.
      */
     @NonNull
-    WordSetKey STYLE_CLASS = new WordSetKey("class", ChampSet.of());
+    WordSetKey STYLE_CLASS = new WordSetKey("class", SimpleImmutableSet.of());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
      * are used for styling a figure with CSS.
@@ -48,7 +48,7 @@ public interface StyleableFigure extends Figure {
      * Default value: empty set.
      */
     @NonNull
-    WordSetKey PSEUDO_CLASS = new WordSetKey("pseudoClass", ChampSet.of());
+    WordSetKey PSEUDO_CLASS = new WordSetKey("pseudoClass", SimpleImmutableSet.of());
     /**
      * Defines the style of the figure. The style is used for styling a figure
      * with CSS.

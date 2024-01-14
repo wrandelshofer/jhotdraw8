@@ -39,7 +39,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
@@ -352,7 +352,7 @@ public class PageFigure extends AbstractCompositeFigure
         int currentPage = 0;
         final Transform pageTransform = getPageTransform(currentPage);
 
-        ImmutableList<Transform> transforms = VectorList.of();
+        ImmutableList<Transform> transforms = SimpleImmutableList.of();
         if (!pageTransform.isIdentity()) {
             transforms = transforms.add(pageTransform);
         }

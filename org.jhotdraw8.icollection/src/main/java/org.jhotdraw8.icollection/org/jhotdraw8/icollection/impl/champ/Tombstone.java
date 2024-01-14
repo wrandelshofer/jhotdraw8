@@ -6,10 +6,10 @@
 package org.jhotdraw8.icollection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.VectorSet;
+import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
 
 /**
- * A tombstone is used by {@link VectorSet} to mark a deleted slot in its Vector.
+ * A tombstone is used by {@link SimpleImmutableSequencedSet} to mark a deleted slot in its Vector.
  * <p>
  * A tombstone stores the minimal number of neighbors 'before' and 'after' it in the
  * Vector.
@@ -61,9 +61,9 @@ import org.jhotdraw8.icollection.VectorSet;
  * </pre>
  * References:
  * <p>
- * The design of this class is inspired by 'VectorMap.scala'.
+ * The design of this class is inspired by 'SimpleImmutableSequencedMap.scala'.
  * <dl>
- *      <dt>VectorMap.scala
+ *      <dt>SimpleImmutableSequencedMap.scala
  *      <br>The Scala library. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
  *      <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a>
  *      </dd>

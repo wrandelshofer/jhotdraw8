@@ -6,24 +6,24 @@
 package org.jhotdraw8.icollection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 
 import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * A spliterator for a {@code VectorMap} or {@code VectorSet} that skips
+ * A spliterator for a {@code SimpleImmutableSequencedMap} or {@code SimpleImmutableSequencedSet} that skips
  * tombstones.
  *
  * @param <E> the element type
  */
 public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
-    private final @NonNull VectorList<Object> vector;
+    private final @NonNull SimpleImmutableList<Object> vector;
     private final @NonNull Function<Object, E> mapper;
     private int index;
 
-    public ReverseTombSkippingVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, E> mapper, long est, int additionalCharacteristics) {
+    public ReverseTombSkippingVectorSpliterator(@NonNull SimpleImmutableList<Object> vector, @NonNull Function<Object, E> mapper, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;

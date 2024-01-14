@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.SimpleImmutableMap;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.io.IOException;
@@ -40,7 +40,7 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-    private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
+    private @NonNull ImmutableMap<Key<?>, Object> options = SimpleImmutableMap.of();
 
     public AbstractExportOutputFormat() {
     }

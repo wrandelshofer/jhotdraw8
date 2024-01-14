@@ -9,7 +9,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.icollection.VectorSet;
+import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 import java.io.Serial;
@@ -37,7 +37,7 @@ public class SetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSe
      * @param converter String converter for a list element
      */
     public SetStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter) {
-        super(name, type.getType(), converter, VectorSet.of());
+        super(name, type.getType(), converter, SimpleImmutableSequencedSet.of());
     }
 
     /**

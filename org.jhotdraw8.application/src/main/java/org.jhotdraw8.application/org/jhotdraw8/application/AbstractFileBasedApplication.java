@@ -60,7 +60,7 @@ import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.SimpleImmutableMap;
 
 import java.lang.ref.WeakReference;
 import java.net.URI;
@@ -590,7 +590,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             getActivities().add(v);
             v.addDisabler(this);
             v.read(uri, null,
-                    ChampMap.of(),
+                    SimpleImmutableMap.of(),
                     false, new SimpleWorkState<Void>()).whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();

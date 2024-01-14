@@ -1,7 +1,17 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.VectorList;
-import org.openjdk.jmh.annotations.*;
+import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.math.BigInteger;
 import java.util.Iterator;
@@ -75,14 +85,14 @@ public class VectorListJmh {
     private int mask = -65;
 
     private BenchmarkData data;
-    private VectorList<Key> listA;
+    private SimpleImmutableList<Key> listA;
 
     private int index;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        listA = VectorList.of();
+        listA = SimpleImmutableList.of();
         for (Key key : data.setA) {
             listA = listA.add(key);
         }
@@ -91,16 +101,16 @@ public class VectorListJmh {
 
 
     @Benchmark
-        public VectorList<Key> mAddAll() {
-            return VectorList.copyOf(data.setA);
+    public SimpleImmutableList<Key> mAddAll() {
+        return SimpleImmutableList.copyOf(data.setA);
         }        @Benchmark
-        public VectorList<Key> mAddAllArray() {
-            return VectorList.<Key>of(data.setA.toArray(new Key[0]));
+    public SimpleImmutableList<Key> mAddAllArray() {
+        return SimpleImmutableList.<Key>of(data.setA.toArray(new Key[0]));
         }
 
         @Benchmark
-        public VectorList<Key> mAddOneByOne() {
-            VectorList<Key> set = VectorList.of();
+        public SimpleImmutableList<Key> mAddOneByOne() {
+            SimpleImmutableList<Key> set = SimpleImmutableList.of();
             for (Key key : data.listA) {
                 set = set.add(key);
             }
@@ -108,7 +118,7 @@ public class VectorListJmh {
         }
 
     @Benchmark
-        public VectorList<Key> mRemoveOneByOne() {
+    public SimpleImmutableList<Key> mRemoveOneByOne() {
             var map = listA;
             for (var e : data.listA) {
                 map = map.remove(e);
@@ -118,8 +128,8 @@ public class VectorListJmh {
         }
 
     @Benchmark
-        public VectorList<Key> mRemoveAll() {
-            VectorList<Key> set = listA;
+    public SimpleImmutableList<Key> mRemoveAll() {
+        SimpleImmutableList<Key> set = listA;
             return set.removeAll(data.listA);
     }
 
@@ -151,18 +161,18 @@ public class VectorListJmh {
     }
 
         @Benchmark
-        public VectorList<Key> mTail() {
+        public SimpleImmutableList<Key> mTail() {
             return listA.removeAt(0);
         }
 
         @Benchmark
-        public VectorList<Key> mAddLast() {
+        public SimpleImmutableList<Key> mAddLast() {
             Key key = data.nextKeyInB();
             return (listA).add(key);
         }
 
         @Benchmark
-        public VectorList<Key> mAddFirst() {
+        public SimpleImmutableList<Key> mAddFirst() {
             Key key = data.nextKeyInB();
             return (listA).add(0,key);
         }
@@ -170,12 +180,12 @@ public class VectorListJmh {
 
 
     @Benchmark
-    public VectorList<Key> mRemoveLast() {
+    public SimpleImmutableList<Key> mRemoveLast() {
         return listA.removeAt(listA.size() - 1);
     }
 
     @Benchmark
-    public VectorList<Key> mRemoveAtIndex() {
+    public SimpleImmutableList<Key> mRemoveAtIndex() {
         return listA.removeAt(index);
     }
 
@@ -197,7 +207,7 @@ public class VectorListJmh {
     }
 
     @Benchmark
-    public VectorList<Key> mSet() {
+    public SimpleImmutableList<Key> mSet() {
         int index = data.nextIndexInA();
         Key key = data.nextKeyInB();
         return listA.set(index, key);

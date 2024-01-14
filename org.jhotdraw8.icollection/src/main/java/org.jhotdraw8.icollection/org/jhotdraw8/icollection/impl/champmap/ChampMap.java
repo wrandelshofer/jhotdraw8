@@ -1,5 +1,5 @@
 /*
- * @(#)ChampMap.java
+ * @(#)SimpleImmutableMap.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -174,10 +174,10 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
                 () -> new FailFastIterator<>(new EntryIterator<K, V>(root,
                         this::persistentRemove, this::persistentPutIfPresent),
                         () -> this.modCount),
-                ChampMap.this::size,
-                ChampMap.this::containsEntry,
-                ChampMap.this::clear,
-                ChampMap.this::removeEntry
+                SimpleImmutableMap.this::size,
+                SimpleImmutableMap.this::containsEntry,
+                SimpleImmutableMap.this::clear,
+                SimpleImmutableMap.this::removeEntry
         );*/
     }
 

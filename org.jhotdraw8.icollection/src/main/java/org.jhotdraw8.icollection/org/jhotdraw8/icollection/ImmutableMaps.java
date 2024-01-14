@@ -23,7 +23,7 @@ public class ImmutableMaps {
      * @return empty map
      */
     public static <K, V> ImmutableMap<K, V> of() {
-        return ChampMap.of();
+        return SimpleImmutableMap.of();
     }
 
     /**
@@ -39,7 +39,7 @@ public class ImmutableMaps {
      */
     @SuppressWarnings("unchecked")
     public static <K, V> ImmutableMap<K, V> of(Iterable<? extends Map.Entry<K, V>> entries) {
-        return (entries instanceof ImmutableMap<?, ?>) ? (ImmutableMap<K, V>) entries : ChampMap.<K, V>of().putAll(entries);
+        return (entries instanceof ImmutableMap<?, ?>) ? (ImmutableMap<K, V>) entries : SimpleImmutableMap.<K, V>of().putAll(entries);
     }
 
     /**
@@ -51,6 +51,6 @@ public class ImmutableMaps {
      * @return immutable map of the specified entries
      */
     public static <K, V> ImmutableMap<K, V> copyOf(Map<K, V> entries) {
-        return ChampMap.<K, V>of().putAll(entries);
+        return SimpleImmutableMap.<K, V>of().putAll(entries);
     }
 }

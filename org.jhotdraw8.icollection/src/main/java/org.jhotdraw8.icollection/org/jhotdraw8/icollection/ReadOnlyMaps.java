@@ -25,7 +25,7 @@ public class ReadOnlyMaps {
      * @return empty read-only map
      */
     public static <K, V> ReadOnlyMap<K, V> of() {
-        return ChampMap.of();
+        return SimpleImmutableMap.of();
     }
 
     /**

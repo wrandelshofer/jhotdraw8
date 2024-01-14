@@ -20,7 +20,7 @@ public class ImmutableSets {
      * @return empty set
      */
     public static <E> ImmutableSet<E> of() {
-        return ChampSet.of();
+        return SimpleImmutableSet.of();
     }
 
     /**
@@ -32,7 +32,7 @@ public class ImmutableSets {
      */
     @SafeVarargs
     public static <E> ImmutableSet<E> of(E... elements) {
-        return ChampSet.of(elements);
+        return SimpleImmutableSet.of(elements);
     }
 
     /**
@@ -46,7 +46,7 @@ public class ImmutableSets {
      * @return immutable set of the specified elements
      */
     public static <E> ImmutableSet<E> copyOf(Iterable<E> elements) {
-        return elements instanceof ImmutableSet<?> ? (ImmutableSet<E>) elements : ChampSet.<E>of().addAll(elements);
+        return elements instanceof ImmutableSet<?> ? (ImmutableSet<E>) elements : SimpleImmutableSet.<E>of().addAll(elements);
     }
 
 }

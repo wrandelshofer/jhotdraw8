@@ -25,7 +25,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.SimpleImmutableMap;
 
 import java.net.URI;
 import java.util.Map;
@@ -123,7 +123,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         v.setDataFormat(chosenFormat);
 
         // Open the file
-        v.read(uri, chosenFormat, ChampMap.copyOf(options), false, workState).whenComplete((actualFormat, exception) -> {
+        v.read(uri, chosenFormat, SimpleImmutableMap.copyOf(options), false, workState).whenComplete((actualFormat, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
             } else if (exception != null) {

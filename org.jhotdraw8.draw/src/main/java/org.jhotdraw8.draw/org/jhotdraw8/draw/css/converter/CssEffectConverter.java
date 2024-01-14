@@ -28,7 +28,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.value.CssColor;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.IOException;
@@ -92,7 +92,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class CssEffectConverter implements CssConverter<Effect> {
-    private static final ImmutableList<String> examples = VectorList.of(
+    private static final ImmutableList<String> examples = SimpleImmutableList.of(
             "blend(hard-light)",
             "bloom(10%)",
             "box-blur(10,3,3)",

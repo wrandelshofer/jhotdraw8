@@ -19,7 +19,7 @@ import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.SimpleImmutableMap;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
@@ -72,7 +72,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected IdFactory idFactory;
     protected String namespaceQualifier;
     protected String namespaceURI;
-    private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
+    private @NonNull ImmutableMap<Key<?>, Object> options = SimpleImmutableMap.of();
 
     /**
      * Specifies the number of characters that should be used for indentation.

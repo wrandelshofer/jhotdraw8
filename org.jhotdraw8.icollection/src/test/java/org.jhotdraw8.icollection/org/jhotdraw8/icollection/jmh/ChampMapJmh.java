@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.ChampMap;
+import org.jhotdraw8.icollection.SimpleImmutableMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -51,12 +51,12 @@ public class ChampMapJmh {
     private int mask;
 
     private BenchmarkData data;
-    private ChampMap<Key, Boolean> mapA;
+    private SimpleImmutableMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = ChampMap.of();
+        mapA = SimpleImmutableMap.of();
         for (Key key : data.setA) {
             mapA = mapA.put(key, Boolean.TRUE);
         }
@@ -74,25 +74,25 @@ public class ChampMapJmh {
 
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRemoveThenAdd() {
+    public SimpleImmutableMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mPut() {
+    public SimpleImmutableMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
         return mapA.put(key, Boolean.FALSE);
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mCopyOf() {
-        return ChampMap.copyOf(data.mapA);
+    public SimpleImmutableMap<Key, Boolean> mCopyOf() {
+        return SimpleImmutableMap.copyOf(data.mapA);
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mCopyOnyByOne() {
-        ChampMap<Key, Boolean> set = ChampMap.of();
+    public SimpleImmutableMap<Key, Boolean> mCopyOnyByOne() {
+        SimpleImmutableMap<Key, Boolean> set = SimpleImmutableMap.of();
         for (Key key : data.listA) {
             set = set.put(key, Boolean.FALSE);
         }
@@ -118,12 +118,12 @@ public class ChampMapJmh {
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mTail() {
+    public SimpleImmutableMap<Key, Boolean> mTail() {
         return mapA.remove(mapA.iterator().next().getKey());
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRemoveOneByOne() {
+    public SimpleImmutableMap<Key, Boolean> mRemoveOneByOne() {
         var map = mapA;
         for (var e : data.listA) {
             map = map.remove(e);
@@ -134,14 +134,14 @@ public class ChampMapJmh {
 
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRemoveAll() {
+    public SimpleImmutableMap<Key, Boolean> mRemoveAll() {
         var updated = mapA.removeAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRetainAllNoneRetained() {
+    public SimpleImmutableMap<Key, Boolean> mRetainAllNoneRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setB);
         assert updated.isEmpty();
@@ -149,7 +149,7 @@ public class ChampMapJmh {
     }
 
     @Benchmark
-    public ChampMap<Key, Boolean> mRetainAllAllRetained() {
+    public SimpleImmutableMap<Key, Boolean> mRetainAllAllRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setA);
         assert updated == mapA;

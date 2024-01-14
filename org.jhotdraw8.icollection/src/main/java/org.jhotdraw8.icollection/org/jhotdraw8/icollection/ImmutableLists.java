@@ -19,7 +19,7 @@ public class ImmutableLists {
      * @return empty immutable list
      */
     public static <E> ImmutableList<E> of() {
-        return VectorList.of();
+        return SimpleImmutableList.of();
     }
 
     /**
@@ -31,7 +31,7 @@ public class ImmutableLists {
      */
     @SafeVarargs
     public static <E> ImmutableList<E> of(E... elements) {
-        return VectorList.of(elements);
+        return SimpleImmutableList.of(elements);
     }
 
     /**
@@ -45,6 +45,6 @@ public class ImmutableLists {
      * @return immutable list of the specified elements
      */
     public static <E> ImmutableList<E> copyOf(Iterable<E> elements) {
-        return elements instanceof ImmutableList<?> ? (ImmutableList<E>) elements : VectorList.<E>of().addAll(elements);
+        return elements instanceof ImmutableList<?> ? (ImmutableList<E>) elements : SimpleImmutableList.<E>of().addAll(elements);
     }
 }

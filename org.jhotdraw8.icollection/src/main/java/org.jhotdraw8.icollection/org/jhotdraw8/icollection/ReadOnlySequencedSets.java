@@ -26,7 +26,7 @@ public class ReadOnlySequencedSets {
      * @return empty read-only sequenced set
      */
     public static <E> ReadOnlySequencedSet<E> of() {
-        return VectorSet.of();
+        return SimpleImmutableSequencedSet.of();
     }
 
     /**

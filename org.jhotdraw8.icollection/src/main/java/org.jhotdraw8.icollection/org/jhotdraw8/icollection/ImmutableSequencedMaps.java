@@ -24,7 +24,7 @@ public class ImmutableSequencedMaps {
      * @return empty map
      */
     public static <K, V> ImmutableSequencedMap<K, V> of() {
-        return VectorMap.of();
+        return SimpleImmutableSequencedMap.of();
     }
 
     /**
@@ -42,7 +42,7 @@ public class ImmutableSequencedMaps {
     public static <K, V> ImmutableSequencedMap<K, V> of(Iterable<? extends Map.Entry<K, V>> entries) {
         return (entries instanceof ImmutableSequencedMap<?, ?>)
                 ? (ImmutableSequencedMap<K, V>) entries
-                : VectorMap.<K, V>of().putAll(entries);
+                : SimpleImmutableSequencedMap.<K, V>of().putAll(entries);
     }
 
     /**
@@ -54,6 +54,6 @@ public class ImmutableSequencedMaps {
      * @return immutable sequenced map of the specified entries
      */
     public static <K, V> ImmutableSequencedMap<K, V> copyOf(Map<K, V> entries) {
-        return VectorMap.<K, V>of().putAll(entries);
+        return SimpleImmutableSequencedMap.<K, V>of().putAll(entries);
     }
 }

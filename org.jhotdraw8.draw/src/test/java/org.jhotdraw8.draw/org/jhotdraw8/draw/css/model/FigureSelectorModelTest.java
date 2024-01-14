@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.figure.LabelFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -49,7 +49,7 @@ public class FigureSelectorModelTest {
 
         assertEquals(null, instance.getAttributeAsString(figure, namespace, attrName), "no value has been set, must be null");
 
-        instance.setAttribute(figure, StyleOrigin.USER, namespace, attrName, VectorList.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
+        instance.setAttribute(figure, StyleOrigin.USER, namespace, attrName, SimpleImmutableList.of(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE)));
 
         assertNull(figure.get(key), "figure.get(key) value has been explicitly set to null");
 

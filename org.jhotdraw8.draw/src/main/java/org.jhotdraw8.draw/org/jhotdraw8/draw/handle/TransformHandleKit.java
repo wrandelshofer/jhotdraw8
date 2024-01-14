@@ -30,7 +30,7 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.Collection;
@@ -223,7 +223,7 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds.getConvertedBoundsValue();
-            ImmutableList<Transform> oldTransforms = startTransforms == null ? VectorList.of() : startTransforms;
+            ImmutableList<Transform> oldTransforms = startTransforms == null ? SimpleImmutableList.of() : startTransforms;
 
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();
@@ -237,7 +237,7 @@ public class TransformHandleKit {
             }
             switch (oldTransforms.size()) {
             case 0:
-                model.set(owner, TRANSFORMS, VectorList.of(transform));
+                model.set(owner, TRANSFORMS, SimpleImmutableList.of(transform));
                 break;
             default:
                 int last = oldTransforms.size() - 1;

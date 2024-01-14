@@ -16,7 +16,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.SimpleImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
@@ -82,12 +82,12 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 
     @Override
     public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Styleable element) {
-        return ChampSet.copyOf(element.getStyleClass());
+        return SimpleImmutableSet.copyOf(element.getStyleClass());
     }
 
     @Override
     public @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull Styleable element) {
-        return ChampSet.copyOf(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
+        return SimpleImmutableSet.copyOf(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
                 .collect(Collectors.toList()));
     }
 

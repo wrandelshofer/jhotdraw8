@@ -9,7 +9,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssSetConverter;
 import org.jhotdraw8.draw.css.converter.CssIdentConverter;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.icollection.VectorSet;
+import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 import java.io.Serial;
@@ -31,7 +31,7 @@ public class WordSetStyleableKey extends SetStyleableKey<String> {
      * @param name The name of the key.
      */
     public WordSetStyleableKey(@NonNull String name) {
-        this(name, VectorSet.of());
+        this(name, SimpleImmutableSequencedSet.of());
     }
 
     /**

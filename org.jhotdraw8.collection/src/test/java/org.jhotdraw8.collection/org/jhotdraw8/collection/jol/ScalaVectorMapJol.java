@@ -12,13 +12,13 @@ import java.util.Collections;
 
 /**
  * <pre>
- * class scala.collection.immutable.VectorMap with 1000000 elements.
+ * class scala.collection.immutable.SimpleImmutableSequencedMap with 1000000 elements.
  * total size              : 128419696
  * element size            : 48
  * data size               : 48000000 37%
  * data structure size     : 80419696 62%
  * ----footprint---
- * scala.collection.immutable.VectorMap@53dbe163d footprint:
+ * scala.collection.immutable.SimpleImmutableSequencedMap@53dbe163d footprint:
  *      COUNT       AVG       SUM   DESCRIPTION
  *     301911        30   9139048   [I
  *     339672        55  18793600   [Ljava.lang.Object;
@@ -33,7 +33,7 @@ import java.util.Collections;
  *          1        16        16   scala.collection.immutable.HashMap
  *        102        16      1632   scala.collection.immutable.Vector1
  *          1        56        56   scala.collection.immutable.Vector4
- *          1        32        32   scala.collection.immutable.VectorMap
+ *          1        32        32   scala.collection.immutable.SimpleImmutableSequencedMap
  *    4951323           128419696   (total)
  * </pre>
  */
@@ -41,13 +41,13 @@ public class ScalaVectorMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class scala.collection.immutable.VectorMap with 1000 elements.
+     * class scala.collection.immutable.SimpleImmutableSequencedMap with 1000 elements.
      * total size              : 127576
      * element size            : 48
      * data size               : 48000 37%
      * data structure size     : 79576 62%
      * ----footprint---
-     * scala.collection.immutable.VectorMap@545b995ed footprint:
+     * scala.collection.immutable.SimpleImmutableSequencedMap@545b995ed footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        293        30      8992   [I
      *        328        56     18528   [Ljava.lang.Object;
@@ -58,7 +58,7 @@ public class ScalaVectorMapJol extends AbstractJol {
      *        296        40     11840   scala.collection.immutable.BitmapIndexedMapNode
      *          1        16        16   scala.collection.immutable.HashMap
      *          1        32        32   scala.collection.immutable.Vector2
-     *          1        32        32   scala.collection.immutable.VectorMap
+     *          1        32        32   scala.collection.immutable.SimpleImmutableSequencedMap
      *       4921              127576   (total)
      * </pre>
      */
@@ -79,13 +79,13 @@ public class ScalaVectorMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class scala.collection.immutable.VectorMap with 250 elements.
+     * class scala.collection.immutable.SimpleImmutableSequencedMap with 250 elements.
      * total size              : 45792
      * element size            : 48
      * data size               : 12000 26%
      * data structure size     : 33792 73%
      * ----footprint---
-     * scala.collection.immutable.VectorMap@524f3b3ad footprint:
+     * scala.collection.immutable.SimpleImmutableSequencedMap@524f3b3ad footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *         52        36      1896   [I
      *         84        90      7600   [Ljava.lang.Object;
@@ -96,8 +96,8 @@ public class ScalaVectorMapJol extends AbstractJol {
      *         52        40      2080   scala.collection.immutable.BitmapIndexedMapNode
      *          1        16        16   scala.collection.immutable.HashMap
      *          1        32        32   scala.collection.immutable.Vector2
-     *          1        32        32   scala.collection.immutable.VectorMap
-     *        750        16     12000   scala.collection.immutable.VectorMap$Tombstone
+     *          1        32        32   scala.collection.immutable.SimpleImmutableSequencedMap
+     *        750        16     12000   scala.collection.immutable.SimpleImmutableSequencedMap$Tombstone
      *       1942               45792   (total)
      * </pre>
      */

@@ -8,7 +8,7 @@ package org.jhotdraw8.graph.path.backlink;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayDeque;
@@ -60,7 +60,7 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
         for (IndexedVertexBackLinkWithCost<CC> parent = node; parent != null; parent = parent.getParent()) {
             deque.addFirst(mappingFunction.apply(parent));
         }
-        return new SimpleOrderedPair<>(VectorList.copyOf(deque), node.getCost());
+        return new SimpleOrderedPair<>(SimpleImmutableList.copyOf(deque), node.getCost());
     }
 
 }

@@ -38,7 +38,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.SimpleImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.lang.reflect.Field;
@@ -752,7 +752,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return a list of layout subjects
      */
     default @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
-        return ChampSet.of();
+        return SimpleImmutableSet.of();
     }
 
     /**

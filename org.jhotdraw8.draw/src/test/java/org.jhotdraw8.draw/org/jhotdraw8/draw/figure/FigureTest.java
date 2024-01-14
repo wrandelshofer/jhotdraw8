@@ -24,7 +24,7 @@ import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.SimpleImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
 
@@ -156,7 +156,7 @@ public class FigureTest {
 
         @Override
         public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
-            return ChampSet.of();
+            return SimpleImmutableSet.of();
         }
 
         @Override

@@ -3,8 +3,8 @@ package org.jhotdraw8.icollection.jmh;
 
 import kotlinx.collections.immutable.ExtensionsKt;
 import kotlinx.collections.immutable.PersistentSet;
-import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.MutableChampSet;
+import org.jhotdraw8.icollection.SimpleImmutableSet;
+import org.jhotdraw8.icollection.SimpleMutableSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -42,9 +42,9 @@ public class MutableChampSetJmh {
 
 
     @Benchmark
-    public ChampSet<Integer> mAddMutableOneByOne() {
+    public SimpleImmutableSet<Integer> mAddMutableOneByOne() {
         Random rng = new Random(7);
-        MutableChampSet<Integer> set = new MutableChampSet<>();
+        SimpleMutableSet<Integer> set = new SimpleMutableSet<>();
         for (int i = 0; i < size; i++) {
             set.add(rng.nextInt());
         }
@@ -52,9 +52,9 @@ public class MutableChampSetJmh {
     }
 
     @Benchmark
-    public ChampSet<Integer> mAddImmutableOneByOne() {
+    public SimpleImmutableSet<Integer> mAddImmutableOneByOne() {
         Random rng = new Random(7);
-        ChampSet<Integer> set = ChampSet.of();
+        SimpleImmutableSet<Integer> set = SimpleImmutableSet.of();
         for (int i = 0; i < size; i++) {
             set = set.add(rng.nextInt());
         }

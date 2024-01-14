@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.IOException;
@@ -75,11 +75,11 @@ public class XmlWordListConverter implements Converter<ImmutableList<String>> {
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
-        return VectorList.copyOf(tree);
+        return SimpleImmutableList.copyOf(tree);
     }
 
     @Override
     public ImmutableList<String> getDefaultValue() {
-        return VectorList.of();
+        return SimpleImmutableList.of();
     }
 }

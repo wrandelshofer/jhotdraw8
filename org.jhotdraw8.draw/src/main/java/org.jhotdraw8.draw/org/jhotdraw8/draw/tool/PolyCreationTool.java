@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -89,7 +89,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                     new CssPoint2D(createdFigure.worldToParent(view.viewToWorld(new Point2D(x1, y1))))).getConvertedValue();
             points.add(c);
         }
-        dm.set(createdFigure, key, VectorList.copyOf(points));
+        dm.set(createdFigure, key, SimpleImmutableList.copyOf(points));
 
         event.consume();
     }
@@ -115,7 +115,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                     createdFigure.worldToParent(dv.viewToWorld(x2, y2)))).getConvertedValue();
             DrawingModel dm = dv.getModel();
             points.set(points.size() - 1, c2);
-            dm.set(createdFigure, key, VectorList.copyOf(points));
+            dm.set(createdFigure, key, SimpleImmutableList.copyOf(points));
         }
         event.consume();
     }
@@ -133,7 +133,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
                 if (points.size() < 2) {
                     dm.removeFromParent(createdFigure);
                 } else {
-                    dm.set(createdFigure, key, VectorList.copyOf(points));
+                    dm.set(createdFigure, key, SimpleImmutableList.copyOf(points));
                     dv.getSelectedFigures().clear();
                     dv.getEditor().setHandleType(HandleType.POINT);
                     dv.getSelectedFigures().add(createdFigure);

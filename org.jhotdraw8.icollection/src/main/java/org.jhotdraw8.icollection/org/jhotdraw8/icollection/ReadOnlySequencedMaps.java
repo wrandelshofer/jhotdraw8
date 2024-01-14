@@ -27,7 +27,7 @@ public class ReadOnlySequencedMaps {
      * @return empty read-only sequenced map
      */
     public static <K, V> ReadOnlySequencedMap<K, V> of() {
-        return VectorMap.of();
+        return SimpleImmutableSequencedMap.of();
     }
 
     /**

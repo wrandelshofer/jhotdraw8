@@ -26,7 +26,7 @@ public class ReadOnlyLists {
      * @return empty read-only list
      */
     public static <E> ReadOnlyList<E> of() {
-        return VectorList.of();
+        return SimpleImmutableList.of();
     }
 
     /**
