@@ -8,7 +8,9 @@ import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.PathMetrics;
 import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.SimplePathMetrics;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
@@ -34,7 +36,10 @@ import java.util.ArrayList;
  * @author Werner Randelshofer
  */
 public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape {
-
+    /**
+     * This field is used for memoizing PathMetrics that have been built fom this instance.
+     */
+    private transient @Nullable PathMetrics pathMetrics;
     private final int windingRule;
 
     private BezierPath(int windingRule) {
@@ -436,6 +441,13 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     @Override
     public BezierNode get(int index) {
         return super.get(index);
+    }
+
+    public @NonNull PathMetrics getPathMetrics() {
+        if (pathMetrics == null) {
+            pathMetrics = SimplePathMetrics.of(this);
+        }
+        return pathMetrics;
     }
 
     @Override

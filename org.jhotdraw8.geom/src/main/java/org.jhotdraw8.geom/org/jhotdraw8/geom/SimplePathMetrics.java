@@ -77,6 +77,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         this.maxy = mmaxy;
     }
 
+    public static SimplePathMetrics of(Shape shape) {
+        return AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), shape.getPathIterator(null)).build();
+    }
 
     /**
      * Evaluates the path at the specified arc length

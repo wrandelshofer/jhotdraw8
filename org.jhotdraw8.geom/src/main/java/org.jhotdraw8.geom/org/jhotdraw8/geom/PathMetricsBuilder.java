@@ -124,7 +124,7 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     }
 
     @Override
-    public @Nullable PathMetrics build() {
+    public @Nullable SimplePathMetrics build() {
         return new SimplePathMetrics(commands.toByteArray(),
                 offsets.toIntArray(),
                 coords.toDoubleArray(),
