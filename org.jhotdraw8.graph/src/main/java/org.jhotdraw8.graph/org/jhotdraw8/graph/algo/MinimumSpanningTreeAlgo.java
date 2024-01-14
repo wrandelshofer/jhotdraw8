@@ -7,14 +7,21 @@ package org.jhotdraw8.graph.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class MinimumSpanningTreeAlgo {
@@ -112,7 +119,7 @@ public class MinimumSpanningTreeAlgo {
      * @param costf the cost function
      * @return the graph builder
      */
-    public @NonNull <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(@NonNull DirectedGraph<V, A> graph, @NonNull TriFunction<V, V, A, C> costf) {
+    public @NonNull <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(@NonNull DirectedGraph<V, A> graph, @NonNull Function3<V, V, A, C> costf) {
         Collection<V> vertices = graph.getVertices();
         Set<V> done = new HashSet<>();
         List<ArrowWithCost<V, A, C>> arrowWithCosts = new ArrayList<>();

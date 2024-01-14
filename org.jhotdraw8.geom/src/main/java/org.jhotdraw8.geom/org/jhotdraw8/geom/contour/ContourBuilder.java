@@ -5,8 +5,8 @@
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.QuintFunction;
-import org.jhotdraw8.base.function.TriConsumer;
+import org.jhotdraw8.base.function.Consumer3;
+import org.jhotdraw8.base.function.Function5;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
@@ -327,7 +327,7 @@ public class ContourBuilder {
 
         final boolean connectionArcsAreCCW = offset < 0;
 
-        TriConsumer<PlineOffsetSegment, PlineOffsetSegment, PolyArcPath> joinResultVisitor = (s1, s2, presult) -> {
+        Consumer3<PlineOffsetSegment, PlineOffsetSegment, PolyArcPath> joinResultVisitor = (s1, s2, presult) -> {
             final boolean s1IsLine = s1.v1.bulgeIsZero();
             final boolean s2IsLine = s2.v1.bulgeIsZero();
             if (s1IsLine && s2IsLine) {
@@ -943,7 +943,7 @@ public class ContourBuilder {
 
         Predicate<Double> validLineSegIntersect = (Double t) -> !falseIntersect(t) && Math.abs(t) > Utils.realPrecision;
 
-        QuintFunction<Point2D.Double, Point2D.Double, Point2D.Double, Double, Point2D.Double, Boolean>
+        Function5<Point2D.Double, Point2D.Double, Point2D.Double, Double, Point2D.Double, Boolean>
                 validArcSegIntersect = (Point2D.Double arcCenter, Point2D.Double arcStart,
                                         Point2D.Double arcEnd, Double bulge,
                                         Point2D.Double intrPoint) -> !Points.almostEqual(arcStart, intrPoint, Utils.realPrecision) &&

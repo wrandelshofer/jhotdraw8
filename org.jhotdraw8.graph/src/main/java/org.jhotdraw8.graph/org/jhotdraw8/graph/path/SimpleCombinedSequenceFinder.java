@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
@@ -32,7 +32,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
 
     private final @NonNull C zero;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
-    private final @NonNull TriFunction<V, V, A, C> costFunction;
+    private final @NonNull Function3<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
     private final @NonNull ArcPathSearchAlgo<V, A, C> algo;
 
@@ -52,7 +52,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
     public SimpleCombinedSequenceFinder(
             @NonNull C zero,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-            @NonNull TriFunction<V, V, A, C> costFunction,
+            @NonNull Function3<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction,
             @NonNull ArcPathSearchAlgo<V, A, C> algo) {
         if (zero.doubleValue() != 0.0) {
@@ -81,7 +81,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      */
     public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull TriFunction<VV, VV, AA, Integer> costFunction,
+            @NonNull Function3<VV, VV, AA, Integer> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Integer> algo) {
         return new SimpleCombinedSequenceFinder<>(0, nextArcsFunction, costFunction, Integer::sum, algo);
     }
@@ -139,7 +139,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      */
     public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Double> newDoubleCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull TriFunction<VV, VV, AA, Double> costFunction,
+            @NonNull Function3<VV, VV, AA, Double> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Double> algo) {
         return new SimpleCombinedSequenceFinder<>(0.0, nextArcsFunction, costFunction, Double::sum, algo);
     }
@@ -159,7 +159,7 @@ public class SimpleCombinedSequenceFinder<V, A, C extends Number & Comparable<C>
      */
     public static <VV, AA> @NonNull SimpleCombinedSequenceFinder<VV, AA, Long> newLongCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull TriFunction<VV, VV, AA, Long> costFunction,
+            @NonNull Function3<VV, VV, AA, Long> costFunction,
             @NonNull ArcPathSearchAlgo<VV, AA, Long> algo) {
         return new SimpleCombinedSequenceFinder<>(0L, nextArcsFunction, costFunction, Long::sum, algo);
     }

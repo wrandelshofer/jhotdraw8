@@ -6,8 +6,8 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.Double6Consumer;
-import org.jhotdraw8.base.function.Double8Consumer;
+import org.jhotdraw8.base.function.DoubleConsumer6;
+import org.jhotdraw8.base.function.DoubleConsumer8;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
 import java.awt.geom.CubicCurve2D;
@@ -219,8 +219,8 @@ public class CubicCurves {
      */
     public static void splitCubicCurveTo(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                          double t,
-                                         @Nullable Double6Consumer left,
-                                         @Nullable Double6Consumer right) {
+                                         @Nullable DoubleConsumer6 left,
+                                         @Nullable DoubleConsumer6 right) {
         split(x0, y0, x1, y1, x2, y2, x3, y3, t,
                 left == null ? null : (lx, ly, lx1, ly1, lx2, ly2, lx3, ly3) -> left.accept(lx1, ly1, lx2, ly2, lx3, ly3),
                 right == null ? null : (lx, ly, lx1, ly1, lx2, ly2, lx3, ly3) -> right.accept(lx1, ly1, lx2, ly2, lx3, ly3)
@@ -251,8 +251,8 @@ public class CubicCurves {
      */
     public static void split(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                              double t,
-                             @Nullable Double8Consumer first,
-                             @Nullable Double8Consumer second) {
+                             @Nullable DoubleConsumer8 first,
+                             @Nullable DoubleConsumer8 second) {
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);

@@ -1,17 +1,17 @@
 /*
- * @(#)Double8Consumer.java
+ * @(#)DoubleConsumer8.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.base.function;
 
 /**
- * Double6Consumer.
+ * DoubleConsumer6.
  *
  * @author Werner Randelshofer
  */
 @FunctionalInterface
-public interface Double8Consumer {
+public interface DoubleConsumer8 {
     /**
      * Performs this operation on the given argument.
      *

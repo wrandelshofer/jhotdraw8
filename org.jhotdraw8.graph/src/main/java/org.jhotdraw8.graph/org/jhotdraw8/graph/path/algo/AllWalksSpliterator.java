@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.Arc;
@@ -53,7 +53,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
     private final @NonNull Predicate<V> goalPredicate;
     private final int maxDepth;
     private final @NonNull C maxCost;
-    private final @NonNull TriFunction<V, V, A, C> costFunction;
+    private final @NonNull Function3<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
     private final @NonNull Function<ArcBackLinkWithCost<V, A, C>,
@@ -82,7 +82,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
                                int maxDepth,
                                @NonNull C maxCost,
                                @NonNull C zero,
-                               @NonNull TriFunction<V, V, A, C> costFunction,
+                               @NonNull Function3<V, V, A, C> costFunction,
                                @NonNull BiFunction<C, C, C> sumFunction) {
         super(Long.MAX_VALUE, 0);
         AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, maxCost);
@@ -93,7 +93,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
         this.nextArcsFunction = nextArcsFunction;
         this.sequenceFunction = sequenceFunction;
 
-        this.costFunction = new CheckedNonNegativeArcCostFunction<>(zero, costFunction);
+        this.costFunction = new CheckedNonNegativeArcCostFunction3<>(zero, costFunction);
         this.sumFunction = sumFunction;
         for (V start : startVertices) {
             queue.add(new ArcBackLinkWithCost<>(start, null, null, zero));

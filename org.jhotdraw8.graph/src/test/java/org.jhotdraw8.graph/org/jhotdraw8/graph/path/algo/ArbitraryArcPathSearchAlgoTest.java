@@ -6,7 +6,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.ToIntTriFunction;
+import org.jhotdraw8.base.function.ToIntFunction3;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
@@ -112,7 +112,7 @@ public class ArbitraryArcPathSearchAlgoTest {
 
     @NonNull
     private CombinedSequenceFinder<Integer, Double, Integer> newInstance(DirectedGraph<Integer, Double> graph) {
-        ToIntTriFunction<Integer, Integer, Double> costFunction = (u, v, a) -> a.intValue();
+        ToIntFunction3<Integer, Integer, Double> costFunction = (u, v, a) -> a.intValue();
         CombinedSequenceFinder<Integer, Double, Integer> instance = SimpleCombinedSequenceFinder.newIntCostInstance(
                 graph::getNextArcs,
                 costFunction,

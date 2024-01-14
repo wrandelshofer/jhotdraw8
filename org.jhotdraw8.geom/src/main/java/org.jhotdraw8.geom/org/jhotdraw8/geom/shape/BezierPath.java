@@ -351,6 +351,7 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
         return EMPTY;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @NonNull BezierPath clear() {
         return isEmpty() ? this : new BezierPath(windingRule);

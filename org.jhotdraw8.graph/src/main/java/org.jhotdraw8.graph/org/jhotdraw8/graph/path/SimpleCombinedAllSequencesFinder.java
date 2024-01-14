@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
 import org.jhotdraw8.graph.Arc;
@@ -30,7 +30,7 @@ import java.util.function.Predicate;
 public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparable<C>> implements CombinedAllSequencesFinder<V, A, C> {
     private final @NonNull C zero;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
-    private final @NonNull TriFunction<V, V, A, C> costFunction;
+    private final @NonNull Function3<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
 
     /**
@@ -43,7 +43,7 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
      */
     public SimpleCombinedAllSequencesFinder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
                                             @NonNull C zero,
-                                            @NonNull TriFunction<V, V, A, C> costFunction,
+                                            @NonNull Function3<V, V, A, C> costFunction,
                                             @NonNull BiFunction<C, C, C> sumFunction) {
         this.zero = zero;
         this.nextArcsFunction = nextArcsFunction;

@@ -1,5 +1,5 @@
 /*
- * @(#)CheckedNonNegativeArcCostFunction.java
+ * @(#)CheckedNonNegativeArcCostFunction3.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 
 /**
  * A cost function that checks if the provided cost function always returns
@@ -19,11 +19,11 @@ import org.jhotdraw8.base.function.TriFunction;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-class CheckedNonNegativeArcCostFunction<V, A, C extends Number & Comparable<C>> implements TriFunction<V, V, A, C> {
+class CheckedNonNegativeArcCostFunction3<V, A, C extends Number & Comparable<C>> implements Function3<V, V, A, C> {
     final @NonNull C zero;
-    final @NonNull TriFunction<V, V, A, C> costFunction;
+    final @NonNull Function3<V, V, A, C> costFunction;
 
-    public CheckedNonNegativeArcCostFunction(@NonNull C zero, @NonNull TriFunction<V, V, A, C> costFunction) {
+    public CheckedNonNegativeArcCostFunction3(@NonNull C zero, @NonNull Function3<V, V, A, C> costFunction) {
         AlgoArguments.checkZero(zero);
         this.zero = zero;
         this.costFunction = costFunction;

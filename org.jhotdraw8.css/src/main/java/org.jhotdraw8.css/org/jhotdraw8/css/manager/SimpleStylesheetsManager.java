@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.jhotdraw8.base.converter.UriResolver;
-import org.jhotdraw8.base.function.TriConsumer;
+import org.jhotdraw8.base.function.Consumer3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.css.ast.Declaration;
@@ -80,7 +80,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     private @Nullable Map<String, ImmutableList<CssToken>> cachedInlineCustomProperties;
     private @Nullable Map<String, ImmutableList<CssToken>> cachedUserAgentCustomProperties;
 
-    private @NonNull TriConsumer<Level, String, Throwable> logger = (l, s, t) -> {
+    private @NonNull Consumer3<Level, String, Throwable> logger = (l, s, t) -> {
     };
 
     public SimpleStylesheetsManager(@NonNull SelectorModel<E> selectorModel) {
@@ -120,12 +120,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     @Override
-    public @NonNull TriConsumer<Level, String, Throwable> getLogger() {
+    public @NonNull Consumer3<Level, String, Throwable> getLogger() {
         return logger;
     }
 
     @Override
-    public void setLogger(@NonNull TriConsumer<Level, String, Throwable> logger) {
+    public void setLogger(@NonNull Consumer3<Level, String, Throwable> logger) {
         this.logger = logger;
     }
 
@@ -562,10 +562,10 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         private final @NonNull StyleOrigin origin;
         private @Nullable FutureTask<Stylesheet> future;
         private @Nullable Stylesheet stylesheet;
-        private final @NonNull TriConsumer<Level, String, Throwable> logger;
+        private final @NonNull Consumer3<Level, String, Throwable> logger;
 
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI stylesheetUri, @Nullable URI documentHome, @NonNull TriConsumer<Level, String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull URI stylesheetUri, @Nullable URI documentHome, @NonNull Consumer3<Level, String, Throwable> logger) {
             this.origin = origin;
             this.uri = stylesheetUri;
             this.future = new FutureTask<>(() -> {
@@ -583,14 +583,14 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             executor.execute(future);
         }
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet, @NonNull TriConsumer<Level, String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet, @NonNull Consumer3<Level, String, Throwable> logger) {
             this.logger = logger;
             this.uri = null;
             this.origin = origin;
             this.stylesheet = stylesheet;
         }
 
-        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI stylesheetUri, @Nullable URI documentHome, @NonNull TriConsumer<Level, String, Throwable> logger) {
+        public StylesheetEntry(@NonNull StyleOrigin origin, @NonNull String str, @Nullable URI stylesheetUri, @Nullable URI documentHome, @NonNull Consumer3<Level, String, Throwable> logger) {
             this.logger = logger;
             this.uri = null;
             this.origin = origin;

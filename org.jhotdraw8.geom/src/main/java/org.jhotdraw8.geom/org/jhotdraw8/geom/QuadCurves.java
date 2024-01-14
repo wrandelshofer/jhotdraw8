@@ -6,7 +6,7 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.Double4Consumer;
+import org.jhotdraw8.base.function.DoubleConsumer4;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
@@ -175,8 +175,8 @@ public class QuadCurves {
      */
     public static void split(double x0, double y0, double x1, double y1, double x2, double y2,
                              double t,
-                             @Nullable Double4Consumer first,
-                             @Nullable Double4Consumer second) {
+                             @Nullable DoubleConsumer4 first,
+                             @Nullable DoubleConsumer4 second) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);

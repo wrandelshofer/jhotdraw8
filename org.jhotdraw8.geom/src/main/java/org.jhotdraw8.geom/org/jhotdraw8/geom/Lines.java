@@ -7,7 +7,7 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.Double2Consumer;
+import org.jhotdraw8.base.function.DoubleConsumer2;
 
 import java.awt.geom.Point2D;
 
@@ -217,8 +217,8 @@ public class Lines {
      * @param second if not null, accepts the curve from t1 to x2,y2
      */
     public static void split(double x0, double y0, double x1, double y1, double t,
-                             @Nullable Double2Consumer first,
-                             @Nullable Double2Consumer second) {
+                             @Nullable DoubleConsumer2 first,
+                             @Nullable DoubleConsumer2 second) {
         final double x12 = (x1 - x0) * t + x0;
         final double y12 = (y1 - y0) * t + y0;
 

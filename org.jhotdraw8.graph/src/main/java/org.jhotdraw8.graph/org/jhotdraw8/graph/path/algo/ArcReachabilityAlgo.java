@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 
 import java.util.function.BiFunction;
@@ -43,6 +43,6 @@ public interface ArcReachabilityAlgo<V, A, C extends Number & Comparable<C>> {
             int maxDepth,
             @NonNull C zero,
             @NonNull C costLimit,
-            @NonNull TriFunction<V, V, A, C> costFunction,
+            @NonNull Function3<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction);
 }

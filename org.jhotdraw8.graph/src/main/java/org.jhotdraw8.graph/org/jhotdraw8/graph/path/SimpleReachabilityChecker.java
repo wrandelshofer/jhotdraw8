@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.algo.ArcReachabilityAlgo;
@@ -28,7 +28,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     private final @NonNull ArcReachabilityAlgo<V, A, C> algo;
     private final @NonNull C zero;
     private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
-    private final @NonNull TriFunction<V, V, A, C> costFunction;
+    private final @NonNull Function3<V, V, A, C> costFunction;
     private final @NonNull BiFunction<C, C, C> sumFunction;
 
     /**
@@ -46,7 +46,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     public SimpleReachabilityChecker(
             @NonNull C zero,
             @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-            @NonNull TriFunction<V, V, A, C> costFunction,
+            @NonNull Function3<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction,
             @NonNull ArcReachabilityAlgo<V, A, C> algo) {
         if (zero.doubleValue() != 0.0) {
@@ -73,7 +73,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      */
     public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull TriFunction<VV, VV, AA, Integer> costFunction,
+            @NonNull Function3<VV, VV, AA, Integer> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
         return new SimpleReachabilityChecker<VV, AA, Integer>(0, nextArcsFunction, costFunction, Integer::sum, algo);
     }
@@ -109,7 +109,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      */
     public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Long> newLongCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull TriFunction<VV, VV, AA, Long> costFunction,
+            @NonNull Function3<VV, VV, AA, Long> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Long> algo) {
         return new SimpleReachabilityChecker<VV, AA, Long>(0L, nextArcsFunction, costFunction, Long::sum, algo);
     }

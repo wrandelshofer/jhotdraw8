@@ -1,17 +1,17 @@
 /*
- * @(#)Double6Consumer.java
+ * @(#)DoubleConsumer4.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.base.function;
 
 /**
- * Double6Consumer.
+ * DoubleConsumer4.
  *
  * @author Werner Randelshofer
  */
 @FunctionalInterface
-public interface Double6Consumer {
+public interface DoubleConsumer4 {
     /**
      * Performs this operation on the given argument.
      *
@@ -19,9 +19,7 @@ public interface Double6Consumer {
      * @param v2 the input argument
      * @param v3 the input argument
      * @param v4 the input argument
-     * @param v5 the input argument
-     * @param v6 the input argument
      */
-    void accept(double v1, double v2, double v3, double v4, double v5, double v6);
+    void accept(double v1, double v2, double v3, double v4);
 
 }

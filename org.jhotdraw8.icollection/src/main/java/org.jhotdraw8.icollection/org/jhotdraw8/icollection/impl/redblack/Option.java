@@ -37,6 +37,24 @@ public interface Option<T> {
         return new Some<>(value);
     }
 
+    /**
+     * Creates a new {@code Option} of a given value.
+     *
+     * <pre>{@code
+     * // = Some(3), an Option which contains the value 3
+     * Option<Integer> option = Option.of(3);
+     *
+     * // = None, the empty Option
+     * Option<Integer> none = Option.of(null);
+     * }</pre>
+     *
+     * @param value A value
+     * @param <T>   type of the value
+     * @return {@code Some(value)} if value is not {@code null}, {@code None} otherwise
+     */
+    static <T> Option<T> of(T value) {
+        return (value == null) ? none() : some(value);
+    }
     record Some<T>(T value) implements Option<T> {
         @Override
         public boolean isEmpty() {

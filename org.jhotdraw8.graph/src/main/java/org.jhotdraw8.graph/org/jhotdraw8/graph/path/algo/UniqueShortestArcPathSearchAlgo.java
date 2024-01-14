@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
@@ -84,11 +84,11 @@ public class UniqueShortestArcPathSearchAlgo<V, A, C extends Number & Comparable
             final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth, final @NonNull C zero,
             final @NonNull C costLimit,
-            final @NonNull TriFunction<V, V, A, C> costFunction,
+            final @NonNull Function3<V, V, A, C> costFunction,
             final @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
 
         AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
-        CheckedNonNegativeArcCostFunction<V, A, C> costf = new CheckedNonNegativeArcCostFunction<>(zero, costFunction);
+        CheckedNonNegativeArcCostFunction3<V, A, C> costf = new CheckedNonNegativeArcCostFunction3<>(zero, costFunction);
 
         // Priority queue: back-links by lower cost and shallower depth.
         //          Ordering by depth prevents that the algorithm

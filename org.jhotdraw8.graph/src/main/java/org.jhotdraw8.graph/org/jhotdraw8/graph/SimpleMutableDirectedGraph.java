@@ -6,7 +6,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.icollection.facade.SetFacade;
 
@@ -103,7 +103,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      */
     public <VV, AA> SimpleMutableDirectedGraph(@NonNull DirectedGraph<VV, AA> graph,
                                                @NonNull Function<VV, V> vertexMapper,
-                                               @NonNull TriFunction<VV, VV, AA, A> arrowMapper) {
+                                               @NonNull Function3<VV, VV, AA, A> arrowMapper) {
         super(graph.getVertexCount(), graph.getArrowCount());
         final int vcount = graph.getVertexCount();
         this.vertexMap = new HashMap<>(vcount);

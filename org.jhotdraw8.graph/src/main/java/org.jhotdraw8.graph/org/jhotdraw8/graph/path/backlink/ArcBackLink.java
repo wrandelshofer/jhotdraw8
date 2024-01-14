@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -68,7 +68,7 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
      */
     public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
                                                                                                                                @NonNull CC zero,
-                                                                                                                               @NonNull TriFunction<VV, VV, AA, CC> costFunction,
+                                                                                                                               @NonNull Function3<VV, VV, AA, CC> costFunction,
                                                                                                                                @NonNull BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;

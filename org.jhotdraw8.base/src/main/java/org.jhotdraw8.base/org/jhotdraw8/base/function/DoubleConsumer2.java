@@ -1,16 +1,16 @@
 /*
- * @(#)Double2Consumer.java
+ * @(#)DoubleConsumer2.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.base.function;
 
 /**
- * Double2Consumer.
+ * DoubleConsumer2.
  *
  * @author Werner Randelshofer
  */
 @FunctionalInterface
-public interface Double2Consumer {
+public interface DoubleConsumer2 {
 
     /**
      * Performs this operation on the given argument.

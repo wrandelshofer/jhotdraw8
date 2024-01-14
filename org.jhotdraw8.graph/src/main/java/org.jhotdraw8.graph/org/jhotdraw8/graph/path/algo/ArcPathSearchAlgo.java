@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
@@ -47,6 +47,6 @@ public interface ArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> {
             int maxDepth,
             @NonNull C zero,
             @NonNull C costLimit,
-            @NonNull TriFunction<V, V, A, C> costFunction,
+            @NonNull Function3<V, V, A, C> costFunction,
             @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited);
 }

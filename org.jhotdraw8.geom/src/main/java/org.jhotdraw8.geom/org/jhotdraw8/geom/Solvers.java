@@ -6,7 +6,7 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
@@ -38,7 +38,7 @@ public class Solvers {
      *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
      * </dl>
      */
-    public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> polynomialApprox3(@NonNull TriFunction<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+    public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> polynomialApprox3(@NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
                                                                                            @NonNull ToDoubleFunction<Double> fp,
                                                                                            double xmin, double xmax) {
         double y1 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) * 1.0 / 3.0);
@@ -80,7 +80,7 @@ public class Solvers {
      * </dl>
      */
     public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> invPolynomialApprox3(
-            @NonNull TriFunction<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+            @NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             @NonNull ToDoubleFunction<Double> fp,
             double xmin, double xmax) {
         ToDoubleFunction<Double> f = (t) -> Math.abs(quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) * t));
@@ -182,7 +182,7 @@ public class Solvers {
      * @return x the estimated x value
      */
     public static double hybridNewtonBisectionMethod(
-            @NonNull TriFunction<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+            @NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             @NonNull ToDoubleFunction<Double> f, double y, double xmin, double xmax, double x0, double epsilon) {
 
         return hybridNewtonBisectionMethod(x -> quadratureFunction.apply(f, 0.0, x), f, y, xmin, xmax, x0, epsilon);
@@ -269,7 +269,7 @@ public class Solvers {
      */
     public static @NonNull SimpleOrderedPair<ToDoubleFunction<Double>, Double> invPolynomialChebyshevApprox(
             int N,
-            @NonNull TriFunction<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+            @NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
             @NonNull ToDoubleFunction<Double> fp,
             double tmin, double tmax) {
         // TODO: find better way to determine N. For Arc 10 seems fine, for some Quads 10 is too low,

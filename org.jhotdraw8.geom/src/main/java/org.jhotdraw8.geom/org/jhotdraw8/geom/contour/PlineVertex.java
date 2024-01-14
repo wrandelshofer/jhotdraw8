@@ -6,8 +6,8 @@ package org.jhotdraw8.geom.contour;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.QuadConsumer;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Consumer4;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.geom.AABB;
@@ -25,7 +25,10 @@ import java.util.function.Predicate;
 import static java.lang.Math.max;
 import static java.lang.Math.min;
 import static org.jhotdraw8.geom.contour.BulgeConversionFunctions.arcRadiusAndCenter;
-import static org.jhotdraw8.geom.contour.Utils.*;
+import static org.jhotdraw8.geom.contour.Utils.angle;
+import static org.jhotdraw8.geom.contour.Utils.closestPointOnLineSeg;
+import static org.jhotdraw8.geom.contour.Utils.pointFromParametric;
+import static org.jhotdraw8.geom.contour.Utils.pointWithinArcSweepAngle;
 
 /**
  * PlineVertex.
@@ -296,7 +299,7 @@ public class PlineVertex implements Cloneable {
         final boolean uIsLine = u1.bulgeIsZero();
 
         // helper function to process line arc intersect
-        QuadConsumer<Point2D.Double, Point2D.Double, PlineVertex, PlineVertex>
+        Consumer4<Point2D.Double, Point2D.Double, PlineVertex, PlineVertex>
                 processLineArcIntr = /*[&result]*/(Point2D.Double p0, Point2D.Double p1,
                                                    PlineVertex a1, PlineVertex a2) -> {
             BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
@@ -374,7 +377,7 @@ public class PlineVertex implements Cloneable {
             BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
             BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
-            TriFunction<Point2D.Double, Point2D.Double, Double, OrderedPair<Double, Double>> startAndSweepAngle = (Point2D.Double sp, Point2D.Double center, Double bulge) -> {
+            Function3<Point2D.Double, Point2D.Double, Double, OrderedPair<Double, Double>> startAndSweepAngle = (Point2D.Double sp, Point2D.Double center, Double bulge) -> {
                 double startAngle = Utils.normalizeRadians(angle(center, sp));
                 double sweepAngle = 4.0 * Math.atan(bulge);
                 return new SimpleOrderedPair<>(startAngle, sweepAngle);

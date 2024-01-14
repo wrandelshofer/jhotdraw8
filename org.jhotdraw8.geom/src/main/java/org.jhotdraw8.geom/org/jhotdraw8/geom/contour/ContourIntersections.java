@@ -5,9 +5,9 @@
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.QuadConsumer;
-import org.jhotdraw8.base.function.TriConsumer;
-import org.jhotdraw8.base.function.TriFunction;
+import org.jhotdraw8.base.function.Consumer3;
+import org.jhotdraw8.base.function.Consumer4;
+import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.NonNullOrderedPair;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
@@ -252,7 +252,7 @@ public class ContourIntersections {
             return;
         }
 
-        TriConsumer<Integer, Integer, Integer> testAndAddIntersect = (Integer i, Integer j, Integer k) -> {
+        Consumer3<Integer, Integer, Integer> testAndAddIntersect = (Integer i, Integer j, Integer k) -> {
             final PlineVertex v1 = pline.get(i);
             final PlineVertex v2 = pline.get(j);
             final PlineVertex v3 = pline.get(k);
@@ -487,7 +487,7 @@ public class ContourIntersections {
         final boolean uIsLine = u1.bulgeIsZero();
 
         // helper function to process line arc intersect
-        QuadConsumer<Point2D.Double, Point2D.Double, PlineVertex, PlineVertex> processLineArcIntr
+        Consumer4<Point2D.Double, Point2D.Double, PlineVertex, PlineVertex> processLineArcIntr
                 = (final Point2D.Double p0, final Point2D.Double p1,
                    final PlineVertex a1, final PlineVertex a2) -> {
             BulgeConversionFunctions.ArcRadiusAndCenter arc = arcRadiusAndCenter(a1, a2);
@@ -574,7 +574,7 @@ public class ContourIntersections {
             BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
             BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
-            TriFunction<Point2D.Double, Point2D.Double, Double, NonNullOrderedPair<Double, Double>> startAndSweepAngle = (final Point2D.Double sp, final Point2D.Double center, Double bulge) -> {
+            Function3<Point2D.Double, Point2D.Double, Double, NonNullOrderedPair<Double, Double>> startAndSweepAngle = (final Point2D.Double sp, final Point2D.Double center, Double bulge) -> {
                 double startAngle = Utils.normalizeRadians(Utils.angle(center, sp));
                 double sweepAngle = 4.0 * Math.atan(bulge);
                 return new NonNullOrderedPair<>(startAngle, sweepAngle);
