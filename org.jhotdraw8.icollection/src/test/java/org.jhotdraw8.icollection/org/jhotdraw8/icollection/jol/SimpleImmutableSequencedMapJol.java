@@ -51,30 +51,30 @@ public class SimpleImmutableSequencedMapJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.SimpleImmutableSequencedMap with 250 elements.
-     * total size              : 26288
+     * total size              : 25752
      * element size            : 48
-     * data size               : 12000 45%
-     * data structure size     : 14288 54%
-     * overhead per element    : 57.152 bytes
+     * data size               : 12000 46%
+     * data structure size     : 13752 53%
+     * overhead per element    : 55.008 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.SimpleImmutableSequencedMap@b4711e2d footprint:
+     * org.jhotdraw8.icollection.SimpleImmutableSequencedMap@62010f5cd footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        102        50      5128   [Ljava.lang.Object;
-     *          1        24        24   org.jhotdraw8.icollection.SimpleImmutableList
+     *         92        53      4944   [Ljava.lang.Object;
+     *          1        16        16   org.jhotdraw8.icollection.SimpleImmutableList
      *          1        32        32   org.jhotdraw8.icollection.SimpleImmutableSequencedMap
      *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *         85        32      2720   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
-     *        250        24      6000   org.jhotdraw8.icollection.impl.champ.SequencedEntry
-     *         20        16       320   org.jhotdraw8.icollection.impl.champ.Tombstone
+     *         75        32      2400   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *        251        24      6024   org.jhotdraw8.icollection.impl.champ.SequencedEntry
+     *         14        16       224   org.jhotdraw8.icollection.impl.champ.Tombstone
      *          1        16        16   org.jhotdraw8.icollection.impl.vector.ArrayType$ObjectArrayType
      *          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
-     *        500        24     12000   org.jhotdraw8.icollection.jmh.Key
-     *        962               26288   (total)
+     *        251        24      6024   org.jhotdraw8.icollection.jmh.Key
+     *        251        24      6024   org.jhotdraw8.icollection.jmh.Value
+     *        939               25752   (total)
      * </pre>
      */
     @Test
     @Disabled
-
     public void estimateMemoryUsageAfter75PercentRandomRemoves() {
         int size = 1000;
         final int mask = ~64;

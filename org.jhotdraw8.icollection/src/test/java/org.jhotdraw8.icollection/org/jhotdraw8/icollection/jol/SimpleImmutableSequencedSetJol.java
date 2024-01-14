@@ -48,25 +48,25 @@ public class SimpleImmutableSequencedSetJol extends AbstractJol {
     /**
      * <pre>
      * class org.jhotdraw8.icollection.SimpleImmutableSequencedSet with 250 elements.
-     * total size              : 20544
+     * total size              : 19560
      * element size            : 24
-     * data size               : 6000 29%
-     * data structure size     : 14544 70%
-     * overhead per element    : 58.176 bytes
+     * data size               : 6000 30%
+     * data structure size     : 13560 69%
+     * overhead per element    : 54.24 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.SimpleImmutableSequencedSet@56673b2cd footprint:
+     * org.jhotdraw8.icollection.SimpleImmutableSequencedSet@2796aeaed footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        104        49      5144   [Ljava.lang.Object;
-     *          1        24        24   org.jhotdraw8.icollection.SimpleImmutableList
+     *         88        55      4840   [Ljava.lang.Object;
+     *          1        16        16   org.jhotdraw8.icollection.SimpleImmutableList
      *          1        32        32   org.jhotdraw8.icollection.SimpleImmutableSequencedSet
      *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *         87        32      2784   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
-     *        251        24      6024   org.jhotdraw8.icollection.impl.champ.SequencedElement
-     *         28        16       448   org.jhotdraw8.icollection.impl.champ.Tombstone
+     *         71        32      2272   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *        252        24      6048   org.jhotdraw8.icollection.impl.champ.SequencedElement
+     *         15        16       240   org.jhotdraw8.icollection.impl.champ.Tombstone
      *          1        16        16   org.jhotdraw8.icollection.impl.vector.ArrayType$ObjectArrayType
      *          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
-     *        251        24      6024   org.jhotdraw8.icollection.jmh.Key
-     *        726               20544   (total)
+     *        252        24      6048   org.jhotdraw8.icollection.jmh.Key
+     *        683               19560   (total)
      * </pre>
      */
     @Test

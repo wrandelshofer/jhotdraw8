@@ -80,26 +80,14 @@ public record Tombstone(int skip) {
      * we can save lots of memory by this.
      */
     private static final @NonNull Tombstone[] TOMBS = {
-            new Tombstone(-3),
-            new Tombstone(-2),
-            new Tombstone(-1),
             new Tombstone(0),
             new Tombstone(1),
             new Tombstone(2),
             new Tombstone(3),
     };
 
-    public int after() {
-        return skip > 0 ? skip : 0;
-    }
-
-    public int before() {
-        return skip < 0 ? -skip : 0;
-    }
-
-    static @NonNull Tombstone create(int before, int after) {
-        if (before != 0 && after != 0) throw new IllegalArgumentException("one of before or after must be 0");
-        int skip = after - before;
-        return (Math.abs(skip) <= 3) ? TOMBS[skip + 3] : new Tombstone(skip);
+    static @NonNull Tombstone create(int skip) {
+        assert skip >= 0;
+        return skip < TOMBS.length ? TOMBS[skip] : new Tombstone(skip);
     }
 }

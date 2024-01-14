@@ -37,7 +37,7 @@ public class TombSkippingVectorSpliterator<K> extends Spliterators.AbstractSplit
         boolean success = vector.tryAdvance(this);
         if (!success) return false;
         if (current instanceof Tombstone t) {
-            vector.skip(t.after());
+            vector.skip(t.skip());
             vector.tryAdvance(this);
         }
         action.accept(mapper.apply(current));

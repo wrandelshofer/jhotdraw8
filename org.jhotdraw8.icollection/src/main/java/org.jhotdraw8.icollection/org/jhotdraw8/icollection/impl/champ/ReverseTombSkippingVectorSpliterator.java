@@ -37,7 +37,7 @@ public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.Abstra
         }
         Object o = vector.get(index--);
         if (o instanceof Tombstone t) {
-            index -= t.before();
+            index -= t.skip();
             o = vector.get(index--);
         }
         action.accept(mapper.apply(o));
