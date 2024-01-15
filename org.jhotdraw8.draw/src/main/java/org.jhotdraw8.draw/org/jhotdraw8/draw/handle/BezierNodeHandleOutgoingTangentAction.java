@@ -19,10 +19,10 @@ import static org.jhotdraw8.geom.shape.BezierNode.C2_MASK;
 public class BezierNodeHandleOutgoingTangentAction extends AbstractBezierNodeHandleAction {
     public final static String ID = "handle.bezierNode.outgoingTangent";
 
-    public BezierNodeHandleOutgoingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> bezierPathKey, @NonNull int nodeIndex, @NonNull DrawingView view) {
-        super(ID, figure, bezierPathKey, nodeIndex, view);
+    public BezierNodeHandleOutgoingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, @NonNull int nodeIndex, @NonNull DrawingView view) {
+        super(ID, figure, pathKey, nodeIndex, view);
 
-        BezierPath path = figure.get(bezierPathKey);
+        BezierPath path = figure.get(pathKey);
         if (path != null && path.size() > nodeIndex) {
             BezierNode bnode = path.get(nodeIndex);
             setSelected((bnode.getMask() & BezierNode.C1C2_MASK) == BezierNode.C2_MASK);
@@ -31,12 +31,12 @@ public class BezierNodeHandleOutgoingTangentAction extends AbstractBezierNodeHan
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event) {
-        BezierPath path = figure.get(pathKey);
+        BezierPath path = owner.get(pathKey);
         if (path == null || path.size() <= nodeIndex) return;
         BezierNode bnode = path.get(nodeIndex);
         BezierNode changedNode = bnode.withClearMaskBits(C1C2_MASK).withMaskBits(C2_MASK);
         path = path.set(nodeIndex, changedNode);
-        view.getModel().set(figure, pathKey, path);
+        view.getModel().set(owner, pathKey, path);
         view.recreateHandles();
     }
 }

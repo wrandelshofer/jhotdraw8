@@ -77,7 +77,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     private final @NonNull Region node;
     private @Nullable Point2D pickLocation;
     private final int nodeIndex;
-    private final MapAccessor<BezierPath> pathKey;
+    private final @NonNull MapAccessor<BezierPath> pathKey;
 
 
     public BezierNodeNonMovableEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, @NonNull int nodeIndex) {
@@ -100,9 +100,9 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
-    private BezierNode getBezierNode() {
-        BezierPath list = owner.get(pathKey);
-        return list.get(nodeIndex);
+    private @Nullable BezierNode getBezierNode() {
+        BezierPath path = owner.get(pathKey);
+        return path == null || path.size() <= nodeIndex ? null : path.get(nodeIndex);
 
     }
 
@@ -191,7 +191,8 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
             inRadio = null;
         }
         RadioMenuItem outRadio;
-        int nodeListSize = owner.get(pathKey).size();
+        BezierPath path = owner.get(pathKey);
+        int nodeListSize = path == null ? 0 : path.size();
         if (nodeIndex < nodeListSize - 1) {
             outRadio = new RadioMenuItem();
             Actions.bindMenuItem(outRadio, new BezierNodeHandleOutgoingTangentAction(owner, pathKey, nodeIndex, view));
@@ -235,8 +236,8 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        BezierPath list = f.get(pathKey);
-        if (list == null || nodeIndex >= list.size()) {
+        BezierPath path = f.get(pathKey);
+        if (path == null || nodeIndex >= path.size()) {
             node.setVisible(false);
             return;
         } else {

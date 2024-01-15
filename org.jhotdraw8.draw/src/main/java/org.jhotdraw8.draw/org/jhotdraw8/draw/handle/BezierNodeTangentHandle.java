@@ -40,11 +40,11 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<BezierPath> pointKey;
+    private final @NonNull MapAccessor<BezierPath> pathKey;
 
-    public BezierNodeTangentHandle(Figure figure, MapAccessor<BezierPath> pointKey, int pointIndex) {
+    public BezierNodeTangentHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int pointIndex) {
         super(figure);
-        this.pointKey = pointKey;
+        this.pathKey = pathKey;
         this.pointIndex = pointIndex;
         node = new Polyline();
         node.setManaged(false);
@@ -57,7 +57,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     private BezierNode getBezierNode() {
-        BezierPath list = owner.get(pointKey);
+        BezierPath list = owner.get(pathKey);
         return list.get(pointIndex);
 
     }
@@ -92,7 +92,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        BezierPath list = f.get(pointKey);
+        BezierPath list = f.get(pathKey);
         if (list == null || pointIndex >= list.size()) {
             node.setVisible(false);
             return;

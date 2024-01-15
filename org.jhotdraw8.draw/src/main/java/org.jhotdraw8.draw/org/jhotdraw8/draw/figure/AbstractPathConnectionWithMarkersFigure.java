@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
-import org.jhotdraw8.draw.key.NullableBezierPathStyleableKey;
+import org.jhotdraw8.draw.key.BezierPathStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
@@ -63,7 +63,7 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public static final @NonNull NullableBezierPathStyleableKey PATH = new NullableBezierPathStyleableKey("path");
+    public static final @NonNull BezierPathStyleableKey PATH = new BezierPathStyleableKey("path");
 
 
 
@@ -173,7 +173,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
-        BezierPath path = get(PATH);
+        BezierPath path = getNonNull(PATH);
 
         // Find initial start and end points
         if (startConnector != null && startTarget != null) {
@@ -182,10 +182,11 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (endConnector != null && endTarget != null) {
             end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
+
         // Chop start and end points
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx chp;
-            if (path != null && path.size() > 2) {
+            if (path.size() > 2) {
                 BezierNode secondPoint = path.get(1);
                 chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), secondPoint.getX0(), secondPoint.getY0());
             } else {
@@ -196,7 +197,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
         if (endConnector != null && endTarget != null) {
             IntersectionPointEx chp;
-            if (path != null && path.size() > 2) {
+            if (path.size() > 2) {
                 BezierNode secondLastPoint = path.get(path.size() - 2);
                 chp = endConnector.chopStart(ctx, this, endTarget,
                         end.getX(), end.getY(),
@@ -210,7 +211,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
 
         // Update start and end positions of the path
-        if (path != null && !path.isEmpty()) {
+        if (path.size() < 2) {
+            path = path.add(new BezierNode(start)).add(new BezierNode(end));
+        }
             if (start != null) {
                 BezierNode first = path.getFirst();
                 path = path.set(0,
@@ -221,7 +224,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
                 path = path.set(path.size() - 1,
                         last.transform(Transform.translate(end.getX() - last.getX0(), end.getY() - last.getY0())));
             }
-        }
 
         // store the path and compute path metrics
         set(PATH, path);

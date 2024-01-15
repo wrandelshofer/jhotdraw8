@@ -17,12 +17,12 @@ public abstract class AbstractHandle implements Handle {
     // ---
     // Fields
     // ---
-    protected final Figure owner;
+    protected final @NonNull Figure owner;
 
     // ---
     // Constructors
     // ---
-    public AbstractHandle(Figure owner) {
+    public AbstractHandle(@NonNull Figure owner) {
         this.owner = owner;
     }
 
@@ -34,7 +34,7 @@ public abstract class AbstractHandle implements Handle {
     }
 
     @Override
-    public Figure getOwner() {
+    public @NonNull Figure getOwner() {
         return owner;
     }
 

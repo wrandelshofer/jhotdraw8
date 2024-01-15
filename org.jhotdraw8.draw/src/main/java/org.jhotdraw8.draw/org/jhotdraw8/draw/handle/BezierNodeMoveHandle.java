@@ -69,12 +69,12 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     private Point2D oldPoint;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<BezierPath> pointKey;
+    private final @NonNull MapAccessor<BezierPath> pathKey;
 
 
-    public BezierNodeMoveHandle(Figure figure, MapAccessor<BezierPath> pointKey, int pointIndex) {
+    public BezierNodeMoveHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int pointIndex) {
         super(figure);
-        this.pointKey = pointKey;
+        this.pathKey = pathKey;
         this.pointIndex = pointIndex;
         node = new Region();
         node.setShape(REGION_SHAPE_LINEAR);
@@ -93,9 +93,9 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }
 
-    private BezierNode getBezierNode() {
-        BezierPath list = owner.get(pointKey);
-        return list.get(pointIndex);
+    private @Nullable BezierNode getBezierNode() {
+        BezierPath path = owner.get(pathKey);
+        return path == null || path.size() <= pointIndex ? null : path.get(pointIndex);
 
     }
 
@@ -105,7 +105,8 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     private @NonNull Point2D getLocation() {
-        return getBezierNode().getC0();
+        BezierNode bezierNode = getBezierNode();
+        return bezierNode == null ? Point2D.ZERO : bezierNode.getC0();
 
     }
 

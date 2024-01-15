@@ -43,10 +43,10 @@ public class BezierPathOutlineHandle extends AbstractHandle {
     private final @NonNull Path path1;
     private double strokeWidth = 1;
 
-    private final MapAccessor<BezierPath> bezierPathKey;
+    private final @NonNull MapAccessor<BezierPath> bezierPathKey;
     private final boolean selectable;
 
-    public BezierPathOutlineHandle(Figure figure, MapAccessor<BezierPath> pointKey, boolean selectable) {
+    public BezierPathOutlineHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pointKey, boolean selectable) {
         super(figure);
         this.bezierPathKey = pointKey;
         node = new Group();

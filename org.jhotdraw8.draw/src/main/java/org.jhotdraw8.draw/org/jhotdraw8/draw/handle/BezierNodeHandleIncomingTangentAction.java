@@ -22,21 +22,20 @@ public class BezierNodeHandleIncomingTangentAction extends AbstractBezierNodeHan
     public BezierNodeHandleIncomingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> nodeListKey, @NonNull int nodeIndex, @NonNull DrawingView model) {
         super(ID, figure, nodeListKey, nodeIndex, model);
 
-        BezierPath path = figure.get(nodeListKey);
-        if (path != null && path.size() > nodeIndex) {
-            BezierNode bnode = path.get(nodeIndex);
+        BezierNode bnode = getBezierNode();
+        if (bnode != null) {
             setSelected((bnode.getMask() & BezierNode.C1C2_MASK) == BezierNode.C1_MASK);
         }
     }
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent event) {
-        BezierPath path = figure.get(pathKey);
-        if (path == null) return;
-        BezierNode bnode = path.get(nodeIndex);
+        BezierPath path = owner.get(pathKey);
+        BezierNode bnode = getBezierNode();
+        if (path == null || bnode == null) return;
         BezierNode changedNode = bnode.withClearMaskBits(C1C2_MASK).withMaskBits(C1_MASK);
         path = path.set(nodeIndex, changedNode);
-        view.getModel().set(figure, pathKey, path);
+        view.getModel().set(owner, pathKey, path);
         view.recreateHandles();
     }
 }
