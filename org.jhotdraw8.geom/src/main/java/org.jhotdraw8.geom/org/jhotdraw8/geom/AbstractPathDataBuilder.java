@@ -13,15 +13,6 @@ import org.jhotdraw8.collection.primitive.IntArrayList;
 import java.awt.geom.PathIterator;
 
 public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> {
-    @NonNull
-    protected final ByteArrayList commands = new ByteArrayList();
-    protected @NonNull
-    final IntArrayList offsets = new IntArrayList();
-
-    protected @NonNull
-    final DoubleArrayList coords = new DoubleArrayList();
-    protected @NonNull
-    final double[] temp = new double[8];
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
     private static final byte SEG_MOVETO = (int) PathIterator.SEG_MOVETO;
@@ -29,6 +20,14 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
     private static final byte SEG_QUADTO = (int) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
+    @NonNull
+    protected final ByteArrayList commands = new ByteArrayList();
+    @NonNull
+    protected final IntArrayList offsets = new IntArrayList();
+    @NonNull
+    protected final DoubleArrayList coords = new DoubleArrayList();
+    protected @NonNull
+    final double[] temp = new double[8];
     protected int windingRule = PathIterator.WIND_EVEN_ODD;
 
     public AbstractPathDataBuilder() {

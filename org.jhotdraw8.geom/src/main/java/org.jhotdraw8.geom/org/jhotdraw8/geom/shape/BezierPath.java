@@ -445,7 +445,7 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
 
     public @NonNull PathMetrics getPathMetrics() {
         if (pathMetrics == null) {
-            pathMetrics = SimplePathMetrics.of(this);
+            pathMetrics = new SimplePathMetrics(this);
         }
         return pathMetrics;
     }

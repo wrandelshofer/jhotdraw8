@@ -27,27 +27,22 @@ import org.jhotdraw8.draw.handle.LineOutlineHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
-import org.jhotdraw8.draw.key.BezierPathStyleableKey;
+import org.jhotdraw8.draw.key.NullableBezierPathStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.fxcollection.typesafekey.TransientKey;
-import org.jhotdraw8.geom.AwtShapes;
-import org.jhotdraw8.geom.CutEndPathBuilder;
-import org.jhotdraw8.geom.CutStartPathBuilder;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.PathBuilder;
 import org.jhotdraw8.geom.PathMetrics;
-import org.jhotdraw8.geom.PathMetricsBuilder;
 import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.SimplePathMetrics;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
-import org.jhotdraw8.geom.shape.BezierPathBuilder;
 
 import java.awt.geom.AffineTransform;
+import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -68,14 +63,9 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public static final @NonNull BezierPathStyleableKey PATH = new BezierPathStyleableKey("path", BezierPath.of());
+    public static final @NonNull NullableBezierPathStyleableKey PATH = new NullableBezierPathStyleableKey("path");
 
-    /**
-     * PathMetrics is used to speed up the layout process
-     * of this figure and - potentially - of dependent figures
-     * that need to create sub-paths from this connection figure.
-     */
-    public static final @NonNull TransientKey<PathMetrics> PATH_METRICS = new TransientKey<>("pathMetrics", PathMetrics.class);
+
 
     public AbstractPathConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
@@ -162,9 +152,11 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
-        PathMetrics path = get(PATH_METRICS);
-        if (path == null) {
-            return AwtShapes.emptyPathIterator();
+        BezierPath path = get(PATH);
+        if (path == null || path.isEmpty()) {
+            Point2D start = getNonNull(START).getConvertedValue();
+            Point2D end = getNonNull(END).getConvertedValue();
+            return new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()).getPathIterator(tx);
         }
         return path.getPathIterator(tx);
     }
@@ -193,7 +185,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         // Chop start and end points
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx chp;
-            if (path.size() > 2) {
+            if (path != null && path.size() > 2) {
                 BezierNode secondPoint = path.get(1);
                 chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), secondPoint.getX0(), secondPoint.getY0());
             } else {
@@ -204,7 +196,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
         if (endConnector != null && endTarget != null) {
             IntersectionPointEx chp;
-            if (path.size() > 2) {
+            if (path != null && path.size() > 2) {
                 BezierNode secondLastPoint = path.get(path.size() - 2);
                 chp = endConnector.chopStart(ctx, this, endTarget,
                         end.getX(), end.getY(),
@@ -218,10 +210,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
 
         // Update start and end positions of the path
-        if (path == null || path.isEmpty()) {
-            path = path.add(new BezierNode(start.getX(), start.getY()).withMask(BezierNode.MOVE_MASK));
-            path = path.add(new BezierNode(end.getX(), end.getY()));
-        } else {
+        if (path != null && !path.isEmpty()) {
             if (start != null) {
                 BezierNode first = path.getFirst();
                 path = path.set(0,
@@ -234,11 +223,8 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             }
         }
 
-
         // store the path and compute path metrics
         set(PATH, path);
-        PathMetrics pm = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), path.getPathIterator(null)).build();
-        set(PATH_METRICS, pm);
     }
 
     @Override
@@ -327,9 +313,8 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        BezierPath path = get(PATH);
-        PathMetrics pathMetrics = get(PATH_METRICS);
-        if (path == null || pathMetrics == null) {
+        PathMetrics pathMetrics = getPathMetrics();
+        if (pathMetrics == null) {
             node.setVisible(false);
             return;
         }
@@ -347,21 +332,10 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         // Cut stroke at start and at end
         double strokeCutStart = getStrokeCutStart(ctx);
         double strokeCutEnd = getStrokeCutEnd(ctx);
-        if (strokeCutStart > 0 || strokeCutEnd > 0) {
-            PathBuilder<BezierPath> out = new BezierPathBuilder();
-            if (strokeCutStart > 0) {
-                out = new CutStartPathBuilder<>(out, strokeCutStart);
-            }
-            if (strokeCutEnd > 0) {
-                out = new CutEndPathBuilder<>(out, strokeCutEnd);
-            }
-            path = AwtShapes.buildFromPathIterator(out, path.getPathIterator(null)).build();
-        }
-
         lineNode.setFillRule(getStyledNonNull(FILL_RULE));
         final List<PathElement> elements =
                 FXShapes.fxPathElementsFromAwt(
-                        path.getPathIterator(null));
+                        pathMetrics.getSubPathIteratorAtArcLength(strokeCutStart, pathMetrics.getArcLength() - strokeCutEnd, null));
         if (!lineNode.getElements().equals(elements)) {
             lineNode.getElements().setAll(elements);
         }
@@ -375,6 +349,16 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
                 endMarkerStr, getMarkerEndScaleFactor());
         updateStartMarkerNode(ctx, startMarkerNode);
         updateEndMarkerNode(ctx, endMarkerNode);
+    }
+
+    protected @NonNull PathMetrics getPathMetrics() {
+        BezierPath path = get(PATH);
+        if (path == null || path.isEmpty()) {
+            Point2D start = getNonNull(START).getConvertedValue();
+            Point2D end = getNonNull(END).getConvertedValue();
+            return new SimplePathMetrics(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
+        }
+        return path.getPathMetrics();
     }
 
     /**

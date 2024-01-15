@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 
@@ -12,8 +13,8 @@ import java.awt.geom.PathIterator;
 import java.util.DoubleSummaryStatistics;
 
 public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
-    private final DoubleArrayList lengths = new DoubleArrayList();
-    private final DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
+    protected final @NonNull DoubleArrayList lengths = new DoubleArrayList();
+    private final @NonNull DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
     private final double epsilon = 0.125;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.

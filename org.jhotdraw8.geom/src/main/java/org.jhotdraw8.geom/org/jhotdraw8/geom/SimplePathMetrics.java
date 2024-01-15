@@ -77,8 +77,26 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         this.maxy = mmaxy;
     }
 
-    public static SimplePathMetrics of(Shape shape) {
-        return AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), shape.getPathIterator(null)).build();
+
+    public SimplePathMetrics(@NonNull Shape shape) {
+        PathMetricsBuilder b = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), shape.getPathIterator(null));
+        this.commands = b.commands.toByteArray();
+        this.offsets = b.offsets.toIntArray();
+        this.coords = b.coords.toDoubleArray();
+        this.accumulatedLengths = b.lengths.toDoubleArray();
+        this.windingRule = b.windingRule;
+
+        double mminx = POSITIVE_INFINITY, mminy = POSITIVE_INFINITY, mmaxx = NEGATIVE_INFINITY, mmaxy = NEGATIVE_INFINITY;
+        for (int i = 0; i < coords.length; i += 2) {
+            mminx = Math.min(mminx, coords[i]);
+            mmaxx = Math.max(mmaxx, coords[i]);
+            mminy = Math.min(mminy, coords[i + 1]);
+            mmaxy = Math.min(mmaxy, coords[i + 1]);
+        }
+        this.minx = mminx;
+        this.maxx = mmaxx;
+        this.miny = mminy;
+        this.maxy = mmaxy;
     }
 
     /**
@@ -125,7 +143,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @return the length of the path in [0,Double.MAX_VALUE].
      */
     public double getArcLength() {
-        return accumulatedLengths[accumulatedLengths.length - 1];
+        return accumulatedLengths.length == 0 ? 0 : accumulatedLengths[accumulatedLengths.length - 1];
     }
 
     /**
@@ -139,7 +157,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @return the same builder that was passed as an argument
      */
     public <T> @NonNull PathBuilder<T> buildSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
-        double totalArcLength = accumulatedLengths[accumulatedLengths.length - 1];
+        double totalArcLength = accumulatedLengths.length == 0 ? 0 : accumulatedLengths[accumulatedLengths.length - 1];
         if (commands.length == 0 || s0 > totalArcLength || s1 < s0) {
             return b;
         }
