@@ -142,7 +142,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      *
      * @return the length of the path in [0,Double.MAX_VALUE].
      */
-    public double getArcLength() {
+    public double arcLength() {
         return lengths.length == 0 ? 0 : lengths[lengths.length - 1];
     }
 
@@ -151,8 +151,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * <p>
      * This method does not call {@link PathBuilder#build()}.
      *
-     * @param s0 the arc length at which the sub-path starts, in [0,getArcLength()].
-     * @param s1 the arc length at which the sub-path ends, in [0,getArcLength()].
+     * @param s0 the arc length at which the sub-path starts, in [0,arcLength()].
+     * @param s1 the arc length at which the sub-path ends, in [0,arcLength()].
      * @param b  the builder
      * @return the same builder that was passed as an argument
      */
@@ -355,6 +355,11 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         return new SimplePathMetrics(rCommands, rOffsets, rCoords, rLengths, windingRule);
     }
 
+    @Override
+    public boolean isEmpty() {
+        return commands.length == 0;
+    }
+
 
     @Override
     public Rectangle getBounds() {
@@ -414,7 +419,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
     @Override
     public PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
-        double totalArcLength = getArcLength();
+        double totalArcLength = arcLength();
         if (s0 > totalArcLength || s1 < s0) {
             return new EmptyPathIterator();
         }

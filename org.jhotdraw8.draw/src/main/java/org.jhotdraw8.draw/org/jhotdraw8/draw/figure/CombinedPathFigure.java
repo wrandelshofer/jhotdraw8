@@ -17,7 +17,11 @@ import org.jhotdraw8.draw.css.value.CssTransforms;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.NullableEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.AwtPathBuilder;
+import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.ConcatenatedPathIterator;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
@@ -67,7 +71,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
         if (localToParent != null) {
-            AffineTransform ltpTx = FXTransforms.toAWT(localToParent);
+            AffineTransform ltpTx = FXTransforms.toAwt(localToParent);
             if (tx != null) {
                 childTx = (AffineTransform) tx.clone();
                 childTx.concatenate(ltpTx);

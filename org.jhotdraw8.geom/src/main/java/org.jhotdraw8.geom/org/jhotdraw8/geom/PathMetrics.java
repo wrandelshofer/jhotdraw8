@@ -12,7 +12,7 @@ public interface PathMetrics {
      *
      * @return the length of the path in [0,Double.MAX_VALUE].
      */
-    double getArcLength();
+    double arcLength();
 
     /**
      * Builds a sub-path from t0 to t1.
@@ -25,7 +25,7 @@ public interface PathMetrics {
      * @return the same builder that was passed as an argument
      */
     default <T> PathBuilder<T> buildSubPath(double t0, double t1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
-        double totalArcLength = getArcLength();
+        double totalArcLength = arcLength();
         double s0 = t0 * totalArcLength;
         double s1 = t1 * totalArcLength;
         return buildSubPathAtArcLength(s0, s1, b, skipFirstMoveTo);
@@ -36,8 +36,8 @@ public interface PathMetrics {
      * <p>
      * This method does not call {@link PathBuilder#build()}.
      *
-     * @param s0 the arc length at which the sub-path starts, in [0,getArcLength()].
-     * @param s1 the arc length at which the sub-path ends, in [0,getArcLength()].
+     * @param s0 the arc length at which the sub-path starts, in [0,arcLength()].
+     * @param s1 the arc length at which the sub-path ends, in [0,arcLength()].
      * @param b  the builder
      * @return the same builder that was passed as an argument
      */
@@ -50,8 +50,8 @@ public interface PathMetrics {
      * <p>
      * This method does not call {@link PathBuilder#build()}.
      *
-     * @param s0              the arc length at which the sub-path starts, in [0,getArcLength()].
-     * @param s1              the arc length at which the sub-path ends, in [0,getArcLength()].
+     * @param s0              the arc length at which the sub-path starts, in [0,arcLength()].
+     * @param s1              the arc length at which the sub-path ends, in [0,arcLength()].
      * @param b               the builder
      * @param skipFirstMoveTo whether to skip the first moveTo
      * @return the same builder that was passed as an argument
@@ -65,7 +65,7 @@ public interface PathMetrics {
      * @return the path iterator
      */
     default PathIterator getPathIterator(final @Nullable AffineTransform tx) {
-        return getSubPathIterator(0, getArcLength(), tx);
+        return getSubPathIterator(0, arcLength(), tx);
     }
 
     /**
@@ -75,7 +75,7 @@ public interface PathMetrics {
      * @return point and tangent at t
      */
     default @NonNull PointAndDerivative eval(double t) {
-        return evalAtArcLength(t * getArcLength());
+        return evalAtArcLength(t * arcLength());
     }
 
     /**
@@ -95,7 +95,7 @@ public interface PathMetrics {
      * @return the path iterator
      */
     default @NonNull PathIterator getSubPathIterator(double t0, double t1, final @Nullable AffineTransform tx) {
-        double totalArcLength = getArcLength();
+        double totalArcLength = arcLength();
         double s0 = t0 * totalArcLength;
         double s1 = t1 * totalArcLength;
         return getSubPathIteratorAtArcLength(s0, s1, tx);
@@ -104,8 +104,8 @@ public interface PathMetrics {
     /**
      * Returns a path iterator of the specified sub-path.
      *
-     * @param s0 the arc length at which the sub-path starts, in [0,getArcLength()].
-     * @param s1 the arc length at which the sub-path ends, in [0,getArcLength()].
+     * @param s0 the arc length at which the sub-path starts, in [0,arcLength()].
+     * @param s1 the arc length at which the sub-path ends, in [0,arcLength()].
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */
@@ -131,6 +131,13 @@ public interface PathMetrics {
      * @return a string representation
      */
     static String pathMetricsToString(@NonNull PathMetrics pm) {
-        return "PathMetrics{" + pm.getArcLength() + "px, \"" + SvgPaths.doubleSvgStringFromAwt(pm.getPathIterator(null)) + "\"}";
+        return "PathMetrics{" + pm.arcLength() + "px, \"" + SvgPaths.doubleSvgStringFromAwt(pm.getPathIterator(null)) + "\"}";
     }
+
+    /**
+     * Returns true if this path metrics is empty.
+     *
+     * @return true if empty
+     */
+    boolean isEmpty();
 }

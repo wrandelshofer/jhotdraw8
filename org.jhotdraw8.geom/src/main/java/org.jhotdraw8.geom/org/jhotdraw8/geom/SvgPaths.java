@@ -700,7 +700,7 @@ public class SvgPaths {
                         r2d.getX(), r2d.getY(), r2d.getWidth(), r2d.getHeight(),
                         b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()
                 );
-                AwtShapes.buildFromPathIterator(builder, shape.getPathIterator(FXTransforms.toAWT(tx)));
+                AwtShapes.buildFromPathIterator(builder, shape.getPathIterator(FXTransforms.toAwt(tx)));
                 return;
             } catch (ParseException e) {
                 LOGGER.warning(e.getMessage() + " Path: \"" + pathstr + "\".");

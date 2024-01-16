@@ -196,7 +196,7 @@ public class FXTransforms {
         }
     }
 
-    public static @Nullable AffineTransform toAWT(@Nullable Transform t) {
+    public static @Nullable AffineTransform toAwt(@Nullable Transform t) {
         if (t == null) {
             return null;
         }

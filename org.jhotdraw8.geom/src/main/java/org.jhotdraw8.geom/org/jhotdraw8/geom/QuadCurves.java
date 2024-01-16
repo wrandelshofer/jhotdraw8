@@ -221,8 +221,8 @@ public class QuadCurves {
             first[offsetFirst + 5] = y012;
         }
         if (second != null) {
-            first[offsetFirst] = x012;
-            first[offsetFirst + 1] = y012;
+            second[offsetSecond] = x012;
+            second[offsetSecond + 1] = y012;
             second[offsetSecond + 2] = x12;
             second[offsetSecond + 3] = y12;
             second[offsetSecond + 4] = x2;

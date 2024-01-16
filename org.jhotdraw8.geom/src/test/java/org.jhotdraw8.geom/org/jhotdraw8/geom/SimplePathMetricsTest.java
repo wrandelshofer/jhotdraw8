@@ -21,7 +21,7 @@ public class SimplePathMetricsTest {
 
     private void shouldMeasureArcLength(String input, double expected) throws Exception {
         var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
-        assertEquals(expected, metrics.getArcLength());
+        assertEquals(expected, metrics.arcLength());
 
     }
 
@@ -48,7 +48,7 @@ public class SimplePathMetricsTest {
         PathMetrics reversedMetrics = metrics.reverse();
         var actual = SvgPaths.doubleSvgStringFromAwt(reversedMetrics.getPathIterator(null));
         assertEquals(expected, actual, "should reverse path operations");
-        assertEquals(metrics.getArcLength(), reversedMetrics.getArcLength(), "should have identical arc length");
+        assertEquals(metrics.arcLength(), reversedMetrics.arcLength(), "should have identical arc length");
 
     }
 
