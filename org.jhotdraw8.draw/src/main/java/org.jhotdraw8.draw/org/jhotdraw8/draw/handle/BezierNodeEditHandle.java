@@ -113,7 +113,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     private @NonNull Point2D getLocation() {
-        return getBezierNode().getC0();
+        return getBezierNode().getC0(Point2D::new);
 
     }
 

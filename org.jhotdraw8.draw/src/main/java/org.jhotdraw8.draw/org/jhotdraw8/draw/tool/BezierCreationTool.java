@@ -113,10 +113,10 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             Point2D c2 = createdFigure.worldToParent(dv.viewToWorld(x2, y2));
             DrawingModel dm = dv.getModel();
             if (dragStartIndex < 0) {
-                path = path.add(new BezierNode(c2));
+                path = path.add(new BezierNode(c2.getX(), c2.getY()));
                 dragStartIndex = path.size() - 1;
             } else {
-                path = path.add(new BezierNode(c2));
+                path = path.add(new BezierNode(c2.getX(), c2.getY()));
             }
             dm.set(createdFigure, key, path);
         }
@@ -190,7 +190,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         if (dragStartIndex != -1) {
             List<Point2D> digitized = new ArrayList<>(path.size() - dragStartIndex);
             for (int i = dragStartIndex, n = path.size(); i < n; i++) {
-                digitized.add(path.get(i).getC0());
+                digitized.add(path.get(i).getC0(Point2D::new));
             }
             BezierPathBuilder builder = new BezierPathBuilder();
             double error = 5 / dv.getZoomFactor();

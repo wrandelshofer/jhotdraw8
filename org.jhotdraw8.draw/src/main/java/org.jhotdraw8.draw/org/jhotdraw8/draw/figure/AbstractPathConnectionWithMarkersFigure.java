@@ -187,8 +187,8 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx chp;
             if (path.size() > 2) {
-                BezierNode secondPoint = path.get(1);
-                chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), secondPoint.getX0(), secondPoint.getY0());
+                PointAndDerivative pd = path.evalFirst();
+                chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), pd.x() + pd.dx(), pd.y() + pd.dy());
             } else {
                 chp = startConnector.chopStart(ctx, this, startTarget, start, end);
             }
@@ -198,10 +198,10 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (endConnector != null && endTarget != null) {
             IntersectionPointEx chp;
             if (path.size() > 2) {
-                BezierNode secondLastPoint = path.get(path.size() - 2);
+                PointAndDerivative pd = path.evalLastInReverse();
                 chp = endConnector.chopStart(ctx, this, endTarget,
                         end.getX(), end.getY(),
-                        secondLastPoint.getX0(), secondLastPoint.getY0()
+                        pd.x() + pd.dx(), pd.y() + pd.dy()
                 );
             } else {
                 chp = endConnector.chopStart(ctx, this, endTarget, end, start);

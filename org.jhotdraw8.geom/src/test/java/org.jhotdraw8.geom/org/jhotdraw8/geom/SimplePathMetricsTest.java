@@ -76,7 +76,7 @@ public class SimplePathMetricsTest {
         );
     }
 
-    private void shouldBuildSubPathAtArcLength(String input, double s0, double s1, String expected) throws Exception {
+    private void shouldBuildSubPathAtArcLength(@NonNull String input, double s0, double s1, @NonNull String expected) throws Exception {
         var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
 
         // should buildSubPathAtArcLength

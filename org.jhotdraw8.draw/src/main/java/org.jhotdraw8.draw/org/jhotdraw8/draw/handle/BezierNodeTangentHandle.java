@@ -68,7 +68,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     private @NonNull Point2D getLocation() {
-        return getBezierNode().getC0();
+        return getBezierNode().getC0(Point2D::new);
 
     }
 
@@ -99,9 +99,9 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         }
         node.setVisible(true);
         BezierNode bn = getBezierNode();
-        Point2D c0 = FXTransforms.transform(t, bn.getC0());
-        Point2D c1 = FXTransforms.transform(t, bn.getC1());
-        Point2D c2 = FXTransforms.transform(t, bn.getC2());
+        Point2D c0 = FXTransforms.transform(t, bn.getX0(), bn.getY0());
+        Point2D c1 = FXTransforms.transform(t, bn.getX1(), bn.getY1());
+        Point2D c2 = FXTransforms.transform(t, bn.getX2(), bn.getY2());
 
         Polyline node = getNode(view);
         List<Double> points = node.getPoints();

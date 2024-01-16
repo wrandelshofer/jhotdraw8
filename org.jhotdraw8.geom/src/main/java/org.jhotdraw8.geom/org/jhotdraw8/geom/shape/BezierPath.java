@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PathMetrics;
+import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.ReversePathIterator;
 import org.jhotdraw8.geom.SimplePathMetrics;
@@ -465,6 +466,65 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     @Override
     public int size() {
         return super.size();
+    }
+
+    /**
+     * Evaluates the first point of the bezier path.
+     *
+     * @return the point and derivative of the first point in the path
+     * @throws java.util.NoSuchElementException if the path is empty
+     */
+    public @NonNull PointAndDerivative evalFirst() {
+        BezierNode first = getFirst();
+        double y0 = first.getY0();
+        double x0 = first.getX0();
+        if (first.isC2()) {
+            return new PointAndDerivative(
+                    x0, y0,
+                    first.getX2() - x0, first.getY2() - y0);
+        }
+        if (size() < 2) return new PointAndDerivative(first.getX0(), y0, 1, 0);
+        BezierNode second = get(1);
+        if (second.isC1()) {
+            return new PointAndDerivative(x0, y0, second.getX1() - x0, second.getY1() - y0);
+        }
+        return new PointAndDerivative(x0, y0, second.getX0() - x0, second.getY0() - y0);
+    }
+
+    /**
+     * Evaluates the reverse derivative of the last point.
+     * <p>
+     * The result is the same as reversing the path, and then
+     * evaluating its first point.
+     *
+     * @return the reverse derivative
+     * @throws java.util.NoSuchElementException if the path is empty
+     */
+    public @NonNull PointAndDerivative evalLastInReverse() {
+        BezierNode last = getLast();
+        BezierNode secondLast = size() > 1 ? get(size() - 2) : null;
+        if (last.hasMask(BezierNode.CLOSE_MASK) && size() > 1) {
+            for (int i = size() - 1; i >= 0; i--) {
+                if (i == 0 || get(i).hasMask(BezierNode.MOVE_MASK)) {
+                    secondLast = i == 0 ? last : get(i - 1);
+                    last = get(i);
+                    break;
+                }
+            }
+        }
+
+        double y0 = last.getY0();
+        double x0 = last.getX0();
+        if (last.isC1()) {
+            return new PointAndDerivative(x0, y0,
+                    last.getX1() - x0, last.getY1() - y0);
+        }
+        if (secondLast == null) return new PointAndDerivative(x0, y0, -1, 0);
+        if (secondLast.isC2()) {
+            return new PointAndDerivative(x0, y0,
+                    secondLast.getX2() - x0, secondLast.getY2() - y0);
+        }
+        return new PointAndDerivative(x0, y0, secondLast.getX0() - x0, secondLast.getY0() - y0);
     }
 
     @Override

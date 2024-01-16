@@ -106,7 +106,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
 
     private @NonNull Point2D getLocation() {
         BezierNode bezierNode = getBezierNode();
-        return bezierNode == null ? Point2D.ZERO : bezierNode.getC0();
+        return bezierNode == null ? Point2D.ZERO : bezierNode.getC0(Point2D::new);
 
     }
 
