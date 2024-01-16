@@ -7,10 +7,13 @@ package org.jhotdraw8.geom.shape;
 import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PathMetrics;
 import org.jhotdraw8.geom.QuadCurves;
+import org.jhotdraw8.geom.ReversePathIterator;
 import org.jhotdraw8.geom.SimplePathMetrics;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
@@ -25,7 +28,6 @@ import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.ArrayList;
 
 /**
  * A BezierPath is defined by its nodes. Each node has three control points:
@@ -315,7 +317,10 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     /**
      * Reverses the direction of the path.
      */
+    @Override
     public BezierPath reverse() {
+        return AwtShapes.buildFromPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
+        /*
         int size = size();
         ArrayList<BezierNode> temp = new ArrayList<>(size);
         int lastMoveTo = -1;
@@ -347,6 +352,8 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
             temp.add(reversed);
         }
         return new BezierPath(temp, windingRule);
+
+         */
     }
 
     private static final BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);
@@ -458,5 +465,10 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     @Override
     public int size() {
         return super.size();
+    }
+
+    @Override
+    public String toString() {
+        return "BezierPath{\"" + SvgPaths.doubleSvgStringFromAwt(getPathIterator(null)) + "\"}";
     }
 }

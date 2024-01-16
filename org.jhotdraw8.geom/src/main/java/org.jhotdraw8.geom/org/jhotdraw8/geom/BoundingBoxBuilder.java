@@ -28,7 +28,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         // nothing to do
     }
 
@@ -40,14 +40,14 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x3, double y3) {
         addToBounds(x1, y1);
         addToBounds(x2, y2);
         addToBounds(x3, y3);
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         addToBounds(x, y);
     }
 
@@ -57,7 +57,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x2, double y2) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x2, double y2) {
         addToBounds(x1, y1);
         addToBounds(x2, y2);
     }

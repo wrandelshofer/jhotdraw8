@@ -56,25 +56,25 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
     }
 
     @Override
-    protected void doArcTo(double rx, double ry, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
+    protected void doArcTo(double lastX, double lastY, double rx, double ry, double xAxisRotation, double x, double y, boolean largeArcFlag, boolean sweepFlag) {
         needsSquareAtLastPoint = true;
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         if (needsSquareAtLastPoint) {
-            addSquare(getLastX(), getLastY());
+            addSquare(lastX, lastY);
             needsSquareAtLastPoint = false;
         }
     }
 
     @Override
-    protected void doCurveTo(double x, double y, double x0, double y0, double x1, double y1) {
+    protected void doCurveTo(double lastX, double lastY, double x, double y, double x0, double y0, double x1, double y1) {
         needsSquareAtLastPoint = true;
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         needsSquareAtLastPoint = true;
     }
 
@@ -93,7 +93,7 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
     }
 
     @Override
-    protected void doQuadTo(double x, double y, double x0, double y0) {
+    protected void doQuadTo(double lastX, double lastY, double x, double y, double x0, double y0) {
         needsSquareAtLastPoint = true;
     }
 

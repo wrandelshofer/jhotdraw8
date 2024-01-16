@@ -17,6 +17,9 @@ import java.util.function.BiPredicate;
 import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox;
 import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
 
+/**
+ * Represents a path consisting of poly arc elements.
+ */
 public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
     @Serial
     private static final long serialVersionUID = 1L;

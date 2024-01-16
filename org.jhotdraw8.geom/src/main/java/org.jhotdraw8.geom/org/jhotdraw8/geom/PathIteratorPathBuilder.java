@@ -50,7 +50,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         if (needsMoveTo) {
             return;
         }
@@ -65,7 +65,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         if (needsMoveTo) {
             doMoveTo(lastX, lastY);
         }
@@ -80,7 +80,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         if (needsMoveTo) {
             doMoveTo(lastX, lastY);
         }
@@ -100,7 +100,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x, double y) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
         if (needsMoveTo) {
             doMoveTo(lastX, lastY);
         }

@@ -4,7 +4,7 @@ import org.jhotdraw8.annotation.Nullable;
 
 public class ReversePathBuilder<T> extends AbstractPathBuilder<T> {
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
 
     }
 
@@ -14,12 +14,12 @@ public class ReversePathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
 
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
 
     }
 
@@ -29,7 +29,7 @@ public class ReversePathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x, double y) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
 
     }
 

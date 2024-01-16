@@ -27,15 +27,15 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         //empty
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x3, double y3) {
         if (!startDone) {
-            startX = getLastX();
-            startY = getLastY();
+            startX = lastX;
+            startY = lastY;
             startTangentX = startX - x1;
             startTangentY = startY - y1;
             startDone = true;
@@ -52,18 +52,18 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         if (!startDone) {
-            startX = getLastX();
-            startY = getLastY();
+            startX = lastX;
+            startY = lastY;
             startTangentX = startX - x;
             startTangentY = startY - y;
             startDone = true;
         }
         endX = x;
         endY = y;
-        endTangentX = x - getLastX();
-        endTangentY = y - getLastY();
+        endTangentX = x - lastX;
+        endTangentY = y - lastY;
     }
 
     @Override
@@ -72,10 +72,10 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x2, double y2) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x2, double y2) {
         if (!startDone) {
-            startX = getLastX();
-            startY = getLastY();
+            startX = lastX;
+            startY = lastY;
             startTangentX = startX - x1;
             startTangentY = startY - y1;
             startDone = true;

@@ -30,7 +30,7 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         BezierNode last = getLast();
         if (last != null) {
             if (moveIndex != -1 && moveIndex != nodes.size() - 1) {
@@ -50,7 +50,7 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         BezierNode last = getLast();
 
         if (last != null) {
@@ -67,7 +67,7 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         add(new BezierNode(BezierNode.C0_MASK, false, false, x, y, x, y, x, y));
     }
 
@@ -78,7 +78,7 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x, double y) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
         BezierNode last = getLast();
         if (last != null && last.isC1()) {
             // Set the outgoing tangent on the last bezier node if it already has an ingoing tangent
@@ -93,14 +93,14 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
     }
 
     @Override
-    protected void doSmoothCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
+    protected void doSmoothCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         BezierNode last = getLast();
         setLast(new BezierNode(last.getMask() | BezierNode.C2_MASK, true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1));
         add(new BezierNode(BezierNode.C0C1_MASK, false, false, x, y, x2, y2, x2, y2));
     }
 
     @Override
-    protected void doSmoothQuadTo(double x1, double y1, double x, double y) {
+    protected void doSmoothQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
         BezierNode last = getLast();
         setLast(new BezierNode(last.getMask() | BezierNode.C2_MASK, true, true, last.getX0(), last.getY0(), last.getX1(), last.getY1(), x1, y1));
         add(new BezierNode(BezierNode.C0_MASK, false, false, x, y, x1, y1, x1, y1));

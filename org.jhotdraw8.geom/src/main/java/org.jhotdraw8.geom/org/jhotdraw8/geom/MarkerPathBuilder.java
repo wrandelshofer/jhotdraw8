@@ -35,11 +35,11 @@ public class MarkerPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x3, double y3) {
         doStartOrMidMarker(x1, y1);
         tangentX = x2;
         tangentY = y2;
@@ -53,10 +53,10 @@ public class MarkerPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         doStartOrMidMarker(x, y);
-        tangentX = getLastX();
-        tangentY = getLastY();
+        tangentX = lastX;
+        tangentY = lastY;
         needsEndMarker = true;
     }
 
@@ -99,7 +99,7 @@ public class MarkerPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x2, double y2) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x2, double y2) {
         doStartOrMidMarker(x1, y1);
         tangentX = x1;
         tangentY = y1;

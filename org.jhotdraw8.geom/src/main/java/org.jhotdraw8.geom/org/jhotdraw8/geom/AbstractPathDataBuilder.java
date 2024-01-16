@@ -42,7 +42,7 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         if (!commands.isEmpty()
                 && commands.getLastAsByte() != SEG_MOVETO
                 && commands.getLastAsByte() != SEG_CLOSE) {
@@ -57,9 +57,9 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        temp[0] = getLastX();
-        temp[1] = getLastY();
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
+        temp[0] = lastX;
+        temp[1] = lastY;
         temp[2] = x1;
         temp[3] = y1;
         temp[4] = x2;
@@ -77,7 +77,7 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         commands.addAsByte(SEG_LINETO);
         offsets.addAsInt(coords.size());
         coords.addAsDouble(x);
@@ -93,9 +93,9 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x, double y) {
-        temp[0] = getLastX();
-        temp[1] = getLastY();
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
+        temp[0] = lastX;
+        temp[1] = lastY;
         temp[2] = x1;
         temp[3] = y1;
         temp[4] = x;

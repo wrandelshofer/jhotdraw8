@@ -118,4 +118,19 @@ public interface PathMetrics {
      */
     @NonNull PathMetrics reverse();
 
+    /**
+     * Implementations of PathMetrics should implement their {@code toString}
+     * as follows:
+     * <pre>
+     * public @NonNull toString() {
+     *     return PathMetrics.pathMetricsToString(this);
+     * }
+     * </pre>
+     *
+     * @param pm the path metrics implementation
+     * @return a string representation
+     */
+    static String pathMetricsToString(@NonNull PathMetrics pm) {
+        return "PathMetrics{" + pm.getArcLength() + "px, \"" + SvgPaths.doubleSvgStringFromAwt(pm.getPathIterator(null)) + "\"}";
+    }
 }

@@ -30,17 +30,17 @@ public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         path.closePath();
     }
 
     @Override
-    protected void doCurveTo(double x, double y, double x0, double y0, double x1, double y1) {
+    protected void doCurveTo(double lastX, double lastY, double x, double y, double x0, double y0, double x1, double y1) {
         path.curveTo(x, y, x0, y0, x1, y1);
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         path.lineTo(x, y);
     }
 
@@ -50,7 +50,7 @@ public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
     }
 
     @Override
-    protected void doQuadTo(double x, double y, double x0, double y0) {
+    protected void doQuadTo(double lastX, double lastY, double x, double y, double x0, double y0) {
         path.quadTo(x, y, x0, y0);
     }
 

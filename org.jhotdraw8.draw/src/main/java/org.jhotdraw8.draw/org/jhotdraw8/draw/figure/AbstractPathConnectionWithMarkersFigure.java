@@ -353,7 +353,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    protected @NonNull PathMetrics getPathMetrics() {
+    public @NonNull PathMetrics getPathMetrics() {
         BezierPath path = get(PATH);
         if (path == null || path.isEmpty()) {
             Point2D start = getNonNull(START).getConvertedValue();

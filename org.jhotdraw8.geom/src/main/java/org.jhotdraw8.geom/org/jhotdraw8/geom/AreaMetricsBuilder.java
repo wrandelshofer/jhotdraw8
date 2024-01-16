@@ -21,8 +21,8 @@ public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
     double lastMoveToX, lastMoveToY;
 
     @Override
-    protected void doClosePath() {
-        addToArea(lastMoveToX, lastMoveToY, getLastX(), getLastY());
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
+        addToArea(this.lastMoveToX, this.lastMoveToY, lastX, getLastY());
     }
 
     private void addToArea(double x0, double y0, double x1, double y1) {
@@ -35,13 +35,13 @@ public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        addToArea(getLastX(), getLastY(), x, y);
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
+        addToArea(lastX, lastY, x, y);
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
-        addToArea(getLastX(), getLastY(), x, y);
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
+        addToArea(lastX, lastY, x, y);
     }
 
     @Override
@@ -51,8 +51,8 @@ public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x, double y) {
-        addToArea(lastMoveToX, lastMoveToY, getLastX(), getLastY());
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
+        addToArea(lastMoveToX, lastMoveToY, lastX, lastY);
     }
 
     @Override

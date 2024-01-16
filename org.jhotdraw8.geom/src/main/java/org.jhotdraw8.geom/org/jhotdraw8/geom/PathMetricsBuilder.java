@@ -28,14 +28,14 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         if (!commands.isEmpty()
                 && commands.getLastAsByte() != SEG_MOVETO
                 && commands.getLastAsByte() != SEG_CLOSE) {
             // Only add SEG_CLOSE if it actually closes a path
 
             // Add a missing SEG_LINETO if necessary
-            double length = Points.distance(lastMoveToX, lastMoveToY, getLastX(), getLastY());
+            double length = Points.distance(lastMoveToX, lastMoveToY, lastX, getLastY());
             if (length > epsilon) {
                 commands.addAsByte(SEG_LINETO);
                 offsets.addAsInt(coords.size());
@@ -57,9 +57,9 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
-        temp[0] = getLastX();
-        temp[1] = getLastY();
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
+        temp[0] = lastX;
+        temp[1] = lastY;
         temp[2] = x1;
         temp[3] = y1;
         temp[4] = x2;
@@ -82,8 +82,8 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
-        double length = Points.distance(getLastX(), getLastY(), x, y);
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
+        double length = Points.distance(lastX, lastY, x, y);
         if (length > epsilon) {
             commands.addAsByte(SEG_LINETO);
             offsets.addAsInt(coords.size());
@@ -104,9 +104,9 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x, double y) {
-        temp[0] = getLastX();
-        temp[1] = getLastY();
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
+        temp[0] = lastX;
+        temp[1] = lastY;
         temp[2] = x1;
         temp[3] = y1;
         temp[4] = x;
@@ -130,5 +130,9 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
                 offsets.toIntArray(),
                 coords.toDoubleArray(),
                 lengths.toDoubleArray(), windingRule);
+    }
+
+    public boolean isEmpty() {
+        return commands.isEmpty();
     }
 }

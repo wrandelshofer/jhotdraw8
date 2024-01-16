@@ -45,7 +45,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     private final byte @NonNull [] commands;
     private final int @NonNull [] offsets;
     private final double @NonNull [] coords;
-    private final double @NonNull [] accumulatedLengths;
+    private final double @NonNull [] lengths;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
     private static final byte SEG_MOVETO = (byte) PathIterator.SEG_MOVETO;
@@ -57,11 +57,11 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     private final int windingRule;
     private final double epsilon = 0.125;
 
-    SimplePathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] accumulatedLengths, int windingRule) {
+    SimplePathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] lengths, int windingRule) {
         this.commands = commands;
         this.offsets = offsets;
         this.coords = coords;
-        this.accumulatedLengths = accumulatedLengths;
+        this.lengths = lengths;
         this.windingRule = windingRule;
 
         double mminx = POSITIVE_INFINITY, mminy = POSITIVE_INFINITY, mmaxx = NEGATIVE_INFINITY, mmaxy = NEGATIVE_INFINITY;
@@ -83,7 +83,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         this.commands = b.commands.toByteArray();
         this.offsets = b.offsets.toIntArray();
         this.coords = b.coords.toDoubleArray();
-        this.accumulatedLengths = b.lengths.toDoubleArray();
+        this.lengths = b.lengths.toDoubleArray();
         this.windingRule = b.windingRule;
 
         double mminx = POSITIVE_INFINITY, mminy = POSITIVE_INFINITY, mmaxx = NEGATIVE_INFINITY, mmaxy = NEGATIVE_INFINITY;
@@ -106,7 +106,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @return point and tangent at s
      */
     public @NonNull PointAndDerivative evalAtArcLength(double s) {
-        int search = Arrays.binarySearch(accumulatedLengths, s);
+        int search = Arrays.binarySearch(lengths, s);
         int i = search < 0 ? Math.min(commands.length - 1, ~search) : search;
 
         if (commands[i] == SEG_CLOSE) {
@@ -122,7 +122,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         }
 
         int offset = offsets[i] - 2;// at offset - 2 we have the x,y coordinates of the previous command
-        double start = (i == 0 ? 0 : accumulatedLengths[i - 1]);
+        double start = (i == 0 ? 0 : lengths[i - 1]);
         final double segmentS = s - start;// the s value inside the segment
 
         return switch (commands[i]) {
@@ -143,7 +143,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @return the length of the path in [0,Double.MAX_VALUE].
      */
     public double getArcLength() {
-        return accumulatedLengths.length == 0 ? 0 : accumulatedLengths[accumulatedLengths.length - 1];
+        return lengths.length == 0 ? 0 : lengths[lengths.length - 1];
     }
 
     /**
@@ -157,7 +157,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @return the same builder that was passed as an argument
      */
     public <T> @NonNull PathBuilder<T> buildSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
-        double totalArcLength = accumulatedLengths.length == 0 ? 0 : accumulatedLengths[accumulatedLengths.length - 1];
+        double totalArcLength = lengths.length == 0 ? 0 : lengths[lengths.length - 1];
         if (commands.length == 0 || s0 > totalArcLength || s1 < s0) {
             return b;
         }
@@ -169,21 +169,21 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         }
 
         // Find the segment on which the sub-path starts
-        int search0 = s0 == 0 ? 0 : Arrays.binarySearch(accumulatedLengths, s0);
+        int search0 = s0 == 0 ? 0 : Arrays.binarySearch(lengths, s0);
         boolean startsAtSegment = search0 >= 0;
         int i0 = search0 < 0 ? ~search0 : search0;
         // Make sure that the start segment contains s0+epsilon
-        while (i0 < commands.length - 1 && accumulatedLengths[i0] <= s0) {
+        while (i0 < commands.length - 1 && lengths[i0] <= s0) {
             i0++;
         }
 
         // Find the segment on which the sub-path ends
-        int search1 = s1 == totalArcLength ? commands.length - 1 : Arrays.binarySearch(accumulatedLengths, s1);
+        int search1 = s1 == totalArcLength ? commands.length - 1 : Arrays.binarySearch(lengths, s1);
         boolean endsAtSegment = search1 >= 0;
         int i1 = search1 < 0 ? ~search1 : search1;
         if (!endsAtSegment) {
             // Make sure that the end segment contains s1
-            while (i1 < commands.length - 1 && accumulatedLengths[i1 + 1] < s1) {
+            while (i1 < commands.length - 1 && lengths[i1 + 1] < s1) {
                 i1++;
             }
         } else {
@@ -193,8 +193,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         double[] splitCoords = new double[8];
         if (!startsAtSegment) {
             int offset = offsets[i0];
-            double s = s0 - accumulatedLengths[i0 - 1];
-            double arcLength = accumulatedLengths[i0] - accumulatedLengths[i0 - 1];
+            double s = s0 - lengths[i0 - 1];
+            double arcLength = lengths[i0] - lengths[i0 - 1];
             switch (commands[i0]) {
                 case SEG_CLOSE, SEG_MOVETO -> {
                 }
@@ -256,8 +256,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
         if (!endsAtSegment) {
             int offset = offsets[i1];
-            double s = s1 - accumulatedLengths[i1 - 1];
-            double arcLength = accumulatedLengths[i1] - accumulatedLengths[i1 - 1];
+            double s = s1 - lengths[i1 - 1];
+            double arcLength = lengths[i1] - lengths[i1 - 1];
             switch (commands[i1]) {
                 case SEG_CLOSE -> b.closePath();
                 case SEG_MOVETO -> {
@@ -269,12 +269,12 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 }
                 case SEG_QUADTO -> {
                     QuadCurves.split(coords, offset - 2,
-                            QuadCurves.invArcLength(coords, offset - 1, s, epsilon), splitCoords, 0, null, 0);
+                            QuadCurves.invArcLength(coords, offset - 2, s, epsilon), splitCoords, 0, null, 0);
                     b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
                 }
                 case SEG_CUBICTO -> {
                     CubicCurves.split(coords, offset - 2,
-                            CubicCurves.invArcLength(coords, offset - 1, s, epsilon), splitCoords, 0, null, 0);
+                            CubicCurves.invArcLength(coords, offset - 2, s, epsilon), splitCoords, 0, null, 0);
                     b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
                 }
                 default -> throw new IllegalStateException("unexpected command=" + commands[i1] + " at index=" + i1);
@@ -289,64 +289,70 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
             return this;
         }
 
-        byte @NonNull [] reverseCommands = new byte[commands.length];
-        int @NonNull [] reverseOffsets = new int[offsets.length];
-        double @NonNull [] reverseCoords = new double[coords.length];
-        double @NonNull [] reverseAccumulatedLengths = new double[accumulatedLengths.length];
+        byte @NonNull [] rCommands = new byte[commands.length];
+        int @NonNull [] rOffsets = new int[offsets.length];
+        double @NonNull [] rCoords = new double[coords.length];
+        double @NonNull [] rLengths = new double[lengths.length];
 
         // reverse coordinates
         for (int i = 0, n = coords.length; i < n; i += 2) {
-            reverseCoords[n - i - 2] = coords[i];
-            reverseCoords[n - i - 1] = coords[i + 1];
+            rCoords[n - i - 2] = coords[i];
+            rCoords[n - i - 1] = coords[i + 1];
         }
 
         // reverse commands, offsets and accumulated lengths
-        double arcLength = accumulatedLengths.length - 1;
-        boolean pendingClose = false;
-        int sr = 0;
+        double arcLength = lengths[lengths.length - 1];
+        boolean needsClose = false;
+        boolean needsMoveTo = true;
 
-        // add initial moveto command
-        reverseCommands[sr++] = SEG_MOVETO;
-        int offset = 2;
-
-        // add remaining commands
-        for (int s = commands.length - 1; s > 0; --s) {
-            switch (commands[s]) {
-                case SEG_MOVETO:
-                    if (pendingClose) {
-                        pendingClose = false;
-                        reverseOffsets[sr] = offset;
-                        reverseAccumulatedLengths[sr] = arcLength - accumulatedLengths[sr];
-                        reverseCommands[sr++] = SEG_CLOSE;
+        // reverse commands
+        int j = 0;
+        int offset = 0;
+        for (int i = commands.length - 1; i > 0; --i) {
+            switch (commands[i]) {
+                case SEG_MOVETO -> {
+                    if (needsClose) {
+                        needsClose = false;
+                        rOffsets[j] = offset;
+                        rLengths[j] = arcLength - lengths[i - 1];
+                        rCommands[j++] = SEG_CLOSE;
                     }
-                    reverseOffsets[sr] = offset;
-                    reverseAccumulatedLengths[sr] = arcLength - accumulatedLengths[sr];
-                    reverseCommands[sr] = SEG_MOVETO;
-                    sr++;
+                    needsMoveTo = false;
+                    rOffsets[j] = offset;
+                    rLengths[j] = arcLength - lengths[i - 1];
+                    rCommands[j] = SEG_MOVETO;
+                    j++;
                     offset += 2;
-                    break;
-
-                case SEG_CLOSE:
-                    pendingClose = true;
-                    break;
-
-                default:
-                    reverseOffsets[sr] = offset;
-                    reverseAccumulatedLengths[sr] = arcLength - accumulatedLengths[sr];
-                    reverseCommands[sr++] = commands[s];
-                    offset += switch (commands[s]) {
+                }
+                case SEG_CLOSE -> {
+                    needsClose = true;
+                }
+                default -> {
+                    if (needsMoveTo) {
+                        needsMoveTo = false;
+                        rOffsets[j] = offset;
+                        rLengths[j] = j == 0 ? 0 : rLengths[j - 1];//same as last rLength
+                        rCommands[j] = SEG_MOVETO;
+                        offset += 2;
+                        j++;
+                    }
+                    rOffsets[j] = offset;
+                    rLengths[j] = arcLength - lengths[i - 1];
+                    rCommands[j++] = commands[i];
+                    offset += switch (commands[i]) {
                         default -> 2;
                         case SEG_QUADTO -> 4;
                         case SEG_CUBICTO -> 6;
                     };
-                    break;
+                }
             }
         }
-        if (pendingClose) {
-            reverseCommands[sr] = SEG_CLOSE;
-            reverseOffsets[sr] = offset;
+        if (needsClose) {
+            rCommands[j] = SEG_CLOSE;
+            rLengths[j] = j == 0 ? 0 : rLengths[j - 1];//same as last rLength
+            rOffsets[j] = offset;
         }
-        return new SimplePathMetrics(reverseCommands, reverseOffsets, reverseCoords, reverseAccumulatedLengths, windingRule);
+        return new SimplePathMetrics(rCommands, rOffsets, rCoords, rLengths, windingRule);
     }
 
 
@@ -696,5 +702,10 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 return commands[current];
             }
         };
+    }
+
+    @Override
+    public String toString() {
+        return PathMetrics.pathMetricsToString(this);
     }
 }

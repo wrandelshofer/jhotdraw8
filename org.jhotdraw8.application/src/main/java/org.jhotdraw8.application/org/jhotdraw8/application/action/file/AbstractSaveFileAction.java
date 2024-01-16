@@ -112,13 +112,6 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
                 if (uri != null && !app.getNonNull(FileBasedApplication.ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI)) {
                     for (Activity pi : app.getActivities()) {
                         FileBasedActivity vi = (FileBasedActivity) pi;
-                        if (vi != v && uri.equals(v.getURI())) {
-                            // FIXME Localize message
-                            Alert alert = new Alert(Alert.AlertType.INFORMATION, "You can not save to a file which is already open.");
-                            alert.getDialogPane().setMaxWidth(640.0);
-                            alert.showAndWait();
-                            continue Outer;
-                        }
                     }
                 }
                 break;

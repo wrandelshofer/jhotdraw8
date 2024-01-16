@@ -334,6 +334,7 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public E get(int index) {
+        Objects.checkIndex(index, size());
         return trie.get(index);
     }
 

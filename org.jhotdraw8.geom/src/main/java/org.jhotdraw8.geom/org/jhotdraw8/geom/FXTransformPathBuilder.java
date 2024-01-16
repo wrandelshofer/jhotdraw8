@@ -30,12 +30,12 @@ public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         target.closePath();
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x3, double y3) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x3, double y3) {
         Point2D p1 = transform.transform(x1, y1);
         Point2D p2 = transform.transform(x2, y2);
         Point2D p3 = transform.transform(x3, y3);
@@ -48,7 +48,7 @@ public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         Point2D p = transform.transform(x, y);
         target.lineTo(p.getX(), p.getY());
     }
@@ -60,7 +60,7 @@ public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x2, double y2) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x2, double y2) {
         Point2D p1 = transform.transform(x1, y1);
         Point2D p2 = transform.transform(x2, y2);
         target.quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());

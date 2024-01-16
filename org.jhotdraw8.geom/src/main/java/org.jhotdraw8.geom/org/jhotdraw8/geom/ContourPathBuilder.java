@@ -33,7 +33,7 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doClosePath() {
+    protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         papb.closePath();
     }
 
@@ -50,12 +50,12 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doCurveTo(double x1, double y1, double x2, double y2, double x, double y) {
+    protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         papb.curveTo(x1, y1, x2, y2, x, y);
     }
 
     @Override
-    protected void doLineTo(double x, double y) {
+    protected void doLineTo(double lastX, double lastY, double x, double y) {
         if (eps2 == 0 || (lastX - x) * (lastX - x) + (lastY - y) * (lastY - y) >= eps2) {
             papb.lineTo(x, y);
         }
@@ -67,7 +67,7 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doQuadTo(double x1, double y1, double x, double y) {
+    protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
         papb.quadTo(x1, y1, x, y);
     }
 

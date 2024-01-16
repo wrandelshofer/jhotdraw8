@@ -353,7 +353,7 @@ public class QuadCurves {
         double arcLength = 0.5 * sqrt(A)
                 * (u * E - b * F + (k * log(abs((u + E) / (b + F)))));
 
-        if (Double.isNaN(arcLength)) {
+        if (Double.isNaN(arcLength) || Double.isInfinite(arcLength)) {
             // the arc is degenerated to a line
             return Lines.arcLength(q[offset], q[offset + 1], q[offset + 4], q[offset + 5]);
         }
