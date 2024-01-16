@@ -327,6 +327,7 @@ public class QuadCurves {
      * @param q      the coordinates of the control points of the bézier curve
      * @param offset the offset of the first control point in {@code q}
      * @param t      the value of t in range [0,1]
+     * @return the arc length, a non-negative value
      */
     public static double arcLength(double[] q, int offset, double t) {
         double x0 = q[offset],
@@ -353,7 +354,7 @@ public class QuadCurves {
         double arcLength = 0.5 * sqrt(A)
                 * (u * E - b * F + (k * log(abs((u + E) / (b + F)))));
 
-        if (Double.isNaN(arcLength) || Double.isInfinite(arcLength)) {
+        if (arcLength < 0 || Double.isNaN(arcLength)) {
             // the arc is degenerated to a line
             return Lines.arcLength(q[offset], q[offset + 1], q[offset + 4], q[offset + 5]);
         }
