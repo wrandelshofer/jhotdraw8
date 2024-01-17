@@ -38,6 +38,10 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
                 if (Points.almostEqual(last.getX0(), last.getY0(), moveNode.getX0(), moveNode.getY0())) {
                     moveNode = moveNode.withMaskBits(last.getMask() & BezierNode.C1_MASK)
                             .setX1(last.getX1()).setY1(last.getY1());
+                    BezierNode moveNodeAsLineNode = moveNode.withClearMaskBits(BezierNode.MOVE_MASK);
+                    moveNode = moveNode
+                            .withCollinear(moveNodeAsLineNode.computeIsCollinear())
+                            .withEquidistant(moveNodeAsLineNode.computeIsEquidistant());
                     nodes.set(moveIndex, moveNode);
                     nodes.removeLast();
                     last = getLast();
