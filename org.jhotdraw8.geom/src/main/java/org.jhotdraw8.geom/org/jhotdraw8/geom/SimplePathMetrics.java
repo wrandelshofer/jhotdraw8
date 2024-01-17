@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
 
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
-import static java.lang.Double.isNaN;
 
 /**
  * The {@code PathMetrics} class allows access to the
@@ -54,53 +53,35 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     private final int @NonNull [] offsets;
     private final double @NonNull [] coords;
     private final double @NonNull [] lengths;
-    private final double minx, miny, maxx, maxy;
     private final int windingRule;
-    private final double epsilon = 0.125;
+    private final double epsilon;
 
-    SimplePathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] lengths, int windingRule) {
+    SimplePathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] lengths, int windingRule, double epsilon) {
         this.commands = commands;
         this.offsets = offsets;
         this.coords = coords;
         this.lengths = lengths;
         this.windingRule = windingRule;
 
-        double mminx = POSITIVE_INFINITY, mminy = POSITIVE_INFINITY, mmaxx = NEGATIVE_INFINITY, mmaxy = NEGATIVE_INFINITY;
-        for (int i = 0; i < coords.length; i += 2) {
-            mminx = Math.min(mminx, coords[i]);
-            mmaxx = Math.max(mmaxx, coords[i]);
-            mminy = Math.min(mminy, coords[i + 1]);
-            mmaxy = Math.min(mmaxy, coords[i + 1]);
-        }
-        this.minx = mminx;
-        this.maxx = mmaxx;
-        this.miny = mminy;
-        this.maxy = mmaxy;
+        this.epsilon = epsilon;
     }
 
     public SimplePathMetrics(@NonNull Shape shape) {
-        this(shape.getPathIterator(null));
+        this(shape.getPathIterator(null), 0.125);
     }
 
     public SimplePathMetrics(@NonNull PathIterator pathIterator) {
+        this(pathIterator, 0.125);
+    }
+
+    public SimplePathMetrics(@NonNull PathIterator pathIterator, double epsilon) {
         PathMetricsBuilder b = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), pathIterator);
         this.commands = b.commands.toByteArray();
         this.offsets = b.offsets.toIntArray();
         this.coords = b.coords.toDoubleArray();
         this.lengths = b.lengths.toDoubleArray();
         this.windingRule = b.windingRule;
-
-        double mminx = POSITIVE_INFINITY, mminy = POSITIVE_INFINITY, mmaxx = NEGATIVE_INFINITY, mmaxy = NEGATIVE_INFINITY;
-        for (int i = 0; i < coords.length; i += 2) {
-            mminx = Math.min(mminx, coords[i]);
-            mmaxx = Math.max(mmaxx, coords[i]);
-            mminy = Math.min(mminy, coords[i + 1]);
-            mmaxy = Math.min(mmaxy, coords[i + 1]);
-        }
-        this.minx = mminx;
-        this.maxx = mmaxx;
-        this.miny = mminy;
-        this.maxy = mmaxy;
+        this.epsilon = epsilon;
     }
 
     /**
@@ -219,7 +200,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
             rLengths[j] = j == 0 ? 0 : rLengths[j - 1];//same as last rLength
             rOffsets[j] = offset;
         }
-        return new SimplePathMetrics(rCommands, rOffsets, rCoords, rLengths, windingRule);
+        return new SimplePathMetrics(rCommands, rOffsets, rCoords, rLengths, windingRule, epsilon);
     }
 
     @Override
@@ -229,22 +210,22 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
 
     @Override
-    public Rectangle getBounds() {
-        return new Rectangle((int) minx, (int) miny, (int) (maxx - minx), (int) (maxy - miny));
-    }
-
-    @Override
     public Rectangle2D getBounds2D() {
+        double minx = POSITIVE_INFINITY, miny = POSITIVE_INFINITY, maxx = NEGATIVE_INFINITY, maxy = NEGATIVE_INFINITY;
+        for (int i = 0; i < coords.length; i += 2) {
+            minx = Math.min(minx, coords[i]);
+            maxx = Math.max(maxx, coords[i]);
+            miny = Math.min(miny, coords[i + 1]);
+            maxy = Math.max(maxy, coords[i + 1]);
+        }
+
         return new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
     }
 
     @Override
     public boolean contains(double x, double y) {
-        if (minx <= x && x <= maxx && miny <= y && y <= maxy) {
-            IntersectionResult result = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, 0);
-            return result.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE || result.getStatus() == IntersectionStatus.INTERSECTION;
-        }
-        return false;
+        IntersectionResult result = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, 0);
+        return result.getStatus() == IntersectionStatus.NO_INTERSECTION_INSIDE || result.getStatus() == IntersectionStatus.INTERSECTION;
     }
 
 
@@ -263,12 +244,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      */
     @Override
     public boolean contains(double x, double y, double w, double h) {
-        if (isNaN(x + w) || isNaN(y + h) || w <= 0 || h <= 0
-                || !(minx <= x) || !(x + w <= maxx) || !(miny <= y) || !(y + h <= maxy)) {
-            return false;
-        }
-        // FIXME implement me
-        return true;
+        return getBounds2D().contains(x, y, w, h);
     }
 
     /**

@@ -15,7 +15,7 @@ import java.util.DoubleSummaryStatistics;
 public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     protected final @NonNull DoubleArrayList lengths = new DoubleArrayList();
     private final @NonNull DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
-    private final double epsilon = 0.125;
+    private final double epsilon;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
     private static final byte SEG_MOVETO = (int) PathIterator.SEG_MOVETO;
@@ -25,6 +25,11 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
 
     public PathMetricsBuilder() {
+        this(0.125);
+    }
+
+    public PathMetricsBuilder(double epsilon) {
+        this.epsilon = epsilon;
     }
 
     @Override
@@ -129,7 +134,7 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
         return new SimplePathMetrics(commands.toByteArray(),
                 offsets.toIntArray(),
                 coords.toDoubleArray(),
-                lengths.toDoubleArray(), windingRule);
+                lengths.toDoubleArray(), windingRule, epsilon);
     }
 
     public boolean isEmpty() {
