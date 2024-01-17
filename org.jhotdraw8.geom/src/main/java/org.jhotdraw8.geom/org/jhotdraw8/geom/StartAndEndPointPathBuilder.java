@@ -8,7 +8,8 @@ package org.jhotdraw8.geom;
 import org.jhotdraw8.annotation.Nullable;
 
 /**
- * StartAndEndPointPathBuilder gets the start and end point of a path and their derivatives.
+ * StartAndEndPointPathBuilder gets the first start point and last end point of a path,
+ * and the derivatives of these points.
  *
  * @author Werner Randelshofer
  */

@@ -16,6 +16,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
 import static java.lang.Double.NEGATIVE_INFINITY;
 import static java.lang.Double.POSITIVE_INFINITY;
@@ -42,10 +43,6 @@ import static java.lang.Double.isNaN;
  * </ul>
  */
 public class SimplePathMetrics extends AbstractShape implements PathMetrics {
-    private final byte @NonNull [] commands;
-    private final int @NonNull [] offsets;
-    private final double @NonNull [] coords;
-    private final double @NonNull [] lengths;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
     private static final byte SEG_MOVETO = (byte) PathIterator.SEG_MOVETO;
@@ -53,6 +50,10 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     private static final byte SEG_QUADTO = (byte) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (byte) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
+    private final byte @NonNull [] commands;
+    private final int @NonNull [] offsets;
+    private final double @NonNull [] coords;
+    private final double @NonNull [] lengths;
     private final double minx, miny, maxx, maxy;
     private final int windingRule;
     private final double epsilon = 0.125;
@@ -144,143 +145,6 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      */
     public double arcLength() {
         return lengths.length == 0 ? 0 : lengths[lengths.length - 1];
-    }
-
-    /**
-     * Builds a sub-path from arc-lengths s0 to s1.
-     * <p>
-     * This method does not call {@link PathBuilder#build()}.
-     *
-     * @param s0 the arc length at which the sub-path starts, in [0,arcLength()].
-     * @param s1 the arc length at which the sub-path ends, in [0,arcLength()].
-     * @param b  the builder
-     * @return the same builder that was passed as an argument
-     */
-    public <T> @NonNull PathBuilder<T> buildSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
-        double totalArcLength = lengths.length == 0 ? 0 : lengths[lengths.length - 1];
-        if (commands.length == 0 || s0 > totalArcLength || s1 < s0) {
-            return b;
-        }
-        if (s0 < 0) {
-            s0 = 0;
-        }
-        if (s1 > totalArcLength) {
-            s1 = totalArcLength;
-        }
-
-        // Find the segment on which the sub-path starts
-        int search0 = s0 == 0 ? 0 : Arrays.binarySearch(lengths, s0);
-        boolean startsAtSegment = search0 >= 0;
-        int i0 = search0 < 0 ? ~search0 : search0;
-        // Make sure that the start segment contains s0+epsilon
-        while (i0 < commands.length - 1 && lengths[i0] <= s0) {
-            i0++;
-        }
-
-        // Find the segment on which the sub-path ends
-        int search1 = s1 == totalArcLength ? commands.length - 1 : Arrays.binarySearch(lengths, s1);
-        boolean endsAtSegment = search1 >= 0;
-        int i1 = search1 < 0 ? ~search1 : search1;
-        if (!endsAtSegment) {
-            // Make sure that the end segment contains s1
-            while (i1 < commands.length - 1 && lengths[i1 + 1] < s1) {
-                i1++;
-            }
-        } else {
-            i1++;
-        }
-
-        double[] splitCoords = new double[8];
-        if (!startsAtSegment) {
-            int offset = offsets[i0];
-            double s = s0 - lengths[i0 - 1];
-            double arcLength = lengths[i0] - lengths[i0 - 1];
-            switch (commands[i0]) {
-                case SEG_CLOSE, SEG_MOVETO -> {
-                }
-                case SEG_LINETO -> {
-                    Lines.split(coords, offset - 2,
-                            s / arcLength, null, 0, splitCoords, 0);
-                    if (!skipFirstMoveTo) {
-                        b.moveTo(splitCoords[0], splitCoords[1]);
-                    }
-                    if (i1 > i0) {
-                        b.lineTo(splitCoords[2], splitCoords[3]);
-                    }
-                }
-                case SEG_QUADTO -> {
-                    QuadCurves.split(coords, offset - 2,
-                            QuadCurves.invArcLength(coords, offset - 1, s, epsilon), null, 0, splitCoords, 0);
-                    if (!skipFirstMoveTo) {
-                        b.moveTo(splitCoords[0], splitCoords[1]);
-                    }
-                    if (i1 > i0) {
-                        b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
-                    }
-                }
-                case SEG_CUBICTO -> {
-                    CubicCurves.split(coords, offset - 2,
-                            CubicCurves.invArcLength(coords, offset - 1, s, epsilon), null, 0, splitCoords, 0);
-                    if (!skipFirstMoveTo) {
-                        b.moveTo(splitCoords[0], splitCoords[1]);
-                    }
-                    if (i1 > i0) {
-                        b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
-                    }
-                }
-                default -> throw new IllegalStateException("unexpected command=" + commands[i0] + " at index=" + i0);
-            }
-        } else {
-            if (commands[i0] != SEG_MOVETO) {
-                int offset = offsets[i0];
-                if (offset > 0) {
-                    if (!skipFirstMoveTo) {
-                        b.moveTo(coords[offset - 2], coords[offset - 1]);
-                    }
-                }
-            }
-        }
-
-        for (int i = startsAtSegment ? i0 : i0 + 1; i < i1; i++) {
-            int offset = offsets[i];
-            switch (commands[i]) {
-                case SEG_CLOSE -> b.closePath();
-                case SEG_MOVETO -> b.moveTo(coords[offset], coords[offset + 1]);
-                case SEG_LINETO -> b.lineTo(coords[offset], coords[offset + 1]);
-                case SEG_QUADTO -> b.quadTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3]);
-                case SEG_CUBICTO ->
-                        b.curveTo(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3], coords[offset + 4], coords[offset + 5]);
-                default -> throw new IllegalStateException("unexpected command=" + commands[i] + " at index=" + i);
-            }
-        }
-
-        if (!endsAtSegment) {
-            int offset = offsets[i1];
-            double s = s1 - lengths[i1 - 1];
-            double arcLength = lengths[i1] - lengths[i1 - 1];
-            switch (commands[i1]) {
-                case SEG_CLOSE -> b.closePath();
-                case SEG_MOVETO -> {
-                }
-                case SEG_LINETO -> {
-                    Lines.split(coords, offset - 2,
-                            s / arcLength, splitCoords, 0, null, 0);
-                    b.lineTo(splitCoords[2], splitCoords[3]);
-                }
-                case SEG_QUADTO -> {
-                    QuadCurves.split(coords, offset - 2,
-                            QuadCurves.invArcLength(coords, offset - 2, s, epsilon), splitCoords, 0, null, 0);
-                    b.quadTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5]);
-                }
-                case SEG_CUBICTO -> {
-                    CubicCurves.split(coords, offset - 2,
-                            CubicCurves.invArcLength(coords, offset - 2, s, epsilon), splitCoords, 0, null, 0);
-                    b.curveTo(splitCoords[2], splitCoords[3], splitCoords[4], splitCoords[5], splitCoords[6], splitCoords[7]);
-                }
-                default -> throw new IllegalStateException("unexpected command=" + commands[i1] + " at index=" + i1);
-            }
-        }
-        return b;
     }
 
     @Override
@@ -381,7 +245,6 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     }
 
 
-
     /**
      * This implementation checks if the bounding box
      * of this shape contains the specified rectangle.
@@ -416,7 +279,6 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
-
     @Override
     public PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
         double totalArcLength = arcLength();
@@ -428,214 +290,10 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         boolean endsAtLastSegment = s1 >= totalArcLength;
 
         if (startsAtFirstSegment && endsAtLastSegment) {
-            return getPathIterator(tx);
+            return new FullPathIterator(this, tx);
         }
 
-        // XXX this is quite inefficient, we should directly implement a PathIterator.
-        return buildSubPathAtArcLength(s0, s1, new AwtPathBuilder()).build().getPathIterator(tx);
-
-        /*
-        // The iterator is a state machine with n-states in the range [-2,commands.length]
-        // The state machine in the code below is not correct.
-        int startState;//inclusive
-        int firstMoveToStartOfSegmentState;//a value less than startState indicates that we do not need a first move to
-        int firstMoveToSubSegmentState;//a value less than startState indicates that we do not need a first move to
-        int firstSubSegmentState;//a value less than startState indicates that we do not need a sub-segment
-        int lastSubSegmentState;//a value less than startState indicates that we do not need a sub-segment
-        int endState;// exclusive
-        int firstSegmentIndex;
-        int lastSegmentIndex;
-        int i0;
-        boolean startsAtSegment;
-        if (startsAtFirstSegment) {
-            i0=0;
-            startsAtSegment=true;
-            startState = 0;
-            firstMoveToStartOfSegmentState = startState - 1;
-            firstMoveToSubSegmentState = startState - 1;
-            firstSubSegmentState = startState - 1;
-            firstSegmentIndex = 0;
-        } else {
-            // Find the segment on which the sub-path starts
-            int search0 =  Arrays.binarySearch(accumulatedLengths, s0);
-            startsAtSegment = search0 >= 0;
-            i0 = search0 < 0 ? ~search0 : search0;
-            // Make sure that the start segment contains s0+epsilon
-            while (i0 < commands.length - 1 && accumulatedLengths[i0 ] <= s0) {
-                i0++;
-            }
-            if (startsAtSegment) {
-                startState = i0 - 1;
-                firstMoveToStartOfSegmentState = startState;
-                firstMoveToSubSegmentState = startState - 1;
-                firstSubSegmentState = startState - 1;
-            } else {
-                startState = i0 - 1;
-                firstMoveToStartOfSegmentState = startState - 1;
-                firstMoveToSubSegmentState = startState;
-                firstSubSegmentState = startState + 1;
-            }
-            firstSegmentIndex = i0;
-        }
-
-        if (endsAtLastSegment) {
-            endState = commands.length;
-            lastSubSegmentState = startState - 1;
-            lastSegmentIndex = commands.length - 1;
-        } else {
-            // Find the segment on which the sub-path ends
-            int search1 = s1 == totalArcLength ? commands.length - 1 : Arrays.binarySearch(accumulatedLengths, s1);
-            boolean endsAtSegment = search1 >= 0;
-            int i1 = search1 < 0 ? ~search1 : search1;
-            if (endsAtSegment) {
-                endState = i1+1;
-                lastSubSegmentState = startState - 1;
-            } else {
-                // Make sure that the end segment contains s1
-                while (i1 < commands.length - 1 && accumulatedLengths[i1 + 1] < s1) {
-                    i1++;
-                }
-                endState = (!startsAtSegment&&i0==i1-1)?i1:i1 + 1;
-                lastSubSegmentState = i1;
-            }
-            lastSegmentIndex = i1;
-        }
-        final AffineTransform tt = tx == null ? AffineTransform.getTranslateInstance(0, 0) : tx;
-
-        return new PathIterator() {
-            private final double[] splitCoords = new double[8];
-            enum State {
-
-            }
-            private int current = startState;
-
-            @Override
-            public int getWindingRule() {
-                return windingRule;
-            }
-
-            @Override
-            public boolean isDone() {
-                return current >= endState;
-            }
-
-            @Override
-            public void next() {
-                if (!isDone()) {
-                    current++;
-                }
-            }
-
-            @Override
-            public int currentSegment(float[] coords) {
-                int command = currentSegment(splitCoords);
-                for (int i = 0; i < 6; i++) {
-                    coords[i] = (float) splitCoords[i];
-                }
-                return command;
-            }
-
-            @Override
-            public int currentSegment(double[] coords) {
-                if (current == firstMoveToStartOfSegmentState) return firstMoveToStartOfSegment(coords);
-                if (current == firstMoveToSubSegmentState) return firstMoveToSubSegment(coords);
-                if (current == firstSubSegmentState) return firstSubSegment(coords);
-                if (current == lastSubSegmentState) return lastSubSegment(coords);
-                return middleSegment(coords);
-            }
-
-            private int middleSegment(double[] coords) {
-                final int offset = offsets[current];
-                switch (commands[current]) {
-                    case SimplePathMetrics.SEG_MOVETO, SimplePathMetrics.SEG_LINETO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 1);
-                    }
-                    case SimplePathMetrics.SEG_QUADTO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 2);
-                    }
-                    case SimplePathMetrics.SEG_CUBICTO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 3);
-                    }
-                    default -> {//SEG CLOSE
-
-                    }
-                }
-                return commands[current];
-            }
-
-            private int lastSubSegment(double[] coords) {
-                int offset = offsets[lastSegmentIndex];
-                double s = s1 - accumulatedLengths[lastSegmentIndex - 1];
-                double arcLength = accumulatedLengths[lastSegmentIndex] - accumulatedLengths[lastSegmentIndex - 1];
-                switch (commands[lastSegmentIndex]) {
-                    case SEG_CLOSE, SEG_MOVETO -> {
-                    }
-                    case SEG_LINETO -> {
-                        Lines.split(SimplePathMetrics.this.coords, offset - 2,
-                                s / arcLength, splitCoords, 0, null, 0);
-                        tt.transform(splitCoords, 2, coords, 0, 1);
-                    }
-                    case SEG_QUADTO -> {
-                        QuadCurves.split(SimplePathMetrics.this.coords, offset - 2,
-                                QuadCurves.invArcLength(coords, offset - 1, s, epsilon), splitCoords, 0, null, 0);
-                        tt.transform(splitCoords, 2, coords, 0, 2);
-                    }
-                    case SEG_CUBICTO -> {
-                        CubicCurves.split(SimplePathMetrics.this.coords, offset - 2,
-                                CubicCurves.invArcLength(coords, offset - 1, s, epsilon), splitCoords, 0, null, 0);
-                        tt.transform(splitCoords, 2, coords, 0, 3);
-                    }
-                    default ->
-                            throw new IllegalStateException("unexpected command=" + commands[lastSegmentIndex] + " at index=" + lastSegmentIndex);
-                }
-                return commands[lastSegmentIndex];
-            }
-
-            private int firstMoveToStartOfSegment(double[] coords) {
-                int offset = offsets[firstSegmentIndex];
-                tt.transform(SimplePathMetrics.this.coords, offset - 2, coords, 0, 1);
-                return SEG_MOVETO;
-            }
-
-            private int firstMoveToSubSegment(double[] coords) {
-                doFirstSubSegment(coords);
-                return SEG_MOVETO;
-            }
-
-            private int firstSubSegment(double[] coords) {
-                doFirstSubSegment(coords);
-                return commands[firstSegmentIndex];
-            }
-
-            private void doFirstSubSegment(double[] coords) {
-                int offset = offsets[firstSegmentIndex];
-                double s = s0 - accumulatedLengths[firstSegmentIndex - 1];
-                double arcLength = accumulatedLengths[firstSegmentIndex] - accumulatedLengths[firstSegmentIndex - 1];
-                switch (commands[firstSegmentIndex]) {
-                    case SEG_CLOSE, SEG_MOVETO -> {
-                    }
-                    case SEG_LINETO -> {
-                        Lines.split(SimplePathMetrics.this.coords, offset - 2,
-                                s / arcLength, null, 0, splitCoords, 0);
-                        tt.transform(splitCoords, 0, coords, 0, 1);
-                    }
-                    case SEG_QUADTO -> {
-                        QuadCurves.split(SimplePathMetrics.this.coords, offset - 2,
-                                QuadCurves.invArcLength(coords, offset - 1, s, epsilon), null, 0, splitCoords, 0);
-                        tt.transform(splitCoords, 0, coords, 0, 2);
-                    }
-                    case SEG_CUBICTO -> {
-                        CubicCurves.split(SimplePathMetrics.this.coords, offset - 2,
-                                CubicCurves.invArcLength(coords, offset - 1, s, epsilon), null, 0, splitCoords, 0);
-                        tt.transform(splitCoords, 0, coords, 0, 3);
-                    }
-                    default ->
-                            throw new IllegalStateException("unexpected command=" + commands[firstSegmentIndex] + " at index=" + firstSegmentIndex);
-                }
-            }
-        };
-
-         */
+        return new SubPathIterator(s0, s1, this, tx);
     }
 
     /**
@@ -646,71 +304,324 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      */
     @Override
     public PathIterator getPathIterator(final @Nullable AffineTransform tx) {
-        final AffineTransform tt = tx == null ? AffineTransform.getTranslateInstance(0, 0) : tx;
-        return new PathIterator() {
-            int current = 0;
-
-            @Override
-            public int getWindingRule() {
-                return windingRule;
-            }
-
-            @Override
-            public boolean isDone() {
-                return current >= commands.length;
-            }
-
-            @Override
-            public void next() {
-                if (!isDone()) {
-                    current++;
-                }
-            }
-
-            @Override
-            public int currentSegment(float[] coords) {
-                final int offset = offsets[current];
-                switch (commands[current]) {
-                    case SEG_MOVETO, SEG_LINETO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 1);
-                    }
-                    case SEG_QUADTO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 2);
-                    }
-                    case SEG_CUBICTO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 3);
-                    }
-                    default -> {//SEG CLOSE
-
-                    }
-                }
-                return commands[current];
-            }
-
-            @Override
-            public int currentSegment(double[] coords) {
-                final int offset = offsets[current];
-                switch (commands[current]) {
-                    case SEG_MOVETO, SEG_LINETO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 1);
-                    }
-                    case SEG_QUADTO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 2);
-                    }
-                    case SEG_CUBICTO -> {
-                        tt.transform(SimplePathMetrics.this.coords, offset, coords, 0, 3);
-                    }
-                    default -> {//SEG CLOSE
-
-                    }
-                }
-                return commands[current];
-            }
-        };
+        return new FullPathIterator(this, tx);
     }
 
     @Override
     public String toString() {
         return PathMetrics.pathMetricsToString(this);
+    }
+
+    /**
+     * This {@link PathIterator} iterates over the entire path of the given {@link SimplePathMetrics}
+     * object.
+     */
+    private static class FullPathIterator implements PathIterator {
+        private final @NonNull SimplePathMetrics m;
+        private final @NonNull AffineTransform tt;
+        int current = 0;
+
+        public FullPathIterator(@NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
+            this.m = m;
+            this.tt = tt == null ? AffineTransform.getTranslateInstance(0, 0) : tt;
+        }
+
+        @Override
+        public int getWindingRule() {
+            return m.windingRule;
+        }
+
+        @Override
+        public boolean isDone() {
+            return current >= m.commands.length;
+        }
+
+        @Override
+        public void next() {
+            if (!isDone()) {
+                current++;
+            }
+        }
+
+        @Override
+        public int currentSegment(float[] coords) {
+            final int offset = m.offsets[current];
+            switch (m.commands[current]) {
+                case SEG_MOVETO, SEG_LINETO -> {
+                    tt.transform(m.coords, offset, coords, 0, 1);
+                }
+                case SEG_QUADTO -> {
+                    tt.transform(m.coords, offset, coords, 0, 2);
+                }
+                case SEG_CUBICTO -> {
+                    tt.transform(m.coords, offset, coords, 0, 3);
+                }
+                default -> {//SEG CLOSE
+
+                }
+            }
+            return m.commands[current];
+        }
+
+        @Override
+        public int currentSegment(double[] coords) {
+            final int offset = m.offsets[current];
+            switch (m.commands[current]) {
+                case SEG_MOVETO, SEG_LINETO -> {
+                    tt.transform(m.coords, offset, coords, 0, 1);
+                }
+                case SEG_QUADTO -> {
+                    tt.transform(m.coords, offset, coords, 0, 2);
+                }
+                case SEG_CUBICTO -> {
+                    tt.transform(m.coords, offset, coords, 0, 3);
+                }
+                default -> {//SEG CLOSE
+
+                }
+            }
+            return m.commands[current];
+        }
+    }
+
+    /**
+     * This {@link PathIterator} iterates over the entire path of the given {@link SimplePathMetrics}
+     * object.
+     */
+    private static class SubPathIterator implements PathIterator {
+        private final double s0, s1;
+        private final @NonNull SimplePathMetrics m;
+        private final @NonNull AffineTransform tt;
+        int current = 0;
+        /**
+         * The index of the first command that ends inside the sub-path.
+         */
+        int i0;
+        /**
+         * The index of the first command that ends outside the sub-path.
+         */
+        int i1;
+        double[] splitCoords = new double[8];
+        private final double @NonNull [] segCoords = new double[6];
+        private int segType;
+
+        enum State {
+            CLIP_FIRST_AND_LAST_SEGMENT,
+            CLIP_FIRST_SEGMENT,
+            INNER_SEGMENT,
+            CLIP_LAST_SEGMENT,
+            FINAL_SEGMENT,
+            DONE
+        }
+
+        private final double epsilon = 0.125;
+        private @NonNull State state;
+        private boolean startsAtSegment, endsAtSegment;
+
+        public SubPathIterator(double s0, double s1, @NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
+            double totalArcLength = m.arcLength();
+            this.s0 = Math.max(0, s0);
+            this.s1 = Math.min(totalArcLength, Math.max(this.s0, s1));
+            this.m = m;
+            this.tt = tt == null ? AffineTransform.getTranslateInstance(0, 0) : tt;
+
+            // Find the segment on which the sub-path starts
+            int search0 = s0 == 0 ? 0 : Arrays.binarySearch(m.lengths, s0);
+            startsAtSegment = search0 >= 0;
+            i0 = search0 < 0 ? ~search0 : search0;
+            // Make sure that the start segment contains s0+epsilon
+            while (i0 < m.commands.length - 1 && m.lengths[i0] <= s0) {
+                i0++;
+            }
+
+
+            // Find the segment on which the sub-path ends
+            int search1 = s1 == totalArcLength ? m.commands.length - 1 : Arrays.binarySearch(m.lengths, s1);
+            endsAtSegment = search1 >= 0;
+            i1 = search1 < 0 ? ~search1 : search1;
+            if (!endsAtSegment) {
+                // Make sure that the end segment contains s1
+                while (i1 < m.commands.length - 1 && m.lengths[i1 + 1] < s1) {
+                    i1++;
+                }
+            }
+
+            // Set the initial state
+            segType = SimplePathMetrics.SEG_MOVETO;
+            current = i0;
+            if (startsAtSegment) {
+                System.arraycopy(m.coords, m.offsets[i0 - 1], segCoords, 0, 2);
+                if (endsAtSegment || i0 < i1) {
+                    state = State.INNER_SEGMENT;
+                } else {
+                    state = State.CLIP_LAST_SEGMENT;
+                }
+            } else {
+                int offset = m.offsets[i0];
+                double arcLength = m.lengths[i0] - m.lengths[i0 - 1];
+                switch (m.commands[i0]) {
+                    case SEG_LINETO -> {
+                        Lines.split(m.coords, offset - 2,
+                                s0 / arcLength, null, 0, splitCoords, 0);
+                    }
+                    case SEG_QUADTO -> {
+                        QuadCurves.split(m.coords, offset - 2,
+                                QuadCurves.invArcLength(m.coords, offset - 2, s0, epsilon), null, 0, splitCoords, 0);
+                    }
+                    case SEG_CUBICTO -> {
+                        CubicCurves.split(m.coords, offset - 2,
+                                CubicCurves.invArcLength(m.coords, offset - 2, s0, epsilon), null, 0, splitCoords, 0);
+                    }
+                    default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
+                }
+                System.arraycopy(splitCoords, 0, segCoords, 0, 2);
+                if (i0 == i1 && !endsAtSegment) {
+                    switch (m.commands[i0]) {
+                        case SEG_LINETO -> {
+                            Lines.split(m.coords, offset - 2,
+                                    s1 / arcLength, splitCoords, 0, null, 0);
+                        }
+                        case SEG_QUADTO -> {
+                            QuadCurves.split(splitCoords, 0,
+                                    QuadCurves.invArcLength(splitCoords, 0, s1 - s0, epsilon), splitCoords, 0, null, 0);
+                        }
+                        case SEG_CUBICTO -> {
+                            CubicCurves.split(splitCoords, 0,
+                                    CubicCurves.invArcLength(splitCoords, 0, s1 - s0, epsilon), splitCoords, 0, null, 0);
+                        }
+                        default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
+                    }
+                    state = State.CLIP_FIRST_AND_LAST_SEGMENT;
+                } else {
+                    state = State.CLIP_FIRST_SEGMENT;
+                }
+            }
+        }
+
+        @Override
+        public int getWindingRule() {
+            return m.windingRule;
+        }
+
+        @Override
+        public boolean isDone() {
+            return state == State.DONE;
+        }
+
+        @Override
+        public void next() {
+            switch (state) {
+                case CLIP_FIRST_SEGMENT -> {
+                    segType = m.commands[current];
+                    switch (segType) {
+                        case SEG_LINETO -> {
+                            System.arraycopy(splitCoords, 2, segCoords, 0, 2);
+                        }
+                        case SEG_QUADTO -> {
+                            System.arraycopy(splitCoords, 2, segCoords, 0, 4);
+                        }
+                        case SEG_CUBICTO -> {
+                            System.arraycopy(splitCoords, 2, segCoords, 0, 6);
+                        }
+                        default -> throw new AssertionError("unexpected command=" + segType);
+                    }
+                    current++;
+                    if (current < i1) {
+                        state = State.INNER_SEGMENT;
+                    } else if (endsAtSegment) {
+                        if (i1 == i0) {
+                            state = State.FINAL_SEGMENT;
+                        } else {
+                            state = State.INNER_SEGMENT;
+                        }
+                    } else {
+                        state = State.CLIP_LAST_SEGMENT;
+                    }
+                }
+                case INNER_SEGMENT -> {
+                    segType = m.commands[current];
+                    final int offset = m.offsets[current];
+                    switch (m.commands[current]) {
+                        case SEG_MOVETO, SEG_LINETO -> {
+                            tt.transform(m.coords, offset, segCoords, 0, 1);
+                        }
+                        case SEG_QUADTO -> {
+                            tt.transform(m.coords, offset, segCoords, 0, 2);
+                        }
+                        case SEG_CUBICTO -> {
+                            tt.transform(m.coords, offset, segCoords, 0, 3);
+                        }
+                        default -> {//SEG CLOSE
+
+                        }
+                    }
+                    current++;
+                    if (current >= i1) {
+                        if (endsAtSegment) {
+                            state = State.FINAL_SEGMENT;
+                        } else {
+                            state = State.CLIP_LAST_SEGMENT;
+                        }
+                    }
+                }
+                case CLIP_LAST_SEGMENT -> {
+                    int offset = m.offsets[i1];
+                    double s = s1 - m.lengths[i1 - 1];
+                    double arcLength = m.lengths[i1] - m.lengths[i1 - 1];
+                    segType = m.commands[i1];
+                    switch (segType) {
+                        case SEG_LINETO -> {
+                            Lines.split(m.coords, offset - 2,
+                                    s / arcLength, splitCoords, 0, null, 0);
+                        }
+                        case SEG_QUADTO -> {
+                            QuadCurves.split(m.coords, offset - 2,
+                                    QuadCurves.invArcLength(m.coords, offset - 2, s, epsilon), splitCoords, 0, null, 0);
+                        }
+                        case SEG_CUBICTO -> {
+                            CubicCurves.split(m.coords, offset - 2,
+                                    CubicCurves.invArcLength(m.coords, offset - 2, s, epsilon), splitCoords, 0, null, 0);
+                        }
+                        default -> throw new AssertionError("unexpected command=" + segType);
+                    }
+                    System.arraycopy(splitCoords, 2, segCoords, 0, 6);
+                    state = State.FINAL_SEGMENT;
+                }
+                case CLIP_FIRST_AND_LAST_SEGMENT -> {
+                    segType = m.commands[i1];
+                    System.arraycopy(splitCoords, 2, segCoords, 0, 6);
+                    state = State.FINAL_SEGMENT;
+                }
+                default -> {
+                    state = State.DONE;
+                }
+            }
+        }
+
+        @Override
+        public int currentSegment(double[] coords) {
+            switch (segType) {
+                case SEG_MOVETO, SEG_LINETO -> tt.transform(segCoords, 0, coords, 0, 1);
+                case SEG_QUADTO -> tt.transform(segCoords, 0, coords, 0, 2);
+                case SEG_CUBICTO -> tt.transform(segCoords, 0, coords, 0, 3);
+                case SEG_CLOSE -> {
+                }
+                default -> throw new NoSuchElementException();
+            }
+            return segType;
+        }
+
+        @Override
+        public int currentSegment(float[] coords) {
+            switch (segType) {
+                case SEG_MOVETO, SEG_LINETO -> tt.transform(segCoords, 0, coords, 0, 1);
+                case SEG_QUADTO -> tt.transform(segCoords, 0, coords, 0, 2);
+                case SEG_CUBICTO -> tt.transform(segCoords, 0, coords, 0, 3);
+                case SEG_CLOSE -> {
+                }
+                default -> throw new NoSuchElementException();
+            }
+            return segType;
+        }
     }
 }

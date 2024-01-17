@@ -15,50 +15,6 @@ public interface PathMetrics {
     double arcLength();
 
     /**
-     * Builds a sub-path from t0 to t1.
-     * <p>
-     * This method does not call {@link PathBuilder#build()}.
-     *
-     * @param t0 the start time in [0,1].
-     * @param t1 the end time in [0,1].
-     * @param b  the builder
-     * @return the same builder that was passed as an argument
-     */
-    default <T> PathBuilder<T> buildSubPath(double t0, double t1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo) {
-        double totalArcLength = arcLength();
-        double s0 = t0 * totalArcLength;
-        double s1 = t1 * totalArcLength;
-        return buildSubPathAtArcLength(s0, s1, b, skipFirstMoveTo);
-    }
-
-    /**
-     * Builds a sub-path from arc-lengths s0 to s1.
-     * <p>
-     * This method does not call {@link PathBuilder#build()}.
-     *
-     * @param s0 the arc length at which the sub-path starts, in [0,arcLength()].
-     * @param s1 the arc length at which the sub-path ends, in [0,arcLength()].
-     * @param b  the builder
-     * @return the same builder that was passed as an argument
-     */
-    default <T> @NonNull PathBuilder<T> buildSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b) {
-        return buildSubPathAtArcLength(s0, s1, b, false);
-    }
-
-    /**
-     * Builds a sub-path from arc-lengths s0 to s1.
-     * <p>
-     * This method does not call {@link PathBuilder#build()}.
-     *
-     * @param s0              the arc length at which the sub-path starts, in [0,arcLength()].
-     * @param s1              the arc length at which the sub-path ends, in [0,arcLength()].
-     * @param b               the builder
-     * @param skipFirstMoveTo whether to skip the first moveTo
-     * @return the same builder that was passed as an argument
-     */
-    <T> @NonNull PathBuilder<T> buildSubPathAtArcLength(double s0, double s1, @NonNull PathBuilder<T> b, boolean skipFirstMoveTo);
-
-    /**
      * Returns a path iterator of the entire path.
      *
      * @param tx an optional transformation for the path iterator

@@ -10,6 +10,12 @@ import org.jhotdraw8.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * StartAndEndPointPathBuilder gets all start and end points of a path,
+ * and the derivatives of these points.
+ *
+ * @author Werner Randelshofer
+ */
 public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
     private final List<PointAndDerivative> startPoints = new ArrayList<>();
     private final List<PointAndDerivative> endPoints = new ArrayList<>();
