@@ -6,7 +6,6 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 
 import java.awt.geom.PathIterator;
@@ -130,7 +129,7 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     }
 
     @Override
-    public @Nullable SimplePathMetrics build() {
+    public @NonNull SimplePathMetrics build() {
         return new SimplePathMetrics(commands.toByteArray(),
                 offsets.toIntArray(),
                 coords.toDoubleArray(),

@@ -73,6 +73,7 @@ public class SimplePathMetricsTest {
                 dynamicTest("two-horizontal-lines-cropped-at-end-inside-middle-element", () -> shouldIterateSubPath("M0,0 1,0 2,0", 0, 0.75, "M0,0 0.75,0")),
                 dynamicTest("two-horizontal-lines-cropped-at-start-inside-first-element", () -> shouldIterateSubPath("M0,0 1,0 2,0", 0.25, 2, "M0.25,0 1,0 2,0")),
                 dynamicTest("two-horizontal-lines-cropped-at-start-of-second-element", () -> shouldIterateSubPath("M0,0 1,0 2,0", 1, 2, "M1,0 2,0")),
+                dynamicTest("many-horizontal-lines-cropped-at-third-start-segment", () -> shouldIterateSubPath("M1680,225 1685,225 1690,225 1700,225, 1705,225 1748,225", 7, 68 - 7, "M1687,225 1690,225 1700,225 1705,225 1741,225")),
                 dynamicTest("rectangle", () -> shouldIterateSubPath("M0,0 1,0 1,1 0,1 0,0", 0, 4, "M0,0 1,0 1,1 0,1 0,0")),
                 dynamicTest("rectangle-closed", () -> shouldIterateSubPath("M0,0 1,0 1,1 0,1 0,0Z", 0, 4, "M0,0 1,0 1,1 0,1 0,0 Z")),
                 dynamicTest("rectangle-closed-with-gap", () -> shouldIterateSubPath("M0,0 1,0 1,1 0,1Z", 0, 4, "M0,0 1,0 1,1 0,1 0,0 Z"))
@@ -82,11 +83,13 @@ public class SimplePathMetricsTest {
     private void shouldIterateSubPath(@NonNull String input, double s0, double s1, @NonNull String expected) throws Exception {
         var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
 
-
         // should getSubPathIteratorAtArcLength
         var actual = SvgPaths.doubleSvgStringFromAwt(metrics.getSubPathIteratorAtArcLength(s0, s1, null));
         assertEquals(expected, actual);
 
+        // sub path should have expected length
+        SimplePathMetrics subMetrics = new SimplePathMetrics(metrics.getSubPathIteratorAtArcLength(s0, s1, null));
+        assertEquals(Math.min(metrics.arcLength(), s1) - Math.max(0, s0), subMetrics.arcLength(), 0.125);
     }
 
 }

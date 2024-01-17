@@ -437,36 +437,38 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 }
             } else {
                 int offset = m.offsets[i0];
+                double ss0 = s0 - m.lengths[i0 - 1];
                 double arcLength = m.lengths[i0] - m.lengths[i0 - 1];
                 switch (m.commands[i0]) {
                     case SEG_LINETO -> {
                         Lines.split(m.coords, offset - 2,
-                                s0 / arcLength, null, 0, splitCoords, 0);
+                                ss0 / arcLength, null, 0, splitCoords, 0);
                     }
                     case SEG_QUADTO -> {
                         QuadCurves.split(m.coords, offset - 2,
-                                QuadCurves.invArcLength(m.coords, offset - 2, s0, epsilon), null, 0, splitCoords, 0);
+                                QuadCurves.invArcLength(m.coords, offset - 2, ss0, epsilon), null, 0, splitCoords, 0);
                     }
                     case SEG_CUBICTO -> {
                         CubicCurves.split(m.coords, offset - 2,
-                                CubicCurves.invArcLength(m.coords, offset - 2, s0, epsilon), null, 0, splitCoords, 0);
+                                CubicCurves.invArcLength(m.coords, offset - 2, ss0, epsilon), null, 0, splitCoords, 0);
                     }
                     default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
                 }
                 System.arraycopy(splitCoords, 0, segCoords, 0, 2);
                 if (i0 == i1 && !endsAtSegment) {
+                    double ss1 = s1 - m.lengths[i0 - 1];
                     switch (m.commands[i0]) {
                         case SEG_LINETO -> {
                             Lines.split(m.coords, offset - 2,
-                                    s1 / arcLength, splitCoords, 0, null, 0);
+                                    ss1 / arcLength, splitCoords, 0, null, 0);
                         }
                         case SEG_QUADTO -> {
                             QuadCurves.split(splitCoords, 0,
-                                    QuadCurves.invArcLength(splitCoords, 0, s1 - s0, epsilon), splitCoords, 0, null, 0);
+                                    QuadCurves.invArcLength(splitCoords, 0, ss1 - ss0, epsilon), splitCoords, 0, null, 0);
                         }
                         case SEG_CUBICTO -> {
                             CubicCurves.split(splitCoords, 0,
-                                    CubicCurves.invArcLength(splitCoords, 0, s1 - s0, epsilon), splitCoords, 0, null, 0);
+                                    CubicCurves.invArcLength(splitCoords, 0, ss1 - ss0, epsilon), splitCoords, 0, null, 0);
                         }
                         default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
                     }
