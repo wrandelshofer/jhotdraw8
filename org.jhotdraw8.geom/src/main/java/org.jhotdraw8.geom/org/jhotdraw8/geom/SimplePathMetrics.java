@@ -78,9 +78,12 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         this.maxy = mmaxy;
     }
 
-
     public SimplePathMetrics(@NonNull Shape shape) {
-        PathMetricsBuilder b = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), shape.getPathIterator(null));
+        this(shape.getPathIterator(null));
+    }
+
+    public SimplePathMetrics(@NonNull PathIterator pathIterator) {
+        PathMetricsBuilder b = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), pathIterator);
         this.commands = b.commands.toByteArray();
         this.offsets = b.offsets.toIntArray();
         this.coords = b.coords.toDoubleArray();

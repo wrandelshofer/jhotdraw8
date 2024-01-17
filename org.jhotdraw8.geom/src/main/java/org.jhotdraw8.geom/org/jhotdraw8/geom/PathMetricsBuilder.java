@@ -111,7 +111,7 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
         temp[3] = y1;
         temp[4] = x;
         temp[5] = y;
-        double arcLength = QuadCurves.arcLength(temp, 0);
+        double arcLength = QuadCurves.arcLength(temp, 0, epsilon);
         if (arcLength > epsilon) {
             commands.addAsByte(SEG_QUADTO);
             offsets.addAsInt(coords.size());

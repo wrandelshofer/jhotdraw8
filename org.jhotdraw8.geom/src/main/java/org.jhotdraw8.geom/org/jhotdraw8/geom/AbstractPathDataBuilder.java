@@ -100,15 +100,12 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
         temp[3] = y1;
         temp[4] = x;
         temp[5] = y;
-        double arcLength = QuadCurves.arcLength(temp, 0);
-        if (arcLength > 0) {
             commands.addAsByte(SEG_QUADTO);
             offsets.addAsInt(coords.size());
             coords.addAsDouble(x1);
             coords.addAsDouble(y1);
             coords.addAsDouble(x);
             coords.addAsDouble(y);
-        }
     }
 
 }

@@ -449,7 +449,7 @@ public class CubicCurves {
      * @param p       points of the curve
      * @param offset  index of the first point in array {@code p}
      * @param t       the time
-     * @param epsilon
+     * @param epsilon the error tolerance
      * @return the arc length
      */
     public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {

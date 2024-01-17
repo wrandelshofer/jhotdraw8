@@ -14,7 +14,8 @@ public class SimplePathMetricsTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsShouldMeasureArcLength() {
         return Arrays.asList(
-                dynamicTest("1", () -> shouldMeasureArcLength("M0,0 1,0", 1.0))
+                dynamicTest("horizontal-line", () -> shouldMeasureArcLength("M0,0 1,0", 1.0)),
+                dynamicTest("degenerated-smoothQuadTo", () -> shouldMeasureArcLength("M36.16707689026681,195.13717962388827 Q65,75,100,75 320,75,250,75 T223.30609011754328,195.29469477095358", 475.24631578037315))
 
         );
     }
@@ -23,6 +24,8 @@ public class SimplePathMetricsTest {
         var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
         assertEquals(expected, metrics.arcLength());
 
+        var flattenedMetrics = new SimplePathMetrics(SvgPaths.buildFromSvgString(new AwtPathBuilder(), input).build().getPathIterator(null, 0.125));
+        assertEquals(expected, flattenedMetrics.arcLength(), 1.5);
     }
 
     @TestFactory
@@ -58,8 +61,8 @@ public class SimplePathMetricsTest {
                 dynamicTest("quadTo-complicated-1-no-cut", () -> shouldIterateSubPath("M37,195 110,50 Q180,50,220,50 320,40,244,195", 0, Integer.MAX_VALUE, "M37,195 110,50 Q180,50,220,50 320,40,244,195")),
                 dynamicTest("quadTo-complicated-1-cut-to-single-point", () -> shouldIterateSubPath("M37,195 110,50 Q180,50,220,50 320,40,244,195", 7, 7, "M40.14773113166062,188.74765734122204 40.14773113166062,188.74765734122204")),
                 dynamicTest("quadTo-complicated-2-cut-to-single-point", () -> shouldIterateSubPath("M37,195 110,50 Q180,60,220,60 320,50,244,195", 7, 7, "M40.14773113166062,188.74765734122204 40.14773113166062,188.74765734122204")),
-                dynamicTest("quadTo-complicated-1", () -> shouldIterateSubPath("M37,195 110,50 Q180,50,220,50 320,40,244,195", 7, 464.144222523906 - 7, "M40.14773113166062,188.74765734122204 110,50 Q180,50,220,50 317.9623118772454,40.20376881227546,247.0242077038002,188.75167767207336")),
-                dynamicTest("quadTo-complicated-2", () -> shouldIterateSubPath("M37,195 110,50 Q180,60,220,60 320,50,244,195", 7, 455.87069527285587 - 7, "M40.14773113166062,188.74765734122204 110,50 Q180,60,220,60 317.84983522276104,50.21501647772389,247.1868819905839,188.83618187883093")),
+                dynamicTest("quadTo-complicated-1", () -> shouldIterateSubPath("M37,195 110,50 Q180,50,220,50 320,40,244,195", 7, 464.144222523906 - 7, "M40.14773113166062,188.74765734122204 110,50 Q180,50,220,50 317.9610285106768,40.20389714893233,247.0260663404481,188.74778556121345")),
+                dynamicTest("quadTo-complicated-2", () -> shouldIterateSubPath("M37,195 110,50 Q180,60,220,60 320,50,244,195", 7, 455.87069527285587 - 7, "M40.14773113166062,188.74765734122204 110,50 Q180,60,220,60 317.8497029105922,50.215029708940776,247.18707309062006,188.83580699309448")),
                 dynamicTest("horizontal-line-not-cropped", () -> shouldIterateSubPath("M0,0 1,0", 0, 1, "M0,0 1,0")),
                 dynamicTest("horizontal-line-cropped-at-end", () -> shouldIterateSubPath("M0,0 1,0", 0, 0.75, "M0,0 0.75,0")),
                 dynamicTest("horizontal-line-cropped-at-start", () -> shouldIterateSubPath("M0,0 1,0", 0.25, 1, "M0.25,0 1,0")),

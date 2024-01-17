@@ -15,8 +15,6 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.log;
 import static java.lang.Math.sqrt;
 import static org.jhotdraw8.geom.Lines.lerp;
 
@@ -248,119 +246,30 @@ public class QuadCurves {
 
 
     /**
-     * Calculates the arc-length of a quadratic bézier curve using a closed form solution.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Stackoverflow, Calculate the length of a segment of a quadratic bezier,
-     *     Copyright Michael Anderson, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">
-     *        stackoverflow.com </a></dd>
-     * </dl>
+     * Computes the arc length s.
      *
-     * @param b      the coordinates of the control points of the bézier curve
-     * @param offset the offset of the first control point in {@code b}
+     * @param p       points of the curve
+     * @param offset  index of the first point in array {@code p}
+     * @param epsilon the error tolerance
+     * @return the arc length
      */
-    public static double arcLength(double @NonNull [] b, int offset) {
-        return arcLength(b, offset, 1.0);
+    public static double arcLength(double @NonNull [] p, int offset, double epsilon) {
+        return arcLength(p, offset, 1, epsilon);
     }
 
+
     /**
-     * Calculates the arc-length {@code s} of a segment from [0, t] of a
-     * quadratic bézier curve using a closed form solution.
-     * <p>
-     * Length of any parametric (in general length of any well defined curve) curve can be computated
-     * using curve length integral. In case of 2nd order Bezier curve, using its derivatives,
-     * this integral can be written as Quadratic Bezier Curve integral
-     * <pre>
-     * s = integrate ( √( Bx'(t)² + By′(t)² ) ,  d:t, from:0, to:t)
-     * </pre>
-     * To simplify this integral we can make some substitutions. In this case it we will look like this
-     * <pre>
-     * a = P₀ − 2*P₁ + P₂
-     * b = 2*P₁ − 2*P₀
-     * ∂B∂t(t) = 2*t*a + b
-     * </pre>
-     * Next after doing some algebra and grouping elements in order to parameter t we will do another
-     * substitutions (to make this integral easier):
-     * <pre>
-     * A = 4*(ax² + ay²)
-     * B = 4*(ax*bx + ay*by)
-     * C = bx² + by²
-     * </pre>
-     * <p>
-     * The arc-length {@code L} can now be computed with the following equation:
-     * <pre>
-     *     L = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
-     * </pre>
-     * Which we can write as:
-     * <pre>
-     *     L = √(A) * integrate( √( t² + 2*b*t +c ), d:t, from:0, to:t)
-     *     where b = B/(2*A)
-     *           c = C/A
-     * </pre>
-     * Then we get:
-     * <pre>
-     *     L = √(A) * integrate( √(u²+k), d:t, from:b, to:u)
-     *     where u = t + b
-     *           k = c - b²
-     * </pre>
-     * Now we can use the integral identity from the link to obtain:
-     * <pre>
-     *     L = √(A)/2 * (
-     *                   u*√(u²+k) - b*√(b²+k)
-     *                   + k*log( (u+√(u²+k)) / (b+√(b²+k)) )
-     *                   )
-     * </pre>
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Stackoverflow. Calculate the length of a segment of a quadratic bezier.
-     *     Copyright Michael Anderson. CC BY-SA 4.0 license.</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">
-     *        stackoverflow.com</a></dd>
+     * Computes the arc length s from time 0 to time t.
      *
-     *     <dt>Quadratic Bezier curves, Copyright malczak</dt>
-     *     <dd><a href="https://malczak.info/blog/quadratic-bezier-curve-length">malczak.info</a></dd>
-     * </dl>
-     *
-     * @param q      the coordinates of the control points of the bézier curve
-     * @param offset the offset of the first control point in {@code q}
-     * @param t      the value of t in range [0,1]
-     * @return the arc length, a non-negative value
+     * @param p       the coordinates of the control points of the bézier curve
+     * @param offset  the offset of the first control point in {@code b}
+     * @param t the time value
+     * @param epsilon the error tolerance
+     * @return the arc length
      */
-    public static double arcLength(double[] q, int offset, double t) {
-        double x0 = q[offset],
-                y0 = q[offset + 1],
-                x1 = q[offset + 2],
-                y1 = q[offset + 3],
-                x2 = q[offset + 4],
-                y2 = q[offset + 5];
-        double ax, ay, bx, by, A, B, C, b, c, u, k, E, F;
-        ax = x0 - x1 - x1 + x2;
-        ay = y0 - y1 - y1 + y2;
-        bx = x1 + x1 - x0 - x0;
-        by = y1 + y1 - y0 - y0;
-        A = 4.0 * (ax * ax + ay * ay);
-        B = 4.0 * (ax * bx + ay * by);
-        C = bx * bx + by * by;
-        b = B / (2.0 * A);
-        c = C / A;
-        u = t + b;
-        k = c - (b * b);
-        E = sqrt((u * u) + k);
-        F = sqrt((b * b) + k);
-
-        double arcLength = 0.5 * sqrt(A)
-                * (u * E - b * F + (k * log(abs((u + E) / (b + F)))));
-
-        if (arcLength < 0 || Double.isNaN(arcLength)) {
-            // the arc is degenerated to a line
-            return Lines.arcLength(q[offset], q[offset + 1], q[offset + 4], q[offset + 5]);
-        }
-
-        return arcLength;
-
+    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
+        ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
+        return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
 
     /**
@@ -373,8 +282,10 @@ public class QuadCurves {
      * @param epsilon
      */
     public static double invArcLength(double[] p, int offset, double s, double epsilon) {
-        ToDoubleFunction<Double> f = t -> arcLength(p, offset, t);
+        //ToDoubleFunction<Double> f = t -> arcLength_BROKEN(p, offset, t);
+        ToDoubleFunction<Double> f = t -> arcLength(p, offset, t, epsilon);
         ToDoubleFunction<Double> fd = getArcLengthIntegrand(p, offset);
+        //return Solvers.bisectionMethod(f,  s, 0, 1, epsilon);
         return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / arcLength(p, offset, 1), epsilon);
     }
 

@@ -85,8 +85,8 @@ public class Solvers {
             double xmin, double xmax) {
         ToDoubleFunction<Double> f = (t) -> Math.abs(quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) * t));
         double f3 = f.applyAsDouble(1.0);
-        double t1 = bisectionMethod(f, (1.0 / 3.0) * f3, 0.0, 1.0);
-        double t2 = bisectionMethod(f, (2.0 / 3.0) * f3, 0.0, 1.0);
+        double t1 = bisectionMethod(f, (1.0 / 3.0) * f3, 0.0, 1.0, 1e-7);
+        double t2 = bisectionMethod(f, (2.0 / 3.0) * f3, 0.0, 1.0, 1e-7);
         double t3 = 1.0;
 
         // We have four points on the x(y) curve at y0=0, y1=1/3, y2=2/3 and y3=1
@@ -122,19 +122,19 @@ public class Solvers {
      *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
      * </dl>
      *
-     * @param f    a function that grows monotonically
-     * @param y    the desired y value
-     * @param xmin the start of the interval
-     * @param xmax the end of the interval
+     * @param f         a function that grows monotonically
+     * @param y         the desired y value
+     * @param xmin      the start of the interval
+     * @param xmax      the end of the interval
+     * @param tolerance
      * @return x the estimated x value
      */
-    public static double bisectionMethod(@NonNull ToDoubleFunction<Double> f, double y, double xmin, double xmax) {
+    public static double bisectionMethod(@NonNull ToDoubleFunction<Double> f, double y, double xmin, double xmax, double tolerance) {
         final int maxIterations = 100;
-        final double tolerance = 0.001; // 0.1%
 
         int n = 0;
         double toleranceX = Math.abs(xmax - xmin) * tolerance;
-        double toleranceY = Math.abs(f.applyAsDouble(xmax) - f.applyAsDouble(xmin)) * tolerance;
+        double toleranceY = tolerance;//Math.abs(f.applyAsDouble(xmax) - f.applyAsDouble(xmin)) * tolerance;
 
         double x;
         while (true) {
@@ -277,7 +277,7 @@ public class Solvers {
         // TODO: track efficiency, how many times is fp called? Does a look-up table make more sense?
         ToDoubleFunction<Double> fLength = (t) -> Math.abs(quadratureFunction.apply(fp, tmin, t));
         double totalLength = fLength.applyAsDouble(tmax);
-        ToDoubleFunction<Double> t = (L) -> bisectionMethod(fLength, L, tmin, tmax);
+        ToDoubleFunction<Double> t = (L) -> bisectionMethod(fLength, L, tmin, tmax, 1e-7);
         return new SimpleOrderedPair<>(polynomialChebyshevApprox(N, t, 0.0, totalLength, tmin, tmax), totalLength);
     }
 
