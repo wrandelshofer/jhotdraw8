@@ -5,11 +5,11 @@
 package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  * BezierPathIterator.
@@ -17,45 +17,39 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class BezierPathIterator implements PathIterator {
+    enum State {
+        PRODUCE_SEGMENT,
+        CLOSE_PATH,
+        PRODUCE_CLOSE,
+        FINAL_SEGMENT, DONE
+    }
 
-    private final @NonNull List<BezierNode> nodes;
+    private @NonNull State state;
     private int index;
-    private final AffineTransform affine;
-    private final int size;
-    private final int windingRule;
+    private int lastMoveTo;
+    private final @NonNull BezierPath path;
+    private final @NonNull AffineTransform transform;
 
-    private final static BezierNode CLOSE_PATH = new BezierNode(0, 0);
+    private final double @NonNull [] segCoords = new double[6];
+    private int segType;
 
-    public BezierPathIterator(@NonNull BezierPath nodes, int windingRule, AffineTransform affine) {
-        // We patch the list of bezier nodes, to make the iteration methods simpler.
-        this.nodes = new ArrayList<BezierNode>(nodes.size());
-        boolean needsMoveTo = true;
-        BezierNode lastMoveTo = null;
-        for (BezierNode n : nodes) {
-            // Ensure that all new path segments start with a MOVE_TO.
-            if (needsMoveTo) {
-                n = n.withMaskBits(BezierNode.MOVE_MASK);
+    public BezierPathIterator(@NonNull BezierPath path, @Nullable AffineTransform transform) {
+        this.path = path;
+        this.transform = transform == null ? AffineTransform.getTranslateInstance(0, 0) : transform;
+        if (path.isEmpty()) {
+            this.state = State.DONE;
+        } else {
+            this.segType = SEG_MOVETO;
+            BezierNode current = path.get(0);
+            this.segCoords[0] = current.getX0();
+            this.segCoords[1] = current.getY0();
+            if (path.size() > 1) {
+                this.state = State.PRODUCE_SEGMENT;
+                index++;
+            } else {
+                this.state = State.FINAL_SEGMENT;
             }
-            needsMoveTo = n.isClosePath();
-
-            this.nodes.add(n.withClearMaskBits(BezierNode.CLOSE_MASK));
-
-            if (n.isMoveTo()) {
-                // Remember the last moveTo, so that we can close the path with a curve if necessary
-                lastMoveTo = n;
-            } else if (n.isClosePath()) {
-                // We have to reinsert the lastMoveTo node, if the path is closed with a Bézier curve
-                if (n.isC2() || lastMoveTo != null && lastMoveTo.isC1()) {
-                    this.nodes.add(lastMoveTo.withClearMaskBits(BezierNode.MOVE_MASK));
-                }
-                // We use a dedicated close path node instead of a node with the close mask being set.
-                this.nodes.add(CLOSE_PATH);
-            }
-
         }
-        size = this.nodes.size();
-        this.windingRule = windingRule;
-        this.affine = affine;
     }
 
     /**
@@ -66,7 +60,7 @@ public class BezierPathIterator implements PathIterator {
      */
     @Override
     public int getWindingRule() {
-        return windingRule;
+        return path.getWindingRule();
     }
 
     /**
@@ -76,133 +70,140 @@ public class BezierPathIterator implements PathIterator {
      */
     @Override
     public boolean isDone() {
-        // open path: we need one additional segment for the initial moveTo
-        // closed path: we need two additional segments: one for the initial moveTo and one for the closePath
-        return index >= size;
+        return state == State.DONE;
     }
 
-    /**
-     * Moves the iterator to the next segment of the path forwards along the
-     * primary direction of traversal as long as there are more points in that
-     * direction.
-     */
     @Override
     public void next() {
-        if (!isDone()) {
-            index++;
-        }
-    }
-
-    private final double @NonNull [] temp_double = new double[6];
-
-    /**
-     * Returns the coordinates and type of the current path segment in the
-     * iteration. The return value is the path segment type: SEG_MOVETO,
-     * SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE. A float array of
-     * length 6 must be passed in and may be used to store the coordinates of
-     * the point(s). Each point is stored as a pair of float x,y coordinates.
-     * SEG_MOVETO and SEG_LINETO types will return one point, SEG_QUADTO will
-     * return two points, SEG_CUBICTO will return 3 points and SEG_CLOSE will
-     * not return any points.
-     *
-     * @see PathIterator#SEG_MOVETO
-     * @see PathIterator#SEG_LINETO
-     * @see PathIterator#SEG_QUADTO
-     * @see PathIterator#SEG_CUBICTO
-     * @see PathIterator#SEG_CLOSE
-     */
-    @Override
-    public int currentSegment(float[] coords) {
-        int type = currentSegment(temp_double);
-        for (int i = 0; i < temp_double.length; i++) {
-            coords[i] = (float) temp_double[i];
-        }
-        return type;
-    }
-
-    /**
-     * Returns the coordinates and type of the current path segment in the
-     * iteration. The return value is the path segment type: SEG_MOVETO,
-     * SEG_LINETO, SEG_QUADTO, SEG_CUBICTO, or SEG_CLOSE. A double array of
-     * length 6 must be passed in and may be used to store the coordinates of
-     * the point(s). Each point is stored as a pair of double x,y coordinates.
-     * SEG_MOVETO and SEG_LINETO types will return one point, SEG_QUADTO will
-     * return two points, SEG_CUBICTO will return 3 points and SEG_CLOSE will
-     * not return any points.
-     *
-     * @see PathIterator#SEG_MOVETO
-     * @see PathIterator#SEG_LINETO
-     * @see PathIterator#SEG_QUADTO
-     * @see PathIterator#SEG_CUBICTO
-     * @see PathIterator#SEG_CLOSE
-     */
-    @Override
-    public int currentSegment(double[] coords) {
-        int numCoords = 0;
-        int type = 0;
-
-        if (index == 0) {
-            BezierNode current = nodes.get(index);
-            coords[0] = current.getX0();
-            coords[1] = current.getY0();
-            numCoords = 1;
-            type = SEG_MOVETO;
-        } else {
-            BezierNode current = nodes.get(index);
-            BezierNode previous = nodes.get(index - 1);
-
-            if (current == CLOSE_PATH) {
-                // Note: We use an explicit close path node, ignoring the CLOSE_PATH mask on the BezierNodes!
-                type = SEG_CLOSE;
-            } else {
-                if (current.isMoveTo()) {
-                    numCoords = 1;
-                    type = SEG_MOVETO;
-                    coords[0] = (float) current.getX0();
-                    coords[1] = (float) current.getY0();
-
-                } else if (!previous.isC2()) {
-                    if (!current.isC1()) {
-                        numCoords = 1;
-                        type = SEG_LINETO;
-                        coords[0] = current.getX0();
-                        coords[1] = current.getY0();
-
-                    } else {
-                        numCoords = 2;
-                        type = SEG_QUADTO;
-                        coords[0] = current.getX1();
-                        coords[1] = current.getY1();
-                        coords[2] = current.getX0();
-                        coords[3] = current.getY0();
-                    }
+        if (isDone()) return;
+        switch (state) {
+            case FINAL_SEGMENT -> {
+                state = State.DONE;
+            }
+            case PRODUCE_SEGMENT -> {
+                BezierNode prev = path.get(index - 1);
+                BezierNode current = path.get(index);
+                if (current.hasMask(BezierNode.MOVE_MASK)) {
+                    segCoords[0] = current.getX0();
+                    segCoords[1] = current.getY0();
+                    segType = SEG_MOVETO;
+                    lastMoveTo = index;
                 } else {
-                    if (!current.isC1()) {
-                        numCoords = 2;
-                        type = SEG_QUADTO;
-                        coords[0] = previous.getX2();
-                        coords[1] = previous.getY2();
-                        coords[2] = current.getX0();
-                        coords[3] = current.getY0();
+                    if (prev.isC2() && current.isC1()) {
+                        segCoords[0] = prev.getX2();
+                        segCoords[1] = prev.getY2();
+                        segCoords[2] = current.getX1();
+                        segCoords[3] = current.getY1();
+                        segCoords[4] = current.getX0();
+                        segCoords[5] = current.getY0();
+                        segType = SEG_CUBICTO;
+                    } else if (prev.isC2()) {
+                        segCoords[0] = prev.getX2();
+                        segCoords[1] = prev.getY2();
+                        segCoords[2] = current.getX0();
+                        segCoords[3] = current.getY0();
+                        segType = SEG_QUADTO;
+                    } else if (current.isC1()) {
+                        segCoords[0] = current.getX1();
+                        segCoords[1] = current.getY1();
+                        segCoords[2] = current.getX0();
+                        segCoords[3] = current.getY0();
+                        segType = SEG_QUADTO;
                     } else {
-                        numCoords = 3;
-                        type = SEG_CUBICTO;
-                        coords[0] = previous.getX2();
-                        coords[1] = previous.getY2();
-                        coords[2] = current.getX1();
-                        coords[3] = current.getY1();
-                        coords[4] = current.getX0();
-                        coords[5] = current.getY0();
+                        segCoords[0] = current.getX0();
+                        segCoords[1] = current.getY0();
+                        segType = SEG_LINETO;
+                    }
+                }
+                if (current.hasMask(BezierNode.CLOSE_MASK)) {
+                    state = State.CLOSE_PATH;
+                } else if (index < path.size() - 1) {
+                    index++;
+                } else {
+                    state = State.FINAL_SEGMENT;
+                }
+            }
+            case CLOSE_PATH -> {
+                BezierNode current = path.get(index);
+                BezierNode lastMove = path.get(lastMoveTo);
+                if (current.isC2() && lastMove.isC1()) {
+                    segCoords[0] = current.getX2();
+                    segCoords[1] = current.getY2();
+                    segCoords[2] = lastMove.getX1();
+                    segCoords[3] = lastMove.getY1();
+                    segCoords[4] = lastMove.getX0();
+                    segCoords[5] = lastMove.getY0();
+                    segType = SEG_CUBICTO;
+                    state = State.PRODUCE_CLOSE;
+                } else if (current.isC2()) {
+                    segCoords[0] = current.getX2();
+                    segCoords[1] = current.getY2();
+                    segCoords[2] = lastMove.getX0();
+                    segCoords[3] = lastMove.getY0();
+                    segType = SEG_QUADTO;
+                    state = State.PRODUCE_CLOSE;
+                } else if (lastMove.isC1()) {
+                    segCoords[0] = lastMove.getX1();
+                    segCoords[1] = lastMove.getY1();
+                    segCoords[2] = lastMove.getX0();
+                    segCoords[3] = lastMove.getY0();
+                    segType = SEG_QUADTO;
+                    state = State.PRODUCE_CLOSE;
+                } else {
+                    if (index < path.size() - 1) {
+                        segType = SEG_CLOSE;
+                        state = State.PRODUCE_SEGMENT;
+                        index++;
+                    } else {
+                        segType = SEG_CLOSE;
+                        state = State.FINAL_SEGMENT;
                     }
                 }
             }
-        }
 
-        if (affine != null) {
-            affine.transform(coords, 0, coords, 0, numCoords);
-        }
+            case PRODUCE_CLOSE -> {
+                segType = SEG_CLOSE;
+                if (index < path.size() - 1) {
+                    segType = SEG_CLOSE;
+                    state = State.PRODUCE_SEGMENT;
+                    index++;
+                } else {
+                    state = State.FINAL_SEGMENT;
+                }
+            }
 
-        return type;
+            default -> {
+                throw new NoSuchElementException();
+            }
+
+        }
+    }
+
+
+    @Override
+    public int currentSegment(double[] coords) {
+        switch (segType) {
+            case SEG_MOVETO, SEG_LINETO -> transform.transform(segCoords, 0, coords, 0, 1);
+            case SEG_QUADTO -> transform.transform(segCoords, 0, coords, 0, 2);
+            case SEG_CUBICTO -> transform.transform(segCoords, 0, coords, 0, 3);
+            case SEG_CLOSE -> {
+            }
+            default -> throw new NoSuchElementException();
+        }
+        return segType;
+    }
+
+    @Override
+    public int currentSegment(float[] coords) {
+        switch (segType) {
+            case SEG_MOVETO, SEG_LINETO -> transform.transform(segCoords, 0, coords, 0, 1);
+            case SEG_QUADTO -> transform.transform(segCoords, 0, coords, 0, 2);
+            case SEG_CUBICTO -> transform.transform(segCoords, 0, coords, 0, 3);
+            case SEG_CLOSE -> {
+            }
+            default -> throw new NoSuchElementException();
+        }
+        return segType;
     }
 
 }

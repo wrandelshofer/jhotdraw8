@@ -14,7 +14,6 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.ReversePathIterator;
 import org.jhotdraw8.geom.SimplePathMetrics;
-import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
@@ -157,7 +156,7 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
 
     @Override
     public @NonNull PathIterator getPathIterator(AffineTransform at) {
-        return new BezierPathIterator(this, windingRule, at);
+        return new BezierPathIterator(this, at);
     }
 
     @Override
@@ -527,8 +526,7 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
         return new PointAndDerivative(x0, y0, secondLast.getX0() - x0, secondLast.getY0() - y0);
     }
 
-    @Override
-    public String toString() {
-        return "BezierPath{\"" + SvgPaths.doubleSvgStringFromAwt(getPathIterator(null)) + "\"}";
+    public int getWindingRule() {
+        return windingRule;
     }
 }

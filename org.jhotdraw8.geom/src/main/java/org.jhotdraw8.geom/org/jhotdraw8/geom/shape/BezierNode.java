@@ -690,7 +690,10 @@ public class BezierNode {
 
     @Override
     public @NonNull String toString() {
-        return "BezierNode{" + "collinear=" + collinear + ", equidistant=" + equidistant + ", mask=" + mask + ", x0=" + x0 + ", x1=" + x1 + ", x2=" + x2 + ", y0=" + y0 + ", y1=" + y1 + ", y2=" + y2 + '}';
+        return "BezierNode{"
+                + (collinear ? "isCollinear " : "")
+                + (equidistant ? "isEquidistant " : "")
+                + "mask=" + mask + ", " + x0 + "," + y0 + " " + x1 + "," + y1 + " " + x2 + "," + y2 + '}';
     }
 
     public @NonNull BezierNode transform(@NonNull AffineTransform transform) {
