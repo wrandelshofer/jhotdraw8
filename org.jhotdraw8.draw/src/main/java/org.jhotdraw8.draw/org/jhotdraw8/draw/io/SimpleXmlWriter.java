@@ -264,7 +264,10 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
             if (Figure.class.isAssignableFrom(k.getRawValueType())) {
                 w.writeAttribute(name, idFactory.createId(value));
             } else {
-                w.writeAttribute(name, figureFactory.valueToString(k, value));
+                String stringValue = figureFactory.valueToString(k, value);
+                if (stringValue != null && !stringValue.isEmpty()) {
+                    w.writeAttribute(name, stringValue);
+                }
             }
         }
     }
