@@ -17,7 +17,13 @@ import org.jhotdraw8.application.action.Action;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Formatter;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.NoSuchElementException;
+import java.util.ResourceBundle;
 
 /**
  * This is a convenience wrapper for accessing resources stored in a
@@ -184,15 +190,25 @@ public interface Resources {
     boolean containsKey(String key);
 
     /**
-     * Returns a formatted string using java.util.Formatter().
+     * Returns a formatted string using {@link java.util.Formatter}.
      *
      * @param key       the key
      * @param arguments the arguments
      * @return formatted String
      */
     default @NonNull String format(@NonNull String key, Object... arguments) {
-        //return String.format(resource.getLocale(), getString(key), arguments);
         return new Formatter(getLocale()).format(getString(key), arguments).toString();
+    }
+
+    /**
+     * Returns a formatted string using {@link java.text.MessageFormat}.
+     *
+     * @param key       the key
+     * @param arguments the arguments
+     * @return formatted String
+     */
+    default @NonNull String messageFormat(@NonNull String key, Object... arguments) {
+        return new MessageFormat(getString(key), getLocale()).format(arguments);
     }
 
     /**
