@@ -399,8 +399,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
         public SubPathIterator(double s0, double s1, @NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
             double totalArcLength = m.arcLength();
-            this.s0 = Math.max(0, s0);
-            this.s1 = Math.min(totalArcLength, Math.max(this.s0, s1));
+            this.s0 = s0 = Math.max(0, s0);
+            this.s1 = s1 = Math.min(totalArcLength, Math.max(this.s0, s1));
             this.m = m;
             this.tt = tt == null ? AffineTransform.getTranslateInstance(0, 0) : tt;
 
@@ -413,14 +413,13 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 i0++;
             }
 
-
             // Find the segment on which the sub-path ends
             int search1 = s1 == totalArcLength ? m.commands.length - 1 : Arrays.binarySearch(m.lengths, s1);
             endsAtSegment = search1 >= 0;
             i1 = search1 < 0 ? ~search1 : search1;
             if (!endsAtSegment) {
                 // Make sure that the end segment contains s1
-                while (i1 < m.commands.length - 1 && m.lengths[i1 + 1] < s1) {
+                while (i1 < m.commands.length - 1 && m.lengths[i1 + 1] <= s1) {
                     i1++;
                 }
             }
@@ -537,12 +536,10 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                         }
                     }
                     current++;
-                    if (current >= i1) {
-                        if (endsAtSegment) {
-                            state = State.FINAL_SEGMENT;
-                        } else {
-                            state = State.CLIP_LAST_SEGMENT;
-                        }
+                    if (endsAtSegment && current > i1) {
+                        state = State.FINAL_SEGMENT;
+                    } else if (current >= i1) {
+                        state = State.CLIP_LAST_SEGMENT;
                     }
                 }
                 case CLIP_LAST_SEGMENT -> {

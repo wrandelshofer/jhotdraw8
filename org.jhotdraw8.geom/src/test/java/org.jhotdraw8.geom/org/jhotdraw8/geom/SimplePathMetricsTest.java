@@ -58,6 +58,12 @@ public class SimplePathMetricsTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsShouldBuildSubPathAtArcLength() {
         return Arrays.asList(
+                dynamicTest("quadTo-moveTo-lineTo-cut-end-before-moveTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195", 0, 100, "M435,195 Q448.2037350367509,120.17883479174476,480.77842773136007,111.21892562020746")),
+                dynamicTest("quadTo-moveTo-lineTo-cut-end-after-moveTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195", 0, 120, "M435,195 Q450,110,490,110 M530,110 536.2831377179671,118.613979129471")),
+                dynamicTest("quadTo-moveTo-lineTo-cut-start-inside-quadTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195", 100, 215, "M480.77842773136007,111.21892562020746 Q485.20996009800245,110,490,110 M530,110 592,195")),
+                dynamicTest("quadTo-moveTo-2*lineTo-cut-start-inside-quadTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195 600,195", 100, 215 + 8, "M480.77842773136007,111.21892562020746 Q485.20996009800245,110,490,110 M530,110 592,195 600,195")),
+                dynamicTest("quadTo-3*lineTo-cut-start-inside-quadTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 L530,110 592,195 600,195", 100, 300, "M480.77842773136007,111.21892562020746 Q485.20996009800245,110,490,110 L530,110 592,195 600,195")),
+                dynamicTest("quadTo-moveTo-lineTo-cut-start-after-moveTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195", 120, 215, "M536.2831377179671,118.613979129471 592,195")),
                 dynamicTest("quadTo-complicated-1-no-cut", () -> shouldIterateSubPath("M37,195 110,50 Q180,50,220,50 320,40,244,195", 0, Integer.MAX_VALUE, "M37,195 110,50 Q180,50,220,50 320,40,244,195")),
                 dynamicTest("quadTo-complicated-1-cut-to-single-point", () -> shouldIterateSubPath("M37,195 110,50 Q180,50,220,50 320,40,244,195", 7, 7, "M40.14773113166062,188.74765734122204 40.14773113166062,188.74765734122204")),
                 dynamicTest("quadTo-complicated-2-cut-to-single-point", () -> shouldIterateSubPath("M37,195 110,50 Q180,60,220,60 320,50,244,195", 7, 7, "M40.14773113166062,188.74765734122204 40.14773113166062,188.74765734122204")),
