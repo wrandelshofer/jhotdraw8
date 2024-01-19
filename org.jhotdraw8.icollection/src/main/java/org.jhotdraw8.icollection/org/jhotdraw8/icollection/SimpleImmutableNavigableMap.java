@@ -31,32 +31,32 @@ public class SimpleImmutableNavigableMap<K, V> implements ImmutableNavigableMap<
     final @NonNull Comparator<? super K> comparator;
 
     /**
-     * Creates a new instance with the provided opaque data object.
+     * Creates a new instance with the provided privateData data object.
      * <p>
      * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
      *
-     * @param opaque an opaque data object
+     * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected SimpleImmutableNavigableMap(@NonNull Opaque opaque) {
-        this(((Map.Entry<Comparator<? super K>, ?>) opaque.get()).getKey(), ((Map.Entry<?, RedBlackTree<K, V>>) opaque.get()).getValue());
+    protected SimpleImmutableNavigableMap(@NonNull PrivateData privateData) {
+        this(((Map.Entry<Comparator<? super K>, ?>) privateData.get()).getKey(), ((Map.Entry<?, RedBlackTree<K, V>>) privateData.get()).getValue());
     }
 
     /**
-     * Creates a new instance with the provided opaque object as its internal data structure.
+     * Creates a new instance with the provided privateData object as its internal data structure.
      * <p>
      * Subclasses must override this method, and return a new instance of their subclass!
      *
-     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull SimpleImmutableNavigableMap<K, V> newInstance(@NonNull Opaque opaque) {
-        return new SimpleImmutableNavigableMap<>(opaque);
+    protected @NonNull SimpleImmutableNavigableMap<K, V> newInstance(@NonNull PrivateData privateData) {
+        return new SimpleImmutableNavigableMap<>(privateData);
     }
 
     private @NonNull SimpleImmutableNavigableMap<K, V> newInstance(@NonNull Comparator<? super K> comparator, @NonNull RedBlackTree<K, V> root) {
-        return newInstance(new Opaque(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
+        return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
     }
     SimpleImmutableNavigableMap(@NonNull Comparator<? super K> comparator, @NonNull RedBlackTree<K, V> root) {
         this.root = root;

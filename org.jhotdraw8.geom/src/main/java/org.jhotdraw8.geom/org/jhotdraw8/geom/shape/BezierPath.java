@@ -18,7 +18,7 @@ import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
-import org.jhotdraw8.icollection.Opaque;
+import org.jhotdraw8.icollection.PrivateData;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -49,8 +49,8 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
         this.windingRule = windingRule;
     }
 
-    public BezierPath(@NonNull Opaque opaque, int windingRule) {
-        super(opaque);
+    public BezierPath(@NonNull PrivateData privateData, int windingRule) {
+        super(privateData);
         this.windingRule = windingRule;
     }
 
@@ -370,8 +370,8 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     }
 
     @Override
-    protected SimpleImmutableList<BezierNode> newInstance(@NonNull Opaque opaque) {
-        return new BezierPath(opaque, windingRule);
+    protected SimpleImmutableList<BezierNode> newInstance(@NonNull PrivateData privateData) {
+        return new BezierPath(privateData, windingRule);
     }
 
     @Override

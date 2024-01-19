@@ -155,37 +155,37 @@ public class SimpleImmutableSequencedSet<E>
     ;
 
     /**
-     * Creates a new instance with the provided opaque data object.
+     * Creates a new instance with the provided privateData data object.
      * <p>
      * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
      *
-     * @param opaque an opaque data object
+     * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected SimpleImmutableSequencedSet(@NonNull Opaque opaque) {
-        this(((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).root,
-                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).vector,
-                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).size,
-                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) opaque.get()).offset);
+    protected SimpleImmutableSequencedSet(@NonNull PrivateData privateData) {
+        this(((SimpleImmutableSequencedSet.OpaqueRecord<E>) privateData.get()).root,
+                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) privateData.get()).vector,
+                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) privateData.get()).size,
+                ((SimpleImmutableSequencedSet.OpaqueRecord<E>) privateData.get()).offset);
     }
 
     /**
-     * Creates a new instance with the provided opaque object as its internal data structure.
+     * Creates a new instance with the provided privateData object as its internal data structure.
      * <p>
      * Subclasses must override this method, and return a new instance of their subclass!
      *
-     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull SimpleImmutableSequencedSet<E> newInstance(@NonNull Opaque opaque) {
-        return new SimpleImmutableSequencedSet<>(opaque);
+    protected @NonNull SimpleImmutableSequencedSet<E> newInstance(@NonNull PrivateData privateData) {
+        return new SimpleImmutableSequencedSet<>(privateData);
     }
 
     private @NonNull SimpleImmutableSequencedSet<E> newInstance(@NonNull BitmapIndexedNode<SequencedElement<E>> root,
                                                                 @NonNull SimpleImmutableList<Object> vector,
                                                                 int size, int offset) {
-        return new SimpleImmutableSequencedSet<>(new Opaque(new OpaqueRecord<>(root, vector, size, offset)));
+        return new SimpleImmutableSequencedSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
     SimpleImmutableSequencedSet(

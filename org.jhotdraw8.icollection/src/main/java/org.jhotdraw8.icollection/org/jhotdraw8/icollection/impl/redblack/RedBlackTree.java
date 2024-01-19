@@ -7,7 +7,7 @@ package org.jhotdraw8.icollection.impl.redblack;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.icollection.ImmutableLists;
+import org.jhotdraw8.icollection.SimpleImmutableList;
 
 import java.util.ArrayDeque;
 import java.util.Comparator;
@@ -255,7 +255,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
 
     default Iterator<Node<K, V>> iterator() {
         if (isEmpty()) {
-            return ImmutableLists.<Node<K, V>>of().iterator();
+            return SimpleImmutableList.<Node<K, V>>of().iterator();
         } else {
             final Node<K, V> that = (Node<K, V>) this;
             return new Iterator<Node<K, V>>() {
@@ -311,7 +311,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      */
     default Iterator<Node<K, V>> reverseIterator() {
         if (isEmpty()) {
-            return ImmutableLists.<Node<K, V>>of().iterator();
+            return SimpleImmutableList.<Node<K, V>>of().iterator();
         } else {
             final Node<K, V> that = (Node<K, V>) this;
             return new Iterator<Node<K, V>>() {

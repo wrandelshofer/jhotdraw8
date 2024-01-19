@@ -149,37 +149,37 @@ public class SimpleImmutableSequencedMap<K, V> implements ImmutableSequencedMap<
     ;
 
     /**
-     * Creates a new instance with the provided opaque data object.
+     * Creates a new instance with the provided privateData data object.
      * <p>
      * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
      *
-     * @param opaque an opaque data object
+     * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected SimpleImmutableSequencedMap(@NonNull Opaque opaque) {
-        this(((OpaqueRecord<K, V>) opaque.get()).root,
-                ((OpaqueRecord<K, V>) opaque.get()).vector,
-                ((OpaqueRecord<K, V>) opaque.get()).size,
-                ((OpaqueRecord<K, V>) opaque.get()).offset);
+    protected SimpleImmutableSequencedMap(@NonNull PrivateData privateData) {
+        this(((OpaqueRecord<K, V>) privateData.get()).root,
+                ((OpaqueRecord<K, V>) privateData.get()).vector,
+                ((OpaqueRecord<K, V>) privateData.get()).size,
+                ((OpaqueRecord<K, V>) privateData.get()).offset);
     }
 
     /**
-     * Creates a new instance with the provided opaque object as its internal data structure.
+     * Creates a new instance with the provided privateData object as its internal data structure.
      * <p>
      * Subclasses must override this method, and return a new instance of their subclass!
      *
-     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull SimpleImmutableSequencedMap<K, V> newInstance(@NonNull Opaque opaque) {
-        return new SimpleImmutableSequencedMap<>(opaque);
+    protected @NonNull SimpleImmutableSequencedMap<K, V> newInstance(@NonNull PrivateData privateData) {
+        return new SimpleImmutableSequencedMap<>(privateData);
     }
 
     private @NonNull SimpleImmutableSequencedMap<K, V> newInstance(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
                                                                    @NonNull SimpleImmutableList<Object> vector,
                                                                    int size, int offset) {
-        return new SimpleImmutableSequencedMap<>(new Opaque(new OpaqueRecord<>(root, vector, size, offset)));
+        return new SimpleImmutableSequencedMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
     SimpleImmutableSequencedMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,

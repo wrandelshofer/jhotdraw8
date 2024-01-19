@@ -110,32 +110,32 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
     }
 
     /**
-     * Creates a new instance with the provided opaque data object.
+     * Creates a new instance with the provided privateData data object.
      * <p>
      * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
      *
-     * @param opaque an opaque data object
+     * @param privateData an privateData data object
      */
-    protected SimpleImmutableList(@NonNull Opaque opaque) {
-        this.trie = opaque.get();
+    protected SimpleImmutableList(@NonNull PrivateData privateData) {
+        this.trie = privateData.get();
     }
 
     /**
-     * Creates a new instance with the provided opaque object as its internal data structure.
+     * Creates a new instance with the provided privateData object as its internal data structure.
      * <p>
      * Subclasses must override this method, and return a new instance of their subclass!
      *
-     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull SimpleImmutableList<E> newInstance(@NonNull Opaque opaque) {
-        return new SimpleImmutableList<>(opaque);
+    protected @NonNull SimpleImmutableList<E> newInstance(@NonNull PrivateData privateData) {
+        return new SimpleImmutableList<>(privateData);
     }
 
     @SuppressWarnings("unchecked")
     private @NonNull SimpleImmutableList<E> newInstance(@NonNull BitMappedTrie<E> trie) {
-        return newInstance(new Opaque(trie));
+        return newInstance(new PrivateData(trie));
     }
 
     @SuppressWarnings("unchecked")

@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection;
 
 /**
- * This record holds an opaque object.
+ * This record holds an object that contains private data.
  * <p>
  * This record is used to allow subclassing of immutable classes
  * that need to create new instances of subclasses,
@@ -16,7 +16,7 @@ package org.jhotdraw8.icollection;
  * <p>
  * To allow subclassing of ImmutableFoo by other modules,
  * class ImmutableFoo provides a protected constructor and
- * a protected {@code newInstance} method that take an Opaque object
+ * a protected {@code newInstance} method that take an PrivateData object
  * as parameters.
  * <pre>{@literal
  * module org.foo {
@@ -32,10 +32,10 @@ package org.jhotdraw8.icollection;
  *     public ImmutableFoo() {
  *        table = new InternalHashtable();
  *     }
- *     protected ImmutableFoo(Opaque opaque) {
+ *     protected ImmutableFoo(PrivateData opaque) {
  *         this.table = opaque.get();
  *     }
- *     protected ImmutableFoo newInstance(Opaque opaque) {
+ *     protected ImmutableFoo newInstance(PrivateData opaque) {
  *         return new ImmutableFoo(opaque);
  *     }
  * }
@@ -51,17 +51,17 @@ package org.jhotdraw8.icollection;
  *     public ImmutableBar(int bar) {
  *         this.bar=bar;
  *     }
- *     protected ImmutableBar(Opaque opaque, int bar) {
+ *     protected ImmutableBar(PrivateData opaque, int bar) {
  *         super(opaque);
  *         this.bar=bar;
  *     }
- *     protected newInstance(Opaque opaque) {
+ *     protected newInstance(PrivateData opaque) {
  *         return new ImmutableBar(opaque,this.bar);
  *     }
  * }
  * }</pre>
  */
-public record Opaque(Object object) {
+public record PrivateData(Object object) {
     @SuppressWarnings("unchecked")
     <O> O get() {
         return (O) object;

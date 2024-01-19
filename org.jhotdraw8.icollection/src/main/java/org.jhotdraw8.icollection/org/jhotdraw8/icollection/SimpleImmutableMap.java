@@ -103,32 +103,32 @@ public class SimpleImmutableMap<K, V>
     final int size;
 
     /**
-     * Creates a new instance with the provided opaque data object.
+     * Creates a new instance with the provided privateData data object.
      * <p>
      * This constructor is intended to be called from a constructor
-     * of the subclass, that is called from method {@link #newInstance(Opaque)}.
+     * of the subclass, that is called from method {@link #newInstance(PrivateData)}.
      *
-     * @param opaque an opaque data object
+     * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected SimpleImmutableMap(@NonNull Opaque opaque) {
-        this(((Map.Entry<BitmapIndexedNode<K, V>, ?>) opaque.get()).getKey(), ((Map.Entry<?, Integer>) opaque.get()).getValue());
+    protected SimpleImmutableMap(@NonNull PrivateData privateData) {
+        this(((Map.Entry<BitmapIndexedNode<K, V>, ?>) privateData.get()).getKey(), ((Map.Entry<?, Integer>) privateData.get()).getValue());
     }
 
     /**
-     * Creates a new instance with the provided opaque object as its internal data structure.
+     * Creates a new instance with the provided privateData object as its internal data structure.
      * <p>
      * Subclasses must override this method, and return a new instance of their subclass!
      *
-     * @param opaque the internal data structure needed by this class for creating the instance.
+     * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull SimpleImmutableMap<K, V> newInstance(@NonNull Opaque opaque) {
-        return new SimpleImmutableMap<>(opaque);
+    protected @NonNull SimpleImmutableMap<K, V> newInstance(@NonNull PrivateData privateData) {
+        return new SimpleImmutableMap<>(privateData);
     }
 
     private @NonNull SimpleImmutableMap<K, V> newInstance(@NonNull BitmapIndexedNode<K, V> root, int size) {
-        return newInstance(new Opaque(new AbstractMap.SimpleImmutableEntry<>(root, size)));
+        return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(root, size)));
     }
     SimpleImmutableMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
         this.root = root;
