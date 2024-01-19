@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 public interface ReadOnlySortedSet<E> extends ReadOnlySequencedSet<E> {
     /**
-     * Returns the comparator used to order the elements in this set, or null if this set uses
+     * Returns the comparator used to order the elements in this set, or {@code null} if this set uses
      * the natural ordering of its elements.
      *
      * @return comparator or null

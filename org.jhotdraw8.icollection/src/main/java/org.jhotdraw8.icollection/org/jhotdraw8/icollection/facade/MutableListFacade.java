@@ -85,7 +85,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     @Override
     public void clear() {
         ImmutableList<E> oldList = backingList;
-        backingList = backingList.clear();
+        backingList = backingList.empty();
         if (oldList != backingList) modCount++;
     }
 

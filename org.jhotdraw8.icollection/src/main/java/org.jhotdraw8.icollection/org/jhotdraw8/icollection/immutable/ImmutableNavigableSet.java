@@ -21,7 +21,7 @@ public interface ImmutableNavigableSet<E> extends ReadOnlyNavigableSet<E>, Immut
     }
 
     @Override
-    @NonNull ImmutableNavigableSet<E> clear();
+    @NonNull <T> ImmutableNavigableSet<T> empty();
 
     @Override
     @NonNull ImmutableNavigableSet<E> remove(E element);
@@ -65,7 +65,7 @@ public interface ImmutableNavigableSet<E> extends ReadOnlyNavigableSet<E>, Immut
 
     default @NonNull ImmutableNavigableSet<E> reversed() {
         if (size() < 2) return this;
-        return clear().addAll(readOnlyReversed());
+        return this.<E>empty().addAll(readOnlyReversed());
     }
     
 }

@@ -118,7 +118,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      * @return A new RedBlackTree if the value is present, otherwise this.
      */
     default RedBlackTree<K, V> delete(K key, Comparator<? super K> comparator) {
-        final RedBlackTree<K, V> tree = Node.delete(this, key, comparator)._1;
+        final RedBlackTree<K, V> tree = Node.delete(this, key, comparator)._1();
         return tree.size() == this.size() ? this : Node.color(tree, Color.BLACK);
     }
 

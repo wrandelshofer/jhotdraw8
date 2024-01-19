@@ -1,8 +1,10 @@
 package org.jhotdraw8.icollection.immutable;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySortedSet;
 
+import java.util.Comparator;
 import java.util.NavigableSet;
 import java.util.NoSuchElementException;
 
@@ -21,7 +23,18 @@ public interface ImmutableSortedSet<E> extends ReadOnlySortedSet<E>, ImmutableSe
     }
 
     @Override
-    @NonNull ImmutableSortedSet<E> clear();
+    @NonNull <T> ImmutableSortedSet<T> empty();
+
+    /**
+     * Returns a copy of this collection that is empty, and has the specified
+     * type and comparator.
+     *
+     * @param comparator a comparator for ordering the elements of the set,
+     *                   specify {@code null} to use the natural order of the elements
+     * @param <T>        the element type of the collection
+     * @return an empty collection of the specified type and comparator
+     */
+    @NonNull <T> ImmutableCollection<T> empty(@Nullable Comparator<T> comparator);
 
     @Override
     @NonNull ImmutableSortedSet<E> remove(E element);
@@ -63,6 +76,6 @@ public interface ImmutableSortedSet<E> extends ReadOnlySortedSet<E>, ImmutableSe
 
     default @NonNull ImmutableSortedSet<E> reversed() {
         if (size() < 2) return this;
-        return clear().addAll(readOnlyReversed());
+        return this.<E>empty().addAll(readOnlyReversed());
     }    
 }

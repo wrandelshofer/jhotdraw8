@@ -8,6 +8,7 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
+import org.jhotdraw8.icollection.immutable.CollectionOps;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
@@ -25,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Spliterator;
+import java.util.stream.Stream;
 
 /**
  * Implements the {@link ImmutableList} interface using a bit-mapped trie
@@ -150,6 +152,16 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
     }
 
     @SuppressWarnings("unchecked")
+    public static <T> SimpleImmutableList<T> ofIterator(Iterator<T> iterator) {
+        return SimpleImmutableList.<T>of().addAll(() -> (Iterator<T>) iterator);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> SimpleImmutableList<T> ofStream(Stream<T> stream) {
+        return SimpleImmutableList.<T>of().addAll(() -> (Iterator<T>) stream.iterator());
+    }
+
+    @SuppressWarnings("unchecked")
     public static <T> SimpleImmutableList<T> copyOf(Iterable<? extends T> iterable) {
         Objects.requireNonNull(iterable, "iterable is null");
         if (iterable instanceof Collection<?> c && c.isEmpty()
@@ -170,13 +182,19 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull SimpleImmutableList<E> clear() {
-        return isEmpty() ? this : of();
+    public @NonNull <T> SimpleImmutableList<T> empty() {
+        return of();
     }
 
     @Override
     public @NonNull SimpleImmutableList<E> add(@NonNull E element) {
         return newInstance(trie.append(element));
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T, TC extends CollectionOps<T, TC>> CollectionOps<T, TC> emptyOp() {
+        return (CollectionOps<T, TC>) of();
     }
 
     @Override
@@ -265,6 +283,11 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
         return (SimpleImmutableList<E>) ImmutableList.super.removeLast();
     }
 
+    @Override
+    public SimpleImmutableList<E> diff(@NonNull ReadOnlyCollection<? super E> that) {
+        return retainAll(that);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull SimpleImmutableList<E> retainAll(@NonNull Iterable<?> c) {
@@ -325,6 +348,7 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
         }
         return result;
     }
+
 
     @Override
     public @NonNull SimpleImmutableList<E> set(int index, @NonNull E element) {

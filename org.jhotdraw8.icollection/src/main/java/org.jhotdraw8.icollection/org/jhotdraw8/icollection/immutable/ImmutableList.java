@@ -19,15 +19,16 @@ import java.util.List;
  *
  * @param <E> the element type
  */
-public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCollection<E> {
+public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCollection<E>, CollectionOps<E, ImmutableList<E>> {
     /**
      * Returns a copy of this list that is empty.
      *
      * @return this list instance if it is already empty, or a different list
      * instance that is empty.
      */
+    @SuppressWarnings("unchecked")
     @Override
-    @NonNull ImmutableList<E> clear();
+    @NonNull <T> ImmutableList<T> empty();
 
     @Override
     @NonNull ImmutableList<E> addFirst(@Nullable final E element);

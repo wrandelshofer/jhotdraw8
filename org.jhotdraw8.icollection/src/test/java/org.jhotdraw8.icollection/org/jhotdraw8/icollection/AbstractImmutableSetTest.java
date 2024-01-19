@@ -156,27 +156,15 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void clearShouldYieldEmptySet(@NonNull SetData data) {
+    public void emptyShouldYieldEmptySet(@NonNull SetData data) {
         ImmutableSet<Key> actual = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), actual);
-        ImmutableSet<Key> actual2 = actual.clear();
+        ImmutableSet<Key> actual2 = actual.empty();
         assertNotSame(actual, actual2);
         assertEqualSet(Collections.emptySet(), actual2);
     }
 
-    @ParameterizedTest
-    @MethodSource("dataProvider")
-    public void clearShouldBeIdempotent(@NonNull SetData data) {
-        ImmutableSet<Key> instance = newInstance(data.a());
-        assertNotEqualSet(Collections.emptySet(), instance);
-        ImmutableSet<Key> instance2 = instance.clear();
-        assertEqualSet(Collections.emptySet(), instance2);
-        assertNotSame(instance, instance2);
 
-        ImmutableSet<Key> instance3 = instance2.clear();
-        assertSame(instance2, instance3);
-        assertEqualSet(Collections.emptySet(), instance3);
-    }
 
     @ParameterizedTest
     @MethodSource("dataProvider")

@@ -6,6 +6,9 @@ package org.jhotdraw8.icollection.impl.redblack;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.icollection.Tuple;
+import org.jhotdraw8.icollection.Tuple2;
+import org.jhotdraw8.icollection.Tuple4;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -134,8 +137,8 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
             final int comparison = comparator.compare(node.key, key);
             if (comparison < 0) {
                 final Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.left, key, comparator);
-                final RedBlackTree<K, V> l = deleted._1;
-                final boolean d = deleted._2;
+                final RedBlackTree<K, V> l = deleted._1();
+                final boolean d = deleted._2();
                 if (d) {
                     return Node.unbalancedRight(node.color(), l, node.key, node.value, node.right
                     );
@@ -146,8 +149,8 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
                 }
             } else if (comparison > 0) {
                 final Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.right, key, comparator);
-                final RedBlackTree<K, V> r = deleted._1;
-                final boolean d = deleted._2;
+                final RedBlackTree<K, V> r = deleted._1();
+                final boolean d = deleted._2();
                 if (d) {
                     return Node.unbalancedLeft(node.color(), node.left, node.key, node.value, r,
                             Empty.empty());
@@ -166,10 +169,10 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
                 } else {
                     final Node<K, V> nodeRight = (Node<K, V>) node.right;
                     final var newRight = deleteMin(nodeRight);
-                    final RedBlackTree<K, V> r = newRight._1;
-                    final boolean d = newRight._2;
-                    final K m = newRight._3;
-                    final V mv = newRight._4;
+                    final RedBlackTree<K, V> r = newRight._1();
+                    final boolean d = newRight._2();
+                    final K m = newRight._3();
+                    final V mv = newRight._4();
                     if (d) {
                         return Node.unbalancedLeft(node.color(), node.left, m, mv, r, Empty.empty());
                     } else {
@@ -192,14 +195,14 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
         } else {
             final Node<K, V> nodeLeft = (Node<K, V>) node.left;
             final var newNode = deleteMin(nodeLeft);
-            final RedBlackTree<K, V> l = newNode._1;
-            final boolean deleted = newNode._2;
-            final K m = newNode._3;
-            final V mv = newNode._4;
+            final RedBlackTree<K, V> l = newNode._1();
+            final boolean deleted = newNode._2();
+            final K m = newNode._3();
+            final V mv = newNode._4();
             if (deleted) {
                 final Tuple2<Node<K, V>, Boolean> tD = Node.unbalancedRight(node.color(), l,
                         node.key, node.value, node.right);
-                return Tuple.of(tD._1, tD._2, m, mv);
+                return Tuple.of(tD._1(), tD._2(), m, mv);
             } else {
                 final Node<K, V> tD = new Node<>(node.color(), l, node.key, node.value, node.right);
                 return Tuple.of(tD, false, m, mv);

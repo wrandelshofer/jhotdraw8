@@ -21,14 +21,17 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> {
+public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E>, CollectionOps<E, ImmutableSet<E>> {
     /**
-     * Returns a copy of this set that is empty.
+     * Returns an empty set instance that has the specified
+     * element type.
      *
-     * @return this set instance if it is already empty, or a different set
-     * instance that is empty.
+     * @return an empty set of the specified element type.
+     * @param <T> the element type of the returned set
      */
-    @NonNull ImmutableSet<E> clear();
+    @SuppressWarnings("unchecked")
+    @Override
+    @NonNull <T> ImmutableSet<T> empty();
 
     /**
      * Returns a copy of this set that contains all elements
@@ -113,7 +116,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
         }
         if (c instanceof Collection<?> co && co.isEmpty()
                 || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
-            return clear();
+            return empty();
         }
         if (c instanceof Collection<?> co) {
             var s = this;
@@ -125,7 +128,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
             return s;
         }
         if (!(c instanceof ReadOnlyCollection<?>)) {
-            ImmutableSet<Object> clear = (ImmutableSet<Object>) clear();
+            ImmutableSet<Object> clear = (ImmutableSet<Object>) empty();
             c = clear.addAll(c);
         }
         var rc = (ReadOnlyCollection<?>) c;

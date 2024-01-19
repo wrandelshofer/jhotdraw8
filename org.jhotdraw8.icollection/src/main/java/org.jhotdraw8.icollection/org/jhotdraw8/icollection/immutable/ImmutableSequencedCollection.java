@@ -72,7 +72,7 @@ public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>,
     @NonNull ImmutableSequencedCollection<E> addLast(final @Nullable E element);
 
     @Override
-    @NonNull ImmutableSequencedCollection<E> clear();
+    @NonNull <T> ImmutableSequencedCollection<T> empty();
 
     @Override
     @NonNull ImmutableSequencedCollection<E> remove(E element);
