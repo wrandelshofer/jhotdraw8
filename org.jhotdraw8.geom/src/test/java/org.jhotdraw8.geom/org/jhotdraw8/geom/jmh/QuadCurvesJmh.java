@@ -19,15 +19,15 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  * <pre>
  * Benchmark                             Mode  Cnt    Score   Error  Units
- * QuadCurvesJmh.arcLengthIntegrated     avgt    4  191.519 ± 4.653  ns/op
- * QuadCurvesJmh.arcLengthClosedForm     avgt    4   31.658 ± 0.122  ns/op
- * QuadCurvesJmh.invArcLengthIntegrated  avgt    4  333.711 ± 7.070  ns/op
- * QuadCurvesJmh.invArcLengthClosedForm  avgt    4  132.272 ± 0.486  ns/op
+ * QuadCurvesJmh.arcLengthClosedForm     avgt    2   31.815          ns/op
+ * QuadCurvesJmh.arcLengthIntegrated     avgt    2  112.491          ns/op
+ * QuadCurvesJmh.invArcLengthClosedForm  avgt    2  132.488          ns/op
+ * QuadCurvesJmh.invArcLengthIntegrated  avgt    2  189.815          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 4)
-@Warmup(iterations = 4)
+@Measurement(iterations = 2)
+@Warmup(iterations = 2)
 @Fork(value = 1, jvmArgsAppend = {"-Xmx15g",})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
@@ -35,12 +35,12 @@ public class QuadCurvesJmh {
     private final double[] curve = {190, 200, 330, 280, 240, 100};
 
     @Benchmark
-    public double arcLength() {
+    public double arcLengthIntegrated() {
         return QuadCurves.arcLengthIntegrated(curve, 0, 1, 0.125);
     }
 
     @Benchmark
-    public double invArcLength() {
+    public double invArcLengthIntegrated() {
         return QuadCurves.invArcLengthIntegrated(curve, 0, 70, 0.125);
     }
 

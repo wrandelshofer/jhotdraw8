@@ -3,7 +3,6 @@ package org.jhotdraw8.geom.jmh;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.Lines;
-import org.jhotdraw8.geom.QuadCurves;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -25,20 +24,24 @@ import java.util.concurrent.TimeUnit;
  * # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  * <pre>
- * Benchmark                              (loop)  Mode  Cnt     Score     Error  Units
- * CubicCurvesJmh.arcLengthApproximated        0  avgt    4   567.448 ±  17.763  ns/op
- * CubicCurvesJmh.arcLengthApproximated        1  avgt    4   800.193 ±  40.960  ns/op
- * CubicCurvesJmh.arcLengthIntegrated          0  avgt    4   399.558 ±   5.771  ns/op
- * CubicCurvesJmh.arcLengthIntegrated          1  avgt    4   390.106 ±  60.572  ns/op
- * CubicCurvesJmh.arcLengthIterator            0  avgt    4  1090.686 ±  23.838  ns/op
- * CubicCurvesJmh.arcLengthIterator            1  avgt    4  1355.627 ± 579.652  ns/op
- * CubicCurvesJmh.invArcLengthIntegrated       0  avgt    4   654.982 ± 131.034  ns/op
- * CubicCurvesJmh.invArcLengthIntegrated       1  avgt    4   892.800 ±  37.217  ns/op
+ * Benchmark                                   (loop)  Mode  Cnt     Score    Error  Units
+ * CubicCurvesJmh.arcLengthIntegrated               0  avgt    2   118.195           ns/op
+ * CubicCurvesJmh.arcLengthIntegrated               1  avgt    2   126.333           ns/op
+ * CubicCurvesJmh.arcLengthIntegratedFloat          0  avgt    2   104.553           ns/op
+ * CubicCurvesJmh.arcLengthIntegratedFloat          1  avgt    2   102.218           ns/op
+ * CubicCurvesJmh.invArcLengthIntegrated            0  avgt    2   212.101           ns/op
+ * CubicCurvesJmh.invArcLengthIntegrated            1  avgt    2   325.903           ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedFloat       0  avgt    2   177.288           ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedFloat       1  avgt    2   270.904           ns/op
+ * CubicCurvesJmh.arcLengthApproximated             0  avgt    4   539.221 ± 31.352  ns/op
+ * CubicCurvesJmh.arcLengthApproximated             1  avgt    4   755.975 ±  1.517  ns/op
+ * CubicCurvesJmh.arcLengthIterator                 0  avgt    4  1061.041 ± 17.832  ns/op
+ * CubicCurvesJmh.arcLengthIterator                 1  avgt    4  1263.672 ± 11.160  ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
-@Measurement(iterations = 4)
-@Warmup(iterations = 4)
+@Measurement(iterations = 2)
+@Warmup(iterations = 2)
 @Fork(value = 1, jvmArgsAppend = {"-Xmx15g",})
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
@@ -72,6 +75,12 @@ System.out.println(n);
     }
 
     @Benchmark
+    public float arcLengthIntegratedFloat() {
+        return CubicCurves.arcLengthIntegratedFloat(curve, 0, 1, 0.125);
+    }
+
+    /*
+    @Benchmark
     public double arcLengthApproximated() {
         double[] q = new double[8 * 6];
         int n = QuadCurves.approximateCubicCurve(curve, 0, q, 0, 0.125);
@@ -85,12 +94,17 @@ System.out.println(n);
     @Benchmark
     public double arcLengthIterator() {
         return arcLengthIterator(curve, 0, 1, 0.125);
-    }
+    }*/
 
 
     @Benchmark
     public double invArcLengthIntegrated() {
         return CubicCurves.invArcLength(curve, 0, 70, 0.125);
+    }
+
+    @Benchmark
+    public float invArcLengthIntegratedFloat() {
+        return CubicCurves.invArcLengthFloat(curve, 0, 70, 0.125f);
     }
 
     /**

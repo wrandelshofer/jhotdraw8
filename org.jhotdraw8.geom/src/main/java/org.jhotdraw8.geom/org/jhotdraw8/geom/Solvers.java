@@ -7,6 +7,7 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Function3;
+import org.jhotdraw8.base.function.ToFloatFunction;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
@@ -188,6 +189,13 @@ public class Solvers {
         return hybridNewtonBisectionMethod(x -> quadratureFunction.apply(f, 0.0, x), f, y, xmin, xmax, x0, epsilon);
     }
 
+    public static float hybridNewtonBisectionMethodFloat(
+            @NonNull Function3<ToFloatFunction<Float>, Float, Float, Float> quadratureFunction,
+            @NonNull ToFloatFunction<Float> f, float y, float xmin, float xmax, float x0, float epsilon) {
+
+        return hybridNewtonBisectionMethodFloat(x -> quadratureFunction.apply(f, 0.0f, x), f, y, xmin, xmax, x0, epsilon);
+    }
+
     /**
      * Find value x for which f(x) = y in the interval x in [xmin, xmax] using a hybrid of Newton's method
      * and the bisection method.
@@ -231,6 +239,43 @@ public class Solvers {
 
             double derivative = df.applyAsDouble(x);
             double candidateX = x - dy / derivative;
+
+            if (dy > 0) {
+                upperBound = x;
+                if (candidateX <= xmin) {
+                    x = (upperBound + lowerBound) / 2;
+                } else {
+                    x = candidateX;
+                }
+            } else {
+                lowerBound = x;
+                if (candidateX >= xmax) {
+                    x = (upperBound + lowerBound) / 2;
+                } else {
+                    x = candidateX;
+                }
+            }
+        }
+        return x;
+    }
+
+    public static float hybridNewtonBisectionMethodFloat(
+            @NonNull ToFloatFunction<Float> f,
+            @NonNull ToFloatFunction<Float> df, float y, float xmin, float xmax, float x0, float epsilon) {
+        final int maxIterations = 100;
+
+        float x = x0;
+        float lowerBound = xmin;
+        float upperBound = xmax;
+
+        for (int i = 0; i < maxIterations; ++i) {
+            float dy = f.applyAsFloat(x) - y;
+
+            if (Math.abs(dy) < epsilon)
+                break;
+
+            float derivative = df.applyAsFloat(x);
+            float candidateX = x - dy / derivative;
 
             if (dy > 0) {
                 upperBound = x;

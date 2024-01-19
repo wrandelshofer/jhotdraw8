@@ -268,7 +268,7 @@ public class QuadCurves {
 
         if (arcLength < 0 || Double.isNaN(arcLength)) {
             // the arc is degenerated to a line
-            return Lines.arcLength(q[offset], q[offset + 1], q[offset + 4], q[offset + 5]);
+            return Lines.arcLength(x0, y0, x1, y1) + Lines.arcLength(x1, y1, x2, y2);
         }
 
         return arcLength;
@@ -386,8 +386,8 @@ public class QuadCurves {
         /*
         return (t)-> {
             PointAndDerivative p = eval(v, offset, t);
-            return Math.hypot(p.dx(),p.dy());
-            //return Math.sqrt(p.dx()*p.dx()+p.dy()*p.dy());
+            //return Math.hypot(p.dx(),p.dy());
+            return Math.sqrt(p.dx()*p.dx()+p.dy()*p.dy());
         };
         */
 
