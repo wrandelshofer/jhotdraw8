@@ -8,7 +8,6 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.icollection.immutable.CollectionOps;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
@@ -316,10 +315,6 @@ public class SimpleImmutableSequencedSet<E>
         return this;
     }
 
-    @Override
-    public SimpleImmutableSequencedSet<E> diff(@NonNull ReadOnlyCollection<? super E> that) {
-        return retainAll(that);
-    }
     /**
      * {@inheritDoc}
      */
@@ -328,11 +323,6 @@ public class SimpleImmutableSequencedSet<E>
         return isEmpty() ? this : of();
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T, TC extends CollectionOps<T, TC>> CollectionOps<T, TC> emptyOp() {
-        return (CollectionOps<T, TC>) of();
-    }
     @Override
     public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;

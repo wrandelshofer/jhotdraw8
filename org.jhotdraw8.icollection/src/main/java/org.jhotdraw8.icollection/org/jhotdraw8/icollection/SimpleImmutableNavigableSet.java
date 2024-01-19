@@ -3,7 +3,6 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.icollection.immutable.CollectionOps;
 import org.jhotdraw8.icollection.immutable.ImmutableCollection;
 import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
@@ -196,19 +195,8 @@ public class SimpleImmutableNavigableSet<E> implements ImmutableNavigableSet<E>,
     }
 
     @Override
-    public SimpleImmutableNavigableSet<E> diff(@NonNull ReadOnlyCollection<? super E> that) {
-        return retainAll(that);
-    }
-
-    @Override
     public <T> @NonNull SimpleImmutableNavigableSet<T> empty() {
         return of();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T, TC extends CollectionOps<T, TC>> CollectionOps<T, TC> emptyOp() {
-        return (CollectionOps<T, TC>) of();
     }
 
     @Override

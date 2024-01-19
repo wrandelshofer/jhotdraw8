@@ -1,4 +1,4 @@
-package org.jhotdraw8.icollection;
+package org.jhotdraw8.icollection.impl.redblack;
 
 /*-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-*\
    G E N E R A T O R   C R A F T E D

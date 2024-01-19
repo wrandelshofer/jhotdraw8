@@ -7,7 +7,6 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.icollection.immutable.CollectionOps;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChampIterator;
@@ -207,10 +206,6 @@ public class SimpleImmutableSet<E> implements ImmutableSet<E>, Serializable {
         return m.addAll(c) ? m.toImmutable() : this;
     }
 
-    @Override
-    public SimpleImmutableSet<E> diff(@NonNull ReadOnlyCollection<? super E> that) {
-        return retainAll(that);
-    }
     /**
      * {@inheritDoc}
      */
@@ -219,11 +214,6 @@ public class SimpleImmutableSet<E> implements ImmutableSet<E>, Serializable {
         return of();
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T, TC extends CollectionOps<T, TC>> CollectionOps<T, TC> emptyOp() {
-        return (CollectionOps<T, TC>) of();
-    }
     @Override
     @SuppressWarnings("unchecked")
     public boolean contains(@Nullable Object o) {

@@ -8,7 +8,6 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
-import org.jhotdraw8.icollection.immutable.CollectionOps;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
@@ -191,11 +190,6 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
         return newInstance(trie.append(element));
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T, TC extends CollectionOps<T, TC>> CollectionOps<T, TC> emptyOp() {
-        return (CollectionOps<T, TC>) of();
-    }
 
     @Override
     public @NonNull SimpleImmutableList<E> add(int index, @NonNull E element) {
@@ -281,11 +275,6 @@ public class SimpleImmutableList<E> implements ImmutableList<E>, Serializable {
     @Override
     public SimpleImmutableList<E> removeLast() {
         return (SimpleImmutableList<E>) ImmutableList.super.removeLast();
-    }
-
-    @Override
-    public SimpleImmutableList<E> diff(@NonNull ReadOnlyCollection<? super E> that) {
-        return retainAll(that);
     }
 
     @SuppressWarnings("unchecked")

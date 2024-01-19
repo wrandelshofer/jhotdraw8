@@ -19,7 +19,7 @@ import java.util.List;
  *
  * @param <E> the element type
  */
-public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCollection<E>, CollectionOps<E, ImmutableList<E>> {
+public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCollection<E> {
     /**
      * Returns a copy of this list that is empty.
      *

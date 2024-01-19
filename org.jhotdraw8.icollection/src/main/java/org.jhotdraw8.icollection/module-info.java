@@ -16,4 +16,5 @@ module org.jhotdraw8.icollection {
     exports org.jhotdraw8.icollection.readonly;
     exports org.jhotdraw8.icollection.sequenced;
     exports org.jhotdraw8.icollection;
+    exports org.jhotdraw8.icollection.impl.redblack;
 }

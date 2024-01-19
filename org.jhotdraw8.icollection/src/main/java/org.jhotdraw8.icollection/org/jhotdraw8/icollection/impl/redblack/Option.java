@@ -2,11 +2,10 @@
  * @(#)Option.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.icollection;
+package org.jhotdraw8.icollection.impl.redblack;
 
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.immutable.CollectionOps;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 
 import java.util.Collections;
@@ -14,7 +13,6 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Predicate;
 
 /**
  * An Option is a read-only collection of one element or of zero elements.
@@ -29,7 +27,7 @@ import java.util.function.Predicate;
  *
  * @param <T> The type of the optional value.
  */
-public interface Option<T> extends ReadOnlyCollection<T>, CollectionOps<T, Option<T>> {
+public interface Option<T> extends ReadOnlyCollection<T> {
     @SuppressWarnings("unchecked")
     static <T> Option<T> none() {
         return (Option<T>) None.INSTANCE;
@@ -37,12 +35,6 @@ public interface Option<T> extends ReadOnlyCollection<T>, CollectionOps<T, Optio
 
     static <T> Option<T> some(T value) {
         return new Some<>(value);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    default <T1, TC extends CollectionOps<T1, TC>> CollectionOps<T1, TC> emptyOp() {
-        return (CollectionOps<T1, TC>) Option.none();
     }
 
 
@@ -65,20 +57,6 @@ public interface Option<T> extends ReadOnlyCollection<T>, CollectionOps<T, Optio
         return (value == null) ? none() : some(value);
     }
     record Some<T>(T value) implements Option<T> {
-        @Override
-        public Option<T> diff(@NonNull ReadOnlyCollection<? super T> that) {
-            return that.contains(value) ? none() : this;
-        }
-
-        @Override
-        public Option<T> filter(@NonNull Predicate<T> p) {
-            return p.test(value) ? none() : this;
-        }
-
-        @Override
-        public Option<T> add(T t) {
-            throw new IllegalStateException("Some can not contain more than one element.");
-        }
 
         @Override
         public int size() {
@@ -126,21 +104,6 @@ public interface Option<T> extends ReadOnlyCollection<T>, CollectionOps<T, Optio
          * The singleton instance of None.
          */
         private static final None<?> INSTANCE = new None<>();
-
-        @Override
-        public None<T> diff(@NonNull ReadOnlyCollection<? super T> that) {
-            return this;
-        }
-
-        @Override
-        public None<T> filter(@NonNull Predicate<T> p) {
-            return this;
-        }
-
-        @Override
-        public Option<T> add(T t) {
-            return new Some<>(t);
-        }
 
         @Override
         public int size() {

@@ -6,7 +6,6 @@
 package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.immutable.CollectionOps;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.Iterators;
@@ -32,17 +31,6 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     public ImmutableSetFacade(@NonNull Set<E> target, @NonNull Function<Set<E>, Set<E>> cloneFunction) {
         this.target = target;
         this.cloneFunction = cloneFunction;
-    }
-
-    @Override
-    public ImmutableSetFacade<E> diff(@NonNull ReadOnlyCollection<? super E> that) {
-        return (ImmutableSetFacade<E>) retainAll(that);
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public <T, TC extends CollectionOps<T, TC>> CollectionOps<T, TC> emptyOp() {
-        return (CollectionOps<T, TC>) empty();
     }
 
     @Override

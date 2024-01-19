@@ -8,6 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 
 import java.util.Collection;
+import java.util.function.Predicate;
 
 /**
  * An interface to an immutable collection; the implementation
@@ -53,20 +54,20 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      */
     @NonNull <T> ImmutableCollection<T> empty();
 
-    /*
+    /**
      * Retains all elements in this collection that satisfy the specified predicate.
      *
      * @param p a predicate
      * @return a collection that only contains elements that satisfy the predicate
      *
-     * /
+     */
     default ImmutableCollection<E> filter(@NonNull Predicate<E> p) {
         ImmutableCollection<E> result = this.<E>empty();
         for(E e:this){
             if (p.test(e))result=result.add(e);
         }
         return result;
-    }*/
+    }
 
     /**
      * Returns the maximal number of elements that this collection type can

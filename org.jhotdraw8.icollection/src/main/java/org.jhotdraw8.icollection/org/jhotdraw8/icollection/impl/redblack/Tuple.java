@@ -1,4 +1,4 @@
-package org.jhotdraw8.icollection;
+package org.jhotdraw8.icollection.impl.redblack;
 
 /**
  * A Tuple combines a fixed number of elements together so that they can be passed around as a whole.

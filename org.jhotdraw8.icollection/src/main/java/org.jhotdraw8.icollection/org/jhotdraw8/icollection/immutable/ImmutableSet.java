@@ -21,7 +21,7 @@ import java.util.Set;
  *
  * @param <E> the element type
  */
-public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E>, CollectionOps<E, ImmutableSet<E>> {
+public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> {
     /**
      * Returns an empty set instance that has the specified
      * element type.
