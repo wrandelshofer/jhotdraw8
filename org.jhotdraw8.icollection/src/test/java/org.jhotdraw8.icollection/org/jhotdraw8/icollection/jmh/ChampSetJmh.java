@@ -2,6 +2,7 @@ package org.jhotdraw8.icollection.jmh;
 
 
 import org.jhotdraw8.icollection.SimpleImmutableSet;
+import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Measurement;
@@ -107,7 +108,7 @@ import java.util.concurrent.TimeUnit;
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @BenchmarkMode(Mode.AverageTime)
 public class ChampSetJmh {
-    @Param({/*"10", "1000", "100000", "10000000"*/})
+    @Param({"10", "1000", "100000", "10000000"})
     private int size;
 
     @Param({"-65"})
@@ -129,8 +130,8 @@ public class ChampSetJmh {
         assert setAA.size() == size;
     }
 
-    /*
-        @Benchmark
+
+    @Benchmark
         public SimpleImmutableSet<Key> mCopyOf() {
             SimpleImmutableSet<Key> set = SimpleImmutableSet.copyOf(data.listA);
             assert set.size() == data.listA.size();
@@ -246,5 +247,5 @@ public class ChampSetJmh {
         Key key = data.nextKeyInB();
         return setA.contains(key);
     }
-*/
+
 }

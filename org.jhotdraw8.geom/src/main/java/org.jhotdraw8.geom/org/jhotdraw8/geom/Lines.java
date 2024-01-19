@@ -42,7 +42,11 @@ public class Lines {
      * @return true if collinear
      */
     public static boolean isCollinear(double a, double b, double m, double n, double x, double y) {
-        return abs(a * (n - y) + m * (y - b) + x * (b - n)) < 1e-6;
+        return isCollinear(a, b, m, n, x, y, 1e-6);
+    }
+
+    public static boolean isCollinear(double a, double b, double m, double n, double x, double y, double tolerance) {
+        return abs(a * (n - y) + m * (y - b) + x * (b - n)) < tolerance;
     }
 
     /**

@@ -453,9 +453,24 @@ public class CubicCurves {
      * @return the arc length
      */
     public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
+        return arcLengthIntegrated(p, offset, t, epsilon);
+    }
+
+    /**
+     * Computes the arc length s from time 0 to time t using an integration method.
+     *
+     * @param p       points of the curve
+     * @param offset  index of the first point in array {@code p}
+     * @param t       the time
+     * @param epsilon the error tolerance
+     * @return the arc length
+     */
+    public static double arcLengthIntegrated(double @NonNull [] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
+
+
 
     /**
      * Computes time t at the given arc length s.

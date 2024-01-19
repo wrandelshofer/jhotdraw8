@@ -15,6 +15,8 @@ import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
 
+import static java.lang.Math.abs;
+import static java.lang.Math.log;
 import static java.lang.Math.sqrt;
 import static org.jhotdraw8.geom.Lines.lerp;
 
@@ -46,6 +48,261 @@ public class QuadCurves {
      * Don't let anyone instantiate this class.
      */
     private QuadCurves() {
+    }
+
+    /**
+     * Approximates a cubic curve with up to 8 quadratic curves.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Proc. ACM Comput. Graph. Interact. Tech., Vol. 3, No. 2, Article 16. Publication date: August 2020.
+     *     Quadratic Approximation of Cubic Curves.
+     *     NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
+     *     Copyright 2020 held by the owner/author(s). Publication rights licensed to ACM.
+     *     </dt>
+     *     <dd><a href="https://ttnghia.github.io/pdf/QuadraticApproximation.pdf">ttnghia.github.io</a>
+     *     </dd>
+     * </dl>
+     *
+     * @param p       the points of the cubic curve
+     * @param offsetP the index of the first point in p
+     * @param q       the points of the quadratic curves (on output, must space for up to 8*6=48 coords).
+     * @param offsetQ the index of the first point in q
+     * @return the number of quadratic curves
+     */
+    public static int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
+        return approximateCubicCurve(p, offsetP, q, offsetQ, tolerance, 2);
+    }
+
+    private static int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance, int maxDepth) {
+        double errorSquared = maxDepth == 0 ? 0 : estimateCubicCurveApproximationErrorSquared(p, offsetP);
+        if (errorSquared > tolerance * tolerance) {
+            // we should split
+
+            DoubleArrayList list = CubicCurveCharacteristics.inflectionPoints(p, offsetP);
+            Double singularPoint = CubicCurveCharacteristics.singularPoint(p, offsetP);
+            if (singularPoint != null) {
+                list.add(singularPoint);
+                list.sort();
+            }
+            final double epsilon = 1e-6;
+            for (double t : list) {
+                if (!Points.almostEqual(t, 0, epsilon) && !Points.almostEqual(t, 1, epsilon)) {
+                    return approximateCubicCurveSplitCase(p, offsetP, t, q, offsetQ, tolerance, maxDepth);
+                }
+            }
+            return approximateCubicCurveSplitCase(p, offsetP, 0.5, q, offsetQ, tolerance, maxDepth);
+        } else {
+            // we only need to split once or not at all
+            return approximateCubicCurveBaseCase(p, offsetP, q, offsetQ, tolerance);
+        }
+    }
+
+    private static int approximateCubicCurveBaseCase(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
+        double x0 = p[offsetP];
+        double y0 = p[offsetP + 1];
+        double x1 = p[offsetP + 2];
+        double y1 = p[offsetP + 3];
+        double x2 = p[offsetP + 4];
+        double y2 = p[offsetP + 5];
+        double x3 = p[offsetP + 6];
+        double y3 = p[offsetP + 7];
+
+        // The quadratic curve always starts at the same point as the cubic curve
+        int qq = offsetQ;
+        q[qq] = x0;
+        q[qq + 1] = y0;
+
+        if (CubicCurve2D.getFlatnessSq(p, offsetP) <= tolerance * tolerance) {
+            // p1 and p2 coincide or
+            // the curve is almost flat
+            q[qq + 2] = (x0 + x3) * 0.5;
+            q[qq + 3] = (y0 + y3) * 0.5;
+            q[qq + 4] = x3;
+            q[qq + 5] = y3;
+            return 1;
+        }
+        double gamma = 0.5;
+        double x2i = x0 + (3.0 * 0.5 * gamma) * (x1 - x0);
+        double y2i = y0 + (3.0 * 0.5 * gamma) * (y1 - y0);
+        double x2iplus1 = x3 + (3.0 * 0.5 * (1 - gamma)) * (x2 - x3);
+        double y2iplus1 = y3 + (3.0 * 0.5 * (1 - gamma)) * (y2 - y3);
+        q[qq + 2] = x2i;
+        q[qq + 3] = y2i;
+        q[qq + 4] = q[qq + 6] = (1 - gamma) * x2i + gamma * x2iplus1;
+        q[qq + 5] = q[qq + 7] = (1 - gamma) * y2i + gamma * y2iplus1;
+        q[qq + 8] = x2iplus1;
+        q[qq + 9] = y2iplus1;
+        q[qq + 10] = x3;
+        q[qq + 11] = y3;
+        return 2;
+    }
+
+    private static int approximateCubicCurveSplitCase(double[] p, int offsetP, double t, double[] q, int offsetQ, double tolerance, int maxDepth) {
+        double[] pp = new double[8 * 2];
+        CubicCurves.split(p, offsetP, t, pp, 0, pp, 8);
+        int count = approximateCubicCurve(pp, 0, q, offsetQ, tolerance, maxDepth - 1);
+        return count + approximateCubicCurve(pp, 8, q, offsetQ + count * 6, tolerance, maxDepth - 1);
+    }
+
+    /**
+     * Computes the arc length s.
+     *
+     * @param p       points of the curve
+     * @param offset  index of the first point in array {@code p}
+     * @param epsilon the error tolerance
+     * @return the arc length
+     */
+    public static double arcLength(double @NonNull [] p, int offset, double epsilon) {
+        return arcLength(p, offset, 1, epsilon);
+    }
+
+    /**
+     * Computes the arc length s from time 0 to time t.
+     *
+     * @param p       the coordinates of the control points of the bézier curve
+     * @param offset  the offset of the first control point in {@code b}
+     * @param t       the time value
+     * @param epsilon the error tolerance
+     * @return the arc length
+     */
+    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
+        return arcLengthIntegrated(p, offset, t, epsilon);
+    }
+
+    /**
+     * Calculates the arc-length {@code s} of a segment from [0, t] of a
+     * quadratic bézier curve using a closed form solution.
+     * <p>
+     * FIXME this method is not numerically stable!
+     * <p>
+     * Length of any parametric (in general length of any well defined curve) curve can be computated
+     * using curve length integral. In case of 2nd order Bezier curve, using its derivatives,
+     * this integral can be written as Quadratic Bezier Curve integral
+     * <pre>
+     * s = integrate ( √( Bx'(t)² + By′(t)² ) ,  d:t, from:0, to:t)
+     * </pre>
+     * To simplify this integral we can make some substitutions. In this case it we will look like this
+     * <pre>
+     * a = P₀ − 2*P₁ + P₂
+     * b = 2*P₁ − 2*P₀
+     * ∂B∂t(t) = 2*t*a + b
+     * </pre>
+     * Next after doing some algebra and grouping elements in order to parameter t we will do another
+     * substitutions (to make this integral easier):
+     * <pre>
+     * A = 4*(ax² + ay²)
+     * B = 4*(ax*bx + ay*by)
+     * C = bx² + by²
+     * </pre>
+     * <p>
+     * The arc-length {@code L} can now be computed with the following equation:
+     * <pre>
+     *     L = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
+     * </pre>
+     * Which we can write as:
+     * <pre>
+     *     L = √(A) * integrate( √( t² + 2*b*t +c ), d:t, from:0, to:t)
+     *     where b = B/(2*A)
+     *           c = C/A
+     * </pre>
+     * Then we get:
+     * <pre>
+     *     L = √(A) * integrate( √(u²+k), d:t, from:b, to:u)
+     *     where u = t + b
+     *           k = c - b²
+     * </pre>
+     * Now we can use the integral identity from the link to obtain:
+     * <pre>
+     *     L = √(A)/2 * (
+     *                   u*√(u²+k) - b*√(b²+k)
+     *                   + k*log( (u+√(u²+k)) / (b+√(b²+k)) )
+     *                   )
+     * </pre>
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Stackoverflow. Calculate the length of a segment of a quadratic bezier.
+     *     Copyright Michael Anderson. CC BY-SA 4.0 license.</dt>
+     *     <dd><a href="https://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">
+     *        stackoverflow.com</a></dd>
+     *
+     * <dt>Quadratic Bezier curves, Copyright malczak</dt>
+     * <dd><a href="https://malczak.info/blog/quadratic-bezier-curve-length">malczak.info</a></dd>
+     * </dl>
+     *
+     * @param q      the coordinates of the control points of the bézier curve
+     * @param offset the offset of the first control point in {@code q}
+     * @param t      the value of t in range [0,1]
+     * @return the arc length, a non-negative value
+     */
+    public static double arcLengthClosedForm(double[] q, int offset, double t) {
+        double x0 = q[offset],
+                y0 = q[offset + 1],
+                x1 = q[offset + 2],
+                y1 = q[offset + 3],
+                x2 = q[offset + 4],
+                y2 = q[offset + 5];
+
+        if (Lines.isCollinear(x0, y0, x1, y1, x2, y2, 0.125)) {
+            return Lines.arcLength(x0, y0, x1, y1) + Lines.arcLength(x1, y1, x2, y2);
+        }
+
+        double ax, ay, bx, by, A, B, C, b, c, u, k, E, F;
+        ax = x0 - x1 - x1 + x2;
+        ay = y0 - y1 - y1 + y2;
+        bx = x1 + x1 - x0 - x0;
+        by = y1 + y1 - y0 - y0;
+        A = 4.0 * (ax * ax + ay * ay);
+        B = 4.0 * (ax * bx + ay * by);
+        C = bx * bx + by * by;
+        b = B / (2.0 * A);
+        c = C / A;
+        u = t + b;
+        k = c - (b * b);
+        E = sqrt((u * u) + k);
+        F = sqrt((b * b) + k);
+
+        double arcLength = 0.5 * sqrt(A)
+                * (u * E - b * F + (k * log(abs((u + E) / (b + F)))));
+
+        if (arcLength < 0 || Double.isNaN(arcLength)) {
+            // the arc is degenerated to a line
+            return Lines.arcLength(q[offset], q[offset + 1], q[offset + 4], q[offset + 5]);
+        }
+
+        return arcLength;
+
+    }
+
+    /**
+     * Computes the arc length s from time 0 to time t
+     * using an integration method.
+     *
+     * @param p       the coordinates of the control points of the bézier curve
+     * @param offset  the offset of the first control point in {@code b}
+     * @param t       the time value
+     * @param epsilon the error tolerance
+     * @return the arc length
+     */
+    public static double arcLengthIntegrated(double @NonNull [] p, int offset, double t, double epsilon) {
+        ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
+        return Integrals.rombergQuadrature(f, 0, t, epsilon);
+    }
+
+    private static double estimateCubicCurveApproximationErrorSquared(double[] p, int offsetP) {
+        double x0 = p[offsetP];
+        double y0 = p[offsetP + 1];
+        double x1 = p[offsetP + 2];
+        double y1 = p[offsetP + 3];
+        double x2 = p[offsetP + 4];
+        double y2 = p[offsetP + 5];
+        double x3 = p[offsetP + 6];
+        double y3 = p[offsetP + 7];
+
+        double ex = -x0 + 3 * x1 - 3 * x2 + x3;
+        double ey = -y0 + 3 * y1 - 3 * y2 + y3;
+        return (ex * ex + ey * ey) * (1.0 / (54 * 54));
     }
 
     /**
@@ -102,6 +359,103 @@ public class QuadCurves {
         return new PointAndDerivative(x012, y012, x12 - x01, y12 - y01);
     }
 
+    /**
+     * Gets the integrand function for the arc-length of a quadratic bézier curve.
+     * <p>
+     * The arc-length {@code s} can be computed with the following equation:
+     * <pre>
+     *     s = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
+     * </pre>
+     * The integrand function is therefore:
+     * <pre>
+     *     s = √( A*t² + B*t +C )
+     * </pre>
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Calculate the length of a segment of a quadratic bezier, Copyright Michael Anderson, CC BY-SA 4.0 license </dt>
+     *     <dd><a href="https://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">
+     *        stackoverflow.com</a></dd>
+     * </dl>
+     *
+     * @param p      the coordinates of the control points of the bézier curve
+     * @param offset the offset of the first control point in {@code p}
+     */
+    public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] p, int offset) {
+        // Instead of the code below, we could evaluate the magnitude of the derivative
+        /*
+        return (t)-> {
+            PointAndDerivative p = eval(v, offset, t);
+            return Math.hypot(p.dx(),p.dy());
+            //return Math.sqrt(p.dx()*p.dx()+p.dy()*p.dy());
+        };
+        */
+
+        double x0 = p[offset],
+                y0 = p[offset + 1],
+                x1 = p[offset + 2],
+                y1 = p[offset + 3],
+                x2 = p[offset + 4],
+                y2 = p[offset + 5];
+        double ax, ay, bx, by, A, B, C;
+        ax = x0 - x1 - x1 + x2;
+        ay = y0 - y1 - y1 + y2;
+        bx = x1 + x1 - x0 - x0;
+        by = y1 + y1 - y0 - y0;
+        A = 4.0 * (ax * ax + ay * ay);
+        B = 4.0 * (ax * bx + ay * by);
+        C = (bx * bx) + (by * by);
+
+        // Derivative:
+        return (t) -> sqrt(A * t * t + B * t + C);
+    }
+
+    /**
+     * Calculates the time {@code t} at a given arc-length {@code s} of a
+     * quadratic bézier curve.
+     *
+     * @param p       the coordinates of the control points of the bézier curve
+     * @param offset  the offset of the first control point in {@code b}
+     * @param s       the arc-length value where {@literal s >= 0}
+     * @param epsilon
+     */
+    public static double invArcLength(double[] p, int offset, double s, double epsilon) {
+        return invArcLengthIntegrated(p, offset, s, epsilon);
+    }
+
+    /**
+     * Calculates the time {@code t} at a given arc-length {@code s} of a
+     * quadratic bézier curve using a closed form solution.
+     * <p>
+     * FIXME this method is not numerically stable!
+     *
+     * @param p       the coordinates of the control points of the bézier curve
+     * @param offset  the offset of the first control point in {@code b}
+     * @param s       the arc-length value where {@literal s >= 0}
+     * @param epsilon the error tolerance
+     */
+    public static double invArcLengthClosedForm(double[] p, int offset, double s, double epsilon) {
+        ToDoubleFunction<Double> f = t -> arcLengthClosedForm(p, offset, t);
+        return Solvers.bisectionMethod(f, s, 0, 1, epsilon);
+        //ToDoubleFunction<Double> f = t -> arcLengthClosedForm(p, offset, t);
+        //ToDoubleFunction<Double> fd = getArcLengthIntegrand(p, offset);
+        //return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / arcLength(p, offset, 1), epsilon);
+    }
+
+    /**
+     * Calculates the time {@code t} at a given arc-length {@code s} of a
+     * quadratic bézier curve using an integration method.
+     *
+     * @param p       the coordinates of the control points of the bézier curve
+     * @param offset  the offset of the first control point in {@code b}
+     * @param s       the arc-length value where {@literal s >= 0}
+     * @param epsilon
+     */
+    public static double invArcLengthIntegrated(double[] p, int offset, double s, double epsilon) {
+        ToDoubleFunction<Double> f = t -> arcLength(p, offset, t, epsilon);
+        ToDoubleFunction<Double> fd = getArcLengthIntegrand(p, offset);
+        return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / arcLength(p, offset, 1), epsilon);
+    }
 
     /**
      * Tries to join two bézier curves. Returns the new control point.
@@ -242,211 +596,5 @@ public class QuadCurves {
                 tb, null, 0, first, offsetFirst);
         split(first, offsetFirst, tab,
                 null, 0, first, offsetFirst);
-    }
-
-
-    /**
-     * Computes the arc length s.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
-    public static double arcLength(double @NonNull [] p, int offset, double epsilon) {
-        return arcLength(p, offset, 1, epsilon);
-    }
-
-
-    /**
-     * Computes the arc length s from time 0 to time t.
-     *
-     * @param p       the coordinates of the control points of the bézier curve
-     * @param offset  the offset of the first control point in {@code b}
-     * @param t the time value
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
-    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
-        ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
-        return Integrals.rombergQuadrature(f, 0, t, epsilon);
-    }
-
-    /**
-     * Calculates the time {@code t} at a given arc-length {@code s} of a
-     * quadratic bézier curve using a closed form solution.
-     *
-     * @param p       the coordinates of the control points of the bézier curve
-     * @param offset  the offset of the first control point in {@code b}
-     * @param s       the arc-length value where {@literal s >= 0}
-     * @param epsilon
-     */
-    public static double invArcLength(double[] p, int offset, double s, double epsilon) {
-        //ToDoubleFunction<Double> f = t -> arcLength_BROKEN(p, offset, t);
-        ToDoubleFunction<Double> f = t -> arcLength(p, offset, t, epsilon);
-        ToDoubleFunction<Double> fd = getArcLengthIntegrand(p, offset);
-        //return Solvers.bisectionMethod(f,  s, 0, 1, epsilon);
-        return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / arcLength(p, offset, 1), epsilon);
-    }
-
-    /**
-     * Gets the integrand function for the arc-length of a quadratic bézier curve.
-     * <p>
-     * The arc-length {@code s} can be computed with the following equation:
-     * <pre>
-     *     s = integrate( √( A*t² + B*t +C ), d:t, from:0, to:t)
-     * </pre>
-     * The integrand function is therefore:
-     * <pre>
-     *     s = √( A*t² + B*t +C )
-     * </pre>
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Calculate the length of a segment of a quadratic bezier, Copyright Michael Anderson, CC BY-SA 4.0 license </dt>
-     *     <dd><a href="https://stackoverflow.com/questions/11854907/calculate-the-length-of-a-segment-of-a-quadratic-bezier">
-     *        stackoverflow.com</a></dd>
-     * </dl>
-     *
-     * @param p      the coordinates of the control points of the bézier curve
-     * @param offset the offset of the first control point in {@code p}
-     */
-    public static ToDoubleFunction<Double> getArcLengthIntegrand(double[] p, int offset) {
-        // Instead of the code below, we could evaluate the magnitude of the derivative
-        /*
-        return (t)-> {
-            PointAndDerivative p = eval(v, offset, t);
-            return Math.hypot(p.dx(),p.dy());
-            //return Math.sqrt(p.dx()*p.dx()+p.dy()*p.dy());
-        };
-        */
-
-        double x0 = p[offset],
-                y0 = p[offset + 1],
-                x1 = p[offset + 2],
-                y1 = p[offset + 3],
-                x2 = p[offset + 4],
-                y2 = p[offset + 5];
-        double ax, ay, bx, by, A, B, C;
-        ax = x0 - x1 - x1 + x2;
-        ay = y0 - y1 - y1 + y2;
-        bx = x1 + x1 - x0 - x0;
-        by = y1 + y1 - y0 - y0;
-        A = 4.0 * (ax * ax + ay * ay);
-        B = 4.0 * (ax * bx + ay * by);
-        C = (bx * bx) + (by * by);
-
-        // Derivative:
-        return (t) -> sqrt(A * t * t + B * t + C);
-    }
-
-    /**
-     * Approximates a cubic curve with up to 16 quadratic curves.
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Proc. ACM Comput. Graph. Interact. Tech., Vol. 3, No. 2, Article 16. Publication date: August 2020.
-     *     Quadratic Approximation of Cubic Curves.
-     *     NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
-     *     Copyright 2020 held by the owner/author(s). Publication rights licensed to ACM.
-     *     </dt>
-     *     <dd><a href="https://ttnghia.github.io/pdf/QuadraticApproximation.pdf">ttnghia.github.io</a>
-     *     </dd>
-     * </dl>
-     *
-     * @param p       the points of the cubic curve
-     * @param offsetP the index of the first point in p
-     * @param q       the points of the quadratic curves (on output)
-     * @param offsetQ the index of the first point in q
-     * @return the number of quadratic curves
-     */
-    public static int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
-        return approximateCubicCurve(p, offsetP, q, offsetQ, tolerance, 3);
-    }
-
-    private static int approximateCubicCurve(double[] p, int offsetP, double[] q, int offsetQ, double tolerance, int maxDepth) {
-        double errorSquared = maxDepth == 0 ? 0 : estimateCubicCurveApproximationErrorSquared(p, offsetP);
-        if (errorSquared > tolerance * tolerance) {
-            // we should split
-
-            DoubleArrayList list = CubicCurveCharacteristics.inflectionPoints(p, offsetP);
-            Double singularPoint = CubicCurveCharacteristics.singularPoint(p, offsetP);
-            if (singularPoint != null) {
-                list.add(singularPoint);
-                list.sort();
-            }
-            final double epsilon = 1e-6;
-            for (double t : list) {
-                if (!Points.almostEqual(t, 0, epsilon) && !Points.almostEqual(t, 1, epsilon)) {
-                    return approximateCubicCurveSplitCase(p, offsetP, t, q, offsetQ, tolerance, maxDepth);
-                }
-            }
-            return approximateCubicCurveSplitCase(p, offsetP, 0.5, q, offsetQ, tolerance, maxDepth);
-        } else {
-            // we only need to split once or not at all
-            return approximateCubicCurveBaseCase(p, offsetP, q, offsetQ, tolerance);
-        }
-    }
-
-    private static int approximateCubicCurveSplitCase(double[] p, int offsetP, double t, double[] q, int offsetQ, double tolerance, int maxDepth) {
-        double[] pp = new double[8 * 2];
-        CubicCurves.split(p, offsetP, t, pp, 0, pp, 8);
-        int count = approximateCubicCurve(pp, 0, q, offsetQ, tolerance, maxDepth - 1);
-        return count + approximateCubicCurve(pp, 8, q, offsetQ + count * 6, tolerance, maxDepth - 1);
-    }
-
-    private static int approximateCubicCurveBaseCase(double[] p, int offsetP, double[] q, int offsetQ, double tolerance) {
-        double x0 = p[offsetP];
-        double y0 = p[offsetP + 1];
-        double x1 = p[offsetP + 2];
-        double y1 = p[offsetP + 3];
-        double x2 = p[offsetP + 4];
-        double y2 = p[offsetP + 5];
-        double x3 = p[offsetP + 6];
-        double y3 = p[offsetP + 7];
-
-        // The quadratic curve always starts at the same point as the cubic curve
-        int qq = offsetQ;
-        q[qq] = x0;
-        q[qq + 1] = y0;
-
-        if (CubicCurve2D.getFlatnessSq(p, offsetP) <= tolerance * tolerance) {
-            // p1 and p2 coincide or
-            // the curve is almost flat
-            q[qq + 2] = (x0 + x3) * 0.5;
-            q[qq + 3] = (y0 + y3) * 0.5;
-            q[qq + 4] = x3;
-            q[qq + 5] = y3;
-            return 1;
-        }
-        double gamma = 0.5;
-        double x2i = x0 + (3.0 * 0.5 * gamma) * (x1 - x0);
-        double y2i = y0 + (3.0 * 0.5 * gamma) * (y1 - y0);
-        double x2iplus1 = x3 + (3.0 * 0.5 * (1 - gamma)) * (x2 - x3);
-        double y2iplus1 = y3 + (3.0 * 0.5 * (1 - gamma)) * (y2 - y3);
-        q[qq + 2] = x2i;
-        q[qq + 3] = y2i;
-        q[qq + 4] = q[qq + 6] = (1 - gamma) * x2i + gamma * x2iplus1;
-        q[qq + 5] = q[qq + 7] = (1 - gamma) * y2i + gamma * y2iplus1;
-        q[qq + 8] = x2iplus1;
-        q[qq + 9] = y2iplus1;
-        q[qq + 10] = x3;
-        q[qq + 11] = y3;
-        return 2;
-    }
-
-    private static double estimateCubicCurveApproximationErrorSquared(double[] p, int offsetP) {
-        double x0 = p[offsetP];
-        double y0 = p[offsetP + 1];
-        double x1 = p[offsetP + 2];
-        double y1 = p[offsetP + 3];
-        double x2 = p[offsetP + 4];
-        double y2 = p[offsetP + 5];
-        double x3 = p[offsetP + 6];
-        double y3 = p[offsetP + 7];
-
-        double ex = -x0 + 3 * x1 - 3 * x2 + x3;
-        double ey = -y0 + 3 * y1 - 3 * y2 + y3;
-        return (ex * ex + ey * ey) * (1.0 / (54 * 54));
     }
 }
