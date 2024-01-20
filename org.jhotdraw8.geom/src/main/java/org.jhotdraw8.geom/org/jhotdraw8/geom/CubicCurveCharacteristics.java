@@ -330,4 +330,51 @@ public class CubicCurveCharacteristics {
         }
         return null;
     }
+
+    /**
+     * Computes the extreme points of the given cubic curve.
+     */
+    public static @NonNull DoubleArrayList extremePoints(CubicCurve2D.Double c) {
+        return extremePoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
+    }
+
+    /**
+     * Computes the extreme points of the given cubic curve.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>Extremes for Bézier curves</dt>
+     *     <dd><a href="https://github.polettix.it/ETOOBUSY/2020/07/09/bezier-extremes/">github.polettix.it</a></dd>
+     * </dl>
+     */
+    public static @NonNull DoubleArrayList extremePoints(double x0, double y0,
+                                                         double x1, double y1,
+                                                         double x2, double y2,
+                                                         double x3, double y3) {
+        double ax, ay, bx, by, cx, cy, t0, t1, t2, t3;
+        double detx, dety;
+
+        cx = 3 * (x1 - x0);
+        cy = 3 * (y1 - y0);
+        bx = 6 * (x0 - 2 * x1 + x2);
+        by = 6 * (y0 - 2 * y1 + y2);
+        ax = 3 * (-x0 + 3 * x1 - 3 * x2 + x3);
+        ay = 3 * (-y0 + 3 * y1 - 3 * y2 + y3);
+
+        detx = sqrt((bx / 2) * (bx / 2) - ax * cx);
+        dety = sqrt((by / 2) * (by / 2) - ay * cy);
+        t0 = (-bx / 2 + detx) / ax;
+        t2 = (-bx / 2 - detx) / ax;
+        t1 = (-by / 2 + dety) / ay;
+        t3 = (-by / 2 - dety) / ay;
+
+
+        var list = new DoubleArrayList();
+        if (0 <= t0 && t0 <= 1) list.add(t0);
+        if (0 <= t1 && t1 <= 1) list.add(t1);
+        if (0 <= t2 && t2 <= 1) list.add(t2);
+        if (0 <= t3 && t3 <= 1) list.add(t3);
+        return list;
+    }
+
 }

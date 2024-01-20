@@ -8,6 +8,7 @@ import javafx.scene.shape.FillRule;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.BoundingBoxBuilder;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PathMetrics;
 import org.jhotdraw8.geom.PointAndDerivative;
@@ -42,6 +43,10 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
      * This field is used for memoizing PathMetrics that have been built fom this instance.
      */
     private transient @Nullable PathMetrics pathMetrics;
+    /**
+     * This field is used for memoizing Bounds that have been built fom this instance.
+     */
+    private transient Rectangle2D.@Nullable Double bounds;
     private final int windingRule;
 
     private BezierPath(int windingRule) {
@@ -101,57 +106,10 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
 
     @Override
     public @NonNull Rectangle2D getBounds2D() {
-        double x1 = Double.POSITIVE_INFINITY, y1 = Double.POSITIVE_INFINITY,
-                x2 = Double.NEGATIVE_INFINITY, y2 = Double.NEGATIVE_INFINITY;
-        for (BezierNode n : this) {
-            double y = n.pointY();
-            double x = n.pointX();
-            if (x < x1) {
-                x1 = x;
-            }
-            if (y < y1) {
-                y1 = y;
-            }
-            if (x > x2) {
-                x2 = x;
-            }
-            if (y > y2) {
-                y2 = y;
-            }
-            if (n.hasIn()) {
-                y = n.inY();
-                x = n.inX();
-                if (x < x1) {
-                    x1 = x;
-                }
-                if (y < y1) {
-                    y1 = y;
-                }
-                if (x > x2) {
-                    x2 = x;
-                }
-                if (y > y2) {
-                    y2 = y;
-                }
-            }
-            if (n.hasOut()) {
-                y = n.outY();
-                x = n.outX();
-                if (x < x1) {
-                    x1 = x;
-                }
-                if (y < y1) {
-                    y1 = y;
-                }
-                if (x > x2) {
-                    x2 = x;
-                }
-                if (y > y2) {
-                    y2 = y;
-                }
-            }
+        if (bounds == null) {
+            bounds = AwtShapes.buildFromPathIterator(new BoundingBoxBuilder(), getPathIterator(null)).buildRectangle2D();
         }
-        return new Rectangle2D.Double(x1, y1, x2 - x1, y2 - y1);
+        return new Rectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height);
     }
 
     @Override

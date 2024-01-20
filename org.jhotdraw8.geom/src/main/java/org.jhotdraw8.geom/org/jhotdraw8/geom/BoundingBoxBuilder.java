@@ -7,7 +7,8 @@ package org.jhotdraw8.geom;
 import javafx.geometry.BoundingBox;
 import javafx.scene.shape.Rectangle;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+
+import java.awt.geom.Rectangle2D;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -41,8 +42,10 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
 
     @Override
     protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x3, double y3) {
-        addToBounds(x1, y1);
-        addToBounds(x2, y2);
+        for (double t : CubicCurveCharacteristics.extremePoints(lastX, lastY, x1, y1, x2, y2, x3, y3)) {
+            PointAndDerivative eval = CubicCurves.eval(lastX, lastY, x1, y1, x2, y2, x3, y3, t);
+            addToBounds(eval.x(), eval.y());
+        }
         addToBounds(x3, y3);
     }
 
@@ -58,15 +61,25 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
 
     @Override
     protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x2, double y2) {
-        addToBounds(x1, y1);
+        for (double t : QuadCurveCharacteristics.extremePoints(lastX, lastY, x1, y1, x2, y2)) {
+            PointAndDerivative eval = QuadCurves.eval(lastX, lastY, x1, y1, x2, y2, t);
+            addToBounds(eval.x(), eval.y());
+        }
         addToBounds(x2, y2);
     }
 
-    public @Nullable Rectangle getRectangle() {
+    public @NonNull Rectangle buildRectangle() {
         if (Double.isNaN(minx)) {
-            return null;
+            return new Rectangle(0, 0, 0, 0);
         }
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
+    }
+
+    public Rectangle2D.@NonNull Double buildRectangle2D() {
+        if (Double.isNaN(minx)) {
+            return new Rectangle2D.Double(0, 0, 0, 0);
+        }
+        return new Rectangle2D.Double(minx, miny, maxx - minx, maxy - miny);
     }
 
     @Override

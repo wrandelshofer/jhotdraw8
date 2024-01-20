@@ -36,6 +36,7 @@ import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 /**
@@ -90,18 +91,8 @@ public class BezierPathFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull Bounds getLayoutBounds() {
-        // XXX should be cached
-        double minX = Double.POSITIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
-        for (BezierNode p : getNonNull(PATH)) {
-            minX = Math.min(minX, p.getMinX());
-            minY = Math.min(minY, p.getMinY());
-            maxX = Math.max(maxX, p.getMaxX());
-            maxY = Math.max(maxY, p.getMaxY());
-        }
-        return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
+        Rectangle2D b = getNonNull(PATH).getBounds2D();
+        return new BoundingBox(b.getX(), b.getY(), b.getWidth(), b.getHeight());
     }
 
     @Override
