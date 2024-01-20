@@ -8,11 +8,11 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
 
-import static org.jhotdraw8.geom.shape.BezierNode.C1C2_MASK;
+import static org.jhotdraw8.geom.shape.BezierNode.IN_OUT_MASK;
 
 /**
- * This action sets the mask bits {@link BezierNode#C1_MASK},
- * {@link BezierNode#C2_MASK} to {@code false}, {@code false} in
+ * This action sets the mask bits {@link BezierNode#IN_MASK},
+ * {@link BezierNode#OUT_MASK} to {@code false}, {@code false} in
  * the specified {@link BezierNode}.
  */
 public class BezierNodeHandleNoTangentsAction extends AbstractBezierNodeHandleAction {
@@ -23,7 +23,7 @@ public class BezierNodeHandleNoTangentsAction extends AbstractBezierNodeHandleAc
 
         BezierNode bnode = getBezierNode();
         if (bnode != null) {
-            setSelected((bnode.getMask() & BezierNode.C1C2_MASK) == 0);
+            setSelected((bnode.getMask() & BezierNode.IN_OUT_MASK) == 0);
         }
     }
 
@@ -32,7 +32,7 @@ public class BezierNodeHandleNoTangentsAction extends AbstractBezierNodeHandleAc
         BezierPath path = owner.get(pathKey);
         BezierNode bnode = getBezierNode();
         if (bnode == null || path == null) return;
-        BezierNode changedNode = bnode.withClearMaskBits(C1C2_MASK);
+        BezierNode changedNode = bnode.withMaskBitsClears(IN_OUT_MASK);
         path = path.set(nodeIndex, changedNode);
         view.getModel().set(owner, pathKey, path);
         view.recreateHandles();

@@ -68,8 +68,8 @@ public class BezierPathFigure extends AbstractLeafFigure
             for (int i = 0, n = nodes.size(); i < n; i++) {
                 list.add(new BezierNodeTangentHandle(this, PATH, i));
                 list.add(new BezierNodeEditHandle(this, PATH, i));
-                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK));
-                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK));
+                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.IN_MASK));
+                list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.OUT_MASK));
             }
         } else {
             super.createHandles(handleType, list);

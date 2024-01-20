@@ -137,7 +137,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
              */
             if (!path.isEmpty()) {
                 BezierNode lastNode = path.get(path.size() - 1);
-                Point2D start = FXTransforms.transform(FXTransforms.concat(dv.getWorldToView(), createdFigure.getLocalToWorld()), lastNode.getX0(), lastNode.getY0());
+                Point2D start = FXTransforms.transform(FXTransforms.concat(dv.getWorldToView(), createdFigure.getLocalToWorld()), lastNode.pointX(), lastNode.pointY());
                 rubberBand.setStartX(start.getX());
                 rubberBand.setStartY(start.getY());
                 rubberBand.setEndX(event.getX());
@@ -190,7 +190,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
         if (dragStartIndex != -1) {
             List<Point2D> digitized = new ArrayList<>(path.size() - dragStartIndex);
             for (int i = dragStartIndex, n = path.size(); i < n; i++) {
-                digitized.add(path.get(i).getC0(Point2D::new));
+                digitized.add(path.get(i).getPoint(Point2D::new));
             }
             BezierPathBuilder builder = new BezierPathBuilder();
             double error = 5 / dv.getZoomFactor();

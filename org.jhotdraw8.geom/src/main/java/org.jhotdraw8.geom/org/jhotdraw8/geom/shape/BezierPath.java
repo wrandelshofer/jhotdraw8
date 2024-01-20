@@ -104,8 +104,8 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
         double x1 = Double.POSITIVE_INFINITY, y1 = Double.POSITIVE_INFINITY,
                 x2 = Double.NEGATIVE_INFINITY, y2 = Double.NEGATIVE_INFINITY;
         for (BezierNode n : this) {
-            double y = n.getY0();
-            double x = n.getX0();
+            double y = n.pointY();
+            double x = n.pointX();
             if (x < x1) {
                 x1 = x;
             }
@@ -118,9 +118,9 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
             if (y > y2) {
                 y2 = y;
             }
-            if (n.isC1()) {
-                y = n.getY1();
-                x = n.getX1();
+            if (n.hasIn()) {
+                y = n.inY();
+                x = n.inX();
                 if (x < x1) {
                     x1 = x;
                 }
@@ -134,9 +134,9 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
                     y2 = y;
                 }
             }
-            if (n.isC2()) {
-                y = n.getY2();
-                x = n.getX2();
+            if (n.hasOut()) {
+                y = n.outY();
+                x = n.outX();
                 if (x < x1) {
                     x1 = x;
                 }
@@ -196,56 +196,56 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
             BezierNode prev = get(prevSegment);
             BezierNode next = get(segment);
             double t = intersections.getFirst().getArgumentA() - segment;
-            boolean pc2 = prev.isC2();
-            boolean nc1 = next.isC1();
+            boolean pc2 = prev.hasOut();
+            boolean nc1 = next.hasIn();
             if (pc2) {
                 if (nc1) {
                     // cubic curve
-                    middle = new BezierNode(BezierNode.C1C2_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
+                    middle = new BezierNode(BezierNode.IN_OUT_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
                     result[0] = result[0].add(segment, middle);
-                    CubicCurves.splitCubicCurveTo(prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(),
-                            next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
+                    CubicCurves.splitCubicCurveTo(prev.pointX(), prev.pointY(), prev.outX(), prev.outY(),
+                            next.inX(), next.inY(), next.pointX(), next.pointY(), t,
                             (x1, y1, x2, y2, x3, y3) -> {
-                                result[0] = result[0].set(prevSegment, prev.setX2(x1).setY2(y1));
-                                result[0] = result[0].set(segment, result[0].get(segment).setX1(x2).setY1(y2));
+                                result[0] = result[0].set(prevSegment, prev.withOx(x1).withOy(y1));
+                                result[0] = result[0].set(segment, result[0].get(segment).withIx(x2).withIy(y2));
                             },
                             (x1, y1, x2, y2, x3, y3) -> {
-                                result[0] = result[0].set(segment, result[0].get(segment).setX2(x1).setY2(y1));
-                                result[0] = result[0].set(segment + 1, next.setX1(x2).setY1(y2));
+                                result[0] = result[0].set(segment, result[0].get(segment).withOx(x1).withOy(y1));
+                                result[0] = result[0].set(segment + 1, next.withIx(x2).withIy(y2));
                             }
                     );
                 } else {
                     // quadratic curve controlled by prev
-                    middle = new BezierNode(BezierNode.C2_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
+                    middle = new BezierNode(BezierNode.OUT_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
                     prev.withCollinear(true);
                     result[0] = result[0].add(segment, middle);
-                    QuadCurves.split(prev.getX0(), prev.getY0(),
-                            next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
+                    QuadCurves.split(prev.pointX(), prev.pointY(),
+                            next.inX(), next.inY(), next.pointX(), next.pointY(), t,
                             (x1, y1, x2, y2) -> {
-                                result[0] = result[0].set(prevSegment, middle.setX2(x1).setY2(y1));
-                                result[0] = result[0].set(segment, result[0].get(segment).setX0(x2).setY0(y2));
+                                result[0] = result[0].set(prevSegment, middle.withOx(x1).withOy(y1));
+                                result[0] = result[0].set(segment, result[0].get(segment).withPx(x2).withPointY(y2));
                             },
                             (x1, y1, x2, y2) -> {
-                                result[0] = result[0].set(segment, result[0].get(segment).setX2(x1).setY2(y1));
+                                result[0] = result[0].set(segment, result[0].get(segment).withOx(x1).withOy(y1));
                             }
                     );
                 }
             } else if (nc1) {
                 // quadratic curve controlled by next
-                middle = new BezierNode(BezierNode.C1_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
+                middle = new BezierNode(BezierNode.IN_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
                 result[0] = result[0].add(segment, middle);
-                QuadCurves.split(prev.getX0(), prev.getY0(),
-                        next.getX1(), next.getY1(), next.getX0(), next.getY0(), t,
+                QuadCurves.split(prev.pointX(), prev.pointY(),
+                        next.inX(), next.inY(), next.pointX(), next.pointY(), t,
                         (x1, y1, x2, y2) -> {
-                            result[0] = result[0].set(segment, middle.setX1(x1).setY1(y1).setX0(x2).setY0(y2));
+                            result[0] = result[0].set(segment, middle.withIx(x1).withIy(y1).withPx(x2).withPointY(y2));
                         },
                         (x1, y1, x2, y2) -> {
-                            result[0] = result[0].set(segment + 1, next.setX1(x1).setY1(y1).withCollinear(true));
+                            result[0] = result[0].set(segment + 1, next.withIx(x1).withIy(y1).withCollinear(true));
                         }
                 );
             } else {
                 // line
-                middle = new BezierNode(BezierNode.C0_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
+                middle = new BezierNode(BezierNode.POINT_MASK, true, true, p.getX(), p.getY(), p.getX(), p.getY(), p.getX(), p.getY());
                 result[0] = result[0].add(segment, middle);
             }
         }
@@ -260,31 +260,31 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
         BezierNode prev = get(prevSegment);
         BezierNode middle = get(segment);
         BezierNode next = get(nextSegment);
-        boolean pc2 = prev.isC2();
-        boolean mc2 = middle.isC2();
-        boolean mc1 = middle.isC1();
-        boolean nc1 = next.isC1();
+        boolean pc2 = prev.hasOut();
+        boolean mc2 = middle.hasOut();
+        boolean mc1 = middle.hasIn();
+        boolean nc1 = next.hasIn();
         if (!pc2 && mc1 && nc1) {
             double[] p = QuadCurves.merge(
-                    prev.getX0(), prev.getY0(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
-                    next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);
+                    prev.pointX(), prev.pointY(), middle.inX(), middle.inY(), middle.pointX(), middle.pointY(),
+                    next.inX(), next.inY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].set(nextSegment, next.setX1(p[2]).setY1(p[3]));
+                result[0] = result[0].set(nextSegment, next.withIx(p[2]).withIy(p[3]));
             }
         } else if (pc2 && mc2 && !nc1) {
             double[] p = QuadCurves.merge(
-                    prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX0(), middle.getY0(),
-                    middle.getX2(), middle.getY2(), next.getX0(), next.getY0(), tolerance);
+                    prev.pointX(), prev.pointY(), prev.outX(), prev.outY(), middle.pointX(), middle.pointY(),
+                    middle.outX(), middle.outY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
+                result[0] = result[0].set(prevSegment, prev.withOx(p[2]).withOy(p[3]));
             }
         } else if (pc2 && mc1 && mc2 && nc1) {
             double[] p = CubicCurves.merge(
-                    prev.getX0(), prev.getY0(), prev.getX2(), prev.getY2(), middle.getX1(), middle.getY1(), middle.getX0(), middle.getY0(),
-                    middle.getX2(), middle.getY2(), next.getX1(), next.getY1(), next.getX0(), next.getY0(), tolerance);
+                    prev.pointX(), prev.pointY(), prev.outX(), prev.outY(), middle.inX(), middle.inY(), middle.pointX(), middle.pointY(),
+                    middle.outX(), middle.outY(), next.inX(), next.inY(), next.pointX(), next.pointY(), tolerance);
             if (p != null) {
-                result[0] = result[0].set(prevSegment, prev.setX2(p[2]).setY2(p[3]));
-                result[0] = result[0].set(nextSegment, next.setX1(p[4]).setY1(p[5]));
+                result[0] = result[0].set(prevSegment, prev.withOx(p[2]).withOy(p[3]));
+                result[0] = result[0].set(nextSegment, next.withIx(p[4]).withIy(p[5]));
             }
         }
         result[0] = result[0].removeAt(segment);
@@ -300,8 +300,8 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
      */
     public @Nullable Point2D getOutgoingTangentPoint(int index) {
         BezierNode node = get(index);
-        if (node.isC2()) {
-            return new Point2D.Double(node.getX2(), node.getY2());
+        if (node.hasOut()) {
+            return new Point2D.Double(node.outX(), node.outY());
         }
         return null;
     }
@@ -475,19 +475,19 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
      */
     public @NonNull PointAndDerivative evalFirst() {
         BezierNode first = getFirst();
-        double y0 = first.getY0();
-        double x0 = first.getX0();
-        if (first.isC2()) {
+        double y0 = first.pointY();
+        double x0 = first.pointX();
+        if (first.hasOut()) {
             return new PointAndDerivative(
                     x0, y0,
-                    first.getX2() - x0, first.getY2() - y0);
+                    first.outX() - x0, first.outY() - y0);
         }
-        if (size() < 2) return new PointAndDerivative(first.getX0(), y0, 1, 0);
+        if (size() < 2) return new PointAndDerivative(first.pointX(), y0, 1, 0);
         BezierNode second = get(1);
-        if (second.isC1()) {
-            return new PointAndDerivative(x0, y0, second.getX1() - x0, second.getY1() - y0);
+        if (second.hasIn()) {
+            return new PointAndDerivative(x0, y0, second.inX() - x0, second.inY() - y0);
         }
-        return new PointAndDerivative(x0, y0, second.getX0() - x0, second.getY0() - y0);
+        return new PointAndDerivative(x0, y0, second.pointX() - x0, second.pointY() - y0);
     }
 
     /**
@@ -512,18 +512,18 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
             }
         }
 
-        double y0 = last.getY0();
-        double x0 = last.getX0();
-        if (last.isC1()) {
+        double y0 = last.pointY();
+        double x0 = last.pointX();
+        if (last.hasIn()) {
             return new PointAndDerivative(x0, y0,
-                    last.getX1() - x0, last.getY1() - y0);
+                    last.inX() - x0, last.inY() - y0);
         }
         if (secondLast == null) return new PointAndDerivative(x0, y0, -1, 0);
-        if (secondLast.isC2()) {
+        if (secondLast.hasOut()) {
             return new PointAndDerivative(x0, y0,
-                    secondLast.getX2() - x0, secondLast.getY2() - y0);
+                    secondLast.outX() - x0, secondLast.outY() - y0);
         }
-        return new PointAndDerivative(x0, y0, secondLast.getX0() - x0, secondLast.getY0() - y0);
+        return new PointAndDerivative(x0, y0, secondLast.pointX() - x0, secondLast.pointY() - y0);
     }
 
     public int getWindingRule() {

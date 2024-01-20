@@ -41,8 +41,8 @@ public class BezierPathIterator implements PathIterator {
         } else {
             this.segType = SEG_MOVETO;
             BezierNode current = path.get(0);
-            this.segCoords[0] = current.getX0();
-            this.segCoords[1] = current.getY0();
+            this.segCoords[0] = current.pointX();
+            this.segCoords[1] = current.pointY();
             if (path.size() > 1) {
                 this.state = State.PRODUCE_SEGMENT;
                 index++;
@@ -84,34 +84,34 @@ public class BezierPathIterator implements PathIterator {
                 BezierNode prev = path.get(index - 1);
                 BezierNode current = path.get(index);
                 if (current.hasMask(BezierNode.MOVE_MASK)) {
-                    segCoords[0] = current.getX0();
-                    segCoords[1] = current.getY0();
+                    segCoords[0] = current.pointX();
+                    segCoords[1] = current.pointY();
                     segType = SEG_MOVETO;
                     lastMoveTo = index;
                 } else {
-                    if (prev.isC2() && current.isC1()) {
-                        segCoords[0] = prev.getX2();
-                        segCoords[1] = prev.getY2();
-                        segCoords[2] = current.getX1();
-                        segCoords[3] = current.getY1();
-                        segCoords[4] = current.getX0();
-                        segCoords[5] = current.getY0();
+                    if (prev.hasOut() && current.hasIn()) {
+                        segCoords[0] = prev.outX();
+                        segCoords[1] = prev.outY();
+                        segCoords[2] = current.inX();
+                        segCoords[3] = current.inY();
+                        segCoords[4] = current.pointX();
+                        segCoords[5] = current.pointY();
                         segType = SEG_CUBICTO;
-                    } else if (prev.isC2()) {
-                        segCoords[0] = prev.getX2();
-                        segCoords[1] = prev.getY2();
-                        segCoords[2] = current.getX0();
-                        segCoords[3] = current.getY0();
+                    } else if (prev.hasOut()) {
+                        segCoords[0] = prev.outX();
+                        segCoords[1] = prev.outY();
+                        segCoords[2] = current.pointX();
+                        segCoords[3] = current.pointY();
                         segType = SEG_QUADTO;
-                    } else if (current.isC1()) {
-                        segCoords[0] = current.getX1();
-                        segCoords[1] = current.getY1();
-                        segCoords[2] = current.getX0();
-                        segCoords[3] = current.getY0();
+                    } else if (current.hasIn()) {
+                        segCoords[0] = current.inX();
+                        segCoords[1] = current.inY();
+                        segCoords[2] = current.pointX();
+                        segCoords[3] = current.pointY();
                         segType = SEG_QUADTO;
                     } else {
-                        segCoords[0] = current.getX0();
-                        segCoords[1] = current.getY0();
+                        segCoords[0] = current.pointX();
+                        segCoords[1] = current.pointY();
                         segType = SEG_LINETO;
                     }
                 }
@@ -126,27 +126,27 @@ public class BezierPathIterator implements PathIterator {
             case CLOSE_PATH -> {
                 BezierNode current = path.get(index);
                 BezierNode lastMove = path.get(lastMoveTo);
-                if (current.isC2() && lastMove.isC1()) {
-                    segCoords[0] = current.getX2();
-                    segCoords[1] = current.getY2();
-                    segCoords[2] = lastMove.getX1();
-                    segCoords[3] = lastMove.getY1();
-                    segCoords[4] = lastMove.getX0();
-                    segCoords[5] = lastMove.getY0();
+                if (current.hasOut() && lastMove.hasIn()) {
+                    segCoords[0] = current.outX();
+                    segCoords[1] = current.outY();
+                    segCoords[2] = lastMove.inX();
+                    segCoords[3] = lastMove.inY();
+                    segCoords[4] = lastMove.pointX();
+                    segCoords[5] = lastMove.pointY();
                     segType = SEG_CUBICTO;
                     state = State.PRODUCE_CLOSE;
-                } else if (current.isC2()) {
-                    segCoords[0] = current.getX2();
-                    segCoords[1] = current.getY2();
-                    segCoords[2] = lastMove.getX0();
-                    segCoords[3] = lastMove.getY0();
+                } else if (current.hasOut()) {
+                    segCoords[0] = current.outX();
+                    segCoords[1] = current.outY();
+                    segCoords[2] = lastMove.pointX();
+                    segCoords[3] = lastMove.pointY();
                     segType = SEG_QUADTO;
                     state = State.PRODUCE_CLOSE;
-                } else if (lastMove.isC1()) {
-                    segCoords[0] = lastMove.getX1();
-                    segCoords[1] = lastMove.getY1();
-                    segCoords[2] = lastMove.getX0();
-                    segCoords[3] = lastMove.getY0();
+                } else if (lastMove.hasIn()) {
+                    segCoords[0] = lastMove.inX();
+                    segCoords[1] = lastMove.inY();
+                    segCoords[2] = lastMove.pointX();
+                    segCoords[3] = lastMove.pointY();
                     segType = SEG_QUADTO;
                     state = State.PRODUCE_CLOSE;
                 } else {

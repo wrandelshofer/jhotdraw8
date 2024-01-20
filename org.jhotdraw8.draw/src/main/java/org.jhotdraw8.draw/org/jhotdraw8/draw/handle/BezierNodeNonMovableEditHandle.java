@@ -112,7 +112,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     }
 
     private @NonNull Point2D getLocation() {
-        return getBezierNode().getC0(Point2D::new);
+        return getBezierNode().getPoint(Point2D::new);
 
     }
 
@@ -155,10 +155,10 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         BezierNode node = path.get(nodeIndex);
 
         // If the oldNode was a MOVE_TO, convert it into a LINE_TO
-        path = path.set(nodeIndex, node.withClearMaskBits(MOVE_MASK));
+        path = path.set(nodeIndex, node.withMaskBitsClears(MOVE_MASK));
 
         // Remove the CLOSE path mask from the new node
-        path = path.add(nodeIndex, node.withClearMaskBits(CLOSE_MASK));
+        path = path.add(nodeIndex, node.withMaskBitsClears(CLOSE_MASK));
 
         view.getModel().set(owner, pathKey, path);
         view.recreateHandles();
@@ -252,9 +252,9 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         BezierNode bn = getBezierNode();
-        if (bn.isC1() && bn.isC2()) {
+        if (bn.hasIn() && bn.hasOut()) {
             node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
-        } else if (bn.isC1() || bn.isC2()) {
+        } else if (bn.hasIn() || bn.hasOut()) {
             node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
         } else {
             node.setShape(REGION_SHAPE_LINEAR);

@@ -146,7 +146,7 @@ public class BezierFit {
     public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull BezierPath digitizedPoints, double error) {
         List<Point2D> d = new ArrayList<>();
         for (BezierNode n : digitizedPoints) {
-            d.add(new Point2D(n.getX0(), n.getY0()));
+            d.add(new Point2D(n.pointX(), n.pointY()));
         }
         fitBezierPath(builder, d, error);
     }

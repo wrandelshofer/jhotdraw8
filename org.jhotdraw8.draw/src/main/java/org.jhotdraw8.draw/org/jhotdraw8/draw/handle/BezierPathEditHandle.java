@@ -13,6 +13,8 @@ import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.shape.BezierNode;
@@ -53,9 +55,42 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
             int segment = intersectionPointEx.getSegmentA();
             BezierNode newNode = new BezierNode(intersectionPointEx.getX(), intersectionPointEx.getY());
             if (segment > 0 && path.get(segment - 1).isClosePath()) {
-                path = path.set(segment - 1, path.get(segment - 1).withClearMaskBits(BezierNode.CLOSE_MASK));
-                newNode = newNode.withMaskBits(BezierNode.CLOSE_MASK);
+                path = path.set(segment - 1, path.get(segment - 1).withMaskBitsClears(BezierNode.CLOSE_MASK));
+                newNode = newNode.withMaskBitsSet(BezierNode.CLOSE_MASK);
             }
+            int inNodeIndex = (path.size() + segment - 1) % path.size();
+            BezierNode inNode = path.get(inNodeIndex);
+            int outNodeIndex = (path.size() + segment) % path.size();
+            BezierNode outNode = path.get(outNodeIndex);
+            if (inNode.hasOut() && outNode.hasIn()) {
+                // split cubic curve
+                double[] split = new double[8 + 6];
+                CubicCurves.split(new double[]{inNode.pointX(), inNode.pointY(), inNode.outX(), inNode.outY(), outNode.inX(), outNode.inY(), outNode.pointX(), outNode.pointY()},
+                        0,
+                        intersectionPointEx.getArgumentA(), split, 0, split, 6);
+                inNode = inNode.withOut(split[2], split[3]);
+                newNode = newNode.withIn(split[4], split[5]).withOut(split[8], split[9]).withMaskBitsSet(BezierNode.IN_OUT_MASK);
+                outNode = outNode.withIn(split[10], split[11]);
+
+            } else if (inNode.hasOut()) {
+                // split quadratic curve
+                double[] split = new double[6 + 4];
+                QuadCurves.split(new double[]{inNode.pointX(), inNode.pointY(), inNode.outX(), inNode.outY(), outNode.pointX(), outNode.pointY()},
+                        0,
+                        intersectionPointEx.getArgumentA(), split, 0, split, 4);
+                inNode = inNode.withOut(split[2], split[3]);
+                newNode = newNode.withOut(split[6], split[7]).withMaskBitsSet(BezierNode.OUT_MASK);
+            } else if (outNode.hasIn()) {
+                // split quadratic curve
+                double[] split = new double[6 + 4];
+                QuadCurves.split(new double[]{inNode.pointX(), inNode.pointY(), outNode.inX(), outNode.inY(), outNode.pointX(), outNode.pointY()},
+                        0,
+                        intersectionPointEx.getArgumentA(), split, 0, split, 4);
+                newNode = newNode.withIn(split[2], split[3]).withMaskBitsSet(BezierNode.IN_MASK);
+                outNode = outNode.withIn(split[6], split[7]);
+            }
+            path = path.set(inNodeIndex, inNode).set(outNodeIndex, outNode);
+
             path = path.add(segment, newNode);
             view.getModel().set(owner, pointKey, path);
             view.recreateHandles();

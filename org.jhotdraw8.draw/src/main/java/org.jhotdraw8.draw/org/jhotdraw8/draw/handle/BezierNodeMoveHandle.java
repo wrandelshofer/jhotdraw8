@@ -106,7 +106,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
 
     private @NonNull Point2D getLocation() {
         BezierNode bezierNode = getBezierNode();
-        return bezierNode == null ? Point2D.ZERO : bezierNode.getC0(Point2D::new);
+        return bezierNode == null ? Point2D.ZERO : bezierNode.getPoint(Point2D::new);
 
     }
 
@@ -198,9 +198,9 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         BezierNode bn = getBezierNode();
-        if (bn.isC1() && bn.isC2()) {
+        if (bn.hasIn() && bn.hasOut()) {
             node.setShape(REGION_SHAPE_CUBIC);
-        } else if (bn.isC1() || bn.isC2()) {
+        } else if (bn.hasIn() || bn.hasOut()) {
             node.setShape(REGION_SHAPE_QUADRATIC);
         } else {
             node.setShape(REGION_SHAPE_LINEAR);

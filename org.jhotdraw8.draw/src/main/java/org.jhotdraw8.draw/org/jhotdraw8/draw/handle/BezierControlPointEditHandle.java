@@ -93,7 +93,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         this.pathKey = pathKey;
         this.nodeIndex = nodeIndex;
         this.controlPointMask = controlPointMask;
-        if (this.controlPointMask != BezierNode.C1_MASK && this.controlPointMask != BezierNode.C2_MASK) {
+        if (this.controlPointMask != BezierNode.IN_MASK && this.controlPointMask != BezierNode.OUT_MASK) {
             throw new IllegalArgumentException("controlPoint:" + controlPointMask);
         }
         node = new Region();
@@ -197,10 +197,10 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             } else {
                 // move control point and opposite control point to same distance
                 BezierNode newBezierNode = bn.withC(controlPointMask, p.getX(), p.getY());
-                Point2D c0 = bn.getC0(Point2D::new);
+                Point2D c0 = bn.getPoint(Point2D::new);
                 double r = p.distance(c0);
-                if (controlPointMask == BezierNode.C1_MASK) {
-                    Point2D p2 = bn.getC2(Point2D::new);
+                if (controlPointMask == BezierNode.IN_MASK) {
+                    Point2D p2 = bn.getOut(Point2D::new);
                     Point2D dir = p2.subtract(c0).normalize();
                     if (dir.magnitude() == 0) {
                         dir = new Point2D(0, 1);// point down
@@ -210,9 +210,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     if (Points.almostEqual(p2.getX(), p2.getY(), constrainedPoint.getX(), constrainedPoint.getY())) {
                         p2 = constrainedPoint;
                     }
-                    newBezierNode = newBezierNode.withC2(p2.getX(), p2.getY());
+                    newBezierNode = newBezierNode.withOut(p2.getX(), p2.getY());
                 } else {
-                    Point2D p2 = bn.getC1(Point2D::new);
+                    Point2D p2 = bn.getIn(Point2D::new);
                     Point2D dir = p2.subtract(c0).normalize();
                     if (dir.magnitude() == 0) {
                         dir = new Point2D(0, 1);// point down
@@ -222,22 +222,22 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                     if (Points.almostEqual(p2.getX(), p2.getY(), constrainedPoint.getX(), constrainedPoint.getY())) {
                         p2 = constrainedPoint;
                     }
-                    newBezierNode = newBezierNode.withC1(p2.getX(), p2.getY());
+                    newBezierNode = newBezierNode.withIn(p2.getX(), p2.getY());
                 }
 
                 view.getModel().set(f, pathKey,
                         list.set(nodeIndex, newBezierNode));
             }
         } else {
-            Point2D c0 = bn.getC0(Point2D::new);
+            Point2D c0 = bn.getPoint(Point2D::new);
 
             // move control point and opposite control point on same line
             double a = Math.PI + FXGeom.angle(c0, p);
             Point2D p2;
-            if (controlPointMask == BezierNode.C1_MASK) {
-                p2 = bn.getC2(Point2D::new);
+            if (controlPointMask == BezierNode.IN_MASK) {
+                p2 = bn.getOut(Point2D::new);
             } else {
-                p2 = bn.getC1(Point2D::new);
+                p2 = bn.getIn(Point2D::new);
             }
 
             double r;
@@ -259,10 +259,10 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 p2 = constrainedPoint;
             }
             BezierNode newBezierNode;
-            if (controlPointMask == BezierNode.C1_MASK) {
-                newBezierNode = bn.withC1(p.getX(), p.getY()).withC2(p2.getX(), p2.getY());
+            if (controlPointMask == BezierNode.IN_MASK) {
+                newBezierNode = bn.withIn(p.getX(), p.getY()).withOut(p2.getX(), p2.getY());
             } else {
-                newBezierNode = bn.withC2(p.getX(), p.getY()).withC1(p2.getX(), p2.getY());
+                newBezierNode = bn.withOut(p.getX(), p.getY()).withIn(p2.getX(), p2.getY());
             }
             view.getModel().set(f, pathKey,
                     list.set(nodeIndex, newBezierNode));
@@ -381,7 +381,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             node.setShape(REGION_SHAPE_CUSP);
         }
 
-        node.setVisible(bn.isC(controlPointMask));
+        node.setVisible(bn.hasMaskBits(controlPointMask));
 
     }
 

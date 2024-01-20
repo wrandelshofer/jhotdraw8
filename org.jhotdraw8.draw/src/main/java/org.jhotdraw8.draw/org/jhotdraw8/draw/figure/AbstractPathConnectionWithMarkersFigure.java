@@ -112,11 +112,11 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
                 } else {
                     list.add(new BezierNodeEditHandle(this, PATH, i));
                 }
-                if (nodes.get(i).isC1()) {
-                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C1_MASK));
+                if (nodes.get(i).hasIn()) {
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.IN_MASK));
                 }
-                if (nodes.get(i).isC2()) {
-                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.C2_MASK));
+                if (nodes.get(i).hasOut()) {
+                    list.add(new BezierControlPointEditHandle(this, PATH, i, BezierNode.OUT_MASK));
                 }
             }
         } else if (handleType == HandleType.TRANSFORM) {
@@ -217,12 +217,12 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             if (start != null) {
                 BezierNode first = path.getFirst();
                 path = path.set(0,
-                        first.transform(Transform.translate(start.getX() - first.getX0(), start.getY() - first.getY0())));
+                        first.transform(Transform.translate(start.getX() - first.pointX(), start.getY() - first.pointY())));
             }
             if (end != null) {
                 BezierNode last = path.getLast();
                 path = path.set(path.size() - 1,
-                        last.transform(Transform.translate(end.getX() - last.getX0(), end.getY() - last.getY0())));
+                        last.transform(Transform.translate(end.getX() - last.pointX(), end.getY() - last.pointY())));
             }
 
         // store the path and compute path metrics

@@ -113,7 +113,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     }
 
     private @NonNull Point2D getLocation() {
-        return getBezierNode().getC0(Point2D::new);
+        return getBezierNode().getPoint(Point2D::new);
 
     }
 
@@ -164,10 +164,10 @@ public class BezierNodeEditHandle extends AbstractHandle {
         BezierNode node = path.get(nodeIndex);
 
         // If the oldNode was a MOVE_TO, convert it into a LINE_TO
-        path = path.set(nodeIndex, node.withClearMaskBits(MOVE_MASK));
+        path = path.set(nodeIndex, node.withMaskBitsClears(MOVE_MASK));
 
         // Remove the CLOSE path mask from the new node
-        path = path.add(nodeIndex, node.withClearMaskBits(CLOSE_MASK));
+        path = path.add(nodeIndex, node.withMaskBitsClears(CLOSE_MASK));
 
         view.getModel().set(owner, pathKey, path);
         view.recreateHandles();
@@ -188,7 +188,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
         BezierNode p = list.get(nodeIndex);
         view.getModel().set(getOwner(), pathKey,
-                list.set(nodeIndex, p.withC0AndTranslateC1C2(getOwner().worldToLocal(newPoint))));
+                list.set(nodeIndex, p.withPointAndTranslatedInOut(getOwner().worldToLocal(newPoint))));
     }
 
     @Override
@@ -237,19 +237,19 @@ public class BezierNodeEditHandle extends AbstractHandle {
         }
 
         moveToRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.withClearMaskBits(CLOSE_MASK).withMaskBits(MOVE_MASK);
+            BezierNode changedNode = bnode.withMaskBitsClears(CLOSE_MASK).withMaskBitsSet(MOVE_MASK);
             finalPath[0] = finalPath[0].set(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });
         closePathRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.withMaskBits(CLOSE_MASK).withClearMaskBits(MOVE_MASK);
+            BezierNode changedNode = bnode.withMaskBitsSet(CLOSE_MASK).withMaskBitsClears(MOVE_MASK);
             finalPath[0] = finalPath[0].set(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });
         lineToRadio.setOnAction(actionEvent -> {
-            BezierNode changedNode = bnode.withClearMaskBits(MOVE_MASK | CLOSE_MASK);
+            BezierNode changedNode = bnode.withMaskBitsClears(MOVE_MASK | CLOSE_MASK);
             finalPath[0] = finalPath[0].set(nodeIndex, changedNode);
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
@@ -296,9 +296,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         BezierNode bn = getBezierNode();
-        if (bn.isC1() && bn.isC2()) {
+        if (bn.hasIn() && bn.hasOut()) {
             node.setShape(REGION_SHAPE_CUBIC);// FIXME this is not correct
-        } else if (bn.isC1() || bn.isC2()) {
+        } else if (bn.hasIn() || bn.hasOut()) {
             node.setShape(REGION_SHAPE_QUADRATIC);// FIXME this is not correct
         } else {
             node.setShape(REGION_SHAPE_LINEAR);
