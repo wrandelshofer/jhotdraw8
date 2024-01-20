@@ -25,18 +25,20 @@ import java.util.concurrent.TimeUnit;
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
  * <pre>
  * Benchmark                                   (loop)  Mode  Cnt     Score    Error  Units
- * CubicCurvesJmh.arcLengthIntegrated               0  avgt    2   118.195           ns/op
- * CubicCurvesJmh.arcLengthIntegrated               1  avgt    2   126.333           ns/op
- * CubicCurvesJmh.arcLengthIntegratedFloat          0  avgt    2   104.553           ns/op
- * CubicCurvesJmh.arcLengthIntegratedFloat          1  avgt    2   102.218           ns/op
- * CubicCurvesJmh.invArcLengthIntegrated            0  avgt    2   212.101           ns/op
- * CubicCurvesJmh.invArcLengthIntegrated            1  avgt    2   325.903           ns/op
- * CubicCurvesJmh.invArcLengthIntegratedFloat       0  avgt    2   177.288           ns/op
- * CubicCurvesJmh.invArcLengthIntegratedFloat       1  avgt    2   270.904           ns/op
- * CubicCurvesJmh.arcLengthApproximated             0  avgt    4   539.221 ± 31.352  ns/op
- * CubicCurvesJmh.arcLengthApproximated             1  avgt    4   755.975 ±  1.517  ns/op
- * CubicCurvesJmh.arcLengthIterator                 0  avgt    4  1061.041 ± 17.832  ns/op
- * CubicCurvesJmh.arcLengthIterator                 1  avgt    4  1263.672 ± 11.160  ns/op
+ * CubicCurvesJmh.arcLengthIntegrated                            0  avgt    2   121.528          ns/op
+ * CubicCurvesJmh.arcLengthIntegrated                            1  avgt    2   134.638          ns/op
+ * CubicCurvesJmh.arcLengthIntegratedFloat                       0  avgt    2   107.126          ns/op
+ * CubicCurvesJmh.arcLengthIntegratedFloat                       1  avgt    2   103.871          ns/op
+ * CubicCurvesJmh.invArcLengthIntegrated                         0  avgt    2   214.884          ns/op
+ * CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2   331.676          ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedFloat                    0  avgt    2   180.258          ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedFloat                    1  avgt    2   274.829          ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   105.299          ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2   260.924          ns/op
+ * CubicCurvesJmh.arcLengthApproximated                          0  avgt    4   539.221 ± 31.352  ns/op
+ * CubicCurvesJmh.arcLengthApproximated                          1  avgt    4   755.975 ±  1.517  ns/op
+ * CubicCurvesJmh.arcLengthIterator                              0  avgt    4  1061.041 ± 17.832  ns/op
+ * CubicCurvesJmh.arcLengthIterator                              1  avgt    4  1263.672 ± 11.160  ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -55,11 +57,14 @@ public class CubicCurvesJmh {
     // Curve without a loop
     private final double[] curveWithoutLoop = {190, 200, 270, 280, 330, 280, 240, 100};
     private double[] curve;
+    private double arcLength;
 
     @Setup
     public void setup() {
         if (loop == 0) curve = curveWithoutLoop;
         else curve = curveWithLoop;
+        arcLength = CubicCurves.arcLength(curve, 0, 1, 0.125);
+        System.out.println("arcLength=" + arcLength + "\n");
     }
     /*
     public static void main(String... args){
@@ -71,12 +76,12 @@ System.out.println(n);
 
     @Benchmark
     public double arcLengthIntegrated() {
-        return CubicCurves.arcLengthIntegrated(curve, 0, 1, 0.125);
+        return CubicCurves.arcLength(curve, 0, 1, 0.125);
     }
 
     @Benchmark
     public float arcLengthIntegratedFloat() {
-        return CubicCurves.arcLengthIntegratedFloat(curve, 0, 1, 0.125);
+        return CubicCurves.arcLengthFloat(curve, 0, 1, 0.125);
     }
 
     /*
@@ -100,6 +105,12 @@ System.out.println(n);
     @Benchmark
     public double invArcLengthIntegrated() {
         return CubicCurves.invArcLength(curve, 0, 70, 0.125);
+    }
+
+
+    @Benchmark
+    public double invArcLengthIntegratedWithKnownArcLength() {
+        return CubicCurves.invArcLength(curve, 0, 70, arcLength, 0.125);
     }
 
     @Benchmark

@@ -157,18 +157,6 @@ public class QuadCurves {
         return arcLength(p, offset, 1, epsilon);
     }
 
-    /**
-     * Computes the arc length s from time 0 to time t.
-     *
-     * @param p       the coordinates of the control points of the bézier curve
-     * @param offset  the offset of the first control point in {@code b}
-     * @param t       the time value
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
-    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
-        return arcLengthIntegrated(p, offset, t, epsilon);
-    }
 
     /**
      * Calculates the arc-length {@code s} of a segment from [0, t] of a
@@ -285,7 +273,7 @@ public class QuadCurves {
      * @param epsilon the error tolerance
      * @return the arc length
      */
-    public static double arcLengthIntegrated(double @NonNull [] p, int offset, double t, double epsilon) {
+    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
@@ -410,18 +398,7 @@ public class QuadCurves {
         return (t) -> sqrt(A * t * t + B * t + C);
     }
 
-    /**
-     * Calculates the time {@code t} at a given arc-length {@code s} of a
-     * quadratic bézier curve.
-     *
-     * @param p       the coordinates of the control points of the bézier curve
-     * @param offset  the offset of the first control point in {@code b}
-     * @param s       the arc-length value where {@literal s >= 0}
-     * @param epsilon
-     */
-    public static double invArcLength(double[] p, int offset, double s, double epsilon) {
-        return invArcLengthIntegrated(p, offset, s, epsilon);
-    }
+
 
     /**
      * Calculates the time {@code t} at a given arc-length {@code s} of a
@@ -451,10 +428,14 @@ public class QuadCurves {
      * @param s       the arc-length value where {@literal s >= 0}
      * @param epsilon
      */
-    public static double invArcLengthIntegrated(double[] p, int offset, double s, double epsilon) {
+    public static double invArcLength(double[] p, int offset, double s, double epsilon) {
+        return invArcLength(p, offset, s, arcLength(p, offset, 1, epsilon), epsilon);
+    }
+
+    public static double invArcLength(double[] p, int offset, double s, double totalArcLength, double epsilon) {
         ToDoubleFunction<Double> f = t -> arcLength(p, offset, t, epsilon);
         ToDoubleFunction<Double> fd = getArcLengthIntegrand(p, offset);
-        return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / arcLength(p, offset, 1), epsilon);
+        return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / totalArcLength, epsilon);
     }
 
     /**

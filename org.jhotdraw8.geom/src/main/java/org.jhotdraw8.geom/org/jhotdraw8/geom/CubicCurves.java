@@ -478,22 +478,7 @@ public class CubicCurves {
         return arcLength(p, offset, 1, epsilon);
     }
 
-    /**
-     * Computes the arc length s from time 0 to time t.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param t       the time
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
-    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
-        return arcLengthIntegrated(p, offset, t, epsilon);
-    }
 
-    public static float arcLengthFloat(double @NonNull [] p, int offset, double t, double epsilon) {
-        return arcLengthIntegratedFloat(p, offset, t, epsilon);
-    }
 
     /**
      * Computes the arc length s from time 0 to time t using an integration method.
@@ -504,7 +489,7 @@ public class CubicCurves {
      * @param epsilon the error tolerance
      * @return the arc length
      */
-    public static double arcLengthIntegrated(double @NonNull [] p, int offset, double t, double epsilon) {
+    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
@@ -518,7 +503,7 @@ public class CubicCurves {
      * @param epsilon the error tolerance
      * @return the arc length
      */
-    public static float arcLengthIntegratedFloat(double @NonNull [] p, int offset, double t, double epsilon) {
+    public static float arcLengthFloat(double @NonNull [] p, int offset, double t, double epsilon) {
         ToFloatFunction<Float> f = getArcLengthIntegrandFloat(p, offset);
         return Integrals.rombergQuadratureFloat(f, 0, (float) t, (float) epsilon);
     }
@@ -535,12 +520,49 @@ public class CubicCurves {
      * @return t at s
      */
     public static double invArcLength(double @NonNull [] p, int offset, double s, double epsilon) {
-        ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
-        return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / arcLength(p, offset, 1, epsilon), epsilon);
+        return invArcLength(p, offset, s, arcLength(p, offset, 1, epsilon), epsilon);
     }
 
+    /**
+     * Computes time t at the given arc length s.
+     *
+     * @param p              points of the curve
+     * @param offset         index of the first point in array {@code p}
+     * @param s              arc length
+     * @param totalArcLength the total arc length of the curve
+     * @param epsilon
+     * @return t at s
+     */
+    public static double invArcLength(double @NonNull [] p, int offset, double s, double totalArcLength, double epsilon) {
+        ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
+        return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / totalArcLength, epsilon);
+    }
+
+    /**
+     * Computes time t at the given arc length s.
+     *
+     * @param p       points of the curve
+     * @param offset  index of the first point in array {@code p}
+     * @param s       arc length
+     * @param epsilon
+     * @return t at s
+     */
     public static float invArcLengthFloat(double @NonNull [] p, int offset, float s, float epsilon) {
+        return invArcLengthFloat(p, offset, s, arcLengthFloat(p, offset,1,epsilon), epsilon);
+    }
+
+    /**
+     * Computes time t at the given arc length s.
+     *
+     * @param p              points of the curve
+     * @param offset         index of the first point in array {@code p}
+     * @param s              arc length
+     * @param totalArcLength the total arc length of the curve
+     * @param epsilon
+     * @return t at s
+     */
+    public static float invArcLengthFloat(double @NonNull [] p, int offset, float s, float totalArcLength, float epsilon) {
         ToFloatFunction<Float> f = getArcLengthIntegrandFloat(p, offset);
-        return Solvers.hybridNewtonBisectionMethodFloat(Integrals::rombergQuadratureFloat, f, s, 0, 1, s / arcLengthFloat(p, offset, 1, epsilon), epsilon);
+        return Solvers.hybridNewtonBisectionMethodFloat(Integrals::rombergQuadratureFloat, f, s, 0, 1, s / totalArcLength, epsilon);
     }
 }
