@@ -5,9 +5,10 @@
 package org.jhotdraw8.geom.contour;
 
 import org.jhotdraw8.geom.AbstractPathBuilder;
-import org.jhotdraw8.geom.CubicCurves;
-import org.jhotdraw8.geom.QuadCurves;
 
+import java.awt.geom.CubicCurve2D;
+import java.awt.geom.PathIterator;
+import java.awt.geom.QuadCurve2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,8 +18,17 @@ import java.util.List;
 public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
     private final List<PolyArcPath> paths = new ArrayList<>();
     private PolyArcPath current;
+    private double flatness = 0.125;
 
     public PolyArcPathBuilder() {
+    }
+
+    public double getFlatness() {
+        return flatness;
+    }
+
+    public void setFlatness(double flatness) {
+        this.flatness = flatness;
     }
 
     @Override
@@ -46,11 +56,14 @@ public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
         if (current == null) {
             current = new PolyArcPath();
         }
-        // FIXME we must approximate the bezier curve with poly arcs!
-        current.addVertex(CubicCurves.eval(lastX, lastY, x1, y1, x2, y2, x, y, 0.25).getPoint(PlineVertex::new));
-        current.addVertex(CubicCurves.eval(lastX, lastY, x1, y1, x2, y2, x, y, 0.5).getPoint(PlineVertex::new));
-        current.addVertex(CubicCurves.eval(lastX, lastY, x1, y1, x2, y2, x, y, 0.75).getPoint(PlineVertex::new));
-        current.addVertex(x, y);
+        PathIterator it = new CubicCurve2D.Double(lastX, lastY, x1, y1, x2, y2, x, y).getPathIterator(null, flatness);
+        it.next();
+        double[] coords = new double[8];
+        while (!it.isDone()) {
+            it.currentSegment(coords);
+            lineTo(coords[0], coords[1]);
+            it.next();
+        }
     }
 
     @Override
@@ -75,11 +88,14 @@ public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
         if (current == null) {
             current = new PolyArcPath();
         }
-        // FIXME we must approximate the bezier curve with poly arcs!
-        current.addVertex(QuadCurves.eval(lastX, lastY, x1, y1, x, y, 0.25).getPoint(PlineVertex::new));
-        current.addVertex(QuadCurves.eval(lastX, lastY, x1, y1, x, y, 0.5).getPoint(PlineVertex::new));
-        current.addVertex(QuadCurves.eval(lastX, lastY, x1, y1, x, y, 0.75).getPoint(PlineVertex::new));
-        current.addVertex(x, y);
+        PathIterator it = new QuadCurve2D.Double(lastX, lastY, x1, y1, x, y).getPathIterator(null, flatness);
+        it.next();
+        double[] coords = new double[8];
+        while (!it.isDone()) {
+            it.currentSegment(coords);
+            lineTo(coords[0], coords[1]);
+            it.next();
+        }
     }
 
     @Override

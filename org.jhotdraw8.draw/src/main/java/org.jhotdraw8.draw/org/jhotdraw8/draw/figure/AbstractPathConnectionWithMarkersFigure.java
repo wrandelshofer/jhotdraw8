@@ -185,17 +185,27 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
         // Chop start and end points
         if (startConnector != null && startTarget != null) {
+            IntersectionPointEx chp;
+            if (!path.isEmpty()) {
                 PointAndDerivative pd = path.evalFirst();
-            IntersectionPointEx chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), pd.x() + pd.dx(), pd.y() + pd.dy());
+                chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), pd.x() + pd.dx(), pd.y() + pd.dy());
+            } else {
+                chp = startConnector.chopStart(ctx, this, startTarget, start, end);
+            }
             start = worldToParent(chp.getX(), chp.getY());
             set(START, new CssPoint2D(start));
         }
         if (endConnector != null && endTarget != null) {
+            IntersectionPointEx chp;
+            if (!path.isEmpty()) {
                 PointAndDerivative pd = path.evalLastInReverse();
-            IntersectionPointEx chp = endConnector.chopStart(ctx, this, endTarget,
+                chp = endConnector.chopStart(ctx, this, endTarget,
                         end.getX(), end.getY(),
                         pd.x() + pd.dx(), pd.y() + pd.dy()
                 );
+            } else {
+                chp = endConnector.chopStart(ctx, this, endTarget, end, start);
+            }
             end = worldToParent(chp.getX(), chp.getY());
             set(END, new CssPoint2D(end));
         }
