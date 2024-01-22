@@ -20,25 +20,23 @@ import java.awt.geom.PathIterator;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * <pre>
  * # JMH version: 1.37
  * # VM version: JDK 21.0.1, OpenJDK 64-Bit Server VM, 21.0.1+12-LTS
  * # Intel(R) Core(TM) i7-8700B CPU @ 3.20GHz
+ * OBSOLETE
+ * </pre>
  * <pre>
- * Benchmark                                   (loop)  Mode  Cnt     Score    Error  Units
- * CubicCurvesJmh.arcLengthIntegrated                            0  avgt    2   121.528          ns/op
- * CubicCurvesJmh.arcLengthIntegrated                            1  avgt    2   134.638          ns/op
- * CubicCurvesJmh.arcLengthIntegratedFloat                       0  avgt    2   107.126          ns/op
- * CubicCurvesJmh.arcLengthIntegratedFloat                       1  avgt    2   103.871          ns/op
- * CubicCurvesJmh.invArcLengthIntegrated                         0  avgt    2   214.884          ns/op
- * CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2   331.676          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedFloat                    0  avgt    2   180.258          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedFloat                    1  avgt    2   274.829          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   105.299          ns/op
- * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2   260.924          ns/op
- * CubicCurvesJmh.arcLengthApproximated                          0  avgt    4   539.221 ± 31.352  ns/op
- * CubicCurvesJmh.arcLengthApproximated                          1  avgt    4   755.975 ±  1.517  ns/op
- * CubicCurvesJmh.arcLengthIterator                              0  avgt    4  1061.041 ± 17.832  ns/op
- * CubicCurvesJmh.arcLengthIterator                              1  avgt    4  1263.672 ± 11.160  ns/op
+ * # JMH version: 1.37
+ * # VM version: JDK 21, OpenJDK 64-Bit Server VM, 21+35
+ * # Apple M2 Max @ 3.70GHz
+ * Benchmark                                                (loop)  Mode  Cnt    Score   Error  Units
+ * CubicCurvesJmh.arcLengthIntegrated                            0  avgt    2   33.879          ns/op
+ * CubicCurvesJmh.arcLengthIntegrated                            1  avgt    2   34.120          ns/op
+ * CubicCurvesJmh.invArcLengthIntegrated                         0  avgt    2  104.898          ns/op
+ * CubicCurvesJmh.invArcLengthIntegrated                         1  avgt    2  189.029          ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       0  avgt    2   39.451          ns/op
+ * CubicCurvesJmh.invArcLengthIntegratedWithKnownArcLength       1  avgt    2  117.550          ns/op
  * </pre>
  */
 @State(Scope.Benchmark)
@@ -64,43 +62,12 @@ public class CubicCurvesJmh {
         if (loop == 0) curve = curveWithoutLoop;
         else curve = curveWithLoop;
         arcLength = CubicCurves.arcLength(curve, 0, 1, 0.125);
-        System.out.println("arcLength=" + arcLength + "\n");
     }
-    /*
-    public static void main(String... args){
-     double[]curve={190,200 ,270,280,330,280,240,1000};
-        double[]q=new double[8*6];
-        int n = QuadCurves.approximateCubicCurve(curve, 0, q, 0, 0.125);
-System.out.println(n);
-    }*/
 
     @Benchmark
     public double arcLengthIntegrated() {
         return CubicCurves.arcLength(curve, 0, 1, 0.125);
     }
-
-    @Benchmark
-    public float arcLengthIntegratedFloat() {
-        return CubicCurves.arcLengthFloat(curve, 0, 1, 0.125);
-    }
-
-    /*
-    @Benchmark
-    public double arcLengthApproximated() {
-        double[] q = new double[8 * 6];
-        int n = QuadCurves.approximateCubicCurve(curve, 0, q, 0, 0.125);
-        double arcLength = 0;
-        for (int i = 0; i < n; i++) {
-            arcLength += QuadCurves.arcLengthClosedForm(q, i * 6, 1);
-        }
-        return arcLength;
-    }
-
-    @Benchmark
-    public double arcLengthIterator() {
-        return arcLengthIterator(curve, 0, 1, 0.125);
-    }*/
-
 
     @Benchmark
     public double invArcLengthIntegrated() {
@@ -111,11 +78,6 @@ System.out.println(n);
     @Benchmark
     public double invArcLengthIntegratedWithKnownArcLength() {
         return CubicCurves.invArcLength(curve, 0, 70, arcLength, 0.125);
-    }
-
-    @Benchmark
-    public float invArcLengthIntegratedFloat() {
-        return CubicCurves.invArcLengthFloat(curve, 0, 70, 0.125f);
     }
 
     /**

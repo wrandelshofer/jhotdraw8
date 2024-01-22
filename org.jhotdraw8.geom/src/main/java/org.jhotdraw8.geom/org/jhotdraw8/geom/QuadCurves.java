@@ -395,7 +395,7 @@ public class QuadCurves {
         C = (bx * bx) + (by * by);
 
         // Derivative:
-        return (t) -> sqrt(A * t * t + B * t + C);
+        return (t) -> sqrt(Math.fma(A, t * t, Math.fma(B, t, C)));
     }
 
 

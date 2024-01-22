@@ -6,7 +6,6 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.function.ToFloatFunction;
 
 import java.util.function.ToDoubleFunction;
 
@@ -42,10 +41,6 @@ public class Integrals {
         return rombergQuadrature(f, t0, t1, 0.1);
     }
 
-    public static float rombergQuadratureFloat(ToFloatFunction<Float> f, float t0, float t1) {
-        return rombergQuadratureFloat(f, t0, t1, 0.1f);
-    }
-
     /**
      * Romberg Quadrature.
      * <p>
@@ -76,13 +71,13 @@ public class Integrals {
             double c = 0;
             int ep = 1 << (i - 1);
             for (int j = 1; j <= ep; j++) {
-                c += f.applyAsDouble(t0 + (2 * j - 1) * h);
+                c += f.applyAsDouble(Math.fma(2 * j - 1, h, t0));
             }
-            Rc[0] = h * c + 0.5 * Rp[0]; //R(i,0)
+            Rc[0] = Math.fma(h, c, 0.5 * Rp[0]); //R(i,0)
             double n_k = 1;
             for (int j = 1; j <= i; j++) {
                 n_k *= 4;
-                Rc[j] = (n_k * Rc[j - 1] - Rp[j - 1]) / (n_k - 1); // compute R(i,j)
+                Rc[j] = Math.fma(n_k, Rc[j - 1], -Rp[j - 1]) / (n_k - 1); // compute R(i,j)
             }
             if (i > 1 && Math.abs(Rp[i - 1] - Rc[i]) < epsilon) {
                 return Rc[i - 1];
@@ -94,36 +89,6 @@ public class Integrals {
         return Rp[maxSteps - 1];
     }
 
-    public static float rombergQuadratureFloat(ToFloatFunction<Float> f, float t0, float t1, float epsilon) {
-        int maxSteps = 5;
-        float h = t1 - t0;
-
-        float[] Rp = new float[maxSteps];
-        float[] Rc = new float[maxSteps];
-        Rp[0] = (f.applyAsFloat(t0) + f.applyAsFloat(t1)) * h * 0.5f;
-
-        for (int i = 1; i < maxSteps; i++) {
-            h *= 0.5f;
-            float c = 0;
-            int ep = 1 << (i - 1);
-            for (int j = 1; j <= ep; j++) {
-                c += f.applyAsFloat(t0 + (2 * j - 1) * h);
-            }
-            Rc[0] = h * c + 0.5f * Rp[0]; //R(i,0)
-            float n_k = 1;
-            for (int j = 1; j <= i; j++) {
-                n_k *= 4;
-                Rc[j] = (n_k * Rc[j - 1] - Rp[j - 1]) / (n_k - 1); // compute R(i,j)
-            }
-            if (i > 1 && Math.abs(Rp[i - 1] - Rc[i]) < epsilon) {
-                return Rc[i - 1];
-            }
-            float[] tmp = Rp;
-            Rp = Rc;
-            Rc = tmp;
-        }
-        return Rp[maxSteps - 1];
-    }
 
     /**
      * Estimates the integral of the given function in the given interval using

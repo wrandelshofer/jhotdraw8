@@ -506,7 +506,7 @@ public class ContourIntersections {
             };
 
             ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
-            if (intersections.size() == 0) {
+            if (intersections.isEmpty()) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intersections.size() == 1) {
                 NonNullOrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intersections.getFirst().getArgumentA());

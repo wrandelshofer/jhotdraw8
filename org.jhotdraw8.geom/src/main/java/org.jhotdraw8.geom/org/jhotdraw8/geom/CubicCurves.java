@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.DoubleConsumer6;
 import org.jhotdraw8.base.function.DoubleConsumer8;
-import org.jhotdraw8.base.function.ToFloatFunction;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 
 import java.awt.geom.CubicCurve2D;
@@ -424,43 +423,10 @@ public class CubicCurves {
             double dx = Math.fma(Math.fma(ax, t, bx), t, cx),
                     dy = Math.fma(Math.fma(ay, t, by), t, cy);
             //return Math.hypot(dx, dy);// hypot does not run into intermediate overflows and underflows
-            return Math.sqrt(dx * dx + dy * dy);
+            return Math.sqrt(Math.fma(dx, dx, dy * dy));
         };
     }
 
-    public static ToFloatFunction<Float> getArcLengthIntegrandFloat(double[] v, int offset) {
-        // Instead of the code below, we could evaluate the magnitude of the derivative
-        /*
-        return (t)-> {
-            PointAndDerivative p = eval(v, offset, t);
-            return Math.hypot(p.dx(),p.dy());
-            //return Math.sqrt(p.dx()*p.dx()+p.dy()*p.dy());
-        };
-        */
-
-        // Calculate the coefficients of a Bezier derivative.
-        double x0 = v[offset], y0 = v[offset + 1],
-                x1 = v[offset + 2], y1 = v[offset + 3],
-                x2 = v[offset + 4], y2 = v[offset + 5],
-                x3 = v[offset + 6], y3 = v[offset + 7];
-
-        float
-                ax = (float) (9 * (x1 - x2) + 3 * (x3 - x0)),
-                bx = (float) (6 * (x0 + x2) - 12 * x1),
-                cx = (float) (3 * (x1 - x0)),
-
-                ay = (float) (9 * (y1 - y2) + 3 * (y3 - y0)),
-                by = (float) (6 * (y0 + y2) - 12 * y1),
-                cy = (float) (3 * (y1 - y0));
-
-        return (t) -> {
-            // Calculate quadratic equations of derivatives for x and y
-            float dx = Math.fma(Math.fma(ax, t, bx), t, cx),
-                    dy = Math.fma(Math.fma(ay, t, by), t, cy);
-            //return Math.hypot(dx, dy);// hypot does not run into intermediate overflows and underflows
-            return (float) Math.sqrt(dx * dx + dy * dy);
-        };
-    }
 
     public static double[] toArray(CubicCurve2D.Double c) {
         return new double[]{c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2};
@@ -494,19 +460,6 @@ public class CubicCurves {
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
 
-    /**
-     * Computes the arc length s from time 0 to time t using an integration method.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param t       the time
-     * @param epsilon the error tolerance
-     * @return the arc length
-     */
-    public static float arcLengthFloat(double @NonNull [] p, int offset, double t, double epsilon) {
-        ToFloatFunction<Float> f = getArcLengthIntegrandFloat(p, offset);
-        return Integrals.rombergQuadratureFloat(f, 0, (float) t, (float) epsilon);
-    }
 
 
 
@@ -536,33 +489,5 @@ public class CubicCurves {
     public static double invArcLength(double @NonNull [] p, int offset, double s, double totalArcLength, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / totalArcLength, epsilon);
-    }
-
-    /**
-     * Computes time t at the given arc length s.
-     *
-     * @param p       points of the curve
-     * @param offset  index of the first point in array {@code p}
-     * @param s       arc length
-     * @param epsilon
-     * @return t at s
-     */
-    public static float invArcLengthFloat(double @NonNull [] p, int offset, float s, float epsilon) {
-        return invArcLengthFloat(p, offset, s, arcLengthFloat(p, offset,1,epsilon), epsilon);
-    }
-
-    /**
-     * Computes time t at the given arc length s.
-     *
-     * @param p              points of the curve
-     * @param offset         index of the first point in array {@code p}
-     * @param s              arc length
-     * @param totalArcLength the total arc length of the curve
-     * @param epsilon
-     * @return t at s
-     */
-    public static float invArcLengthFloat(double @NonNull [] p, int offset, float s, float totalArcLength, float epsilon) {
-        ToFloatFunction<Float> f = getArcLengthIntegrandFloat(p, offset);
-        return Solvers.hybridNewtonBisectionMethodFloat(Integrals::rombergQuadratureFloat, f, s, 0, 1, s / totalArcLength, epsilon);
     }
 }

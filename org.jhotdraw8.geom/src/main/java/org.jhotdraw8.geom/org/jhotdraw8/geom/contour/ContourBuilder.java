@@ -459,7 +459,7 @@ public class ContourBuilder {
         BiConsumer<PlineVertex, PlineVertex> offsetVisitor = (v1, v2) -> {
             double dx = v1.getX() - v2.getX();
             double dy = v1.getY() - v2.getY();
-            double squaredDistance = dx * dx + dy * dy;
+            double squaredDistance = Math.fma(dx, dx, dy * dy);
             if (squaredDistance <= Utils.realPrecision) {
                 return;
             }
