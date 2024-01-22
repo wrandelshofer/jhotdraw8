@@ -165,7 +165,6 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                         rLengths[j] = arcLength - lengths[i - 1];
                         rCommands[j++] = SEG_CLOSE;
                     }
-                    needsMoveTo = false;
                     rOffsets[j] = offset;
                     rLengths[j] = arcLength - lengths[i - 1];
                     rCommands[j] = SEG_MOVETO;
@@ -417,11 +416,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
             int search1 = s1 == totalArcLength ? m.commands.length - 1 : Arrays.binarySearch(m.lengths, s1);
             endsAtSegment = search1 >= 0;
             i1 = search1 < 0 ? ~search1 : search1;
-            if (!endsAtSegment) {
-                // Make sure that the end segment contains s1
-                while (i1 < m.commands.length - 1 && m.lengths[i1 + 1] <= s1) {
-                    i1++;
-                }
+            // Make sure that the end segment contains s1
+            while (i1 > 0 && m.lengths[i1 - 1] >= s1) {
+                i1--;
             }
 
             // Set the initial state
@@ -545,8 +542,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 }
                 case CLIP_LAST_SEGMENT -> {
                     int offset = m.offsets[i1];
-                    double s = s1 - m.lengths[i1 - 1];
-                    double arcLength = m.lengths[i1] - m.lengths[i1 - 1];
+                    double startLength = i1 > 0 ? m.lengths[i1 - 1] : 0;
+                    double s = s1 - startLength;
+                    double arcLength = m.lengths[i1] - startLength;
                     segType = m.commands[i1];
                     switch (segType) {
                         case SEG_LINETO -> {

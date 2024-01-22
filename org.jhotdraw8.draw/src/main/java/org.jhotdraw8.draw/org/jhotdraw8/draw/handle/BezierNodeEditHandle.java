@@ -202,14 +202,16 @@ public class BezierNodeEditHandle extends AbstractHandle {
         BezierPath path = owner.get(pathKey);
         if (path == null) return;
         ContextMenu contextMenu = new ContextMenu();
+
+        // add point / remove point menu ----
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
         MenuItem removePoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
         addPoint.setOnAction(actionEvent -> addPoint(view));
         removePoint.setOnAction(actionEvent -> removePoint(view));
         contextMenu.getItems().addAll(addPoint, removePoint);
 
+        // tangents menu ----
         Menu tangentsMenu = new Menu(DrawLabels.getResources().getString("handle.bezierNode.tangents.text"));
-
         RadioMenuItem noneRadio = new RadioMenuItem();
         Actions.bindMenuItem(noneRadio, new BezierNodeHandleNoTangentsAction(owner, pathKey, nodeIndex, view));
         RadioMenuItem inRadio = new RadioMenuItem();
@@ -218,7 +220,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
         Actions.bindMenuItem(outRadio, new BezierNodeHandleOutgoingTangentAction(owner, pathKey, nodeIndex, view));
         RadioMenuItem bothRadio = new RadioMenuItem();
         Actions.bindMenuItem(bothRadio, new BezierNodeHandleIncomingAndOutgoingTangentAction(owner, pathKey, nodeIndex, view));
+        tangentsMenu.getItems().addAll(noneRadio, inRadio, outRadio, bothRadio);
 
+        // path menu ----
         Menu pathMenu = new Menu(DrawLabels.getResources().getString("handle.bezierNode.path.text"));
         RadioMenuItem moveToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.moveTo.text"));
         RadioMenuItem lineToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.lineTo.text"));
@@ -254,9 +258,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
             view.getModel().set(owner, pathKey, finalPath[0]);
             view.recreateHandles();
         });
-
-        tangentsMenu.getItems().addAll(noneRadio, inRadio, outRadio, bothRadio);
         pathMenu.getItems().addAll(moveToRadio, lineToRadio, closePathRadio);
+
+        // assemble all menus ----
         contextMenu.getItems().add(tangentsMenu);
         contextMenu.getItems().add(pathMenu);
         contextMenu.show(node, event.getScreenX(), event.getScreenY());

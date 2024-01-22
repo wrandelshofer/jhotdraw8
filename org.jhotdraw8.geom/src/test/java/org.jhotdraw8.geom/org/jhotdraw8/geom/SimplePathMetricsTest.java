@@ -31,6 +31,8 @@ public class SimplePathMetricsTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsShouldReversePath() {
         return Arrays.asList(
+                dynamicTest("moveTo-lineTo-moveTo", () -> shouldReversePath("M100,200 200,200 M300,200", "M300,200 M200,200 100,200")),
+                dynamicTest("moveTo-lineTo-moveTo-moveTo-lineTo", () -> shouldReversePath("M100,200 200,200 M300,200 M400,200 500,200", "M500,200 400,200 M300,200 M200,200 100,200")),
                 dynamicTest("quadto", () -> shouldReversePath("M0,0 Q1,0,1,1", "M1,1 Q1,0,0,0")),
                 dynamicTest("moveto-lineto-quadto", () -> shouldReversePath("M0,0 0,2 Q1,0,1,1", "M1,1 Q1,0,0,2 L0,0")),
                 dynamicTest("two-quadtos", () -> shouldReversePath("M0,0 Q1,0,1,1 2,1,2,0", "M2,0 Q2,1,1,1 1,0,0,0")),
@@ -58,6 +60,9 @@ public class SimplePathMetricsTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsShouldBuildSubPathAtArcLength() {
         return Arrays.asList(
+                dynamicTest("moveTo-lineTo-lineTo-moveTo-cut-end", () -> shouldIterateSubPath("M100,200 200,200 300,200 M400,200", 0, 95, "M100,200 195,200")),
+                dynamicTest("moveTo-lineTo-moveTo-cut-end", () -> shouldIterateSubPath("M100,200 200,200 M300,200", 0, 95, "M100,200 195,200")),
+                dynamicTest("moveTo-lineTo-moveTo-cut-start", () -> shouldIterateSubPath("M100,200 200,200 M300,200", 5, 100, "M105,200 200,200")),
                 dynamicTest("quadTo-moveTo-lineTo-cut-end-before-moveTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195", 0, 100, "M435,195 Q448.20371138917096,120.17896879469775,480.77831105040013,111.2189577143933")),
                 dynamicTest("quadTo-moveTo-lineTo-cut-end-after-moveTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195", 0, 120, "M435,195 Q450,110,490,110 M530,110 536.2831377179671,118.613979129471")),
                 dynamicTest("quadTo-moveTo-lineTo-cut-start-inside-quadTo", () -> shouldIterateSubPath("M435,195 Q450,110,490,110 M530,110 592,195", 100, 215, "M480.77831105040013,111.2189577143933 Q485.2098970377893,110,490,110 M530,110 592,195")),

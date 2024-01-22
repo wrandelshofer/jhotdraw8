@@ -9,7 +9,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -173,12 +172,38 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
 
     private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
         ContextMenu contextMenu = new ContextMenu();
-        MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
-        //MenuItem removePoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
-        addPoint.setOnAction(actionEvent -> addPoint(view));
-        //removePoint.setOnAction(actionEvent -> removePoint(view));
-        //contextMenu.getItems().addAll(addPoint, removePoint);
 
+        // path menu ----
+        Menu pathMenu = new Menu(DrawLabels.getResources().getString("handle.bezierNode.path.text"));
+        RadioMenuItem moveToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.moveTo.text"));
+        RadioMenuItem lineToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.lineTo.text"));
+
+        BezierPath path = owner.get(pathKey);
+        if (path == null) return;
+        BezierPath[] finalPath = {path};
+        BezierNode bnode = finalPath[0].get(nodeIndex);
+
+        if (nodeIndex == 0 || bnode.isMoveTo()) {
+            moveToRadio.setSelected(true);
+        } else {
+            lineToRadio.setSelected(true);
+        }
+
+        moveToRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.withMaskBitsClears(CLOSE_MASK).withMaskBitsSet(MOVE_MASK);
+            finalPath[0] = finalPath[0].set(nodeIndex, changedNode);
+            view.getModel().set(owner, pathKey, finalPath[0]);
+            view.recreateHandles();
+        });
+        lineToRadio.setOnAction(actionEvent -> {
+            BezierNode changedNode = bnode.withMaskBitsClears(MOVE_MASK | CLOSE_MASK);
+            finalPath[0] = finalPath[0].set(nodeIndex, changedNode);
+            view.getModel().set(owner, pathKey, finalPath[0]);
+            view.recreateHandles();
+        });
+        pathMenu.getItems().addAll(moveToRadio, lineToRadio);
+
+        // tangents menu ----
         Menu tangentsMenu = new Menu(DrawLabels.getResources().getString("handle.bezierNode.tangents.text"));
 
         RadioMenuItem noneRadio = new RadioMenuItem();
@@ -191,7 +216,6 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
             inRadio = null;
         }
         RadioMenuItem outRadio;
-        BezierPath path = owner.get(pathKey);
         int nodeListSize = path == null ? 0 : path.size();
         if (nodeIndex < nodeListSize - 1) {
             outRadio = new RadioMenuItem();
@@ -206,7 +230,6 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         } else {
             bothRadio = null;
         }
-
         tangentsMenu.getItems().add(noneRadio);
         if (inRadio != null)
             tangentsMenu.getItems().add(inRadio);
@@ -214,7 +237,11 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
             tangentsMenu.getItems().add(outRadio);
         if (bothRadio != null)
             tangentsMenu.getItems().add(bothRadio);
+
+
+        // assemble all menus ----
         contextMenu.getItems().add(tangentsMenu);
+        contextMenu.getItems().add(pathMenu);
         contextMenu.show(node, event.getScreenX(), event.getScreenY());
         event.consume();
     }
