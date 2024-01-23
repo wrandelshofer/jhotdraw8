@@ -13,7 +13,13 @@ import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -165,7 +171,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     public void testCreateRandomGraph(int vertexCount, int maxArity) throws IOException {
         MutableIndexedBidiGraph instance = newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
-        IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
+        IndexedBidiGraphBidiGraphFacade actual = new IndexedBidiGraphBidiGraphFacade(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
@@ -215,7 +221,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     public void testCreateRandomSortedGraph(int vertexCount, int maxArity) throws IOException {
         MutableIndexedBidiGraph instance = newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
-        IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
+        IndexedBidiGraphBidiGraphFacade actual = new IndexedBidiGraphBidiGraphFacade(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
@@ -274,7 +280,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     public void testCreateRandomMultiGraph(int vertexCount, int maxArity) throws IOException {
         MutableIndexedBidiGraph instance = newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
-        IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
+        IndexedBidiGraphBidiGraphFacade actual = new IndexedBidiGraphBidiGraphFacade(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
@@ -317,7 +323,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     public void testCreateRandomGraphWithArrowData(int vertexCount, int maxArity) throws IOException {
         MutableIndexedBidiGraph instance = newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
-        IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
+        IndexedBidiGraphBidiGraphFacade actual = new IndexedBidiGraphBidiGraphFacade(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);
@@ -360,7 +366,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     public void testCreateRandomSortedGraphWithArrowData(int vertexCount, int maxArity) throws IOException {
         MutableIndexedBidiGraph instance = newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
-        IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
+        IndexedBidiGraphBidiGraphFacade actual = new IndexedBidiGraphBidiGraphFacade(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);

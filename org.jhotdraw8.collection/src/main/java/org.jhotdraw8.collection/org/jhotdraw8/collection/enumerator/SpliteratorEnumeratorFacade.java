@@ -10,15 +10,15 @@ import java.util.Spliterator;
 import java.util.function.Consumer;
 
 /**
- * Wraps a {@link Spliterator} into the Enumerator interface.
+ * Provides an {@link Enumerator} facade for a {@link Spliterator}.
  *
  * @param <E> the element type
  */
-public class SpliteratorEnumeratorWrapper<E> implements Enumerator<E>, Consumer<E> {
+public class SpliteratorEnumeratorFacade<E> implements Enumerator<E>, Consumer<E> {
     private final Spliterator<E> spliterator;
     private E current;
 
-    public SpliteratorEnumeratorWrapper(Spliterator<E> spliterator) {
+    public SpliteratorEnumeratorFacade(Spliterator<E> spliterator) {
         this.spliterator = spliterator;
     }
 
@@ -40,7 +40,7 @@ public class SpliteratorEnumeratorWrapper<E> implements Enumerator<E>, Consumer<
     @Override
     public @Nullable Spliterator<E> trySplit() {
         final Spliterator<E> splitted = spliterator.trySplit();
-        return splitted == null ? null : new SpliteratorEnumeratorWrapper<>(splitted);
+        return splitted == null ? null : new SpliteratorEnumeratorFacade<>(splitted);
     }
 
     @Override

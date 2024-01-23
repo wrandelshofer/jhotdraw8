@@ -11,17 +11,17 @@ import java.util.Iterator;
 import java.util.Spliterator;
 
 /**
- * Wraps an {@link Iterator} into the {@link Enumerator} interface.
+ * Provides a {@link Enumerator} facade for an {@link Iterator}.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class IteratorEnumeratorWrapper<E> implements Enumerator<E> {
+public class IteratorEnumeratorFacade<E> implements Enumerator<E> {
     private final @NonNull Iterator<? extends E> iterator;
 
     private E current;
 
-    public IteratorEnumeratorWrapper(final @NonNull Iterator<? extends E> iterator) {
+    public IteratorEnumeratorFacade(final @NonNull Iterator<? extends E> iterator) {
         this.iterator = iterator;
     }
 

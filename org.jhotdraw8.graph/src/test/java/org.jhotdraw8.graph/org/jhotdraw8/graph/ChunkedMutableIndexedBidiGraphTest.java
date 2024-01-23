@@ -12,7 +12,12 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -55,7 +60,7 @@ public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBi
     public void testGraphRemoveAll(int vertexCount, int maxArity) throws IOException {
         ChunkedMutableIndexedBidiGraph instance = (ChunkedMutableIndexedBidiGraph) newInstance(maxArity);
         SimpleMutableBidiGraph<Integer, Integer> expected = new SimpleMutableBidiGraph<>();
-        IndexedBidiGraphWrapper actual = new IndexedBidiGraphWrapper(instance);
+        IndexedBidiGraphBidiGraphFacade actual = new IndexedBidiGraphBidiGraphFacade(instance);
 
         for (int vidx = 0; vidx < vertexCount; vidx++) {
             instance.addVertexAsInt(vidx);

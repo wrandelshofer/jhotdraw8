@@ -11,12 +11,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Wraps a {@link IndexedDirectedGraph} into a {@link DirectedGraph} API.
+ * Provides a {@link BidiGraph} facade for an {@link IndexedBidiGraph}.
  */
-public class IndexedBidiGraphWrapper implements BidiGraph<Integer, Integer> {
+public class IndexedBidiGraphBidiGraphFacade implements BidiGraph<Integer, Integer> {
     private final @NonNull IndexedBidiGraph graph;
 
-    public IndexedBidiGraphWrapper(@NonNull IndexedBidiGraph graph) {
+    public IndexedBidiGraphBidiGraphFacade(@NonNull IndexedBidiGraph graph) {
         this.graph = graph;
     }
 

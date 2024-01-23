@@ -11,12 +11,12 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 /**
- * Wraps a {@link IndexedDirectedGraph} into a {@link DirectedGraph} API.
+ * Provides a {@link DirectedGraph} facade for an {@link IndexedDirectedGraph}.
  */
-public class IndexedDirectedGraphWrapper implements DirectedGraph<Integer, Integer> {
+public class IndexedDirectedGraphDirectedGraphFacade implements DirectedGraph<Integer, Integer> {
     private final @NonNull IndexedDirectedGraph graph;
 
-    public IndexedDirectedGraphWrapper(@NonNull IndexedDirectedGraph graph) {
+    public IndexedDirectedGraphDirectedGraphFacade(@NonNull IndexedDirectedGraph graph) {
         this.graph = graph;
     }
 
