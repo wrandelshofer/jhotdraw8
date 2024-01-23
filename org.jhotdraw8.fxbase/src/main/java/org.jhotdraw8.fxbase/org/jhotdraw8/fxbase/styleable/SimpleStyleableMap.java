@@ -11,7 +11,16 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.io.Serial;
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import static java.lang.Integer.highestOneBit;
@@ -446,12 +455,14 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
                 // Only StyleOrigin.USER may fire a property change event.
                 // The other style origins can be updated in parallel, and thus
                 // firing an event is not a good idea!
-                @SuppressWarnings("unchecked")
                 V newValue = rawValueToValue(newRawValue);
-                @SuppressWarnings("unchecked")
                 V oldValue = rawValueToValue(oldRawValue);
-                ChangeEvent change = new ChangeEvent(key, oldValue, newValue, newRawValue != NO_VALUE, oldRawValue != NO_VALUE);
-                callObservers(this.origin, change);
+                boolean wasAdded = newRawValue != NO_VALUE;
+                boolean wasRemoved = oldRawValue != NO_VALUE;
+                if (!Objects.equals(oldValue, newValue)) {
+                    ChangeEvent change = new ChangeEvent(key, oldValue, newValue, wasAdded, wasRemoved);
+                    callObservers(this.origin, change);
+                }
             }
         }
         return oldRawValue;

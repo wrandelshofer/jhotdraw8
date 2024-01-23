@@ -6,9 +6,11 @@
 package org.jhotdraw8.fxbase.undo;
 
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.fxbase.text.FXBaseLabels;
 
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;
+import java.text.MessageFormat;
 
 /**
  * A concrete subclass of AbstractUndoableEdit, used to assemble little
@@ -50,5 +52,20 @@ public class CompositeEdit extends CompoundEdit {
             return true;
         }
         return super.addEdit(anEdit);
+    }
+
+    @Override
+    public String getPresentationName() {
+        return localizedName;
+    }
+
+    @Override
+    public String getUndoPresentationName() {
+        return MessageFormat.format(FXBaseLabels.getResources().getString("undo.representationName.text"), localizedName);
+    }
+
+    @Override
+    public String getRedoPresentationName() {
+        return MessageFormat.format(FXBaseLabels.getResources().getString("redo.representationName.text"), localizedName);
     }
 }

@@ -13,7 +13,12 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.ChildLayoutingFigure;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.FigurePropertyChangeEvent;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
@@ -23,7 +28,14 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayDeque;
+import java.util.Collections;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.function.BiFunction;
 
 /**
@@ -81,9 +93,9 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             if (target != null) {
                 final boolean wasAdded = !target.containsKey(key);
                 Object oldValue = target.put(key, newValue);
-                if (figure != null) {
-                    onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue, wasAdded, false);
-                }
+                // if (figure != null) {
+                //     onPropertyChanged(figure, (Key<Object>) key, oldValue, newValue, wasAdded, false);
+                // }
                 return oldValue;
             } else {
                 return newValue;
@@ -134,18 +146,10 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     private void onPropertyChanged(@NonNull FigurePropertyChangeEvent event) {
-        if (!Objects.equals(event.getOldValue(), event.getNewValue())) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     event.getKey(), event.getOldValue(),
                     event.getNewValue(), event.wasAdded(), event.wasRemoved()));
             fireTreeModelEvent(TreeModelEvent.nodeChanged(this, event.getSource()));
-        }
-    }
-
-    private <T> void onPropertyChanged(@NonNull Figure figure, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
-        fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, figure,
-                key, oldValue, newValue, wasAdded, wasRemoved));
-        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, figure));
     }
 
     private void markDirty(@NonNull Figure figure) {
@@ -238,13 +242,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public <T> T set(@NonNull Figure figure, @NonNull MapAccessor<T> key, @Nullable T newValue) {
         if (key instanceof Key<?>) {
-            boolean wasAdded = !figure.getProperties().containsKey(key);
-            T oldValue = figure.put(key, newValue);
-            // event will be fired by method handlePropertyChanged if newValue differs from oldValue
-            @SuppressWarnings({"unchecked", "RedundantSuppression"})
-            Key<Object> keyObject = (Key<Object>) key;
-            onPropertyChanged(figure, keyObject, oldValue, newValue, wasAdded, false);
-            return oldValue;
+            return figure.put(key, newValue);
         } else {
             mapProxy.setFigure(figure);
             mapProxy.setTarget(figure.getProperties());
@@ -265,7 +263,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             // event will be fired by method handlePropertyChanged if newValue differs from oldValue
             @SuppressWarnings({"unchecked", "RedundantSuppression"})
             Key<Object> keyObject = (Key<Object>) key;
-            onPropertyChanged(figure, keyObject, oldValue, null, false, wasRemoved);
+            //onPropertyChanged(figure, keyObject, oldValue, null, false, wasRemoved);
             return oldValue;
         } else {
             mapProxy.setFigure(figure);
@@ -284,7 +282,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         boolean wasRemoved = figure.getProperties().containsKey(key);
         T oldValue = figure.remove(key);
         // event will be fired by method handlePropertyChanged
-        onPropertyChanged(figure, key, oldValue, key.getDefaultValue(), false, wasRemoved);
+        //onPropertyChanged(figure, key, oldValue, key.getDefaultValue(), false, wasRemoved);
         return oldValue;
     }
 

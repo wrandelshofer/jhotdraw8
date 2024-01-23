@@ -57,6 +57,7 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw;
     exports org.jhotdraw8.draw.css.model;
     exports org.jhotdraw8.draw.xml.converter;
+    exports org.jhotdraw8.draw.undo;
 
     provides java.util.spi.ResourceBundleProvider with DrawResourceBundleProvider;
 

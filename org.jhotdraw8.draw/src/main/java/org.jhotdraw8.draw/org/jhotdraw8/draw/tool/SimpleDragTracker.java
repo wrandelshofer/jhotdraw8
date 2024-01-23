@@ -74,10 +74,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
         groupReshapeableFigures = new HashSet<>();
         for (Figure f : selectedFigures) {
             if (f.isGroupReshapeableWith(selectedFigures)) {
-                // Only add a figure if it does not depend from other figures in the group.
-                if (!dependsOn(f, selectedFigures)) {
                     groupReshapeableFigures.add(f);
-                }
             }
         }
     }

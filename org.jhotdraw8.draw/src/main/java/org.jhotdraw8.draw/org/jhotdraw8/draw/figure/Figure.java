@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -447,6 +448,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param wasRemoved true if the old property value was removed
      */
     default <T> void firePropertyChangeEvent(Figure source, Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
+        if (!wasRemoved && !wasAdded && Objects.equals(oldValue, newValue)) return;
         if (hasPropertyChangeListeners()) {
             firePropertyChangeEvent(new FigurePropertyChangeEvent(source, key, oldValue, newValue, wasAdded, wasRemoved));
         }
@@ -874,7 +876,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return true if the user may svgStringReshapeToBuilder this figure together with
      * those in the set.
      */
-    default boolean isGroupReshapeableWith(Set<Figure> others) {
+    default boolean isGroupReshapeableWith(@NonNull Set<Figure> others) {
         return true;
     }
 

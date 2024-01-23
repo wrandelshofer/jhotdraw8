@@ -19,7 +19,8 @@ import java.util.regex.Pattern;
  * <p>
  * The property value must have the following format:
  * <pre>
- * format = prefix, "U+", codePoint
+ * format = prefix, "U+", codePoint ;
+ * prefix = "fonticon:" ;
  * </pre>
  *
  * @author Werner Randelshofer

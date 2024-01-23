@@ -3,12 +3,14 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.draw.model;
+package org.jhotdraw8.draw.undo;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.fxbase.tree.TreeModelUndoAdapter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
@@ -17,6 +19,7 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 import javax.swing.undo.UndoableEdit;
+import java.text.MessageFormat;
 
 /**
  * Emits {@link UndoableEditEvent}s.
@@ -62,7 +65,7 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         private final @NonNull Figure figure;
         private final @NonNull Key<Object> key;
         private final @Nullable Object oldValue;
-        private final @Nullable Object newValue;
+        private @Nullable Object newValue;
         /**
          * True if the change is the result of an add operation.
          */
@@ -85,7 +88,7 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
 
         @Override
         public String getPresentationName() {
-            return getResourceBundle().getString("edit.changePropertyValue");
+            return MessageFormat.format(getResourceBundle().getString("edit.changePropertyValue"), key.getName());
         }
 
         @Override
@@ -99,6 +102,19 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         }
 
         @Override
+        public boolean addEdit(UndoableEdit anEdit) {
+            if (anEdit instanceof PropertyChangedEdit<?> that
+                    && this.figure.equals(that.figure)
+                    && this.key.equals(that.key)
+                    && !this.wasAdded && !this.wasRemoved
+                    && !that.wasAdded && !that.wasRemoved) {
+                this.newValue = that.newValue;
+                return true;
+            }
+            return false;
+        }
+
+        @Override
         public void undo() throws CannotUndoException {
             super.undo();
             if (wasAdded && !wasRemoved) {
@@ -106,6 +122,15 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
             } else {
                 model.set(figure, key, oldValue);
             }
+        }
+
+        @Override
+        public String toString() {
+            return "PropertyChangedEdit{" +
+                    "figure=" + figure.getId() +
+                    ", " + key.getName() +
+                    "=" + newValue +
+                    '}';
         }
     }
 }

@@ -142,26 +142,6 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     }
 
 
-    /**
-     * Insert a new node before the node at pointIndex.
-     *
-     * @param view
-     */
-    private void addPoint(@NonNull DrawingView view) {
-        BezierPath path = owner.get(pathKey);
-        if (path == null) path = BezierPath.of();
-
-        BezierNode node = path.get(nodeIndex);
-
-        // If the oldNode was a MOVE_TO, convert it into a LINE_TO
-        path = path.set(nodeIndex, node.withMaskBitsClears(MOVE_MASK));
-
-        // Remove the CLOSE path mask from the new node
-        path = path.add(nodeIndex, node.withMaskBitsClears(CLOSE_MASK));
-
-        view.getModel().set(owner, pathKey, path);
-        view.recreateHandles();
-    }
 
     @Override
     public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
@@ -179,7 +159,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         RadioMenuItem lineToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.lineTo.text"));
 
         BezierPath path = owner.get(pathKey);
-        if (path == null) return;
+        if (path == null || nodeIndex >= path.size()) return;
         BezierPath[] finalPath = {path};
         BezierNode bnode = finalPath[0].get(nodeIndex);
 

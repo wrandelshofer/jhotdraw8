@@ -15,6 +15,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import java.io.Serial;
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -40,12 +41,16 @@ public abstract class AbstractStyleablePropertyBean
             @SuppressWarnings("unchecked")
             protected void callObservers(@NonNull StyleOrigin origin, MapChangeListener.@NonNull Change<Key<?>, Object> change) {
                 final Key<Object> key = (Key<Object>) change.getKey();
-                onPropertyChanged(key,
-                        change.wasRemoved() ? change.getValueRemoved() : key.getDefaultValue(),
-                        change.wasAdded() ? change.getValueAdded() : key.getDefaultValue(),
-                        change.wasAdded(), change.wasRemoved());
-                AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
-                super.callObservers(origin, change);
+                Object oldValue = change.wasRemoved() ? change.getValueRemoved() : key.getDefaultValue();
+                Object newValue = change.wasAdded() ? change.getValueAdded() : key.getDefaultValue();
+                if (!Objects.equals(oldValue, newValue)) {
+                    onPropertyChanged(key,
+                            oldValue,
+                            newValue,
+                            change.wasAdded(), change.wasRemoved());
+                    AbstractStyleablePropertyBean.this.callObservers(origin, false, change);
+                    super.callObservers(origin, change);
+                }
             }
         };
     }

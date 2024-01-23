@@ -12,6 +12,9 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.undo.RecreateHandlesEdit;
+import org.jhotdraw8.fxbase.undo.CompositeEdit;
+import org.jhotdraw8.fxbase.undo.FXUndoManager;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
@@ -19,6 +22,9 @@ import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.undo.CompoundEdit;
 
 public class BezierPathEditHandle extends BezierPathOutlineHandle {
     private final MapAccessor<BezierPath> pointKey;
@@ -47,7 +53,9 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
 
     private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView view) {
         BezierPath path = owner.get(pointKey);
-        if (path == null) path = BezierPath.of();
+        if (path == null) {
+            path = BezierPath.of();
+        }
         Point2D pointInLocal = owner.worldToLocal(view.viewToWorld(event.getX(), event.getY()));
         IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
         if (!intersectionResultEx.intersections().isEmpty()) {
@@ -92,8 +100,15 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
             path = path.set(inNodeIndex, inNode).set(outNodeIndex, outNode);
 
             path = path.add(segment, newNode);
+
+            CompoundEdit compoundEdit = new CompositeEdit(DrawLabels.getResources().getString("handle.addPoint.text"));
+            FXUndoManager undoManager = view.getEditor().getUndoManager();
+            undoManager.undoableEditHappened(new UndoableEditEvent(this, compoundEdit));
+            undoManager.undoableEditHappened(new UndoableEditEvent(this, new RecreateHandlesEdit(view)));
             view.getModel().set(owner, pointKey, path);
             view.recreateHandles();
+            undoManager.undoableEditHappened(new UndoableEditEvent(this, new RecreateHandlesEdit(view)));
+            undoManager.undoableEditHappened(new UndoableEditEvent(this, compoundEdit));
         }
     }
 

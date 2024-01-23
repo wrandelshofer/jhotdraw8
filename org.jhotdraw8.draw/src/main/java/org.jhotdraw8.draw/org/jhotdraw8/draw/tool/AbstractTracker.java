@@ -9,6 +9,7 @@ import javafx.scene.layout.BorderPane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.AbstractDisableable;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.fxbase.undo.CompositeEdit;
@@ -45,7 +46,7 @@ public abstract class AbstractTracker extends AbstractDisableable implements Tra
      */
     protected void startCompositeEdit(DrawingView view) {
         if (compositeEdit == null) {
-            compositeEdit = new CompositeEdit();
+            compositeEdit = new CompositeEdit(DrawLabels.getResources().getString("handle.moveFigure.text"));
             DrawingEditor editor = view.getEditor();
             if (editor != null) {
                 editor.getUndoManager().undoableEditHappened(new UndoableEditEvent(this, compositeEdit));

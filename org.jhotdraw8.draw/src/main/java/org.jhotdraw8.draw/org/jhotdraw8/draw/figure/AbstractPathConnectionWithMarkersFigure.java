@@ -258,6 +258,18 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
     }
 
+    @Override
+    public void reshapeInLocal(@NonNull Transform tx) {
+        super.reshapeInLocal(tx);
+        BezierPath path = get(PATH);
+        if (path != null) {
+            for (int i = 0, n = path.size(); i < n; i++) {
+                var node = path.get(i);
+                path = path.set(i, node.transform(tx));
+            }
+            set(PATH, path);
+        }
+    }
     /**
      * This method can be overridden by a subclass to apply styles to the marker
      * node.
@@ -362,6 +374,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
         return path.getPathMetrics();
     }
+
 
     /**
      * This method can be overridden by a subclass to apply styles to the marker

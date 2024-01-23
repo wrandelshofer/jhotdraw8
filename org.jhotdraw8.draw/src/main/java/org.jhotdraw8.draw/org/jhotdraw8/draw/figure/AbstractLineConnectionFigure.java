@@ -153,16 +153,6 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public boolean isGroupReshapeableWith(@NonNull Set<Figure> others) {
-        for (Figure f : getLayoutSubjects()) {
-            if (others.contains(f)) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
     public boolean isLayoutable() {
         return true;
     }
