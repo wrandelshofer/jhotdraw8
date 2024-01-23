@@ -64,7 +64,7 @@ public interface ShapeableFigure extends Figure {
 
         try {
             AwtPathBuilder builder = new AwtPathBuilder(new Path2D.Double());
-            SvgPaths.buildFromSvgString(builder, content);
+            SvgPaths.svgStringToBuilder(content, builder);
             Path2D path = builder.build();
 
 

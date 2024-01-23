@@ -47,12 +47,12 @@ public class XmlPath2DDoubleConverter implements Converter<Path2D.Double> {
         if ("none".equals(string)) {
             return null;
         }
-        return SvgPaths.awtShapeFromSvgString(string);
+        return SvgPaths.svgStringToAwtShape(string);
     }
 
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, Path2D.@Nullable Double value) throws IOException {
-        final String content = value == null ? null : SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null));
+        final String content = value == null ? null : SvgPaths.awtPathIteratorToDoubleSvgString(value.getPathIterator(null));
         out.append(content == null ? "none" : content);
     }
 

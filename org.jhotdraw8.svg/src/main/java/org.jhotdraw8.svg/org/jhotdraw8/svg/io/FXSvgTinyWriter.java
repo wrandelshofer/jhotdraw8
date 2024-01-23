@@ -92,7 +92,7 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
         w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
-            d = SvgPaths.floatRelativeSvgStringFromAwt(FXShapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
+            d = SvgPaths.awtPathIteratorToFloatRelativeSvgString(FXShapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
             d = FXSvgPaths.floatSvgStringFromPathElements(node.getElements());
         }

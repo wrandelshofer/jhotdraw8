@@ -51,7 +51,7 @@ public class XmlBezierPathConverter implements Converter<BezierPath> {
             }
         }
         BezierPathBuilder builder = new BezierPathBuilder();
-        SvgPaths.buildFromSvgString(builder, input);
+        SvgPaths.svgStringToBuilder(input, builder);
         BezierPath path = builder.build();
         buf.position(buf.limit());
         return path;
@@ -68,7 +68,7 @@ public class XmlBezierPathConverter implements Converter<BezierPath> {
             return;
         }
 
-        out.append(SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null)));// we lose smooth!
+        out.append(SvgPaths.awtPathIteratorToDoubleSvgString(value.getPathIterator(null)));// we lose smooth!
 
     }
 

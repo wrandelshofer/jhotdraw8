@@ -39,13 +39,13 @@ public class CssPathMetricsConverter extends AbstractCssConverter<PathMetrics> {
             throw new ParseException("⟨BezierPath⟩ String expected.", tt.getStartPosition());
         }
         PathMetricsBuilder builder = new PathMetricsBuilder();
-        SvgPaths.buildFromSvgString(builder, tt.currentStringNonNull());
+        SvgPaths.svgStringToBuilder(tt.currentStringNonNull(), builder);
         return builder.build();
     }
 
     @Override
     protected <TT extends PathMetrics> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null))));
+        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.awtPathIteratorToDoubleSvgString(value.getPathIterator(null))));
     }
 
     @Override

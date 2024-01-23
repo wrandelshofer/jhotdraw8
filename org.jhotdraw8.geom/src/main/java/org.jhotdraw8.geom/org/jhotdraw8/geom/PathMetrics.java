@@ -87,7 +87,7 @@ public interface PathMetrics {
      * @return a string representation
      */
     static String pathMetricsToString(@NonNull PathMetrics pm) {
-        return "PathMetrics{" + pm.arcLength() + "px, \"" + SvgPaths.doubleSvgStringFromAwt(pm.getPathIterator(null)) + "\"}";
+        return "PathMetrics{" + pm.arcLength() + "px, \"" + SvgPaths.awtPathIteratorToDoubleSvgString(pm.getPathIterator(null)) + "\"}";
     }
 
     /**

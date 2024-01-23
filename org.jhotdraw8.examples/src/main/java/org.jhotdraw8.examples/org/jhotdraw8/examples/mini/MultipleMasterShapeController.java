@@ -86,9 +86,9 @@ public class MultipleMasterShapeController {
         List<PathIterator> paths = new ArrayList<>();
         try {
             if (defaultSvgPathProperty().get().isEmpty()) return;
-            paths.add(SvgPaths.buildFromSvgString(new AwtPathBuilder(), defaultSvgPathProperty().get()).build().getPathIterator(null));
-            paths.add(SvgPaths.buildFromSvgString(new AwtPathBuilder(), dim1SvgPathProperty().get().isEmpty() ? defaultSvgPathProperty().get() : dim1SvgPathProperty().get()).build().getPathIterator(null));
-            paths.add(SvgPaths.buildFromSvgString(new AwtPathBuilder(), dim2SvgPathProperty().get().isEmpty() ? defaultSvgPathProperty().get() : dim2SvgPathProperty().get()).build().getPathIterator(null));
+            paths.add(SvgPaths.svgStringToBuilder(defaultSvgPathProperty().get(), new AwtPathBuilder()).build().getPathIterator(null));
+            paths.add(SvgPaths.svgStringToBuilder(dim1SvgPathProperty().get().isEmpty() ? defaultSvgPathProperty().get() : dim1SvgPathProperty().get(), new AwtPathBuilder()).build().getPathIterator(null));
+            paths.add(SvgPaths.svgStringToBuilder(dim2SvgPathProperty().get().isEmpty() ? defaultSvgPathProperty().get() : dim2SvgPathProperty().get(), new AwtPathBuilder()).build().getPathIterator(null));
             MultipleMasterShape mmShape = new MultipleMasterShape(paths);
             mmShape.setWeight(0, dim1Slider.getValue() / 100.0);
             mmShape.setWeight(1, dim2Slider.getValue() / 100.0);

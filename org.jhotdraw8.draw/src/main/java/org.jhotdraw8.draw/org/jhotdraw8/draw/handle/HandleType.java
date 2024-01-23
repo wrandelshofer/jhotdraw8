@@ -31,7 +31,7 @@ public class HandleType {
      */
     public static final HandleType MOVE = new HandleType();
     /**
-     * Handle of this type should allow to reshape (resize) a figure.
+     * Handle of this type should allow to svgStringReshapeToBuilder (resize) a figure.
      */
     public static final HandleType RESIZE = new HandleType();
     /**

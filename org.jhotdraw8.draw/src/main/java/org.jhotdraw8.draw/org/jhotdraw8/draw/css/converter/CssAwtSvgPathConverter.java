@@ -41,7 +41,7 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
 
         try {
             final AwtPathBuilder builder = new AwtPathBuilder();
-            SvgPaths.buildFromSvgString(builder, svgPathString);
+            SvgPaths.svgStringToBuilder(svgPathString, builder);
             return builder.build();
         } catch (final ParseException ex) {
             final Path2D.Double p = new Path2D.Double();
@@ -58,7 +58,7 @@ public class CssAwtSvgPathConverter extends AbstractCssConverter<Path2D.Double> 
 
     @Override
     protected <TT extends Path2D.Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(value)));
+        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.awtPathIteratorToDoubleSvgString(value)));
     }
 
     @Override

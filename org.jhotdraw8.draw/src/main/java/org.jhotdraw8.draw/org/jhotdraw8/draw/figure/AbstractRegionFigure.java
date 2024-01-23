@@ -124,7 +124,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         if (getStyledNonNull(SHAPE_PRESERVE_RATIO_KEY)) {
             AwtPathBuilder awtPathBuilder = new AwtPathBuilder(path);
             try {
-                SvgPaths.buildFromSvgString(awtPathBuilder, pathstr);
+                SvgPaths.svgStringToBuilder(pathstr, awtPathBuilder);
                 java.awt.geom.Rectangle2D bounds2D = awtPathBuilder.build().getBounds2D();
                 double pathRatio = bounds2D.getHeight() / bounds2D.getWidth();
                 double regionRatio = height / width;
@@ -155,6 +155,6 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         }
         //XXX this method is only available since Java SE 11
         //path.trimToSize();
-        SvgPaths.reshape(pathstr, b, new AwtPathBuilder(path));
+        SvgPaths.svgStringReshapeToBuilder(pathstr, b, new AwtPathBuilder(path));
     }
 }

@@ -25,8 +25,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class ShapesTest {
 
     void testDoubleSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
-        String actual = SvgPaths.doubleSvgStringFromAwt(path);
+        Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
+        String actual = SvgPaths.awtPathIteratorToDoubleSvgString(path);
         assertEquals(expected, actual);
     }
 
@@ -49,20 +49,20 @@ public class ShapesTest {
     }
 
     void testDoubleRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
-        String actual = SvgPaths.doubleRelativeSvgStringFromAwt(path.getPathIterator(null));
+        Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
+        String actual = SvgPaths.awtShapeToDoubleRelativeSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     void testFloatRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
-        String actual = SvgPaths.floatRelativeSvgStringFromAwt(path.getPathIterator(null));
+        Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
+        String actual = SvgPaths.awtPathIteratorToFloatRelativeSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     void testFloatSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
-        Path2D.Double path = SvgPaths.awtShapeFromSvgString(input);
-        String actual = SvgPaths.floatSvgStringFromAwt(path.getPathIterator(null));
+        Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
+        String actual = SvgPaths.awtPathIteratorToFloatSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 

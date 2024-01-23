@@ -387,7 +387,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             Point2D p = FXTransforms.deltaTransform(getInverseTransform(), transform.getTx(), transform.getTy());
             reshapeInLocal(new Translate(p.getX(), p.getY()));
         } else {
-            // FIXME we do not want to reshape!
+            // FIXME we do not want to svgStringReshapeToBuilder!
             Transform combined = FXTransforms.concat(transform, getTransform());
             set(TRANSFORMS, SimpleImmutableList.of(combined));
         }

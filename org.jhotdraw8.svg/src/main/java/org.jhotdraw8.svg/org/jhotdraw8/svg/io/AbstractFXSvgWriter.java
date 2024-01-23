@@ -902,7 +902,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
-            d = SvgPaths.doubleRelativeSvgStringFromAwt(FXShapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
+            d = SvgPaths.awtShapeToDoubleRelativeSvgString(FXShapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
             d = FXSvgPaths.doubleSvgStringFromPathElements(node.getElements());
         }
@@ -965,9 +965,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
         String d;
         if (isRelativizePaths()) {
-            d = SvgPaths.doubleRelativeSvgStringFromAwt(area.getPathIterator(null));
+            d = SvgPaths.awtShapeToDoubleRelativeSvgString(area.getPathIterator(null));
         } else {
-            d = SvgPaths.doubleSvgStringFromAwt(area.getPathIterator(null));
+            d = SvgPaths.awtPathIteratorToDoubleSvgString(area.getPathIterator(null));
         }
         w.writeAttribute("d", d);
 
@@ -1450,7 +1450,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (isConvertTextToPath()) {
             w.writeStartElement("path");
             w.writeAttribute("d",
-                    SvgPaths.doubleRelativeSvgStringFromAwt(FXShapes.awtShapeFromFX(node).getPathIterator(null)));
+                    SvgPaths.awtShapeToDoubleRelativeSvgString(FXShapes.awtShapeFromFX(node).getPathIterator(null)));
         } else {
             w.writeStartElement("text");
             writeTextAttributes(w, node);

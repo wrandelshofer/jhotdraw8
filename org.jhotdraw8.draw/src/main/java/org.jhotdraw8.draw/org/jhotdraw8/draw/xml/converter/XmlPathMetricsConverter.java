@@ -51,7 +51,7 @@ public class XmlPathMetricsConverter implements Converter<PathMetrics> {
             }
         }
         PathMetricsBuilder builder = new PathMetricsBuilder();
-        SvgPaths.buildFromSvgString(builder, input);
+        SvgPaths.svgStringToBuilder(input, builder);
         p = builder.build();
 
         buf.position(buf.limit());
@@ -70,7 +70,7 @@ public class XmlPathMetricsConverter implements Converter<PathMetrics> {
             return;
         }
 
-        out.append(SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null)));
+        out.append(SvgPaths.awtPathIteratorToDoubleSvgString(value.getPathIterator(null)));
 
     }
 

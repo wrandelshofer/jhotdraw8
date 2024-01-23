@@ -241,7 +241,7 @@ public class FXSvgPaths {
     }
 
     /**
-     * This parser preserves more of the semantics than {@link SvgPaths#buildFromSvgString(PathBuilder, String)},
+     * This parser preserves more of the semantics than {@link SvgPaths#svgStringToBuilder(String, PathBuilder)},
      * because {@link PathBuilder} does not understand relative path commands
      * and horizontal and vertical lineto commands.
      */
@@ -603,7 +603,7 @@ public class FXSvgPaths {
      */
     public static void reshapePathElements(String pathstr, @NonNull Bounds b, List<PathElement> elems) {
         FXPathElementsBuilder builder = new FXPathElementsBuilder(elems);
-        SvgPaths.reshape(pathstr, b, builder);
+        SvgPaths.svgStringReshapeToBuilder(pathstr, b, builder);
         builder.pathDone();
     }
 

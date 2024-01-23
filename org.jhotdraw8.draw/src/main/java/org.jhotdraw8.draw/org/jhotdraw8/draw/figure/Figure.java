@@ -871,7 +871,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation always returns true.
      *
      * @param others A set of figures.
-     * @return true if the user may reshape this figure together with
+     * @return true if the user may svgStringReshapeToBuilder this figure together with
      * those in the set.
      */
     default boolean isGroupReshapeableWith(Set<Figure> others) {

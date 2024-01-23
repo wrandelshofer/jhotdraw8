@@ -42,7 +42,7 @@ public class IntersectLinePathIteratorTest {
         IntersectionResultEx actual = IntersectLinePathIterator.intersectLinePathIteratorEx(
                 line.getStartX(), line.getStartY(),
                 line.getEndX(), line.getEndY(),
-                SvgPaths.awtShapeFromSvgString(path).getPathIterator(null));
+                SvgPaths.svgStringToAwtShape(path).getPathIterator(null));
         assertEquals(expectedStatus, actual.getStatus());
     }
 }

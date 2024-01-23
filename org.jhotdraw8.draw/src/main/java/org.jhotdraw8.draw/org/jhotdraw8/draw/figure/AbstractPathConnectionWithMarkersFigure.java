@@ -292,7 +292,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
                 // of the markerNode, because this fires too many change events.
                 List<PathElement> nodes = new ArrayList<>();
                 FXPathElementsBuilder builder = new FXPathElementsBuilder(nodes);
-                SvgPaths.buildFromSvgString(builder, svgString);
+                SvgPaths.svgStringToBuilder(svgString, builder);
                 builder.build();
                 if (!nodes.equals(markerNode.getElements())) {
                     markerNode.getElements().setAll(nodes);

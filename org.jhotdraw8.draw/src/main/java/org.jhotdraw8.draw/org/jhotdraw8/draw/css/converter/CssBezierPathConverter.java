@@ -39,7 +39,7 @@ public class CssBezierPathConverter extends AbstractCssConverter<BezierPath> {
             throw new ParseException("⟨BezierPath⟩ String expected.", tt.getStartPosition());
         }
         BezierPathBuilder builder = new BezierPathBuilder();
-        SvgPaths.buildFromSvgString(builder, tt.currentStringNonNull());
+        SvgPaths.svgStringToBuilder(tt.currentStringNonNull(), builder);
         return builder.build();
     }
 
@@ -49,7 +49,7 @@ public class CssBezierPathConverter extends AbstractCssConverter<BezierPath> {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
             // FIXME we lose smooth here! Use a PathBuilder instead.
-            out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.doubleSvgStringFromAwt(value.getPathIterator(null))));
+            out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.awtPathIteratorToDoubleSvgString(value.getPathIterator(null))));
         }
     }
 

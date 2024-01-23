@@ -21,10 +21,10 @@ public class SimplePathMetricsTest {
     }
 
     private void shouldMeasureArcLength(String input, double expected) throws Exception {
-        var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
+        var metrics = SvgPaths.svgStringToBuilder(input, new PathMetricsBuilder()).build();
         assertEquals(expected, metrics.arcLength());
 
-        var flattenedMetrics = new SimplePathMetrics(SvgPaths.buildFromSvgString(new AwtPathBuilder(), input).build().getPathIterator(null, 0.125));
+        var flattenedMetrics = new SimplePathMetrics(SvgPaths.svgStringToBuilder(input, new AwtPathBuilder()).build().getPathIterator(null, 0.125));
         assertEquals(expected, flattenedMetrics.arcLength(), 1.5);
     }
 
@@ -49,9 +49,9 @@ public class SimplePathMetricsTest {
     }
 
     private void shouldReversePath(String input, String expected) throws Exception {
-        var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
+        var metrics = SvgPaths.svgStringToBuilder(input, new PathMetricsBuilder()).build();
         PathMetrics reversedMetrics = metrics.reverse();
-        var actual = SvgPaths.doubleSvgStringFromAwt(reversedMetrics.getPathIterator(null));
+        var actual = SvgPaths.awtPathIteratorToDoubleSvgString(reversedMetrics.getPathIterator(null));
         assertEquals(expected, actual, "should reverse path operations");
         assertEquals(metrics.arcLength(), reversedMetrics.arcLength(), "should have identical arc length");
 
@@ -92,10 +92,10 @@ public class SimplePathMetricsTest {
     }
 
     private void shouldIterateSubPath(@NonNull String input, double s0, double s1, @NonNull String expected) throws Exception {
-        var metrics = SvgPaths.buildFromSvgString(new PathMetricsBuilder(), input).build();
+        var metrics = SvgPaths.svgStringToBuilder(input, new PathMetricsBuilder()).build();
 
         // should getSubPathIteratorAtArcLength
-        var actual = SvgPaths.doubleSvgStringFromAwt(metrics.getSubPathIteratorAtArcLength(s0, s1, null));
+        var actual = SvgPaths.awtPathIteratorToDoubleSvgString(metrics.getSubPathIteratorAtArcLength(s0, s1, null));
         assertEquals(expected, actual);
 
         // sub path should have expected length

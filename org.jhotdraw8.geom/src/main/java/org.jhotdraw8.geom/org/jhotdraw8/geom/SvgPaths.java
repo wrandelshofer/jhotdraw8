@@ -39,14 +39,14 @@ public class SvgPaths {
      * Returns a value as a SvgPath2D.
      * <p>
      * Also supports elliptical arc commands 'a' and 'A' as specified in
-     * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
+     * <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
      *
-     * @param builder the builder
      * @param str     the SVG path
+     * @param builder the builder
      * @return the path builder
      * @throws ParseException if the String is not a valid path
      */
-    public static <T> @NonNull PathBuilder<T> buildFromSvgString(@NonNull PathBuilder<T> builder, @NonNull String str) throws ParseException {
+    public static <T> @NonNull PathBuilder<T> svgStringToBuilder(@NonNull String str, @NonNull PathBuilder<T> builder) throws ParseException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));
         try {
 
@@ -331,8 +331,8 @@ public class SvgPaths {
      * @param shape AWT Shape
      * @return SVG Path
      */
-    public static @NonNull String doubleSvgStringFromAwt(@NonNull Shape shape) {
-        return doubleSvgStringFromAwt(shape.getPathIterator(null));
+    public static @NonNull String awtPathIteratorToDoubleSvgString(@NonNull Shape shape) {
+        return awtPathIteratorToDoubleSvgString(shape.getPathIterator(null));
     }
 
     /**
@@ -342,8 +342,8 @@ public class SvgPaths {
      * @param at    Optional transformation which is applied to the shape
      * @return SVG Path
      */
-    public static @NonNull String doubleSvgStringFromAwt(@NonNull Shape shape, AffineTransform at) {
-        return doubleSvgStringFromAwt(shape.getPathIterator(at));
+    public static @NonNull String awtPathIteratorToDoubleSvgString(@NonNull Shape shape, AffineTransform at) {
+        return awtPathIteratorToDoubleSvgString(shape.getPathIterator(at));
     }
 
     /**
@@ -352,7 +352,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String doubleSvgStringFromAwt(@NonNull PathIterator iter) {
+    public static @NonNull String awtPathIteratorToDoubleSvgString(@NonNull PathIterator iter) {
         XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
@@ -453,7 +453,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String doubleRelativeSvgStringFromAwt(@NonNull PathIterator iter) {
+    public static @NonNull String awtShapeToDoubleRelativeSvgString(@NonNull PathIterator iter) {
         XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
@@ -527,7 +527,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String floatRelativeSvgStringFromAwt(@NonNull PathIterator iter) {
+    public static @NonNull String awtPathIteratorToFloatRelativeSvgString(@NonNull PathIterator iter) {
         XmlNumberConverter nb = new XmlNumberConverter();
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
@@ -601,7 +601,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String floatSvgStringFromAwt(@NonNull PathIterator iter) {
+    public static @NonNull String awtPathIteratorToFloatSvgString(@NonNull PathIterator iter) {
         NumberConverter nb = new NumberConverter(Float.class);
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
@@ -668,15 +668,15 @@ public class SvgPaths {
      * Returns a value as a SvgPath2D.
      * <p>
      * Also supports elliptical arc commands 'a' and 'A' as specified in
-     * http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands
+     * <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
      *
      * @param str the SVG path
      * @return the SvgPath2D
      * @throws ParseException if the String is not a valid path
      */
-    public static Path2D.@NonNull Double awtShapeFromSvgString(@NonNull String str) throws ParseException {
+    public static Path2D.@NonNull Double svgStringToAwtShape(@NonNull String str) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
-        buildFromSvgString(b, str);
+        svgStringToBuilder(str, b);
         return b.build();
     }
 
@@ -690,11 +690,11 @@ public class SvgPaths {
      * @param b       the desired bounds
      * @param builder the builder into which the path is output
      */
-    public static void reshape(@Nullable String pathstr, @NonNull Bounds b, @NonNull PathBuilder<?> builder) {
+    public static void svgStringReshapeToBuilder(@Nullable String pathstr, @NonNull Bounds b, @NonNull PathBuilder<?> builder) {
         if (pathstr != null) {
             Shape shape = null;
             try {
-                shape = awtShapeFromSvgString(pathstr);
+                shape = svgStringToAwtShape(pathstr);
                 java.awt.geom.Rectangle2D r2d = shape.getBounds2D();
                 Transform tx = FXTransforms.createReshapeTransform(
                         r2d.getX(), r2d.getY(), r2d.getWidth(), r2d.getHeight(),
