@@ -29,12 +29,20 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
 
+    /**
+     * Creates a path metrics builder with an accuracy of 0.125 pixels.
+     */
     public PathMetricsBuilder() {
         this(0.125);
     }
 
+    /**
+     * Creates a path metrics builder with the specified accuracy.
+     *
+     * @param epsilon accuracy
+     */
     public PathMetricsBuilder(double epsilon) {
-        this.epsilon = epsilon;
+        this.epsilon = Math.abs(epsilon);
     }
 
     @Override

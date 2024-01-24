@@ -149,7 +149,6 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                         .stream().map(Map.Entry::getKey).collect(Collectors.toList());//front to back
 
                 double closestDistanceSq = Double.POSITIVE_INFINITY;
-                SearchLoop:
                 for (int i = list.size() - 1; i >= 0; i--) {
                     Figure f1 = list.get(i);
                     for (Figure ff : f1.breadthFirstIterable()) {//back to front NOOO
