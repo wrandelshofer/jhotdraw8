@@ -18,7 +18,7 @@ import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox
 import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
 
 /**
- * Represents a path consisting of {@link PlineVertex elements.
+ * Represents a path consisting of {@link PlineVertex} elements.
  */
 public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
     @Serial

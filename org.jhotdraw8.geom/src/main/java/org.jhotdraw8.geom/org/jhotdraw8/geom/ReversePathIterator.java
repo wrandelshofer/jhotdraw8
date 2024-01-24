@@ -47,7 +47,6 @@ import java.awt.geom.PathIterator;
  *     <a href="https://caff.de/projects/ReversePathIterator/">caff.de</a>
  *     </dd>
  * </dl>
- * <p>
  */
 public class ReversePathIterator
         implements PathIterator {
