@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
 public class QuadCurvesJmh {
     private final double[] curve = {190, 200, 330, 280, 240, 100};
     private double arcLength = QuadCurves.arcLength(curve, 0, 1, 0.125);
-    ;
+
     @Benchmark
     public double arcLengthIntegrated() {
         return QuadCurves.arcLength(curve, 0, 1, 0.125);
