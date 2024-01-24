@@ -8,6 +8,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -306,6 +307,20 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      * @param f the figure
      */
     void disconnect(Figure f);
+
+    /**
+     * Returns true if the drawing model is currently validating its figures.
+     *
+     * @return true if validation is in progress
+     */
+    boolean isValidating();
+
+    /**
+     * This property returns true if the drawing model is validating its figures.
+     *
+     * @return property that returns true if validation is in progress
+     */
+    ReadOnlyBooleanProperty validatingProperty();
 
     /**
      * Invokes the updateCss method of the figure and fires appropriate

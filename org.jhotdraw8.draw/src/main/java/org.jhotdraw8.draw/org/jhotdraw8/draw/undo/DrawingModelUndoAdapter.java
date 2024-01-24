@@ -25,9 +25,13 @@ import java.text.MessageFormat;
  * Emits {@link UndoableEditEvent}s.
  */
 public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
+
     private final @NonNull Listener<DrawingModelEvent> drawingModelListener = new Listener<DrawingModelEvent>() {
         @Override
         public void handle(DrawingModelEvent event) {
+            if (event.getSource().isValidating()) {
+                return;
+            }
             UndoableEdit edit = switch (event.getEventType()) {
                 case PROPERTY_VALUE_CHANGED ->
                         new PropertyChangedEdit<>(event.getSource(), event.getNode(), event.getKey(), event.getOldValue(), event.getNewValue(),

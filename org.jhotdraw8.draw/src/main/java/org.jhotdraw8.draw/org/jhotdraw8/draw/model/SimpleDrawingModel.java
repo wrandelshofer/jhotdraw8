@@ -6,6 +6,8 @@ package org.jhotdraw8.draw.model;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
+import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -60,7 +62,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         // empty
     }
 
-    private class MapProxy extends AbstractMap<Key<?>, Object> {
+    private static class MapProxy extends AbstractMap<Key<?>, Object> {
 
         private @Nullable Map<Key<?>, Object> target = null;
         private @Nullable Figure figure = null;
@@ -106,10 +108,11 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     private final @NonNull MapProxy mapProxy = new MapProxy();
 
-    private boolean isValidating = false;
+
     private boolean valid = true;
     private final @NonNull Set<Figure> dirties = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
+
     private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
         @Override
         public void set(@Nullable Drawing newValue) {
@@ -342,9 +345,21 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     @Override
     public void layout(@NonNull Figure f, @NonNull RenderContext ctx) {
+        validating.set(true);
         f.layoutChanged(ctx);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
+        validating.set(false);
+    }
+
+    private final ReadOnlyBooleanWrapper validating = new ReadOnlyBooleanWrapper(this, "layoutIsInProgress");
+
+    public boolean isValidating() {
+        return validating.get();
+    }
+
+    public ReadOnlyBooleanProperty validatingProperty() {
+        return validating.getReadOnlyProperty();
     }
 
     @Override
@@ -360,7 +375,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     @Override
     public void validate(@NonNull RenderContext ctx) {
         if (!valid) {
-            isValidating = true;
+            validating.set(true);
 
             // all dirty figures: invoke layoutObserverChanged/layoutSubjectChangedNotify
             for (Figure f : dirties) {
@@ -425,7 +440,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             }
 
             dirties.clear();
-            isValidating = false;
+            validating.set(false);
             valid = true;
         }
 
@@ -444,7 +459,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     protected void onDrawingModelEvent(@NonNull DrawingModelEvent event) {
-        if (isValidating) {
+        if (isValidating()) {
             return;
         }
 
@@ -480,7 +495,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     protected void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
-        if (isValidating) {
+        if (isValidating()) {
             return;
         }
 
@@ -521,4 +536,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                         + "not supported");
         }
     }
+
+
 }
