@@ -29,8 +29,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.contour.ContourBuilder;
+import org.jhotdraw8.geom.contour.PlinePath;
 import org.jhotdraw8.geom.contour.PlineVertex;
-import org.jhotdraw8.geom.contour.PolyArcPath;
 
 import java.util.List;
 
@@ -102,9 +102,9 @@ public class ContourPathExampleMain extends Application {
     }
 
     private void createTest(ActionEvent actionEvent) {
-        PolyArcPath pline = createPline(polyline);
+        PlinePath pline = createPline(polyline);
         ContourBuilder papb = new ContourBuilder();
-        List<PolyArcPath> offsetPlines = papb.parallelOffset(pline, offset.get());
+        List<PlinePath> offsetPlines = papb.parallelOffset(pline, offset.get());
         StringBuilder buf = new StringBuilder();
         buf.append("dynamicTest(\"1\", () -> doTest(\n");
         dumpPline(pline, buf);
@@ -113,7 +113,7 @@ public class ContourPathExampleMain extends Application {
         buf.append(",\n");
         buf.append("Arrays.asList(");
         boolean first = true;
-        for (PolyArcPath opl : offsetPlines) {
+        for (PlinePath opl : offsetPlines) {
             if (first) {
                 first = false;
             } else {
@@ -127,7 +127,7 @@ public class ContourPathExampleMain extends Application {
         System.out.println(buf);
     }
 
-    private void dumpPline(PolyArcPath pline, StringBuilder buf) {
+    private void dumpPline(PlinePath pline, StringBuilder buf) {
         buf.append("polylineOf(").append(pline.isClosed()).append(",new double[][]{");
 
         boolean first = true;
@@ -183,9 +183,9 @@ public class ContourPathExampleMain extends Application {
 
 
     private void doOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
-        PolyArcPath pap = createPline(polyline);
+        PlinePath pap = createPline(polyline);
         ContourBuilder papb = new ContourBuilder();
-        List<PolyArcPath> offsetPlines = papb.parallelOffset(pap, offset);
+        List<PlinePath> offsetPlines = papb.parallelOffset(pap, offset);
 
         ObservableList<PathElement> elements = path.getElements();
         elements.clear();
@@ -195,8 +195,8 @@ public class ContourPathExampleMain extends Application {
         }
     }
 
-    private @NonNull PolyArcPath createPline(javafx.scene.shape.Polyline polyline) {
-        PolyArcPath pap = new PolyArcPath();
+    private @NonNull PlinePath createPline(javafx.scene.shape.Polyline polyline) {
+        PlinePath pap = new PlinePath();
         ObservableList<Double> points = polyline.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {
             pap.addVertex(points.get(i), points.get(i + 1));

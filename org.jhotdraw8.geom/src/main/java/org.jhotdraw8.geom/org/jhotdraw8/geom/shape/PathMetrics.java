@@ -1,12 +1,15 @@
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.SvgPaths;
 
+import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
-public interface PathMetrics {
+public interface PathMetrics extends Shape {
     /**
      * Gets the length of the path.
      *

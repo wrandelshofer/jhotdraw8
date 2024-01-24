@@ -33,13 +33,13 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.PathMetrics;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.geom.SimplePathMetrics;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jhotdraw8.geom.shape.PathMetrics;
+import org.jhotdraw8.geom.shape.SimplePathMetrics;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;

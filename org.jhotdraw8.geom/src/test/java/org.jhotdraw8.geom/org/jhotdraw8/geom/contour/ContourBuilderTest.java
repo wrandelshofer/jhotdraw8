@@ -118,12 +118,12 @@ public class ContourBuilderTest {
         );
     }
 
-    private static PolyArcPath polylineOf(double[][] coords) {
+    private static PlinePath polylineOf(double[][] coords) {
         return polylineOf(false, coords);
     }
 
-    private static PolyArcPath polylineOf(boolean closed, double[][] coords) {
-        PolyArcPath p = new PolyArcPath();
+    private static PlinePath polylineOf(boolean closed, double[][] coords) {
+        PlinePath p = new PlinePath();
         for (int i = 0; i < coords.length; i++) {
             double[] v = coords[i];
             p.addVertex(v[0], v[1], v[2]);
@@ -132,18 +132,18 @@ public class ContourBuilderTest {
         return p;
     }
 
-    private void testOffsetPath(PolyArcPath input, double offset, List<PolyArcPath> expected) throws Exception {
+    private void testOffsetPath(PlinePath input, double offset, List<PlinePath> expected) throws Exception {
         final ContourBuilder pap = new ContourBuilder();
         //final Polyline raw = pap.createRawOffsetPline(input, offset);
         //final StringBuilder b = new StringBuilder();
         //dumpPline(raw,b);
         //System.err.println(b);
 
-        List<PolyArcPath> actual = pap.parallelOffset(input, offset);
+        List<PlinePath> actual = pap.parallelOffset(input, offset);
         boolean isEqual = expected.size() == actual.size();
         for (int i = 0; i < expected.size(); i++) {
-            PolyArcPath e = expected.get(i);
-            PolyArcPath a = actual.get(i);
+            PlinePath e = expected.get(i);
+            PlinePath a = actual.get(i);
             isEqual &= e.size() == a.size();
             if (!isEqual) {
                 break;
@@ -163,7 +163,7 @@ public class ContourBuilderTest {
         }
 
         if (!isEqual) {
-            for (PolyArcPath p : actual) {
+            for (PlinePath p : actual) {
                 boolean first = true;
                 for (PlineVertex v : p) {
                     if (first) {
@@ -187,7 +187,7 @@ public class ContourBuilderTest {
 
                         g.setColor(Color.CYAN);// expected offset line
                         g.setStroke(new BasicStroke(3.0f));
-                        for (PolyArcPath p : expected) {
+                        for (PlinePath p : expected) {
                             b = new AwtPathBuilder();
                             AwtShapes.buildFromPathIterator(b, p.getPathIterator(null));
                             g.draw(b.build());
@@ -196,7 +196,7 @@ public class ContourBuilderTest {
 
 
                         b = new AwtPathBuilder();
-                        final PolyArcPath rawOffsetPline = pap.createRawOffsetPline(input, offset);
+                        final PlinePath rawOffsetPline = pap.createRawOffsetPline(input, offset);
                         AwtShapes.buildFromPathIterator(b, rawOffsetPline.getPathIterator(null));
                         g.setColor(Color.PINK);// raw offset line
                         g.draw(b.build());
@@ -223,7 +223,7 @@ public class ContourBuilderTest {
 
     }
 
-    private void testOffsetLine(PolyArcPath input, boolean closed, double offset, PolyArcPath expected) throws Exception {
+    private void testOffsetLine(PlinePath input, boolean closed, double offset, PlinePath expected) throws Exception {
         input.isClosed(closed);
         SwingUtilities.invokeAndWait(() -> {
             JDialog f = new JDialog();

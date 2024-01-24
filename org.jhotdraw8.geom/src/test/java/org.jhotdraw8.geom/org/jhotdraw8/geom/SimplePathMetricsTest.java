@@ -1,6 +1,9 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.shape.PathMetrics;
+import org.jhotdraw8.geom.shape.PathMetricsBuilder;
+import org.jhotdraw8.geom.shape.SimplePathMetrics;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

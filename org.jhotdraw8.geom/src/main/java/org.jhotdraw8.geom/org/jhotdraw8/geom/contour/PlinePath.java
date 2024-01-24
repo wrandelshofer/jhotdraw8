@@ -18,25 +18,25 @@ import static org.jhotdraw8.geom.contour.PlineVertex.createFastApproxBoundingBox
 import static org.jhotdraw8.geom.contour.PlineVertex.segLength;
 
 /**
- * Represents a path consisting of poly arc elements.
+ * Represents a path consisting of {@link PlineVertex elements.
  */
-public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
+public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
     @Serial
     private static final long serialVersionUID = 1L;
 
     @Override
-    public PolyArcPath clone() {
-        return (PolyArcPath) super.clone();
+    public PlinePath clone() {
+        return (PlinePath) super.clone();
     }
 
     private boolean closed;
     private int windingRule = PathIterator.WIND_EVEN_ODD;
 
-    public PolyArcPath() {
+    public PlinePath() {
         super();
     }
 
-    public PolyArcPath(int initialCapacity) {
+    public PlinePath(int initialCapacity) {
         super(initialCapacity);
     }
 
@@ -106,8 +106,8 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
     public PathIterator getPathIterator(AffineTransform at) {
         PathIteratorPathBuilder b = new PathIteratorPathBuilder(getWindingRule());
         if (size() > 0) {
-            PlineVertex prev = PolyArcPath.this.get(PolyArcPath.this.size() - 1);
-            for (PlineVertex vertex : PolyArcPath.this) {
+            PlineVertex prev = PlinePath.this.get(PlinePath.this.size() - 1);
+            for (PlineVertex vertex : PlinePath.this) {
                 if (prev.bulgeIsZero()) {
                     if (b.isEmpty()) {
                         b.moveTo(vertex.getX(), vertex.getY());
@@ -128,7 +128,7 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
                 }
                 prev = vertex;
             }
-            if (PolyArcPath.this.isClosed()) {
+            if (PlinePath.this.isClosed()) {
                 b.closePath();
             }
         }
@@ -139,7 +139,7 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
      * Creates an approximate spatial index for all the segments in the polyline given using
      * createFastApproxBoundingBox.
      */
-    public static StaticSpatialIndex createApproxSpatialIndex(final PolyArcPath pline) {
+    public static StaticSpatialIndex createApproxSpatialIndex(final PlinePath pline) {
         assert pline.size() > 1 : "need at least 2 vertexes to form segments for spatial index";
 
         int segmentCount = pline.isClosed() ? pline.size() : pline.size() - 1;
@@ -163,7 +163,7 @@ public class PolyArcPath extends ArrayList<PlineVertex> implements Cloneable {
     }
 
     /// becomes the end vertex and the end vertex becomes the starting vertex.
-    public static void invertDirection(PolyArcPath pline) {
+    public static void invertDirection(PlinePath pline) {
         if (pline.size() < 2) {
             return;
         }

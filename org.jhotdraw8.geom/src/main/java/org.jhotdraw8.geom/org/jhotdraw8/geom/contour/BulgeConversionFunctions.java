@@ -14,7 +14,7 @@ import java.awt.geom.Point2D;
 /**
  * Provides bulge conversion functions.
  * <p>
- * The curvature of a {@link PolyArcPath} arc segment is defined using a quantity
+ * The curvature of a {@link PlinePath} arc segment is defined using a quantity
  * known as {@code bulge}. This unit measures the deviation of the curve from
  * the straight line (chord) joining the two vertices of the segment.
  * It is defined as the ratio of the arc sagitta (versine) to half the length

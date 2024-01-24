@@ -12,9 +12,9 @@ import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.io.CharBufferReader;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.geom.PathMetrics;
-import org.jhotdraw8.geom.PathMetricsBuilder;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.shape.PathMetrics;
+import org.jhotdraw8.geom.shape.PathMetricsBuilder;
 
 import java.io.IOException;
 import java.nio.CharBuffer;

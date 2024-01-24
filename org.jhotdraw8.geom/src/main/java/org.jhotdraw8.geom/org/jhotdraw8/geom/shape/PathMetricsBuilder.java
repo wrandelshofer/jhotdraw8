@@ -3,10 +3,16 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.collection.primitive.ByteArrayList;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
+import org.jhotdraw8.collection.primitive.IntArrayList;
+import org.jhotdraw8.geom.AbstractPathDataBuilder;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.QuadCurves;
 
 import java.awt.geom.PathIterator;
 import java.util.DoubleSummaryStatistics;
@@ -138,5 +144,17 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
 
     public boolean isEmpty() {
         return commands.isEmpty();
+    }
+
+    protected ByteArrayList getCommands() {
+        return commands;
+    }
+
+    protected IntArrayList getOffsets() {
+        return offsets;
+    }
+
+    protected DoubleArrayList getCoords() {
+        return coords;
     }
 }

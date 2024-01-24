@@ -7,8 +7,8 @@ package org.jhotdraw8.geom;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.contour.ContourBuilder;
-import org.jhotdraw8.geom.contour.PolyArcPath;
-import org.jhotdraw8.geom.contour.PolyArcPathBuilder;
+import org.jhotdraw8.geom.contour.PlinePath;
+import org.jhotdraw8.geom.contour.PlinePathBuilder;
 
 /**
  * Builds a contour path around a path.
@@ -19,7 +19,7 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     private final double offset;
 
     private final @NonNull PathBuilder<T> consumer;
-    private final @NonNull PolyArcPathBuilder papb = new PolyArcPathBuilder();
+    private final @NonNull PlinePathBuilder papb = new PlinePathBuilder();
     private final double eps2;
 
     public ContourPathBuilder(@NonNull PathBuilder<T> consumer, double offset) {
@@ -41,8 +41,8 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     protected void doPathDone() {
         papb.pathDone();
         ContourBuilder contourBuilder = new ContourBuilder();
-        for (PolyArcPath path : papb.build()) {
-            for (PolyArcPath contourPath : contourBuilder.parallelOffset(path, -offset)) {
+        for (PlinePath path : papb.build()) {
+            for (PlinePath contourPath : contourBuilder.parallelOffset(path, -offset)) {
                 AwtShapes.buildFromPathIterator(consumer, contourPath.getPathIterator(null), false);
             }
         }

@@ -3,10 +3,17 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.geom.AbstractShape;
+import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.CubicCurves;
+import org.jhotdraw8.geom.EmptyPathIterator;
+import org.jhotdraw8.geom.Lines;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
@@ -76,11 +83,11 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
     public SimplePathMetrics(@NonNull PathIterator pathIterator, double epsilon) {
         PathMetricsBuilder b = AwtShapes.buildFromPathIterator(new PathMetricsBuilder(), pathIterator);
-        this.commands = b.commands.toByteArray();
-        this.offsets = b.offsets.toIntArray();
-        this.coords = b.coords.toDoubleArray();
+        this.commands = b.getCommands().toByteArray();
+        this.offsets = b.getOffsets().toIntArray();
+        this.coords = b.getCoords().toDoubleArray();
         this.lengths = b.lengths.toDoubleArray();
-        this.windingRule = b.windingRule;
+        this.windingRule = b.getWindingRule();
         this.epsilon = epsilon;
     }
 

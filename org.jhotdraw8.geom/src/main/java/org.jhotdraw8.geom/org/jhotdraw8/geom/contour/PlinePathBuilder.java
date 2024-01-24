@@ -13,14 +13,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Path builder for {@link PolyArcPath}.
+ * Path builder for {@link PlinePath}.
  */
-public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
-    private final List<PolyArcPath> paths = new ArrayList<>();
-    private PolyArcPath current;
+public class PlinePathBuilder extends AbstractPathBuilder<List<PlinePath>> {
+    private final List<PlinePath> paths = new ArrayList<>();
+    private PlinePath current;
     private double flatness = 0.125;
 
-    public PolyArcPathBuilder() {
+    public PlinePathBuilder() {
     }
 
     public double getFlatness() {
@@ -32,7 +32,7 @@ public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
     }
 
     @Override
-    public List<PolyArcPath> build() {
+    public List<PlinePath> build() {
         return paths;
     }
 
@@ -54,7 +54,7 @@ public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
     @Override
     protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         if (current == null) {
-            current = new PolyArcPath();
+            current = new PlinePath();
         }
         PathIterator it = new CubicCurve2D.Double(lastX, lastY, x1, y1, x2, y2, x, y).getPathIterator(null, flatness);
         it.next();
@@ -69,7 +69,7 @@ public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
     @Override
     protected void doLineTo(double lastX, double lastY, double x, double y) {
         if (current == null) {
-            current = new PolyArcPath();
+            current = new PlinePath();
         }
         current.addVertex(x, y);
     }
@@ -79,14 +79,14 @@ public class PolyArcPathBuilder extends AbstractPathBuilder<List<PolyArcPath>> {
         if (current != null) {
             paths.add(current);
         }
-        current = new PolyArcPath();
+        current = new PlinePath();
         current.addVertex(x, y);
     }
 
     @Override
     protected void doQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
         if (current == null) {
-            current = new PolyArcPath();
+            current = new PlinePath();
         }
         PathIterator it = new QuadCurve2D.Double(lastX, lastY, x1, y1, x, y).getPathIterator(null, flatness);
         it.next();

@@ -18,10 +18,10 @@ package org.jhotdraw8.geom.contour;
  */
 public class OpenPolylineSlice {
     final int intrStartIndex;
-    final PolyArcPath pline;
+    final PlinePath pline;
 
     public OpenPolylineSlice(int startIndex) {
-        this.pline = new PolyArcPath();
+        this.pline = new PlinePath();
         this.intrStartIndex = startIndex;
     }
 
@@ -31,7 +31,7 @@ public class OpenPolylineSlice {
      * @param sIndex start index
      * @param slice  a polyline slice (will be cloned)
      */
-    public OpenPolylineSlice(int sIndex, PolyArcPath slice) {
+    public OpenPolylineSlice(int sIndex, PlinePath slice) {
         this.intrStartIndex = sIndex;
         this.pline = slice.clone();
     }

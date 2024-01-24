@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.css.converter.CssPathMetricsConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
-import org.jhotdraw8.geom.PathMetrics;
+import org.jhotdraw8.geom.shape.PathMetrics;
 
 import java.io.Serial;
 

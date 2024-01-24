@@ -100,7 +100,7 @@ public class ContourIntersections {
 
     static CoincidentSlicesResult
     sortAndJoinCoincidentSlices(List<PlineCoincidentIntersect> coincidentIntrs,
-                                PolyArcPath pline1, PolyArcPath pline2) {
+                                PlinePath pline1, PlinePath pline2) {
         CoincidentSlicesResult result = new CoincidentSlicesResult();
 
         if (coincidentIntrs.size() == 0) {
@@ -131,9 +131,9 @@ public class ContourIntersections {
 
         Deque<PlineIntersect> sliceStartPoints = result.sliceStartPoints;
         Deque<PlineIntersect> sliceEndPoints = result.sliceEndPoints;
-        Deque<PolyArcPath> coincidentSlices = result.coincidentSlices;
+        Deque<PlinePath> coincidentSlices = result.coincidentSlices;
 
-        PolyArcPath[] currCoincidentSlice = new PolyArcPath[]{new PolyArcPath()};
+        PlinePath[] currCoincidentSlice = new PlinePath[]{new PlinePath()};
 
         IntConsumer startCoincidentSliceAt = (int intrIndex) -> {
             final PlineCoincidentIntersect intr = coincidentIntrs.get(intrIndex);
@@ -170,7 +170,7 @@ public class ContourIntersections {
             final PlineVertex u1 = pline2.get(intr.sIndex2);
 
             coincidentSlices.add(currCoincidentSlice[0]);
-            currCoincidentSlice[0] = new PolyArcPath();
+            currCoincidentSlice[0] = new PlinePath();
             PlineIntersect sliceEnd = new PlineIntersect();
             sliceEnd.pos = intr.point2;
             sliceEnd.sIndex1 = intr.sIndex1;
@@ -214,7 +214,7 @@ public class ContourIntersections {
             final Point2D.Double firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
             if (Points.almostEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
-                final PolyArcPath lastSlice = coincidentSlices.getLast();
+                final PlinePath lastSlice = coincidentSlices.getLast();
                 lastSlice.removeLast();
                 lastSlice.addAll(coincidentSlices.getFirst());
 
@@ -235,7 +235,7 @@ public class ContourIntersections {
      * two polyline segments that share a vertex. NOTES:
      * - Singularities (repeating vertexes) are returned as coincident intersects
      */
-    public static void localSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output) {
+    public static void localSelfIntersects(final PlinePath pline, final List<PlineIntersect> output) {
         if (pline.size() < 2) {
             return;
         }
@@ -312,7 +312,7 @@ public class ContourIntersections {
      * /// - We never include intersects at a segment's start point, the matching intersect from the
      * /// previous segment's end point is included (no sense in including both)
      */
-    static void globalSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
+    static void globalSelfIntersects(final PlinePath pline, final List<PlineIntersect> output,
                                      final StaticSpatialIndex spatialIndex) {
         if (pline.size() < 3) {
             return;
@@ -387,7 +387,7 @@ public class ContourIntersections {
 
     /// Finds all self intersects of the polyline (equivalent to calling localSelfIntersects and
     /// globalSelfIntersects).
-    public static void allSelfIntersects(final PolyArcPath pline, final List<PlineIntersect> output,
+    public static void allSelfIntersects(final PlinePath pline, final List<PlineIntersect> output,
                                          final StaticSpatialIndex spatialIndex) {
         localSelfIntersects(pline, output);
         globalSelfIntersects(pline, output, spatialIndex);
@@ -396,7 +396,7 @@ public class ContourIntersections {
     /**
      * Finds all intersects between pline1 and pline2.
      */
-    static void findIntersects(final PolyArcPath pline1, final PolyArcPath pline2,
+    static void findIntersects(final PlinePath pline1, final PlinePath pline2,
                                final StaticSpatialIndex pline1SpatialIndex,
                                final PlineIntersectsResult output) {
         IntArrayList queryResults = new IntArrayList();
