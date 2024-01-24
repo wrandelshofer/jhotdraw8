@@ -186,7 +186,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         // Chop start and end points
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx chp;
-            if (path.size() > 2 || path.getFirst().hasOut() || path.get(1).hasIn()) {
+            if (path.size() > 2 || path.size() == 2 && (path.getFirst().hasOut() || path.get(1).hasIn())) {
                 PointAndDerivative pd = path.evalFirst();
                 chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), start.getX() + pd.dx(), start.getY() + pd.dy());
             } else {
@@ -197,7 +197,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
         if (endConnector != null && endTarget != null) {
             IntersectionPointEx chp;
-            if (path.size() > 2 || path.getLast().hasIn() || path.getLast(1).hasOut()) {
+            if (path.size() > 2 || path.size() == 2 && (path.getLast().hasIn() || path.getLast(1).hasOut())) {
                 PointAndDerivative pd = path.evalLastInReverse();
                 chp = endConnector.chopStart(ctx, this, endTarget,
                         end.getX(), end.getY(),

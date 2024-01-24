@@ -99,7 +99,8 @@ public class BezierPathOutlineHandle extends AbstractHandle {
         AwtShapes.buildFromPathIterator(builder, path.getPathIterator(FXShapes.awtTransformFromFX(t)));
 
         // draw a small arrow at the center of each segment, to visualize the direction of the path
-        double arrowSize = 3;//Math.max(3,strokeWidth);
+        double arrowLength = 4 * Math.max(2, strokeWidth);
+        double arrowWidth = 1.5 * Math.max(2, strokeWidth);
         if (!elements.isEmpty()) {
             double x = 0, y = 0;
             double newx = 0, newy = 0;
@@ -140,9 +141,13 @@ public class BezierPathOutlineHandle extends AbstractHandle {
                 }
                 if (p != null && dir != null) {
                     Point2D perp = FXGeom.perp(dir);
-                    elements.add(new MoveTo(p.getX() - perp.getX() * arrowSize - dir.getX() * arrowSize, p.getY() - perp.getY() * arrowSize - dir.getY() * arrowSize));
+                    double vx = perp.getX() * arrowWidth;
+                    double vy = perp.getY() * arrowWidth;
+                    double dx = dir.getX() * arrowLength;
+                    double dy = dir.getY() * arrowLength;
+                    elements.add(new MoveTo(p.getX() - vx - dx, p.getY() - vy - dy));
                     elements.add(new LineTo(p.getX(), p.getY()));
-                    elements.add(new LineTo(p.getX() + perp.getX() * arrowSize - dir.getX() * arrowSize, p.getY() + perp.getY() * arrowSize - dir.getY() * arrowSize));
+                    elements.add(new LineTo(p.getX() + vx - dx, p.getY() + vy - dy));
                 }
                 x = newx;
                 y = newy;

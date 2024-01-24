@@ -97,9 +97,8 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 newNode = newNode.withIn(split[2], split[3]).withMaskBitsSet(BezierNode.IN_MASK);
                 outNode = outNode.withIn(split[6], split[7]);
             }
-            path = path.set(inNodeIndex, inNode).set(outNodeIndex, outNode);
-
-            path = path.add(segment, newNode);
+            path = path.set(inNodeIndex, inNode).set(outNodeIndex, outNode)
+                    .add(segment, newNode);
 
             CompoundEdit compoundEdit = new CompositeEdit(DrawLabels.getResources().getString("handle.addPoint.text"));
             FXUndoManager undoManager = view.getEditor().getUndoManager();
