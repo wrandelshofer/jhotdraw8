@@ -21,8 +21,8 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Bezier2BiArc {
-    private Bezier2BiArc() {
+public class CubicCurveToBiArc {
+    private CubicCurveToBiArc() {
     }
 
 

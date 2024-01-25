@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.geom;
 
+import org.jhotdraw8.geom.biarc.ArcToCubicCurve;
+
 import java.awt.geom.Path2D;
 import java.awt.geom.Point2D;
 import java.io.Serial;
@@ -51,7 +53,7 @@ public class SvgPath2D extends Path2D.Double {
         double lastX = lastPoint.getX();
         double lastY = lastPoint.getY();
 
-        ArcToCubicBezier.arcTo(lastX, lastY,
+        ArcToCubicCurve.arcTo(lastX, lastY,
                 rx, ry,
                 xAxisRotation,
                 x, y,

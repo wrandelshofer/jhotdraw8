@@ -3,22 +3,23 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.geom;
+package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.DoubleConsumer2;
 import org.jhotdraw8.base.function.DoubleConsumer6;
 import org.jhotdraw8.base.util.MathUtil;
+import org.jhotdraw8.geom.Angles;
 
 import java.util.ArrayList;
 
-public class ArcToCubicBezier {
+public class ArcToCubicCurve {
     private static final double TAU = Math.PI * 2.0;
 
     /**
      * Don't let anyone instantiate this class.
      */
-    private ArcToCubicBezier() {
+    private ArcToCubicCurve() {
     }
 
     /**

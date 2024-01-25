@@ -21,12 +21,12 @@ public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
         this(new Path2D.Double());
     }
 
-    public boolean isEmpty() {
-        return path.getCurrentPoint() == null;
-    }
-
     public AwtPathBuilder(Path2D.Double path) {
         this.path = path;
+    }
+
+    public boolean isEmpty() {
+        return path.getCurrentPoint() == null;
     }
 
     @Override

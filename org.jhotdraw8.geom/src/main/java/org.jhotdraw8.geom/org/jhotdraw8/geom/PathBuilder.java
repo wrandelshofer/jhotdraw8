@@ -5,6 +5,7 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.geom.biarc.ArcToCubicCurve;
 
 import java.awt.geom.Point2D;
 
@@ -53,7 +54,7 @@ public interface PathBuilder<T> {
                        double x, double y,
                        boolean largeArcFlag, boolean sweepFlag
     ) {
-        ArcToCubicBezier.arcTo(getLastX(), getLastY(),
+        ArcToCubicCurve.arcTo(getLastX(), getLastY(),
                 radiusX, radiusY, xAxisRotation, x, y, largeArcFlag, sweepFlag,
                 this::lineTo,
                 this::curveTo);

@@ -20,8 +20,8 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.BezierPathStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
-import org.jhotdraw8.geom.BezierFit;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.geom.PolylineToCubicCurve;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
 import org.jhotdraw8.geom.shape.BezierPathBuilder;
@@ -194,7 +194,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
             }
             BezierPathBuilder builder = new BezierPathBuilder();
             double error = 5 / dv.getZoomFactor();
-            BezierFit.fitBezierPath(builder, digitized, error);
+            PolylineToCubicCurve.fitBezierPath(builder, digitized, error);
             BezierPath built = builder.build();
 
             BezierPath newList = BezierPath.of();

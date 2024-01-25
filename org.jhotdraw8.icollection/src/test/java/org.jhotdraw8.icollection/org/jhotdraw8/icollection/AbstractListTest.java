@@ -7,7 +7,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Spliterator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -136,11 +143,11 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
             var instance = newInstance();
             instance.addAll(shuffled);
-            instance.remove(b.iterator().next());
+            instance.remove(b.getFirst());
 
             checker.setAsReferenced(instance);
 
-            checker.assertCollectable(b.iterator().next()); // notReferenced should be collectable
+            checker.assertCollectable(b.getFirst()); // notReferenced should be collectable
         });
     }
 

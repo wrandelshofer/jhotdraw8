@@ -25,14 +25,14 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CubicCurveCharacteristics;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.Points;
-import org.jhotdraw8.geom.biarc.Bezier2BiArc;
 import org.jhotdraw8.geom.biarc.BiArc;
+import org.jhotdraw8.geom.biarc.CubicCurveToBiArc;
 
 import java.awt.geom.CubicCurve2D;
 import java.util.List;
 
 /**
- * CardinalSplineSampleMain.
+ * Example of approximation of Bézier curves by bi-arcs.
  *
  * @author Werner Randelshofer
  */
@@ -206,7 +206,7 @@ public class BiArcApproExampleMain extends Application {
                 x, y, x1, y1,
                 x2, y2, x3, y3
         );
-        List<BiArc> biArcs = Bezier2BiArc.approxCubicBezier(cubicBezier, 3, 0.25);
+        List<BiArc> biArcs = CubicCurveToBiArc.approxCubicBezier(cubicBezier, 3, 0.25);
         System.out.println("#inflectionPoints: " + CubicCurveCharacteristics.inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3).size());
         System.out.println("#biArcs: " + biArcs.size());

@@ -24,12 +24,12 @@ import java.util.List;
  *     from "Graphics Gems", Academic Press, 1990
  * </pre>
  */
-public class BezierFit {
+public class PolylineToCubicCurve {
 
     /**
      * Prevent instance creation.
      */
-    private BezierFit() {
+    private PolylineToCubicCurve() {
     }
 
     public static void main(String[] args) {

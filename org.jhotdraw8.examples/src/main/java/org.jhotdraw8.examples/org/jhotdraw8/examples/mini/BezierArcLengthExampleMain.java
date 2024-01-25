@@ -23,6 +23,7 @@ import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.CubicCurveCharacteristics;
+import org.jhotdraw8.geom.CubicCurveToQuadCurves;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.FXCubicCurves;
 import org.jhotdraw8.geom.FXGeom;
@@ -31,7 +32,6 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.Integrals;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points;
-import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.Solvers;
 
 import java.awt.geom.PathIterator;
@@ -257,7 +257,7 @@ public class BezierArcLengthExampleMain extends Application {
     private void addApproximatedQuadraticCurves(Group quadraticCurves) {
         double[] b = FXCubicCurves.toArray(curve);
         double[] q = new double[16 * 6];
-        int n = QuadCurves.approximateCubicCurve(b, 0, q, 0, 0.5);
+        int n = new CubicCurveToQuadCurves().approximateCubicCurve(b, 0, q, 0, 0.5);
 
 
         for (int i = 0; i < n; i++) {
