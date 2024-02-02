@@ -102,7 +102,7 @@ import org.jhotdraw8.draw.io.DefaultFigureFactory;
 import org.jhotdraw8.draw.io.FigureFactory;
 import org.jhotdraw8.draw.io.PrinterExportFormat;
 import org.jhotdraw8.draw.io.SimpleFigureIdFactory;
-import org.jhotdraw8.draw.io.SimpleXmlStaxReader;
+import org.jhotdraw8.draw.io.SimpleXmlReader;
 import org.jhotdraw8.draw.io.SimpleXmlWriter;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -371,7 +371,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         IdFactory idFactory = new SimpleFigureIdFactory();
         FigureFactory factory = new DefaultFigureFactory(idFactory);
         SimpleXmlWriter iow = new SimpleXmlWriter(factory, idFactory, GRAPHER_NAMESPACE_URI, null);
-        SimpleXmlStaxReader ior = new SimpleXmlStaxReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
+        SimpleXmlReader ior = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
         ior.setLayerFactory(LayerFigure::new);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
                 iow, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
@@ -479,7 +479,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
             IdFactory idFactory = new SimpleFigureIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
-            SimpleXmlStaxReader io = new SimpleXmlStaxReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
+            SimpleXmlReader io = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
             if (drawing != null) {

@@ -48,7 +48,10 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
     public SequencedSetFacade(@NonNull ReadOnlySequencedCollection<E> backingSet) {
         this(backingSet::iterator, backingSet::spliterator, () -> backingSet.readOnlyReversed().iterator(),
                 () -> backingSet.readOnlyReversed().spliterator(), backingSet::size,
-                backingSet::contains, null, null, null, null, null, null, null, null);
+                backingSet::contains, null, null,
+                backingSet::getFirst,
+                backingSet::getLast,
+                null, null, null, null);
     }
 
     public SequencedSetFacade(@NonNull Set<E> backingSet,

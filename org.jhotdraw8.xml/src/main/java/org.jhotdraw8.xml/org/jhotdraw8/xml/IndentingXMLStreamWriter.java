@@ -307,7 +307,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
 
     @Override
     public void close() throws XMLStreamException {
-
+        try {
+            w.flush();
+        } catch (IOException e) {
+            throw new XMLStreamException(e);
+        }
     }
 
     public String getIndentation() {

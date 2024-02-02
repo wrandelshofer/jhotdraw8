@@ -25,9 +25,14 @@ import java.net.URI;
 import java.util.concurrent.CompletionStage;
 
 /**
- * A {@link FileBasedActivity} is a specialization of {@link Activity} for
- * activities that work with content that is stored in a file identified
- * by an {@link URI}.
+ * A {@code FileBasedActivity} is an {@link Activity} that involves data
+ * that is stored in a file.
+ * <p>
+ * There is one activity instance per file. The filename is
+ * used as the title of the activity.
+ * <p>
+ * The storage location of a file is not restricted to the file system.
+ * This is why, the storage location of the file is identified by an {@link URI}.
  *
  * @author Werner Randelshofer
  */

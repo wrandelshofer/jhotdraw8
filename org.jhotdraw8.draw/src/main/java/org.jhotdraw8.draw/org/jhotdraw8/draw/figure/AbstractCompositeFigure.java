@@ -24,7 +24,7 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
-    private final ChildList<Figure> children = new ChildList<>(this);
+    private final @NonNull ChildList<Figure> children = new ChildList<>(this);
 
     public AbstractCompositeFigure() {
     }

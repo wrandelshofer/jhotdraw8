@@ -131,7 +131,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
             return Tuple.of(tree, false);
         } else {
             final Node<K, V> node = (Node<K, V>) tree;
-            final int comparison = comparator.compare(node.key, key);
+            final int comparison = comparator.compare(key, node.key);
             if (comparison < 0) {
                 final Tuple2<? extends RedBlackTree<K, V>, Boolean> deleted = delete(node.left, key, comparator);
                 final RedBlackTree<K, V> l = deleted._1();
@@ -223,7 +223,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
             return new Node<>(Color.RED, empty, key, value, empty);
         } else {
             final Node<K, V> node = (Node<K, V>) tree;
-            final int comparison = comparator.compare(node.key, key);
+            final int comparison = comparator.compare(key, node.key);
             if (comparison < 0) {
                 final Node<K, V> newLeft = insert(node.left, key, value, comparator);
                 return (newLeft == node.left)
@@ -324,7 +324,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public @NonNull RedBlackTree<K, V> ceiling(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
+        final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.ceiling(value, comparator);
         } else if (result > 0) {
@@ -345,7 +345,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public boolean contains(K key, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, key);
+        final int result = comparator.compare(key, this.key);
         if (result < 0) {
             return left.contains(key, comparator);
         }
@@ -369,7 +369,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public RedBlackTree<K, V> find(K key, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, key);
+        final int result = comparator.compare(key, this.key);
         if (result < 0) {
             return left.find(key, comparator);
         } else if (result > 0) {
@@ -381,7 +381,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public @NonNull RedBlackTree<K, V> floor(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
+        final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.floor(value, comparator).orElse(this);
         } else if (result > 0) {
@@ -409,7 +409,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public @NonNull RedBlackTree<K, V> higher(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
+        final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.higher(value, comparator);
         } else if (result > 0) {
@@ -445,7 +445,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
 
     @Override
     public @NonNull RedBlackTree<K, V> lower(K value, Comparator<? super K> comparator) {
-        final int result = comparator.compare(this.key, value);
+        final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.lower(value, comparator).orElse(this);
         } else if (result > 0) {

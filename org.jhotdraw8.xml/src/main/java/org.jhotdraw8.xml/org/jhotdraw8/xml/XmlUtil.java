@@ -6,14 +6,11 @@ package org.jhotdraw8.xml;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.fxbase.tree.ChildIterator;
-import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.Attributes;
 import org.xml.sax.InputSource;
 import org.xml.sax.Locator;
@@ -58,8 +55,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * XmlUtil.
@@ -278,6 +273,32 @@ public class XmlUtil {
     }
 
     /**
+     * Creates an XMLStreamReader that only reads data from the specified file.
+     * That is, it does not create socket connections.
+     *
+     * @param file a file
+     * @return an XMLStreamReader
+     * @throws XMLStreamException when the XMLStreamReader could not be created
+     */
+
+    public static XMLStreamReader streamReader(final @NonNull Source file) throws XMLStreamException {
+        final XMLInputFactory dbf = XMLInputFactory.newInstance();
+
+        // We do not want that the reader creates a socket connection,
+        // even if it would benefit the result!
+        dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
+        dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
+        dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        dbf.setXMLResolver((publicID,
+                            systemID,
+                            baseURI,
+                            namespace) -> null
+        );
+        return dbf.createXMLStreamReader(file);
+
+    }
+
+    /**
      * Attempts to replace the provided result by a StaxResult.
      *
      * @param result           a result
@@ -307,19 +328,7 @@ public class XmlUtil {
         return result;
     }
 
-    /**
-     * Returns a stream which iterates over the subtree starting at the
-     * specified node in preorder sequence.
-     *
-     * @param node a node
-     * @return a stream
-     */
-    public static @NonNull Stream<Node> preorderStream(Node node) {
-        return StreamSupport.stream(new PreorderSpliterator<>(n -> {
-            final NodeList childNodes = n.getChildNodes();
-            return () -> new ChildIterator<>(childNodes.getLength(), childNodes::item);
-        }, node), false);
-    }
+
 
     private static class LocationFilter extends XMLFilterImpl {
         private Locator locator = null;
@@ -389,59 +398,34 @@ public class XmlUtil {
     }
 
     public static String readNamespaceUri(Source source) throws IOException {
-        XMLInputFactory dbf = XMLInputFactory.newInstance();
-
-        // We do not want that the reader creates a socket connection,
-        // even if it would benefit the result!
-        dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-        dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
-        dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-        dbf.setXMLResolver((publicID,
-                            systemID,
-                            baseURI,
-                            namespace) -> null);
         try {
-            for (XMLStreamReader r = dbf.createXMLStreamReader(source); r.hasNext(); ) {
+            for (XMLStreamReader r = streamReader(source); r.hasNext(); ) {
                 int next = r.next();
                 switch (next) {
-                    case XMLStreamReader.START_ELEMENT:
+                    case XMLStreamReader.START_ELEMENT -> {
                         return r.getNamespaceURI();
-                    case XMLStreamReader.END_ELEMENT:
-                        return null;
-                    case XMLStreamReader.PROCESSING_INSTRUCTION:
-                        break;
-                    case XMLStreamReader.CHARACTERS:
-                        break;
-                    case XMLStreamReader.COMMENT:
-                        break;
-                    case XMLStreamReader.SPACE:
-                        break;
-                    case XMLStreamReader.START_DOCUMENT:
-                        break;
-                    case XMLStreamReader.END_DOCUMENT:
-                        break;
-                    case XMLStreamReader.ENTITY_REFERENCE:
-                        break;
-                    case XMLStreamReader.ATTRIBUTE:
-                        break;
-                    case XMLStreamReader.DTD:
-                        break;
-                    case XMLStreamReader.CDATA:
-                        break;
-                    case XMLStreamReader.NAMESPACE:
-                        break;
-                    case XMLStreamReader.NOTATION_DECLARATION:
-                        break;
-                    case XMLStreamReader.ENTITY_DECLARATION:
-                        break;
-                    default:
-                        throw new IOException("unsupported XMLStream event: " + next);
+                    }
+                    case XMLStreamReader.END_ELEMENT,
+                            XMLStreamReader.PROCESSING_INSTRUCTION,
+                            XMLStreamReader.CHARACTERS,
+                            XMLStreamReader.ENTITY_DECLARATION,
+                            XMLStreamReader.NOTATION_DECLARATION,
+                            XMLStreamReader.NAMESPACE,
+                            XMLStreamReader.CDATA,
+                            XMLStreamReader.DTD,
+                            XMLStreamReader.ATTRIBUTE,
+                            XMLStreamReader.ENTITY_REFERENCE,
+                            XMLStreamReader.END_DOCUMENT,
+                            XMLStreamReader.START_DOCUMENT,
+                            XMLStreamReader.SPACE,
+                            XMLStreamReader.COMMENT -> {
+                    }
+                    default -> throw new IOException("unsupported XMLStream event: " + next);
                 }
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);
         }
-
 
         return null;
     }

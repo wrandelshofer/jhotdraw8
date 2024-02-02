@@ -23,7 +23,10 @@ import java.util.concurrent.ForkJoinPool;
  */
 public class FXWorker {
 
-    public FXWorker() {
+    /**
+     * Don't let anyone instantiate this class.
+     */
+    private FXWorker() {
     }
 
     /**

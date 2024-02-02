@@ -22,11 +22,12 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.xml.XmlUtil;
 
 import javax.xml.stream.Location;
-import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.transform.stream.StreamSource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -38,7 +39,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.SequencedSet;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;
@@ -50,7 +51,7 @@ import java.util.regex.Pattern;
 /**
  * This reader does not support {@link FigureFactory#nodeListToValue(MapAccessor, List)}.
  */
-public class SimpleXmlStaxReader extends AbstractInputFormat implements ClipboardInputFormat {
+public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInputFormat {
     private static final Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
     private final @NonNull IdFactory idFactory;
     private @Nullable String namespaceURI;
@@ -58,7 +59,7 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
     private final String idAttribute = "id";
     private Supplier<Layer> layerFactory;
 
-    public SimpleXmlStaxReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
+    public SimpleXmlReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
         this.idFactory = idFactory;
         this.figureFactory = figureFactory;
         this.namespaceURI = namespaceURI;
@@ -110,27 +111,24 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
         return read((AutoCloseable) in, drawing, documentHome, workState);
     }
 
+    /**
+     * Reads from the specified input stream.
+     *
+     * @param in must be an instanceof {@link InputStream} or of {@link Reader}.
+     * @return a deque of the figures in the files
+     * @throws IOException on IO failure
+     */
     private Deque<Figure> doRead(AutoCloseable in) throws IOException {
-        XMLInputFactory dbf = XMLInputFactory.newInstance();
 
-        // We do not want that the reader creates a socket connection,
-        // even if it would benefit the result!
-        dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
-        dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
-        dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
-        dbf.setXMLResolver((publicID,
-                            systemID,
-                            baseURI,
-                            namespace) -> null
-        );
         Deque<Figure> stack = new ArrayDeque<>();
         List<Runnable> secondPass = new ArrayList<>();
         List<Runnable> parallelPass = new ArrayList<>();
         List<FutureTask<Void>> futures = new ArrayList<>();
         List<Consumer<Figure>> processingInstructions = new ArrayList<>();
         try {
-            XMLStreamReader xmlStreamReader = (in instanceof InputStream) ? dbf.createXMLStreamReader((InputStream) in)
-                    : dbf.createXMLStreamReader((Reader) in);
+            XMLStreamReader xmlStreamReader = XmlUtil.streamReader(
+                    (in instanceof InputStream inputStream) ? new StreamSource(inputStream)
+                            : new StreamSource((Reader)in));
             while (xmlStreamReader.hasNext()) {
                 readNode(xmlStreamReader, xmlStreamReader.next(), stack, processingInstructions,
                         secondPass, parallelPass, futures);
@@ -185,10 +183,10 @@ public class SimpleXmlStaxReader extends AbstractInputFormat implements Clipboar
 
 
     @Override
-    public Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, @Nullable Figure parent) throws IOException {
+    public SequencedSet<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, @Nullable Figure parent) throws IOException {
         Object content = clipboard.getContent(getDataFormat());
         if (content instanceof String) {
-            Set<Figure> figures = new LinkedHashSet<>();
+            SequencedSet<Figure> figures = new LinkedHashSet<>();
             Figure newDrawing = read(new StringReader((String) content), null, null, new SimpleWorkState<>());
             if (newDrawing == null) {
                 return figures;

@@ -7,6 +7,7 @@ package org.jhotdraw8.fxbase.control;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.event.EventType;
+import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -32,7 +33,7 @@ import static java.lang.Math.max;
 import static java.lang.Math.min;
 
 /**
- * ListViewUtil.
+ * Provides static utility methods for {@link ListView}.
  *
  * @author Werner Randelshofer
  */
@@ -272,7 +273,20 @@ public class ListViewUtil {
      * @param <T>                       the data type of the list view
      * @param listView                  the list view
      * @param clipboardIO               a reader/writer for the clipboard.
-     * @param undoableEditEventConsumer
+     */
+    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO) {
+        addDragAndDropSupport(listView, listView.getCellFactory(), clipboardIO, undoableEditEvent -> {
+            // empty
+        });
+    }
+
+    /**
+     * Adds drag and drop support to the list view
+     *
+     * @param <T>                       the data type of the list view
+     * @param listView                  the list view
+     * @param clipboardIO               a reader/writer for the clipboard.
+     * @param undoableEditEventConsumer a consumer for undoable edits
      */
     public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         addDragAndDropSupport(listView, listView.getCellFactory(), clipboardIO, undoableEditEventConsumer);
@@ -289,15 +303,20 @@ public class ListViewUtil {
      * @param clipboardIO               a reader/writer for the clipboard.
      * @param undoableEditEventConsumer
      */
-    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView,
+                                                 @Nullable Callback<ListView<T>, ListCell<T>> cellFactory,
+                                                 @NonNull ClipboardIO<T> clipboardIO,
+                                                 @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         addDragAndDropSupport(listView, cellFactory, clipboardIO, false, undoableEditEventConsumer);
     }
 
-    private static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, ClipboardIO<T> clipboardIO,
+    private static <T> void addDragAndDropSupport(@NonNull ListView<T> listView,
+                                                  @Nullable Callback<ListView<T>, ListCell<T>> cellFactory,
+                                                  @NonNull ClipboardIO<T> clipboardIO,
                                                   boolean reorderingOnly, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         DnDSupport<T> dndSupport = new DnDSupport<>(listView, clipboardIO, reorderingOnly, undoableEditEventConsumer);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
-            ListCell<T> cell = cellFactory.call(lv);
+            ListCell<T> cell = cellFactory == null ? new SimpleListCell<>() : cellFactory.call(lv);
             cell.addEventHandler(DragEvent.ANY, dndSupport.cellDragHandler);
             cell.addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
             return cell;
@@ -371,5 +390,24 @@ public class ListViewUtil {
         addDragAndDropSupport(listView, cellFactory, clipboardIO, true, undoableEditEventConsumer);
     }
 
+    static class SimpleListCell<T> extends ListCell<T> {
+        public void updateItem(T var1, boolean var2) {
+            super.updateItem(var1, var2);
+            if (var2) {
+                this.setText((String) null);
+                this.setGraphic((Node) null);
+            } else if (var1 instanceof Node) {
+                this.setText((String) null);
+                Node var3 = this.getGraphic();
+                Node var4 = (Node) var1;
+                if (var3 == null || !var3.equals(var4)) {
+                    this.setGraphic(var4);
+                }
+            } else {
+                this.setText(var1 == null ? "null" : var1.toString());
+                this.setGraphic((Node) null);
+            }
 
+        }
+    }
 }

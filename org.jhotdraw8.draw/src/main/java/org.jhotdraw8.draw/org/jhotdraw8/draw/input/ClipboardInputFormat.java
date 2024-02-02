@@ -28,7 +28,7 @@ public interface ClipboardInputFormat {
      *                  performed.
      * @param drawing   The contents of the clipboard is added to this drawing.
      * @param parent    If you provide a non-null value, the contents of the
-     *                  clipboard is added to this parent. Otherwise the content is added into an
+     *                  clipboard is added to this parent. Otherwise, the content is added into an
      *                  unspecified layer.
      * @return the figures that were read from the clipboard
      * @throws java.io.IOException if an IO error occurs

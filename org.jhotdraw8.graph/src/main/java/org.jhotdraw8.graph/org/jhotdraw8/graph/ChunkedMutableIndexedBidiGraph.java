@@ -67,6 +67,9 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      */
     private @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayCsrGraphChunk::new;
 
+    /**
+     * Creates a new ins
+     */
     public ChunkedMutableIndexedBidiGraph() {
         this(256, 4);
     }

@@ -29,12 +29,12 @@ public interface ClipboardIO<T> {
      * Returns null if read failed.
      *
      * @param clipboard The clipboard
-     * @return izrmd the items
+     * @return the items
      */
     @Nullable List<T> read(Clipboard clipboard);
 
     /**
-     * Returns true if data from the clibpoard can be imported
+     * Returns true if data from the clipboard can be imported
      *
      * @param clipboard The clipboard
      * @return true if import is possible

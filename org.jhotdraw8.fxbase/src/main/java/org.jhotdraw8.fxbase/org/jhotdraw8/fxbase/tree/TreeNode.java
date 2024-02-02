@@ -9,7 +9,11 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Spliterator;
 
 /**
  * Represents a node of a tree structure.
@@ -23,6 +27,23 @@ import java.util.*;
  * <p>
  * A node may only support a restricted set of child types
  * {@literal <C extends T>}.
+ * <p>
+ * Usage:
+ * <pre>{@literal
+ *     public class MyTree implements TreeNode<MyTree> {
+ *        private @Nullable MyTree parent;
+ *        private @NonNull ChildList<MyTree> children=new ChildList<>(this);
+ *
+ *        @Override
+ *        public @Nullable MyTree getParent() { return parent; }
+ *
+ *        @Override
+ *        public void setParent(@Nullable MyTree p) { this.parent = p; }
+ *
+ *        @Override
+ *        public ObservableList<MyTree> getChildren() { return children; }
+ *     }
+ * }</pre>
  *
  * @author Werner Randelshofer
  * @param <T> the type of the tree node
