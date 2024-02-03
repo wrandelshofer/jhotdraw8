@@ -5,13 +5,14 @@
 package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.IntSupplier;
 import java.util.function.Predicate;
@@ -30,15 +31,18 @@ public class ReadOnlyCollectionFacade<E> extends AbstractReadOnlyCollection<E> {
     protected final Predicate<Object> containsFunction;
     protected final int characteristics;
 
-    public ReadOnlyCollectionFacade(@NonNull Set<E> backingSet, int characteristics) {
-        this(backingSet::iterator, backingSet::size, backingSet::contains, characteristics);
-    }
 
-    public ReadOnlyCollectionFacade(Supplier<Iterator<E>> iteratorFunction, IntSupplier sizeFunction, Predicate<Object> containsFunction, int characteristics) {
+    public ReadOnlyCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
+                                    @Nullable IntSupplier sizeFunction,
+                                    @NonNull Predicate<Object> containsFunction, int characteristics) {
         this.iteratorFunction = iteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsFunction = containsFunction;
         this.characteristics = characteristics;
+    }
+
+    public ReadOnlyCollectionFacade(@NonNull Collection<E> c) {
+        this(c::iterator, c::size, c::contains, Spliterator.SIZED | Spliterator.SUBSIZED);
     }
 
     @Override

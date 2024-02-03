@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * Provides a {@link ReadOnlySequencedSet} facade to a set of {@code Set} functions.
+ * Provides a {@link ReadOnlySequencedSet} facade to a set of {@code SequencedSet} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer

@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.SequencedSet;
+import java.util.SequencedCollection;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.IntSupplier;
@@ -32,15 +32,10 @@ public class ReadOnlySequencedCollectionFacade<E> extends ReadOnlyCollectionFaca
     final @NonNull Supplier<E> getLastFunction;
     final @NonNull Supplier<Iterator<E>> reverseIteratorFunction;
     private final @Nullable Comparator<E> comparator;
-    public ReadOnlySequencedCollectionFacade(@NonNull ReadOnlySequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(),
-                backingSet::size,
-                backingSet::contains, backingSet::getFirst, backingSet::getLast, Spliterator.SIZED, null);
-    }
 
-    public ReadOnlySequencedCollectionFacade(@NonNull SequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.reversed().iterator(), backingSet::size,
-                backingSet::contains, backingSet::getFirst, backingSet::getLast, Spliterator.SIZED, null);
+    public ReadOnlySequencedCollectionFacade(@NonNull SequencedCollection<E> c) {
+        this(c::iterator, () -> c.reversed().iterator(), c::size,
+                c::contains, c::getFirst, c::getLast, Spliterator.SIZED, null);
     }
 
     public ReadOnlySequencedCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
