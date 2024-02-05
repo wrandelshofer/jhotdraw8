@@ -24,10 +24,10 @@ import java.util.Set;
  * Tests {@link SimpleMutableSet} with the Guava test suite.
  */
 
-public class MutableSimpleSetGuavaTests {
+public class SimpleMutableSetGuavaTests {
 
     public static Test suite() {
-        return new MutableSimpleSetGuavaTests().allTests();
+        return new SimpleMutableSetGuavaTests().allTests();
     }
 
     public Test allTests() {

@@ -14,23 +14,22 @@ import com.google.common.collect.testing.features.SetFeature;
 import com.google.common.collect.testing.testers.CollectionSpliteratorTester;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.SimpleMutableNavigableSet;
 
 import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Set;
 
 /**
- * Tests {@link SimpleMutableNavigableSet} with the Guava test suite.
+ * Tests {@link java.util.TreeSet} with the Guava test suite.
  */
-public class SimpleMutableNavigableSetGuavaTests {
+public class JavaTreeSetGuavaTests {
 
     public static Test suite() {
-        return new SimpleMutableNavigableSetGuavaTests().allTests();
+        return new JavaTreeSetGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(SimpleMutableNavigableSet.class.getSimpleName());
+        TestSuite suite = new TestSuite(java.util.TreeSet.class.getSimpleName());
         suite.addTest(testsForSet());
         suite.addTest(testsForReversedSet());
         return suite;
@@ -41,18 +40,18 @@ public class SimpleMutableNavigableSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new SimpleMutableNavigableSet<>(MinimalCollection.of(elements));
+                                return new java.util.TreeSet<>(MinimalCollection.of(elements));
                             }
                         })
-                .named(SimpleMutableNavigableSet.class.getSimpleName())
+                .named(java.util.TreeSet.class.getSimpleName())
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.DESCENDING_VIEW,
                         CollectionFeature.SUBSET_VIEW,
                         CollectionFeature.SUPPORTS_ITERATOR_REMOVE,
                         //CollectionFeature.KNOWN_ORDER,
-                        CollectionFeature.ALLOWS_NULL_VALUES,
-                        CollectionFeature.ALLOWS_NULL_QUERIES,
+                        //CollectionFeature.ALLOWS_NULL_VALUES,
+                        //CollectionFeature.ALLOWS_NULL_QUERIES,
                         CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
@@ -65,19 +64,20 @@ public class SimpleMutableNavigableSetGuavaTests {
                         new TestStringSetGenerator() {
                             @Override
                             public Set<String> create(String[] elements) {
-                                return new SimpleMutableNavigableSet<>(MinimalCollection.of(elements)).reversed();
+                                return new java.util.TreeSet<>(MinimalCollection.of(elements)).reversed();
                             }
                         })
-                .named(SimpleMutableNavigableSet.class.getSimpleName() + "Reversed")
+                .named(java.util.TreeSet.class.getSimpleName() + "Reversed")
                 .withFeatures(
                         SetFeature.GENERAL_PURPOSE,
                         CollectionFeature.DESCENDING_VIEW,
                         CollectionFeature.SUBSET_VIEW,
                         CollectionFeature.REMOVE_OPERATIONS,
                         //CollectionFeature.KNOWN_ORDER,
-                        CollectionFeature.ALLOWS_NULL_VALUES,
+                        //CollectionFeature.ALLOWS_NULL_VALUES,
+                        //CollectionFeature.ALLOWS_NULL_QUERIES,
                         CollectionFeature.GENERAL_PURPOSE,
-                        //CollectionFeature.SERIALIZABLE,
+                        CollectionFeature.SERIALIZABLE,
                         CollectionFeature.FAILS_FAST_ON_CONCURRENT_MODIFICATION,
                         CollectionSize.ANY)
                 .suppressing(suppressForSet())

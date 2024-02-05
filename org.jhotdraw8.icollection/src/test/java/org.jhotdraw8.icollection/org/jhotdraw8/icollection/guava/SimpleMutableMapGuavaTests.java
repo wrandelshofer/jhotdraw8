@@ -23,10 +23,10 @@ import java.util.Map;
 /**
  * Tests {@link SimpleMutableMap} with the Guava test suite.
  */
-public class MutableSimpleMapGuavaTests {
+public class SimpleMutableMapGuavaTests {
 
     public static Test suite() {
-        return new MutableSimpleMapGuavaTests().allTests();
+        return new SimpleMutableMapGuavaTests().allTests();
     }
 
     public Test allTests() {

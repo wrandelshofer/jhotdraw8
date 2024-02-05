@@ -40,25 +40,14 @@ import java.util.stream.Stream;
  * @param <E> the element type
  */
 public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements NavigableSet<E>, Serializable, Cloneable, ReadOnlyNavigableSet<E> {
-    @Override
-    public E getFirst() {
-        return first();
-    }
-
-    @Override
-    public E getLast() {
-        return last();
-    }
-
     @Serial
     private static final long serialVersionUID = 0L;
+    final @NonNull Comparator<E> comparator;
     /**
      * The number of times this set has been structurally modified.
      */
     protected transient int modCount;
-    final @NonNull Comparator<E> comparator;
     @NonNull RedBlackTree<E, Void> root;
-
     /**
      * Constructs a new, empty set, sorted according to the
      * specified comparator.
@@ -69,7 +58,6 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = RedBlackTree.empty();
     }
-
     /**
      * Constructs a new tree set containing the elements in the specified
      * collection, sorted according to the specified comparator.
@@ -121,8 +109,6 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         return false;
     }
 
-
-    @SuppressWarnings("unchecked")
     public boolean addAll(@NonNull Iterable<? extends E> c) {
         boolean modified = false;
         for (E e : c)
@@ -145,10 +131,11 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public SimpleMutableNavigableSet<E> clone() {
         try {
-            return (SimpleMutableNavigableSet) super.clone();
+            return (SimpleMutableNavigableSet<E>) super.clone();
         } catch (CloneNotSupportedException e) {
             throw new AssertionError();
         }
@@ -164,10 +151,6 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
     @SuppressWarnings("unchecked")
     public boolean contains(Object o) {
         return root.contains((E) o, comparator);
-    }
-
-    private void iteratorRemove(E e) {
-        remove(e);
     }
 
     @NonNull
@@ -194,6 +177,16 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
     @Override
     public E floor(E e) {
         return root.floor(e, comparator).keyOrNull();
+    }
+
+    @Override
+    public E getFirst() {
+        return first();
+    }
+
+    @Override
+    public E getLast() {
+        return last();
     }
 
     /**
@@ -237,37 +230,8 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         );
     }
 
-    @NonNull
-    Iterator<E> reverseIterator() {
-        return new FailFastIterator<>(
-                new MappedIterator<>(root.reverseIterator(), Map.Entry::getKey),
-                this::iteratorRemove, this::getModCount
-        );
-    }
-
-    @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(
-                this::reverseIterator,
-                this::iterator,
-                this::size,
-                this::contains,
-                this::getLast,
-                this::getFirst,
-                Spliterator.IMMUTABLE);
-    }
-
-    @Override
-    public Spliterator<E> spliterator() {
-        return new FailFastSpliterator<>(
-                NavigableSet.super.spliterator(),
-                this::getModCount,
-                comparator == NaturalComparator.instance() ? null : comparator);
-    }
-
-    @Override
-    public Stream<E> stream() {
-        return super.stream();
+    private void iteratorRemove(E e) {
+        remove(e);
     }
 
     @Override
@@ -297,6 +261,18 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         return value;
     }
 
+    @Override
+    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+        return new ReadOnlySequencedSetFacade<>(
+                this::reverseIterator,
+                this::iterator,
+                this::size,
+                this::contains,
+                this::getLast,
+                this::getFirst,
+                Spliterator.IMMUTABLE);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
@@ -309,10 +285,30 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         return false;
     }
 
+    @NonNull
+    Iterator<E> reverseIterator() {
+        return new FailFastIterator<>(
+                new MappedIterator<>(root.reverseIterator(), Map.Entry::getKey),
+                this::iteratorRemove, this::getModCount
+        );
+    }
 
     @Override
     public int size() {
         return root.size();
+    }
+
+    @Override
+    public Spliterator<E> spliterator() {
+        return new FailFastSpliterator<>(
+                NavigableSet.super.spliterator(),
+                this::getModCount,
+                comparator == NaturalComparator.instance() ? null : comparator);
+    }
+
+    @Override
+    public Stream<E> stream() {
+        return super.stream();
     }
 
     @NonNull
@@ -349,6 +345,11 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         return new SimpleImmutableNavigableSet<>(comparator, root);
     }
 
+    @Override
+    public String toString() {
+        return ReadOnlyCollection.iterableToString(this);
+    }
+
     @Serial
     private @NonNull Object writeReplace() {
         return new SimpleMutableNavigableSet.SerializationProxy<>(this);
@@ -367,11 +368,6 @@ public class SimpleMutableNavigableSet<E> extends AbstractSet<E> implements Navi
         protected @NonNull Object readResolve() {
             return new SimpleMutableNavigableSet<>(deserializedComparator, deserializedElements);
         }
-    }
-
-    @Override
-    public String toString() {
-        return ReadOnlyCollection.iterableToString(this);
     }
 
 }

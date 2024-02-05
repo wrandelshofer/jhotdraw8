@@ -104,7 +104,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
                 this::contains,
                 this::getLast,
                 this::getFirst,
-                0, null);
+                Spliterator.SIZED | Spliterator.SUBSIZED | Spliterator.ORDERED);
     }
 
     @SuppressWarnings("unchecked")

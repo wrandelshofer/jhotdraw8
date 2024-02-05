@@ -135,7 +135,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
                     if (e == null) throw new NoSuchElementException();
                     return e.getValue();
                 },
-                characteristics() & ~(Spliterator.DISTINCT | Spliterator.SORTED), null);
+                characteristics() & ~(Spliterator.DISTINCT | Spliterator.SORTED));
     }
 
     @Override
