@@ -19,7 +19,7 @@ import java.util.Deque;
 import java.util.function.Consumer;
 
 /**
- * Processes the calc() function.
+ * Processes the {@code calc()} function.
  * <pre>
  * calc               = "calc(", calc-sum, ")" ;
  * calc-sum            = calc-product ,  { [ '+' | '-' ] , calc-product } ;

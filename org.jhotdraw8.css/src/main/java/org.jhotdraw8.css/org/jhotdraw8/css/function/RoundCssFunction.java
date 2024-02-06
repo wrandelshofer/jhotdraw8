@@ -20,9 +20,9 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
- * Processes the round() function.
+ * Processes the {@code round()} function.
  * <pre>
- * round               = "round(", [ rounding-strategy , "," ] , calc-sum , "," , calc-sum ")" ;
+ * round               = "round(", [ rounding-strategy , "," ] , calc-sum , [ "," , calc-sum ] ")" ;
  * <rounding-strategy> = "nearest" | "up" | "down" | "to-zero" ;
  * calc-sum            = (* see superclass *)
  * </pre>

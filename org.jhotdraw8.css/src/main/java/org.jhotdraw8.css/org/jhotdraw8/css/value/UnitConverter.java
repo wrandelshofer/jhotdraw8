@@ -16,12 +16,12 @@ import static java.lang.Math.min;
  * <p>
  * References:
  * <dl>
- *     <dt>Absolute lengths: the cm, mm, Q, in, pt, pc, px units</dt>
- *     <dd><a href="https://www.w3.org/TR/css3-values/#absolute-length">w3.org</a></dd>
- *     <dt>Viewport-percentage lengths: the vw, vh, vmin, vmax units</dt>
- *     <dd><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">w3.org</a></dd>
- *     <dt>Font-relative lengths: the em, ex, ch, rem units</dt>
+ *     <dt>CSS Values and Units Module Level 3. § 5.1.1 Font-relative lengths: the em, ex, ch, rem units</dt>
  *     <dd><a href="https://www.w3.org/TR/css3-values/#font-relative-lengths">w3.org</a></dd>
+ *     <dt>CSS Values and Units Module Level 3. § 5.1.2 Viewport-percentage lengths: the vw, vh, vmin, vmax units</dt>
+ *     <dd><a href="https://www.w3.org/TR/css3-values/#viewport-relative-lengths">w3.org</a></dd>
+ *     <dt>CSS Values and Units Module Level 3. § 5.2 Absolute lengths: the cm, mm, Q, in, pt, pc, px units</dt>
+ *     <dd><a href="https://www.w3.org/TR/css3-values/#absolute-length">w3.org</a></dd>
  * </dl>
  *
  * @author Werner Randelshofer
