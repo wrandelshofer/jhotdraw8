@@ -10,8 +10,16 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.scene.Node;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
@@ -118,7 +126,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
             break;
         }
         case 1: {
-            Dockable i = dockables.get(0);
+            Dockable i = dockables.getFirst();
             titlePane.setText(i.getText());
 
 

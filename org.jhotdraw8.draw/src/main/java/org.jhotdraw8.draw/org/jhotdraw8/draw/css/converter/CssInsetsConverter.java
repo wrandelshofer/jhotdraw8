@@ -62,7 +62,7 @@ public class CssInsetsConverter extends AbstractCssConverter<CssInsets> {
         }
         switch (list.size()) {
         case 1:
-            CssSize trbl = list.get(0);
+            CssSize trbl = list.getFirst();
             return new CssInsets(trbl, trbl, trbl, trbl);
         case 2:
             CssSize tb = list.get(0);

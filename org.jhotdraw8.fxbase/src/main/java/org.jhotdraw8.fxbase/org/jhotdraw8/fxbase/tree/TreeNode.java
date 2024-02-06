@@ -166,7 +166,7 @@ public interface TreeNode<T extends TreeNode<T>> {
     default @Nullable T getFirstChild() {
         return getChildren().isEmpty() //
                 ? null//
-                : getChildren().get(getChildren().size() - 1);
+                : getChildren().getLast();
     }
 
     /**
@@ -175,7 +175,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @return The last child. Returns null if the figure has no getChildren.
      */
     default @Nullable T getLastChild() {
-        return getChildren().isEmpty() ? null : getChildren().get(0);
+        return getChildren().isEmpty() ? null : getChildren().getFirst();
     }
 
     /**

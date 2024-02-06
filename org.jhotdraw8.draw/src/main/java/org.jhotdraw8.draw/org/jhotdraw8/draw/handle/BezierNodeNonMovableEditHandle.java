@@ -126,7 +126,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
             node.resize(size, size);
         }
         CssColor color = view.getEditor().getHandleColor();
-        BorderStroke borderStroke = node.getBorder().getStrokes().get(0);
+        BorderStroke borderStroke = node.getBorder().getStrokes().getFirst();
         if (!borderStroke.getTopStroke().equals(color.getColor())) {
             node.setBorder(new Border(
                     new BorderStroke(color.getColor(), BorderStrokeStyle.SOLID, null, null)

@@ -78,7 +78,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                 transforms.clear();
             }
         } else if (transforms.size() == 1) {
-            if (!Objects.equals(transforms.get(0), t)) {
+            if (!Objects.equals(transforms.getFirst(), t)) {
                 transforms.set(0, t);
             }
         } else {

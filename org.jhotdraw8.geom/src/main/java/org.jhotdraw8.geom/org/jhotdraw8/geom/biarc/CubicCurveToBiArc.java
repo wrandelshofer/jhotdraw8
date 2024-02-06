@@ -181,7 +181,7 @@ public class CubicCurveToBiArc {
             DoubleArrayList inflex = CubicCurveCharacteristics.inflectionPoints(bezier);
 
             if (inflex.size() == 1) {
-                SimpleOrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted = CubicCurves.split(bezier, inflex.get(0));
+                SimpleOrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> splitted = CubicCurves.split(bezier, inflex.getFirst());
                 stack.push(splitted.second());
                 stack.push(splitted.first());
             } else if (inflex.size() == 2) {

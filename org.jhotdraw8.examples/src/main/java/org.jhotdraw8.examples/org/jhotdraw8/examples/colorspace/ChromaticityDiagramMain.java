@@ -58,13 +58,13 @@ public class ChromaticityDiagramMain extends Application {
                 new Rec2020ColorSpace(),
                 new SrgbColorSpace()
         );
-        csComboBox.setValue(csComboBox.getItems().get(0));
+        csComboBox.setValue(csComboBox.getItems().getFirst());
         ComboBox<NamedColorSpace> displayCsComboBox = new ComboBox<NamedColorSpace>();
         displayCsComboBox.getItems().setAll(
                 new SrgbColorSpace(),
                 new DisplayP3ColorSpace()
         );
-        displayCsComboBox.setValue(displayCsComboBox.getItems().get(0));
+        displayCsComboBox.setValue(displayCsComboBox.getItems().getFirst());
         chromaticityDiagram.colorSpaceProperty().bind(csComboBox.valueProperty());
         chromaticityDiagram.displayColorSpaceProperty().bind(displayCsComboBox.valueProperty());
         VBox vbox = new VBox();

@@ -144,10 +144,10 @@ public class HitTestExampleMain extends Application {
         path = Shape.intersect(text, new Rectangle(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()));
         path.setManaged(false);
         if (canvas.getChildren().size() > 2) {
-            canvas.getChildren().remove(0);
+            canvas.getChildren().removeFirst();
         }
         path.setStrokeWidth(width.doubleValue());
-        canvas.getChildren().add(0, path);
+        canvas.getChildren().addFirst(path);
 
 
         Bounds cb = canvas.getLayoutBounds();

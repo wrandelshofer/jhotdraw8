@@ -112,7 +112,7 @@ public class TransformFlattener {
         // apply translation to children
         if (!translate.isIdentity()) {
             for (Node child : parent.getChildrenUnmodifiable()) {
-                child.getTransforms().add(0, translate);
+                child.getTransforms().addFirst(translate);
             }
         }
         // try to flatten the children

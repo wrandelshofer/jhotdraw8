@@ -55,7 +55,7 @@ public class SvgLinearGradientFigure extends AbstractSvgGradientFigure {
         CycleMethod spreadMethod = getStyledNonNull(SPREAD_METHOD);
 
         if (stops.size() == 1) {
-            return stops.get(0).getColor();
+            return stops.getFirst().getColor();
         }
 
         return new LinearGradient(x1, y1, x2, y2, gradientUnits == SvgGradientUnits.OBJECT_BOUNDING_BOX,

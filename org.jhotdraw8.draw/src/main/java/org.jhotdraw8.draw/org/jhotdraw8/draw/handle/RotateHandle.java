@@ -131,7 +131,7 @@ public class RotateHandle extends AbstractHandle {
         }
         Paint color = Paintable.getPaint(view.getEditor().getHandleColor());
         line.setStroke(color);
-        BorderStroke borderStroke = pickNode.getBorder().getStrokes().get(0);
+        BorderStroke borderStroke = pickNode.getBorder().getStrokes().getFirst();
         if (borderStroke == null || !borderStroke.getTopStroke().equals(color)) {
             Border border = new Border(
                     new BorderStroke(color, INSIDE_STROKE, null, null)

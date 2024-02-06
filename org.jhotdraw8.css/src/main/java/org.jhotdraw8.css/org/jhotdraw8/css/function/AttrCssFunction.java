@@ -100,8 +100,8 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                 }
                 attrFallback.add(tt.getToken());
             }
-            while (!attrFallback.isEmpty() && attrFallback.get(attrFallback.size() - 1).getType() == CssTokenType.TT_S) {
-                attrFallback.remove(attrFallback.size() - 1);//remove trailing white space
+            while (!attrFallback.isEmpty() && attrFallback.getLast().getType() == CssTokenType.TT_S) {
+                attrFallback.removeLast();//remove trailing white space
             }
         }
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {

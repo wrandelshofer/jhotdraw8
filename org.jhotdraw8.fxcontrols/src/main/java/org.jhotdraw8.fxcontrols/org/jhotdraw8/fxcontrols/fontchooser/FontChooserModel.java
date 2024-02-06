@@ -36,6 +36,6 @@ public class FontChooserModel {
     }
 
     public @Nullable FontCollection getAllFonts() {
-        return fontCollections.isEmpty() ? null : fontCollections.get(0);
+        return fontCollections.isEmpty() ? null : fontCollections.getFirst();
     }
 }

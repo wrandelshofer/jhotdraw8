@@ -121,7 +121,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }
                     ClipboardContent content = new ClipboardContent();
-                    URI stylesheetUri = items.get(0);
+                    URI stylesheetUri = items.getFirst();
                     URI documentHome = getDrawing().get(Drawing.DOCUMENT_HOME);
                     stylesheetUri = new SimpleUriResolver().absolutize(documentHome, stylesheetUri);
                     content.putUrl(stylesheetUri.toString());

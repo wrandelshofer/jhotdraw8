@@ -306,7 +306,7 @@ public class SimpleDockRoot
         if (c.getList().isEmpty()) {
             contentPane.centerProperty().set(null);
         } else {
-            contentPane.setCenter((c.getList().get(0).getNode()));
+            contentPane.setCenter((c.getList().getFirst().getNode()));
         }
 
     }
@@ -330,7 +330,7 @@ public class SimpleDockRoot
                     todo.add(parent);
                 } else if (dock.getDockAxis() != TrackAxis.Z && dock.getDockChildren().size() == 1) {
                     // Replace xy composite with its child if xy composite has one child
-                    DockChild onlyChild = dock.getDockChildren().remove(0);
+                    DockChild onlyChild = dock.getDockChildren().removeFirst();
                     parent.getDockChildren().set(parent.getDockChildren().indexOf(dock), onlyChild);
                     todo.add(parent);
                 }

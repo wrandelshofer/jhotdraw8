@@ -141,7 +141,7 @@ public class PreferencesUtil {
             boolean first = side == Side.LEFT || side == Side.TOP;
             if (newValue) {
                 if (first) {
-                    splitPane.getItems().add(0, node);
+                    splitPane.getItems().addFirst(node);
                 } else {
                     splitPane.getItems().add(node);
                 }

@@ -164,7 +164,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                                 0, 0//
                         );//
                     case 1:
-                        double a = m.get(0);
+                        double a = m.getFirst();
                         return Transform.affine(1, 0, tan(a), 1, 0, 0);
 
                     default:
@@ -178,7 +178,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                                 0, 0//
                         );//
                     case 1:
-                        double a = m.get(0);
+                        double a = m.getFirst();
                         return Transform.affine(1, tan(a), 0, 1, 0, 0);
 
                     default:

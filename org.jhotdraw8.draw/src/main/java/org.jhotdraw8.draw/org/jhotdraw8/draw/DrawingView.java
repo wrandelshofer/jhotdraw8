@@ -559,7 +559,7 @@ public interface DrawingView extends WritableRenderContext {
 
     default @Nullable Figure getSelectionLead() {
         ArrayList<Figure> selection = new ArrayList<>(getSelectedFigures());
-        return selection.isEmpty() ? null : selection.get(selection.size() - 1);
+        return selection.isEmpty() ? null : selection.getLast();
     }
 
     default @Nullable Figure getSelectionAnchor() {

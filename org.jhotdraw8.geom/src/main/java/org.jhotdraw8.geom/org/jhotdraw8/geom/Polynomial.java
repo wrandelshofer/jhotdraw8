@@ -556,7 +556,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
 
         if (droots.size() > 0) {
             // find root on [min, droots[0]]
-            Double root = bisection(func, min, droots.get(0));
+            Double root = bisection(func, min, droots.getFirst());
             if (root != null) {
                 roots.add(root);
             }
@@ -570,7 +570,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
             }
 
             // find root on [droots[count-1],xmax]
-            root = bisection(func, droots.get(droots.size() - 1), max);
+            root = bisection(func, droots.getLast(), max);
             if (root != null) {
                 roots.add(root);
             }

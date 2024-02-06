@@ -268,7 +268,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
             }
         };
         colorSpaceBox.valueProperty().addListener(csListener);
-        colorSpaceBox.setValue(colorSpaceBox.getItems().get(0));
+        colorSpaceBox.setValue(colorSpaceBox.getItems().getFirst());
         csListener.changed(colorSpaceBox.valueProperty(), colorSpaceBox.getValue(), colorSpaceBox.getValue());
 
         Scene scene = new Scene(vbox, 300, 250);

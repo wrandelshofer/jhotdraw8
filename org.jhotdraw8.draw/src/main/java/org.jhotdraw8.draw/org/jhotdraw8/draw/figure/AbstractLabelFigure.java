@@ -388,8 +388,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
             return;
         }
         final Path path;
-        if (!iconGroupNode.getChildren().isEmpty() && iconGroupNode.getChildren().get(0) instanceof Path) {
-            path = (Path) iconGroupNode.getChildren().get(0);
+        if (!iconGroupNode.getChildren().isEmpty() && iconGroupNode.getChildren().getFirst() instanceof Path) {
+            path = (Path) iconGroupNode.getChildren().getFirst();
         } else {
             path = new Path();
             iconGroupNode.getChildren().setAll(path);

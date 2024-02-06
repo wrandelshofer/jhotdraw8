@@ -162,7 +162,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         updateBackground(ctx, g);
         g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
 
-        Group gg = (Group) g.getChildren().get(0);
+        Group gg = (Group) g.getChildren().getFirst();
 
 
         List<Node> nodes = new ArrayList<>(getChildren().size());

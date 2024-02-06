@@ -7,7 +7,6 @@ package org.jhotdraw8.css.function;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
-import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
@@ -19,7 +18,6 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Deque;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -149,7 +147,7 @@ public abstract class AbstractMathCssFunction<T> extends AbstractCssFunction<T> 
                 if (list.size() != 1) {
                     throw new ParseException(getName() + "(): function " + name + "() must return single value.", tt.getStartPosition());
                 }
-                CssToken token = list.get(0);
+                CssToken token = list.getFirst();
                 switch (token.getType()) {
                     case CssTokenType.TT_NUMBER:
                         return CssSize.of(token.getNumericValue().doubleValue());

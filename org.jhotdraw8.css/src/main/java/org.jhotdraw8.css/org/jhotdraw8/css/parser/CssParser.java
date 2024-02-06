@@ -264,8 +264,8 @@ public class CssParser {
         } else {
             tt.pushBack();
             parseCurlyBlock(tt, body);
-            body.remove(0);
-            body.remove(body.size() - 1);
+            body.removeFirst();
+            body.removeLast();
             return new AtRule(sourceLocator, atKeyword, header, body);
         }
     }
@@ -450,7 +450,7 @@ public class CssParser {
             throw tt.createParseException("Declaration: ':' expected.");
         }
         List<CssToken> terms = parseTerms(tt);
-        int endPos = terms.isEmpty() ? tt.getStartPosition() : terms.get(terms.size() - 1).getEndPos();
+        int endPos = terms.isEmpty() ? tt.getStartPosition() : terms.getLast().getEndPos();
 
         return new Declaration(tt.getSourceLocator(), namespace, name, terms, startPos, endPos, lineNumber);
 

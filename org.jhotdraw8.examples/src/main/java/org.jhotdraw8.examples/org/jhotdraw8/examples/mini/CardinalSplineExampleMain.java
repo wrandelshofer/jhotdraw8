@@ -122,7 +122,7 @@ public class CardinalSplineExampleMain extends Application {
         if (!pp.isEmpty()) {
             if (closed.get()) {
                 ps.add(pp.get(pp.size() - 2));
-                ps.add(pp.get(pp.size() - 1));
+                ps.add(pp.getLast());
                 ps.addAll(pp);
                 ps.add(pp.get(0));
                 ps.add(pp.get(1));
@@ -133,7 +133,7 @@ public class CardinalSplineExampleMain extends Application {
                 ps.add(pp.get(1));
                 ps.addAll(pp);
                 ps.add(pp.get(pp.size() - 2));
-                ps.add(pp.get(pp.size() - 1));
+                ps.add(pp.getLast());
             }
         }
         Point2D[] points = CardinalSplines.cardinalSplineToBezier(ps, tension.get());

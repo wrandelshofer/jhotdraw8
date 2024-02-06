@@ -153,7 +153,7 @@ public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
 
         if (pline.isClosed()) {
             // add final segment from last to first
-            AABB approxBB = createFastApproxBoundingBox(pline.lastVertex(), pline.get(0));
+            AABB approxBB = createFastApproxBoundingBox(pline.lastVertex(), pline.getFirst());
             result.add(approxBB.minX(), approxBB.minY(),
                     approxBB.maxX(), approxBB.maxY());
         }
@@ -171,7 +171,7 @@ public class PlinePath extends ArrayList<PlineVertex> implements Cloneable {
         Collections.reverse(pline);
 
         // shift and negate bulge (to maintain same geometric path)
-        double firstBulge = pline.get(0).bulge();
+        double firstBulge = pline.getFirst().bulge();
 
         for (int i = 1; i < pline.size(); ++i) {
             pline.get(i - 1).bulge(-pline.get(i).bulge());

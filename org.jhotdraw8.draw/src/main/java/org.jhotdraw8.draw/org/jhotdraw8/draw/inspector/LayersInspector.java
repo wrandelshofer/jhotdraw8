@@ -248,7 +248,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }
                     ClipboardContent content = new ClipboardContent();
-                    Figure f = items.get(0);
+                    Figure f = items.getFirst();
                     String id = f.get(StyleableFigure.ID);
                     content.putString(id == null ? "" : id);
                     clipboard.setContent(content);

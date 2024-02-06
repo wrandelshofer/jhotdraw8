@@ -211,7 +211,7 @@ public class ContourIntersections {
         if (coincidentSlices.size() > 1) {
             // check if last coincident slice connects with first()
             final Point2D.Double lastSliceEnd = coincidentSlices.getLast().lastVertex().pos();
-            final Point2D.Double firstSliceBegin = coincidentSlices.getFirst().get(0).pos();
+            final Point2D.Double firstSliceBegin = coincidentSlices.getFirst().getFirst().pos();
             if (Points.almostEqual(lastSliceEnd, firstSliceBegin, Utils.realPrecision)) {
                 // they do connect, join them together
                 final PlinePath lastSlice = coincidentSlices.getLast();

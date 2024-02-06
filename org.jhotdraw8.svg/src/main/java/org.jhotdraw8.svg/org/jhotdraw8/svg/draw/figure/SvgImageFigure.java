@@ -116,7 +116,7 @@ public class SvgImageFigure extends AbstractLeafFigure
         final Drawing drawing = getDrawing();
         final URI documentHome = drawing == null ? null : drawing.get(Drawing.DOCUMENT_HOME);
         final URI absoluteImageUri = documentHome == null || imageUri == null ? imageUri : new SimpleUriResolver().absolutize(documentHome, imageUri);
-        Node imageNode = g.getChildren().isEmpty() ? null : g.getChildren().get(0);
+        Node imageNode = g.getChildren().isEmpty() ? null : g.getChildren().getFirst();
         if (imageNode == null || !Objects.equals(renderedUri, absoluteImageUri)) {
             imageNode = loadImage();
             g.getChildren().setAll(imageNode);

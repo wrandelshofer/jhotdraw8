@@ -276,7 +276,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         if (newValue != null) {
             Node node = newValue.getNode();
             node.setManaged(false);
-            foreground.getChildren().add(0, node);
+            foreground.getChildren().addFirst(node);
             node.applyCss();
             newValue.updateNode(this);
             newValue.addListener(this::onConstrainerInvalidated);

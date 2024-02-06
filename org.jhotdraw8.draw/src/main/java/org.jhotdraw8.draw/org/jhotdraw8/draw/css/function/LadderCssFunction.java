@@ -104,8 +104,8 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
 
         final List<CssColor> list = entry.getValue();
         return brightness <= entry.getKey()
-                ? list.get(0)
-                : list.get(list.size() - 1);
+                ? list.getFirst()
+                : list.getLast();
     }
 
     protected @NonNull CssSize parsePercentageValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {

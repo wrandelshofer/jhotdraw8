@@ -351,7 +351,7 @@ public class BinaryPListParser {
         Element root = doc.createElement("plist");
         doc.appendChild(root);
         root.setAttribute("version", "1.0");
-        convertObjectTableToXML(doc, root, objectTable.get(0), (int) fileLength);
+        convertObjectTableToXML(doc, root, objectTable.getFirst(), (int) fileLength);
 
         return doc;
     }

@@ -60,7 +60,6 @@ import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableMap;
 
 import java.lang.ref.WeakReference;
@@ -270,7 +269,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         }
         for (ArrayList<Activity> list : titles.values()) {
             if (list.size() == 1) {
-                list.get(0).setDisambiguation(0);
+                list.getFirst().setDisambiguation(0);
             } else {
                 int max = 0;
                 for (Activity v : list) {

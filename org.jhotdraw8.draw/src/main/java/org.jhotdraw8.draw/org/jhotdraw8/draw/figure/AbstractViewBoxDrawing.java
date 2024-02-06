@@ -48,7 +48,7 @@ public abstract class AbstractViewBoxDrawing extends AbstractDrawing implements 
         final double x = getStyledNonNull(VIEW_BOX_X).getConvertedValue(unitConverter);
         final double y = getStyledNonNull(VIEW_BOX_Y).getConvertedValue(unitConverter);
 
-        Group gg = (Group) ((Pane) n).getChildrenUnmodifiable().get(0);
+        Group gg = (Group) ((Pane) n).getChildrenUnmodifiable().getFirst();
         gg.setTranslateX(-x);
         gg.setTranslateY(-y);
     }

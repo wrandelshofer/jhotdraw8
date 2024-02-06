@@ -98,7 +98,7 @@ public abstract class AbstractColorSlidersMain extends Application {
                 return map.get(string);
             }
         });
-        comboBox.setValue(comboBox.getItems().get(0));
+        comboBox.setValue(comboBox.getItems().getFirst());
         return comboBox;
     }
 

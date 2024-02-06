@@ -53,7 +53,7 @@ public class AddToGroupAction extends AbstractDrawingViewAction {
             alert.showAndWait();
             return;
         }
-        Figure lead = figures.get(figures.size() - 1);
+        Figure lead = figures.getLast();
         if (!(lead instanceof Grouping) && !lead.isAllowsChildren() || !lead.isDecomposable()) {
             // FIXME internationalize me
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "The last figure in the selection must be a group.");

@@ -102,22 +102,22 @@ public class PolylineToCubicCurve {
                     break;
                 case 1:
                     if (first) {
-                        builder.moveTo(seg.get(0).getX(), seg.get(0).getY());
+                        builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
                         first = false;
                     } else {
-                        builder.lineTo(seg.get(0).getX(), seg.get(0).getY());
+                        builder.lineTo(seg.getFirst().getX(), seg.getFirst().getY());
                     }
                     break;
                 case 2:
                     if (first) {
-                        builder.moveTo(seg.get(0).getX(), seg.get(0).getY());
+                        builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
                         first = false;
                     }
                     builder.lineTo(seg.get(1).getX(), seg.get(1).getY());
                     break;
                 default:
                     if (first) {
-                        builder.moveTo(seg.get(0).getX(), seg.get(0).getY());
+                        builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
                         first = false;
                     }
                     /*  Unit tangent vectors at endpoints */
@@ -179,7 +179,7 @@ public class PolylineToCubicCurve {
             double squaredDistance = minDistance * minDistance;
             java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
             if (digitizedPoints.size() > 0) {
-                Point2D prev = digitizedPoints.get(0);
+                Point2D prev = digitizedPoints.getFirst();
                 cleaned.add(prev);
                 for (Point2D p : digitizedPoints) {
                     if (v2SquaredDistanceBetween2Points(prev, p) > squaredDistance) {
@@ -187,8 +187,8 @@ public class PolylineToCubicCurve {
                         prev = p;
                     }
                 }
-                if (!prev.equals(digitizedPoints.get(digitizedPoints.size() - 1))) {
-                    cleaned.set(cleaned.size() - 1, digitizedPoints.get(digitizedPoints.size() - 1));
+                if (!prev.equals(digitizedPoints.getLast())) {
+                    cleaned.set(cleaned.size() - 1, digitizedPoints.getLast());
                 }
             }
             return cleaned;
@@ -211,7 +211,7 @@ public class PolylineToCubicCurve {
     private static @NonNull ArrayList<Point2D> removeCoincidentPoints(java.util.@NonNull List<Point2D> digitizedPoints) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
-            Point2D prev = digitizedPoints.get(0);
+            Point2D prev = digitizedPoints.getFirst();
             cleaned.add(prev);
             for (Point2D p : digitizedPoints) {
                 if (!prev.equals(p)) {
@@ -332,7 +332,7 @@ public class PolylineToCubicCurve {
     public static @NonNull ArrayList<Point2D> reduceNoise(java.util.@NonNull List<Point2D> digitizedPoints, double weight) {
         java.util.ArrayList<Point2D> cleaned = new ArrayList<>();
         if (digitizedPoints.size() > 0) {
-            Point2D prev = digitizedPoints.get(0);
+            Point2D prev = digitizedPoints.getFirst();
             cleaned.add(prev);
             double pnWeight = (1d - weight) / 2d; // weight of previous and next
             for (int i = 1, n = digitizedPoints.size() - 1; i < n; i++) {
@@ -344,7 +344,7 @@ public class PolylineToCubicCurve {
                 prev = cur;
             }
             if (digitizedPoints.size() > 1) {
-                cleaned.add(digitizedPoints.get(digitizedPoints.size() - 1));
+                cleaned.add(digitizedPoints.getLast());
             }
         }
         return cleaned;

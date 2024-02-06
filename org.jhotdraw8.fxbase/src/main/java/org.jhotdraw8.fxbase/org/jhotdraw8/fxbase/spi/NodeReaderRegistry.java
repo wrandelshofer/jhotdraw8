@@ -43,11 +43,11 @@ public class NodeReaderRegistry {
 
     public static @Nullable NodeReader getNodeReader(@NonNull URL url) {
         List<NodeReader> list = getNodeReaders(url);
-        return list.isEmpty() ? null : list.get(0);
+        return list.isEmpty() ? null : list.getFirst();
     }
 
     public static @Nullable NodeReader getNodeReader(@NonNull String path) throws MalformedURLException {
         List<NodeReader> list = getNodeReaders(path);
-        return list.isEmpty() ? null : list.get(0);
+        return list.isEmpty() ? null : list.getFirst();
     }
 }

@@ -120,12 +120,12 @@ public class InteractiveHandleRenderer {
         List<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size() > 1) {
             if (getEditor().getAnchorHandleType() != null) {
-                Figure anchor = selection.get(0);
+                Figure anchor = selection.getFirst();
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
                 anchor.createHandles(getEditor().getAnchorHandleType(), list);
             }
             if (getEditor().getLeadHandleType() != null) {
-                Figure anchor = selection.get(selection.size() - 1);
+                Figure anchor = selection.getLast();
                 List<Handle> list = handles.computeIfAbsent(anchor, k -> new ArrayList<>());
                 anchor.createHandles(getEditor().getLeadHandleType(), list);
             }

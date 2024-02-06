@@ -923,7 +923,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         public String getPrefix(@NonNull String namespaceURI) {
             Objects.requireNonNull(namespaceURI, "namespaceURI");
             List<String> prefixes = nsToPrefix.get(namespaceURI);
-            return prefixes == null || prefixes.isEmpty() ? null : prefixes.get(0);
+            return prefixes == null || prefixes.isEmpty() ? null : prefixes.getFirst();
         }
 
         @Override
@@ -939,7 +939,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                 nsToPrefix.get(oldNs).removeIf(prefix::equals);
             }
             if (DEFAULT_PREFIX.equals(prefix)) {
-                nsToPrefix.computeIfAbsent(uri, k -> new ArrayList<>()).add(0, prefix);
+                nsToPrefix.computeIfAbsent(uri, k -> new ArrayList<>()).addFirst(prefix);
             } else {
                 nsToPrefix.computeIfAbsent(uri, k -> new ArrayList<>()).add(prefix);
             }

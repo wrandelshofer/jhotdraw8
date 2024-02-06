@@ -57,7 +57,7 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
         }
         switch (list.size()) {
         case 1:
-            double trbl = list.get(0).doubleValue();
+            double trbl = list.getFirst().doubleValue();
             return new Insets(trbl);
         case 2:
             double tb = list.get(0).doubleValue();

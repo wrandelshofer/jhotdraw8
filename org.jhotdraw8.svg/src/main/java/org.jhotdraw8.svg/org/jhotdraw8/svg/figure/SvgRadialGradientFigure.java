@@ -54,7 +54,7 @@ public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
         CycleMethod spreadMethod = getStyledNonNull(SPREAD_METHOD);
 
         if (stops.size() == 1) {
-            return stops.get(0).getColor();
+            return stops.getFirst().getColor();
         }
 
         return new RadialGradient(0, 0, cx, cy, r, gradientUnits == SvgGradientUnits.OBJECT_BOUNDING_BOX,

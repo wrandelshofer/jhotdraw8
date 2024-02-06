@@ -318,7 +318,7 @@ public class ContourBuilder {
 
         // detect single collapsed arc segment (this may be removed in the future if invalid segments are
         // tracked in join functions to be pruned at slice creation)
-        if (rawOffsets.size() == 1 && rawOffsets.get(0).collapsedArc) {
+        if (rawOffsets.size() == 1 && rawOffsets.getFirst().collapsedArc) {
             return result;
         }
 
@@ -361,8 +361,8 @@ public class ContourBuilder {
 
         if (pline.isClosed() && result.size() > 1) {
             // joining segments at vertex indexes (n, 0) and (0, 1)
-            final PlineOffsetSegment s1 = rawOffsets.get(rawOffsets.size() - 1);
-            final PlineOffsetSegment s2 = rawOffsets.get(0);
+            final PlineOffsetSegment s1 = rawOffsets.getLast();
+            final PlineOffsetSegment s2 = rawOffsets.getFirst();
 
             // temp polyline to capture results of joining (to avoid mutating result)
             PlinePath closingPartResult = new PlinePath();
@@ -370,7 +370,7 @@ public class ContourBuilder {
             joinResultVisitor.accept(s1, s2, closingPartResult);
 
             // update last vertexes
-            result.set(result.size() - 1, closingPartResult.get(0));
+            result.set(result.size() - 1, closingPartResult.getFirst());
             for (int i = 1; i < closingPartResult.size(); ++i) {
                 result.addVertex(closingPartResult.get(i));
             }
@@ -391,7 +391,7 @@ public class ContourBuilder {
                     if ((updatedTheta < 0.0 && result.get(0).bulgeIsPos()) ||
                             (updatedTheta > 0.0 && result.get(0).bulgeIsNeg())) {
                         // first vertex not valid, just update its position to be removed later
-                        result.set(0, new PlineVertex(updatedFirstPos, result.get(0).bulge()));
+                        result.set(0, new PlineVertex(updatedFirstPos, result.getFirst().bulge()));
                     } else {
                         // update position and bulge
                         result.set(0, new PlineVertex(updatedFirstPos, Math.tan(updatedTheta * 0.25)));
@@ -402,10 +402,10 @@ public class ContourBuilder {
             // must do final singularity prune between first and second vertex after joining curves (n, 0)
             // and (0, 1)
             if (result.size() > 1 && Points.almostEqual(result.get(0).pos(), result.get(1).pos(), realPrecision)) {
-                result.remove(0);
+                result.removeFirst();
             }
         } else {
-            addOrReplaceIfSamePos(result, rawOffsets.get(rawOffsets.size() - 1).v2);
+            addOrReplaceIfSamePos(result, rawOffsets.getLast().v2);
         }
 
         // if due to joining of segments we are left with only 1 vertex then return no raw offset (empty
@@ -492,7 +492,7 @@ public class ContourBuilder {
 
         IntArrayDeque queryStack = new IntArrayDeque(8);
         if (intersectsLookup.size() == 0) {
-            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.get(0).pos(),
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.getFirst().pos(),
                     queryStack)) {
                 return result;
             }
@@ -500,7 +500,7 @@ public class ContourBuilder {
             OpenPolylineSlice back = new OpenPolylineSlice(Integer.MAX_VALUE, rawOffsetPline);
             back.pline.isClosed(false);
             if (originalPline.isClosed()) {
-                back.pline.addVertex(rawOffsetPline.get(0));
+                back.pline.addVertex(rawOffsetPline.getFirst());
                 back.pline.lastVertex().bulge(0.0);
             }
             result.add(back);
@@ -561,7 +561,7 @@ public class ContourBuilder {
                     addOrReplaceIfSamePos(firstSlice, rawOffsetPline.get(index));
                 } else {
                     // intersect found, test segment will be valid before finishing first open polyline
-                    final Point2D.Double intersectPos = iter.get(0);
+                    final Point2D.Double intersectPos = iter.getFirst();
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
                             intersectPos, queryStack)) {
                         break;
@@ -604,7 +604,7 @@ public class ContourBuilder {
             if (siList.size() != 1) {
                 // build all the segments between the N intersects in siList (N > 1), skipping the first
                 // segment (to be processed at the end)
-                SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.get(0));
+                SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.getFirst());
                 PlineVertex prevVertex = firstSplit.splitVertex;
                 for (int i = 1; i < siList.size(); ++i) {
                     SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
@@ -649,12 +649,12 @@ public class ContourBuilder {
             // build the segment between the last intersect in siList and the next intersect found
 
             // check that the first point is valid
-            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.get(siList.size() - 1),
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.getLast(),
                     queryStack)) {
                 continue;
             }
 
-            SplitResult split = splitAtPoint(startVertex, endVertex, siList.get(siList.size() - 1));
+            SplitResult split = splitAtPoint(startVertex, endVertex, siList.getLast());
             PlinePath currSlice = new PlinePath();
             currSlice.addVertex(split.splitVertex.clone());
 
@@ -690,7 +690,7 @@ public class ContourBuilder {
                     // there is an intersect, slice is done, check if final segment is valid
 
                     // check intersect pos is valid (which will also be end vertex position)
-                    final Point2D.Double intersectPos = nextIntr.get(0);
+                    final Point2D.Double intersectPos = nextIntr.getFirst();
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
                             intersectPos, queryStack)) {
                         isValidPline = false;
@@ -757,7 +757,7 @@ public class ContourBuilder {
             // find intersects between circles generated at original open polyline end points and raw offset
             // polyline
             List<OrderedPair<Integer, List<Point2D.Double>>> intersects = new ArrayList<>();
-            offsetCircleIntersectsWithPline(rawOffsetPline, offset, originalPline.get(0).pos(),
+            offsetCircleIntersectsWithPline(rawOffsetPline, offset, originalPline.getFirst().pos(),
                     rawOffsetPlineSpatialIndex, intersects);
             offsetCircleIntersectsWithPline(rawOffsetPline, offset,
                     originalPline.lastVertex().pos(),
@@ -1063,7 +1063,7 @@ public class ContourBuilder {
 
         IntArrayDeque queryStack = new IntArrayDeque(8);
         if (selfIntersects.size() == 0) {
-            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.get(0).pos(),
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.getFirst().pos(),
                     queryStack)) {
                 return result;
             }
@@ -1071,7 +1071,7 @@ public class ContourBuilder {
             OpenPolylineSlice back = new OpenPolylineSlice(Integer.MAX_VALUE, rawOffsetPline);
             result.add(back);
             back.pline.isClosed(false);
-            back.pline.addVertex(rawOffsetPline.get(0));
+            back.pline.addVertex(rawOffsetPline.getFirst());
             back.pline.lastVertex().bulge(0.0);
             return result;
         }
@@ -1121,7 +1121,7 @@ public class ContourBuilder {
             if (siList.size() != 1) {
                 // build all the segments between the N intersects in siList (N > 1), skipping the first
                 // segment (to be processed at the end)
-                SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.get(0));
+                SplitResult firstSplit = splitAtPoint(startVertex, endVertex, siList.getFirst());
                 PlineVertex prevVertex = firstSplit.splitVertex;
                 for (int i = 1; i < siList.size(); ++i) {
                     SplitResult split = splitAtPoint(prevVertex, endVertex, siList.get(i));
@@ -1167,12 +1167,12 @@ public class ContourBuilder {
             // build the segment between the last intersect in siList and the next intersect found
 
             // check that the first point is valid
-            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.get(siList.size() - 1),
+            if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, siList.getLast(),
                     queryStack)) {
                 continue;
             }
 
-            SplitResult split = splitAtPoint(startVertex, endVertex, siList.get(siList.size() - 1));
+            SplitResult split = splitAtPoint(startVertex, endVertex, siList.getLast());
             PlinePath currSlice = new PlinePath();
             currSlice.addVertex(split.splitVertex);
 
@@ -1208,7 +1208,7 @@ public class ContourBuilder {
                     // there is an intersect, slice is done, check if final segment is valid
 
                     // check intersect pos is valid (which will also be end vertex position)
-                    final Point2D.Double intersectPos = nextIntr.get(0);
+                    final Point2D.Double intersectPos = nextIntr.getFirst();
                     if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex,
                             intersectPos, queryStack)) {
                         isValidPline = false;
@@ -1240,7 +1240,7 @@ public class ContourBuilder {
 
             isValidPline = isValidPline && currSlice.size() > 1;
 
-            if (isValidPline && Points.almostEqual(currSlice.get(0).pos(), currSlice.lastVertex().pos())) {
+            if (isValidPline && Points.almostEqual(currSlice.getFirst().pos(), currSlice.lastVertex().pos())) {
                 // discard very short slice loops (invalid loops may arise due to valid offset distance
                 // thresholding)
                 isValidPline = currSlice.getPathLength() > 1e-2;
@@ -1271,11 +1271,11 @@ public class ContourBuilder {
         }
 
         if (slices.size() == 1) {
-            result.add(slices.get(0).pline);
+            result.add(slices.getFirst().pline);
             if (closedPolyline &&
-                    Points.almostEqual(result.get(0).get(0).pos(), result.get(0).lastVertex().pos(), joinThreshold)) {
-                result.get(0).isClosed(true);
-                result.get(0).removeLast();
+                    Points.almostEqual(result.getFirst().getFirst().pos(), result.getFirst().lastVertex().pos(), joinThreshold)) {
+                result.getFirst().isClosed(true);
+                result.getFirst().removeLast();
             }
 
             return result;
@@ -1284,7 +1284,7 @@ public class ContourBuilder {
         // load spatial index with all start points
         StaticSpatialIndex spatialIndex = new StaticSpatialIndex(slices.size());
         for (final OpenPolylineSlice slice : slices) {
-            final Point2D.Double point = slice.pline.get(0).pos();
+            final Point2D.Double point = slice.pline.getFirst().pos();
             spatialIndex.add(point.getX() - joinThreshold, point.getY() - joinThreshold,
                     point.getX() + joinThreshold, point.getY() + joinThreshold);
         }
@@ -1302,7 +1302,7 @@ public class ContourBuilder {
 
             PlinePath currPline = new PlinePath();
             int currIndex = i;
-            final Point2D.Double initialStartPoint = slices.get(i).pline.get(0).pos();
+            final Point2D.Double initialStartPoint = slices.get(i).pline.getFirst().pos();
             int loopCount = 0;
             final int maxLoopCount = slices.size();
             while (true) {
@@ -1353,7 +1353,7 @@ public class ContourBuilder {
                 if (queryResults.size() == 0) {
                     // we're done
                     if (currPline.size() > 1) {
-                        if (closedPolyline && Points.almostEqual(currPline.get(0).pos(), currPline.lastVertex().pos(),
+                        if (closedPolyline && Points.almostEqual(currPline.getFirst().pos(), currPline.lastVertex().pos(),
                                 Utils.realPrecision)) {
                             currPline.removeLast();
                             currPline.isClosed(true);
