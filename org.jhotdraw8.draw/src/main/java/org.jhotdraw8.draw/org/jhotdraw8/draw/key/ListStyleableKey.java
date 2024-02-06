@@ -10,7 +10,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -36,44 +36,38 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableL
      * default value.
      *
      * @param name      The name of the key.
-     * @param type      the class of the type
-     * @param converter String converter for a list element
+     * @param elementType      the class of the type
+     * @param elementConverter String converter for a list element
      */
-    public ListStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableList<T>> converter) {
-        super(name, type, converter, SimpleImmutableList.of());
+    public ListStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter) {
+        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter), SimpleImmutableList.of());
     }
 
-    /**
-     * Creates a new instance with the specified name and with an empty list as the
-     * default value.
-     *
-     * @param name      The name of the key.
-     * @param type      the class of the type
-     * @param converter String converter for a list element
-     */
-    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
-        super(name, type.getType(), new CssListConverter<>(converter), SimpleImmutableList.of());
-    }
 
     /**
      * Creates a new instance with the specified name, mask and default value.
      *
      * @param name         The name of the key.
-     * @param type         the class of the type
-     * @param converter    String converter for a list element
+     * @param elementType         the class of the type
+     * @param elementConverter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public ListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
-        super(name, type.getType(), new CssListConverter<>(converter), defaultValue);
+    public ListStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter, @NonNull ImmutableList<T> defaultValue) {
+        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter), defaultValue);
     }
 
-    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableList<T> defaultValue) {
-        super(xmlName, cssName, type.getType(), new CssListConverter<>(converter), defaultValue);
+    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter, @NonNull ImmutableList<T> defaultValue) {
+        super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter), defaultValue);
     }
 
-    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter,
+    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter,
                             @Nullable String delimiter, @NonNull ImmutableList<T> defaultValue) {
-        super(xmlName, cssName, type.getType(), new CssListConverter<>(converter, delimiter), defaultValue);
+        super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter, delimiter), defaultValue);
+    }
+
+    public ListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter,
+                            @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, @NonNull ImmutableList<T> defaultValue) {
+        super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter, delimiter, prefix, suffix), defaultValue);
     }
 
 }

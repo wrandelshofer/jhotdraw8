@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 
 import java.lang.reflect.Type;
 
@@ -24,17 +23,6 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
     private final @NonNull String cssName;
     private final @Nullable String namespace;
 
-    /**
-     * Creates a new instance with the specified name, type token class, default
-     * value.
-     *
-     * @param key          The name of the name.
-     * @param typeToken    The type of the value.
-     * @param defaultValue The default value.
-     */
-    public AbstractStyleableKey(@NonNull String key, @NonNull TypeToken<T> typeToken, @Nullable T defaultValue) {
-        this(null, key, typeToken.getType(), defaultValue == null, defaultValue);
-    }
 
     /**
      * Creates a new instance with the specified name, type token class, default

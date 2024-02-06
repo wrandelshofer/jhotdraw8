@@ -9,6 +9,7 @@ import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.Serial;
+import java.lang.reflect.Type;
 
 /**
  * A {@link Key} that stores a list of values.
@@ -21,11 +22,11 @@ public class SimpleNonNullListKey<E> extends SimpleNonNullKey<ImmutableList<E>> 
     @Serial
     private static final long serialVersionUID = 1L;
 
-    public SimpleNonNullListKey(@NonNull String key, @NonNull TypeToken<ImmutableList<E>> type) {
-        super(key, type, SimpleImmutableList.of());
+    public SimpleNonNullListKey(@NonNull String key, @NonNull Type elementType) {
+        super(key, new SimpleParameterizedType(ImmutableList.class, elementType), SimpleImmutableList.of());
     }
 
-    public SimpleNonNullListKey(@NonNull String key, @NonNull TypeToken<ImmutableList<E>> type, @NonNull ImmutableList<E> defaultValue) {
-        super(key, type, defaultValue);
+    public SimpleNonNullListKey(@NonNull String key, @NonNull Type elementType, @NonNull ImmutableList<E> defaultValue) {
+        super(key, new SimpleParameterizedType(ImmutableList.class, elementType), defaultValue);
     }
 }

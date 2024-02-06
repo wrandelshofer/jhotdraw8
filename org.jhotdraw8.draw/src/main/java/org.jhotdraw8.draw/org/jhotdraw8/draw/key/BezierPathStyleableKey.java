@@ -9,7 +9,6 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.CssBezierPathConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.geom.shape.BezierPath;
 
 import java.io.Serial;
@@ -45,8 +44,7 @@ public class BezierPathStyleableKey
      * @param defaultValue The default value.
      */
     public BezierPathStyleableKey(@NonNull String name, @NonNull BezierPath defaultValue) {
-        super(name, new TypeToken<BezierPath>() {
-        }, defaultValue);
+        super(name, BezierPath.class, defaultValue);
 
     }
 

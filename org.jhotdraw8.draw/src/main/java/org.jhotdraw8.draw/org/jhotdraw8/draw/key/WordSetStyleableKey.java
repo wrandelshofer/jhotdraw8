@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssSetConverter;
 import org.jhotdraw8.draw.css.converter.CssIdentConverter;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
@@ -54,8 +54,7 @@ public class WordSetStyleableKey extends SetStyleableKey<String> {
      */
     public WordSetStyleableKey(@NonNull String name, @NonNull CssConverter<ImmutableSequencedSet<String>> converter, @NonNull ImmutableSequencedSet<String> defaultValue) {
         super(name,
-                new TypeToken<ImmutableSequencedSet<String>>() {
-                },
+                new SimpleParameterizedType(ImmutableSequencedSet.class, String.class),
                 converter,
                 defaultValue);
     }

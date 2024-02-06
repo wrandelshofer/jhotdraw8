@@ -24,7 +24,7 @@ import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableMap;
 
 import java.net.URI;
@@ -36,8 +36,7 @@ import java.util.function.Supplier;
 public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     public static final @NonNull Key<URIChooser> OPEN_CHOOSER_KEY = new SimpleNullableKey<>("openChooser", URIChooser.class);
     public static final @NonNull Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("openChooserFactory",
-            new TypeToken<Supplier<URIChooser>>() {
-            });
+            new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
     public AbstractOpenFileAction(@NonNull FileBasedApplication app) {
         super(app);

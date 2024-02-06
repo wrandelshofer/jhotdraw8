@@ -20,7 +20,7 @@ import java.util.function.Consumer;
  * Processes the concat() function.
  * <pre>
  * concat              = "concat(", string-list, ")" ;
- * string-iist         = value ,  { [ ',' ] , value } ;
+ * string-list         = value ,  { [ ',' ] , value } ;
  * value               = string | number | dimension | percentage | url ;
  * </pre>
  *

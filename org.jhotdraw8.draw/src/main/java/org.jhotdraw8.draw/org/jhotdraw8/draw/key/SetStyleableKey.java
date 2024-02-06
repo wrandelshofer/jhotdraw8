@@ -8,11 +8,11 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 import java.io.Serial;
+import java.lang.reflect.Type;
 
 /**
  * SetStyleableKey.
@@ -36,8 +36,8 @@ public class SetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSe
      * @param type      the class of the type
      * @param converter String converter for a list element
      */
-    public SetStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter) {
-        super(name, type.getType(), converter, SimpleImmutableSequencedSet.of());
+    public SetStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter) {
+        super(name, type, converter, SimpleImmutableSequencedSet.of());
     }
 
     /**
@@ -48,8 +48,8 @@ public class SetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSe
      * @param converter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public SetStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter, @NonNull ImmutableSequencedSet<T> defaultValue) {
-        super(name, type.getType(), converter, defaultValue);
+    public SetStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter, @NonNull ImmutableSequencedSet<T> defaultValue) {
+        super(name, type, converter, defaultValue);
     }
 /*
     public SetStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableSequencedSet<T> defaultValue) {

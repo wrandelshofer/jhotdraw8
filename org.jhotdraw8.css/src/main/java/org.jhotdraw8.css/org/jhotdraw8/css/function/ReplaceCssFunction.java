@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 /**
- * Processes the replaceAll() function.
+ * Processes the replace() function.
  * <pre>
  * replace     = "replace(", string, [","], regex, [","], replacement, ")" ;
  * string      = string-token ;

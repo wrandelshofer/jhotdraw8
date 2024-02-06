@@ -5,12 +5,11 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -18,7 +17,7 @@ import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
- * ListStyleableKey.
+ * Nullable ListStyleableKey.
  *
  * @param <T> the element type of the list
  * @author Werner Randelshofer
@@ -35,44 +34,10 @@ public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Im
      * default value.
      *
      * @param name      The name of the key.
-     * @param type      the class of the type
-     * @param converter String converter for a list element
+     * @param elementType      the class of the type
+     * @param elementConverter String converter for a list element
      */
-    public NullableListStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<ImmutableList<T>> converter) {
-        super(name, type, converter, SimpleImmutableList.of());
+    public NullableListStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter) {
+        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter), SimpleImmutableList.of());
     }
-
-    /**
-     * Creates a new instance with the specified name and with an empty list as the
-     * default value.
-     *
-     * @param name      The name of the key.
-     * @param type      the class of the type
-     * @param converter String converter for a list element
-     */
-    public NullableListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter) {
-        super(name, type.getType(), new CssListConverter<>(converter), SimpleImmutableList.of());
-    }
-
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param type         the class of the type
-     * @param converter    String converter for a list element
-     * @param defaultValue The default value.
-     */
-    public NullableListStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @Nullable ImmutableList<T> defaultValue) {
-        super(name, type.getType(), new CssListConverter<>(converter), defaultValue);
-    }
-
-    public NullableListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter, @Nullable ImmutableList<T> defaultValue) {
-        super(xmlName, cssName, type.getType(), new CssListConverter<>(converter), defaultValue);
-    }
-
-    public NullableListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableList<T>> type, @NonNull CssConverter<T> converter,
-                                    @Nullable String delimiter, @Nullable ImmutableList<T> defaultValue) {
-        super(xmlName, cssName, type.getType(), new CssListConverter<>(converter, delimiter), defaultValue);
-    }
-
 }

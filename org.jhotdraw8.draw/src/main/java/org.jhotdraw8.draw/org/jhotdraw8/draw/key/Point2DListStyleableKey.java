@@ -11,7 +11,7 @@ import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -47,8 +47,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
      * @param defaultValue The default value.
      */
     public Point2DListStyleableKey(@NonNull String name, @NonNull ImmutableList<@NonNull Point2D> defaultValue) {
-        super(name, new TypeToken<ImmutableList<Point2D>>() {
-        }, defaultValue);
+        super(name, new SimpleParameterizedType(ImmutableList.class, Point2D.class), defaultValue);
 
         this.converter = new CssListConverter<>(
                 new Point2DConverter(false, false));

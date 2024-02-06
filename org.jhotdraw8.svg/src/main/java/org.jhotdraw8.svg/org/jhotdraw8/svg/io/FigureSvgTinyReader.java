@@ -27,7 +27,7 @@ import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.MapEntries;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -169,8 +169,7 @@ public class FigureSvgTinyReader {
 
         // Override converters that have different representations in CSS and XML
         mutableConverterMap.put(String.class, new XmlStringConverter());
-        mutableConverterMap.put(new TypeToken<CssDefaultableValue<Paintable>>() {
-                }.getType(),
+        mutableConverterMap.put(new SimpleParameterizedType(CssDefaultableValue.class, Paintable.class),
                 new CssDefaultableValueConverter<>(new SvgXmlPaintableConverter()));
 
         converterMap = Collections.unmodifiableMap(mutableConverterMap);

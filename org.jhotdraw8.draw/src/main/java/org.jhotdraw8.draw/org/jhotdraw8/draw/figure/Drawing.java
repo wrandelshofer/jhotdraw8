@@ -19,7 +19,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullListKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -66,8 +66,7 @@ public interface Drawing extends Figure {
      * This property is not styleable.</p>
      */
     @NonNull NonNullKey<ImmutableList<URI>> AUTHOR_STYLESHEETS = new SimpleNonNullListKey<URI>("authorStylesheets",
-            new TypeToken<ImmutableList<URI>>() {
-            });
+            new SimpleParameterizedType(ImmutableList.class, URI.class));
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -79,16 +78,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new SimpleNonNullListKey<URI>("userAgentStylesheets", new TypeToken<ImmutableList<URI>>() {
-    });
+    @NonNull NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new SimpleNonNullListKey<URI>("userAgentStylesheets", new SimpleParameterizedType(ImmutableList.class, URI.class));
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new SimpleNonNullListKey<String>("inlineStylesheets", new TypeToken<ImmutableList<String>>() {
-    });
+    @NonNull NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new SimpleNonNullListKey<String>("inlineStylesheets", new SimpleParameterizedType(ImmutableList.class, String.class));
 
 
     /**

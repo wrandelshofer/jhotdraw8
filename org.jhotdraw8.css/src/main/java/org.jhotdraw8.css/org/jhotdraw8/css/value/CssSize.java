@@ -15,7 +15,7 @@ import java.util.Objects;
  * A CssSize can be used to hold the value of a CSS {@code number-token},
  * {@code percentage-token} or {@code dimension-token}.
  * <p>
- * Unlike {@link javafx.css.Size} this class supports an open ended
+ * Unlike {@link javafx.css.Size} this class supports an open-ended
  * set of units.
  * <p>
  * References:

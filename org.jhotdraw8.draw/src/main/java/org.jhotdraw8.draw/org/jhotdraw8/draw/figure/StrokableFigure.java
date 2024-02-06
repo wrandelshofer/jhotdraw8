@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.key.ListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -124,8 +124,7 @@ public interface StrokableFigure extends Figure {
      * </dl>
      */
     @NonNull ListStyleableKey<CssSize> STROKE_DASH_ARRAY = new ListStyleableKey<>("stroke-dasharray",
-            new TypeToken<ImmutableList<CssSize>>() {
-            },
+            new SimpleParameterizedType(ImmutableList.class, CssSize.class),
             new CssSizeConverter(false), SimpleImmutableList.of());
 
     /**

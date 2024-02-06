@@ -5,15 +5,16 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.CssConverter;
+import org.jhotdraw8.css.converter.CssSetConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 import java.io.Serial;
+import java.lang.reflect.Type;
 
 /**
  * SetStyleableKey.
@@ -34,31 +35,10 @@ public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * default value.
      *
      * @param name      The name of the key.
-     * @param type      the class of the type
-     * @param converter String converter for a list element
+     * @param elementType      the class of the type
+     * @param elementConverter String converter for a list element
      */
-    public NullableSetStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter) {
-        super(name, type.getType(), converter, SimpleImmutableSequencedSet.of());
+    public NullableSetStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter) {
+        super(name, new SimpleParameterizedType(ImmutableSequencedSet.class, elementType), new CssSetConverter<>(elementConverter), SimpleImmutableSequencedSet.of());
     }
-
-    /**
-     * Creates a new instance with the specified name, mask and default value.
-     *
-     * @param name         The name of the key.
-     * @param type         the class of the type
-     * @param converter    String converter for a list element
-     * @param defaultValue The default value.
-     */
-    public NullableSetStyleableKey(@NonNull String name, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<ImmutableSequencedSet<T>> converter, @Nullable ImmutableSequencedSet<T> defaultValue) {
-        super(name, type.getType(), converter, defaultValue);
-    }
-/*
-    public SetStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<T> converter, @NonNull ImmutableSequencedSet<T> defaultValue) {
-        super(xmlName, cssName, type.getType(), new CssSetConverter<>(converter), defaultValue);
-    }
-    public SetStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull TypeToken<ImmutableSequencedSet<T>> type, @NonNull CssConverter<T> converter,
-                           @Nullable String delimiter, @NonNull ImmutableSequencedSet<T> defaultValue) {
-        super(xmlName, cssName, type.getType(), new CssSetConverter<>(converter,delimiter), defaultValue);
-    }
-*/
 }

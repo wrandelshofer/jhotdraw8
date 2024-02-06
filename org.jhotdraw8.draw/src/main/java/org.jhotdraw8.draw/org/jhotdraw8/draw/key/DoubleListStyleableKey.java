@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssDoubleConverter;
 import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.Serial;
@@ -43,8 +43,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      * @param defaultValue The default value.
      */
     public DoubleListStyleableKey(@NonNull String name, ImmutableList<Double> defaultValue) {
-        super(name, new TypeToken<ImmutableList<Double>>() {
-        }, defaultValue);
+        super(name, new SimpleParameterizedType(ImmutableList.class, Double.class), defaultValue);
 
         converter = new CssListConverter<>(new CssDoubleConverter(false));
     }

@@ -11,7 +11,7 @@ import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.draw.css.converter.CssTransformConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -47,8 +47,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param defaultValue The default value.
      */
     public TransformListStyleableKey(@NonNull String name, ImmutableList<Transform> defaultValue) {
-        super(name, new TypeToken<ImmutableList<Transform>>() {
-        }, defaultValue);
+        super(name, new SimpleParameterizedType(ImmutableList.class, Transform.class), defaultValue);
         converter = new CssListConverter<>(new CssTransformConverter());
     }
 

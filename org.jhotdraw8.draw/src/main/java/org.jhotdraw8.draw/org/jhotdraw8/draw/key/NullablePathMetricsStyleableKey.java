@@ -10,7 +10,6 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.CssPathMetricsConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.geom.shape.PathMetrics;
 
 import java.io.Serial;
@@ -46,8 +45,7 @@ public class NullablePathMetricsStyleableKey
      * @param defaultValue The default value.
      */
     public NullablePathMetricsStyleableKey(@NonNull String name, @Nullable PathMetrics defaultValue) {
-        super(name, new TypeToken<PathMetrics>() {
-        }, defaultValue);
+        super(name, PathMetrics.class, defaultValue);
 
     }
 

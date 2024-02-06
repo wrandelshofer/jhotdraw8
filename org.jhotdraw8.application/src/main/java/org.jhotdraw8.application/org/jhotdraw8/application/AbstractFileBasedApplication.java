@@ -59,7 +59,8 @@ import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.SimpleImmutableMap;
 
 import java.lang.ref.WeakReference;
@@ -102,8 +103,7 @@ import static java.lang.Math.min;
 public abstract class AbstractFileBasedApplication extends AbstractApplication implements FileBasedApplication {
 
     private static final @NonNull Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new SimpleNullableKey<>("focusListener",
-            new TypeToken<ChangeListener<Boolean>>() {
-            });
+            new SimpleParameterizedType(ChangeListener.class, Boolean.class));
     private static final @NonNull Key<Stage> STAGE_KEY = new SimpleNullableKey<>("stage", Stage.class);
     public static final @NonNull String WINDOW_MENU_ID = "window";
     public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";

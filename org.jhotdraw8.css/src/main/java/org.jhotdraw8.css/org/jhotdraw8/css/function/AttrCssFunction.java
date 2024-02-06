@@ -40,8 +40,9 @@ import java.util.function.Consumer;
  * <p>
  * References:
  * <dl>
- *     <dt>attr() function</dt>
- *     <dd><a href="https://drafts.csswg.org/css-values-4/#attr-notation">csswg.org</a></dd>
+ *     <dt>CSS Values and Units Module Level 5.
+ *     Paragraph 5.4. Attribute References: the attr() function</dt>
+ *     <dd><a href="https://drafts.csswg.org/css-values-5/#attr-notation">csswg.org</a></dd>
  * </dl>
  * @param <T> the element type of the DOM
  */

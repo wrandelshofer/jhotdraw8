@@ -20,13 +20,13 @@ import java.util.Set;
  * Values are integers {@literal >= 0}.
  */
 public class KeyMap implements Map<Key<?>, Integer> {
+    private final @NonNull Map<Key<?>, Integer> backingMap;
     private int size;
     /**
      * Stores stuffed values which are value + 1,
      * so that we can initialize the table with 0.
      */
     private int @NonNull [] table = new int[0];
-    private final @NonNull Map<Key<?>, Integer> backingMap;
 
     public KeyMap(int initialCapacity) {
         this.table = new int[initialCapacity];

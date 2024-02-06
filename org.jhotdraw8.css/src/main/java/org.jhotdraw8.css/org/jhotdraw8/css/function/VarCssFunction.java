@@ -28,6 +28,13 @@ import java.util.function.Consumer;
  *     declaration-value = fallback-value;
  * </pre>
  * The custom-property-name must start with two dashes "--".
+ * <p>
+ * References:
+ * <dl>
+ * <dt>CSS Custom Properties for Cascading Variables Module Level 2.
+ * Paragraph 3. Using Cascading Variables: the var() notation</dt>
+ * <dd><a href="https://drafts.csswg.org/css-variables-2/#using-variables">csswg.org</a></dd>
+ * </dl>
  *
  * @param <T> the element type of the DOM
  */

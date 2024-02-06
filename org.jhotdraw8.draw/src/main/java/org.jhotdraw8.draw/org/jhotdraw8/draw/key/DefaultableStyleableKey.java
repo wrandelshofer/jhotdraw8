@@ -12,9 +12,9 @@ import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.draw.css.converter.CssDefaultableValueConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 
 import java.io.Serial;
+import java.lang.reflect.Type;
 
 /**
  * DefaultableStyleableKey.
@@ -41,7 +41,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      * @param converter              String converter for a list element
      * @param initialDefaultingValue The default value.
      */
-    public DefaultableStyleableKey(@NonNull String name, @NonNull TypeToken<CssDefaultableValue<T>> type, @NonNull CssConverter<T> converter,
+    public DefaultableStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<T> converter,
                                    @NonNull CssDefaultableValue<T> initialDefaultingValue,
                                    @Nullable T initialValue) {
         super(name, type, initialDefaultingValue);

@@ -11,11 +11,11 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.AbstractStyleableKey;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
 
 import java.io.Serial;
+import java.lang.reflect.Type;
 
 /**
  * TListStyleableFigureKey.
@@ -41,7 +41,7 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
      * @param converter              String converter for a list element
      * @param initialDefaultingValue The default value.
      */
-    public SvgDefaultablePaintStyleableKey(@NonNull String name, @NonNull TypeToken<SvgDefaultablePaint<T>> type, @NonNull CssConverter<T> converter,
+    public SvgDefaultablePaintStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<T> converter,
                                            @NonNull SvgDefaultablePaint<T> initialDefaultingValue,
                                            @Nullable T initialValue) {
         super(name, type, initialDefaultingValue);

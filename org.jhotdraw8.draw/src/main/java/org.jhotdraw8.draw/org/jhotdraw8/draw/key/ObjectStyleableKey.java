@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
 
 import java.io.Serial;
 import java.lang.reflect.Type;
@@ -24,16 +23,9 @@ public class ObjectStyleableKey<T> extends AbstractKey<T> implements WritableSty
 
     private final @NonNull Converter<T> converter;
 
-    public ObjectStyleableKey(String name, Class<T> clazz, @NonNull Converter<T> converter) {
-        this(name, clazz, null, converter);
-    }
 
-    public ObjectStyleableKey(String name, TypeToken<T> clazz, @NonNull Converter<T> converter) {
+    public ObjectStyleableKey(String name, Type clazz, @NonNull Converter<T> converter) {
         this(name, clazz, null, converter);
-    }
-
-    public ObjectStyleableKey(String name, TypeToken<T> clazz, T defaultValue, @NonNull Converter<T> converter) {
-        this(name, clazz.getType(), defaultValue, converter);
     }
 
     public ObjectStyleableKey(String name, Type clazz, T defaultValue, @NonNull Converter<T> converter) {

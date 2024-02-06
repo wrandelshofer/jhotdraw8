@@ -27,7 +27,7 @@ public class SimpleNullableKey<T> extends AbstractKey<T> implements NullableKey<
      * @param type The type of the value.
      */
     public SimpleNullableKey(@NonNull String name, @NonNull Type type) {
-        super(name, type, false, false, null);
+        super(name, type, true, false, null);
     }
 
     /**

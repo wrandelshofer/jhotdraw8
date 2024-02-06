@@ -95,7 +95,7 @@ import org.jhotdraw8.draw.xml.converter.XmlPoint3DConverter;
 import org.jhotdraw8.draw.xml.converter.XmlRectangle2DConverter;
 import org.jhotdraw8.draw.xml.converter.XmlSvgPathConverter;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.xml.converter.XmlBooleanConverter;
 import org.jhotdraw8.xml.converter.XmlObjectReferenceConverter;
@@ -193,8 +193,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(URI.class, new XmlUriConverter());
         addConverterForType(URL.class, new XmlUrlConverter());
         addConverterForType(VPos.class, new CssKebabCaseEnumConverter<>(VPos.class));
-        addConverterForType(new TypeToken<ImmutableList<PathElement>>() {
-        }.getType(), new XmlFXSvgPathConverter());
+        addConverterForType(new SimpleParameterizedType(ImmutableList.class, PathElement.class), new XmlFXSvgPathConverter());
 
         addConverter(PageFigure.PAPER_SIZE, new CssPaperSizeConverter());
         addConverter(StyleableFigure.STYLE_CLASS, new XmlWordSetConverter());

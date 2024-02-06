@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.TypeToken;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 
 import java.io.Serial;
@@ -38,7 +38,6 @@ public class WordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet<String>> 
      * @param defaultValue The default value.
      */
     public WordSetKey(@NonNull String name, @NonNull ImmutableSet<String> defaultValue) {
-        super(name, new TypeToken<ImmutableSet<String>>() {
-        }, defaultValue);
+        super(name, new SimpleParameterizedType(ImmutableSet.class, String.class), defaultValue);
     }
 }
