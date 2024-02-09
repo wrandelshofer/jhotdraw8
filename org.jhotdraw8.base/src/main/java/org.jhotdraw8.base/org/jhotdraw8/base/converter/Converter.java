@@ -207,7 +207,7 @@ public interface Converter<T> {
         try {
             toString(out, value);
         } catch (IOException ex) {
-            throw new InternalError(ex);
+            throw new RuntimeException(ex);
         }
         return out.toString();
     }

@@ -171,86 +171,93 @@ public class NumberConverter implements Converter<Number> {
             return;
         }
 
-        if (value instanceof Long) {
-            long v = (Long) value;
-            if (factor != 1.0) {
-                v = (long) (v * factor);
-            }
-            buf.append(Long.toString(v));
-        } else if (value instanceof Integer) {
-            int v = (Integer) value;
-            if (factor != 1.0) {
-                v = (int) (v * factor);
-            }
-            buf.append(Integer.toString(v));
-        } else if (value instanceof Byte) {
-            byte v = (Byte) value;
-            if (factor != 1.0) {
-                v = (byte) (v * factor);
-            }
-            buf.append(Byte.toString(v));
-        } else if (value instanceof Short) {
-            short v = (Short) value;
-            if (factor != 1.0) {
-                v = (short) (v * factor);
-            }
-            buf.append(Short.toString(v));
-        } else if (value instanceof Float) {
-            float v = (Float) value;
-            if (factor != 1.0) {
-                v = (float) (v * factor);
-            }
-            if (Float.isInfinite(v)) {
-                if (v < 0.0) {
-                    buf.append('-');
+        switch (value) {
+            case Long l -> {
+                long v = l;
+                if (factor != 1.0) {
+                    v = (long) (v * factor);
                 }
-                buf.append("INF");
-            } else if (Float.isNaN(v)) {
-                buf.append("NaN");
-            } else {
-                String str;// = Float.toString(v);
-                double exponent = v == 0 ? 0 : Math.log10(Math.abs(v));
-                if (!usesScientificNotation || exponent > minNegativeExponent
-                        && exponent < minPositiveExponent) {
-                    // DecimalFormat produces too many digits, because it
-                    // promotes the float to a double before it converts it.
-                    str = Float.toString(v);
-                    int exponentIndex = str.indexOf('E');
-                    int pointIndex = str.indexOf('.');
-                    int fractionDigits = (exponentIndex == -1 ? str.length() : exponentIndex) - pointIndex;
-                    if (str.endsWith(".0")) {
-                        str = str.substring(0, str.length() - 2);
+                buf.append(Long.toString(v));
+            }
+            case Integer i -> {
+                int v = i;
+                if (factor != 1.0) {
+                    v = (int) (v * factor);
+                }
+                buf.append(Integer.toString(v));
+            }
+            case Byte b -> {
+                byte v = b;
+                if (factor != 1.0) {
+                    v = (byte) (v * factor);
+                }
+                buf.append(Byte.toString(v));
+            }
+            case Short i -> {
+                short v = i;
+                if (factor != 1.0) {
+                    v = (short) (v * factor);
+                }
+                buf.append(Short.toString(v));
+            }
+            case Float aFloat -> {
+                float v = aFloat;
+                if (factor != 1.0) {
+                    v = (float) (v * factor);
+                }
+                if (Float.isInfinite(v)) {
+                    if (v < 0.0) {
+                        buf.append('-');
                     }
-                    if (exponentIndex >= 0 || fractionDigits > decimalFormat.getMaximumFractionDigits()) {
+                    buf.append("INF");
+                } else if (Float.isNaN(v)) {
+                    buf.append("NaN");
+                } else {
+                    String str;// = Float.toString(v);
+                    double exponent = v == 0 ? 0 : Math.log10(Math.abs(v));
+                    if (!usesScientificNotation || exponent > minNegativeExponent
+                                                   && exponent < minPositiveExponent) {
+                        // DecimalFormat produces too many digits, because it
+                        // promotes the float to a double before it converts it.
+                        str = Float.toString(v);
+                        int exponentIndex = str.indexOf('E');
+                        int pointIndex = str.indexOf('.');
+                        int fractionDigits = (exponentIndex == -1 ? str.length() : exponentIndex) - pointIndex;
+                        if (str.endsWith(".0")) {
+                            str = str.substring(0, str.length() - 2);
+                        }
+                        if (exponentIndex >= 0 || fractionDigits > decimalFormat.getMaximumFractionDigits()) {
+                            str = decimalFormat.format(v);
+                        }
+                    } else {
+                        str = scientificFormat.format(v);
+                    }
+                    buf.append(str);
+                }
+            }
+            default -> {
+                double v = value.doubleValue();
+                if (factor != 1.0) {
+                    v = v * factor;
+                }
+                if (Double.isInfinite(v)) {
+                    if (v < 0.0) {
+                        buf.append('-');
+                    }
+                    buf.append("INF");
+                } else if (Double.isNaN(v)) {
+                    buf.append("NaN");
+                } else {
+                    String str;
+                    double exponent = v == 0 ? 1 : Math.log10(Math.abs(v));
+                    if (!usesScientificNotation || exponent > minNegativeExponent
+                                                   && exponent < minPositiveExponent) {
                         str = decimalFormat.format(v);
+                    } else {
+                        str = scientificFormat.format(v);
                     }
-                } else {
-                    str = scientificFormat.format(v);
+                    buf.append(str);
                 }
-                buf.append(str);
-            }
-        } else {
-            double v = value.doubleValue();
-            if (factor != 1.0) {
-                v = v * factor;
-            }
-            if (Double.isInfinite(v)) {
-                if (v < 0.0) {
-                    buf.append('-');
-                }
-                buf.append("INF");
-            } else if (Double.isNaN(v)) {
-                buf.append("NaN");
-            } else {
-                String str;
-                double exponent = v == 0 ? 1 : Math.log10(Math.abs(v));
-                if (!usesScientificNotation || exponent > minNegativeExponent
-                        && exponent < minPositiveExponent) {
-                    str = decimalFormat.format(v);
-                } else {
-                    str = scientificFormat.format(v);
-                }
-                buf.append(str);
             }
         }
 

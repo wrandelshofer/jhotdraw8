@@ -17,6 +17,20 @@ public class SimpleParameterizedType implements ParameterizedType {
     }
 
     @Override
+    public String getTypeName() {
+        StringBuilder b = new StringBuilder();
+        b.append(rawType.getTypeName());
+        b.append('<');
+        int first = b.length();
+        for (Type t : actualTypeArguments) {
+            if (b.length() != first) b.append(',');
+            b.append(t.getTypeName());
+        }
+        b.append('>');
+        return b.toString();
+    }
+
+    @Override
     public Type[] getActualTypeArguments() {
         return actualTypeArguments.clone();
     }
