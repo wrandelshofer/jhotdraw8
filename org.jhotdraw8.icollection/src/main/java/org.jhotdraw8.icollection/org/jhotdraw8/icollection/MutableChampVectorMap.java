@@ -64,7 +64,7 @@ import java.util.Spliterators;
  * <p>
  * Implementation details:
  * <p>
- * See description at {@link VectorMap}.
+ * See description at {@link ChampVectorMap}.
  * <p>
  * References:
  * <dl>
@@ -80,7 +80,7 @@ import java.util.Spliterators;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
+public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
         implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -99,7 +99,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     /**
      * Constructs a new empty map.
      */
-    public MutableVectorMap() {
+    public MutableChampVectorMap() {
         root = BitmapIndexedNode.emptyNode();
         vector = VectorList.of();
     }
@@ -111,9 +111,9 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * @param c a map
      */
     @SuppressWarnings("unchecked")
-    public MutableVectorMap(@NonNull Map<? extends K, ? extends V> c) {
-        this((c instanceof MutableVectorMap<?, ?> mvm)
-                ? ((MutableVectorMap<K, V>) mvm).toImmutable()
+    public MutableChampVectorMap(@NonNull Map<? extends K, ? extends V> c) {
+        this((c instanceof MutableChampVectorMap<?, ?> mvm)
+                ? ((MutableChampVectorMap<K, V>) mvm).toImmutable()
                 : c.entrySet());
     }
 
@@ -124,9 +124,9 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public MutableVectorMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
-        if (c instanceof VectorMap<?, ?>) {
-            VectorMap<K, V> that = (VectorMap<K, V>) c;
+    public MutableChampVectorMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
+        if (c instanceof ChampVectorMap<?, ?>) {
+            ChampVectorMap<K, V> that = (ChampVectorMap<K, V>) c;
             this.root = that.root;
             this.size = that.size;
             this.offset = that.offset;
@@ -156,8 +156,8 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      * Returns a shallow copy of this map.
      */
     @Override
-    public @NonNull MutableVectorMap<K, V> clone() {
-        return (MutableVectorMap<K, V>) super.clone();
+    public @NonNull MutableChampVectorMap<K, V> clone() {
+        return (MutableChampVectorMap<K, V>) super.clone();
     }
 
     @Override
@@ -344,10 +344,10 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
     @SuppressWarnings("unchecked")
     @Override
     public boolean putAll(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
-        if (c instanceof MutableVectorMap<?, ?> that) {
+        if (c instanceof MutableChampVectorMap<?, ?> that) {
             c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toImmutable();
         }
-        if (isEmpty() && c instanceof VectorMap<?, ?> that) {
+        if (isEmpty() && c instanceof ChampVectorMap<?, ?> that) {
             if (that.isEmpty()) {
                 return false;
             }
@@ -462,10 +462,10 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
      *
      * @return an immutable copy
      */
-    public @NonNull VectorMap<K, V> toImmutable() {
+    public @NonNull ChampVectorMap<K, V> toImmutable() {
         owner = null;
-        return size == 0 ? VectorMap.of()
-                : new VectorMap<>(root, vector, size, offset);
+        return size == 0 ? ChampVectorMap.of()
+                : new ChampVectorMap<>(root, vector, size, offset);
     }
 
     @Override
@@ -489,7 +489,7 @@ public class MutableVectorMap<K, V> extends AbstractMutableChampMap<K, V, Sequen
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableVectorMap<>(deserializedEntries);
+            return new MutableChampVectorMap<>(deserializedEntries);
         }
     }
 }

@@ -1,5 +1,5 @@
 /*
- * @(#)MutableVectorSet.java
+ * @(#)MutableChampVectorSet.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -61,7 +61,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
  * <p>
  * Implementation details:
  * <p>
- * See description at {@link VectorSet}.
+ * See description at {@link ChampVectorSet}.
  * <p>
  * References:
  * <dl>
@@ -77,7 +77,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
         SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -96,7 +96,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
     /**
      * Constructs a new empty set.
      */
-    public MutableVectorSet() {
+    public MutableChampVectorSet() {
         root = BitmapIndexedNode.emptyNode();
         vector = VectorList.of();
     }
@@ -108,12 +108,12 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      * @param c an iterable
      */
     @SuppressWarnings("unchecked")
-    public MutableVectorSet(Iterable<? extends E> c) {
-        if (c instanceof MutableVectorSet<?>) {
-            c = ((MutableVectorSet<? extends E>) c).toImmutable();
+    public MutableChampVectorSet(Iterable<? extends E> c) {
+        if (c instanceof MutableChampVectorSet<?>) {
+            c = ((MutableChampVectorSet<? extends E>) c).toImmutable();
         }
-        if (c instanceof VectorSet<?>) {
-            VectorSet<E> that = (VectorSet<E>) c;
+        if (c instanceof ChampVectorSet<?>) {
+            ChampVectorSet<E> that = (ChampVectorSet<E>) c;
             this.root = that.root;
             this.size = that.size;
             this.offset = that.offset;
@@ -206,8 +206,8 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      * Returns a shallow copy of this set.
      */
     @Override
-    public @NonNull MutableVectorSet<E> clone() {
-        return (MutableVectorSet<E>) super.clone();
+    public @NonNull MutableChampVectorSet<E> clone() {
+        return (MutableChampVectorSet<E>) super.clone();
     }
 
     @Override
@@ -405,11 +405,11 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
      *
      * @return an immutable copy
      */
-    public @NonNull VectorSet<E> toImmutable() {
+    public @NonNull ChampVectorSet<E> toImmutable() {
         owner = null;
         return size == 0
-                ? VectorSet.of()
-                : new VectorSet<>(root, vector, size, offset);
+                ? ChampVectorSet.of()
+                : new ChampVectorSet<>(root, vector, size, offset);
     }
 
     @Serial
@@ -428,7 +428,7 @@ public class MutableVectorSet<E> extends AbstractMutableChampSet<E, SequencedEle
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return new MutableVectorSet<>(deserializedElements);
+            return new MutableChampVectorSet<>(deserializedElements);
         }
     }
 }

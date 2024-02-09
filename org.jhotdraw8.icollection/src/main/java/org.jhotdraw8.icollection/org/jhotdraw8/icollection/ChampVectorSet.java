@@ -123,10 +123,10 @@ import java.util.Spliterators;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class VectorSet<E>
+public class ChampVectorSet<E>
 
         implements Serializable, ImmutableSequencedSet<E> {
-    private static final @NonNull VectorSet<?> EMPTY = new VectorSet<>(
+    private static final @NonNull ChampVectorSet<?> EMPTY = new ChampVectorSet<>(
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
@@ -163,11 +163,11 @@ public class VectorSet<E>
      * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected VectorSet(@NonNull PrivateData privateData) {
-        this(((VectorSet.OpaqueRecord<E>) privateData.get()).root,
-                ((VectorSet.OpaqueRecord<E>) privateData.get()).vector,
-                ((VectorSet.OpaqueRecord<E>) privateData.get()).size,
-                ((VectorSet.OpaqueRecord<E>) privateData.get()).offset);
+    protected ChampVectorSet(@NonNull PrivateData privateData) {
+        this(((ChampVectorSet.OpaqueRecord<E>) privateData.get()).root,
+                ((ChampVectorSet.OpaqueRecord<E>) privateData.get()).vector,
+                ((ChampVectorSet.OpaqueRecord<E>) privateData.get()).size,
+                ((ChampVectorSet.OpaqueRecord<E>) privateData.get()).offset);
     }
 
     /**
@@ -178,17 +178,17 @@ public class VectorSet<E>
      * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull VectorSet<E> newInstance(@NonNull PrivateData privateData) {
-        return new VectorSet<>(privateData);
+    protected @NonNull ChampVectorSet<E> newInstance(@NonNull PrivateData privateData) {
+        return new ChampVectorSet<>(privateData);
     }
 
-    private @NonNull VectorSet<E> newInstance(@NonNull BitmapIndexedNode<SequencedElement<E>> root,
-                                              @NonNull VectorList<Object> vector,
-                                              int size, int offset) {
-        return new VectorSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
+    private @NonNull ChampVectorSet<E> newInstance(@NonNull BitmapIndexedNode<SequencedElement<E>> root,
+                                                   @NonNull VectorList<Object> vector,
+                                                   int size, int offset) {
+        return new ChampVectorSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
-    VectorSet(
+    ChampVectorSet(
             @NonNull BitmapIndexedNode<SequencedElement<E>> root,
             @NonNull VectorList<Object> vector,
             int size, int offset) {
@@ -208,8 +208,8 @@ public class VectorSet<E>
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull VectorSet<E> copyOf(@NonNull Iterable<? extends E> c) {
-        return VectorSet.<E>of().addAll(c);
+    public static <E> @NonNull ChampVectorSet<E> copyOf(@NonNull Iterable<? extends E> c) {
+        return ChampVectorSet.<E>of().addAll(c);
     }
 
 
@@ -221,8 +221,8 @@ public class VectorSet<E>
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull VectorSet<E> of() {
-        return ((VectorSet<E>) VectorSet.EMPTY);
+    public static <E> @NonNull ChampVectorSet<E> of() {
+        return ((ChampVectorSet<E>) ChampVectorSet.EMPTY);
     }
 
 
@@ -236,28 +236,28 @@ public class VectorSet<E>
 
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull VectorSet<E> of(E @Nullable ... elements) {
+    public static <E> @NonNull ChampVectorSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        return VectorSet.<E>of().addAll(Arrays.asList(elements));
+        return ChampVectorSet.<E>of().addAll(Arrays.asList(elements));
     }
 
     @Override
-    public @NonNull VectorSet<E> add(@Nullable E key) {
+    public @NonNull ChampVectorSet<E> add(@Nullable E key) {
         return addLast(key, false);
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull VectorSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    public @NonNull ChampVectorSet<E> addAll(@NonNull Iterable<? extends E> c) {
         var m = toMutable();
         return m.addAll(c) ? m.toImmutable() : this;
     }
 
-    public @NonNull VectorSet<E> addFirst(@Nullable E element) {
+    public @NonNull ChampVectorSet<E> addFirst(@Nullable E element) {
         return addFirst(element, true);
     }
 
-    private @NonNull VectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
+    private @NonNull ChampVectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
         var newRoot = root.put(null, newElem,
@@ -283,12 +283,12 @@ public class VectorSet<E>
         return this;
     }
 
-    public @NonNull VectorSet<E> addLast(@Nullable E element) {
+    public @NonNull ChampVectorSet<E> addLast(@Nullable E element) {
         return addLast(element, true);
     }
 
-    private @NonNull VectorSet<E> addLast(@Nullable E e,
-                                          boolean moveToLast) {
+    private @NonNull ChampVectorSet<E> addLast(@Nullable E e,
+                                               boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<E>(e, vector.size() - offset);
         var newRoot = root.put(null, newElem,
@@ -319,7 +319,7 @@ public class VectorSet<E>
      * {@inheritDoc}
      */
     @Override
-    public @NonNull VectorSet<E> empty() {
+    public @NonNull ChampVectorSet<E> empty() {
         return isEmpty() ? this : of();
     }
 
@@ -337,8 +337,8 @@ public class VectorSet<E>
         if (other == null) {
             return false;
         }
-        if (other instanceof VectorSet) {
-            VectorSet<?> that = (VectorSet<?>) other;
+        if (other instanceof ChampVectorSet) {
+            ChampVectorSet<?> that = (ChampVectorSet<?>) other;
             return size == that.size && root.equivalent(that.root);
         } else {
             return ReadOnlySet.setEquals(this, other);
@@ -385,7 +385,7 @@ public class VectorSet<E>
     }
 
     @Override
-    public @NonNull VectorSet<E> remove(@Nullable E key) {
+    public @NonNull ChampVectorSet<E> remove(@Nullable E key) {
         int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
         BitmapIndexedNode<SequencedElement<E>> newRoot = root.remove(null,
@@ -394,7 +394,7 @@ public class VectorSet<E>
         if (details.isModified()) {
             var removedElem = details.getOldDataNonNull();
             var result = SequencedData.vecRemove(vector, removedElem, offset);
-            return size == 1 ? VectorSet.of() : renumber(newRoot, result.first(), size - 1,
+            return size == 1 ? ChampVectorSet.of() : renumber(newRoot, result.first(), size - 1,
                     result.second());
         }
         return this;
@@ -402,20 +402,20 @@ public class VectorSet<E>
 
 
     @Override
-    public @NonNull VectorSet<E> removeAll(@NonNull Iterable<?> c) {
+    public @NonNull ChampVectorSet<E> removeAll(@NonNull Iterable<?> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toImmutable() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public VectorSet<E> removeFirst() {
+    public ChampVectorSet<E> removeFirst() {
         return remove(getFirst());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public VectorSet<E> removeLast() {
+    public ChampVectorSet<E> removeLast() {
         return remove(getLast());
     }
 
@@ -426,10 +426,10 @@ public class VectorSet<E>
      * @param vector the root of the vector
      * @param size   the size of the trie
      * @param offset the offset that must be added to a sequence number to get the index into the vector
-     * @return a new {@link VectorSet} instance
+     * @return a new {@link ChampVectorSet} instance
      */
     @NonNull
-    private VectorSet<E> renumber(
+    private ChampVectorSet<E> renumber(
             BitmapIndexedNode<SequencedElement<E>> root,
             VectorList<Object> vector,
             int size, int offset) {
@@ -448,7 +448,7 @@ public class VectorSet<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull VectorSet<E> retainAll(@NonNull Iterable<?> c) {
+    public @NonNull ChampVectorSet<E> retainAll(@NonNull Iterable<?> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toImmutable() : this;
     }
@@ -478,8 +478,8 @@ public class VectorSet<E>
     }
 
     @Override
-    public @NonNull MutableVectorSet<E> toMutable() {
-        return new MutableVectorSet<>(this);
+    public @NonNull MutableChampVectorSet<E> toMutable() {
+        return new MutableChampVectorSet<>(this);
     }
 
     /**
@@ -511,7 +511,7 @@ public class VectorSet<E>
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return VectorSet.copyOf(deserializedElements);
+            return ChampVectorSet.copyOf(deserializedElements);
         }
     }
 

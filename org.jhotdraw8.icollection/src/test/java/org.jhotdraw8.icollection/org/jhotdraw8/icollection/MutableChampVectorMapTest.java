@@ -12,42 +12,42 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.util.Map;
 import java.util.SequencedMap;
 
-public class MutableVectorMapTest extends AbstractSequencedMapTest {
+public class MutableChampVectorMapTest extends AbstractSequencedMapTest {
     @Override
     protected boolean supportsNullKeys() {
         return true;
     }
 
     @Override
-    protected <K, V> @NonNull MutableVectorMap<K, V> newInstance() {
-        return new MutableVectorMap<>();
+    protected <K, V> @NonNull MutableChampVectorMap<K, V> newInstance() {
+        return new MutableChampVectorMap<>();
     }
 
     @Override
-    protected <K, V> @NonNull MutableVectorMap<K, V> newInstance(int numElements, float loadFactor) {
-        return new MutableVectorMap<>();
+    protected <K, V> @NonNull MutableChampVectorMap<K, V> newInstance(int numElements, float loadFactor) {
+        return new MutableChampVectorMap<>();
     }
 
     @Override
-    protected <K, V> @NonNull MutableVectorMap<K, V> newInstance(@NonNull Map<K, V> m) {
-        return new MutableVectorMap<>(m);
+    protected <K, V> @NonNull MutableChampVectorMap<K, V> newInstance(@NonNull Map<K, V> m) {
+        return new MutableChampVectorMap<>(m);
     }
 
     @Override
-    protected <K, V> @NonNull MutableVectorMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m) {
-        return new MutableVectorMap<>(m);
+    protected <K, V> @NonNull MutableChampVectorMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m) {
+        return new MutableChampVectorMap<>(m);
     }
 
 
     @Override
     protected <K, V> @NonNull SequencedMap<K, V> toClonedInstance(@NonNull Map<K, V> m) {
-        return ((MutableVectorMap<K, V>) m).clone();
+        return ((MutableChampVectorMap<K, V>) m).clone();
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testConstructorWithReadOnlyArgYieldsExpectedMap(@NonNull MapData data) throws Exception {
-        Map<Key, Value> instance = new MutableVectorMap<>(data.a());
+        Map<Key, Value> instance = new MutableChampVectorMap<>(data.a());
         assertEqualMap(data.a(), instance);
     }
 }

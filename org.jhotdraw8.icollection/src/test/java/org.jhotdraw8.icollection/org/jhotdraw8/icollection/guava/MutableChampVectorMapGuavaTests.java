@@ -12,7 +12,7 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.MapFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.MutableVectorMap;
+import org.jhotdraw8.icollection.MutableChampVectorMap;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
@@ -21,17 +21,17 @@ import java.util.Collections;
 import java.util.Map;
 
 /**
- * Tests {@link MutableVectorMap} with the Guava test suite.
+ * Tests {@link MutableChampVectorMap} with the Guava test suite.
  */
 
-public class MutableVectorMapGuavaTests {
+public class MutableChampVectorMapGuavaTests {
 
     public static Test suite() {
-        return new MutableVectorMapGuavaTests().allTests();
+        return new MutableChampVectorMapGuavaTests().allTests();
     }
 
     public Test allTests() {
-        TestSuite suite = new TestSuite(MutableVectorMap.class.getSimpleName());
+        TestSuite suite = new TestSuite(MutableChampVectorMap.class.getSimpleName());
         //    suite.addTest(testsForMap());
         suite.addTest(testsForReversedMap());
         return suite;
@@ -42,10 +42,10 @@ public class MutableVectorMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableVectorMap<>(Arrays.asList(entries));
+                                return new MutableChampVectorMap<>(Arrays.asList(entries));
                             }
                         })
-                .named(MutableVectorMap.class.getSimpleName())
+                .named(MutableChampVectorMap.class.getSimpleName())
                 .withFeatures(
                         MapFeature.GENERAL_PURPOSE,
                         MapFeature.ALLOWS_NULL_KEYS,
@@ -65,10 +65,10 @@ public class MutableVectorMapGuavaTests {
                         new TestStringMapGenerator() {
                             @Override
                             protected Map<String, String> create(Map.Entry<String, String>[] entries) {
-                                return new MutableVectorMap<>(Arrays.asList(entries)).reversed();
+                                return new MutableChampVectorMap<>(Arrays.asList(entries)).reversed();
                             }
                         })
-                .named(MutableVectorMap.class.getSimpleName() + ".reversed")
+                .named(MutableChampVectorMap.class.getSimpleName() + ".reversed")
                 .withFeatures(
                         MapFeature.GENERAL_PURPOSE,
                         MapFeature.ALLOWS_NULL_KEYS,

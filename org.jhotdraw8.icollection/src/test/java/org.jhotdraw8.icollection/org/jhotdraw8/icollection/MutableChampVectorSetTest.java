@@ -1,5 +1,5 @@
 /*
- * @(#)MutableVectorSetTest.java
+ * @(#)MutableChampVectorSetTest.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -12,51 +12,51 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class MutableVectorSetTest extends AbstractSequencedSetTest {
+public class MutableChampVectorSetTest extends AbstractSequencedSetTest {
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance() {
-        return new MutableVectorSet<>();
+        return new MutableChampVectorSet<>();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(int numElements, float loadFactor) {
-        return new MutableVectorSet<>();
+        return new MutableChampVectorSet<>();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(Set<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableChampVectorSet<>(m);
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(ReadOnlySet<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableChampVectorSet<>(m);
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> toClonedInstance(Set<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableChampVectorSet<E>) m).clone();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(SequencedSet<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableChampVectorSet<>(m);
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(ReadOnlySequencedSet<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableChampVectorSet<>(m);
     }
 
 
     @Override
     protected <E> @NonNull SequencedSet<E> toClonedInstance(SequencedSet<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableChampVectorSet<E>) m).clone();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(Iterable<E> m) {
-        return new MutableVectorSet<>(m);
+        return new MutableChampVectorSet<>(m);
     }
 
     @Override

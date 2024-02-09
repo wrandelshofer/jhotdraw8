@@ -13,7 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.VectorSet;
+import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
@@ -145,7 +145,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     @Override
     public ImmutableSequencedSet<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return VectorSet.of();
+            return ChampVectorSet.of();
         } else {
             tt.pushBack();
         }
@@ -181,7 +181,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return VectorSet.copyOf(list);
+        return ChampVectorSet.copyOf(list);
     }
 
     @Override
@@ -222,7 +222,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
 
     @Override
     public @Nullable ImmutableSequencedSet<T> getDefaultValue() {
-        return VectorSet.of();
+        return ChampVectorSet.of();
     }
 
     @Override

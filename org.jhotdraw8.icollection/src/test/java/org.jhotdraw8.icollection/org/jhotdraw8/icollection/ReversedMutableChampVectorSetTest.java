@@ -1,5 +1,5 @@
 /*
- * @(#)MutableVectorSetTest.java
+ * @(#)MutableChampVectorSetTest.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import java.util.SequencedSet;
 import java.util.Set;
 
-public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
+public class ReversedMutableChampVectorSetTest extends AbstractSequencedSetTest {
     @Override
     protected boolean supportsNullKeys() {
         return true;
@@ -20,22 +20,22 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance() {
-        return new MutableVectorSet<E>().reversed();
+        return new MutableChampVectorSet<E>().reversed();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(int numElements, float loadFactor) {
-        return new MutableVectorSet<E>().reversed();
+        return new MutableChampVectorSet<E>().reversed();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(Set<E> m) {
-        return new MutableVectorSet<>(m).reversed();
+        return new MutableChampVectorSet<>(m).reversed();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(ReadOnlySet<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());
         return es1;
@@ -43,12 +43,12 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> @NonNull SequencedSet<E> toClonedInstance(Set<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableChampVectorSet<E>) m).clone();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(SequencedSet<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m);
         return es1;
@@ -56,7 +56,7 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(ReadOnlySequencedSet<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());
         return es1;
@@ -65,12 +65,12 @@ public class ReversedMutableVectorSetTest extends AbstractSequencedSetTest {
 
     @Override
     protected <E> @NonNull SequencedSet<E> toClonedInstance(SequencedSet<E> m) {
-        return ((MutableVectorSet<E>) m).clone();
+        return ((MutableChampVectorSet<E>) m).clone();
     }
 
     @Override
     protected <E> @NonNull SequencedSet<E> newInstance(Iterable<E> m) {
-        MutableVectorSet<E> es = new MutableVectorSet<>();
+        MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
         SequencedSet<E> es1 = es.reversed();
         m.forEach(es1::add);
         return es1;

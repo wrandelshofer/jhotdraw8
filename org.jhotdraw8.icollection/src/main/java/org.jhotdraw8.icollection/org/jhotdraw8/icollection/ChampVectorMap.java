@@ -120,8 +120,8 @@ import java.util.Spliterators;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializable {
-    private static final @NonNull VectorMap<?, ?> EMPTY = new VectorMap<>(
+public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializable {
+    private static final @NonNull ChampVectorMap<?, ?> EMPTY = new ChampVectorMap<>(
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
@@ -157,7 +157,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
      * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected VectorMap(@NonNull PrivateData privateData) {
+    protected ChampVectorMap(@NonNull PrivateData privateData) {
         this(((OpaqueRecord<K, V>) privateData.get()).root,
                 ((OpaqueRecord<K, V>) privateData.get()).vector,
                 ((OpaqueRecord<K, V>) privateData.get()).size,
@@ -172,19 +172,19 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
      * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull VectorMap<K, V> newInstance(@NonNull PrivateData privateData) {
-        return new VectorMap<>(privateData);
+    protected @NonNull ChampVectorMap<K, V> newInstance(@NonNull PrivateData privateData) {
+        return new ChampVectorMap<>(privateData);
     }
 
-    private @NonNull VectorMap<K, V> newInstance(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
-                                                 @NonNull VectorList<Object> vector,
-                                                 int size, int offset) {
-        return new VectorMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
+    private @NonNull ChampVectorMap<K, V> newInstance(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
+                                                      @NonNull VectorList<Object> vector,
+                                                      int size, int offset) {
+        return new ChampVectorMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
-    VectorMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
-              @NonNull VectorList<Object> vector,
-              int size, int offset) {
+    ChampVectorMap(@NonNull BitmapIndexedNode<SequencedEntry<K, V>> root,
+                   @NonNull VectorList<Object> vector,
+                   int size, int offset) {
         this.root = root;
         this.size = size;
         this.offset = offset;
@@ -199,8 +199,8 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
      * @param <V> the value type
      * @return an immutable copy
      */
-    public static <K, V> @NonNull VectorMap<K, V> copyOf(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
-        return VectorMap.<K, V>of().putAll(map);
+    public static <K, V> @NonNull ChampVectorMap<K, V> copyOf(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
+        return ChampVectorMap.<K, V>of().putAll(map);
     }
 
     /**
@@ -211,8 +211,8 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
      * @param <V> the value type
      * @return an immutable copy
      */
-    public static <K, V> @NonNull VectorMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
-        return VectorMap.<K, V>of().putAll(map);
+    public static <K, V> @NonNull ChampVectorMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+        return ChampVectorMap.<K, V>of().putAll(map);
     }
 
     /**
@@ -223,8 +223,8 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
      * @return an empty immutable map
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull VectorMap<K, V> of() {
-        return (VectorMap<K, V>) VectorMap.EMPTY;
+    public static <K, V> @NonNull ChampVectorMap<K, V> of() {
+        return (ChampVectorMap<K, V>) ChampVectorMap.EMPTY;
     }
 
 
@@ -232,7 +232,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
      * {@inheritDoc}
      */
     @Override
-    public @NonNull VectorMap<K, V> clear() {
+    public @NonNull ChampVectorMap<K, V> clear() {
         return isEmpty() ? this : of();
     }
 
@@ -248,8 +248,8 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
         if (other == this) {
             return true;
         }
-        if (other instanceof VectorMap) {
-            VectorMap<?, ?> that = (VectorMap<?, ?>) other;
+        if (other instanceof ChampVectorMap) {
+            ChampVectorMap<?, ?> that = (ChampVectorMap<?, ?>) other;
             return size == that.size && root.equivalent(that.root);
         } else {
             return ReadOnlyMap.mapEquals(this, other);
@@ -296,29 +296,29 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     }
 
     @Override
-    public @NonNull VectorMap<K, V> put(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampVectorMap<K, V> put(@NonNull K key, @Nullable V value) {
         return putLast(key, value, false);
     }
 
     @Override
-    public @NonNull VectorMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
-        return (VectorMap<K, V>) ImmutableSequencedMap.super.putAll(m);
+    public @NonNull ChampVectorMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
+        return (ChampVectorMap<K, V>) ImmutableSequencedMap.super.putAll(m);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull VectorMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public @NonNull ChampVectorMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
         return m.putAll(c) ? m.toImmutable() : this;
     }
 
     @Override
-    public @NonNull VectorMap<K, V> putFirst(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampVectorMap<K, V> putFirst(@NonNull K key, @Nullable V value) {
         return putFirst(key, value, true);
     }
 
     @NonNull
-    private VectorMap<K, V> putFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
+    private ChampVectorMap<K, V> putFirst(@NonNull K key, @Nullable V value, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, -offset - 1);
         var newRoot = root.put(null, newEntry,
@@ -356,7 +356,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     }
 
     @NonNull
-    private VectorMap<K, V> putLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
+    private ChampVectorMap<K, V> putLast(@NonNull K key, @Nullable V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
         var newRoot = root.put(null, newEntry,
@@ -389,7 +389,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     }
 
     @Override
-    public @NonNull VectorMap<K, V> putLast(@NonNull K key, @Nullable V value) {
+    public @NonNull ChampVectorMap<K, V> putLast(@NonNull K key, @Nullable V value) {
         return putLast(key, value, true);
     }
 
@@ -407,7 +407,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     }
 
     @Override
-    public @NonNull VectorMap<K, V> remove(@NonNull K key) {
+    public @NonNull ChampVectorMap<K, V> remove(@NonNull K key) {
         int keyHash = SequencedEntry.keyHash(key);
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         BitmapIndexedNode<SequencedEntry<K, V>> newRoot = root.remove(null,
@@ -416,20 +416,20 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
         if (details.isModified()) {
             var oldElem = details.getOldDataNonNull();
             var result = SequencedData.vecRemove(vector, oldElem, offset);
-            return size == 1 ? VectorMap.of() : renumber(newRoot, result.first(), size - 1, result.second());
+            return size == 1 ? ChampVectorMap.of() : renumber(newRoot, result.first(), size - 1, result.second());
         }
         return this;
     }
 
 
     @Override
-    public @NonNull VectorMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ChampVectorMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
         var t = toMutable();
         return t.removeAll(c) ? t.toImmutable() : this;
     }
 
     @NonNull
-    private VectorMap<K, V> renumber(
+    private ChampVectorMap<K, V> renumber(
             BitmapIndexedNode<SequencedEntry<K, V>> root,
             VectorList<Object> vector,
             int size, int offset) {
@@ -447,7 +447,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
     }
 
     @Override
-    public @NonNull VectorMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
+    public @NonNull ChampVectorMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toImmutable() : this;
     }
@@ -482,13 +482,13 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
      * @return a mutable sequenced CHAMP map
      */
     @Override
-    public @NonNull MutableVectorMap<K, V> toMutable() {
-        return new MutableVectorMap<>(this);
+    public @NonNull MutableChampVectorMap<K, V> toMutable() {
+        return new MutableChampVectorMap<>(this);
     }
 
     @Override
-    public @NonNull MutableVectorMap<K, V> asMap() {
-        return new MutableVectorMap<>(this);
+    public @NonNull MutableChampVectorMap<K, V> asMap() {
+        return new MutableChampVectorMap<>(this);
     }
 
     /**
@@ -520,7 +520,7 @@ public class VectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializabl
         @Serial
         @Override
         protected @NonNull Object readResolve() {
-            return VectorMap.of().putAll(deserializedEntries);
+            return ChampVectorMap.of().putAll(deserializedEntries);
         }
     }
 

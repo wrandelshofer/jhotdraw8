@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
 
-import org.jhotdraw8.icollection.VectorSet;
+import org.jhotdraw8.icollection.ChampVectorSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -54,16 +54,16 @@ public class VectorSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private VectorSet<Key> setA;
-    private VectorSet<Key> setAA;
-    private VectorSet<Key> setB;
+    private ChampVectorSet<Key> setA;
+    private ChampVectorSet<Key> setAA;
+    private ChampVectorSet<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = VectorSet.copyOf(data.setA);
-        setB = VectorSet.copyOf(data.listB);
-        setAA = VectorSet.copyOf(data.listA);
+        setA = ChampVectorSet.copyOf(data.setA);
+        setB = ChampVectorSet.copyOf(data.listB);
+        setAA = ChampVectorSet.copyOf(data.listA);
     }
 
     /*
@@ -96,51 +96,51 @@ public class VectorSetJmh {
         }
     */
     @Benchmark
-    public VectorSet<Key> mRemoveAllFromDifferentType() {
-        VectorSet<Key> set = setA;
-        VectorSet<Key> updated = set.removeAll(data.setA);
+    public ChampVectorSet<Key> mRemoveAllFromDifferentType() {
+        ChampVectorSet<Key> set = setA;
+        ChampVectorSet<Key> updated = set.removeAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public VectorSet<Key> mRemoveAllFromSameType() {
-        VectorSet<Key> set = setA;
-        VectorSet<Key> updated = set.removeAll(setAA);
+    public ChampVectorSet<Key> mRemoveAllFromSameType() {
+        ChampVectorSet<Key> set = setA;
+        ChampVectorSet<Key> updated = set.removeAll(setAA);
         assert updated.isEmpty();
         return updated;
     }
 
 
     @Benchmark
-    public VectorSet<Key> mRetainAllFromDifferentTypeAllRetained() {
-        VectorSet<Key> set = setA;
-        VectorSet<Key> updated = set.retainAll(data.setA);
+    public ChampVectorSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+        ChampVectorSet<Key> set = setA;
+        ChampVectorSet<Key> updated = set.retainAll(data.setA);
         assert updated == setA;
         return updated;
     }
 
     @Benchmark
-    public VectorSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
-        VectorSet<Key> set = setA;
-        VectorSet<Key> updated = set.retainAll(data.setB);
+    public ChampVectorSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+        ChampVectorSet<Key> set = setA;
+        ChampVectorSet<Key> updated = set.retainAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public VectorSet<Key> mRetainAllFromSameTypeAllRetained() {
-        VectorSet<Key> set = setA;
-        VectorSet<Key> updated = set.retainAll(setAA);
+    public ChampVectorSet<Key> mRetainAllFromSameTypeAllRetained() {
+        ChampVectorSet<Key> set = setA;
+        ChampVectorSet<Key> updated = set.retainAll(setAA);
         assert updated == setA;
         return updated;
     }
 
 
     @Benchmark
-    public VectorSet<Key> mRetainAllFromSameTypeNoneRetained() {
-        VectorSet<Key> set = setA;
-        VectorSet<Key> updated = set.retainAll(setB);
+    public ChampVectorSet<Key> mRetainAllFromSameTypeNoneRetained() {
+        ChampVectorSet<Key> set = setA;
+        ChampVectorSet<Key> updated = set.retainAll(setB);
         assert updated.isEmpty();
         return updated;
     }

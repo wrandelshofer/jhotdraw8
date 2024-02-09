@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jol;
 
-import org.jhotdraw8.icollection.VectorSet;
+import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.jmh.Key;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ import java.util.Collections;
 /**
  * SimpleImmutableSequencedSetJol.
  */
-public class VectorSetJol extends AbstractJol {
+public class ChampVectorSetJol extends AbstractJol {
 
     /**
      * <pre>
@@ -41,7 +41,7 @@ public class VectorSetJol extends AbstractJol {
         int size = 1_000;
         final int mask = -1;//~64;
         var data = generateSet(size, mask);
-        VectorSet<Key> setA = VectorSet.copyOf(data);
+        ChampVectorSet<Key> setA = ChampVectorSet.copyOf(data);
         estimateMemoryUsage(setA, setA.iterator().next(), setA.size());
     }
 
@@ -75,7 +75,7 @@ public class VectorSetJol extends AbstractJol {
         int size = 1_000;
         final int mask = ~64;
         var data = generateSet(size, mask);
-        VectorSet<Key> setA = VectorSet.copyOf(data);
+        ChampVectorSet<Key> setA = ChampVectorSet.copyOf(data);
 
         ArrayList<Key> keys = new ArrayList<>(data);
         Collections.shuffle(keys);
