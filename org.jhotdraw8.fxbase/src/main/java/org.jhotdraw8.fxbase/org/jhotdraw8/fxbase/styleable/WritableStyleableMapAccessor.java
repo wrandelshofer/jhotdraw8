@@ -6,7 +6,7 @@ package org.jhotdraw8.fxbase.styleable;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 /**
@@ -30,7 +30,7 @@ public interface WritableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAcc
         if (cssConverter instanceof CssConverter<?>) {
             return ((CssConverter<?>) cssConverter).getExamples();
         }*/
-        return SimpleImmutableList.of();
+        return VectorList.of();
     }
 
 

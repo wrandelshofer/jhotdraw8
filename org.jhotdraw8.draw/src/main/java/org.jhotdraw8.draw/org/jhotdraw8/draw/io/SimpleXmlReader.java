@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.xml.XmlUtil;
 
@@ -332,7 +332,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
                         ImmutableList<URI> listOrNull = drawing.get(figureFactory.getStylesheetsKey());
                         List<URI> stylesheets = listOrNull == null ? new ArrayList<>() : new ArrayList<>(listOrNull.asList());
                         stylesheets.add(uri);
-                        drawing.set(figureFactory.getStylesheetsKey(), SimpleImmutableList.copyOf(stylesheets));
+                        drawing.set(figureFactory.getStylesheetsKey(), VectorList.copyOf(stylesheets));
                     }
                 });
             }

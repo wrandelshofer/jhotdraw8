@@ -11,7 +11,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.geom.FXSvgPaths;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class XmlFXSvgPathConverter implements Converter<ImmutableList<PathElemen
         if ("none".equals(string)) {
             return null;
         }
-        return SimpleImmutableList.copyOf(FXSvgPaths.pathElementsFromSvgString(string));
+        return VectorList.copyOf(FXSvgPaths.pathElementsFromSvgString(string));
     }
 
     @Override
@@ -49,6 +49,6 @@ public class XmlFXSvgPathConverter implements Converter<ImmutableList<PathElemen
 
     @Override
     public @NonNull ImmutableList<PathElement> getDefaultValue() {
-        return SimpleImmutableList.of();
+        return VectorList.of();
     }
 }

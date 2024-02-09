@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
 
-import org.jhotdraw8.icollection.SimpleImmutableNavigableSet;
+import org.jhotdraw8.icollection.RedBlackSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -77,16 +77,16 @@ public class RedBlackSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private SimpleImmutableNavigableSet<Key> setA;
-    private SimpleImmutableNavigableSet<Key> setB;
-    private SimpleImmutableNavigableSet<Key> setAA;
+    private RedBlackSet<Key> setA;
+    private RedBlackSet<Key> setB;
+    private RedBlackSet<Key> setAA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = SimpleImmutableNavigableSet.copyOf(data.setA);
-        setB = SimpleImmutableNavigableSet.copyOf(data.listB);
-        setAA = SimpleImmutableNavigableSet.copyOf(data.listA);
+        setA = RedBlackSet.copyOf(data.setA);
+        setB = RedBlackSet.copyOf(data.listB);
+        setAA = RedBlackSet.copyOf(data.listA);
         assert setA.size() == size;
         assert setB.size() == size;
         assert setAA.size() == size;
@@ -94,16 +94,16 @@ public class RedBlackSetJmh {
 
 
     @Benchmark
-    public SimpleImmutableNavigableSet<Key> mCopyOf() {
-        SimpleImmutableNavigableSet<Key> set = SimpleImmutableNavigableSet.copyOf(data.listA);
+    public RedBlackSet<Key> mCopyOf() {
+        RedBlackSet<Key> set = RedBlackSet.copyOf(data.listA);
                 assert set.size() == data.listA.size();
                 return set;
             }
 
 
             @Benchmark
-            public SimpleImmutableNavigableSet<Key> mCopyOnyByOne() {
-                SimpleImmutableNavigableSet<Key> set = SimpleImmutableNavigableSet.of();
+            public RedBlackSet<Key> mCopyOnyByOne() {
+                RedBlackSet<Key> set = RedBlackSet.of();
                 for (Key key : data.listA) {
                     set = set.add(key);
                 }
@@ -112,8 +112,8 @@ public class RedBlackSetJmh {
             }
 
             @Benchmark
-            public SimpleImmutableNavigableSet<Key> mRemoveOneByOne() {
-                SimpleImmutableNavigableSet<Key> set = setA;
+            public RedBlackSet<Key> mRemoveOneByOne() {
+                RedBlackSet<Key> set = setA;
                 for (Key key : data.listA) {
                     set = set.remove(key);
                 }
@@ -122,51 +122,51 @@ public class RedBlackSetJmh {
             }
 
             @Benchmark
-            public SimpleImmutableNavigableSet<Key> mRemoveAllFromDifferentType() {
-                SimpleImmutableNavigableSet<Key> set = setA;
-                SimpleImmutableNavigableSet<Key> updated = set.removeAll(data.setA);
+            public RedBlackSet<Key> mRemoveAllFromDifferentType() {
+                RedBlackSet<Key> set = setA;
+                RedBlackSet<Key> updated = set.removeAll(data.setA);
                 assert updated.isEmpty();
                 return updated;
             }
 
             @Benchmark
-            public SimpleImmutableNavigableSet<Key> mRemoveAllFromSameType() {
-                SimpleImmutableNavigableSet<Key> set = setA;
-                SimpleImmutableNavigableSet<Key> updated = set.removeAll(setAA);
+            public RedBlackSet<Key> mRemoveAllFromSameType() {
+                RedBlackSet<Key> set = setA;
+                RedBlackSet<Key> updated = set.removeAll(setAA);
                 assert updated.isEmpty();
                 return updated;
             }
 
 
     @Benchmark
-    public SimpleImmutableNavigableSet<Key> mRetainAllFromDifferentTypeAllRetained() {
-        SimpleImmutableNavigableSet<Key> set = setA;
-        SimpleImmutableNavigableSet<Key> updated = set.retainAll(data.setA);
+    public RedBlackSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+        RedBlackSet<Key> set = setA;
+        RedBlackSet<Key> updated = set.retainAll(data.setA);
         assert updated == setA;
         return updated;
     }
 
     @Benchmark
-    public SimpleImmutableNavigableSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
-        SimpleImmutableNavigableSet<Key> set = setA;
-        SimpleImmutableNavigableSet<Key> updated = set.retainAll(data.setB);
+    public RedBlackSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+        RedBlackSet<Key> set = setA;
+        RedBlackSet<Key> updated = set.retainAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public SimpleImmutableNavigableSet<Key> mRetainAllFromSameTypeAllRetained() {
-        SimpleImmutableNavigableSet<Key> set = setA;
-        SimpleImmutableNavigableSet<Key> updated = set.retainAll(setAA);
+    public RedBlackSet<Key> mRetainAllFromSameTypeAllRetained() {
+        RedBlackSet<Key> set = setA;
+        RedBlackSet<Key> updated = set.retainAll(setAA);
         assert updated == setA;
         return updated;
     }
 
 
     @Benchmark
-    public SimpleImmutableNavigableSet<Key> mRetainAllFromSameTypeNoneRetained() {
-        SimpleImmutableNavigableSet<Key> set = setA;
-        SimpleImmutableNavigableSet<Key> updated = set.retainAll(setB);
+    public RedBlackSet<Key> mRetainAllFromSameTypeNoneRetained() {
+        RedBlackSet<Key> set = setA;
+        RedBlackSet<Key> updated = set.retainAll(setB);
         assert updated.isEmpty();
         return updated;
     }
@@ -187,14 +187,14 @@ public class RedBlackSetJmh {
 
 
     @Benchmark
-    public SimpleImmutableNavigableSet<Key> mRemoveThenAdd() {
+    public RedBlackSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return setA.remove(key).add(key);
     }
 
 
     @Benchmark
-    public SimpleImmutableNavigableSet<Key> mTail() {
+    public RedBlackSet<Key> mTail() {
         return setA.remove(setA.iterator().next());
     }
 

@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.SimpleImmutableSet;
+import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
@@ -136,7 +136,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
-            return SimpleImmutableSet.of();
+            return ChampSet.of();
         }
         Set<Figure> ctf = new LinkedHashSet<>();
         if (startTarget != null) {

@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
-import org.jhotdraw8.icollection.SimpleImmutableAddOnlySet;
+import org.jhotdraw8.icollection.ChampAddOnlySet;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
@@ -120,7 +120,7 @@ public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>
         final Queue<VertexBackLinkWithAncestorSet<V>> queue = new ArrayDeque<>(16);
         final Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
-        queue.add(new VertexBackLinkWithAncestorSet<>(startVertex, null, SimpleImmutableAddOnlySet.of(startVertex)));
+        queue.add(new VertexBackLinkWithAncestorSet<>(startVertex, null, ChampAddOnlySet.of(startVertex)));
 
         VertexBackLinkWithAncestorSet<V> found = null;
         while (!queue.isEmpty()) {
@@ -132,9 +132,9 @@ public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>
                 found = u;
             }
             if (u.getDepth() < maxDepth) {
-                SimpleImmutableAddOnlySet<V> uAncestors = u.removeAncestors();
+                ChampAddOnlySet<V> uAncestors = u.removeAncestors();
                 for (final V v : nextVerticesFunction.apply(u.getVertex())) {
-                    final SimpleImmutableAddOnlySet<V> vAncestors = uAncestors.add(v);
+                    final ChampAddOnlySet<V> vAncestors = uAncestors.add(v);
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v, 1, Integer::sum) == 1) {
                             queue.add(new VertexBackLinkWithAncestorSet<>(v, u, vAncestors));

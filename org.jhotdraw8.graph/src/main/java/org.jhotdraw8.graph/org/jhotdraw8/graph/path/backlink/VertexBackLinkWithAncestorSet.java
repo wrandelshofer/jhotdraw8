@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.icollection.SimpleImmutableAddOnlySet;
+import org.jhotdraw8.icollection.ChampAddOnlySet;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -28,7 +28,7 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
      * This set is only needed for backlinks that are in the search frontier.
      * Once they leave the search frontier, the set is removed.
      */
-    private @Nullable SimpleImmutableAddOnlySet<V> ancestors;
+    private @Nullable ChampAddOnlySet<V> ancestors;
 
     /**
      * Creates a new instance.
@@ -39,7 +39,7 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
     public VertexBackLinkWithAncestorSet(
             @NonNull V vertex,
             @Nullable VertexBackLinkWithAncestorSet<V> parent,
-            @NonNull SimpleImmutableAddOnlySet<V> ancestors) {
+            @NonNull ChampAddOnlySet<V> ancestors) {
         super(parent);
         this.vertex = vertex;
         this.ancestors = ancestors;
@@ -83,11 +83,11 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
         return newNode;
     }
 
-    public @NonNull SimpleImmutableAddOnlySet<V> removeAncestors() {
+    public @NonNull ChampAddOnlySet<V> removeAncestors() {
         if (ancestors == null) {
             throw new IllegalStateException("ancestors already removed");
         }
-        SimpleImmutableAddOnlySet<V> ancestors = this.ancestors;
+        ChampAddOnlySet<V> ancestors = this.ancestors;
         this.ancestors = null;
         return ancestors;
     }

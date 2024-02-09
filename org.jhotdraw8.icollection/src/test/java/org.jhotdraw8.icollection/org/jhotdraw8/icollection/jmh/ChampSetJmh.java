@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
 
-import org.jhotdraw8.icollection.SimpleImmutableSet;
+import org.jhotdraw8.icollection.ChampSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -115,16 +115,16 @@ public class ChampSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private SimpleImmutableSet<Key> setA;
-    private SimpleImmutableSet<Key> setB;
-    private SimpleImmutableSet<Key> setAA;
+    private ChampSet<Key> setA;
+    private ChampSet<Key> setB;
+    private ChampSet<Key> setAA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = SimpleImmutableSet.copyOf(data.setA);
-        setB = SimpleImmutableSet.copyOf(data.listB);
-        setAA = SimpleImmutableSet.copyOf(data.listA);
+        setA = ChampSet.copyOf(data.setA);
+        setB = ChampSet.copyOf(data.listB);
+        setAA = ChampSet.copyOf(data.listA);
         assert setA.size() == size;
         assert setB.size() == size;
         assert setAA.size() == size;
@@ -132,16 +132,16 @@ public class ChampSetJmh {
 
 
     @Benchmark
-        public SimpleImmutableSet<Key> mCopyOf() {
-            SimpleImmutableSet<Key> set = SimpleImmutableSet.copyOf(data.listA);
+        public ChampSet<Key> mCopyOf() {
+            ChampSet<Key> set = ChampSet.copyOf(data.listA);
             assert set.size() == data.listA.size();
             return set;
         }
 
 
         @Benchmark
-        public SimpleImmutableSet<Key> mCopyOnyByOne() {
-            SimpleImmutableSet<Key> set = SimpleImmutableSet.of();
+        public ChampSet<Key> mCopyOnyByOne() {
+            ChampSet<Key> set = ChampSet.of();
             for (Key key : data.listA) {
                 set = set.add(key);
             }
@@ -150,8 +150,8 @@ public class ChampSetJmh {
         }
 
         @Benchmark
-        public SimpleImmutableSet<Key> mRemoveOneByOne() {
-            SimpleImmutableSet<Key> set = setA;
+        public ChampSet<Key> mRemoveOneByOne() {
+            ChampSet<Key> set = setA;
             for (Key key : data.listA) {
                 set = set.remove(key);
             }
@@ -160,51 +160,51 @@ public class ChampSetJmh {
         }
 
         @Benchmark
-        public SimpleImmutableSet<Key> mRemoveAllFromDifferentType() {
-            SimpleImmutableSet<Key> set = setA;
-            SimpleImmutableSet<Key> updated = set.removeAll(data.setA);
+        public ChampSet<Key> mRemoveAllFromDifferentType() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.removeAll(data.setA);
             assert updated.isEmpty();
             return updated;
         }
 
         @Benchmark
-        public SimpleImmutableSet<Key> mRemoveAllFromSameType() {
-            SimpleImmutableSet<Key> set = setA;
-            SimpleImmutableSet<Key> updated = set.removeAll(setAA);
+        public ChampSet<Key> mRemoveAllFromSameType() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.removeAll(setAA);
             assert updated.isEmpty();
             return updated;
         }
 
 
         @Benchmark
-        public SimpleImmutableSet<Key> mRetainAllFromDifferentTypeAllRetained() {
-            SimpleImmutableSet<Key> set = setA;
-            SimpleImmutableSet<Key> updated = set.retainAll(data.setA);
+        public ChampSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(data.setA);
             assert updated == setA;
             return updated;
         }
 
         @Benchmark
-        public SimpleImmutableSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
-            SimpleImmutableSet<Key> set = setA;
-            SimpleImmutableSet<Key> updated = set.retainAll(data.setB);
+        public ChampSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(data.setB);
             assert updated.isEmpty();
             return updated;
         }
 
         @Benchmark
-        public SimpleImmutableSet<Key> mRetainAllFromSameTypeAllRetained() {
-            SimpleImmutableSet<Key> set = setA;
-            SimpleImmutableSet<Key> updated = set.retainAll(setAA);
+        public ChampSet<Key> mRetainAllFromSameTypeAllRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(setAA);
             assert updated == setA;
             return updated;
         }
 
 
         @Benchmark
-        public SimpleImmutableSet<Key> mRetainAllFromSameTypeNoneRetained() {
-            SimpleImmutableSet<Key> set = setA;
-            SimpleImmutableSet<Key> updated = set.retainAll(setB);
+        public ChampSet<Key> mRetainAllFromSameTypeNoneRetained() {
+            ChampSet<Key> set = setA;
+            ChampSet<Key> updated = set.retainAll(setB);
             assert updated.isEmpty();
             return updated;
         }
@@ -225,14 +225,14 @@ public class ChampSetJmh {
 
 
     @Benchmark
-    public SimpleImmutableSet<Key> mRemoveThenAdd() {
+    public ChampSet<Key> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return setA.remove(key).add(key);
     }
 
 
     @Benchmark
-    public SimpleImmutableSet<Key> mTail() {
+    public ChampSet<Key> mTail() {
         return setA.remove(setA.iterator().next());
     }
 

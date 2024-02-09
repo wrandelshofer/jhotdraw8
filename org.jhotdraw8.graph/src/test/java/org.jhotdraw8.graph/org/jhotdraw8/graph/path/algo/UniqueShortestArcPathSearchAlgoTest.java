@@ -13,7 +13,7 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.path.CombinedSequenceFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedSequenceFinder;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -122,8 +122,8 @@ public class UniqueShortestArcPathSearchAlgoTest {
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
                 dynamicTest("graph.nonunique", () -> testFindShortestVertexPath(graph, 1, 5, null, 0.0)),
-                dynamicTest("graph.2", () -> testFindShortestVertexPath(graph, 1, 4, SimpleImmutableList.of(1, 4), 14.0)),
-                dynamicTest("graph.3", () -> testFindShortestVertexPath(graph, 2, 6, SimpleImmutableList.of(2, 3, 6), 12.0)),
+                dynamicTest("graph.2", () -> testFindShortestVertexPath(graph, 1, 4, VectorList.of(1, 4), 14.0)),
+                dynamicTest("graph.3", () -> testFindShortestVertexPath(graph, 2, 6, VectorList.of(2, 3, 6), 12.0)),
                 dynamicTest("graph.nopath", () -> testFindShortestVertexPath(graph, 2, 99, null, 0.0)),
                 dynamicTest("diamond.1.nonunique", () -> testFindShortestVertexPath(diamondGraph, 1, 4, null, 0.0)),
                 dynamicTest("diamond.2.nonunique", () -> testFindShortestVertexPath(diamondGraph, 1, 5, null, 0.0))
@@ -161,10 +161,10 @@ public class UniqueShortestArcPathSearchAlgoTest {
         return Arrays.asList(
                 dynamicTest("graph.1.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(5, 6), null)),
                 dynamicTest("graph.2.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(4, 5), null)),
-                dynamicTest("graph.3", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(3, 6), SimpleImmutableList.of(10.0))),
+                dynamicTest("graph.3", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(3, 6), VectorList.of(10.0))),
                 dynamicTest("graph.4.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(6, 5), null)),
                 dynamicTest("graph.5.nonunique", () -> testFindShortestEdgeMultiGoalPath(graph, 1, Arrays.asList(5, 4), null)),
-                dynamicTest("graph.6", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(6, 3), SimpleImmutableList.of(10.0))),
+                dynamicTest("graph.6", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(6, 3), VectorList.of(10.0))),
                 dynamicTest("graph.7.unreachable", () -> testFindShortestEdgeMultiGoalPath(graph, 2, Arrays.asList(600, 300), null)),
                 dynamicTest("diamond.1.nonunique", () -> testFindShortestEdgeMultiGoalPath(diamondGraph, 1, Arrays.asList(2, 3), null))
         );
@@ -205,8 +205,8 @@ public class UniqueShortestArcPathSearchAlgoTest {
     public @NonNull List<DynamicTest> dynamicTestsFindShortestEdgePath() throws Exception {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> testFindShortestEdgePath(1, 5, null)),
-                dynamicTest("2", () -> testFindShortestEdgePath(1, 4, SimpleImmutableList.of(14.0))),
-                dynamicTest("3", () -> testFindShortestEdgePath(2, 6, SimpleImmutableList.of(10.0, 2.0)))
+                dynamicTest("2", () -> testFindShortestEdgePath(1, 4, VectorList.of(14.0))),
+                dynamicTest("3", () -> testFindShortestEdgePath(2, 6, VectorList.of(10.0, 2.0)))
         );
     }
 
@@ -241,10 +241,10 @@ public class UniqueShortestArcPathSearchAlgoTest {
     @TestFactory
     public @NonNull List<DynamicTest> dynamicTestsFindShortestVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
-                dynamicTest("1", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 3, 5), SimpleImmutableList.of(1, 3, 6, 5), 20.0)),
-                dynamicTest("2", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), SimpleImmutableList.of(1, 4), 14.0)),
-                dynamicTest("3", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), SimpleImmutableList.of(2, 3, 6), 12.0)),
-                dynamicTest("4", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), SimpleImmutableList.of(1, 3, 6, 5), 20.0))
+                dynamicTest("1", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 3, 5), VectorList.of(1, 3, 6, 5), 20.0)),
+                dynamicTest("2", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VectorList.of(1, 4), 14.0)),
+                dynamicTest("3", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(2, 6), VectorList.of(2, 3, 6), 12.0)),
+                dynamicTest("4", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 6, 5), VectorList.of(1, 3, 6, 5), 20.0))
         );
     }
 
@@ -267,9 +267,9 @@ public class UniqueShortestArcPathSearchAlgoTest {
     public @NonNull List<DynamicTest> dynamicTestsFindEdgePathOverWaypoints() {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 5), null, 0.0)),
-                dynamicTest("2", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 4), SimpleImmutableList.of(14.0), 14.0)),
-                dynamicTest("3", () -> testFindEdgePathOverWaypoints(Arrays.asList(2, 6), SimpleImmutableList.of(10.0, 2.0), 12.0)),
-                dynamicTest("4", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 6, 5), SimpleImmutableList.of(9.0, 2.0, 9.0), 20.0))
+                dynamicTest("2", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 4), VectorList.of(14.0), 14.0)),
+                dynamicTest("3", () -> testFindEdgePathOverWaypoints(Arrays.asList(2, 6), VectorList.of(10.0, 2.0), 12.0)),
+                dynamicTest("4", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 6, 5), VectorList.of(9.0, 2.0, 9.0), 20.0))
         );
     }
 

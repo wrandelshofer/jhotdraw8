@@ -19,34 +19,34 @@ public class MutableSimpleMapTest extends AbstractMapTest {
 
     @Override
     protected <K, V> @NonNull Map<K, V> newInstance() {
-        return new SimpleMutableMap<>();
+        return new MutableChampMap<>();
     }
 
     @Override
     protected <K, V> @NonNull Map<K, V> newInstance(int numElements, float loadFactor) {
-        return new SimpleMutableMap<>();
+        return new MutableChampMap<>();
     }
 
     @Override
     protected <K, V> @NonNull Map<K, V> newInstance(Map<K, V> m) {
-        return new SimpleMutableMap<>(m);
+        return new MutableChampMap<>(m);
     }
 
     @Override
     protected <K, V> @NonNull Map<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m) {
-        return new SimpleMutableMap<>(m);
+        return new MutableChampMap<>(m);
     }
 
 
     @Override
     protected <K, V> @NonNull Map<K, V> toClonedInstance(Map<K, V> m) {
-        return ((SimpleMutableMap<K, V>) m).clone();
+        return ((MutableChampMap<K, V>) m).clone();
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void testNewInstanceReadOnlyArgOfDifferentTypeShouldBeEqualToArg(MapData data) {
-        Map<Key, Value> actual = new SimpleMutableMap<>(data.a());
+        Map<Key, Value> actual = new MutableChampMap<>(data.a());
         assertEqualMap(data.a(), actual);
     }
 
@@ -56,8 +56,8 @@ public class MutableSimpleMapTest extends AbstractMapTest {
         Map<Key, Value> instance = newInstance(data.a);
         List<Map.Entry<Key, Value>> actualList = new ArrayList<>();
         LinkedHashMap<Key, Value> actualMap = new LinkedHashMap<>();
-        ((SimpleMutableMap<Key, Value>) instance).iterator().forEachRemaining(actualList::add);
-        ((SimpleMutableMap<Key, Value>) instance).iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
+        ((MutableChampMap<Key, Value>) instance).iterator().forEachRemaining(actualList::add);
+        ((MutableChampMap<Key, Value>) instance).iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
         assertEquals(data.a.size(), actualList.size());
         assertEqualMap(data.a, actualMap);
     }

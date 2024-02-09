@@ -11,7 +11,7 @@ import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
-import org.jhotdraw8.icollection.SimpleImmutableSet;
+import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.w3c.dom.Element;
@@ -105,15 +105,15 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Element elem) {
         String value = elem.getAttribute("class");
         if (value == null) {
-            return SimpleImmutableSet.of();
+            return ChampSet.of();
         }
         String[] clazzes = value.split(" +");
-        return SimpleImmutableSet.copyOf(Arrays.asList(clazzes));
+        return ChampSet.copyOf(Arrays.asList(clazzes));
     }
 
     @Override
     public @NonNull ReadOnlySet<String> getPseudoClasses(@NonNull Element elem) {
-        return SimpleImmutableSet.of();
+        return ChampSet.of();
     }
 
     /**

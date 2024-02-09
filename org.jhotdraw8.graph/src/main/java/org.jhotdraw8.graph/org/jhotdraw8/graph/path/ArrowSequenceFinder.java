@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V goal,
             int maxDepth,
             @NonNull C costLimit, @NonNull AddToSet<V> visited) {
-        return findArrowSequence(SimpleImmutableList.of(start), goal::equals, maxDepth, costLimit, visited);
+        return findArrowSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
 
     /**
@@ -124,7 +124,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V goal,
             int maxDepth,
             @NonNull C costLimit) {
-        return findArrowSequence(SimpleImmutableList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
+        return findArrowSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
     /**
@@ -140,7 +140,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
             @NonNull V start,
             @NonNull V goal,
             @NonNull C costLimit) {
-        return findArrowSequence(SimpleImmutableList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
+        return findArrowSequence(VectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
     /**
@@ -223,10 +223,10 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
 
         if (count == 1) {
             // the set of waypoints is degenerate
-            return new SimpleOrderedPair<>(SimpleImmutableList.of(), zero);
+            return new SimpleOrderedPair<>(VectorList.of(), zero);
         }
 
-        return new SimpleOrderedPair<>(SimpleImmutableList.copyOf(sequence), sum);
+        return new SimpleOrderedPair<>(VectorList.copyOf(sequence), sum);
     }
 
 }

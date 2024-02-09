@@ -10,7 +10,7 @@ import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
@@ -75,7 +75,7 @@ public interface CssFunctionProcessor<T> {
         } catch (IOException e) {
             throw new RuntimeException("unexpected io exception.", e);
         }
-        return SimpleImmutableList.copyOf(out);
+        return VectorList.copyOf(out);
     }
 
     /**

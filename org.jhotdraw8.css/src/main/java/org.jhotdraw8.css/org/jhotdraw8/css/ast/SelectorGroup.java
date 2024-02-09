@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 import java.util.List;
@@ -28,12 +28,12 @@ public class SelectorGroup extends Selector {
 
     public SelectorGroup(@Nullable SourceLocator sourceLocator, @NonNull Selector selector) {
         super(sourceLocator);
-        this.selectors = SimpleImmutableList.of(selector);
+        this.selectors = VectorList.of(selector);
     }
 
     public SelectorGroup(@Nullable SourceLocator sourceLocator, @NonNull List<Selector> selectors) {
         super(sourceLocator);
-        this.selectors = SimpleImmutableList.copyOf(selectors);
+        this.selectors = VectorList.copyOf(selectors);
     }
 
     @Override

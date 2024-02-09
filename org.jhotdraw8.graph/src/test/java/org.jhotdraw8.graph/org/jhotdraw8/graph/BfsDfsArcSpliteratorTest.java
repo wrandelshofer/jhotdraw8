@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.iterator.BfsDfsArcSpliterator;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -101,7 +101,7 @@ public class BfsDfsArcSpliteratorTest {
                 } else if (path.get(path.size() - 1).equals(current.getStart())) {
                     path.add(current.getEnd());
                 } else {
-                    paths.add(SimpleImmutableList.copyOf(path));
+                    paths.add(VectorList.copyOf(path));
                     path = new ArrayList<>();
                     path.add(current.getStart());
                     path.add(current.getEnd());
@@ -109,7 +109,7 @@ public class BfsDfsArcSpliteratorTest {
             }
         }
         if (path != null) {
-            paths.add(SimpleImmutableList.copyOf(path));
+            paths.add(VectorList.copyOf(path));
         }
 
         String actual = paths.toString();

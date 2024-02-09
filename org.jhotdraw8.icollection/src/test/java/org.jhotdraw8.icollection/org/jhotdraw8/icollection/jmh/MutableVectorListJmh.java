@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.SimpleMutableList;
+import org.jhotdraw8.icollection.MutableVectorList;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -80,14 +80,14 @@ public class MutableVectorListJmh {
     private int mask = -65;
 
     private BenchmarkData data;
-    private SimpleMutableList<Key> listA;
+    private MutableVectorList<Key> listA;
 
     private int index;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        listA = new SimpleMutableList();
+        listA = new MutableVectorList();
         for (Key key : data.setA) {
             listA.add(key);
         }
@@ -96,13 +96,13 @@ public class MutableVectorListJmh {
 
 
     @Benchmark
-    public SimpleMutableList<Key> mAddAll() {
-        return new SimpleMutableList<>(data.setA);
+    public MutableVectorList<Key> mAddAll() {
+        return new MutableVectorList<>(data.setA);
     }
 
     @Benchmark
-    public SimpleMutableList<Key> mAddOneByOne() {
-        SimpleMutableList<Key> set = new SimpleMutableList<>();
+    public MutableVectorList<Key> mAddOneByOne() {
+        MutableVectorList<Key> set = new MutableVectorList<>();
         for (Key key : data.listA) {
             set.add(key);
         }
@@ -110,7 +110,7 @@ public class MutableVectorListJmh {
     }
 
     //@Benchmark
-    public SimpleMutableList<Key> mRemoveOneByOne() {
+    public MutableVectorList<Key> mRemoveOneByOne() {
         var map = listA.clone();
         for (var e : data.listA) {
             map.remove(e);
@@ -121,7 +121,7 @@ public class MutableVectorListJmh {
 
     //@Benchmark
     public boolean mRemoveAll() {
-        SimpleMutableList<Key> set = listA.clone();
+        MutableVectorList<Key> set = listA.clone();
         return set.removeAll(data.listA);
     }
 
@@ -166,7 +166,7 @@ public class MutableVectorListJmh {
     @Benchmark
     public int mAddFirst() {
         Key key = data.nextKeyInB();
-        SimpleMutableList<Key> clone = listA.clone();
+        MutableVectorList<Key> clone = listA.clone();
         clone.addFirst(key);
         return clone.size();
     }
@@ -174,13 +174,13 @@ public class MutableVectorListJmh {
 
     @Benchmark
     public Key mRemoveLast() {
-        SimpleMutableList<Key> clone = listA.clone();
+        MutableVectorList<Key> clone = listA.clone();
         return clone.remove(clone.size() - 1);
     }
 
     @Benchmark
     public Key mRemoveAtIndex() {
-        SimpleMutableList<Key> clone = listA.clone();
+        MutableVectorList<Key> clone = listA.clone();
         return clone.remove(index);
     }
 

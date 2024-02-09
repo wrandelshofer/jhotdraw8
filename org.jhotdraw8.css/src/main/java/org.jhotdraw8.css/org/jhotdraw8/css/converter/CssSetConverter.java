@@ -12,8 +12,8 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
-import org.jhotdraw8.icollection.SimpleImmutableList;
-import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.VectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
@@ -129,9 +129,9 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
                            @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
-        this.delimiter = SimpleImmutableList.copyOf(delimiter);
-        this.prefix = SimpleImmutableList.copyOf(prefix);
-        this.suffix = SimpleImmutableList.copyOf(suffix);
+        this.delimiter = VectorList.copyOf(delimiter);
+        this.prefix = VectorList.copyOf(prefix);
+        this.suffix = VectorList.copyOf(suffix);
         delimiterChars = new HashSet<>();
         for (CssToken cssToken : delimiter) {
             if (cssToken.getType() >= 0) {
@@ -145,7 +145,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     @Override
     public ImmutableSequencedSet<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-            return SimpleImmutableSequencedSet.of();
+            return VectorSet.of();
         } else {
             tt.pushBack();
         }
@@ -181,7 +181,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
         if (comparatorForSorting != null) {
             list.sort(comparatorForSorting);
         }
-        return SimpleImmutableSequencedSet.copyOf(list);
+        return VectorSet.copyOf(list);
     }
 
     @Override
@@ -222,7 +222,7 @@ public class CssSetConverter<T> implements CssConverter<ImmutableSequencedSet<T>
 
     @Override
     public @Nullable ImmutableSequencedSet<T> getDefaultValue() {
-        return SimpleImmutableSequencedSet.of();
+        return VectorSet.of();
     }
 
     @Override

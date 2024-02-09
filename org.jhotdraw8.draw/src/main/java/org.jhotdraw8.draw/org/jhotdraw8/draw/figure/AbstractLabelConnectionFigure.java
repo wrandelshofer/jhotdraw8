@@ -32,7 +32,7 @@ import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.icollection.SimpleImmutableSet;
+import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.util.ArrayList;
@@ -177,7 +177,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     @Override
     public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
-        return labelTarget == null ? SimpleImmutableSet.of() : SimpleImmutableSet.of(labelTarget);
+        return labelTarget == null ? ChampSet.of() : ChampSet.of(labelTarget);
     }
 
     public boolean isConnected() {

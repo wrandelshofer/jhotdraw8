@@ -11,7 +11,7 @@ import org.jhotdraw8.css.converter.CssListConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.io.Serial;
@@ -40,7 +40,7 @@ public class ListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableL
      * @param elementConverter String converter for a list element
      */
     public ListStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter) {
-        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter), SimpleImmutableList.of());
+        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new CssListConverter<>(elementConverter), VectorList.of());
     }
 
 

@@ -7,7 +7,7 @@ package org.jhotdraw8.css.parser;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.ast.SourceLocator;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
@@ -27,11 +27,11 @@ public class ListCssTokenizer implements CssTokenizer {
     private static final CssToken EOF = new CssToken(CssTokenType.TT_EOF);
 
     public ListCssTokenizer(@NonNull List<CssToken> in) {
-        this(SimpleImmutableList.copyOf(in));
+        this(VectorList.copyOf(in));
     }
 
     public ListCssTokenizer(@NonNull ReadOnlyList<CssToken> in) {
-        this.in = SimpleImmutableList.copyOf(in);
+        this.in = VectorList.copyOf(in);
         current = in.isEmpty() ? EOF : in.get(0);
     }
 

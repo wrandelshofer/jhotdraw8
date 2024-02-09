@@ -6,7 +6,7 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.Collections;
@@ -25,7 +25,7 @@ public class IntersectionResultEx {
     }
 
     public IntersectionResultEx(@NonNull IntersectionStatus status, @NonNull List<IntersectionPointEx> intersections) {
-        this.intersections = SimpleImmutableList.copyOf(intersections);
+        this.intersections = VectorList.copyOf(intersections);
         this.status = status;
     }
 

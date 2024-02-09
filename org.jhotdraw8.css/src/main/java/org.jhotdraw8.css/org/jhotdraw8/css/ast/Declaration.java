@@ -7,7 +7,7 @@ package org.jhotdraw8.css.ast;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.parser.CssToken;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class Declaration extends AbstractSyntaxTree {
         super(sourceLocator);
         this.namespace = namespace;
         this.propertyName = propertyName;
-        this.terms = SimpleImmutableList.copyOf(terms);
+        this.terms = VectorList.copyOf(terms);
         this.startPos = startPos;
         this.endPos = endPos;
         this.lineNumber = lineNumber;

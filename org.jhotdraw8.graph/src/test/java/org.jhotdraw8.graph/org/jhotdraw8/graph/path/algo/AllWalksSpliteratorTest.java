@@ -10,7 +10,7 @@ import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;
 import org.jhotdraw8.graph.path.SimpleCombinedAllSequencesFinder;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -95,15 +95,15 @@ public class AllWalksSpliteratorTest {
 
         return Arrays.asList(
                 dynamicTest("1", () -> testFindAllPaths(graph, 1, 5, 4, Arrays.asList(
-                        SimpleImmutableList.of(1, 3, 5),
-                        SimpleImmutableList.of(1, 2, 3, 5),
-                        SimpleImmutableList.of(1, 3, 4, 5),
-                        SimpleImmutableList.of(1, 2, 3, 4, 5)
+                        VectorList.of(1, 3, 5),
+                        VectorList.of(1, 2, 3, 5),
+                        VectorList.of(1, 3, 4, 5),
+                        VectorList.of(1, 2, 3, 4, 5)
                 ))),
                 dynamicTest("2", () -> testFindAllPaths(graph, 1, 5, 3, Arrays.asList(
-                        SimpleImmutableList.of(1, 3, 5),
-                        SimpleImmutableList.of(1, 2, 3, 5),
-                        SimpleImmutableList.of(1, 3, 4, 5)
+                        VectorList.of(1, 3, 5),
+                        VectorList.of(1, 2, 3, 5),
+                        VectorList.of(1, 3, 4, 5)
                 )))
         );
     }

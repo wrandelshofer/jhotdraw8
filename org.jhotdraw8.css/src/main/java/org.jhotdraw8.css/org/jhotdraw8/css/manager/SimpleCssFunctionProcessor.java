@@ -11,7 +11,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
@@ -95,7 +95,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
                 out.add(t);
             }
         }
-        return SimpleImmutableList.copyOf(out);
+        return VectorList.copyOf(out);
     }
 
     @Override

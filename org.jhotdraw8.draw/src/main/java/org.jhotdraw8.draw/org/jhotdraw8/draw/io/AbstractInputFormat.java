@@ -7,11 +7,11 @@ package org.jhotdraw8.draw.io;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.SimpleImmutableMap;
+import org.jhotdraw8.icollection.ChampMap;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 public abstract class AbstractInputFormat implements InputFormat {
-    private @NonNull ImmutableMap<Key<?>, Object> options = SimpleImmutableMap.of();
+    private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
 
     public AbstractInputFormat() {
     }

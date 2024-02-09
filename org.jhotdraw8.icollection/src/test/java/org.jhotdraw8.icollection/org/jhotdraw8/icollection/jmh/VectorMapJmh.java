@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.icollection.SimpleImmutableSequencedMap;
+import org.jhotdraw8.icollection.VectorMap;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -95,12 +95,12 @@ public class VectorMapJmh {
     private int mask = -65;
 
     private BenchmarkData data;
-    private SimpleImmutableSequencedMap<Key, Boolean> mapA;
+    private VectorMap<Key, Boolean> mapA;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        mapA = SimpleImmutableSequencedMap.of();
+        mapA = VectorMap.of();
         for (Key key : data.setA) {
             mapA = mapA.put(key, Boolean.TRUE);
         }
@@ -116,25 +116,25 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mRemoveThenAdd() {
+    public VectorMap<Key, Boolean> mRemoveThenAdd() {
         Key key = data.nextKeyInA();
         return mapA.remove(key).put(key, Boolean.TRUE);
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mPut() {
+    public VectorMap<Key, Boolean> mPut() {
         Key key = data.nextKeyInA();
         return mapA.put(key, Boolean.FALSE);
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mCopyOf() {
-        return SimpleImmutableSequencedMap.copyOf(data.mapA);
+    public VectorMap<Key, Boolean> mCopyOf() {
+        return VectorMap.copyOf(data.mapA);
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mCopyOnyByOne() {
-        SimpleImmutableSequencedMap<Key, Boolean> set = SimpleImmutableSequencedMap.of();
+    public VectorMap<Key, Boolean> mCopyOnyByOne() {
+        VectorMap<Key, Boolean> set = VectorMap.of();
         for (Key key : data.listA) {
             set = set.put(key, Boolean.FALSE);
         }
@@ -160,12 +160,12 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mTail() {
+    public VectorMap<Key, Boolean> mTail() {
         return mapA.remove(mapA.iterator().next().getKey());
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mRemoveOneByOne() {
+    public VectorMap<Key, Boolean> mRemoveOneByOne() {
         var map = mapA;
         for (var e : data.listA) {
             map = map.remove(e);
@@ -176,14 +176,14 @@ public class VectorMapJmh {
 
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mRemoveAll() {
+    public VectorMap<Key, Boolean> mRemoveAll() {
         var updated = mapA.removeAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mRetainAllNoneRetained() {
+    public VectorMap<Key, Boolean> mRetainAllNoneRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setB);
         assert updated.isEmpty();
@@ -191,7 +191,7 @@ public class VectorMapJmh {
     }
 
     @Benchmark
-    public SimpleImmutableSequencedMap<Key, Boolean> mRetainAllAllRetained() {
+    public VectorMap<Key, Boolean> mRetainAllAllRetained() {
         var set = mapA;
         var updated = set.retainAll(data.setA);
         assert updated == mapA;

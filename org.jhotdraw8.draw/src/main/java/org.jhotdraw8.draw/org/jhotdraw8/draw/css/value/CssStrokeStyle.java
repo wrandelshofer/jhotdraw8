@@ -10,7 +10,7 @@ import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.Objects;
@@ -25,7 +25,7 @@ public class CssStrokeStyle {
 
     public CssStrokeStyle() {
         this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.of(4.0),
-                CssSize.ZERO, SimpleImmutableList.of());
+                CssSize.ZERO, VectorList.of());
     }
 
     public CssStrokeStyle(StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,

@@ -8,32 +8,32 @@ import java.util.Set;
 public class MutableSimpleSetTest extends AbstractSetTest {
     @Override
     protected <E> @NonNull Set<E> newInstance() {
-        return new SimpleMutableSet<>();
+        return new MutableChampSet<>();
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(int numElements, float loadFactor) {
-        return new SimpleMutableSet<>();
+        return new MutableChampSet<>();
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(Set<E> m) {
-        return new SimpleMutableSet<>(m);
+        return new MutableChampSet<>(m);
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(ReadOnlySet<E> m) {
-        return new SimpleMutableSet<>(m);
+        return new MutableChampSet<>(m);
     }
 
     @Override
     protected <E> @NonNull Set<E> toClonedInstance(Set<E> m) {
-        return ((SimpleMutableSet<E>) m).clone();
+        return ((MutableChampSet<E>) m).clone();
     }
 
     @Override
     protected <E> @NonNull Set<E> newInstance(Iterable<E> m) {
-        return new SimpleMutableSet<>(m);
+        return new MutableChampSet<>(m);
     }
 
     @Override

@@ -28,7 +28,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.SimpleImmutableSet;
+import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 
 import java.io.IOException;
@@ -109,7 +109,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                     }
                     if (!contains) {
                         newTags.add(tagName);
-                        getModel().set(f, tagsKey, SimpleImmutableSet.copyOf(newTags));
+                        getModel().set(f, tagsKey, ChampSet.copyOf(newTags));
                     }
                 }
                 updateList();
@@ -189,7 +189,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                         }
                     }
                     if (contains) {
-                        getModel().set(f, tagsKey, SimpleImmutableSet.copyOf(newTags));
+                        getModel().set(f, tagsKey, ChampSet.copyOf(newTags));
                     }
                 }
                 updateList();

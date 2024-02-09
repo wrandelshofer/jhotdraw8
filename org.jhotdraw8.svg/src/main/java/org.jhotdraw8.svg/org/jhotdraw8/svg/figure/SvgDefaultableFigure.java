@@ -32,7 +32,7 @@ import org.jhotdraw8.draw.figure.DefaultableFigure;
 import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.SvgPaintDefaulting;
@@ -111,7 +111,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     DefaultableStyleableKey<ImmutableList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
             new SimpleParameterizedType(CssDefaultableValue.class, new SimpleParameterizedType(ImmutableList.class, String.class)), new SvgFontFamilyConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
-            SimpleImmutableList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
+            VectorList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
     );
 
     /**

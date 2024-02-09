@@ -18,7 +18,7 @@ import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.PrivateData;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.*;
@@ -36,7 +36,7 @@ import java.awt.geom.Rectangle2D;
  *
  * @author Werner Randelshofer
  */
-public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape {
+public class BezierPath extends VectorList<BezierNode> implements Shape {
     /**
      * This field is used for memoizing PathMetrics that have been built fom this instance.
      */
@@ -143,7 +143,7 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     public BezierPath split(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         ImmutableList<IntersectionPoint> intersections = isect.intersections();
-        @SuppressWarnings("unchecked") SimpleImmutableList<BezierNode>[] result = new SimpleImmutableList[]{this};
+        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
         if (intersections.size() == 1) {
             int segment = (int) intersections.getFirst().getArgumentA();
             final BezierNode middle;
@@ -209,7 +209,7 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     }
 
     public BezierPath join(int segment, double tolerance) {
-        @SuppressWarnings("unchecked") SimpleImmutableList<BezierNode>[] result = new SimpleImmutableList[]{this};
+        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
 
         final int prevSegment = (segment - 1 + size()) % size();
         final int nextSegment = (segment + 1) % size();
@@ -326,7 +326,7 @@ public class BezierPath extends SimpleImmutableList<BezierNode> implements Shape
     }
 
     @Override
-    protected SimpleImmutableList<BezierNode> newInstance(@NonNull PrivateData privateData) {
+    protected VectorList<BezierNode> newInstance(@NonNull PrivateData privateData) {
         return new BezierPath(privateData, windingRule);
     }
 

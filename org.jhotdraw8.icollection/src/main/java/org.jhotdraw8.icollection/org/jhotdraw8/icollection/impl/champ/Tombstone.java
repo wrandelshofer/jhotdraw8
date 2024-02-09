@@ -6,10 +6,10 @@
 package org.jhotdraw8.icollection.impl.champ;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
+import org.jhotdraw8.icollection.VectorSet;
 
 /**
- * A tombstone is used by {@link SimpleImmutableSequencedSet} to mark a deleted slot in its Vector.
+ * A tombstone is used by {@link VectorSet} to mark a deleted slot in its Vector.
  * <p>
  * A tombstone stores the minimal number of neighbors 'before' and 'after' it in the
  * Vector.

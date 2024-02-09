@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
 
-import org.jhotdraw8.icollection.SimpleImmutableSequencedSet;
+import org.jhotdraw8.icollection.VectorSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -54,16 +54,16 @@ public class VectorSetJmh {
     private int mask;
 
     private BenchmarkData data;
-    private SimpleImmutableSequencedSet<Key> setA;
-    private SimpleImmutableSequencedSet<Key> setAA;
-    private SimpleImmutableSequencedSet<Key> setB;
+    private VectorSet<Key> setA;
+    private VectorSet<Key> setAA;
+    private VectorSet<Key> setB;
 
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        setA = SimpleImmutableSequencedSet.copyOf(data.setA);
-        setB = SimpleImmutableSequencedSet.copyOf(data.listB);
-        setAA = SimpleImmutableSequencedSet.copyOf(data.listA);
+        setA = VectorSet.copyOf(data.setA);
+        setB = VectorSet.copyOf(data.listB);
+        setAA = VectorSet.copyOf(data.listA);
     }
 
     /*
@@ -96,51 +96,51 @@ public class VectorSetJmh {
         }
     */
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mRemoveAllFromDifferentType() {
-        SimpleImmutableSequencedSet<Key> set = setA;
-        SimpleImmutableSequencedSet<Key> updated = set.removeAll(data.setA);
+    public VectorSet<Key> mRemoveAllFromDifferentType() {
+        VectorSet<Key> set = setA;
+        VectorSet<Key> updated = set.removeAll(data.setA);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mRemoveAllFromSameType() {
-        SimpleImmutableSequencedSet<Key> set = setA;
-        SimpleImmutableSequencedSet<Key> updated = set.removeAll(setAA);
+    public VectorSet<Key> mRemoveAllFromSameType() {
+        VectorSet<Key> set = setA;
+        VectorSet<Key> updated = set.removeAll(setAA);
         assert updated.isEmpty();
         return updated;
     }
 
 
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mRetainAllFromDifferentTypeAllRetained() {
-        SimpleImmutableSequencedSet<Key> set = setA;
-        SimpleImmutableSequencedSet<Key> updated = set.retainAll(data.setA);
+    public VectorSet<Key> mRetainAllFromDifferentTypeAllRetained() {
+        VectorSet<Key> set = setA;
+        VectorSet<Key> updated = set.retainAll(data.setA);
         assert updated == setA;
         return updated;
     }
 
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
-        SimpleImmutableSequencedSet<Key> set = setA;
-        SimpleImmutableSequencedSet<Key> updated = set.retainAll(data.setB);
+    public VectorSet<Key> mRetainAllFromDifferentTypeNoneRetained() {
+        VectorSet<Key> set = setA;
+        VectorSet<Key> updated = set.retainAll(data.setB);
         assert updated.isEmpty();
         return updated;
     }
 
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mRetainAllFromSameTypeAllRetained() {
-        SimpleImmutableSequencedSet<Key> set = setA;
-        SimpleImmutableSequencedSet<Key> updated = set.retainAll(setAA);
+    public VectorSet<Key> mRetainAllFromSameTypeAllRetained() {
+        VectorSet<Key> set = setA;
+        VectorSet<Key> updated = set.retainAll(setAA);
         assert updated == setA;
         return updated;
     }
 
 
     @Benchmark
-    public SimpleImmutableSequencedSet<Key> mRetainAllFromSameTypeNoneRetained() {
-        SimpleImmutableSequencedSet<Key> set = setA;
-        SimpleImmutableSequencedSet<Key> updated = set.retainAll(setB);
+    public VectorSet<Key> mRetainAllFromSameTypeNoneRetained() {
+        VectorSet<Key> set = setA;
+        VectorSet<Key> updated = set.retainAll(setB);
         assert updated.isEmpty();
         return updated;
     }

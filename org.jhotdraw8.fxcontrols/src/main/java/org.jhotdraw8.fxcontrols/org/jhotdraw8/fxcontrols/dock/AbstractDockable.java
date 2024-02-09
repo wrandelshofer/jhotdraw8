@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.SimpleImmutableList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 /**
@@ -50,7 +50,7 @@ public abstract class AbstractDockable implements Dockable {
 
     @Override
     public @NonNull ReadOnlyList<DockChild> getDockChildrenReadOnly() {
-        return SimpleImmutableList.of();
+        return VectorList.of();
     }
 
 }
