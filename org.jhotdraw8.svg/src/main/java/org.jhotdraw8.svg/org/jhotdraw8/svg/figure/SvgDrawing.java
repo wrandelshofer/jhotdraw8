@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.key.SimpleStyleableKey;
+import org.jhotdraw8.draw.key.NullableObjectStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
@@ -26,9 +26,9 @@ public class SvgDrawing extends AbstractDrawing
         implements StyleableFigure, LockableFigure, NonTransformableFigure, SvgDefaultableFigure,
         SvgElementFigure {
 
-    public static final @NonNull Key<CssRectangle2D> SVG_VIEW_BOX = new SimpleStyleableKey<>("viewBox", "viewBox", CssRectangle2D.class, new CssRectangle2DConverter(true), null);
-    public static final @NonNull Key<String> BASE_PROFILE = new SimpleStyleableKey<>("baseProfile", "baseProfile", String.class, new CssStringConverter(true), null);
-    public static final @NonNull Key<String> VERSION = new SimpleStyleableKey<>("version", "version", String.class, new CssStringConverter(true), null);
+    public static final @NonNull Key<CssRectangle2D> SVG_VIEW_BOX = new NullableObjectStyleableKey<>("viewBox", "viewBox", CssRectangle2D.class, new CssRectangle2DConverter(true), null);
+    public static final @NonNull Key<String> BASE_PROFILE = new NullableObjectStyleableKey<>("baseProfile", "baseProfile", String.class, new CssStringConverter(true), null);
+    public static final @NonNull Key<String> VERSION = new NullableObjectStyleableKey<>("version", "version", String.class, new CssStringConverter(true), null);
 
     @Override
     public boolean isSuitableChild(@NonNull Figure newChild) {

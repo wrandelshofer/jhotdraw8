@@ -19,7 +19,7 @@ import java.io.Serial;
  * @param <T> the enum type
  * @author Werner Randelshofer
  */
-public class EnumStyleableKey<T extends Enum<T>> extends SimpleStyleableKey<T>
+public class EnumStyleableKey<T extends Enum<T>> extends ObjectStyleableKey<T>
         implements WritableStyleableMapAccessor<T>, NonNullKey<T> {
 
     @Serial

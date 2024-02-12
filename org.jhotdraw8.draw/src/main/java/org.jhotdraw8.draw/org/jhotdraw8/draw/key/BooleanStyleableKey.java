@@ -17,7 +17,7 @@ import java.io.Serial;
  *
  * @author Werner Randelshofer
  */
-public class BooleanStyleableKey extends SimpleStyleableKey<Boolean>
+public class BooleanStyleableKey extends ObjectStyleableKey<Boolean>
         implements WritableStyleableMapAccessor<Boolean>,
         NonNullKey<Boolean> {
 

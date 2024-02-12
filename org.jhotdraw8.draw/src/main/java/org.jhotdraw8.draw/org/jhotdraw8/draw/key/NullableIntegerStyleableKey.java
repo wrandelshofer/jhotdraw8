@@ -17,7 +17,7 @@ import java.io.Serial;
  *
  * @author Werner Randelshofer
  */
-public class NullableIntegerStyleableKey extends SimpleStyleableKey<Integer> implements WritableStyleableMapAccessor<Integer> {
+public class NullableIntegerStyleableKey extends NullableObjectStyleableKey<Integer> implements WritableStyleableMapAccessor<Integer> {
 
     @Serial
     private static final long serialVersionUID = 1L;

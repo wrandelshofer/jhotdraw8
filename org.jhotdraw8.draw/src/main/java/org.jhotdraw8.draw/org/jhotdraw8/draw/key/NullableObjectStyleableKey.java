@@ -1,5 +1,5 @@
 /*
- * @(#)SimpleNonNullStyleableKey.java
+ * @(#)ObjectStyleableKey.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
@@ -18,10 +18,21 @@ import java.lang.reflect.Type;
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public class SimpleNullableStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<T> {
+public class NullableObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<T> {
 
     @Serial
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Creates a new instance with a null default value.
+     *
+     * @param name      The name of the key
+     * @param type      The type of the value.
+     * @param converter the CSS converter
+     */
+    public NullableObjectStyleableKey(@NonNull String name, @NonNull Type type, @NonNull Converter<T> converter) {
+        super(name, type, converter, null);
+    }
 
     /**
      * Creates a new instance.
@@ -31,7 +42,7 @@ public class SimpleNullableStyleableKey<T> extends AbstractReadOnlyStyleableKey<
      * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public SimpleNullableStyleableKey(@NonNull String name, @NonNull Type type, @NonNull Converter<T> converter, @Nullable T defaultValue) {
+    public NullableObjectStyleableKey(@NonNull String name, @NonNull Type type, @NonNull Converter<T> converter, @Nullable T defaultValue) {
         super(name, type, converter, defaultValue);
     }
 
@@ -44,7 +55,7 @@ public class SimpleNullableStyleableKey<T> extends AbstractReadOnlyStyleableKey<
      * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public SimpleNullableStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
+    public NullableObjectStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
         super(xmlName, cssName, type, converter, defaultValue);
     }
 

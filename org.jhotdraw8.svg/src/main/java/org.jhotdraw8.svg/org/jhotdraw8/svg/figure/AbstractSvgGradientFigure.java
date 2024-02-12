@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.figure.ResizableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.key.SimpleNonNullStyleableKey;
+import org.jhotdraw8.draw.key.ObjectStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
@@ -51,8 +51,8 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     /**
      * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementGradientUnitsAttribute">w3.org</a>
      */
-    public static final @NonNull SimpleNonNullStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
-            new SimpleNonNullStyleableKey<>("gradientUnits", SvgGradientUnits.class,
+    public static final @NonNull ObjectStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
+            new ObjectStyleableKey<>("gradientUnits", SvgGradientUnits.class,
                     new MappedConverter<SvgGradientUnits>(Map.of(
                             "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
                             "objectBoundingBox", SvgGradientUnits.OBJECT_BOUNDING_BOX
@@ -63,8 +63,8 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     /**
      * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementSpreadMethodAttribute">w3.org</a>
      */
-    public static final @NonNull SimpleNonNullStyleableKey<CycleMethod> SPREAD_METHOD =
-            new SimpleNonNullStyleableKey<>("spreadMethod", CycleMethod.class,
+    public static final @NonNull ObjectStyleableKey<CycleMethod> SPREAD_METHOD =
+            new ObjectStyleableKey<>("spreadMethod", CycleMethod.class,
                     new MappedConverter<CycleMethod>(Map.of(
                             "pad", CycleMethod.NO_CYCLE,
                             "reflect", CycleMethod.REFLECT,

@@ -16,7 +16,7 @@ import java.io.Serial;
  *
  * @author Werner Randelshofer
  */
-public class NulllableBooleanStyleableKey extends SimpleStyleableKey<Boolean> implements WritableStyleableMapAccessor<Boolean> {
+public class NulllableBooleanStyleableKey extends NullableObjectStyleableKey<Boolean> implements WritableStyleableMapAccessor<Boolean> {
 
     @Serial
     private static final long serialVersionUID = 1L;
