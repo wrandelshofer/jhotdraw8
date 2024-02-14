@@ -32,7 +32,7 @@ import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
@@ -108,8 +108,8 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     public static final @NonNull NullableFXPathElementsStyleableKey ICON_SHAPE = new NullableFXPathElementsStyleableKey("iconShape", null);
     public static final @NonNull CssDimension2DStyleableKey ICON_SIZE = new CssDimension2DStyleableKey("iconSize", new CssDimension2D(16, 16));
     public static final @NonNull CssSizeStyleableKey ICON_TEXT_GAP = new CssSizeStyleableKey("iconTextGap", CssSize.of(4));
-    public static final @NonNull EnumStyleableKey<IconPosition> ICON_POSITION =
-            new EnumStyleableKey<>("iconPosition", IconPosition.class, IconPosition.LEFT);
+    public static final @NonNull NonNullEnumStyleableKey<IconPosition> ICON_POSITION =
+            new NonNullEnumStyleableKey<>("iconPosition", IconPosition.class, IconPosition.LEFT);
     /**
      * Defines the paint used for filling the interior of the icon shape. Default
      * value: {@code Color.BLACK}.
@@ -128,7 +128,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * The horizontal position of the text. Default value: {@link HPos#LEFT}.
      * FIXME Move this to {@link TextLayoutableFigure}.
      */
-    public static final @NonNull EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
+    public static final @NonNull NonNullEnumStyleableKey<HPos> TEXT_HPOS = new NonNullEnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 
     private @Nullable Bounds cachedLayoutBounds;
 

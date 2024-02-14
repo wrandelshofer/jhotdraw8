@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssAwtSvgPathConverter;
+import org.jhotdraw8.draw.css.converter.AwtSvgPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 import java.awt.geom.Path2D;
@@ -47,7 +47,7 @@ public class NullableAwtSvgPathStyleableKey extends AbstractStyleableKey<Path2D.
     public NullableAwtSvgPathStyleableKey(@NonNull String key, Path2D.@Nullable Double defaultValue) {
         super(null, key, Path2D.Double.class, true, defaultValue);
 
-        converter = new CssAwtSvgPathConverter(isNullable());
+        converter = new AwtSvgPathCssConverter(isNullable());
     }
 
     @Override

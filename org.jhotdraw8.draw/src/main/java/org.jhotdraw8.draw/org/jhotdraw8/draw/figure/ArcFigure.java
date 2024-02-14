@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -39,7 +39,7 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
     public static final CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
     public static final DoubleStyleableKey START_ANGLE = new DoubleStyleableKey("startAngle", 0.0);
     public static final DoubleStyleableKey ARC_LENGTH = new DoubleStyleableKey("arcLength", 360.0);
-    public static final EnumStyleableKey<ArcType> ARC_TYPE = new EnumStyleableKey<>("arcType", ArcType.class, ArcType.ROUND);
+    public static final NonNullEnumStyleableKey<ArcType> ARC_TYPE = new NonNullEnumStyleableKey<>("arcType", ArcType.class, ArcType.ROUND);
     public static final @Nullable CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
     public static final CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 

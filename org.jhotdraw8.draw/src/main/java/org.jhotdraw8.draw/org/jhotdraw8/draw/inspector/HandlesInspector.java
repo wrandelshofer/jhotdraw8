@@ -18,7 +18,7 @@ import javafx.util.converter.NumberStringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.NamedCssColor;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
@@ -101,7 +101,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 (CssColor c) -> c == null ? null : c.getColor() //
         );
         handleColorField.textProperty().bindBidirectional(handleColorProperty, new StringConverterAdapter<>(
-                new CssColorConverter(false)));
+                new ColorCssConverter(false)));
 
 
         handleSizeSlider.valueProperty().bindBidirectional(handleSizeProperty);

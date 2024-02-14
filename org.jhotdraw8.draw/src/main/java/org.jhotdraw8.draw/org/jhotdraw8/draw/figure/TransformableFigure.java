@@ -15,7 +15,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.draw.css.converter.CssTranslate3DConverter;
+import org.jhotdraw8.draw.css.converter.Translate3DCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
@@ -78,7 +78,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      * Default value: {@code Rotate.Z_AXIS}.
      */
     @NonNull
-    SimpleNonNullKey<Point3D> ROTATION_AXIS = new SimpleNonNullKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
+    NonNullObjectKey<Point3D> ROTATION_AXIS = new NonNullObjectKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
@@ -128,7 +128,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      * figure.
      */
     @NonNull
-    Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new CssTranslate3DConverter(false));
+    Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new Translate3DCssConverter(false));
 
     static @NonNull Set<Key<?>> getDeclaredKeys() {
         Set<Key<?>> keys = new LinkedHashSet<>();

@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.scene.effect.Effect;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssEffectConverter;
+import org.jhotdraw8.draw.css.converter.EffectCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -19,7 +19,7 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements WritableStyleableMapAccessor<Effect> {
 
     static final long serialVersionUID = 1L;
-    private final CssEffectConverter converter = new CssEffectConverter();
+    private final EffectCssConverter converter = new EffectCssConverter();
 
     /**
      * Creates a new instance with the specified name and with null as the

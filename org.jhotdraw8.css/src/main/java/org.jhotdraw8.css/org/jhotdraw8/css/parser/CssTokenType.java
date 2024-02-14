@@ -15,6 +15,9 @@ package org.jhotdraw8.css.parser;
  */
 public class CssTokenType {
 
+    /**
+     * This identifier is used to denote that a value is absent or that a list is empty.
+     */
     public static final String IDENT_NONE = "none";
 
     /**

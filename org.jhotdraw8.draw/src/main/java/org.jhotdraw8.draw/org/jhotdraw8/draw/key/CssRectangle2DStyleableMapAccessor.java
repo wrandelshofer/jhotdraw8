@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssRectangle2DConverter;
+import org.jhotdraw8.draw.css.converter.Rectangle2DCssConverter;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -55,7 +55,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
         this.heightKey = heightKey;
     }
 
-    private final Converter<CssRectangle2D> converter = new CssRectangle2DConverter(false);
+    private final Converter<CssRectangle2D> converter = new Rectangle2DCssConverter(false);
 
     @Override
     public @NonNull Converter<CssRectangle2D> getCssConverter() {

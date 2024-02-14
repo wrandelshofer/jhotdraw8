@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssPathMetricsConverter;
+import org.jhotdraw8.draw.css.converter.PathMetricsCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.geom.shape.PathMetrics;
@@ -49,7 +49,7 @@ public class NullablePathMetricsStyleableKey
 
     }
 
-    private final Converter<PathMetrics> converter = new CssPathMetricsConverter(true);
+    private final Converter<PathMetrics> converter = new PathMetricsCssConverter(true);
 
     @Override
     public @NonNull Converter<PathMetrics> getCssConverter() {

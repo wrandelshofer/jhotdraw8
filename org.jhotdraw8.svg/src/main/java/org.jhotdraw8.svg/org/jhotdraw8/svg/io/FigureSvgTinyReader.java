@@ -10,12 +10,12 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.CheckedRunnable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
-import org.jhotdraw8.draw.css.converter.CssDefaultableValueConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
+import org.jhotdraw8.draw.css.converter.DefaultableValueCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.css.value.NamedCssColor;
@@ -49,8 +49,8 @@ import org.jhotdraw8.svg.figure.SvgRectFigure;
 import org.jhotdraw8.svg.figure.SvgStop;
 import org.jhotdraw8.svg.figure.SvgTextFigure;
 import org.jhotdraw8.svg.text.SvgXmlPaintableConverter;
-import org.jhotdraw8.xml.converter.XmlStringConverter;
-import org.jhotdraw8.xml.converter.XmlWordSetConverter;
+import org.jhotdraw8.xml.converter.StringXmlConverter;
+import org.jhotdraw8.xml.converter.WordSetXmlConverter;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -108,15 +108,15 @@ public class FigureSvgTinyReader {
      * <p>
      * FIXME we must use XmlSizeConverter and not CssSizeConverter!
      */
-    private final @NonNull CssSizeConverter sizeConverter = new CssSizeConverter(true);
-    private final @NonNull CssDefaultableValueConverter<CssSize> defaultableSizeConverter = new CssDefaultableValueConverter<>(new CssSizeConverter(false));
+    private final @NonNull SizeCssConverter sizeConverter = new SizeCssConverter(true);
+    private final @NonNull DefaultableValueCssConverter<CssSize> defaultableSizeConverter = new DefaultableValueCssConverter<>(new SizeCssConverter(false));
 
     /**
      * Converts a CSS color string into a CssColor value.
      * <p>
      * FIXME we must use XmlColorConverter and not CssColorConverter!
      */
-    private final @NonNull SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new CssColorConverter(true));
+    private final @NonNull SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new ColorCssConverter(true));
     /**
      * Maps from a type to a converter.
      */
@@ -168,9 +168,9 @@ public class FigureSvgTinyReader {
 
 
         // Override converters that have different representations in CSS and XML
-        mutableConverterMap.put(String.class, new XmlStringConverter());
+        mutableConverterMap.put(String.class, new StringXmlConverter());
         mutableConverterMap.put(new SimpleParameterizedType(CssDefaultableValue.class, Paintable.class),
-                new CssDefaultableValueConverter<>(new SvgXmlPaintableConverter()));
+                new DefaultableValueCssConverter<>(new SvgXmlPaintableConverter()));
 
         converterMap = Collections.unmodifiableMap(mutableConverterMap);
         figureMap = Collections.unmodifiableMap(mutableFigureMap);
@@ -354,7 +354,7 @@ public class FigureSvgTinyReader {
                 node.set(StyleableFigure.ID, value);
             } else if ("class".equals(localName) && isInSvgNs) {
                 try {
-                    node.set(StyleableFigure.STYLE_CLASS, new XmlWordSetConverter().fromString(value));
+                    node.set(StyleableFigure.STYLE_CLASS, new WordSetXmlConverter().fromString(value));
                 } catch (ParseException | IOException e) {
                     Location location = r.getLocation();
                     handleError(location, "Could not read attribute \"" + localName + "\".", e);

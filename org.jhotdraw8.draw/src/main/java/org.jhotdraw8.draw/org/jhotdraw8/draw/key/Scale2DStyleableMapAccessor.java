@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssScale2DConverter;
+import org.jhotdraw8.draw.css.converter.Scale2DCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
@@ -28,7 +28,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     private final @NonNull MapAccessor<Double> xKey;
     private final @NonNull MapAccessor<Double> yKey;
-    private final Converter<Point2D> converter = new CssScale2DConverter();
+    private final Converter<Point2D> converter = new Scale2DCssConverter();
 
     /**
      * Creates a new instance with the specified name.

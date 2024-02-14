@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssInsetsConverter;
+import org.jhotdraw8.draw.css.converter.InsetsCssConverter;
 import org.jhotdraw8.draw.css.value.CssInsets;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -52,7 +52,7 @@ public class CssInsetsStyleableMapAccessor
         this.leftKey = leftKey;
     }
 
-    private final Converter<CssInsets> converter = new CssInsetsConverter(false);
+    private final Converter<CssInsets> converter = new InsetsCssConverter(false);
 
     @Override
     public @NonNull Converter<CssInsets> getCssConverter() {

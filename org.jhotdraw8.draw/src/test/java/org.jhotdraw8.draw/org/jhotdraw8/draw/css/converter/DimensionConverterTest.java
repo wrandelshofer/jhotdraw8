@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -40,7 +40,7 @@ public class DimensionConverterTest {
     public static void testToString(@Nullable Double value, String expected) throws Exception {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
-        CssSizeConverter instance = new CssSizeConverter(true);
+        SizeCssConverter instance = new SizeCssConverter(true);
         instance.toString(out, idFactory, value == null ? null : CssSize.of(value, null));
         String actual = out.toString();
         assertEquals(actual, expected);
@@ -52,7 +52,7 @@ public class DimensionConverterTest {
     public static void testFromString(@Nullable Double expected, @NonNull String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
-        CssSizeConverter instance = new CssSizeConverter(true);
+        SizeCssConverter instance = new SizeCssConverter(true);
         CssSize actualSize = instance.fromString(buf, idFactory);
         UnitConverter c = new DefaultUnitConverter(90);
         Double actual = actualSize == null ? null : c.convert(actualSize, UnitConverter.DEFAULT);

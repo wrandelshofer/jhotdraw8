@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.CssConverter;
-import org.jhotdraw8.css.converter.CssSetConverter;
+import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
@@ -17,7 +17,7 @@ import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
- * SetStyleableKey.
+ * NonNullSetStyleableKey.
  *
  * @param <T> the element type of the set
  * @author Werner Randelshofer
@@ -39,6 +39,6 @@ public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * @param elementConverter String converter for a list element
      */
     public NullableSetStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter) {
-        super(name, new SimpleParameterizedType(ImmutableSequencedSet.class, elementType), new CssSetConverter<>(elementConverter), ChampVectorSet.of());
+        super(name, new SimpleParameterizedType(ImmutableSequencedSet.class, elementType), new SetCssConverter<>(elementConverter), ChampVectorSet.of());
     }
 }

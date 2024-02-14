@@ -14,7 +14,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 
@@ -31,7 +31,7 @@ public class CssColorChooserController {
 
     @FXML // fx:id="colorPicker"
     private ColorPicker colorPicker; // Value injected by FXMLLoader
-    private final @NonNull CssColorConverter converter = new CssColorConverter();
+    private final @NonNull ColorCssConverter converter = new ColorCssConverter();
 
     public CssColorChooserController() {
     }

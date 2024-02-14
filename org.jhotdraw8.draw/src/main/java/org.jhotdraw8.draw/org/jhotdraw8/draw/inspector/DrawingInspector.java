@@ -15,10 +15,10 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.ViewBoxableDrawing;
@@ -103,7 +103,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
                     CssColor::new//
             );
             backgroundColorField.textProperty().bindBidirectional(myBackgroundProperty,
-                    new StringConverterAdapter<>(new CssColorConverter(false)));
+                    new StringConverterAdapter<>(new ColorCssConverter(false)));
 
         });
 
@@ -157,10 +157,10 @@ public class DrawingInspector extends AbstractDrawingInspector {
             myBackgroundProperty.bindBidirectional(boundBackgroundProperty);
             myBackgroundProperty.addListener(colorCommitHandler);
 
-            xField.textProperty().bindBidirectional(xProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
-            yField.textProperty().bindBidirectional(yProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
-            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
-            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterAdapter<>(new CssSizeConverter(false)));
+            xField.textProperty().bindBidirectional(xProperty, new StringConverterAdapter<>(new SizeCssConverter(false)));
+            yField.textProperty().bindBidirectional(yProperty, new StringConverterAdapter<>(new SizeCssConverter(false)));
+            widthField.textProperty().bindBidirectional(widthProperty, new StringConverterAdapter<>(new SizeCssConverter(false)));
+            heightField.textProperty().bindBidirectional(heightProperty, new StringConverterAdapter<>(new SizeCssConverter(false)));
         }
     }
 

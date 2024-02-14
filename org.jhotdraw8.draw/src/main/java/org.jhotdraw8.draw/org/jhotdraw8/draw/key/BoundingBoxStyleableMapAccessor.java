@@ -8,7 +8,7 @@ import javafx.geometry.BoundingBox;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssBoundingBoxConverter;
+import org.jhotdraw8.draw.css.converter.BoundingBoxCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
@@ -49,7 +49,7 @@ public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccesso
         this.heightKey = heightKey;
     }
 
-    private final @NonNull Converter<BoundingBox> converter = new CssBoundingBoxConverter(false);
+    private final @NonNull Converter<BoundingBox> converter = new BoundingBoxCssConverter(false);
 
     @Override
     public @NonNull Converter<BoundingBox> getCssConverter() {

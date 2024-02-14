@@ -24,14 +24,6 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
     long serialVersionUID = 1L;
 
     /**
-     * Returns the name string.
-     *
-     * @return name string.
-     */
-    @Override
-    @NonNull String getName();
-
-    /**
      * Gets the converter.
      *
      * @return the converter

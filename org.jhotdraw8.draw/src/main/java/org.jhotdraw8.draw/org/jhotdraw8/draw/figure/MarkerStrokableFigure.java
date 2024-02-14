@@ -11,12 +11,12 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
-import org.jhotdraw8.draw.key.ListStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
@@ -55,7 +55,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    EnumStyleableKey<StrokeLineCap> MARKER_STROKE_LINE_CAP = new EnumStyleableKey<>("marker-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
+    NonNullEnumStyleableKey<StrokeLineCap> MARKER_STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("marker-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -66,7 +66,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    EnumStyleableKey<StrokeLineJoin> MARKER_STROKE_LINE_JOIN = new EnumStyleableKey<>("marker-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
+    NonNullEnumStyleableKey<StrokeLineJoin> MARKER_STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("marker-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style.
      * <p>
@@ -96,7 +96,7 @@ public interface MarkerStrokableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    EnumStyleableKey<StrokeType> MARKER_STROKE_TYPE = new EnumStyleableKey<>("marker-stroke-type", StrokeType.class, StrokeType.CENTERED);
+    NonNullEnumStyleableKey<StrokeType> MARKER_STROKE_TYPE = new NonNullEnumStyleableKey<>("marker-stroke-type", StrokeType.class, StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -133,9 +133,9 @@ public interface MarkerStrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    ListStyleableKey<CssSize> MARKER_STROKE_DASH_ARRAY = new ListStyleableKey<>("marker-stroke-dasharray",
+    NonNullListStyleableKey<CssSize> MARKER_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("marker-stroke-dasharray",
             new SimpleParameterizedType(ImmutableList.class, CssSize.class),
-            new CssSizeConverter(false), VectorList.of());
+            new SizeCssConverter(false), VectorList.of());
 
     /**
      * Combined map accessor for all stroke style properties.

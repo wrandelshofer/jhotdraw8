@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 
@@ -16,7 +16,7 @@ import java.io.Serial;
  *
  * @author Werner Randelshofer
  */
-public class WordSetKey extends SimpleNonNullKey<@NonNull ImmutableSet<String>> {
+public class WordSetKey extends NonNullObjectKey<@NonNull ImmutableSet<String>> {
 
     @Serial
     private static final long serialVersionUID = 1L;

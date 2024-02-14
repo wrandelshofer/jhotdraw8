@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.converter.CssDoubleConverter;
-import org.jhotdraw8.css.converter.CssListConverter;
+import org.jhotdraw8.css.converter.DoubleCssConverter;
+import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -45,7 +45,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
     public DoubleListStyleableKey(@NonNull String name, ImmutableList<Double> defaultValue) {
         super(name, new SimpleParameterizedType(ImmutableList.class, Double.class), defaultValue);
 
-        converter = new CssListConverter<>(new CssDoubleConverter(false));
+        converter = new ListCssConverter<>(new DoubleCssConverter(false));
     }
 
     @Override

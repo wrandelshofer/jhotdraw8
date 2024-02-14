@@ -7,8 +7,8 @@ package org.jhotdraw8.draw.key;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.converter.CssListConverter;
-import org.jhotdraw8.draw.css.converter.CssTransformConverter;
+import org.jhotdraw8.css.converter.ListCssConverter;
+import org.jhotdraw8.draw.css.converter.TransformCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
@@ -48,7 +48,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      */
     public TransformListStyleableKey(@NonNull String name, ImmutableList<Transform> defaultValue) {
         super(name, new SimpleParameterizedType(ImmutableList.class, Transform.class), defaultValue);
-        converter = new CssListConverter<>(new CssTransformConverter());
+        converter = new ListCssConverter<>(new TransformCssConverter());
     }
 
     @Override

@@ -10,7 +10,6 @@ import org.jhotdraw8.icollection.facade.ListFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.icollection.impl.iteration.ReadOnlyListSpliterator;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -143,15 +142,6 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      */
     default @NonNull ListIterator<E> listIterator(int index) {
         return new ReadOnlyListSpliterator<>(this, index, size());
-    }
-
-    /**
-     * Copies this list into an ArrayList.
-     *
-     * @return a new ArrayList.
-     */
-    default @NonNull ArrayList<E> toArrayList() {
-        return new ArrayList<>(this.asList());
     }
 
     /**

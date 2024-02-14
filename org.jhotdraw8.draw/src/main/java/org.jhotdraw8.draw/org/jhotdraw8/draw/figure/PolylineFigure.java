@@ -121,7 +121,7 @@ public class PolylineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(@NonNull Transform transform) {
-        ArrayList<Point2D> newP = getNonNull(POINTS).toArrayList();
+        List<Point2D> newP = getNonNull(POINTS).toMutable();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, FXTransforms.transform(transform, newP.get(i)));
         }
@@ -130,7 +130,7 @@ public class PolylineFigure extends AbstractLeafFigure
 
     @Override
     public void translateInLocal(@NonNull CssPoint2D t) {
-        ArrayList<Point2D> newP = getNonNull(POINTS).toArrayList();
+        List<Point2D> newP = getNonNull(POINTS).toMutable();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
         }

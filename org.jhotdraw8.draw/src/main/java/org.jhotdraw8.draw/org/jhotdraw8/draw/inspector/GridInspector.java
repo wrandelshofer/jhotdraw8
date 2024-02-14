@@ -18,16 +18,16 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.base.converter.XmlNumberConverter;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
+import org.jhotdraw8.xml.converter.NumberXmlConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -114,7 +114,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 CssColor::new//
         );
         gridColorField.textProperty().bindBidirectional(gridColorProperty, new StringConverterAdapter<>(
-                new CssColorConverter(false)));
+                new ColorCssConverter(false)));
     }
 
     @Override
@@ -171,7 +171,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
                         CssSize.of(prefs.getDouble("gridWidth", 0), prefs.get("gridWidthUnits", null)),
                         CssSize.of(prefs.getDouble("gridHeight", 0), prefs.get("gridHeightUnits", null)),
                         prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
-                Converter<CssColor> converter = new CssColorConverter(true);
+                Converter<CssColor> converter = new ColorCssConverter(true);
                 try {
                     gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor", gridConstrainer.getGridColor().getName())));
                 } catch (ParseException | IOException ex) {
@@ -180,9 +180,9 @@ public class GridInspector extends AbstractDrawingViewInspector {
                 newValue.setConstrainer(gridConstrainer);
             }
             StringConverter<CssSize> sc
-                    = new StringConverterAdapter<>(new CssSizeConverter(false));
+                    = new StringConverterAdapter<>(new SizeCssConverter(false));
             StringConverter<Number> nc
-                    = new StringConverterAdapter<>(new XmlNumberConverter());
+                    = new StringConverterAdapter<>(new NumberXmlConverter());
             heightField.textProperty().bindBidirectional(gridConstrainer.heightProperty(), sc);
             widthField.textProperty().bindBidirectional(gridConstrainer.widthProperty(), sc);
             xField.textProperty().bindBidirectional(gridConstrainer.xProperty(), sc);

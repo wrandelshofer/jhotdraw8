@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
-import org.jhotdraw8.draw.css.converter.CssPoint2DConverter;
+import org.jhotdraw8.draw.css.converter.Point2DCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
@@ -46,7 +46,7 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoi
      * @param defaultValue The default value.
      */
     public CssPoint2DStyleableKey(@NonNull String key, @NonNull CssPoint2D defaultValue) {
-        this(key, defaultValue, new CssPoint2DConverter(false));
+        this(key, defaultValue, new Point2DCssConverter(false));
     }
 
     public CssPoint2DStyleableKey(@NonNull String key, @NonNull CssPoint2D defaultValue, @NonNull CssConverter<CssPoint2D> converter) {

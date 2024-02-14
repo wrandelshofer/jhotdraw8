@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
+import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 
 /**
  * LineConnectingFigure.
@@ -27,7 +27,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * The end connector.
      */
     @NonNull
-    SimpleNullableKey<Connector> END_CONNECTOR = new SimpleNullableKey<>("endConnector", Connector.class, null);
+    NullableObjectKey<Connector> END_CONNECTOR = new NullableObjectKey<>("endConnector", Connector.class, null);
     /**
      * The end target.
      * <p>
@@ -36,7 +36,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * figure.
      */
     @NonNull
-    SimpleNullableKey<Figure> END_TARGET = new SimpleNullableKey<>("endTarget", Figure.class, null);
+    NullableObjectKey<Figure> END_TARGET = new NullableObjectKey<>("endTarget", Figure.class, null);
     /**
      * The end position of the line.
      */
@@ -56,7 +56,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * The start connector.
      */
     @NonNull
-    SimpleNullableKey<Connector> START_CONNECTOR = new SimpleNullableKey<>("startConnector", Connector.class, null);
+    NullableObjectKey<Connector> START_CONNECTOR = new NullableObjectKey<>("startConnector", Connector.class, null);
     /**
      * The start target.
      * <p>
@@ -65,7 +65,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * figure.
      */
     @NonNull
-    SimpleNullableKey<Figure> START_TARGET = new SimpleNullableKey<>("startTarget", Figure.class, null);
+    NullableObjectKey<Figure> START_TARGET = new NullableObjectKey<>("startTarget", Figure.class, null);
     /**
      * The start position of the line.
      */

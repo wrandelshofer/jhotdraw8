@@ -12,7 +12,7 @@ import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 
@@ -33,7 +33,7 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
      */
     public static final String CURRENT_COLOR_KEYWORD = "currentColor";
 
-    private static final @NonNull CssColorConverter colorConverter = new CssColorConverter(false);
+    private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
 
     public SvgCssPaintableConverter(boolean nullable) {
         super(nullable);

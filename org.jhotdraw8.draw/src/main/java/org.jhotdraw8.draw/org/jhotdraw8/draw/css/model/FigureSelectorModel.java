@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.converter.CssConverter;
-import org.jhotdraw8.css.converter.CssStringConverter;
+import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.css.model.AbstractSelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -177,7 +177,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
         // FIXME get rid of special treatment for CssStringConverter
         Converter<Object> c = k.getCssConverter();
-        String stringValue = (((Converter<?>) c) instanceof CssStringConverter) ? (String) value : k.getCssConverter().toString(value);
+        String stringValue = (((Converter<?>) c) instanceof StringCssConverter) ? (String) value : k.getCssConverter().toString(value);
         return stringValue;
     }
 

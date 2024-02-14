@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.converter.CssUriConverter;
+import org.jhotdraw8.css.converter.UriCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 import java.io.Serial;
@@ -21,7 +21,7 @@ public class NullableUriStyleableKey extends AbstractStyleableKey<URI> implement
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final Converter<URI> converter = new CssUriConverter(true);
+    private final Converter<URI> converter = new UriCssConverter(true);
 
     /**
      * Creates a new instance with the specified name and with null as the

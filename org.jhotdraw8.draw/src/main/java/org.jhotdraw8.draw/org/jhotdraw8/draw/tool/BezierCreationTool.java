@@ -18,7 +18,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.key.BezierPathStyleableKey;
+import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.PolylineToCubicCurve;
@@ -44,7 +44,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
      */
     private int dragStartIndex;
 
-    private final BezierPathStyleableKey key;
+    private final NonNullObjectStyleableKey<BezierPath> key;
     /**
      * The bezier nodes being created.
      */
@@ -54,11 +54,11 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
      */
     private final @NonNull Line rubberBand = new Line();
 
-    public BezierCreationTool(String name, Resources rsrc, BezierPathStyleableKey key, Supplier<Figure> factory) {
+    public BezierCreationTool(String name, Resources rsrc, NonNullObjectStyleableKey<BezierPath> key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);
     }
 
-    public BezierCreationTool(String name, Resources rsrc, BezierPathStyleableKey key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
+    public BezierCreationTool(String name, Resources rsrc, NonNullObjectStyleableKey<BezierPath> key, Supplier<Figure> figureFactory, Supplier<Layer> layerFactory) {
         super(name, rsrc, figureFactory, layerFactory);
         this.key = key;
         node.setCursor(Cursor.CROSSHAIR);

@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssSvgPathConverter;
+import org.jhotdraw8.draw.css.converter.SvgPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 import java.io.Serial;
@@ -45,7 +45,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
     public NullableSvgPathStyleableKey(@NonNull String key, String defaultValue) {
         super(null, key, String.class, true, defaultValue);
 
-        converter = new CssSvgPathConverter(isNullable());
+        converter = new SvgPathCssConverter(isNullable());
     }
 
     @Override

@@ -36,7 +36,7 @@ public class Rectangle2DConverterTest {
     public static void testFromString(CssRectangle2D expected, @NonNull String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
-        CssRectangle2DConverter instance = new CssRectangle2DConverter(false);
+        Rectangle2DCssConverter instance = new Rectangle2DCssConverter(false);
         CssRectangle2D actual = instance.fromString(buf, idFactory);
         String actualString = instance.toString(expected);
         assertEquals(expected, actual);

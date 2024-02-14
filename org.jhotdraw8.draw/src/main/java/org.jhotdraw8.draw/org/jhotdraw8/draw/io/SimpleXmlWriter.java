@@ -18,7 +18,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.icollection.ChampMap;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
@@ -77,7 +77,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     /**
      * Specifies the number of characters that should be used for indentation.
      */
-    public static SimpleNonNullKey<Integer> INDENT_AMOUNT = new SimpleNonNullKey<Integer>("indent-amount", Integer.class, 2);
+    public static NonNullObjectKey<Integer> INDENT_AMOUNT = new NonNullObjectKey<Integer>("indent-amount", Integer.class, 2);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);

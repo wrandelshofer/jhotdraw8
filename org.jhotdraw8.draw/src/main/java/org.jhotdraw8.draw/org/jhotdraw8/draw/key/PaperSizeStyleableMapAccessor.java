@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssPaperSizeConverter;
+import org.jhotdraw8.draw.css.converter.PaperSizeCssConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -27,7 +27,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final Converter<CssDimension2D> converter = new CssPaperSizeConverter();
+    private final Converter<CssDimension2D> converter = new PaperSizeCssConverter();
 
     private final @NonNull NonNullMapAccessor<CssSize> widthKey;
     private final @NonNull NonNullMapAccessor<CssSize> heightKey;

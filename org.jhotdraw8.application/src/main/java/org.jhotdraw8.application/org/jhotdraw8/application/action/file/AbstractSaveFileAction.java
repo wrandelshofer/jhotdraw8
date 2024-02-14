@@ -24,7 +24,7 @@ import org.jhotdraw8.base.net.UriUtil;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
+import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampMap;
 
@@ -45,8 +45,8 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
 
     private final boolean saveAs;
     private Node oldFocusOwner;
-    public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new SimpleNullableKey<>("saveChooser", URIChooser.class);
-    public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("saveChooserFactory",
+    public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new NullableObjectKey<>("saveChooser", URIChooser.class);
+    public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("saveChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
     /**

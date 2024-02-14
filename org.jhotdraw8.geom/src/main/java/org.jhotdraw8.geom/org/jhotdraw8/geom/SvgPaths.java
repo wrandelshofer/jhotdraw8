@@ -10,7 +10,6 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.NumberConverter;
-import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
 
 import java.awt.*;
@@ -353,7 +352,7 @@ public class SvgPaths {
      * @return SVG Path
      */
     public static @NonNull String awtPathIteratorToDoubleSvgString(@NonNull PathIterator iter) {
-        XmlNumberConverter nb = new XmlNumberConverter();
+        NumberConverter nb = new NumberConverter();
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
         double reflectedX = Double.NaN;
@@ -454,7 +453,7 @@ public class SvgPaths {
      * @return SVG Path
      */
     public static @NonNull String awtShapeToDoubleRelativeSvgString(@NonNull PathIterator iter) {
-        XmlNumberConverter nb = new XmlNumberConverter();
+        NumberConverter nb = new NumberConverter();
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
         double x = 0, y = 0;// current point
@@ -528,7 +527,7 @@ public class SvgPaths {
      * @return SVG Path
      */
     public static @NonNull String awtPathIteratorToFloatRelativeSvgString(@NonNull PathIterator iter) {
-        XmlNumberConverter nb = new XmlNumberConverter();
+        NumberConverter nb = new NumberConverter();
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
         float x = 0, y = 0;// current point

@@ -50,9 +50,8 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.base.converter.XmlNumberConverter;
-import org.jhotdraw8.css.converter.CssDoubleConverter;
-import org.jhotdraw8.css.converter.CssListConverter;
+import org.jhotdraw8.css.converter.DoubleCssConverter;
+import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
 import org.jhotdraw8.geom.FXPreciseRotate;
@@ -63,9 +62,10 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.svg.text.SvgPaintConverter;
+import org.jhotdraw8.svg.text.SvgPaintCssConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
+import org.jhotdraw8.xml.converter.NumberXmlConverter;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -107,12 +107,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     public static final String SVG_NS = "http://www.w3.org/2000/svg";
     protected static final String XLINK_NS = "http://www.w3.org/1999/xlink";
     protected static final String XLINK_PREFIX = "xlink";
-    protected final XmlNumberConverter nb = new XmlNumberConverter();
+    protected final NumberXmlConverter nb = new NumberXmlConverter();
     private final @Nullable Object imageUriKey;
-    private final Converter<ImmutableList<Double>> doubleList = new CssListConverter<>(new CssDoubleConverter(false));
-    private final Converter<Paint> paintConverter = new SvgPaintConverter(true);
+    private final Converter<ImmutableList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
+    private final Converter<Paint> paintConverter = new SvgPaintCssConverter(true);
     private final @Nullable Object skipKey;
-    private final Converter<ImmutableList<Transform>> tx = new CssListConverter<>(new SvgTransformConverter(false));
+    private final Converter<ImmutableList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
     protected @NonNull IdFactory idFactory = new SimpleIdFactory();
 
     /**

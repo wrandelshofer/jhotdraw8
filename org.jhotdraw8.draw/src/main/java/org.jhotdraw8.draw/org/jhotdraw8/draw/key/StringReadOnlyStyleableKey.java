@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.converter.CssStringConverter;
+import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 
 /**
@@ -19,7 +19,7 @@ import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 
     static final long serialVersionUID = 1L;
-    private final @NonNull CssStringConverter converter;
+    private final @NonNull StringCssConverter converter;
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -50,7 +50,7 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      */
     public StringReadOnlyStyleableKey(@NonNull String name, String defaultValue, String helpText) {
         super(null, name, String.class, true, defaultValue);
-        converter = new CssStringConverter(false, '\'', helpText);
+        converter = new StringCssConverter(false, '\'', helpText);
     }
 
     @Override

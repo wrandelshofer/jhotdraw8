@@ -10,7 +10,7 @@ import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.converter.MappedConverter;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
@@ -47,7 +47,7 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
                     entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
                     entry("larger", SvgFontSize.SizeKeyword.LARGER)
             )));
-    private final CssSizeConverter sizeConverter = new CssSizeConverter(false);
+    private final SizeCssConverter sizeConverter = new SizeCssConverter(false);
 
     public SvgFontSizeConverter() {
         super(false);

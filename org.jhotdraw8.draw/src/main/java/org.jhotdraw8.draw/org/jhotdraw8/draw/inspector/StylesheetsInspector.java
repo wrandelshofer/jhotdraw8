@@ -35,7 +35,7 @@ import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.xml.converter.XmlUriConverter;
+import org.jhotdraw8.xml.converter.UriXmlConverter;
 
 import java.io.File;
 import java.io.IOException;
@@ -157,7 +157,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
                 }
 
             };
-            StringConverter<URI> uriConverter = new StringConverterAdapter<>(new XmlUriConverter());
+            StringConverter<URI> uriConverter = new StringConverterAdapter<>(new UriXmlConverter());
 
             ListViewUtil.addDragAndDropSupport(listView,
                     (ListView<URI> param) -> {

@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssPoint2DConverter;
+import org.jhotdraw8.draw.css.converter.Point2DCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -40,7 +40,7 @@ public class CssPoint2DStyleableMapAccessor
      * @param yKey the key for the y coordinate of the point
      */
     public CssPoint2DStyleableMapAccessor(@NonNull String name, @NonNull NonNullMapAccessor<CssSize> xKey, @NonNull NonNullMapAccessor<CssSize> yKey) {
-        this(name, xKey, yKey, new CssPoint2DConverter(false));
+        this(name, xKey, yKey, new Point2DCssConverter(false));
     }
 
     /**

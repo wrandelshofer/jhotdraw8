@@ -16,11 +16,15 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
-import org.jhotdraw8.base.converter.XmlNumberConverter;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.ImageFigure;
+import org.jhotdraw8.draw.figure.Page;
+import org.jhotdraw8.draw.figure.PageFigure;
+import org.jhotdraw8.draw.figure.Slice;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.AbstractExportOutputFormat;
 import org.jhotdraw8.draw.io.OutputFormat;
@@ -28,10 +32,11 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.TransformFlattener;
 import org.jhotdraw8.xml.XmlUtil;
+import org.jhotdraw8.xml.converter.NumberXmlConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -59,7 +64,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
     private static final Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
 
-    public static final SimpleNonNullKey<Boolean> RELATIVIZE_PATHS = new SimpleNonNullKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
+    public static final NonNullObjectKey<Boolean> RELATIVIZE_PATHS = new NonNullObjectKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
 
     public static final DataFormat SVG_FORMAT;
     public static final String SVG_MIME_TYPE = "image/svg+xml";
@@ -73,9 +78,9 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         SVG_FORMAT = fmt;
     }
 
-    private final XmlNumberConverter nb = new XmlNumberConverter();
-    private final CssSizeConverter sc = new CssSizeConverter(false);
-    private final Converter<CssSize> sznb = new CssSizeConverter(false);
+    private final NumberXmlConverter nb = new NumberXmlConverter();
+    private final SizeCssConverter sc = new SizeCssConverter(false);
+    private final Converter<CssSize> sznb = new SizeCssConverter(false);
     private final @NonNull IdFactory idFactory = new SimpleIdFactory();
 
     private BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory = FXSvgFullWriter::new;

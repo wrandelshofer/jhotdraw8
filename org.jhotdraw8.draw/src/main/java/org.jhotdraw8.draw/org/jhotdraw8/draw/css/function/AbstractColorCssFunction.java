@@ -12,7 +12,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.List;
  * @param <T> the element type of the DOM
  */
 public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T> {
-    protected CssColorConverter converter = new CssColorConverter();
+    protected ColorCssConverter converter = new ColorCssConverter();
 
     public AbstractColorCssFunction(String name) {
         super(name);

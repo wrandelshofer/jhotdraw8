@@ -6,8 +6,8 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.CssConverter;
-import org.jhotdraw8.css.converter.CssSetConverter;
-import org.jhotdraw8.draw.css.converter.CssIdentConverter;
+import org.jhotdraw8.css.converter.SetCssConverter;
+import org.jhotdraw8.draw.css.converter.IdentCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
@@ -19,7 +19,7 @@ import java.io.Serial;
  *
  * @author Werner Randelshofer
  */
-public class WordSetStyleableKey extends SetStyleableKey<String> {
+public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -42,7 +42,7 @@ public class WordSetStyleableKey extends SetStyleableKey<String> {
      */
     public WordSetStyleableKey(@NonNull String name, @NonNull ImmutableSequencedSet<String> defaultValue) {
         this(name,
-                new CssSetConverter<String>(new CssIdentConverter(false)),
+                new SetCssConverter<String>(new IdentCssConverter(false)),
                 defaultValue);
     }
 

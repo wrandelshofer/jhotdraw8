@@ -6,7 +6,7 @@ package org.jhotdraw8.application;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 
 /**
  * A {@code FileBasedApplication} handles the life-cycle of {@link FileBasedActivity} objects and
@@ -16,6 +16,6 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
  */
 public interface FileBasedApplication extends Application {
     @NonNull
-    NonNullKey<Boolean> ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI = new SimpleNonNullKey<Boolean>("allowMultipleActivitiesWithSameURI", Boolean.class,
+    NonNullKey<Boolean> ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI = new NonNullObjectKey<Boolean>("allowMultipleActivitiesWithSameURI", Boolean.class,
             Boolean.FALSE);
 }

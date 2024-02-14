@@ -14,7 +14,7 @@ import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.fxbase.fxml.FxmlUtil;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
@@ -31,7 +31,7 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
  * @author Werner Randelshofer
  */
 public class GrapherApplication extends AbstractFileBasedApplication {
-    public static final @NonNull NonNullKey<Boolean> DARK_MODE_KEY = new SimpleNonNullKey<>("darkMode", Boolean.class, Boolean.FALSE);
+    public static final @NonNull NonNullKey<Boolean> DARK_MODE_KEY = new NonNullObjectKey<>("darkMode", Boolean.class, Boolean.FALSE);
 
     /**
      * @param args the command line arguments

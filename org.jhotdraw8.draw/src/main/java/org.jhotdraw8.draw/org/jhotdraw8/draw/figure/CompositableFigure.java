@@ -7,10 +7,10 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.css.converter.CssPercentageConverter;
-import org.jhotdraw8.draw.key.BlendModeStyleableKey;
+import org.jhotdraw8.css.converter.PercentageCssConverter;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.EffectStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -34,7 +34,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    @NonNull BlendModeStyleableKey BLEND_MODE = new BlendModeStyleableKey("blendMode", BlendMode.SRC_OVER);
+    @NonNull NonNullEnumStyleableKey<BlendMode> BLEND_MODE = new NonNullEnumStyleableKey<>("blendMode", BlendMode.class, BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
@@ -52,7 +52,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code 1}.
      */
-    @NonNull DoubleStyleableKey OPACITY = new DoubleStyleableKey("opacity", 1.0, new CssPercentageConverter(false));
+    @NonNull DoubleStyleableKey OPACITY = new DoubleStyleableKey("opacity", 1.0, new PercentageCssConverter(false));
 
     /**
      * Updates a figure node with all effect properties defined in this

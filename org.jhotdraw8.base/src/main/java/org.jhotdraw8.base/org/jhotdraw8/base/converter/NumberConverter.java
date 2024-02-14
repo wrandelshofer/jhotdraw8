@@ -32,9 +32,9 @@ public class NumberConverter implements Converter<Number> {
      */
     private final boolean allowsNullValue;
     @SuppressWarnings("rawtypes")
-    private final @NonNull Comparable min;
+    private final @NonNull Number min;
     @SuppressWarnings("rawtypes")
-    private final @NonNull Comparable max;
+    private final @NonNull Number max;
     private final @Nullable String unit;
     private final @NonNull DecimalFormat decimalFormat;
     private final @NonNull DecimalFormat scientificFormat;
@@ -56,7 +56,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     public NumberConverter(Class<? extends Number> valueClass) {
-        this(valueClass, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1.0, false, null);
+        this(valueClass, null, null, 1.0, false, null);
     }
 
     /**
@@ -95,7 +95,7 @@ public class NumberConverter implements Converter<Number> {
      */
     @SuppressWarnings("WeakerAccess")
     public NumberConverter(Class<? extends Number> valueClass,
-                           double min, double max, double multiplier, boolean allowsNullValue, String unit) {
+                           Number min, Number max, double multiplier, boolean allowsNullValue, String unit) {
         this(valueClass, min, max, multiplier, allowsNullValue, unit,
                 valueClass == Float.class
                         ? new DecimalFormat("#################0.########", new DecimalFormatSymbols(Locale.ENGLISH))
@@ -103,7 +103,7 @@ public class NumberConverter implements Converter<Number> {
                 new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
     }
 
-    public NumberConverter(@NonNull Class<? extends Number> valueClass, double min, double max, double multiplier, boolean allowsNullValue, @Nullable String unit,
+    public NumberConverter(@NonNull Class<? extends Number> valueClass, Number min, Number max, double multiplier, boolean allowsNullValue, @Nullable String unit,
                            @NonNull DecimalFormat decimalFormat,
                            @NonNull DecimalFormat scientificFormat
     ) {
@@ -129,7 +129,7 @@ public class NumberConverter implements Converter<Number> {
      * @return Minimum legal value that can be input
      */
     @SuppressWarnings({"rawtypes", "unused"})
-    public @NonNull Comparable getMinimum() {
+    public @NonNull Number getMinimum() {
         return min;
     }
 
@@ -140,7 +140,7 @@ public class NumberConverter implements Converter<Number> {
      * @return Maximum legal value that can be input
      */
     @SuppressWarnings({"rawtypes", "unused"})
-    public @NonNull Comparable getMaximum() {
+    public @NonNull Number getMaximum() {
         return max;
     }
 
@@ -430,9 +430,9 @@ public class NumberConverter implements Converter<Number> {
      *                 the values, the exception is consumed and false is returned.
      */
     @SuppressWarnings({"unchecked", "WeakerAccess"})
-    boolean isValidValue(@NonNull Number value, boolean wantsCCE) {
+    private boolean isValidValue(@NonNull Number value, boolean wantsCCE) {
         try {
-            if (min != null && min.compareTo(value) > 0) {
+            if (min instanceof Comparable c && c.compareTo(value) > 0) {
                 return false;
             }
         } catch (ClassCastException cce) {
@@ -443,7 +443,7 @@ public class NumberConverter implements Converter<Number> {
         }
 
         try {
-            if (max != null && max.compareTo(value) < 0) {
+            if (max instanceof Comparable c && c.compareTo(value) < 0) {
                 return false;
             }
         } catch (ClassCastException cce) {

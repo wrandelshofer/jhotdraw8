@@ -17,6 +17,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
+import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
@@ -26,7 +27,7 @@ import org.jhotdraw8.draw.handle.BezierPathEditHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
-import org.jhotdraw8.draw.key.BezierPathStyleableKey;
+import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
@@ -49,7 +50,7 @@ public class BezierPathFigure extends AbstractLeafFigure
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
-    public static final BezierPathStyleableKey PATH = new BezierPathStyleableKey("path", BezierPath.of());
+    public static final NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(false), BezierPath.of());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */

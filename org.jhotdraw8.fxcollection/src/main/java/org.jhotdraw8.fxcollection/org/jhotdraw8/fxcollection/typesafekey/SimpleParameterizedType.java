@@ -30,6 +30,13 @@ public class SimpleParameterizedType implements ParameterizedType {
         return b.toString();
     }
 
+    public int getTypeArgumentCount() {
+        return actualTypeArguments.length;
+    }
+
+    public Type getTypeArgument(int i) {
+        return actualTypeArguments[i];
+    }
     @Override
     public Type[] getActualTypeArguments() {
         return actualTypeArguments.clone();

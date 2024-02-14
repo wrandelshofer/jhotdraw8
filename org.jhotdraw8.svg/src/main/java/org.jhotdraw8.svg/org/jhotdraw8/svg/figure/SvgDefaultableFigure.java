@@ -15,16 +15,16 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.converter.CssDoubleConverter;
-import org.jhotdraw8.css.converter.CssKebabCaseEnumConverter;
-import org.jhotdraw8.css.converter.CssListConverter;
-import org.jhotdraw8.css.converter.CssMappedConverter;
-import org.jhotdraw8.css.converter.CssPercentageConverter;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.DoubleCssConverter;
+import org.jhotdraw8.css.converter.KebabCaseEnumCssConverter;
+import org.jhotdraw8.css.converter.ListCssConverter;
+import org.jhotdraw8.css.converter.MappedCssConverter;
+import org.jhotdraw8.css.converter.PercentageCssConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssDefaulting;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.NamedCssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -66,19 +66,19 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <a href="https://www.w3.org/TR/SVGTiny12/painting.html#ColorProperty">link</a>
      */
     DefaultableStyleableKey<CssColor> COLOR_KEY = new DefaultableStyleableKey<>("color",
-            new SimpleParameterizedType(CssDefaultableValue.class, CssColor.class), new CssColorConverter(true),
+            new SimpleParameterizedType(CssDefaultableValue.class, CssColor.class), new ColorCssConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), NamedCssColor.BLACK);
     /**
      * stop-color.
      */
     DefaultableStyleableKey<CssColor> STOP_COLOR_KEY = new DefaultableStyleableKey<>("stop-color",
-            new SimpleParameterizedType(CssDefaultableValue.class, CssColor.class), new CssColorConverter(true),
+            new SimpleParameterizedType(CssDefaultableValue.class, CssColor.class), new ColorCssConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), NamedCssColor.BLACK);
     /**
      * stop-opacity.
      */
     DefaultableStyleableKey<CssSize> STOP_OPACITY_KEY = new DefaultableStyleableKey<>("stop-opacity",
-            new SimpleParameterizedType(CssDefaultableValue.class, CssSize.class), new CssSizeConverter(true),
+            new SimpleParameterizedType(CssDefaultableValue.class, CssSize.class), new SizeCssConverter(true),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), CssSize.ONE);
     /**
      * fill.
@@ -96,7 +96,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     @NonNull DefaultableStyleableKey<FillRule> FILL_RULE_KEY =
             new DefaultableStyleableKey<FillRule>("fill-rule",
                     new SimpleParameterizedType(CssDefaultableValue.class, FillRule.class),
-                    new CssMappedConverter<>("fill-rule",
+                    new MappedCssConverter<>("fill-rule",
                             linkedHashMap(of("nonzero", FillRule.NON_ZERO,
                                     "evenodd", FillRule.EVEN_ODD
                             ))),
@@ -146,7 +146,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDasharrayProperty">link</a>
      */
     DefaultableStyleableKey<ImmutableList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
-            new SimpleParameterizedType(CssDefaultableValue.class, new SimpleParameterizedType(ImmutableList.class, Double.class)), new CssListConverter<Double>(new CssDoubleConverter(false), ", "),
+            new SimpleParameterizedType(CssDefaultableValue.class, new SimpleParameterizedType(ImmutableList.class, Double.class)), new ListCssConverter<Double>(new DoubleCssConverter(false), ", "),
             new CssDefaultableValue<ImmutableList<Double>>(CssDefaulting.INHERIT, null), null);
     /**
      * stroke-dashoffset.
@@ -155,7 +155,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     DefaultableStyleableKey<Double> STROKE_DASHOFFSET_KEY =
             new DefaultableStyleableKey<Double>("stroke-dashoffset",
                     new SimpleParameterizedType(CssDefaultableValue.class, Double.class),
-                    new CssPercentageConverter(false),
+                    new PercentageCssConverter(false),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), 0.0);
     /**
      * fill-opacity.
@@ -164,7 +164,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     DefaultableStyleableKey<Double> FILL_OPACITY_KEY =
             new DefaultableStyleableKey<Double>("fill-opacity",
                     new SimpleParameterizedType(CssDefaultableValue.class, Double.class),
-                    new CssPercentageConverter(false),
+                    new PercentageCssConverter(false),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
     /**
      * stroke-opacity.
@@ -173,7 +173,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     DefaultableStyleableKey<Double> STROKE_OPACITY_KEY =
             new DefaultableStyleableKey<Double>("stroke-opacity",
                     new SimpleParameterizedType(CssDefaultableValue.class, Double.class),
-                    new CssPercentageConverter(false),
+                    new PercentageCssConverter(false),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
     /**
      * text-anchor.
@@ -184,7 +184,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     @NonNull DefaultableStyleableKey<SvgTextAnchor> TEXT_ANCHOR_KEY =
             new DefaultableStyleableKey<SvgTextAnchor>("text-anchor",
                     new SimpleParameterizedType(CssDefaultableValue.class, SvgTextAnchor.class),
-                    new CssKebabCaseEnumConverter<>(SvgTextAnchor.class),
+                    new KebabCaseEnumCssConverter<>(SvgTextAnchor.class),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), SvgTextAnchor.START
             );
     /**
@@ -196,7 +196,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     @NonNull DefaultableStyleableKey<SvgShapeRendering> SHAPE_RENDERING_KEY =
             new DefaultableStyleableKey<SvgShapeRendering>("shape-rendering",
                     new SimpleParameterizedType(CssDefaultableValue.class, SvgShapeRendering.class),
-                    new CssMappedConverter<>("shape-rendering",
+                    new MappedCssConverter<>("shape-rendering",
                             linkedHashMap(of("auto", SvgShapeRendering.AUTO,
                                     "optimizeSpeed", SvgShapeRendering.OPTIMIZE_SPEED,
                                     "crispEdges", SvgShapeRendering.CRISP_EDGES,
@@ -211,7 +211,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     DefaultableStyleableKey<Double> STROKE_MITERLIMIT_KEY = new DefaultableStyleableKey<Double>("stroke-miterlimit",
             new SimpleParameterizedType(CssDefaultableValue.class, Double.class),
-            new CssDoubleConverter(false),
+            new DoubleCssConverter(false),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
             4.0);
     /**
@@ -220,7 +220,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     DefaultableStyleableKey<StrokeLineCap> STROKE_LINECAP_KEY = new DefaultableStyleableKey<StrokeLineCap>("stroke-linecap",
             new SimpleParameterizedType(CssDefaultableValue.class, StrokeLineCap.class),
-            new CssMappedConverter<>("stroke-linecap",
+            new MappedCssConverter<>("stroke-linecap",
                     linkedHashMap(of("butt", StrokeLineCap.BUTT,
                             "round", StrokeLineCap.ROUND,
                             "square", StrokeLineCap.SQUARE))),
@@ -232,7 +232,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     DefaultableStyleableKey<StrokeLineJoin> STROKE_LINEJOIN_KEY = new DefaultableStyleableKey<StrokeLineJoin>("stroke-linejoin",
             new SimpleParameterizedType(CssDefaultableValue.class, StrokeLineJoin.class),
-            new CssMappedConverter<>("stroke-linejoin",
+            new MappedCssConverter<>("stroke-linejoin",
                     linkedHashMap(of("miter", StrokeLineJoin.MITER,
                             "round", StrokeLineJoin.ROUND,
                             "bevel", StrokeLineJoin.BEVEL))),
@@ -245,7 +245,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     DefaultableStyleableKey<CssSize> STROKE_WIDTH_KEY = new DefaultableStyleableKey<CssSize>(
             "stroke-width",
             new SimpleParameterizedType(CssDefaultableValue.class, CssSize.class),
-            new CssSizeConverter(false),
+            new SizeCssConverter(false),
             new CssDefaultableValue<>(CssDefaulting.INHERIT), CssSize.ONE);
     /**
      * visibility.
@@ -253,7 +253,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     DefaultableStyleableKey<SvgVisibility> VISIBILITY_KEY = new DefaultableStyleableKey<>("visiblity",
             new SimpleParameterizedType(CssDefaultableValue.class, SvgVisibility.class),
-            new CssMappedConverter<SvgVisibility>("visiblity",
+            new MappedCssConverter<SvgVisibility>("visiblity",
                     linkedHashMap(of("visible", SvgVisibility.VISIBLE,
                             "hidden", SvgVisibility.HIDDEN,
                             "collapse", SvgVisibility.COLLAPSE))),
@@ -264,7 +264,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     DefaultableStyleableKey<BlendMode> MIX_BLEND_MODE_KEY = new DefaultableStyleableKey<>("mix-blend-mode",
             new SimpleParameterizedType(CssDefaultableValue.class, BlendMode.class),
-            new CssMappedConverter<BlendMode>("mix-blend-mode",
+            new MappedCssConverter<BlendMode>("mix-blend-mode",
                     linkedHashMap(ofEntries(
                             entry("normal", BlendMode.SRC_OVER),
                             entry("mulitply", BlendMode.MULTIPLY),
@@ -296,7 +296,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      */
     @NonNull DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<SvgDisplay>("display",
             new SimpleParameterizedType(CssDefaultableValue.class, SvgDisplay.class),
-            new CssMappedConverter<SvgDisplay>("display",
+            new MappedCssConverter<SvgDisplay>("display",
                     linkedHashMap(of("inline", SvgDisplay.INLINE)), true),
             new CssDefaultableValue<>(SvgDisplay.INLINE),// not inherited by default!
             SvgDisplay.INLINE);
@@ -307,7 +307,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
     @NonNull DefaultableStyleableKey<Double> OPACITY_KEY =
             new DefaultableStyleableKey<Double>("opacity",
                     new SimpleParameterizedType(CssDefaultableValue.class, Double.class),
-                    new CssPercentageConverter(false),
+                    new PercentageCssConverter(false),
                     new CssDefaultableValue<>(CssDefaulting.INHERIT), 1.0);
 
     /**

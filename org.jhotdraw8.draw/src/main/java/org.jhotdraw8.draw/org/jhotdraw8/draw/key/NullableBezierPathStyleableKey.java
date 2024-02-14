@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssBezierPathConverter;
+import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.geom.shape.BezierPath;
 
@@ -47,7 +47,7 @@ public class NullableBezierPathStyleableKey
 
     }
 
-    private final Converter<BezierPath> converter = new CssBezierPathConverter(false);
+    private final Converter<BezierPath> converter = new BezierPathCssConverter(false);
 
     @Override
     public @NonNull Converter<BezierPath> getCssConverter() {

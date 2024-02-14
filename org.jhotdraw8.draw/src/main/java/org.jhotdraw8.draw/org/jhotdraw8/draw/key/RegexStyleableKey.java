@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.text.RegexReplace;
-import org.jhotdraw8.draw.css.converter.CssRegexConverter;
+import org.jhotdraw8.draw.css.converter.RegexCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
@@ -18,7 +18,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implements WritableStyleableMapAccessor<RegexReplace> {
 
     static final long serialVersionUID = 1L;
-    private final @NonNull CssRegexConverter converter;
+    private final @NonNull RegexCssConverter converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -51,7 +51,7 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
      */
     public RegexStyleableKey(String name, boolean nullable, RegexReplace defaultValue) {
         super(null, name, RegexReplace.class, nullable, defaultValue);
-        converter = new CssRegexConverter(isNullable());
+        converter = new RegexCssConverter(isNullable());
     }
 
     @Override

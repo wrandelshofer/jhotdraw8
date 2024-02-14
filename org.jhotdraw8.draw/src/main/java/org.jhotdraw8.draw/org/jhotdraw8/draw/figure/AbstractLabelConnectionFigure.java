@@ -24,7 +24,7 @@ import org.jhotdraw8.draw.handle.LabelConnectorHandle;
 import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
@@ -87,7 +87,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     /**
      * Whether the label should be rotated with the target.
      */
-    public static final @NonNull EnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new EnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
+    public static final @NonNull NonNullEnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new NonNullEnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
     public static final @NonNull CssSizeStyleableKey LABEL_TRANSLATE_Y = new CssSizeStyleableKey("labelTranslationY", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey LABEL_TRANSLATE_X = new CssSizeStyleableKey("labelTranslationX", CssSize.ZERO);
     /**

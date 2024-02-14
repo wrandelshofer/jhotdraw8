@@ -16,10 +16,10 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssFont;
-import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
 import org.jhotdraw8.draw.key.FontStyleableMapAccessor;
+import org.jhotdraw8.draw.key.NonNullBooleanStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -37,17 +37,17 @@ public interface TextFontableFigure extends Figure {
      */
     StringOrIdentStyleableKey FONT_FAMILY = new StringOrIdentStyleableKey("fontFamily", "Arial");
     CssSizeStyleableKey FONT_SIZE = new CssSizeStyleableKey("fontSize", CssSize.of(12.0));
-    EnumStyleableKey<FontPosture> FONT_STYLE = new EnumStyleableKey<>("fontStyle", FontPosture.class, FontPosture.REGULAR);
-    EnumStyleableKey<FontWeight> FONT_WEIGHT = new EnumStyleableKey<>("fontWeight", FontWeight.class, FontWeight.NORMAL);
+    NonNullEnumStyleableKey<FontPosture> FONT_STYLE = new NonNullEnumStyleableKey<>("fontStyle", FontPosture.class, FontPosture.REGULAR);
+    NonNullEnumStyleableKey<FontWeight> FONT_WEIGHT = new NonNullEnumStyleableKey<>("fontWeight", FontWeight.class, FontWeight.NORMAL);
     FontStyleableMapAccessor FONT = new FontStyleableMapAccessor("font", FONT_FAMILY, FONT_WEIGHT, FONT_STYLE, FONT_SIZE);
     /**
      * Whether to strike through the text. Default value: {@code false}
      */
-    BooleanStyleableKey STRIKETHROUGH = new BooleanStyleableKey("strikethrough", false);
+    NonNullBooleanStyleableKey STRIKETHROUGH = new NonNullBooleanStyleableKey("strikethrough", false);
     /**
      * Whether to underline the text. Default value: {@code false}
      */
-    BooleanStyleableKey UNDERLINE = new BooleanStyleableKey("underline", false);
+    NonNullBooleanStyleableKey UNDERLINE = new NonNullBooleanStyleableKey("underline", false);
 
     /**
      * Updates a text node with fontable properties.

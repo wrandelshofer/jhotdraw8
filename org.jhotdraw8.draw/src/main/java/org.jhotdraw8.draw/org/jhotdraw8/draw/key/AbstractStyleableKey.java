@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
+public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
 
     static final long serialVersionUID = 1L;
     private final @NonNull String cssName;
@@ -67,10 +67,12 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> {
         this.namespace = namespace;
     }
 
+    @Override
     public @NonNull String getCssName() {
         return cssName;
     }
 
+    @Override
     public @Nullable String getCssNamespace() {
         return namespace;
     }

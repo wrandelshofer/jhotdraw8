@@ -7,11 +7,11 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.converter.CssBooleanConverter;
+import org.jhotdraw8.css.converter.BooleanCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
- * BooleanStyleableKey.
+ * NonNullBooleanStyleableKey.
  *
  * @author Werner Randelshofer
  */
@@ -60,7 +60,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
     @Override
     public @NonNull Converter<Boolean> getCssConverter() {
         if (converter == null) {
-            converter = new CssBooleanConverter(isNullable());
+            converter = new BooleanCssConverter(isNullable());
         }
         return converter;
     }

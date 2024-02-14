@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.converter.CssListConverter;
+import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
@@ -49,7 +49,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
     public Point2DListStyleableKey(@NonNull String name, @NonNull ImmutableList<@NonNull Point2D> defaultValue) {
         super(name, new SimpleParameterizedType(ImmutableList.class, Point2D.class), defaultValue);
 
-        this.converter = new CssListConverter<>(
+        this.converter = new ListCssConverter<>(
                 new Point2DConverter(false, false));
     }
 

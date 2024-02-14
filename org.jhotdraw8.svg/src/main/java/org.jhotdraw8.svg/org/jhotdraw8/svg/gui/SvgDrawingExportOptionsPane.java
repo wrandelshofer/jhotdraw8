@@ -16,7 +16,7 @@ import javafx.scene.layout.GridPane;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.css.converter.CssNumberConverter;
+import org.jhotdraw8.css.converter.NumberCssConverter;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.fxbase.control.InputDialog;
@@ -57,7 +57,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @FXML
     private TextField drawingDpiField;
 
-    private final TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter(false)));
+    private final TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label drawingDpiLabel;
@@ -79,7 +79,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @SuppressWarnings("unused")
     @FXML
     private TextField pagesDpiField;
-    private final TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter(false)));
+    private final TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label pagesDpiLabel;
@@ -90,7 +90,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @SuppressWarnings("unused")
     @FXML
     private TextField slicesDpiField;
-    private final TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new CssNumberConverter(false)));
+    private final TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label slicesDpiLabel;

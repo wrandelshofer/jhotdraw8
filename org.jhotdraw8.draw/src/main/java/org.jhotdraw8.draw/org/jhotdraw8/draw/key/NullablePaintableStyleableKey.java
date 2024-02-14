@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssPaintableConverter;
+import org.jhotdraw8.draw.css.converter.PaintableCssConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
@@ -45,7 +45,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
     public NullablePaintableStyleableKey(@NonNull String key, Paintable defaultValue) {
         super(key, Paintable.class, defaultValue);
 
-        converter = new CssPaintableConverter(true);
+        converter = new PaintableCssConverter(true);
     }
 
     @Override

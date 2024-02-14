@@ -11,14 +11,14 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.converter.CssSizeConverter;
+import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
-import org.jhotdraw8.draw.key.ListStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -57,7 +57,7 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    EnumStyleableKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new EnumStyleableKey<>("text-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
+    NonNullEnumStyleableKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("text-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -68,7 +68,7 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    EnumStyleableKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new EnumStyleableKey<>("text-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
+    NonNullEnumStyleableKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("text-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
      * value: {@code 4.0}.
@@ -96,7 +96,7 @@ public interface TextStrokeableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.OUTSIDE}.
      */
-    EnumStyleableKey<StrokeType> TEXT_STROKE_TYPE = new EnumStyleableKey<>("text-stroke-type", StrokeType.class, StrokeType.OUTSIDE);
+    NonNullEnumStyleableKey<StrokeType> TEXT_STROKE_TYPE = new NonNullEnumStyleableKey<>("text-stroke-type", StrokeType.class, StrokeType.OUTSIDE);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -119,9 +119,9 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    ListStyleableKey<CssSize> TEXT_STROKE_DASH_ARRAY = new ListStyleableKey<>("text-stroke-dasharray",
+    NonNullListStyleableKey<CssSize> TEXT_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("text-stroke-dasharray",
             new SimpleParameterizedType(ImmutableList.class, CssSize.class),
-            new CssSizeConverter(false), VectorList.of());
+            new SizeCssConverter(false), VectorList.of());
 
     /**
      * Combined map accessor for all stroke style properties.

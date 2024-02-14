@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.css.converter.CssStringOrIdentConverter;
+import org.jhotdraw8.css.converter.StringOrIdentCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
@@ -20,7 +20,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull Str
         implements WritableStyleableMapAccessor<@NonNull String>, NonNullKey<@NonNull String> {
 
     static final long serialVersionUID = 1L;
-    private final Converter<String> converter = new CssStringOrIdentConverter();
+    private final Converter<String> converter = new StringOrIdentCssConverter();
 
     /**
      * Creates a new instance with the specified name and with an empty String

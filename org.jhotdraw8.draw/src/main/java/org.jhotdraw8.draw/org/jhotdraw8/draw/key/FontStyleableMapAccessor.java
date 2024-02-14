@@ -10,7 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssFontConverter;
+import org.jhotdraw8.draw.css.converter.FontCssConverter;
 import org.jhotdraw8.draw.css.value.CssFont;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -35,7 +35,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     private final @NonNull MapAccessor<FontWeight> weightKey;
     private final @NonNull MapAccessor<FontPosture> postureKey;
     private final @NonNull MapAccessor<@NonNull CssSize> sizeKey;
-    private final Converter<CssFont> converter = new CssFontConverter(false);
+    private final Converter<CssFont> converter = new FontCssConverter(false);
 
     /**
      * Creates a new instance with the specified name.

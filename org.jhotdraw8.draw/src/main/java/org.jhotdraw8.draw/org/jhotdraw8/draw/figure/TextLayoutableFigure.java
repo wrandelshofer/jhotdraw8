@@ -17,7 +17,7 @@ import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 
@@ -35,15 +35,15 @@ public interface TextLayoutableFigure extends Figure {
     /**
      * The text alignment. Default value: {@code left}
      */
-    EnumStyleableKey<TextAlignment> TEXT_ALIGNMENT = new EnumStyleableKey<>("textAlignment", TextAlignment.class, TextAlignment.LEFT);
+    NonNullEnumStyleableKey<TextAlignment> TEXT_ALIGNMENT = new NonNullEnumStyleableKey<>("textAlignment", TextAlignment.class, TextAlignment.LEFT);
     /**
      * The vertical position of the text. Default value: {@code baseline}
      */
-    EnumStyleableKey<VPos> TEXT_VPOS = new EnumStyleableKey<>("textVPos", VPos.class, VPos.BASELINE);
+    NonNullEnumStyleableKey<VPos> TEXT_VPOS = new NonNullEnumStyleableKey<>("textVPos", VPos.class, VPos.BASELINE);
     /**
      * The horizontal position of the text. Default value: {@code left}
      */
-    EnumStyleableKey<HPos> TEXT_HPOS = new EnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
+    NonNullEnumStyleableKey<HPos> TEXT_HPOS = new NonNullEnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
     /**
      * Text wrapping width. Default value: {@code 0.0} (no wrapping).
      */

@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
+import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 
 public interface LabelConnectionFigure extends Figure {
     /**
@@ -16,10 +16,10 @@ public interface LabelConnectionFigure extends Figure {
      * layout observer relationship between the label and the target
      * figure.
      */
-    @NonNull SimpleNullableKey<Figure> LABEL_TARGET = new SimpleNullableKey<>("labelTarget", Figure.class, null);
+    @NonNull NullableObjectKey<Figure> LABEL_TARGET = new NullableObjectKey<>("labelTarget", Figure.class, null);
     /**
      * The connector.
      */
-    @NonNull SimpleNullableKey<Connector> LABEL_CONNECTOR = new SimpleNullableKey<>("labelConnector", Connector.class, null);
+    @NonNull NullableObjectKey<Connector> LABEL_CONNECTOR = new NullableObjectKey<>("labelConnector", Connector.class, null);
 
 }

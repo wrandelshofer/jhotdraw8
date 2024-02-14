@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.value.CssDefaultableValue;
-import org.jhotdraw8.draw.css.converter.CssDefaultableValueConverter;
+import org.jhotdraw8.draw.css.converter.DefaultableValueCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
@@ -47,7 +47,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
         super(name, type, initialDefaultingValue);
         this.initialValue = initialValue;
 
-        this.converter = new CssDefaultableValueConverter<>(converter);
+        this.converter = new DefaultableValueCssConverter<>(converter);
     }
 
     @Override

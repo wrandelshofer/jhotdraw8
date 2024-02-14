@@ -18,7 +18,6 @@ import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.VLineTo;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.NumberConverter;
-import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
 
 import java.io.IOException;
@@ -39,7 +38,7 @@ public class FXSvgPaths {
     }
 
     public static @NonNull String doubleSvgStringFromPathElements(@NonNull List<PathElement> elements) {
-        XmlNumberConverter nb = new XmlNumberConverter();
+        NumberConverter nb = new NumberConverter();
         return svgStringFromPathElements(elements, nb);
     }
 

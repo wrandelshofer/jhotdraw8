@@ -4,7 +4,7 @@ import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.NumberConverter;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 
 import java.io.IOException;
@@ -16,7 +16,7 @@ import java.util.Locale;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ComputeTestcommon {
-    private final static CssColorConverter colorConverter = new CssColorConverter();
+    private final static ColorCssConverter colorConverter = new ColorCssConverter();
 
     public static void test_computed_value(@NonNull String property, @NonNull String specified, @NonNull String computed) {
         test_computed_value(property, specified, computed, null);

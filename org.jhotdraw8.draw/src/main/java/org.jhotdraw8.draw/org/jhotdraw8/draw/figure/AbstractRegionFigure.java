@@ -12,9 +12,9 @@ import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
-import org.jhotdraw8.draw.key.BooleanStyleableKey;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
+import org.jhotdraw8.draw.key.NonNullBooleanStyleableKey;
 import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtPathBuilder;
@@ -41,7 +41,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
     public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
 
-    public static final BooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new BooleanStyleableKey("ShapePreserveRatio", false);
+    public static final NonNullBooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new NonNullBooleanStyleableKey("ShapePreserveRatio", false);
     private static final Logger LOGGER = Logger.getLogger(AbstractRegionFigure.class.getName());
 
     private transient Path2D.Double path;

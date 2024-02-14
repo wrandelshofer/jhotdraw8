@@ -45,8 +45,8 @@ import org.jhotdraw8.fxbase.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.fxbase.tree.TreePresentationModel;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
-import org.jhotdraw8.xml.converter.XmlWordListConverter;
-import org.jhotdraw8.xml.converter.XmlWordSetConverter;
+import org.jhotdraw8.xml.converter.WordListXmlConverter;
+import org.jhotdraw8.xml.converter.WordSetXmlConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,8 +71,8 @@ import java.util.function.Supplier;
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
     private final Comparator<String> collator = new CachingCollator(new NaturalSortCollator(Locale.ENGLISH));
-    private final @NonNull XmlWordListConverter wordListConverter = new XmlWordListConverter();
-    private final XmlWordSetConverter wordSetConverter = new XmlWordSetConverter();
+    private final @NonNull WordListXmlConverter wordListConverter = new WordListXmlConverter();
+    private final WordSetXmlConverter wordSetConverter = new WordSetXmlConverter();
     private final SimpleDrawingModel stubDrawingModel = new SimpleDrawingModel();
     private @Nullable DrawingView drawingView;
     @FXML

@@ -25,10 +25,10 @@ import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.figure.ResizableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
-import org.jhotdraw8.draw.key.ObjectStyleableKey;
+import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
+import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -51,8 +51,8 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     /**
      * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementGradientUnitsAttribute">w3.org</a>
      */
-    public static final @NonNull ObjectStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
-            new ObjectStyleableKey<>("gradientUnits", SvgGradientUnits.class,
+    public static final @NonNull NonNullObjectStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
+            new NonNullObjectStyleableKey<>("gradientUnits", SvgGradientUnits.class,
                     new MappedConverter<SvgGradientUnits>(Map.of(
                             "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
                             "objectBoundingBox", SvgGradientUnits.OBJECT_BOUNDING_BOX
@@ -63,8 +63,8 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     /**
      * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementSpreadMethodAttribute">w3.org</a>
      */
-    public static final @NonNull ObjectStyleableKey<CycleMethod> SPREAD_METHOD =
-            new ObjectStyleableKey<>("spreadMethod", CycleMethod.class,
+    public static final @NonNull NonNullObjectStyleableKey<CycleMethod> SPREAD_METHOD =
+            new NonNullObjectStyleableKey<>("spreadMethod", CycleMethod.class,
                     new MappedConverter<CycleMethod>(Map.of(
                             "pad", CycleMethod.NO_CYCLE,
                             "reflect", CycleMethod.REFLECT,
@@ -74,7 +74,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
             );
 
 
-    public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new SimpleNonNullKey<ImmutableList<SvgStop>>("stops",
+    public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new NonNullObjectKey<ImmutableList<SvgStop>>("stops",
             new SimpleParameterizedType(ImmutableList.class, SvgStop.class), VectorList.of());
 
     public AbstractSvgGradientFigure() {

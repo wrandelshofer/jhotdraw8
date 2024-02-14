@@ -39,7 +39,7 @@ public class CssStrokeConverterTest {
     public static void doTestFromString(CssStrokeStyle expected, @NonNull String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
+        StrokeStyleCssConverter instance = new StrokeStyleCssConverter(false);
         CssStrokeStyle actual = instance.fromString(buf, idFactory);
         assertEquals(expected, actual);
     }
@@ -48,7 +48,7 @@ public class CssStrokeConverterTest {
      * Test of toString method, of class CssStrokeStyleConverter.
      */
     public static void doTestToString(CssStrokeStyle value, String expected) throws Exception {
-        CssStrokeStyleConverter instance = new CssStrokeStyleConverter(false);
+        StrokeStyleCssConverter instance = new StrokeStyleCssConverter(false);
         String actual = instance.toString(value);
         assertEquals(expected, actual);
     }

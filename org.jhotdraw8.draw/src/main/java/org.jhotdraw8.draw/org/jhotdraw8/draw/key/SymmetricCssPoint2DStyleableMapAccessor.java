@@ -8,7 +8,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssSymmetricCssPoint2DConverter;
+import org.jhotdraw8.draw.css.converter.SymmetricCssPoint2DCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -28,7 +28,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final @NonNull Converter<@NonNull CssPoint2D> converter = new CssSymmetricCssPoint2DConverter();
+    private final @NonNull Converter<@NonNull CssPoint2D> converter = new SymmetricCssPoint2DCssConverter();
 
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> xKey;
     private final @NonNull NonNullMapAccessor<@NonNull CssSize> yKey;

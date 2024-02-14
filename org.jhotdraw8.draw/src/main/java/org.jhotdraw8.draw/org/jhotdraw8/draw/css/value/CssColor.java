@@ -8,8 +8,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.css.converter.CssNumberConverter;
-import org.jhotdraw8.draw.css.converter.CssColorConverter;
+import org.jhotdraw8.css.converter.DoubleCssConverter;
+import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.io.IOException;
@@ -31,7 +31,7 @@ import java.util.Objects;
  */
 public class CssColor implements Paintable {
 
-    private static final CssNumberConverter num = new CssNumberConverter(false);
+    private static final DoubleCssConverter num = new DoubleCssConverter(false);
 
     private final @NonNull String name;
     private final @NonNull Color color;
@@ -101,18 +101,7 @@ public class CssColor implements Paintable {
         }
     }
 
-    @NonNull
-    protected static String toPercentageString(double v) {
-        // JavaFX color stores the number internally as a float.
-        // Check if we get the same number back, if we do not promote the color
-        // to double
-        float originalFloat = (float) v;
-        float asFloat = (float) v * 100f;
-        double asDouble = v * 100.0;
-        float backFromFloat = asFloat / 100f;
-        float backFromDouble = (float) (asDouble / 100f);
-        return (backFromFloat == originalFloat) ? num.toString(asFloat) : num.toString(asDouble);
-    }
+
 
     @Override
     public int hashCode() {
@@ -142,7 +131,7 @@ public class CssColor implements Paintable {
                 + "}";
     }
 
-    private static final @NonNull CssColorConverter converter = new CssColorConverter();
+    private static final @NonNull ColorCssConverter converter = new ColorCssConverter();
 
     public static @NonNull CssColor valueOf(@NonNull String value) {
         try {

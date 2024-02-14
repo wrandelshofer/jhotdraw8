@@ -12,7 +12,6 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.converter.XmlNumberConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
@@ -28,6 +27,7 @@ import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.xml.converter.NumberXmlConverter;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -113,7 +113,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         }
 
         List<PathElement> build = b.build();
-        set(D, build == null ? null : FXSvgPaths.svgStringFromPathElements(build, new XmlNumberConverter()));
+        set(D, build == null ? null : FXSvgPaths.svgStringFromPathElements(build, new NumberXmlConverter()));
     }
 
     @Override

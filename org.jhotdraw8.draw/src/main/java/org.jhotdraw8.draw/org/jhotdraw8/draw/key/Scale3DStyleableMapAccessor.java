@@ -8,7 +8,7 @@ import javafx.geometry.Point3D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssScale3DConverter;
+import org.jhotdraw8.draw.css.converter.Scale3DCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -42,7 +42,7 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
      * @param zKey the key for the u coordinate of the point
      */
     public Scale3DStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> zKey) {
-        this(name, xKey, yKey, zKey, new CssScale3DConverter(false));
+        this(name, xKey, yKey, zKey, new Scale3DCssConverter(false));
     }
 
     /**

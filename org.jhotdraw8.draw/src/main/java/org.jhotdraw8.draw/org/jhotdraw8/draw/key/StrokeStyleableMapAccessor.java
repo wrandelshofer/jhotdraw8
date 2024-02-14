@@ -11,7 +11,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.converter.CssStrokeStyleConverter;
+import org.jhotdraw8.draw.css.converter.StrokeStyleCssConverter;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -38,7 +38,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     private final @NonNull MapAccessor<StrokeLineJoin> lineJoinKey;
     private final @NonNull MapAccessor<StrokeLineCap> lineCapKey;
     private final @NonNull MapAccessor<CssSize> miterLimitKey;
-    private final Converter<CssStrokeStyle> converter = new CssStrokeStyleConverter(false);
+    private final Converter<CssStrokeStyle> converter = new StrokeStyleCssConverter(false);
 
     public StrokeStyleableMapAccessor(String name,
                                       @NonNull MapAccessor<StrokeType> typeKey,

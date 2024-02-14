@@ -9,7 +9,7 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.Shape;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.draw.key.EnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -25,7 +25,7 @@ public interface FillRulableFigure extends Figure {
      * <p>
      * Default value: {@code StrokeType.NON_ZERO}.
      */
-    EnumStyleableKey<FillRule> FILL_RULE = new EnumStyleableKey<>("fill-rule", FillRule.class, FillRule.NON_ZERO);
+    NonNullEnumStyleableKey<FillRule> FILL_RULE = new NonNullEnumStyleableKey<>("fill-rule", FillRule.class, FillRule.NON_ZERO);
 
     /**
      * Updates a shape node.

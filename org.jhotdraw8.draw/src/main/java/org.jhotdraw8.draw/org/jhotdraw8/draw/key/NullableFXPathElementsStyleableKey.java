@@ -8,7 +8,7 @@ import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.draw.css.converter.CssFXPathElementsConverter;
+import org.jhotdraw8.draw.css.converter.FXPathElementsCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -49,7 +49,7 @@ public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<Imm
     public NullableFXPathElementsStyleableKey(@NonNull String key, @Nullable ImmutableList<PathElement> defaultValue) {
         super(null, key, new SimpleParameterizedType(ImmutableList.class, PathElement.class), true, defaultValue);
 
-        converter = new CssFXPathElementsConverter(isNullable());
+        converter = new FXPathElementsCssConverter(isNullable());
     }
 
     @Override

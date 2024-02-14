@@ -26,7 +26,7 @@ public class DimensionInsetsConverterTest {
     public static void doTestFromString(CssInsets expected, @NonNull String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        CssInsetsConverter instance = new CssInsetsConverter(false);
+        InsetsCssConverter instance = new InsetsCssConverter(false);
         CssInsets actual = instance.fromString(buf, idFactory);
         assertEquals(actual, expected);
     }
