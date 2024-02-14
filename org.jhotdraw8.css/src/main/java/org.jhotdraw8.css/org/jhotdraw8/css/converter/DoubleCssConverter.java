@@ -6,6 +6,7 @@ package org.jhotdraw8.css.converter;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.DoubleConverter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
@@ -24,6 +25,11 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class DoubleCssConverter extends AbstractCssConverter<Double> {
+    private final static DoubleConverter doubleConverter = new DoubleConverter();
+
+    public DoubleCssConverter() {
+        this(false);
+    }
 
     public DoubleCssConverter(boolean nullable) {
         super(nullable);

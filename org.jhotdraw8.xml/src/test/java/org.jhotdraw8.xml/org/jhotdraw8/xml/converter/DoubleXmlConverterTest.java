@@ -23,13 +23,13 @@ import java.util.List;
 /**
  * @author werni
  */
-public class NumberXmlConverterTest {
+public class DoubleXmlConverterTest {
 
     /**
      * Test of toString method, of class XmlNumberConverter.
      */
     public static void testToString(Double inputValue, String expectedValue) {
-        NumberXmlConverter c = new NumberXmlConverter();
+        DoubleXmlConverter c = new DoubleXmlConverter();
 
         String actualValue = c.toString(inputValue);
 
@@ -40,7 +40,7 @@ public class NumberXmlConverterTest {
      * Test of toString method, of class XmlNumberConverter.
      */
     public static void testFromString(Double expectedValue, @NonNull String inputValue) throws ParseException, IOException {
-        NumberXmlConverter c = new NumberXmlConverter();
+        DoubleXmlConverter c = new DoubleXmlConverter();
 
         Number actualValue = c.fromString(inputValue);
 

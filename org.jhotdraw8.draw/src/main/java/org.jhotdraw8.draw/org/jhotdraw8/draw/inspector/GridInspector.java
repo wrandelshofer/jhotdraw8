@@ -18,6 +18,7 @@ import javafx.util.StringConverter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingView;
@@ -27,7 +28,6 @@ import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
-import org.jhotdraw8.xml.converter.NumberXmlConverter;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -182,7 +182,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
             StringConverter<CssSize> sc
                     = new StringConverterAdapter<>(new SizeCssConverter(false));
             StringConverter<Number> nc
-                    = new StringConverterAdapter<>(new NumberXmlConverter());
+                    = new StringConverterAdapter<>(new NumberConverter());
             heightField.textProperty().bindBidirectional(gridConstrainer.heightProperty(), sc);
             widthField.textProperty().bindBidirectional(gridConstrainer.widthProperty(), sc);
             xField.textProperty().bindBidirectional(gridConstrainer.xProperty(), sc);

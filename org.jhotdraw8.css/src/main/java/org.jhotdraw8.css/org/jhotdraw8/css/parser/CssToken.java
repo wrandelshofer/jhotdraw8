@@ -345,7 +345,7 @@ public class CssToken {
     }
 
     private String fromNUMBER() {
-        return NUMBER_CONVERTER.toString(numericValue);
+        return NUMBER_CONVERTER.toString(numericValue.doubleValue());
     }
 
     private @NonNull String fromPERCENTAGE() {

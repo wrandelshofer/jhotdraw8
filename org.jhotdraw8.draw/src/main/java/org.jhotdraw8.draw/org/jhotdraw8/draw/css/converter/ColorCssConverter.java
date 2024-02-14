@@ -7,9 +7,9 @@ package org.jhotdraw8.draw.css.converter;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.color.CssColorSpaces;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.ParametricHlsColorSpace;
@@ -25,19 +25,16 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.NamedCssColor;
-import org.jhotdraw8.draw.css.value.SHsbaCssColor;
+import org.jhotdraw8.draw.css.value.ShsbaCssColor;
 import org.jhotdraw8.draw.css.value.SrgbaCssColor;
 import org.jhotdraw8.draw.css.value.SystemCssColor;
 import org.jhotdraw8.draw.css.value.Uint4HexSrgbaCssColor;
 import org.jhotdraw8.draw.css.value.Uint8HexSrgbaCssColor;
 
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.function.Consumer;
 
 import static org.jhotdraw8.base.util.MathUtil.clamp;
@@ -112,9 +109,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
      * Configure the number convert so that it preserves 32-bit float values,
      * which have a precision of 8 decimal digits.
      */
-    private final static @NonNull NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
-            new DecimalFormat("#################0.########", new DecimalFormatSymbols(Locale.ENGLISH)),
-            new DecimalFormat("0.0#######E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+    private final static @NonNull FloatConverter number = new FloatConverter();
 
     boolean nullable;
 
@@ -135,7 +130,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 else
                     buf.append(' ');
             }
-            buf.append(number.toString(params.get(i).getValue()));
+            buf.append(number.toString((float) params.get(i).getValue()));
             buf.append(params.get(i).getUnits());
         }
         return buf.toString();
@@ -545,13 +540,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         }
 
         if (i == 0) {
-            color = SHsbaCssColor.BLACK;
+            color = ShsbaCssColor.BLACK;
             tt.pushBack();
         } else if (i == 3) {
-            color = new SHsbaCssColor(sizes[0], sizes[1], sizes[2], CssSize.ONE);
+            color = new ShsbaCssColor(sizes[0], sizes[1], sizes[2], CssSize.ONE);
             tt.pushBack();
         } else if (i == 4) {
-            color = new SHsbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
+            color = new ShsbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
         } else {
             throw tt.createParseException("CssColor: hsb values expected.");
         }

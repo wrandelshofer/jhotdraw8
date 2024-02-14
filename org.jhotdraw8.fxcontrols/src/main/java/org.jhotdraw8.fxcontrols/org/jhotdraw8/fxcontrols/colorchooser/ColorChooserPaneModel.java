@@ -21,7 +21,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.converter.NumberConverter;
+import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.color.A98RgbColorSpace;
 import org.jhotdraw8.color.CieLabColorSpace;
 import org.jhotdraw8.color.D50XyzColorSpace;
@@ -41,11 +41,8 @@ import org.jhotdraw8.color.RgbBitConverters;
 import org.jhotdraw8.color.SrgbColorSpace;
 
 import java.awt.color.ColorSpace;
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.AbstractMap;
 import java.util.LinkedHashMap;
-import java.util.Locale;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
@@ -85,13 +82,9 @@ public class ColorChooserPaneModel {
     public static final ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);
     public static final OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
     public static final OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
-    private final static NumberConverter number = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
-            new DecimalFormat("#################0.###", new DecimalFormatSymbols(Locale.ENGLISH)),
-            new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+    private final static FloatConverter number = new FloatConverter();
 
-    private final static NumberConverter percentageNumber = new NumberConverter(Float.class, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY, 1, false, null,
-            new DecimalFormat("#################0.#", new DecimalFormatSymbols(Locale.ENGLISH)),
-            new DecimalFormat("0.0###E0", new DecimalFormatSymbols(Locale.ENGLISH)));
+    private final static FloatConverter percentageNumber = new FloatConverter();
 
     public final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
     public final @NonNull FloatProperty c0 = new SimpleFloatProperty(this, "c0");

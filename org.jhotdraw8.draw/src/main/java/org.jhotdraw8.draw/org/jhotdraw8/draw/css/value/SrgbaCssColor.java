@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.base.converter.NumberConverter;
+import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 
@@ -41,7 +41,7 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * </dl>
  */
 public class SrgbaCssColor extends CssColor {
-    private static final NumberConverter num = new NumberConverter();
+    private static final FloatConverter num = new FloatConverter();
     public static final SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
 
     private final @NonNull CssSize red, green, blue, opacity;
@@ -88,26 +88,26 @@ public class SrgbaCssColor extends CssColor {
         if (UnitConverter.PERCENTAGE.equals(opacity.getUnits()) && opacity.getValue() == 100.0
                 || opacity.getValue() == 1) {
             buf.append("rgb(");
-            buf.append(num.toString(red.getValue()));
+            buf.append(num.toString((float) red.getValue()));
             buf.append(red.getUnits());
             buf.append(",");
-            buf.append(num.toString(green.getValue()));
+            buf.append(num.toString((float) green.getValue()));
             buf.append(green.getUnits());
             buf.append(",");
-            buf.append(num.toString(blue.getValue()));
+            buf.append(num.toString((float) blue.getValue()));
             buf.append(blue.getUnits());
         } else {
             buf.append("rgba(");
-            buf.append(num.toString(red.getValue()));
+            buf.append(num.toString((float) red.getValue()));
             buf.append(red.getUnits());
             buf.append(",");
-            buf.append(num.toString(green.getValue()));
+            buf.append(num.toString((float) green.getValue()));
             buf.append(green.getUnits());
             buf.append(",");
-            buf.append(num.toString(blue.getValue()));
+            buf.append(num.toString((float) blue.getValue()));
             buf.append(blue.getUnits());
             buf.append(",");
-            buf.append(num.toString(opacity.getValue()));
+            buf.append(num.toString((float) opacity.getValue()));
             buf.append(opacity.getUnits());
         }
         buf.append(')');

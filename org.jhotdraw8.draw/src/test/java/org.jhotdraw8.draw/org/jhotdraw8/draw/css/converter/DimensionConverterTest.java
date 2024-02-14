@@ -43,7 +43,7 @@ public class DimensionConverterTest {
         SizeCssConverter instance = new SizeCssConverter(true);
         instance.toString(out, idFactory, value == null ? null : CssSize.of(value, null));
         String actual = out.toString();
-        assertEquals(actual, expected);
+        assertEquals(expected, actual);
     }
 
     /**

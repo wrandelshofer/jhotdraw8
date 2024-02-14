@@ -8,8 +8,6 @@ package org.jhotdraw8.xml.converter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.css.converter.DoubleCssConverter;
-import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +15,7 @@ import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
 import java.nio.CharBuffer;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,7 +39,7 @@ public class SetXmlConverterTest {
     public void testToString(@Nullable List<Double> value, String expected) throws Exception {
         StringBuilder out = new StringBuilder();
         IdFactory idFactory = null;
-        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleCssConverter(false), null);
+        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false), null);
         instance.toString(out, idFactory, value == null ? null : ChampVectorSet.copyOf(value));
         String actual = out.toString();
         Assertions.assertEquals(expected, actual);
@@ -52,9 +51,19 @@ public class SetXmlConverterTest {
     public void testDoubleFromString(List<Double> expected, @NonNull String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleCssConverter(false));
+        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false));
         ImmutableSequencedSet<Double> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, new ArrayList<>(actual.toMutable()));
+    }
+
+    /**
+     * Test of fromString method with a {@code Double} element type.
+     */
+    public void testIllegalDoubleFromString(@NonNull String string) throws Exception {
+        CharBuffer buf = CharBuffer.wrap(string);
+        IdFactory idFactory = null;
+        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false));
+        Assertions.assertThrows(ParseException.class, () -> instance.fromString(buf, idFactory));
     }
 
     /**
@@ -63,9 +72,19 @@ public class SetXmlConverterTest {
     public void testDoubleArrowFromString(List<Double> expected, @NonNull String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleCssConverter(false), "=>");
+        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false), "=>");
         ImmutableSequencedSet<Double> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, new ArrayList<>(actual.toMutable()));
+    }
+
+    /**
+     * Test of fromString method with a {@code Double} element type and "=>" delimiter.
+     */
+    public void testIllegalDoubleArrowFromString(@NonNull String string) throws Exception {
+        CharBuffer buf = CharBuffer.wrap(string);
+        IdFactory idFactory = null;
+        SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false), "=>");
+        Assertions.assertThrows(ParseException.class, () -> instance.fromString(buf, idFactory));
     }
 
 
@@ -75,7 +94,7 @@ public class SetXmlConverterTest {
     public void testStringFromString(List<String> expected, @NonNull String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
-        SetXmlConverter<String> instance = new SetXmlConverter<>(new StringCssConverter(false));
+        SetXmlConverter<String> instance = new SetXmlConverter<>(new StringXmlConverter(false));
         ImmutableSequencedSet<String> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
@@ -90,13 +109,13 @@ public class SetXmlConverterTest {
                 dynamicTest("5", () -> testDoubleFromString(Arrays.asList(1.0, Double.NEGATIVE_INFINITY, 3.0), "1 -INF 3")),
                 dynamicTest("6", () -> testDoubleFromString(Arrays.asList(1.0, Double.NaN, 3.0), "1 NaN 3")),
                 //
-                dynamicTest("12", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1, 2, 3")),
+                dynamicTest("12", () -> testIllegalDoubleFromString("1, 2, 3")),
                 //
                 // should stop at semicolon and at right brackets:
-                dynamicTest("21", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1, 2, 3; 4")),
-                dynamicTest("22", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1, 2, 3) 4")),
-                dynamicTest("23", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1, 2, 3} 4")),
-                dynamicTest("24", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1, 2, 3] 4"))
+                dynamicTest("21", () -> testIllegalDoubleFromString("1, 2, 3; 4")),
+                dynamicTest("22", () -> testIllegalDoubleFromString("1, 2, 3) 4")),
+                dynamicTest("23", () -> testIllegalDoubleFromString("1, 2, 3} 4")),
+                dynamicTest("24", () -> testIllegalDoubleFromString("1, 2, 3] 4"))
         );
     }
 
@@ -104,19 +123,19 @@ public class SetXmlConverterTest {
     public @NonNull List<DynamicTest> dynamicTestsDoubleArrowFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleArrowFromString(Collections.emptyList(), "")),
-                dynamicTest("2", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
-                dynamicTest("3", () -> testDoubleArrowFromString(Arrays.asList(1.0, 3.0e30, 3.0), "1 3e30 3")),
-                dynamicTest("4", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, Double.POSITIVE_INFINITY), "1 2 INF")),
-                dynamicTest("5", () -> testDoubleArrowFromString(Arrays.asList(1.0, Double.NEGATIVE_INFINITY, 3.0), "1 -INF 3")),
-                dynamicTest("6", () -> testDoubleArrowFromString(Arrays.asList(1.0, Double.NaN, 3.0), "1 NaN 3")),
+                dynamicTest("2", () -> testIllegalDoubleArrowFromString("1 2 3")),
+                dynamicTest("3", () -> testDoubleArrowFromString(Arrays.asList(1.0, 3.0e30, 3.0), "1=>3e30=>3")),
+                dynamicTest("4", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, Double.POSITIVE_INFINITY), "1=>2=>INF")),
+                dynamicTest("5", () -> testDoubleArrowFromString(Arrays.asList(1.0, Double.NEGATIVE_INFINITY, 3.0), "1=>-INF=>3")),
+                dynamicTest("6", () -> testDoubleArrowFromString(Arrays.asList(1.0, Double.NaN, 3.0), "1=>NaN=>3")),
                 //
-                dynamicTest("12", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1 => 2 => 3")),
+                dynamicTest("12", () -> testIllegalDoubleArrowFromString("1 => 2 => 3")),
                 //
                 // should stop at semicolon and at right brackets:
-                dynamicTest("21", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1=>2=>3; 4")),
-                dynamicTest("22", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1=> 2=> 3) 4")),
-                dynamicTest("23", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1=> 2 => 3} 4")),
-                dynamicTest("24", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1=> 2=> 3] 4"))
+                dynamicTest("21", () -> testIllegalDoubleArrowFromString("1=>2=>3; 4")),
+                dynamicTest("22", () -> testIllegalDoubleArrowFromString("1=> 2=> 3) 4")),
+                dynamicTest("23", () -> testIllegalDoubleArrowFromString("1=> 2 => 3} 4")),
+                dynamicTest("24", () -> testIllegalDoubleArrowFromString("1=> 2=> 3] 4"))
         );
     }
 
@@ -124,11 +143,11 @@ public class SetXmlConverterTest {
     public @NonNull List<DynamicTest> dynamicTestsStringFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testStringFromString(Collections.emptyList(), "")),
-                dynamicTest("2", () -> testStringFromString(Arrays.asList("a", "b", "c"), "'a' 'b' 'c'")),
-                dynamicTest("3", () -> testStringFromString(Arrays.asList("a", "b", "c"), "'a''b''c'")),
-                dynamicTest("4", () -> testStringFromString(Arrays.asList("a", "b", "c"), "'a','b','c'")),
-                dynamicTest("5", () -> testStringFromString(Arrays.asList("a", "b", "c"), "'a', 'b', 'c'")),
-                dynamicTest("5", () -> testStringFromString(Arrays.asList("a", "b", "c"), "'a',,'b',,'c'"))
+                dynamicTest("2", () -> testStringFromString(Arrays.asList("'a'", "'b'", "'c'"), "'a' 'b' 'c'")),
+                dynamicTest("3", () -> testStringFromString(Arrays.asList("'a''b''c'"), "'a''b''c'")),
+                dynamicTest("4", () -> testStringFromString(Arrays.asList("'a','b','c'"), "'a','b','c'")),
+                dynamicTest("5", () -> testStringFromString(Arrays.asList("'a',", "'b',", "'c'"), "'a', 'b', 'c'")),
+                dynamicTest("5", () -> testStringFromString(Arrays.asList("'a',,'b',,'c'"), "'a',,'b',,'c'"))
         );
     }
 

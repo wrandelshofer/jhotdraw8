@@ -55,7 +55,8 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
     ) {
         this.elementConverter = elementConverter;
         this.delimiter = delimiter == null ? " " : delimiter;
-        this.delimiterPattern = Pattern.compile(delimiter == null || delimiter.isBlank() ? "\\s+" : "\\s*" + delimiter.trim() + "\\s*");
+        this.delimiterPattern = Pattern.compile(delimiter == null || delimiter.isBlank() ? "\\s+"
+                : delimiter.indexOf(' ') == -1 ? delimiter : "\\s*" + delimiter.trim() + "\\s*");
         this.prefix = prefix;
         this.suffix = suffix;
     }

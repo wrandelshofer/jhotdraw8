@@ -65,7 +65,9 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.svg.text.SvgPaintCssConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
-import org.jhotdraw8.xml.converter.NumberXmlConverter;
+import org.jhotdraw8.xml.converter.DoubleXmlConverter;
+import org.jhotdraw8.xml.converter.FloatXmlConverter;
+import org.jhotdraw8.xml.converter.IntegerXmlConverter;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -107,7 +109,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     public static final String SVG_NS = "http://www.w3.org/2000/svg";
     protected static final String XLINK_NS = "http://www.w3.org/1999/xlink";
     protected static final String XLINK_PREFIX = "xlink";
-    protected final NumberXmlConverter nb = new NumberXmlConverter();
+    protected final DoubleXmlConverter nb = new DoubleXmlConverter();
+    protected final IntegerXmlConverter nbi = new IntegerXmlConverter();
+    protected final FloatXmlConverter nbf = new FloatXmlConverter();
     private final @Nullable Object imageUriKey;
     private final Converter<ImmutableList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintCssConverter(true);
@@ -257,8 +261,8 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
                 w.writeStartElement("tspan");
                 int characterCount = nextLayout.getCharacterCount();
-                w.writeAttribute("x", nb.toString(nextPosition));
-                w.writeAttribute("y", nb.toString(verticalPos));
+                w.writeAttribute("x", nbf.toString(nextPosition));
+                w.writeAttribute("y", nbf.toString(verticalPos));
                 w.writeCharacters(paragraph.substring(textIndex, textIndex + characterCount));
                 w.writeEndElement();
 
@@ -532,7 +536,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                 .append(',')
                 .append(nb.toString(radiusY))
                 .append(',')
-                .append(nb.toString(xAxisRot))
+                .append(nbi.toString(xAxisRot))
                 .append(',')
                 .append(largeArc ? '1' : '0')
                 .append(',')

@@ -29,14 +29,23 @@ public class BooleanXmlConverter implements Converter<Boolean> {
     private static final long serialVersionUID = 1L;
 
     private final String trueString = "true";
+    private final String emptyString = "";
     private final String falseString = "false";
     private final String oneString = "1";
     private final String zeroString = "0";
+    private final boolean nullable;
 
     /**
      * Creates a new instance.
      */
+    public BooleanXmlConverter(boolean nullable) {
+        this.nullable = nullable;
+    }
+    /**
+     * Creates a new instance.
+     */
     public BooleanXmlConverter() {
+        this(false);
     }
 
     @Override
@@ -46,24 +55,22 @@ public class BooleanXmlConverter implements Converter<Boolean> {
 
     @Override
     public @NonNull Boolean fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
-        int pos = in.position();
-        StringBuilder out = new StringBuilder();
-        while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
-            out.append(in.get());
-        }
-        String str = out.toString();
+        String str = in.toString();
+        in.position(in.length());
         switch (str) {
-        case trueString:
-        case oneString:
-            return true;
-        case falseString:
-        case zeroString:
-            return false;
+            case trueString, oneString -> {
+                return true;
+            }
+            case falseString, zeroString -> {
+                return false;
+            }
+            case emptyString -> {
+                if (nullable) return null;
+            }
         }
-        in.position(pos);
         throw new ParseException("\"" + trueString + "\", \"" + falseString + "\"" +
                 "\"" + oneString + "\", \"" + zeroString + "\"" +
-                " expected instead of \"" + str + "\".", pos);
+                                 " expected instead of \"" + str + "\".", 0);
     }
 
     @Override
@@ -71,46 +78,4 @@ public class BooleanXmlConverter implements Converter<Boolean> {
         return false;
     }
 
-    /**
-     * XmlWordConverter.
-     *
-     * @author Werner Randelshofer
-     */
-    public static class WordXmlConverter implements Converter<String> {
-
-        public WordXmlConverter() {
-        }
-
-        @Override
-        public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable String value) throws IOException {
-            if (value == null) {
-                return;
-            }
-            for (char ch : value.toCharArray()) {
-                if (Character.isWhitespace(ch)) {
-                    break;
-                }
-                out.append(ch);
-            }
-        }
-
-        @Override
-        public @NonNull String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
-            int pos = in.position();
-            StringBuilder out = new StringBuilder();
-            while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
-                out.append(in.get());
-            }
-            if (out.length() == 0) {
-                in.position(pos);
-                throw new ParseException("word expected", pos);
-            }
-            return out.toString();
-        }
-
-        @Override
-        public @NonNull String getDefaultValue() {
-            return "";
-        }
-    }
 }

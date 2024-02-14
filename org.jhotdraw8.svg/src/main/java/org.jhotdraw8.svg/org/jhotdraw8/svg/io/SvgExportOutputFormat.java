@@ -15,6 +15,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
+import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
@@ -36,7 +37,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.TransformFlattener;
 import org.jhotdraw8.xml.XmlUtil;
-import org.jhotdraw8.xml.converter.NumberXmlConverter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -78,7 +78,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         SVG_FORMAT = fmt;
     }
 
-    private final NumberXmlConverter nb = new NumberXmlConverter();
+    private final NumberConverter nb = new NumberConverter();
     private final SizeCssConverter sc = new SizeCssConverter(false);
     private final Converter<CssSize> sznb = new SizeCssConverter(false);
     private final @NonNull IdFactory idFactory = new SimpleIdFactory();

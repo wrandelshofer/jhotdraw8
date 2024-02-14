@@ -27,11 +27,20 @@ import java.text.ParseException;
 public class StringXmlConverter implements Converter<String> {
 
     private static final long serialVersionUID = 1L;
+    private final boolean nullable;
 
     /**
      * Creates a new instance.
      */
     public StringXmlConverter() {
+        this(false);
+    }
+
+    /**
+     * Creates a new instance.
+     */
+    public StringXmlConverter(boolean nullable) {
+        this.nullable = nullable;
     }
 
     @Override
@@ -44,10 +53,12 @@ public class StringXmlConverter implements Converter<String> {
     @Override
     public @Nullable String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         if (in != null) {
+            if (in.isEmpty() && nullable) {
+                return null;
+            }
             String converted = in.toString();
             in.position(in.position() + in.remaining());
             return converted;
-
         }
         return null;
     }
