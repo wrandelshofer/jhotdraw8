@@ -215,6 +215,19 @@ public interface TreeNode<T extends TreeNode<T>> {
     }
 
     /**
+     * Returns the depth of this node.
+     *
+     * @return depth (0 if the node is the root)
+     */
+    default @NonNull int getDepth() {
+        int depth = 0;
+        for (T node = getParent(); node != null; node = node.getParent()) {
+            depth++;
+        }
+        return depth;
+    }
+
+    /**
      * Returns an iterable which can iterate through this figure and all its
      * descendants in postorder sequence.
      *

@@ -17,7 +17,21 @@ public interface IdResolver {
      * @param id the id
      * @return the object
      */
-    @Nullable Object getObject(String id);
+    @Nullable Object getObject(@Nullable String id);
+
+    /**
+     * Gets the object of the specified class for the specified id.
+     * Returns null if the id has no object of this type.
+     *
+     * @param clazz the clazz
+     * @param id    the id
+     * @return the object
+     */
+    default <T> @Nullable T getObject(@NonNull Class<T> clazz, @Nullable String id) {
+        Object object = getObject(id);
+        if (clazz.isInstance(object)) return clazz.cast(object);
+        return null;
+    }
 
     /**
      * Absolutize the given external URI, so that it can be used inside

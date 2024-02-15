@@ -14,6 +14,17 @@ import java.util.Objects;
  * @author Werner Randelshofer
  */
 public interface UnorderedPair<V> {
+    /**
+     * Returns other() if someone is equal to either(),
+     * returns either() otherwise.
+     *
+     * @param someone either or other
+     * @return
+     */
+    default V getOther(V someone) {
+        V either = either();
+        return Objects.equals(either, someone) ? other() : either;
+    }
 
     V either();
 
