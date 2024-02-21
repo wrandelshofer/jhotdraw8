@@ -31,7 +31,7 @@ public interface ClipboardInputFormat {
      *                  clipboard is added to this parent. Otherwise, the content is added into an
      *                  unspecified layer.
      * @return the figures that were read from the clipboard
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     Set<Figure> read(Clipboard clipboard, DrawingModel model, Drawing drawing, @Nullable Figure parent) throws IOException;
 }

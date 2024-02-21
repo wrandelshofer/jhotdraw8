@@ -6,6 +6,7 @@ package org.jhotdraw8.icollection.impl.vector;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.util.Iterator;
 
 /**
  * Helper to replace reflective array access.
@@ -139,7 +140,7 @@ public interface ArrayType<T> {
     /**
      * Store the content of an iterator in an array
      */
-    static Object[] asArray(java.util.Iterator<?> it, int length) {
+    static Object[] asArray(Iterator<?> it, int length) {
         final Object[] array = new Object[length];
         for (int i = 0; i < length; i++) {
             array[i] = it.next();

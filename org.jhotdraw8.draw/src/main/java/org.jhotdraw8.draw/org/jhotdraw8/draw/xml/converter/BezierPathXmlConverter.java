@@ -36,24 +36,28 @@ public class BezierPathXmlConverter implements Converter<BezierPath> {
     }
 
     @Override
-    public @Nullable BezierPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable BezierPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         String input = buf.toString();
+        buf.position(buf.limit());
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
 
         BezierPath p = null;
-        if (tt.next() == CssTokenType.TT_IDENT) {
-            if (!nullable) {
-                throw new ParseException("String expected. " + tt.current(), buf.position());
+        try {
+            if (tt.next() == CssTokenType.TT_IDENT) {
+                if (!nullable) {
+                    throw new ParseException("String expected. " + tt.current(), buf.position());
+                }
+                if (CssTokenType.IDENT_NONE.equals(tt.currentString())) {
+                    buf.position(buf.limit());
+                    return null;
+                }
             }
-            if (CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-                buf.position(buf.limit());
-                return null;
-            }
+        } catch (IOException e) {
+            throw new ParseException(e.getMessage(), 0);
         }
         BezierPathBuilder builder = new BezierPathBuilder();
         SvgPaths.svgStringToBuilder(input, builder);
         BezierPath path = builder.build();
-        buf.position(buf.limit());
         return path;
     }
 

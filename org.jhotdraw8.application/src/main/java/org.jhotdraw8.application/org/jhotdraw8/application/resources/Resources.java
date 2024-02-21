@@ -190,7 +190,7 @@ public interface Resources {
     boolean containsKey(String key);
 
     /**
-     * Returns a formatted string using {@link java.util.Formatter}.
+     * Returns a formatted string using {@link Formatter}.
      *
      * @param key       the key
      * @param arguments the arguments
@@ -201,7 +201,7 @@ public interface Resources {
     }
 
     /**
-     * Returns a formatted string using {@link java.text.MessageFormat}.
+     * Returns a formatted string using {@link MessageFormat}.
      *
      * @param key       the key
      * @param arguments the arguments

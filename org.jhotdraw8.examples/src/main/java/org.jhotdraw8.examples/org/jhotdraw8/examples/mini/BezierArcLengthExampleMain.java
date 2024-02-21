@@ -6,6 +6,7 @@
 package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
+import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
@@ -230,7 +231,7 @@ public class BezierArcLengthExampleMain extends Application {
 
         for (int i = 1, n = 10; i < n; i++) {
             double s = i / (double) n;
-            javafx.geometry.Point2D p = param.interpolate(s);
+            Point2D p = param.interpolate(s);
             Circle e = new Circle(p.getX(), p.getY(), 2);
             e.setFill(Color.BLUE);
             distancePoints.getChildren().add(e);
@@ -247,7 +248,7 @@ public class BezierArcLengthExampleMain extends Application {
             double s = i / (double) n;
             double t = CubicCurves.invArcLength(b, 0, s * totalLength, epsilon);
             PointAndDerivative pat = CubicCurves.eval(b, 0, t);
-            javafx.geometry.Point2D p = pat.getPoint(javafx.geometry.Point2D::new);
+            Point2D p = pat.getPoint(Point2D::new);
             Circle e = new Circle(p.getX(), p.getY(), 4);
             e.setFill(Color.RED);
             distancePoints.getChildren().add(e);
@@ -293,7 +294,7 @@ public class BezierArcLengthExampleMain extends Application {
             double s = i / (double) n;
             double t = sToT.applyAsDouble(s * totalLength);
             PointAndDerivative pat = CubicCurves.eval(b, 0, t);
-            javafx.geometry.Point2D p = pat.getPoint(javafx.geometry.Point2D::new);
+            Point2D p = pat.getPoint(Point2D::new);
             Circle e = new Circle(p.getX(), p.getY(), 4);
             e.setFill(Color.ORANGE);
             distancePoints.getChildren().add(e);
@@ -312,8 +313,8 @@ public class BezierArcLengthExampleMain extends Application {
                     curve.getControlY2(),
                     curve.getEndX(),
                     curve.getEndY(), t);
-            javafx.geometry.Point2D perp = new javafx.geometry.Point2D(pat.dy(), -pat.dx());
-            javafx.geometry.Point2D tg = perp.normalize();
+            Point2D perp = new Point2D(pat.dy(), -pat.dx());
+            Point2D tg = perp.normalize();
 
             timePoints.getChildren().add(new Line(pat.x() - tg.getX(), pat.y() - tg.getY(),
                     pat.x() + tg.getX(), pat.y() + tg.getY()));
@@ -405,7 +406,7 @@ public class BezierArcLengthExampleMain extends Application {
             /**
              * Absolute arc-length position.
              */
-            public javafx.geometry.Point2D interpolate(double sabs) {
+            public Point2D interpolate(double sabs) {
                 //   return new javafx.geometry.Point2D(x0,y0);
                 return FXGeom.lerp(x0, y0, x1, y1, (sabs - pos) / length);
             }
@@ -450,13 +451,13 @@ public class BezierArcLengthExampleMain extends Application {
         /**
          * Interpolates in {@code s in [0,1]
          */
-        public javafx.geometry.Point2D interpolate(double s) {
+        public Point2D interpolate(double s) {
             double pos = s * length;
             Segment key = new Segment(pos);
             int search = Collections.binarySearch(segments, key);
             int index = Math.min(search < 0 ? ~search - 1 : search, segments.size() - 1);
             if (index < 0) {
-                return new javafx.geometry.Point2D(0, 0);// path is empty
+                return new Point2D(0, 0);// path is empty
             } else {
                 Segment segment = segments.get(index);
                 return segment.interpolate(pos);

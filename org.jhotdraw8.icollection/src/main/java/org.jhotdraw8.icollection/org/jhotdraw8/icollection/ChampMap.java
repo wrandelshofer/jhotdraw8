@@ -26,6 +26,7 @@ import java.util.AbstractMap.SimpleImmutableEntry;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Spliterator;
 
 /**
@@ -98,7 +99,7 @@ public class ChampMap<K, V>
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
-    static final int SALT = new java.util.Random().nextInt();
+    static final int SALT = new Random().nextInt();
     final @NonNull BitmapIndexedNode<K, V> root;
     final int size;
 

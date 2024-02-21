@@ -11,7 +11,7 @@ import java.util.concurrent.CompletionStage;
 
 /**
  * A {@code CompletableWorker} is a {@link Worker} that
- * provides value that it produces in a {@link java.util.concurrent.CompletionStage}
+ * provides value that it produces in a {@link CompletionStage}
  * which completes (or fails) on the FX Application Thread.
  *
  * @param <V> the result type

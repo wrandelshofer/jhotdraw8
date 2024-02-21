@@ -8,6 +8,8 @@ package org.jhotdraw8.icollection.serialization;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -67,7 +69,7 @@ public abstract class SortedSetSerializationProxy<E> implements Serializable {
     }
 
     @Serial
-    private void writeObject(java.io.@NonNull ObjectOutputStream s)
+    private void writeObject(@NonNull ObjectOutputStream s)
             throws IOException {
         s.writeObject(serialized.comparator());
         s.writeInt(serialized.size());
@@ -78,7 +80,7 @@ public abstract class SortedSetSerializationProxy<E> implements Serializable {
 
     @Serial
     @SuppressWarnings("unchecked")
-    private void readObject(java.io.@NonNull ObjectInputStream s)
+    private void readObject(@NonNull ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         deserializedComparator = (Comparator<E>) s.readObject();
         int n = s.readInt();

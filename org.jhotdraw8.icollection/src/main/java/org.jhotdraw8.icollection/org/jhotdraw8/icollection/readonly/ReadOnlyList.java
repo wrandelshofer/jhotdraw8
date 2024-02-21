@@ -60,7 +60,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * Gets the first element of the list.
      *
      * @return the first element
-     * @throws java.util.NoSuchElementException if the list is empty
+     * @throws NoSuchElementException if the list is empty
      */
     @Override
     default E getFirst() {
@@ -74,7 +74,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * Gets the last element of the list.
      *
      * @return the last element
-     * @throws java.util.NoSuchElementException if the list is empty
+     * @throws NoSuchElementException if the list is empty
      */
     @Override
     default E getLast() {

@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
@@ -15,10 +16,19 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.SvgPaths;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -84,7 +94,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
-        javafx.scene.Group g = new javafx.scene.Group();
+        Group g = new Group();
         final Line line = new Line();
         final Path startMarker = new Path();
         final Path endMarker = new Path();
@@ -177,7 +187,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Line node) {
     }
 
-    protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
+    protected void updateMarkerNode(RenderContext ctx, Group group,
                                     @NonNull Path markerNode,
                                     @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
@@ -209,7 +219,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        javafx.scene.Group g = (javafx.scene.Group) node;
+        Group g = (Group) node;
         Line lineNode = (Line) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);

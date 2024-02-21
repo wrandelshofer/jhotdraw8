@@ -22,7 +22,7 @@ public class IntegerConverter implements Converter<Integer> {
     }
 
     @Override
-    public @Nullable Integer fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Integer fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         try {
             if (in.isEmpty() && nullable) return null;
             var result = Integer.parseInt(in.toString());

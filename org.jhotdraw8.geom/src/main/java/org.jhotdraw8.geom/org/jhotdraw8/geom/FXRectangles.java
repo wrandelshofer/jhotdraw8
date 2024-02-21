@@ -5,9 +5,15 @@
 
 package org.jhotdraw8.geom;
 
-import javafx.geometry.*;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Point2D;
+import javafx.geometry.Rectangle2D;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+
+import java.awt.*;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -19,7 +25,7 @@ public class FXRectangles {
      * @param shape an AWT shape
      * @return JavaFX bounds
      */
-    public static @NonNull BoundingBox getBounds(java.awt.@NonNull Shape shape) {
+    public static @NonNull BoundingBox getBounds(@NonNull Shape shape) {
         java.awt.geom.Rectangle2D r = shape.getBounds2D();
         return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }

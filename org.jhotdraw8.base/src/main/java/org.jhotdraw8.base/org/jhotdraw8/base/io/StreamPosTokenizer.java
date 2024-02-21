@@ -983,7 +983,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * tokenizer.
      *
      * @return the next char
-     * @throws java.io.IOException in case of an IO error
+     * @throws IOException in case of an IO error
      */
     public int nextChar() throws IOException {
         if (pushedBack) {
@@ -1002,7 +1002,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Unreads a character back into the input stream of the tokenizer.
      *
      * @param ch The character
-     * @throws java.io.IOException in case of an IO error
+     * @throws IOException in case of an IO error
      */
     public void pushCharBack(int ch) throws IOException {
         if (pushedBack) {

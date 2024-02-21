@@ -18,6 +18,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.IllegalPathStateException;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.io.StringReader;
 import java.text.ParseException;
@@ -694,7 +695,7 @@ public class SvgPaths {
             Shape shape = null;
             try {
                 shape = svgStringToAwtShape(pathstr);
-                java.awt.geom.Rectangle2D r2d = shape.getBounds2D();
+                Rectangle2D r2d = shape.getBounds2D();
                 Transform tx = FXTransforms.createReshapeTransform(
                         r2d.getX(), r2d.getY(), r2d.getWidth(), r2d.getHeight(),
                         b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()

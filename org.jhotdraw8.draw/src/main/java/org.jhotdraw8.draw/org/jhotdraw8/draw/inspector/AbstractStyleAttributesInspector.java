@@ -238,7 +238,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         } catch (IOException ex) {
             ex.printStackTrace();
             return;
-        } catch (java.text.ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
             textArea.positionCaret(e.getErrorOffset());

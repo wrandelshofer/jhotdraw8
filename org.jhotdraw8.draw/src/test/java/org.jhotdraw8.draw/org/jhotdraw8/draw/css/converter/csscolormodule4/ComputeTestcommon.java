@@ -7,7 +7,6 @@ import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
@@ -41,7 +40,7 @@ public class ComputeTestcommon {
             CssColor parsed = colorConverter.fromString(specified);
             String actualComputed = colorConverter.toString(parsed);
             assertEquals(computed, actualComputed, message);
-        } catch (ParseException | IOException e) {
+        } catch (ParseException e) {
             throw new AssertionError(message, e);
         }
     }
@@ -75,7 +74,7 @@ public class ComputeTestcommon {
                     + (c.getOpacity() != 1 ? ", " + number.toString(c.getOpacity()) : "")
                     + ")";
             assertEquals(computed, actualComputed, message);
-        } catch (ParseException | IOException e) {
+        } catch (ParseException e) {
             throw new AssertionError(message, e);
         }
     }

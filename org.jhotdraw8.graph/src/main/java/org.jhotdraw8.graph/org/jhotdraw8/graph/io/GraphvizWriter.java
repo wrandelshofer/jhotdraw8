@@ -58,7 +58,7 @@ public class GraphvizWriter {
      * @param <A>   the arrow data type
      * @param w     the writer
      * @param graph the graph
-     * @throws java.io.IOException if writing fails
+     * @throws IOException if writing fails
      */
     public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
         write(w, graph, v -> "\"" + v + '"', null, null, null);
@@ -74,7 +74,7 @@ public class GraphvizWriter {
      * @param graph          the graph
      * @param vertexToString a function that converts a vertex to a String for
      *                       use as vertex name
-     * @throws java.io.IOException if writing fails
+     * @throws IOException if writing fails
      */
     public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph,
                              @NonNull Function<V, String> vertexToString) throws IOException {
@@ -124,7 +124,7 @@ public class GraphvizWriter {
      * @param arrowAttributes  a function that converts an arrow to a String for
      *                         use as arrow attributes
      * @param graphId          the id of the graph
-     * @throws java.io.IOException if writing fails
+     * @throws IOException if writing fails
      */
     public <V, A> void write(final @NonNull Appendable w,
                              final @NonNull DirectedGraph<V, A> graph,

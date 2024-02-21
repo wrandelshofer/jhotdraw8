@@ -45,7 +45,7 @@ public class DoubleXmlConverter implements Converter<Double> {
     }
 
     @Override
-    public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
             if (str.strip().length() != str.length()) throw new NumberFormatException();

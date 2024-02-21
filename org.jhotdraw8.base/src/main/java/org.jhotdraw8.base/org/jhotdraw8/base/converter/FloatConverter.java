@@ -30,7 +30,7 @@ public class FloatConverter implements Converter<Float> {
     }
 
     @Override
-    public @Nullable Float fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Float fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         try {
             if (in.isEmpty() && nullable) return null;
             var result = Float.parseFloat(in.toString());

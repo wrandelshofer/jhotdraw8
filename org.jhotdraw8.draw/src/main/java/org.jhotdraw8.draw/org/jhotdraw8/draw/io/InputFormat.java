@@ -41,7 +41,7 @@ public interface InputFormat {
      *                  drawing.
      * @param workState for progress monitoring and cancelling the operation
      * @return the figure
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     default @NonNull Figure read(@NonNull URI uri, @Nullable Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         return read(Paths.get(uri), drawing, workState);
@@ -57,7 +57,7 @@ public interface InputFormat {
      *                  drawing.
      * @param workState for progress monitoring and cancelling the operation
      * @return the figure
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     default @NonNull Figure read(@NonNull Path file, @Nullable Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         URI documentHome = file.getParent() == null ? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri() : file.getParent().toUri();
@@ -78,7 +78,7 @@ public interface InputFormat {
      * @param documentHome the URI used to resolve external references from the document
      * @param workState    for progress monitoring and cancelling the operation
      * @return the drawing
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     @NonNull Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState<Void> workState) throws IOException;
 

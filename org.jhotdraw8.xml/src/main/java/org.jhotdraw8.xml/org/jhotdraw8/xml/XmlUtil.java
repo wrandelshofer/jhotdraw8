@@ -27,6 +27,7 @@ import javax.xml.parsers.SAXParserFactory;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
+import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
@@ -165,7 +166,7 @@ public class XmlUtil {
      * @param inputSource    the input source
      * @param namespaceAware whether to be name space aware
      * @return the document
-     * @throws java.io.IOException in case of failure
+     * @throws IOException in case of failure
      */
     public static @NonNull Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
@@ -273,6 +274,18 @@ public class XmlUtil {
     }
 
     /**
+     * Creates an XMLStreamWriter that only writes data to the specified file.
+     * That is, it does not create socket connections.
+     *
+     * @param file a file
+     * @return an XMLStreamWriter
+     * @throws XMLStreamException when the XMLStreamWriter could not be created
+     */
+    public static XMLStreamWriter streamWriter(final @NonNull Result file, @Nullable Properties outputProperties) throws XMLStreamException {
+        return ((StAXResult) replaceStreamResultByStAXResult(file, outputProperties)).getXMLStreamWriter();
+    }
+
+    /**
      * Creates an XMLStreamReader that only reads data from the specified file.
      * That is, it does not create socket connections.
      *
@@ -280,7 +293,6 @@ public class XmlUtil {
      * @return an XMLStreamReader
      * @throws XMLStreamException when the XMLStreamReader could not be created
      */
-
     public static XMLStreamReader streamReader(final @NonNull Source file) throws XMLStreamException {
         final XMLInputFactory dbf = XMLInputFactory.newInstance();
 
@@ -295,7 +307,6 @@ public class XmlUtil {
                             namespace) -> null
         );
         return dbf.createXMLStreamReader(file);
-
     }
 
     /**
@@ -306,18 +317,19 @@ public class XmlUtil {
      * @return the StaxResult if replacement was successful, the provided result otherwise
      */
     private static Result replaceStreamResultByStAXResult(@NonNull Result result, @Nullable Properties outputProperties) {
+        if (outputProperties == null) outputProperties = new Properties();
         if (result instanceof StreamResult sr) {
             IndentingXMLStreamWriter w;
             if (sr.getOutputStream() != null)
                 w = new IndentingXMLStreamWriter(sr.getOutputStream(), Charset.forName((String) outputProperties.getOrDefault(OutputKeys.ENCODING, "UTF-8")));
-            else if (sr.getWriter()!=null){
+            else if (sr.getWriter() != null) {
                 w = new IndentingXMLStreamWriter(sr.getWriter());
             } else {
                 return result;
             }
-            //w.setSortAttributes(false);
+            w.setSortAttributes(true);
             try {
-                int indentation = Integer.parseInt((String) outputProperties.getOrDefault(HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT, "0"));
+                int indentation = Integer.parseInt((String) outputProperties.getOrDefault(HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT, "2"));
                 w.setIndentation(" ".repeat(indentation));
             } catch (NumberFormatException e) {
                 // bail
@@ -327,7 +339,6 @@ public class XmlUtil {
         }
         return result;
     }
-
 
 
     private static class LocationFilter extends XMLFilterImpl {

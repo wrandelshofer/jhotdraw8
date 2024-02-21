@@ -12,7 +12,7 @@ import javax.swing.event.UndoableEditEvent;
 import java.util.function.Consumer;
 
 /**
- * Helper for firing {@link org.jhotdraw8.fxbase.undo.CompositeEdit} events.
+ * Helper for firing {@link CompositeEdit} events.
  */
 public class UndoableEditHelper {
     private @Nullable CompositeEdit edit;

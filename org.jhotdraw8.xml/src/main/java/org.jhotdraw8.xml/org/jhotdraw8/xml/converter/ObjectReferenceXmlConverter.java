@@ -47,12 +47,12 @@ public class ObjectReferenceXmlConverter<T> implements ResolvingConverter<T> {
     }
 
     @Override
-    public @Nullable T fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable T fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         return fromString(buf.toString(), idResolver);
     }
 
     @Override
-    public @Nullable T fromString(@Nullable CharSequence buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable T fromString(@Nullable CharSequence buf, @Nullable IdResolver idResolver) throws ParseException {
         if (idResolver == null) {
             throw new IllegalArgumentException("IdResolver is required for this converter");
         }

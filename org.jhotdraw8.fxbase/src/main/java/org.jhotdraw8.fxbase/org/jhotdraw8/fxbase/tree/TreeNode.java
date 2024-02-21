@@ -93,7 +93,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @param out   an output stream
      * @param depth the indentation depth
-     * @throws java.io.IOException from appendable
+     * @throws IOException from appendable
      */
     default void dumpTree(@NonNull Appendable out, int depth) throws IOException {
         for (int i = 0; i < depth; i++) {

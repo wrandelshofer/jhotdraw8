@@ -90,7 +90,7 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
             r = g = b = value;
         } else {
             float h = (float) (hue - Math.floor(hue)) * 6;
-            float f = h - (float) java.lang.Math.floor(h);
+            float f = h - (float) Math.floor(h);
             float p = value * (1f - saturation);
             float q = value * (1f - saturation * f);
             float t = value * (1f - (saturation * (1f - f)));

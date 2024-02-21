@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -34,7 +35,7 @@ public class GroupFigure extends AbstractCompositeFigure
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
-        javafx.scene.Group n = new javafx.scene.Group();
+        Group n = new Group();
         n.setAutoSizeChildren(false);
         n.setManaged(false);
         return n;
@@ -73,7 +74,7 @@ public class GroupFigure extends AbstractCompositeFigure
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }
-        ObservableList<Node> group = ((javafx.scene.Group) n).getChildren();
+        ObservableList<Node> group = ((Group) n).getChildren();
         if (!group.equals(nodes)) {
             group.setAll(nodes);
         }

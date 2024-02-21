@@ -15,7 +15,6 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.BiConsumer;
 
@@ -45,7 +44,7 @@ public class ExamplesPicker<T> extends AbstractPicker<T> {
             valueItem.setOnAction(e -> {
                 try {
                     callback.accept(true, converter.fromString(s));
-                } catch (ParseException | IOException ex) {
+                } catch (ParseException ex) {
                     ex.printStackTrace();
                 }
             });

@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.*;
 import java.awt.geom.PathIterator;
+import java.awt.geom.Point2D;
 
 import static java.lang.Math.sqrt;
 
@@ -66,11 +67,11 @@ public class Points {
         return (float) sqrt((float) (dx * dx + dy * dy));
     }
 
-    public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2) {
+    public static boolean almostEqual(Point2D v1, Point2D v2) {
         return almostEqual(v1, v2, Rectangles.REAL_THRESHOLD);
     }
 
-    public static boolean almostEqual(java.awt.geom.Point2D v1, java.awt.geom.Point2D v2, double epsilon) {
+    public static boolean almostEqual(Point2D v1, Point2D v2, double epsilon) {
         return v1.distanceSq(v2) < epsilon * epsilon;
     }
 
@@ -82,11 +83,11 @@ public class Points {
         return squaredDistance(x0, y0, x1, y1) < epsilon * epsilon;
     }
 
-    public static boolean almostZero(java.awt.geom.Point2D.Double v) {
+    public static boolean almostZero(Point2D.Double v) {
         return almostZero(v, Rectangles.REAL_THRESHOLD);
     }
 
-    public static boolean almostZero(java.awt.geom.Point2D.Double v, double epsilon) {
+    public static boolean almostZero(Point2D.Double v, double epsilon) {
         return Points2D.magnitudeSq(v) < epsilon * epsilon;
     }
 

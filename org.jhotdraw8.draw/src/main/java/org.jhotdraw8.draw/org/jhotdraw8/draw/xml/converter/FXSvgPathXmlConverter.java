@@ -29,9 +29,14 @@ public class FXSvgPathXmlConverter implements Converter<ImmutableList<PathElemen
     }
 
     @Override
-    public @Nullable ImmutableList<PathElement> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable ImmutableList<PathElement> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
-        int count = buf.read(out);
+        int count = 0;
+        try {
+            count = buf.read(out);
+        } catch (IOException e) {
+            throw new ParseException(e.getMessage(), 0);
+        }
         out.position(0);
         out.limit(count);
         final String string = out.toString();

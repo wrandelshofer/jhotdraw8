@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 
-import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -33,7 +32,7 @@ public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
     public @Nullable T convert(@NonNull ParsedValue<String, T> value, Font font) {
         try {
             return converter.fromString(value.getValue());
-        } catch (ParseException | IOException ex) {
+        } catch (ParseException ex) {
             return converter.getDefaultValue();
         }
     }

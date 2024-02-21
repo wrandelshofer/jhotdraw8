@@ -155,7 +155,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     public V put(K key, V value) {
         Integer index = keyMap.get(key);
         if (index == null) {
-            throw new UnsupportedOperationException("cannot put key=" + key + " value=" + value);
+            throw new UnsupportedOperationException("Cannot put key=" + key + " value=" + value);
         }
         return setValue(index, key, value);
     }

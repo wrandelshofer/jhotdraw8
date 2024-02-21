@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -39,7 +40,7 @@ public class MultipleMasterShapeMain extends Application {
 
         Text tx = new Text("a");
         tx.setFont(Font.font("Helvetica Neue Bold", 144f));
-        Path path = (Path) javafx.scene.shape.Shape.subtract(tx, new Rectangle());
+        Path path = (Path) Shape.subtract(tx, new Rectangle());
         System.out.println(FXSvgPaths.doubleSvgStringFromPathElements(path.getElements()));
     }
 }

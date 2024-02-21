@@ -75,10 +75,14 @@ public class ConnectorXmlConverter implements Converter<Connector> {
     }
 
     @Override
-    public @Nullable Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         Connector c;
         CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
-        c = parseConnector(tt, idResolver);
+        try {
+            c = parseConnector(tt, idResolver);
+        } catch (IOException e) {
+            throw new ParseException(e.getMessage(), 0);
+        }
 
         if (!buf.toString().trim().isEmpty()) {
             throw new ParseException("Locator: End expected, found:" + buf, buf.position());

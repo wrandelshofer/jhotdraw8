@@ -161,7 +161,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      *
      * @param baseName the base name
      * @return the resource bundle
-     * @see java.util.ResourceBundle
+     * @see ResourceBundle
      */
     public static @NonNull Resources getResources(@NonNull String baseName)
             throws MissingResourceException {
@@ -174,7 +174,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @param baseName the base name
      * @param locale   the locale
      * @return the resource bundle
-     * @see java.util.ResourceBundle
+     * @see ResourceBundle
      */
     static Resources getResources(@NonNull String baseName, @NonNull Locale locale)
             throws MissingResourceException {

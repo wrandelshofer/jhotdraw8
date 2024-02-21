@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 
-import java.io.IOException;
 import java.text.ParseException;
 
 /**
@@ -36,7 +35,7 @@ public class StringConverterAdapter<T> extends StringConverter<T> {
     public @Nullable T fromString(@NonNull String string) {
         try {
             return converter.fromString(string);
-        } catch (ParseException | IOException ex) {
+        } catch (ParseException ex) {
             return converter.getDefaultValue();
         }
     }

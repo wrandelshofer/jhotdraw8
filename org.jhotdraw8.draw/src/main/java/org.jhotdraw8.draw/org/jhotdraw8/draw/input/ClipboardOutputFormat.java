@@ -25,7 +25,7 @@ public interface ClipboardOutputFormat {
      *
      * @param out     The clipboard
      * @param drawing The drawing.
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     default void write(Map<DataFormat, Object> out, Drawing drawing) throws IOException {
         write(out, drawing, Collections.singleton(drawing));
@@ -37,7 +37,7 @@ public interface ClipboardOutputFormat {
      * @param out       The clipboard
      * @param drawing   The drawing.
      * @param selection A selection
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException;
 }

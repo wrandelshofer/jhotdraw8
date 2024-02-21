@@ -105,7 +105,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param drawing  the drawing
      * @param pages    the pages
      * @param hints    the hints
-     * @throws java.io.IOException in case of failure
+     * @throws IOException in case of failure
      */
     protected void writePages(@Nullable Path dir, String basename, @NonNull Drawing drawing, @NonNull List<Page> pages, @NonNull Map<Key<?>, Object> hints) throws IOException {
         IdFactory idFactory = new SimpleIdFactory();
@@ -201,7 +201,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param dir
      * @param drawing
      * @param slices
-     * @throws java.io.IOException
+     * @throws IOException
      */
     private void writeSlices(@NonNull Path dir, @NonNull Drawing drawing, @NonNull List<Slice> slices, String suffix, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();

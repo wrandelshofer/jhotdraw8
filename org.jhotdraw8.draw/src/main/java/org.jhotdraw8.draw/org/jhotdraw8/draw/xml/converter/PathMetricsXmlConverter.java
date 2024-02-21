@@ -36,25 +36,29 @@ public class PathMetricsXmlConverter implements Converter<PathMetrics> {
     }
 
     @Override
-    public @Nullable PathMetrics fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable PathMetrics fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         String input = buf.toString();
+        buf.position(buf.limit());
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
 
         PathMetrics p = null;
-        if (tt.next() == CssTokenType.TT_IDENT) {
-            if (!nullable) {
-                throw new ParseException("String expected. " + tt.current(), buf.position());
+        try {
+            if (tt.next() == CssTokenType.TT_IDENT) {
+                if (!nullable) {
+                    throw new ParseException("String expected. " + tt.current(), buf.position());
+                }
+                if (CssTokenType.IDENT_NONE.equals(tt.currentString())) {
+                    buf.position(buf.limit());
+                    return null;
+                }
             }
-            if (CssTokenType.IDENT_NONE.equals(tt.currentString())) {
-                buf.position(buf.limit());
-                return null;
-            }
+        } catch (IOException e) {
+            throw new ParseException(e.getMessage(), 0);
         }
         PathMetricsBuilder builder = new PathMetricsBuilder();
         SvgPaths.svgStringToBuilder(input, builder);
         p = builder.build();
 
-        buf.position(buf.limit());
 
         return p;
     }

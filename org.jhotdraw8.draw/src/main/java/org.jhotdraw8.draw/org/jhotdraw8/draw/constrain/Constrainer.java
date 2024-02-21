@@ -15,7 +15,7 @@ import org.jhotdraw8.draw.figure.Figure;
  * A <em>constrainer</em> constrains editing operations performed by
  * {@link org.jhotdraw8.draw.tool.Tool}s and
  * {@link org.jhotdraw8.draw.handle.Handle}s on a
- * {@link org.jhotdraw8.draw.DrawingView}.
+ * {@link DrawingView}.
  * <p>
  * {@code Constrainer} objects are associated to {@code DrawingView}'s.
  * <p>

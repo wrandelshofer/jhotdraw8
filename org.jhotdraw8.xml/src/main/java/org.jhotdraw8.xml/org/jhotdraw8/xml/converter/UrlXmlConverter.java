@@ -11,6 +11,7 @@ import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.CharBuffer;
 import java.text.ParseException;
@@ -33,12 +34,19 @@ public class UrlXmlConverter implements Converter<URL> {
     }
 
     @Override
-    public @Nullable URL fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable URL fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (str.isEmpty()) {
             return null;
         }
-        URL value = new URL(str);
+        URL value = null;
+        try {
+            value = new URL(str);
+        } catch (MalformedURLException e) {
+            ParseException parseException = new ParseException(e.getMessage(), 0);
+            parseException.initCause(e);
+            throw parseException;
+        }
         in.position(in.limit());
         return value;
     }

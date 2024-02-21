@@ -8,6 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.ClosePath;
@@ -133,7 +134,7 @@ public class PageFigure extends AbstractCompositeFigure
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext ctx) {
-        javafx.scene.Group n = new javafx.scene.Group();
+        Group n = new Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);
 
@@ -150,7 +151,7 @@ public class PageFigure extends AbstractCompositeFigure
         insetsBoundsNode.setStrokeType(StrokeType.CENTERED);
         insetsBoundsNode.getStrokeDashArray().setAll(5.0);
 
-        javafx.scene.Group currentPageNode = new javafx.scene.Group();
+        Group currentPageNode = new Group();
 
         n.getChildren().addAll(pageBoundsNode, insetsBoundsNode, contentBoundsNode, currentPageNode);
         n.getProperties().put(PAGE_BOUNDS_PROPERTY, pageBoundsNode);
@@ -381,7 +382,7 @@ public class PageFigure extends AbstractCompositeFigure
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        javafx.scene.Group groupNode = (javafx.scene.Group) node;
+        Group groupNode = (Group) node;
         // We can't use #applyTransformableFigureProperties(node) because
         // this will rotate around an unpredictable center!
         node.getTransforms().setAll(getLocalToParent(true));
@@ -389,7 +390,7 @@ public class PageFigure extends AbstractCompositeFigure
         Rectangle contentBoundsNode = (Rectangle) groupNode.getProperties().get(CONTENT_BOUNDS_PROPERTY);
         Path pageBoundsNode = (Path) groupNode.getProperties().get(PAGE_BOUNDS_PROPERTY);
         Path pageInsetsNode = (Path) groupNode.getProperties().get(PAGE_INSETS_PROPERTY);
-        javafx.scene.Group currentPageNode = (javafx.scene.Group) groupNode.getProperties().get(CURRENT_PAGE_PROPERTY);
+        Group currentPageNode = (Group) groupNode.getProperties().get(CURRENT_PAGE_PROPERTY);
 
         applyFillableFigureProperties(ctx, pageBoundsNode);
         applyStrokableFigureProperties(ctx, pageBoundsNode);

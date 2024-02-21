@@ -6,6 +6,8 @@ package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.awt.geom.Rectangle2D;
+
 import static java.lang.Math.max;
 
 /**
@@ -71,7 +73,7 @@ public class Rectangles {
      * @param r2 Rectangle 2.
      * @return true if r1 contains r2.
      */
-    public static boolean containsAWT(java.awt.geom.@NonNull Rectangle2D r1, java.awt.geom.@NonNull Rectangle2D r2) {
+    public static boolean containsAWT(@NonNull Rectangle2D r1, @NonNull Rectangle2D r2) {
         return (r2.getX()) >= r1.getX()
                 && r2.getY() >= r1.getY()
                 && (r2.getX() + max(0, r2.getWidth())) <= r1.getX() + max(0, r1.getWidth())

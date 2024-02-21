@@ -19,7 +19,7 @@ import javax.swing.event.UndoableEditEvent;
 /**
  * This abstract class can be extended to implement an {@code Action} that acts
  * on behalf of the selected figures of a
- * {@link org.jhotdraw8.draw.DrawingView}.
+ * {@link DrawingView}.
  * <p>
  * By default the disabled state of this action reflects the disabled state of
  * the active {@code DrawingView}. If no drawing view is active, this action is

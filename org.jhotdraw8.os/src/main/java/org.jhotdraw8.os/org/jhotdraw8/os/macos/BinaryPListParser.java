@@ -36,7 +36,7 @@ import java.util.GregorianCalendar;
  * <p>
  * The DOM returned by this reader is equivalent to the
  * DOM returned, if a PList file in XML format is parsed with
- * a standard {@link javax.xml.parsers.DocumentBuilder}.
+ * a standard {@link DocumentBuilder}.
  * <p>
  * Description about property list taken from <a href="http://developer.apple.com/documentation/Cocoa/Conceptual/PropertyLists/index.html#//apple_ref/doc/uid/10000048i">
  * Apple's online documentation</a>:
@@ -282,7 +282,7 @@ public class BinaryPListParser {
     /**
      * Parses a binary PList file and turns it into a DOM.
      * The Document is equivalent with a XML PList file parsed using
-     * a standard {@link javax.xml.parsers.DocumentBuilder}.
+     * a standard {@link DocumentBuilder}.
      *
      * @param file A file containing a binary PList.
      * @return Returns the parsed Element.

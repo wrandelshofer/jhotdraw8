@@ -70,7 +70,7 @@ public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
 
 
     @Override
-    public @Nullable ImmutableList<T> fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable ImmutableList<T> fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (prefix != null) {
             if (!str.startsWith(prefix)) throw new ParseException("Must start with \"" + prefix + "\"", 0);

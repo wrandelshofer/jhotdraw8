@@ -28,10 +28,16 @@ public class StringOrIdentCssConverter implements Converter<String> {
     }
 
     @Override
-    public @Nullable String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf), null);
-        if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
-            throw new ParseException("Css String or Ident expected. " + tt.current(), buf.position());
+        try {
+            if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
+                throw new ParseException("Css String or Ident expected. " + tt.current(), buf.position());
+            }
+        } catch (IOException e) {
+            ParseException parseException = new ParseException(e.getMessage(), 0);
+            parseException.initCause(e);
+            throw parseException;
         }
         return tt.currentString();
     }

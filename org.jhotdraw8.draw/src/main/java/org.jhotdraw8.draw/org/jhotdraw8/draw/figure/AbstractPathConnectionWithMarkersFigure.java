@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
@@ -129,7 +130,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
-        javafx.scene.Group g = new javafx.scene.Group();
+        Group g = new Group();
         final Path line = new Path();
         final Path startMarker = new Path();
         final Path endMarker = new Path();
@@ -296,7 +297,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     }
 
-    protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
+    protected void updateMarkerNode(RenderContext ctx, Group group,
                                     @NonNull Path markerNode,
                                     @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
@@ -335,7 +336,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         }
 
 
-        javafx.scene.Group g = (javafx.scene.Group) node;
+        Group g = (Group) node;
         Path lineNode = (Path) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);

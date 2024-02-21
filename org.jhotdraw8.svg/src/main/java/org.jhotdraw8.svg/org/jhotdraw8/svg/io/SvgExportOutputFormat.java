@@ -130,7 +130,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         Map<Key<?>, Object> hints = new HashMap<>();
         idFactory.setDocumentHome(documentHome);
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        javafx.scene.Node drawingNode = toNode(external, selection, hints);
+        Node drawingNode = toNode(external, selection, hints);
         final AbstractFXSvgWriter exporter = createExporter();
         exporter.setRelativizePaths(isRelativizePaths());
         Document doc = exporter.toDocument(drawingNode,
@@ -148,7 +148,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         StringWriter out = new StringWriter();
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
-        javafx.scene.Node drawingNode = toNode(drawing, selection, hints);
+        Node drawingNode = toNode(drawing, selection, hints);
         final AbstractFXSvgWriter exporter = createExporter();
         exporter.setRelativizePaths(isRelativizePaths());
         exporter.write(out, drawingNode,
@@ -169,7 +169,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
             try (OutputStream w = Files.newOutputStream(file)) {
                 final AbstractFXSvgWriter exporter = createExporter();
                 exporter.setRelativizePaths(isRelativizePaths());
-                javafx.scene.Node drawingNode = toNode(drawing, Collections.singletonList(drawing), hints);
+                Node drawingNode = toNode(drawing, Collections.singletonList(drawing), hints);
                 exporter.write(w, drawingNode,
                         new CssDimension2D(drawing.getNonNull(Drawing.WIDTH), drawing.getNonNull(Drawing.HEIGHT)));
             }

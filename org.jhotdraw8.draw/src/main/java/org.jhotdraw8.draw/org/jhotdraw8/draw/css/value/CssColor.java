@@ -12,7 +12,6 @@ import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.render.RenderContext;
 
-import java.io.IOException;
 import java.text.ParseException;
 import java.util.Objects;
 
@@ -136,7 +135,7 @@ public class CssColor implements Paintable {
     public static @NonNull CssColor valueOf(@NonNull String value) {
         try {
             return converter.fromString(value);
-        } catch (ParseException | IOException e) {
+        } catch (ParseException e) {
             return new NamedCssColor(value, Color.BLACK);
         }
     }

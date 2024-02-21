@@ -6,6 +6,7 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
@@ -18,10 +19,21 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.handle.*;
+import org.jhotdraw8.draw.handle.Handle;
+import org.jhotdraw8.draw.handle.HandleType;
+import org.jhotdraw8.draw.handle.LineConnectorHandle;
+import org.jhotdraw8.draw.handle.LineOutlineHandle;
+import org.jhotdraw8.draw.handle.MoveHandle;
+import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
+import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.*;
+import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.FXGeom;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jhotdraw8.geom.FXPreciseRotate;
+import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 
 import java.awt.geom.AffineTransform;
@@ -62,7 +74,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
-        javafx.scene.Group g = new javafx.scene.Group();
+        Group g = new Group();
         final Polyline line = new Polyline();
         final Path startMarker = new Path();
         final Path endMarker = new Path();
@@ -136,7 +148,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
-        javafx.scene.Group g = (javafx.scene.Group) node;
+        Group g = (Group) node;
         Polyline lineNode = (Polyline) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);
@@ -183,7 +195,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    protected void updateMarkerNode(RenderContext ctx, javafx.scene.Group group,
+    protected void updateMarkerNode(RenderContext ctx, Group group,
                                     @NonNull Path markerNode,
                                     @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {

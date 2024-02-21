@@ -35,7 +35,7 @@ public interface OutputFormat {
      * @param uri       The resource identifier
      * @param drawing   The drawing.
      * @param workState for progress monitoring and cancelling the operation
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     default void write(@NonNull URI uri, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         write(Paths.get(uri), drawing, workState);
@@ -48,7 +48,7 @@ public interface OutputFormat {
      * @param file      the file
      * @param drawing   the drawing
      * @param workState for progress monitoring and cancelling the operation
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     default void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
@@ -64,7 +64,7 @@ public interface OutputFormat {
      *                     if this URI is null, all URIs in the document will be absolute
      * @param drawing      The drawing.
      * @param workState    for progress monitoring and cancelling the operation
-     * @throws java.io.IOException if an IO error occurs
+     * @throws IOException if an IO error occurs
      */
     void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException;
 

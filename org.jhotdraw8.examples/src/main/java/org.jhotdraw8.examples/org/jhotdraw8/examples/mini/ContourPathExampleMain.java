@@ -24,6 +24,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.FXShapes;
@@ -40,7 +41,7 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class ContourPathExampleMain extends Application {
-    private final javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
+    private final Polyline polyline = new Polyline(
             110, 200,
             160, 180,
             210, 120,
@@ -182,7 +183,7 @@ public class ContourPathExampleMain extends Application {
     }
 
 
-    private void doOffsetPath(javafx.scene.shape.Polyline polyline, Path path, double offset) {
+    private void doOffsetPath(Polyline polyline, Path path, double offset) {
         PlinePath pap = createPline(polyline);
         ContourBuilder papb = new ContourBuilder();
         List<PlinePath> offsetPlines = papb.parallelOffset(pap, offset);
@@ -195,7 +196,7 @@ public class ContourPathExampleMain extends Application {
         }
     }
 
-    private @NonNull PlinePath createPline(javafx.scene.shape.Polyline polyline) {
+    private @NonNull PlinePath createPline(Polyline polyline) {
         PlinePath pap = new PlinePath();
         ObservableList<Double> points = polyline.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {

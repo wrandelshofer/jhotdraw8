@@ -350,7 +350,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     protected abstract String getSvgVersion();
 
 
-    private void initIdFactoryRecursively(javafx.scene.@NonNull Node node) throws IOException {
+    private void initIdFactoryRecursively(@NonNull Node node) throws IOException {
         String id = node.getId();
         if (id != null && idFactory.getObject(id) == null) {
             idFactory.putIdAndObject(id, node);
@@ -360,7 +360,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
         if (node instanceof Parent) {
             Parent pp = (Parent) node;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+            for (Node child : pp.getChildrenUnmodifiable()) {
                 initIdFactoryRecursively(child);
             }
         }
@@ -414,7 +414,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
             if (node instanceof Parent) {
                 Parent pp = (Parent) node;
-                for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+                for (Node child : pp.getChildrenUnmodifiable()) {
                     if (shouldWriteDefsRecursively(child)) {
                         return true;
                     }
@@ -634,7 +634,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
         if (node instanceof Parent) {
             Parent pp = (Parent) node;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+            for (Node child : pp.getChildrenUnmodifiable()) {
                 writeDefsRecursively(w, child);
             }
         }
@@ -879,7 +879,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
         if (node instanceof Parent) {
             final Parent pp = (Parent) node;
-            for (javafx.scene.Node child : pp.getChildrenUnmodifiable()) {
+            for (Node child : pp.getChildrenUnmodifiable()) {
                 writeNodeRecursively(w, child, depth + 1);
             }
         }
@@ -954,7 +954,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                 cap, join,
                 (float) fxShape.getStrokeMiterLimit(),
                 dashes.length == 0 ? null : dashes, (float) fxShape.getStrokeDashOffset()).createStrokedShape(shape);
-        java.awt.geom.Area area = new java.awt.geom.Area(strokedShape);
+        Area area = new Area(strokedShape);
 
         switch (fxShape.getStrokeType()) {
             case INSIDE:

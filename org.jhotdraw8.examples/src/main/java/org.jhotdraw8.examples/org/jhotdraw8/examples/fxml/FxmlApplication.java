@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.examples.fxml;
 
+import javafx.application.Application;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
@@ -24,7 +25,7 @@ import java.util.concurrent.Executors;
  * An application that adds a {@link Parent} created from an FXML file
  * to its primary {@link Stage}.
  */
-public abstract class FxmlApplication extends javafx.application.Application {
+public abstract class FxmlApplication extends Application {
     private static final String FXML_PROPERTY_NAME = "fxml";
 
     private final ObjectProperty<URL> fxml = new SimpleObjectProperty<>(this, FXML_PROPERTY_NAME);

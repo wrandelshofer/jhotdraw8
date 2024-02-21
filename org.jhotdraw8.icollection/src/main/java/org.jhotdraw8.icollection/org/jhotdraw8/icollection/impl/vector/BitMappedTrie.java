@@ -13,7 +13,13 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.SequencedCollection;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -133,7 +139,7 @@ public class BitMappedTrie<T> implements Serializable {
     }
 
     @NonNull
-    public BitMappedTrie<T> prepend(java.util.@NonNull Iterator<? extends T> iterator, int size) {
+    public BitMappedTrie<T> prepend(@NonNull Iterator<? extends T> iterator, int size) {
         BitMappedTrie<T> result = this;
         while (size > 0) {
             Object array = result.array;
@@ -181,7 +187,7 @@ public class BitMappedTrie<T> implements Serializable {
         return offset == 0;
     }
 
-    private @NonNull NodeModifier prependToLeaf(java.util.@NonNull Iterator<? extends T> iterator) {
+    private @NonNull NodeModifier prependToLeaf(@NonNull Iterator<? extends T> iterator) {
         return (array, index) -> {
             final Object copy = type.copy(array, BRANCHING_FACTOR);
             while (iterator.hasNext() && index >= 0) {
@@ -215,7 +221,7 @@ public class BitMappedTrie<T> implements Serializable {
     }
 
     @NonNull
-    public BitMappedTrie<T> append(java.util.@NonNull Iterator<? extends T> iterator, int size) {
+    public BitMappedTrie<T> append(@NonNull Iterator<? extends T> iterator, int size) {
         BitMappedTrie<T> result = this;
         while (size > 0) {
             Object array = result.array;
@@ -263,7 +269,7 @@ public class BitMappedTrie<T> implements Serializable {
         return (offset + length + 1) > treeSize(BRANCHING_FACTOR, depthShift);
     }
 
-    private @NonNull NodeModifier appendToLeaf(java.util.@NonNull Iterator<? extends T> iterator, int leafSize) {
+    private @NonNull NodeModifier appendToLeaf(@NonNull Iterator<? extends T> iterator, int leafSize) {
         return (array, index) -> {
             final Object copy = type.copy(array, leafSize);
             while (iterator.hasNext() && index < leafSize) {

@@ -18,7 +18,7 @@ import java.text.ParseException;
  * Schema Part 2: Datatypes Second Edition: 3.2.13 integer</a>
  * </p>
  */
-public class LongXmlConverter implements Converter<Integer> {
+public class LongXmlConverter implements Converter<Long> {
 
 
     private final boolean nullable;
@@ -33,10 +33,10 @@ public class LongXmlConverter implements Converter<Integer> {
 
 
     @Override
-    public @Nullable Integer fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Long fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         try {
             if (in.isEmpty() && nullable) return null;
-            var result = Integer.parseInt(in.toString());
+            var result = Long.parseLong(in.toString());
             in.position(in.length());
             return result;
         } catch (NumberFormatException e) {
@@ -45,14 +45,14 @@ public class LongXmlConverter implements Converter<Integer> {
     }
 
     @Override
-    public <TT extends Integer> void toString(Appendable buf, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends Long> void toString(Appendable buf, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value != null) {
-            buf.append(Integer.toString(value));
+            buf.append(Long.toString(value));
         }
     }
 
     @Override
-    public @Nullable Integer getDefaultValue() {
-        return 0;
+    public @Nullable Long getDefaultValue() {
+        return 0L;
     }
 }

@@ -7,7 +7,6 @@ package org.jhotdraw8.base.converter;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.io.IOException;
 import java.io.Serial;
 import java.nio.CharBuffer;
 import java.text.FieldPosition;
@@ -48,8 +47,6 @@ public class FormatConverterAdapter extends Format {
             return value;
         } catch (ParseException ex) {
             pos.setErrorIndex(ex.getErrorOffset());
-            return null;
-        } catch (IOException ex) {
             return null;
         }
     }

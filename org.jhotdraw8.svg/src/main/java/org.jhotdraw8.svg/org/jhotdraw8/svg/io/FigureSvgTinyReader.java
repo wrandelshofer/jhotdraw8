@@ -355,7 +355,7 @@ public class FigureSvgTinyReader {
             } else if ("class".equals(localName) && isInSvgNs) {
                 try {
                     node.set(StyleableFigure.STYLE_CLASS, new WordSetXmlConverter().fromString(value));
-                } catch (ParseException | IOException e) {
+                } catch (ParseException e) {
                     Location location = r.getLocation();
                     handleError(location, "Could not read attribute \"" + localName + "\".", e);
                 }
@@ -373,7 +373,7 @@ public class FigureSvgTinyReader {
                                 } else {
                                     try {
                                         node.set(mapAccessor, converter.fromString(value, ctx.idFactory));
-                                    } catch (ParseException | IOException e) {
+                                    } catch (ParseException e) {
                                         Location location = r.getLocation();
                                         handleError(location, "Could not read attribute \"" + localName + "\".", e);
                                     }
@@ -501,7 +501,7 @@ public class FigureSvgTinyReader {
                             handleError(r, "stop: Skipping SVG attribute " + localName + "=\"" + value + "\"W");
                             break;
                     }
-                } catch (ParseException | IOException e) {
+                } catch (ParseException e) {
                     handleError(r, "stop: Could not parse attribute " + localName + "=\"" + value + "\"W");
                 }
             } else {

@@ -83,7 +83,7 @@ public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         String[] strings = buf.toString().split("\\s+");
 
         // If there is a comparator, we do not need to use a sequenced set,

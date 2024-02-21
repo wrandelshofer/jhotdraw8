@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.UnaryOperator;
 
 /**
- * This adapter can be bound to a {@link javafx.scene.control.TextInputControl}
+ * This adapter can be bound to a {@link TextInputControl}
  * to support undo/redo with a {@link FXUndoManager}.
  * <p>
  * This text filter can be added to multiple text input controls.

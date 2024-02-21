@@ -9,6 +9,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.FillRule;
+import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -53,8 +54,8 @@ public class SvgPathFigure extends AbstractLeafFigure
     @Override
     public @NonNull Node createNode(@NonNull RenderContext ctx) {
         Group g = new Group();
-        javafx.scene.shape.Path n0 = new javafx.scene.shape.Path();
-        javafx.scene.shape.Path n1 = new javafx.scene.shape.Path();
+        Path n0 = new Path();
+        Path n1 = new Path();
         n0.setManaged(false);
         n1.setManaged(false);
         g.getChildren().addAll(n0, n1);
@@ -129,8 +130,8 @@ public class SvgPathFigure extends AbstractLeafFigure
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         Group g = (Group) node;
-        javafx.scene.shape.Path n0 = (javafx.scene.shape.Path) g.getChildren().get(0);
-        javafx.scene.shape.Path n1 = (javafx.scene.shape.Path) g.getChildren().get(1);
+        Path n0 = (Path) g.getChildren().get(0);
+        Path n1 = (Path) g.getChildren().get(1);
 
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);

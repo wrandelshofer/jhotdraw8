@@ -34,7 +34,7 @@ public class UriXmlConverter implements Converter<URI> {
     }
 
     @Override
-    public @Nullable URI fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable URI fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString().trim();
         in.position(in.limit());// fully consume the buffer
         if (CssTokenType.IDENT_NONE.equals(str)) {

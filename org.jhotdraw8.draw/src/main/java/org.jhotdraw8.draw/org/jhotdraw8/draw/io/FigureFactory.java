@@ -32,7 +32,7 @@ public interface FigureFactory {
      *
      * @param f the figure
      * @return the name
-     * @throws java.io.IOException if the factory does not support this figure
+     * @throws IOException if the factory does not support this figure
      */
     @Nullable String getElementNameByFigure(Figure f) throws IOException;
 
@@ -41,7 +41,7 @@ public interface FigureFactory {
      *
      * @param elementName the name
      * @return the figure
-     * @throws java.io.IOException if the factory does not support this name
+     * @throws IOException if the factory does not support this name
      */
     @NonNull Figure createFigureByElementName(String elementName) throws IOException;
 
@@ -52,7 +52,7 @@ public interface FigureFactory {
      * @param f   the figure
      * @param key the key
      * @return The name.
-     * @throws java.io.IOException if the factory does not support the key for
+     * @throws IOException if the factory does not support the key for
      *                             the specified figure
      */
     String getAttributeNameByKey(Figure f, MapAccessor<?> key) throws IOException;
@@ -63,7 +63,7 @@ public interface FigureFactory {
      * @param f    the figure
      * @param name the name
      * @return the key
-     * @throws java.io.IOException if the factory does not support the name for
+     * @throws IOException if the factory does not support the name for
      *                             the specified figure
      */
     @Nullable MapAccessor<?> getKeyByAttributeName(Figure f, String name) throws IOException;
@@ -81,7 +81,7 @@ public interface FigureFactory {
      * @param f   the figure
      * @param key the key
      * @return The name.
-     * @throws java.io.IOException if the factory does not support the key for
+     * @throws IOException if the factory does not support the key for
      *                             the specified figure
      */
     String getElementNameByKey(Figure f, MapAccessor<?> key) throws IOException;
@@ -92,7 +92,7 @@ public interface FigureFactory {
      * @param f    the figure
      * @param name the name
      * @return the key
-     * @throws java.io.IOException if the factory does not support the name for
+     * @throws IOException if the factory does not support the name for
      *                             the specified figure
      */
     MapAccessor<?> getKeyByElementName(Figure f, String name) throws IOException;
@@ -104,7 +104,7 @@ public interface FigureFactory {
      * @param key   the key
      * @param value the value
      * @return the mapped attribute value
-     * @throws java.io.IOException if the factory does not support a mapping for
+     * @throws IOException if the factory does not support a mapping for
      *                             the specified key
      */
     @NonNull <T> String valueToString(MapAccessor<T> key, T value) throws IOException;
@@ -118,7 +118,7 @@ public interface FigureFactory {
      * @param key   the key
      * @param value the value
      * @param w     the writer for creating the node list.
-     * @throws java.io.IOException if the factory does not support a mapping for
+     * @throws IOException if the factory does not support a mapping for
      *                             the specified key
      */
     void valueToNodeList(MapAccessor<?> key, Object value, XMLStreamWriter w) throws IOException, XMLStreamException;
@@ -133,7 +133,7 @@ public interface FigureFactory {
      * @param key      the key
      * @param nodeList the nodeList
      * @return the mapped attribute value.
-     * @throws java.io.IOException if the factory does not support a mapping for
+     * @throws IOException if the factory does not support a mapping for
      *                             the specified key
      */
     @Nullable <T> T nodeListToValue(MapAccessor<T> key, List<Node> nodeList) throws IOException;
@@ -145,7 +145,7 @@ public interface FigureFactory {
      * @param key   the key
      * @param cdata the XML attribute value
      * @return the mapped value
-     * @throws java.io.IOException if the factory does not support a mapping for
+     * @throws IOException if the factory does not support a mapping for
      *                             the specified key
      */
     @Nullable <T> T stringToValue(MapAccessor<T> key, String cdata) throws IOException;
@@ -204,7 +204,7 @@ public interface FigureFactory {
      *
      * @param internal an internal representation of the drawing
      * @return An external representation of the drawing.
-     * @throws java.io.IOException if no external representation can be created
+     * @throws IOException if no external representation can be created
      */
     default Drawing toExternalDrawing(Drawing internal) throws IOException {
         return internal;
@@ -219,7 +219,7 @@ public interface FigureFactory {
      *
      * @param external an external representation of the drawing
      * @return An internal representation of the drawing.
-     * @throws java.io.IOException if no internal representation can be created
+     * @throws IOException if no internal representation can be created
      */
     default Drawing fromExternalDrawing(Drawing external) throws IOException {
         return external;
@@ -230,7 +230,7 @@ public interface FigureFactory {
      *
      * @return The stylesheets key of the Drawing object. Return null if
      * stylesheets shall not be supported. The default implementation returns
-     * {@link org.jhotdraw8.draw.figure.Drawing#AUTHOR_STYLESHEETS}.
+     * {@link Drawing#AUTHOR_STYLESHEETS}.
      */
     default MapAccessor<ImmutableList<URI>> getStylesheetsKey() {
         return Drawing.AUTHOR_STYLESHEETS;

@@ -45,7 +45,7 @@ public class FloatXmlConverter implements Converter<Float> {
     }
 
     @Override
-    public @Nullable Float fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Float fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
             if (str.strip().length() != str.length()) throw new NumberFormatException();

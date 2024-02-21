@@ -53,7 +53,7 @@ class NaturalComparator<T> implements Comparator<T>, Serializable {
      * Instance control for object serialization.
      *
      * @return The singleton instance of NaturalComparator.
-     * @see java.io.Serializable
+     * @see Serializable
      */
     private Object readResolve() {
         return INSTANCE;

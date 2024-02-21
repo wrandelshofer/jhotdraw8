@@ -14,8 +14,8 @@ public interface IdResolver {
      * Gets the object for the specified id. Returns null if the id has no
      * object.
      *
-     * @param id the id
-     * @return the object
+     * @param id the id or null
+     * @return the object if present
      */
     @Nullable Object getObject(@Nullable String id);
 
@@ -24,8 +24,8 @@ public interface IdResolver {
      * Returns null if the id has no object of this type.
      *
      * @param clazz the clazz
-     * @param id    the id
-     * @return the object
+     * @param id    the id or null
+     * @return the object if present with the specified type
      */
     default <T> @Nullable T getObject(@NonNull Class<T> clazz, @Nullable String id) {
         Object object = getObject(id);
@@ -47,5 +47,4 @@ public interface IdResolver {
      * @return an internal URI (typically an absolute path)
      */
     @NonNull URI absolutize(@NonNull URI uri);
-
 }

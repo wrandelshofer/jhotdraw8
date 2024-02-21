@@ -110,7 +110,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <p>
  * <b>Update Strategy.</b> A figure does not automatically update its computed
  * property values. The update strategy is factored out into
- * {@link org.jhotdraw8.draw.model.DrawingModel}.
+ * {@link DrawingModel}.
  *
  * @author Werner Randelshofer
  */
@@ -390,7 +390,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that one
+     * {@link DrawingModel} when it determines that one
      * or more layout subjects have been added or removed.
      * <p>
      * The default implementation of this method is empty.
@@ -400,7 +400,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that a
+     * {@link DrawingModel} when it determines that a
      * property has been changed.
      * <p>
      * The default implementation of this method is empty.
@@ -415,7 +415,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that one
+     * {@link DrawingModel} when it determines that one
      * or more layout observers have been added or removed.
      * <p>
      * The default implementation of this method is empty.
@@ -826,7 +826,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * This figure does not keep track of changes that cause the invalidation of
      * its transformation matrices. Use a
-     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage the
+     * {@link DrawingModel} to manage the
      * transformation matrices of the figures in a drawing. Or call this method
      * on a figure and all its descendants, after you have performed a change
      * which invalidated the transform matrices of the figure.
@@ -976,7 +976,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * if layout of the other figures has been performed first.
      * <p>
      * A figure does not keep track of changes that require layout updates.
-     * Use {@link org.jhotdraw8.draw.model.DrawingModel} to manage layout updates.
+     * Use {@link DrawingModel} to manage layout updates.
      * <p>
      * The default implementation is empty.
      * <p>
@@ -990,7 +990,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
+     * {@link DrawingModel} when it determines that the
      * figure needs to be laid out.
      * <p>
      * The default implementation of this method calls {@link #layout}.
@@ -1195,7 +1195,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * This method is invoked on a figure by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
+     * {@link DrawingModel} when it determines that the
      * figure needs to apply its stylesheet again.
      * <p>
      * The default implementation of this method calls {@link #updateCss}.
@@ -1226,7 +1226,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
     /**
      * This method is invoked on a figure and all its descendants by
-     * {@link org.jhotdraw8.draw.model.DrawingModel} when it determines that the
+     * {@link DrawingModel} when it determines that the
      * transformation of the figure has changed.
      * <p>
      * The default implementation of this method calls
@@ -1241,7 +1241,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * values and on the and the property values of its ancestors.
      * <p>
      * This figure does not keep track of changes that require CSS updates. Use
-     * a {@link org.jhotdraw8.draw.model.DrawingModel} to manage CSS updates.
+     * a {@link DrawingModel} to manage CSS updates.
      *
      * @param ctx the render context
      */
@@ -1277,7 +1277,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * input events on Java FX nodes to the corresponding figure.
      * <p>
      * This figure does not keep track of changes that require node updates.
-     * {@link org.jhotdraw8.draw.model.DrawingModel} to manage node updates.
+     * {@link DrawingModel} to manage node updates.
      *
      * @param ctx  the render context
      * @param node the node which was created with {@link #createNode}

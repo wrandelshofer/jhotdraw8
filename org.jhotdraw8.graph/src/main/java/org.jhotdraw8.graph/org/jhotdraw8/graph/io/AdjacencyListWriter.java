@@ -46,7 +46,7 @@ public class AdjacencyListWriter {
      * @param <A>   the arrow data type
      * @param w     the writer
      * @param graph the graph to be dumped
-     * @throws java.io.IOException if writing fails
+     * @throws IOException if writing fails
      */
     public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
         write(w, graph, Object::toString);
@@ -60,7 +60,7 @@ public class AdjacencyListWriter {
      * @param w                the writer
      * @param graph            the graph to be dumped
      * @param toStringFunction a function which converts a vertex to a string
-     * @throws java.io.IOException if writing fails
+     * @throws IOException if writing fails
      */
     public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph, @NonNull Function<V, String> toStringFunction) throws IOException {
         {

@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.svg.figure;
 
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
@@ -83,7 +84,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
-        javafx.scene.Group g = new javafx.scene.Group();
+        Group g = new Group();
         g.setAutoSizeChildren(false);
         g.setManaged(false);
         g.setVisible(false);

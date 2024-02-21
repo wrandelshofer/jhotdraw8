@@ -15,6 +15,7 @@ import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Set;
 
 /**
@@ -85,7 +86,7 @@ public class ChampMap<K, V> extends AbstractMap<K, V> implements Serializable, C
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
-    static final int SALT = new java.util.Random().nextInt();
+    static final int SALT = new Random().nextInt();
 
     public ChampMap() {
         this.root = BitmapIndexedNode.emptyNode();

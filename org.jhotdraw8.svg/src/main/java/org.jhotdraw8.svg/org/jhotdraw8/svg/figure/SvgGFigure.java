@@ -5,6 +5,7 @@
 package org.jhotdraw8.svg.figure;
 
 import javafx.collections.ObservableList;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
@@ -39,7 +40,7 @@ public class SvgGFigure extends AbstractCompositeFigure
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {
-        javafx.scene.Group g = new javafx.scene.Group();
+        Group g = new Group();
         g.setAutoSizeChildren(false);
         g.setManaged(false);
         return g;
@@ -78,7 +79,7 @@ public class SvgGFigure extends AbstractCompositeFigure
         for (Figure child : getChildren()) {
             nodes.add(ctx.getNode(child));
         }
-        ObservableList<Node> group = ((javafx.scene.Group) n).getChildren();
+        ObservableList<Node> group = ((Group) n).getChildren();
         if (!group.equals(nodes)) {
             group.setAll(nodes);
         }

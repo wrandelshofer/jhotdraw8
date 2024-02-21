@@ -35,7 +35,7 @@ public class DefaultConverter implements Converter<Object> {
     }
 
     @Override
-    public @Nullable Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         String str = buf.toString();
         buf.position(buf.limit());
         return "null".equals(str) ? null : str;

@@ -38,7 +38,7 @@ public class DoubleConverter implements Converter<Double> {
     }
 
     @Override
-    public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         try {
             if (in.isEmpty() && nullable) return null;
             var result = Double.parseDouble(in.toString());

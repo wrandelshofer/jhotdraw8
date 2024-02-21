@@ -44,7 +44,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
      * Gets the first entry in this map or {@code null} if this map is empty.
      *
      * @return the first entry or {@code null}
-     * @throws java.util.NoSuchElementException if the map is empty
+     * @throws NoSuchElementException if the map is empty
      */
     default Map.@Nullable Entry<K, V> firstEntry() {
         return isEmpty() ? null : readOnlyEntrySet().iterator().next();
@@ -54,7 +54,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
      * Gets the last entry in this map or {@code null} if this map is empty.
      *
      * @return the last entry or {@code null}
-     * @throws java.util.NoSuchElementException if the map is empty
+     * @throws NoSuchElementException if the map is empty
      */
     default Map.@Nullable Entry<K, V> lastEntry() {
         return isEmpty() ? null : readOnlyReversed().readOnlyEntrySet().iterator().next();

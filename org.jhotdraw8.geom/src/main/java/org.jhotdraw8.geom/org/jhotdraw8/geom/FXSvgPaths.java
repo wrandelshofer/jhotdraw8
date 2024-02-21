@@ -16,6 +16,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.VLineTo;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
@@ -690,7 +691,7 @@ public class FXSvgPaths {
         return builder;
     }
 
-    public static @NonNull List<PathElement> transformPathElements(@NonNull List<PathElement> elements, FillRule fillRule, javafx.scene.transform.Transform fxT) {
+    public static @NonNull List<PathElement> transformPathElements(@NonNull List<PathElement> elements, FillRule fillRule, Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
         FXShapes.awtShapeFromFXPathElements(elements, fillRule);
         return result;

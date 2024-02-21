@@ -71,7 +71,7 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public ImmutableList<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public ImmutableList<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer

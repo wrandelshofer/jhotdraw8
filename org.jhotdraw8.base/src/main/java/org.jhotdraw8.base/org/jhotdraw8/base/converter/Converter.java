@@ -36,12 +36,12 @@ public interface Converter<T> {
      * @param idResolver The factory for looking up object ids. Nullable for some
      *                   converters.
      * @return The value. Nullable.
-     * @throws ParseException      if conversion failed. The error offset field is
-     *                             set to the position where parsing failed. The position of the buffer is
-     *                             undefined.
-     * @throws java.io.IOException Thrown by the CharBuffer.
+     * @throws ParseException if conversion failed. The error offset field is
+     *                        set to the position where parsing failed. The position of the buffer is
+     *                        undefined.
+     * @throws IOException    Thrown by the CharBuffer.
      */
-    default @Nullable T fromString(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    default @Nullable T fromString(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
         return fromString(CharBuffer.wrap(in), idResolver);
     }
 
@@ -60,13 +60,13 @@ public interface Converter<T> {
      * @param idResolver The factory for looking up object ids. Nullable for non-resolving
      *                   converters.
      * @return The value. Nullable.
-     * @throws ParseException      if conversion failed. The error offset field is
-     *                             set to the position where parsing failed. The position of the buffer is
-     *                             undefined.
-     * @throws java.io.IOException Thrown by the CharBuffer.
+     * @throws ParseException if conversion failed. The error offset field is
+     *                        set to the position where parsing failed. The position of the buffer is
+     *                        undefined.
+     * @throws IOException    Thrown by the CharBuffer.
      */
     @Nullable
-    T fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException;
+    T fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException;
 
     /**
      * Converts a value to a string and appends it to the provided
@@ -79,7 +79,7 @@ public interface Converter<T> {
      * @param idSupplier The factory for creating object ids. Nullable for non-resolving
      *                   converters.
      * @param value      The value. Nullable.
-     * @throws java.io.IOException thrown by Appendable
+     * @throws IOException thrown by Appendable
      */
     <TT extends T> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException;
 
@@ -96,12 +96,12 @@ public interface Converter<T> {
      *           beginning of the string when this method is invoked. After completion of
      *           this method, the position is set after the last consumed character.
      * @return The value. Nullable.
-     * @throws ParseException      if conversion failed. The error offset field is
-     *                             set to the position where parsing failed. The position of the buffer is
-     *                             undefined.
-     * @throws java.io.IOException Thrown by the CharBuffer.
+     * @throws ParseException if conversion failed. The error offset field is
+     *                        set to the position where parsing failed. The position of the buffer is
+     *                        undefined.
+     * @throws IOException    Thrown by the CharBuffer.
      */
-    default @Nullable T fromString(@NonNull CharBuffer in) throws ParseException, IOException {
+    default @Nullable T fromString(@NonNull CharBuffer in) throws ParseException {
         return fromString(in, null);
     }
 
@@ -121,7 +121,7 @@ public interface Converter<T> {
      * @throws ParseException on conversion failure
      * @throws IOException    on IO failure
      */
-    default @Nullable T fromString(@NonNull CharSequence in) throws ParseException, IOException {
+    default @Nullable T fromString(@NonNull CharSequence in) throws ParseException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
         if (buf.remaining() != 0) {
@@ -184,7 +184,7 @@ public interface Converter<T> {
      * @param <TT>  the value type
      * @param out   The appendable
      * @param value The value. Nullable.
-     * @throws java.io.IOException thrown by Appendable
+     * @throws IOException thrown by Appendable
      */
     default <TT extends T> void toString(@NonNull Appendable out, @Nullable TT value) throws IOException {
         toString(out, null, value);
@@ -206,6 +206,28 @@ public interface Converter<T> {
         StringBuilder out = new StringBuilder();
         try {
             toString(out, value);
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        return out.toString();
+    }
+
+    /**
+     * Converts a value to a String.
+     * <p>
+     * This method does not change the state of the converter.
+     * <p>
+     * Note: this is a convenience method. Implementing classes rarely need to
+     * overwrite this method.
+     *
+     * @param <TT>  the value type
+     * @param value The value. Nullable.
+     * @return The String.
+     */
+    default @NonNull <TT extends T> String toString(@Nullable IdSupplier idSupplier, @Nullable TT value) {
+        StringBuilder out = new StringBuilder();
+        try {
+            toString(out, idSupplier, value);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

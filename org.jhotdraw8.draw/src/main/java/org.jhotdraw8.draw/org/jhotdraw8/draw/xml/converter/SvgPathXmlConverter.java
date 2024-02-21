@@ -26,12 +26,9 @@ public class SvgPathXmlConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public @Nullable SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        CharBuffer out = CharBuffer.allocate(buf.remaining());
-        int count = buf.read(out);
-        out.position(0);
-        out.limit(count);
-        final String string = out.toString();
+    public @Nullable SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+        final String string = buf.toString();
+        buf.position(buf.length());
         if ("none".equals(string)) {
             return null;
         }

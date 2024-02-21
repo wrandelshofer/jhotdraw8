@@ -19,6 +19,7 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
@@ -29,6 +30,7 @@ import org.jhotdraw8.geom.biarc.BiArc;
 import org.jhotdraw8.geom.biarc.CubicCurveToBiArc;
 
 import java.awt.geom.CubicCurve2D;
+import java.awt.geom.Point2D;
 import java.util.List;
 
 /**
@@ -37,7 +39,7 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class BiArcApproExampleMain extends Application {
-    private final javafx.scene.shape.Polyline polyline = new javafx.scene.shape.Polyline(
+    private final Polyline polyline = new Polyline(
             110, 200,
             160, 180,
             210, 120,
@@ -194,7 +196,7 @@ public class BiArcApproExampleMain extends Application {
         for (double t : CubicCurveCharacteristics.inflectionPoints(
                 x, y, x1, y1, x2, y2, x3, y3)) {
             double r = 2;
-            java.awt.geom.Point2D p = CubicCurves.eval(x, y, x1, y1, x2, y2, x3, y3, t).getPoint(java.awt.geom.Point2D.Double::new);
+            Point2D p = CubicCurves.eval(x, y, x1, y1, x2, y2, x3, y3, t).getPoint(Point2D.Double::new);
 
             // Draw a circle around each inflection point
             inf1.add(new MoveTo(p.getX() - r, p.getY()));

@@ -27,7 +27,7 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
     }
 
     @Override
-    public @Nullable E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         if (in == null) {
             throw new ParseException("Illegal value=null", 0);
         }
