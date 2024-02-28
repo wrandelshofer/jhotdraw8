@@ -99,7 +99,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * a different list instance with the element removed
      */
     @Override
-    @NonNull ImmutableList<E> remove(@NonNull E element);
+    @NonNull ImmutableList<E> remove(E element);
 
     /**
      * Returns a copy of this list that contains all elements

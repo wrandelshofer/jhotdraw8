@@ -16,8 +16,8 @@ import org.jhotdraw8.icollection.ChampAddOnlySet;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
 import java.util.Queue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -57,10 +57,10 @@ import java.util.stream.StreamSupport;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class UniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
-    public UniqueOnDigArcPathSearchAlgo() {
+    public UniqueArcPathSearchAlgo() {
     }
 
     /**
@@ -151,7 +151,7 @@ public class UniqueOnDigArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
         AlgoArguments.checkMaxDepth(maxDepth);
 
         final Queue<ArcBackLinkWithAncestorSet<V, A>> queue = new ArrayDeque<>(16);
-        final Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
+        final SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
         queue.add(new ArcBackLinkWithAncestorSet<>(startVertex, null, null, ChampAddOnlySet.of(startVertex)));
 

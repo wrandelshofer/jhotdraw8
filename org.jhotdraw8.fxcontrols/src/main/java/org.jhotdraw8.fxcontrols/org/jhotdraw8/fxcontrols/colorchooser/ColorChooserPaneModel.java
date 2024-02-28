@@ -43,6 +43,7 @@ import org.jhotdraw8.color.SrgbColorSpace;
 import java.awt.color.ColorSpace;
 import java.util.AbstractMap;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 

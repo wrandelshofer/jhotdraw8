@@ -84,13 +84,13 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
 
     @NonNull
     @Override
-    public Object[] toArray() {
+    public Object @NonNull [] toArray() {
         return new Object[0];
     }
 
     @NonNull
     @Override
-    public <T> T[] toArray(@NonNull T[] a) {
+    public <T> T @NonNull [] toArray(@NonNull T @NonNull [] a) {
         return null;
     }
 

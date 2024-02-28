@@ -6,9 +6,13 @@ import org.openjdk.jol.vm.VM;
 
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
 import java.util.Set;
 
 public class AbstractJol {
@@ -16,7 +20,7 @@ public class AbstractJol {
 
   protected static Map<Key, Key> generateMap(int size, int mask) {
     Random rng = new Random(0);
-    Map<Key, Key> map = new LinkedHashMap<>();
+      SequencedMap<Key, Key> map = new LinkedHashMap<>();
     Set<Integer> preventDuplicates = new HashSet<>();
     for (int i = 0; i < size; i++) {
       map.put(createKey(rng, preventDuplicates, mask), createKey(rng, preventDuplicates, mask));
@@ -26,7 +30,7 @@ public class AbstractJol {
 
   protected static Set<Key> generateSet(int size, int mask) {
     Random rng = new Random(0);
-    Set<Key> set = new LinkedHashSet<>();
+      SequencedSet<Key> set = new LinkedHashSet<>();
     Set<Integer> preventDuplicates = new HashSet<>();
     for (int i = 0; i < size; i++) {
       set.add(createKey(rng, preventDuplicates, mask));

@@ -13,6 +13,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -108,7 +109,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         assertEquals(0, g.getNextCount(v[3]));
         assertEquals(1, g.getNextCount(v[4]));
 
-        Set<V> actualVertices = new LinkedHashSet<>(g.getNextVertices(v[0]));
+        SequencedSet<V> actualVertices = new LinkedHashSet<>(g.getNextVertices(v[0]));
         assertEquals(Set.of(v[1], v[3]), actualVertices);
         assertEquals(v[1], g.getNext(v[1], 0));
         assertEquals(v[2], g.getNext(v[1], 1));

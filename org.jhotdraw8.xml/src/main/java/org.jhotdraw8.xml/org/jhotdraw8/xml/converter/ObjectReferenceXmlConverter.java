@@ -6,9 +6,9 @@ package org.jhotdraw8.xml.converter;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.base.converter.ResolvingConverter;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -16,16 +16,16 @@ import java.text.ParseException;
 import java.util.logging.Logger;
 
 /**
- * XmlObjectReferenceConverter.
+ * ObjectReferenceV2XmlConverter.
  * <p>
  * Converts references to figures.
  *
  * @param <T> the type
  * @author Werner Randelshofer
  */
-public class ObjectReferenceXmlConverter<T> implements ResolvingConverter<T> {
+public class ObjectReferenceXmlConverter<T> implements Converter<T> {
 
-    private static final Logger LOGGER = Logger.getLogger(ObjectReferenceXmlConverter.class.getName());
+    private static final @NonNull Logger LOGGER = Logger.getLogger(ObjectReferenceXmlConverter.class.getName());
     private final @NonNull Class<T> clazz;
 
     /**
@@ -61,12 +61,11 @@ public class ObjectReferenceXmlConverter<T> implements ResolvingConverter<T> {
             return null;
         }
         Object obj = idResolver.getObject(str);
-        if (obj == null) {
-            LOGGER.warning("Could not find an object with this id. id=\"" + str + "\".");
-        }
-
         @SuppressWarnings("unchecked")
         T value = clazz.isInstance(obj) ? (T) obj : null;
+        if (value == null) {
+            LOGGER.warning("Could not find an object with id=\"" + str + "\".");
+        }
         return value;
     }
 

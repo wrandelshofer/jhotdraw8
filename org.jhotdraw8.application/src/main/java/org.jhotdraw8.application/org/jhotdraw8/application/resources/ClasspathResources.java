@@ -12,10 +12,12 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -190,7 +192,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
 
     @Override
     public @NonNull Enumeration<String> getKeys() {
-        Set<String> keys = new LinkedHashSet<>();
+        SequencedSet<String> keys = new LinkedHashSet<>();
 
         for (Enumeration<String> i = resource.getKeys(); i.hasMoreElements(); ) {
             keys.add(i.nextElement());

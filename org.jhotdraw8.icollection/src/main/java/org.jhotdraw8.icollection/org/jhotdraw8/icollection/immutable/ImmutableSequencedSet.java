@@ -37,7 +37,7 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
     @NonNull ImmutableSequencedSet<E> addLast(final @Nullable E element);
 
     @Override
-    @NonNull ImmutableSequencedSet<E> empty();
+    <T> @NonNull ImmutableSequencedSet<T> empty();
 
     @Override
     @NonNull ImmutableSequencedSet<E> remove(E element);
@@ -91,6 +91,6 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      */
     default @NonNull ImmutableSequencedSet<E> reverse() {
         if (size() < 2) return this;
-        return this.empty().addAll(readOnlyReversed());
+        return this.<E>empty().addAll(readOnlyReversed());
     }
 }

@@ -81,7 +81,7 @@ public class BezierNodeEditHandle extends AbstractHandle {
     private final @NonNull MapAccessor<BezierPath> pathKey;
 
 
-    public BezierNodeEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, @NonNull int nodeIndex) {
+    public BezierNodeEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int nodeIndex) {
         super(figure);
         this.pathKey = pathKey;
         this.nodeIndex = nodeIndex;

@@ -10,6 +10,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
 import java.util.Set;
 
 /**
@@ -25,7 +27,7 @@ public class AbstractJol {
 
     protected static Map<Key, Value> generateMap(int size, int mask, long bound) {
         Random rng = new Random(0);
-        Map<Key, Value> map = new LinkedHashMap<>();
+        SequencedMap<Key, Value> map = new LinkedHashMap<>();
         Set<Integer> preventDuplicates = new HashSet<>();
         for (int i = 0; i < size; i++) {
             map.put(createKey(rng, preventDuplicates, mask, bound),
@@ -36,7 +38,7 @@ public class AbstractJol {
 
     protected static Set<Key> generateSet(int size, int mask) {
         Random rng = new Random(0);
-        Set<Key> set = new LinkedHashSet<>();
+        SequencedSet<Key> set = new LinkedHashSet<>();
         Set<Integer> preventDuplicates = new HashSet<>();
         for (int i = 0; i < size; i++) {
             set.add(createKey(rng, preventDuplicates, mask, Integer.MAX_VALUE));

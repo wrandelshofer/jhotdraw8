@@ -13,7 +13,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
+import java.util.SequencedMap;
 
 /**
  * UriUtil.
@@ -151,7 +153,7 @@ public class UriUtil {
      */
     public static @NonNull Map<String, String> parseQuery(@NonNull URI uri) {
         String query = uri.getQuery();
-        Map<String, String> map = new LinkedHashMap<>();
+        SequencedMap<String, String> map = new LinkedHashMap<>();
         if (query != null) {
             for (String pair : query.split("&")) {
                 int p = pair.indexOf('=');

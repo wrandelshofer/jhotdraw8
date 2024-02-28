@@ -73,10 +73,12 @@ import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.SequencedMap;
 import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -387,7 +389,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(activity.getNode());
         if (!isSystemMenuSupported) {
-            Map<String, Action> allActions = new LinkedHashMap<>(getActions());
+            SequencedMap<String, Action> allActions = new LinkedHashMap<>(getActions());
             MenuBar mb = createMenuBar(activity, stage, allActions);
             if (mb != null) {
                 mb.setUseSystemMenuBar(true);

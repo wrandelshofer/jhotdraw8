@@ -1,6 +1,16 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import scala.Tuple2;
 import scala.collection.immutable.TreeSeqMap;
 import scala.collection.mutable.Builder;
@@ -32,6 +42,7 @@ import java.util.concurrent.TimeUnit;
  * ScalaTreeSeqMapJmh.mRemoveOneByOne     -65  1000000  avgt    2  1971_439819.167          ns/op
  * </pre>
  */
+@SuppressWarnings("unchecked")
 @State(Scope.Benchmark)
 @Measurement(iterations = 0)
 @Warmup(iterations = 0)

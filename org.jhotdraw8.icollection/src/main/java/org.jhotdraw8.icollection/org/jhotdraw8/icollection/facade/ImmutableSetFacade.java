@@ -15,6 +15,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.function.Function;
@@ -33,14 +34,12 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
         this.cloneFunction = cloneFunction;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableSet<E> empty() {
-        if (isEmpty()) {
-            return this;
-        }
-        Set<E> clone = cloneFunction.apply(target);
-        clone.clear();
-        return new ImmutableSetFacade<>(clone, cloneFunction);
+    public <T> @NonNull ImmutableSet<T> empty() {
+        return new ImmutableSetFacade<>(new LinkedHashSet<>(), k -> {
+            return (Set<T>) ((LinkedHashSet<?>) k).clone();
+        });
     }
 
     @Override

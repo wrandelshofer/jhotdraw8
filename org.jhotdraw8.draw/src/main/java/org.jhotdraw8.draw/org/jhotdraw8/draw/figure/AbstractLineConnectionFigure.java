@@ -20,6 +20,8 @@ import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
+import java.util.SequencedSet;
 import java.util.Set;
 
 /**
@@ -138,7 +140,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         if (startTarget == null && endTarget == null) {
             return ChampSet.of();
         }
-        Set<Figure> ctf = new LinkedHashSet<>();
+        SequencedSet<Figure> ctf = new LinkedHashSet<>();
         if (startTarget != null) {
             ctf.add(startTarget);
         }

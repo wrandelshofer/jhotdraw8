@@ -319,8 +319,8 @@ public class ChampVectorSet<E>
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ChampVectorSet<E> empty() {
-        return isEmpty() ? this : of();
+    public <T> @NonNull ChampVectorSet<T> empty() {
+        return of();
     }
 
     @Override

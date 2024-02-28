@@ -86,7 +86,7 @@ public final class Empty<K, V> implements RedBlackTree<K, V> {
     }
 
     @Override
-    public RedBlackTree<K, V> right() {
+    public @NonNull RedBlackTree<K, V> right() {
         throw new UnsupportedOperationException("right on empty");
     }
 

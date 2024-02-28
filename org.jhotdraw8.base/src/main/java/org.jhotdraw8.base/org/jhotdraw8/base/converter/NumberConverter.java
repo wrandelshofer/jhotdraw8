@@ -103,7 +103,7 @@ public class NumberConverter implements Converter<Number> {
                 new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
     }
 
-    public NumberConverter(@NonNull Class<? extends Number> valueClass, Number min, Number max, double multiplier, boolean allowsNullValue, @Nullable String unit,
+    public NumberConverter(@NonNull Class<? extends Number> valueClass, @NonNull Number min, @NonNull Number max, double multiplier, boolean allowsNullValue, @Nullable String unit,
                            @NonNull DecimalFormat decimalFormat,
                            @NonNull DecimalFormat scientificFormat
     ) {

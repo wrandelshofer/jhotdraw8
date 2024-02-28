@@ -14,9 +14,12 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -193,7 +196,7 @@ public class SharedKeysMapTest {
     @Test
     public void testValuesIterator() {
         // GIVEN
-        Map<String, Integer> keyMap = new LinkedHashMap<>();
+        SequencedMap<String, Integer> keyMap = new LinkedHashMap<>();
         keyMap.put("one", 0);
         keyMap.put("two", 1);
         keyMap.put("three", 2);
@@ -235,7 +238,7 @@ public class SharedKeysMapTest {
     @Test
     public void testKeysIterator() {
         // GIVEN
-        Map<String, Integer> keyMap = new LinkedHashMap<>();
+        SequencedMap<String, Integer> keyMap = new LinkedHashMap<>();
         keyMap.put("one", 0);
         keyMap.put("two", 1);
         keyMap.put("three", 2);

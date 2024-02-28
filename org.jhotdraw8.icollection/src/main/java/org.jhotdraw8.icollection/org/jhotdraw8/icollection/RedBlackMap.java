@@ -276,6 +276,7 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
         return root.size();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public @Nullable V get(Object key) {
         return root.find((K) key, comparator).valueOrNull();

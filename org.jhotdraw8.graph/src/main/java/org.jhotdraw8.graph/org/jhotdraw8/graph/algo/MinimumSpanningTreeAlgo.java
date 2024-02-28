@@ -19,8 +19,10 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -31,7 +33,7 @@ public class MinimumSpanningTreeAlgo {
 
     public static @NonNull <VV> Map<VV, List<VV>> createForest(@NonNull Collection<VV> vertices) {
         // Create initial forest.
-        Map<VV, List<VV>> forest = new LinkedHashMap<>(vertices.size());
+        SequencedMap<VV, List<VV>> forest = new LinkedHashMap<>(vertices.size());
         for (VV v : vertices) {
             List<VV> initialSet = new ArrayList<>(1);
             initialSet.add(v);

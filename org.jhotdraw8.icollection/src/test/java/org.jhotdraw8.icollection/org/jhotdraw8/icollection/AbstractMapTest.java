@@ -20,6 +20,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.Spliterator;
@@ -152,7 +154,7 @@ public abstract class AbstractMapTest {
     @MethodSource("dataProvider")
     public void entryIteratorEntrySetValueShouldUpdateMap(@NonNull MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> entry : instance.entrySet()) {
             entry.setValue(data.aWithDifferentValues().get(entry.getKey()));
             assertNotEqualMap(instance, expected);
@@ -165,7 +167,7 @@ public abstract class AbstractMapTest {
     @MethodSource("dataProvider")
     public void entryIteratorRemoveShouldRemoveEntryAndRemoveIsNotIdempotent(@NonNull MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         List<Map.Entry<Key, Value>> toRemove = new ArrayList<>(new HashSet<>(data.a().readOnlyEntrySet().asSet()));
         for (int countdown = toRemove.size(); countdown > 0; countdown--) {
             for (Iterator<Map.Entry<Key, Value>> i = instance.entrySet().iterator(); i.hasNext(); ) {
@@ -263,7 +265,7 @@ public abstract class AbstractMapTest {
     @MethodSource("dataProvider")
     public void entrySetRemoveShouldNotRemoveEntryWithDifferentKeyAndDifferentValue(@NonNull MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.c().readOnlyEntrySet()) {
             assertFalse(instance.entrySet().remove(e));
             assertEqualMap(expected, instance);
@@ -274,7 +276,7 @@ public abstract class AbstractMapTest {
     @MethodSource("dataProvider")
     public void entrySetRemoveShouldNotRemoveEntryWithSameKeyButDifferentValue(@NonNull MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.aWithDifferentValues().readOnlyEntrySet()) {
             assertFalse(instance.entrySet().remove(e));
             assertEqualMap(expected, instance);
@@ -285,7 +287,7 @@ public abstract class AbstractMapTest {
     @MethodSource("dataProvider")
     public void entrySetRemoveShouldRemoveEntryWithSameKeyAndValue(@NonNull MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
 
         for (Map.Entry<Key, Value> e : data.a().readOnlyEntrySet()) {
             assertTrue(instance.entrySet().remove(e));
@@ -376,7 +378,7 @@ public abstract class AbstractMapTest {
     @MethodSource("dataProvider")
     public void keyIteratorRemoveShouldRemoveEntry(@NonNull MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().readOnlyKeySet().asSet()));
         while (!toRemove.isEmpty() && !expected.isEmpty()) {
             for (Iterator<Key> i = instance.keySet().iterator(); i.hasNext(); ) {
@@ -562,7 +564,7 @@ public abstract class AbstractMapTest {
     public void putAllWithContainedKeysButNewValuesShouldChangeMap(@NonNull MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.putAll(data.aWithDifferentValues().asMap());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         expected.putAll(data.aWithDifferentValues().asMap());
         assertEqualMap(expected, instance);
     }
@@ -572,7 +574,7 @@ public abstract class AbstractMapTest {
     public void putAllWithNewEntriesShouldChangeMap(@NonNull MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.putAll(data.c().asMap());
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         expected.putAll(data.c().asMap());
         assertEqualMap(expected, instance);
     }
@@ -591,7 +593,7 @@ public abstract class AbstractMapTest {
     public void putAllWithSomeNewKeyShouldAddAll(@NonNull MapData data) throws Exception {
         ArrayList<Map.Entry<Key, Value>> listB = new ArrayList<>(data.aWithDifferentValues.readOnlyEntrySet().asSet());
         ArrayList<Map.Entry<Key, Value>> listC = new ArrayList<>(data.c.readOnlyEntrySet().asSet());
-        Map<Key, Value> m = new LinkedHashMap<>(data.a.asMap());
+        SequencedMap<Key, Value> m = new LinkedHashMap<>(data.a.asMap());
         for (Map.Entry<Key, Value> entry : listB.subList(0, listB.size() / 2)) {
             m.put(entry.getKey(), entry.getValue());
         }
@@ -688,7 +690,7 @@ public abstract class AbstractMapTest {
         assertEquals('{', str.charAt(0));
         assertEquals('}', str.charAt(str.length() - 1));
         LinkedHashSet<String> actual = new LinkedHashSet<>(Arrays.asList(str.substring(1, str.length() - 1).split(", ")));
-        Set<String> expected = new LinkedHashSet<>();
+        SequencedSet<String> expected = new LinkedHashSet<>();
         data.a.iterator().forEachRemaining(e -> expected.add(e.toString()));
         assertEquals(expected, actual);
     }

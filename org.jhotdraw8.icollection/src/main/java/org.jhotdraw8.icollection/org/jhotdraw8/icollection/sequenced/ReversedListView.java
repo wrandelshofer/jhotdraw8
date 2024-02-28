@@ -4,7 +4,12 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.impl.iteration.ReverseListSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.ReverseMutableListIterator;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Spliterator;
 import java.util.function.IntSupplier;
 
 public class ReversedListView<E> extends AbstractList<E> implements List<E> {
@@ -37,17 +42,17 @@ public class ReversedListView<E> extends AbstractList<E> implements List<E> {
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return listIterator();
     }
 
     @Override
-    public ListIterator<E> listIterator() {
+    public @NonNull ListIterator<E> listIterator() {
         return listIterator(0);
     }
 
     @Override
-    public ListIterator<E> listIterator(int index) {
+    public @NonNull ListIterator<E> listIterator(int index) {
         return new ReverseMutableListIterator<>(src, index, modCount);
     }
 

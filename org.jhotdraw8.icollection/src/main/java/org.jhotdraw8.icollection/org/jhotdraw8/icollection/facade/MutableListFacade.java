@@ -65,6 +65,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
         ImmutableList<E> oldList = backingList;

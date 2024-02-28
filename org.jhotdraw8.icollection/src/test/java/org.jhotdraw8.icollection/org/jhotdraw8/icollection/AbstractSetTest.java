@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.Spliterator;
@@ -210,7 +211,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void addWithContainedElementShouldReturnFalse(@NonNull SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
-        Set<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.a) {
             assertFalse(instance.add(e));
             assertEqualSet(expected, instance);
@@ -221,7 +222,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void addWithNewElementShouldReturnTrue(@NonNull SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
-        Set<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.c) {
             assertTrue(instance.add(e));
             expected.add(e);
@@ -350,7 +351,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void iteratorRemoveShouldRemoveElement(@NonNull SetData data) {
         Set<Key> actual = newInstance(data.a());
-        Set<Key> expected = new LinkedHashSet<>(data.a().asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
         while (!toRemove.isEmpty() && !expected.isEmpty()) {
             for (Iterator<Key> i = actual.iterator(); i.hasNext(); ) {
@@ -380,7 +381,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void iteratorShouldYieldElements(@NonNull SetData data) {
         Set<Key> instance = newInstance(data.a());
-        Set<Key> expected = new LinkedHashSet<>(data.a().asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = new ArrayList<>();
         instance.iterator().forEachRemaining(actualList::add);
         assertEquals(expected.size(), actualList.size());
@@ -392,7 +393,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void toArrayShouldYieldElements(@NonNull SetData data) {
         Set<Key> instance = newInstance(data.a());
-        Set<Key> expected = new LinkedHashSet<>(data.a().asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = (List<Key>) (List<?>) Arrays.asList(instance.toArray());
         assertEquals(expected.size(), actualList.size());
         assertEquals(expected, newInstance(actualList));
@@ -403,7 +404,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void toArrayWithTemplateArgShouldYieldElements(@NonNull SetData data) {
         Set<Key> instance = newInstance(data.a());
-        Set<Key> expected = new LinkedHashSet<>(data.a().asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = Arrays.asList(instance.toArray(new Key[0]));
         assertEquals(expected.size(), actualList.size());
         assertEquals(expected, newInstance(actualList));
@@ -543,7 +544,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void spliteratorShouldYieldElements(@NonNull SetData data) {
         Set<Key> instance = newInstance(data.a());
-        Set<Key> expected = new LinkedHashSet<>(data.a().asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = new ArrayList<>();
         instance.spliterator().forEachRemaining(actualList::add);
         assertEquals(expected.size(), actualList.size());
@@ -565,7 +566,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void streamShouldYieldElements(@NonNull SetData data) {
         Set<Key> instance = newInstance(data.a());
-        Set<Key> expected = new LinkedHashSet<>(data.a().asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = instance.stream().collect(Collectors.toList());
         assertEquals(expected.size(), actualList.size());
         assertEquals(expected, newInstance(actualList));
@@ -598,7 +599,7 @@ public abstract class AbstractSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithSomeContainedElementsShouldReturnTrue(@NonNull SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
-        Set<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         assertTrue(instance.retainAll(data.someAPlusSomeB.asSet()));
         assertTrue(expected.retainAll(data.someAPlusSomeB.asSet()));
         assertEquals(expected, instance);
@@ -690,7 +691,7 @@ public abstract class AbstractSetTest {
         assertEquals('[', str.charAt(0));
         assertEquals(']', str.charAt(str.length() - 1));
         LinkedHashSet<String> actual = new LinkedHashSet<>(Arrays.asList(str.substring(1, str.length() - 1).split(", ")));
-        Set<String> expected = new LinkedHashSet<>();
+        SequencedSet<String> expected = new LinkedHashSet<>();
         data.a.iterator().forEachRemaining(e -> expected.add(e.toString()));
         assertEquals(expected, actual);
     }

@@ -33,8 +33,10 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.SequencedSet;
 import java.util.Set;
 
 /**
@@ -131,7 +133,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new Translate3DCssConverter(false));
 
     static @NonNull Set<Key<?>> getDeclaredKeys() {
-        Set<Key<?>> keys = new LinkedHashSet<>();
+        SequencedSet<Key<?>> keys = new LinkedHashSet<>();
         Figure.getDeclaredKeys(TransformableFigure.class, keys);
         return keys;
     }

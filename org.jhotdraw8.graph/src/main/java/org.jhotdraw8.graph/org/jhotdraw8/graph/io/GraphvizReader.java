@@ -20,8 +20,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -251,7 +253,7 @@ public class GraphvizReader<V, A> {
     }
 
     private @NonNull Map<String, String> parseAttrList(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g) throws IOException {
-        Map<String, String> attrList = new LinkedHashMap<>();
+        SequencedMap<String, String> attrList = new LinkedHashMap<>();
         if (tt.nextToken() != '[') {
             throwException(tt, "attr_list: expected `[`");
         }

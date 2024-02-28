@@ -53,7 +53,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    protected void updateLineNode(RenderContext ctx, @NonNull Line node) {
+    protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Line node) {
         super.updateLineNode(ctx, node);
         applyStrokableFigureProperties(ctx, node);
     }

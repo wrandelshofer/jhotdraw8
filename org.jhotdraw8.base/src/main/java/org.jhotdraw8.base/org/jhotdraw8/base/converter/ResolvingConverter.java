@@ -12,6 +12,8 @@ package org.jhotdraw8.base.converter;
  * @param <T> the type of the values that can be converted
  */
 public interface ResolvingConverter<T> extends Converter<T> {
-
-
+    @Override
+    default boolean needsIdResolver() {
+        return true;
+    }
 }

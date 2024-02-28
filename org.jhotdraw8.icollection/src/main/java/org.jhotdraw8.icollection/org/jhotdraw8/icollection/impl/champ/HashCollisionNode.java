@@ -217,7 +217,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull Node<D> putAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull Node<D> putAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.inBoth += dataArity();
             return this;
@@ -306,7 +306,7 @@ class HashCollisionNode<D> extends Node<D> {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected @NonNull Node<D> retainAll(IdentityObject owner, Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
+    protected @NonNull Node<D> retainAll(IdentityObject owner, @NonNull Node<D> otherNode, int shift, @NonNull BulkChangeEvent bulkChange, @NonNull BiFunction<D, D, D> updateFunction, @NonNull BiPredicate<D, D> equalsFunction, @NonNull ToIntFunction<D> hashFunction, @NonNull ChangeEvent<D> details) {
         if (otherNode == this) {
             bulkChange.removed += dataArity();
             return (Node<D>) EMPTY;

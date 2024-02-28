@@ -136,8 +136,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     public IntersectionResult pathIntersection(double x, double y, double tolerance) {
-        IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
-        return isect;
+        return IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
     }
 
     public BezierPath split(double x, double y, double tolerance) {
@@ -274,7 +273,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
      * Reverses the direction of the path.
      */
     @Override
-    public BezierPath reverse() {
+    public @NonNull BezierPath reverse() {
         return AwtShapes.buildFromPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
         /*
         int size = size();
@@ -326,7 +325,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    protected VectorList<BezierNode> newInstance(@NonNull PrivateData privateData) {
+    protected @NonNull VectorList<BezierNode> newInstance(@NonNull PrivateData privateData) {
         return new BezierPath(privateData, windingRule);
     }
 
@@ -362,7 +361,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
 
 
     @Override
-    public @NonNull BezierPath remove(@NonNull BezierNode element) {
+    public @NonNull BezierPath remove(BezierNode element) {
         return (BezierPath) super.remove(element);
     }
 

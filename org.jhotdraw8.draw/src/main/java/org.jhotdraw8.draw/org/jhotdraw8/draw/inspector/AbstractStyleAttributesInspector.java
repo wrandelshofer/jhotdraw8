@@ -85,10 +85,14 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -387,7 +391,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     private @NonNull ObservableMap<String, Set<E>> createPseudoStyles() {
         ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
-        Set<E> fs = new LinkedHashSet<>(selection.get());
+        SequencedSet<E> fs = new LinkedHashSet<>(selection.get());
         // handling of emptyness must be consistent with code in
         // handleSelectionChanged() method
         if (fs.isEmpty()) {
@@ -671,7 +675,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
 
             ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
-            Set<E> fs = new LinkedHashSet<>(getSelection());
+            SequencedSet<E> fs = new LinkedHashSet<>(getSelection());
             pseudoStyles.put("selected", fs);
 
             List<E> matchedFigures = new ArrayList<>();
@@ -717,7 +721,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
-            Set<E> selectedF = new LinkedHashSet<>();
+            SequencedSet<E> selectedF = new LinkedHashSet<>();
             WritableStyleableMapAccessor<?> selectedAccessor = null;
             boolean multipleAccessorTypes = false;
             for (E f : getEntities()) {
@@ -820,7 +824,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     private void updateStylesheetInfo(CssPrettyPrinter pp, List<E> matchedFigures, StylesheetsManager<E> styleManager) {
         final List<StylesheetsManager.StylesheetInfo> stylesheets = styleManager.getStylesheets();
-        Map<StylesheetsManager.StylesheetInfo, Set<StyleRule>> matchedInfos = new LinkedHashMap<>();
+        SequencedMap<StylesheetsManager.StylesheetInfo, Set<StyleRule>> matchedInfos = new LinkedHashMap<>();
 
         final ArrayList<StylesheetsManager.StylesheetInfo> stylesheetInfos = new ArrayList<>();
         for (StylesheetsManager.StylesheetInfo stylesheet : stylesheets) {
@@ -882,14 +886,14 @@ public abstract class AbstractStyleAttributesInspector<E> {
         final boolean decompose = !composeAttributesCheckBox.isSelected();
 
         // handling of emptyness must be consistent with code in apply() method
-        Set<E> selectedOrRoot = new LinkedHashSet<>(getSelection());
+        SequencedSet<E> selectedOrRoot = new LinkedHashSet<>(getSelection());
         if (selectedOrRoot.isEmpty()) {
             selectedOrRoot.add(getRoot());
         }
 
         StylesheetsManager<E> styleManager = getStyleManager();
         ObservableMap<String, Set<E>> pseudoStyles = FXCollections.observableHashMap();
-        Set<E> fs = new LinkedHashSet<>(selectedOrRoot);
+        SequencedSet<E> fs = new LinkedHashSet<>(selectedOrRoot);
         pseudoStyles.put("selected", fs);
         StylesheetsManager<E> sm = getStyleManager();
         if (sm == null) {

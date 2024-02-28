@@ -17,6 +17,7 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 
 import java.net.URI;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -29,7 +30,7 @@ import java.util.function.Supplier;
 public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
-    private final Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialogFactory;
+    private final Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialogFactory;
     public static final @NonNull Key<URIChooser> EXPORT_CHOOSER_KEY = new NullableObjectKey<>("exportChooser", URIChooser.class);
     public static final @NonNull Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("exportChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
@@ -43,7 +44,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         this(activity, ID, null);
     }
 
-    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
         this(activity, ID, optionsDialog);
     }
 
@@ -55,7 +56,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param id            the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<Map<Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
         super(activity, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
@@ -72,7 +73,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
     }
 
     @Override
-    protected @Nullable Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
+    protected @Nullable Dialog<SequencedMap<Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return optionsDialogFactory == null ? null : optionsDialogFactory.apply(format);
     }
 

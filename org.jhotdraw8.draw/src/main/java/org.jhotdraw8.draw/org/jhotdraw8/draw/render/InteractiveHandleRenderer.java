@@ -41,10 +41,13 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SequencedMap;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -65,12 +68,12 @@ public class InteractiveHandleRenderer {
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
-    private final @NonNull Map<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
+    private final @NonNull SequencedMap<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
     private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final @NonNull Map<Figure, List<Handle>> handles = new LinkedHashMap<>();
+    private final @NonNull SequencedMap<Figure, List<Handle>> handles = new LinkedHashMap<>();
     private final @NonNull ObservableSet<Handle> handlesView = FXCollections.observableSet(new LinkedHashSet<>());
 
     /**

@@ -43,7 +43,7 @@ public class SimpleParameterizedType implements ParameterizedType {
     }
 
     @Override
-    public Type getRawType() {
+    public @NonNull Type getRawType() {
         return rawType;
     }
 

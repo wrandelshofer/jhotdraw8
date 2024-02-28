@@ -19,7 +19,9 @@ import org.jhotdraw8.draw.css.value.CssDimension2D;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.function.Consumer;
 
 /**
@@ -34,7 +36,7 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
     private static final @NonNull Map<CssDimension2D, String> sizePapers;
 
     static {
-        Map<String, CssDimension2D> m = new LinkedHashMap<>();
+        SequencedMap<String, CssDimension2D> m = new LinkedHashMap<>();
         m.put("A0", new CssDimension2D(CssSize.of(841, "mm"), CssSize.of(1189, "mm")));
         m.put("A1", new CssDimension2D(CssSize.of(594, "mm"), CssSize.of(841, "mm")));
         m.put("A2", new CssDimension2D(CssSize.of(420, "mm"), CssSize.of(594, "mm")));
@@ -57,7 +59,7 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
         m.put("JapanesePostcard", new CssDimension2D(CssSize.of(100, "mm"), CssSize.of(148, "mm")));
         paperSizes = m;
 
-        Map<CssDimension2D, String> x = new LinkedHashMap<>();
+        SequencedMap<CssDimension2D, String> x = new LinkedHashMap<>();
         for (Map.Entry<String, CssDimension2D> e : m.entrySet()) {
             final CssDimension2D v = e.getValue();
             x.put(v, e.getKey() + " portrait");

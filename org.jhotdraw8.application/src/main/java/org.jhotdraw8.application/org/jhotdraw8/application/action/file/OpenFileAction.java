@@ -10,6 +10,7 @@ import org.jhotdraw8.application.FileBasedApplication;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
 
 /**

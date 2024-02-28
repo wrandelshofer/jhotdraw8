@@ -35,9 +35,11 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SequencedMap;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -324,7 +326,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private @NonNull Map<String, ImmutableList<CssToken>> computeCustomProperties() {
-        Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
+        SequencedMap<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         customProperties.putAll(getUserAgentCustomProperties());
         customProperties.putAll(getAuthorCustomProperties());
         customProperties.putAll(getInlineCustomProperties());
@@ -515,7 +517,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private @NonNull Map<String, ImmutableList<CssToken>> collectCustomProperties(@NonNull Collection<StylesheetEntry> stylesheets) {
-        Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
+        SequencedMap<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         for (StylesheetEntry s : stylesheets) {
             Stylesheet stylesheet = s.getStylesheet();
             if (stylesheet != null) {
@@ -526,7 +528,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private @NonNull Map<String, ImmutableList<CssToken>> collectCustomProperties(@NonNull Stylesheet s) {
-        Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
+        SequencedMap<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         collectCustomProperties(s, customProperties);
         return customProperties;
     }

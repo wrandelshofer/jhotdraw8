@@ -35,7 +35,7 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
      *
      * @return a FontChooserModel.
      */
-    public List<FontCollection> create() {
+    public @NonNull List<FontCollection> create() {
         return generateCollections(loadFonts());
     }
 

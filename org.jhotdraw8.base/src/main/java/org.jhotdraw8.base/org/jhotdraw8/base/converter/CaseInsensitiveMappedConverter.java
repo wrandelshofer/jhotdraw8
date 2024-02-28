@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
 
 public class CaseInsensitiveMappedConverter<E> implements Converter<E> {

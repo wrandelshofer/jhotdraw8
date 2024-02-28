@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.stream.Stream;
@@ -202,7 +203,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void iteratorRemoveShouldThrowUnsupportedOperationException(@NonNull SetData data) {
         ImmutableSet<Key> instance = newInstance(data.a());
-        Set<Key> expected = new LinkedHashSet<>(data.a().asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
         outer:
         while (!toRemove.isEmpty() && !expected.isEmpty()) {
@@ -299,7 +300,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void addWithNewElementShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
-        Set<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.c) {
             ImmutableSet<Key> instance2 = instance.add(e);
             assertNotSame(instance, instance2);
@@ -313,7 +314,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void addWithContainedElementShouldReturnSameInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
-        Set<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.a) {
             ImmutableSet<Key> instance2 = instance.add(e);
             assertSame(instance, instance2);
@@ -548,7 +549,7 @@ public abstract class AbstractImmutableSetTest {
         assertEquals('[', str.charAt(0));
         assertEquals(']', str.charAt(str.length() - 1));
         LinkedHashSet<String> actual = new LinkedHashSet<>(Arrays.asList(str.substring(1, str.length() - 1).split(", ")));
-        Set<String> expected = new LinkedHashSet<>();
+        SequencedSet<String> expected = new LinkedHashSet<>();
         data.a.iterator().forEachRemaining(e -> expected.add(e.toString()));
         assertEquals(expected, actual);
     }
@@ -577,7 +578,7 @@ public abstract class AbstractImmutableSetTest {
     @MethodSource("dataProvider")
     public void retainAllWithSomeContainedElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
-        Set<Key> expected = new LinkedHashSet<>(data.a.asSet());
+        SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         ImmutableSet<Key> actual = instance.retainAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, actual);
         assertEqualSet(expected, instance);

@@ -22,7 +22,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
@@ -381,7 +382,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<Key, Value> instance = newInstance(data.a());
         ImmutableMap<Key, Value> instance2 = instance.putAll(data.c().asMap());
         assertNotSame(instance, instance2);
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         assertEqualMap(expected, instance);
         expected.putAll(data.c().asMap());
         assertEqualMap(expected, instance2);
@@ -393,7 +394,7 @@ public abstract class AbstractImmutableMapTest {
         ImmutableMap<Key, Value> instance = newInstance(data.a());
         ImmutableMap<Key, Value> instance2 = instance.putAll(data.b().asMap());
         assertNotSame(instance, instance2);
-        Map<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
+        SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         assertEqualMap(expected, instance);
         expected.putAll(data.b().asMap());
         assertEqualMap(expected, instance2);
@@ -440,7 +441,7 @@ public abstract class AbstractImmutableMapTest {
     public void copyPutAllWithSomeNewKeyShouldReturnNewInstance(MapData data) throws Exception {
         ArrayList<Map.Entry<Key, Value>> listB = new ArrayList<>(data.b.readOnlyEntrySet().asSet());
         ArrayList<Map.Entry<Key, Value>> listC = new ArrayList<>(data.c.readOnlyEntrySet().asSet());
-        Map<Key, Value> m = new LinkedHashMap<>(data.a.asMap());
+        SequencedMap<Key, Value> m = new LinkedHashMap<>(data.a.asMap());
         for (Map.Entry<Key, Value> entry : listB.subList(0, listB.size() / 2)) {
             m.put(entry.getKey(), entry.getValue());
         }
@@ -476,7 +477,7 @@ public abstract class AbstractImmutableMapTest {
         assertEquals('{', str.charAt(0));
         assertEquals('}', str.charAt(str.length() - 1));
         LinkedHashSet<String> actual = new LinkedHashSet<>(Arrays.asList(str.substring(1, str.length() - 1).split(", ")));
-        Set<String> expected = new LinkedHashSet<>();
+        SequencedSet<String> expected = new LinkedHashSet<>();
         data.a.iterator().forEachRemaining(e -> expected.add(e.toString()));
         assertEquals(expected, actual);
     }

@@ -19,7 +19,7 @@ import static org.jhotdraw8.geom.shape.BezierNode.IN_OUT_MASK;
 public class BezierNodeHandleIncomingTangentAction extends AbstractBezierNodeHandleAction {
     public final static String ID = "handle.bezierNode.incomingTangent";
 
-    public BezierNodeHandleIncomingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> nodeListKey, @NonNull int nodeIndex, @NonNull DrawingView model) {
+    public BezierNodeHandleIncomingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> nodeListKey, int nodeIndex, @NonNull DrawingView model) {
         super(ID, figure, nodeListKey, nodeIndex, model);
 
         BezierNode bnode = getBezierNode();

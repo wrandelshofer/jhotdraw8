@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.SequencedSet;
 import java.util.Set;
 
 
@@ -51,7 +52,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     TransformListStyleableKey TRANSFORMS = TransformableFigure.TRANSFORMS;
 
     static @NonNull Set<Key<?>> getDeclaredKeys() {
-        Set<Key<?>> keys = new LinkedHashSet<>();
+        SequencedSet<Key<?>> keys = new LinkedHashSet<>();
         Figure.getDeclaredKeys(SvgTransformableFigure.class, keys);
         return keys;
     }

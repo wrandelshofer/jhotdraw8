@@ -30,8 +30,10 @@ import org.jhotdraw8.icollection.ChampMap;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.SequencedMap;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
 
@@ -129,8 +131,8 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     }
 
     protected void saveFileChooseOptions(final @NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState<Void> workState) {
-        Map<Key<?>, Object> options = new LinkedHashMap<>();
-        Dialog<Map<Key<?>, Object>> dialog = null;
+        SequencedMap<Key<?>, Object> options = new LinkedHashMap<>();
+        Dialog<SequencedMap<Key<?>, Object>> dialog = null;
         try {
             dialog = createOptionsDialog(format);
         } catch (RuntimeException e) {
@@ -145,7 +147,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         if (dialog != null) {
             dialog.initModality(Modality.WINDOW_MODAL);
             dialog.initOwner(v.getNode().getScene().getWindow());
-            Optional<Map<Key<?>, Object>> result = dialog.showAndWait();
+            Optional<SequencedMap<Key<?>, Object>> result = dialog.showAndWait();
 
             if (result.isPresent()) {
                 options = result.get();
@@ -187,7 +189,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         });
     }
 
-    protected @Nullable Dialog<Map<Key<?>, Object>> createOptionsDialog(DataFormat format) {
+    protected @Nullable Dialog<SequencedMap<Key<?>, Object>> createOptionsDialog(DataFormat format) {
         return null;
     }
 

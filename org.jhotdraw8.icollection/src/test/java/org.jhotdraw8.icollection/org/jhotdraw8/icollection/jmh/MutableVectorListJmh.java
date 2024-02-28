@@ -87,10 +87,8 @@ public class MutableVectorListJmh {
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        listA = new MutableVectorList();
-        for (Key key : data.setA) {
-            listA.add(key);
-        }
+        listA = new MutableVectorList<>();
+        listA.addAll(data.setA);
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 

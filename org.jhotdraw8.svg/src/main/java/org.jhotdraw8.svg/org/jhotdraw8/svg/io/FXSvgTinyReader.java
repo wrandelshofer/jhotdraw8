@@ -23,6 +23,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.SequencedMap;
 
 /**
  * Reads an SVG "Tiny" 1.2 file and creates JavaFX nodes from it.
@@ -47,7 +48,7 @@ public class FXSvgTinyReader {
      * The reader does not close the provided source.
      */
     public Node read(@NonNull Source in) throws IOException {
-        Map<MapAccessor<?>, Object> m = new LinkedHashMap<>();
+        SequencedMap<MapAccessor<?>, Object> m = new LinkedHashMap<>();
         RenderContext.RENDERING_INTENT.put(m, RenderingIntent.EXPORT);
         return read(in, m);
     }

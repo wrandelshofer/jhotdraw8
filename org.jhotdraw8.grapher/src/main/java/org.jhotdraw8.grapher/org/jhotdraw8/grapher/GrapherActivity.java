@@ -148,6 +148,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.MissingResourceException;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -433,7 +434,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         }).whenComplete((list, e) -> {
             if (e == null) {
                 VBoxTrack vtrack = new VBoxTrack();
-                Set<Dockable> items = new LinkedHashSet<>();
+                SequencedSet<Dockable> items = new LinkedHashSet<>();
                 for (Track track : list) {
                     for (DockChild n : track.getDockChildren()) {
                         if (n instanceof Dockable) {

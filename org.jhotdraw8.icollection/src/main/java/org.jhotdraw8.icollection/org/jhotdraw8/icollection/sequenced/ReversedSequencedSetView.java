@@ -2,7 +2,11 @@ package org.jhotdraw8.icollection.sequenced;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.*;
+import java.util.AbstractSet;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.SequencedSet;
+import java.util.Spliterator;
 import java.util.function.Supplier;
 
 /**
@@ -95,7 +99,7 @@ public class ReversedSequencedSetView<E> extends AbstractSet<E> implements Seque
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public @NonNull Iterator<E> iterator() {
         return reverseIterator.get();
     }
 

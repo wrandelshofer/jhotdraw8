@@ -93,7 +93,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         this.addAll(c);
     }
 
-    MutableRedBlackSet(@Nullable Comparator<E> comparator, RedBlackTree<E, Void> root) {
+    MutableRedBlackSet(@Nullable Comparator<E> comparator, @NonNull RedBlackTree<E, Void> root) {
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = root;
     }

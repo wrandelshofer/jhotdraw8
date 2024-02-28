@@ -57,9 +57,11 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -393,7 +395,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         if (!isUpdatingSelectionInView) {
             isUpdatingSelectionInView = true;
             TreeTableView.TreeTableViewSelectionModel<Figure> selectionModel = treeView.getSelectionModel();
-            Set<Figure> newSelection = new LinkedHashSet<>();
+            SequencedSet<Figure> newSelection = new LinkedHashSet<>();
             for (TreeItem<Figure> item : selectionModel.getSelectedItems()) {
                 if (item != null) {
                     newSelection.add(item.getValue());

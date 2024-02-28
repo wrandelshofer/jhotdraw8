@@ -1,6 +1,16 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -64,6 +74,7 @@ import java.util.function.Consumer;
  *
  * Process finished with exit code 0
  */
+@SuppressWarnings({"UseBulkOperation", "unchecked", "ForLoopReplaceableByForEach"})
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)
@@ -84,10 +95,8 @@ public class ArrayListJmh {
     @Setup
     public void setup() {
         data = new BenchmarkData(size, mask);
-        listA = new ArrayList();
-        for (Key key : data.setA) {
-            listA.add(key);
-        }
+        listA = new ArrayList<>();
+        listA.addAll(data.setA);
         index = Math.min(listA.size() - 1, BigInteger.valueOf(listA.size() / 2).nextProbablePrime().intValue());
     }
 

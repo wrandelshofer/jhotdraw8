@@ -219,7 +219,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return depth (0 if the node is the root)
      */
-    default @NonNull int getDepth() {
+    default int getDepth() {
         int depth = 0;
         for (T node = getParent(); node != null; node = node.getParent()) {
             depth++;

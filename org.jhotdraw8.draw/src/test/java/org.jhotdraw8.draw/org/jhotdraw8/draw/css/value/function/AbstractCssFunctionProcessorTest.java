@@ -23,7 +23,9 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.function.Consumer;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,7 +56,7 @@ abstract class AbstractCssFunctionProcessorTest {
         Consumer<CssToken> consumer = t -> buf.append(t.fromToken());
 
         DocumentSelectorModel model = new DocumentSelectorModel();
-        Map<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
+        SequencedMap<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
         customProperties.put("--blarg", VectorList.of(new CssToken(CssTokenType.TT_STRING, "blarg")));
         customProperties.put("--recursion-base", VectorList.of(new CssToken(CssTokenType.TT_STRING, "recursion base")));
         customProperties.put("--recursive-1", VectorList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),

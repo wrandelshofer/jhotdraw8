@@ -28,7 +28,7 @@ public class MappedSpliterator<E, F> implements Spliterator<E> {
     private final int characteristics;
     private final @Nullable Comparator<? super E> comparator;
 
-    public MappedSpliterator(@NonNull Spliterator<? extends F> s, @NonNull Function<F, E> mappingFunction, int characteristics, Comparator<? super E> comparator) {
+    public MappedSpliterator(@NonNull Spliterator<? extends F> s, @NonNull Function<F, E> mappingFunction, int characteristics, @Nullable Comparator<? super E> comparator) {
         this.s = s;
         this.mappingFunction = mappingFunction;
         this.characteristics = characteristics;
@@ -58,7 +58,7 @@ public class MappedSpliterator<E, F> implements Spliterator<E> {
     }
 
     @Override
-    public Comparator<? super E> getComparator() {
+    public @Nullable Comparator<? super E> getComparator() {
         return comparator;
     }
 }

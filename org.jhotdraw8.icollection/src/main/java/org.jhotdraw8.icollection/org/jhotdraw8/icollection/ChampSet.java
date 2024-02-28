@@ -210,7 +210,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ChampSet<E> empty() {
+    public <T> @NonNull ChampSet<T> empty() {
         return of();
     }
 

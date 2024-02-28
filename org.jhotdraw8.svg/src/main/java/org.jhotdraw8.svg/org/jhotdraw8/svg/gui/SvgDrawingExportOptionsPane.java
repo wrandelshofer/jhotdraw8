@@ -27,10 +27,10 @@ import org.jhotdraw8.svg.io.SvgSceneGraphWriter;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
+import java.util.LinkedHashMap;
 import java.util.ResourceBundle;
+import java.util.SequencedMap;
 import java.util.Set;
 import java.util.prefs.Preferences;
 
@@ -46,7 +46,7 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
 public class SvgDrawingExportOptionsPane extends GridPane {
 
-    public static @NonNull Dialog<Map<Key<?>, Object>> createDialog(DataFormat format) {
+    public static @NonNull Dialog<SequencedMap<Key<?>, Object>> createDialog(DataFormat format) {
         Resources labels = ApplicationLabels.getResources();
         final SvgDrawingExportOptionsPane pane = new SvgDrawingExportOptionsPane();
         pane.setFormat(format);
@@ -127,8 +127,8 @@ public class SvgDrawingExportOptionsPane extends GridPane {
      *
      * @return the export options
      */
-    public @NonNull Map<Key<?>, Object> getExportOptions() {
-        Map<Key<?>, Object> map = new HashMap<>();
+    public @NonNull SequencedMap<Key<?>, Object> getExportOptions() {
+        SequencedMap<Key<?>, Object> map = new LinkedHashMap<>();
         EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());
         EXPORT_PAGES_KEY.put(map, exportPagesCheckBox.isSelected());
         EXPORT_SLICES_KEY.put(map, exportSlicesCheckBox.isSelected());

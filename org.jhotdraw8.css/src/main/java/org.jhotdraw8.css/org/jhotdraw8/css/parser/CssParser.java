@@ -51,8 +51,10 @@ import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.function.Function;
 
 /**
@@ -164,7 +166,7 @@ public class CssParser {
     public static final String ANY_NAMESPACE_PREFIX = "*";
     public static final String DEFAULT_NAMESPACE = "|";
     public static final String NAMESPACE_AT_RULE = "namespace";
-    private final Map<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
+    private final SequencedMap<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
 
     {
         //If no default namespace is declared, then names without a namespace
@@ -181,7 +183,7 @@ public class CssParser {
     /**
      * To reduce memory pressure, we deduplicate selectors.
      */
-    private final @NonNull Map<Selector, Selector> deduplicatedSelectors = new LinkedHashMap<>();
+    private final @NonNull SequencedMap<Selector, Selector> deduplicatedSelectors = new LinkedHashMap<>();
 
 
     public CssParser() {

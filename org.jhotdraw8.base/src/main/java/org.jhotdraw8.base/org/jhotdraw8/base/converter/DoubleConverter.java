@@ -31,7 +31,7 @@ public class DoubleConverter implements Converter<Double> {
                 new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
     }
 
-    public DoubleConverter(boolean nullable, DecimalFormat decimalFormat, DecimalFormat scientificFormat) {
+    public DoubleConverter(boolean nullable, @NonNull DecimalFormat decimalFormat, @NonNull DecimalFormat scientificFormat) {
         this.nullable = nullable;
         this.decimalFormat = decimalFormat;
         this.scientificFormat = scientificFormat;

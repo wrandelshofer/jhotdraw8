@@ -7,9 +7,9 @@ package org.jhotdraw8.svg.text;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.base.converter.ResolvingConverter;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -24,7 +24,7 @@ import java.util.function.Consumer;
 /**
  * Paintable representation in XML files is different from representation in CSS.
  */
-public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> implements ResolvingConverter<Paintable> {
+public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> implements Converter<Paintable> {
     private final SvgCssPaintableConverter cssPaintableConverter = new SvgCssPaintableConverter(false);
 
     public SvgXmlPaintableConverter() {
@@ -57,6 +57,11 @@ public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> im
     @Override
     public @Nullable String getHelpText() {
         return null;
+    }
+
+    @Override
+    public boolean needsIdResolver() {
+        return true;
     }
 
     @Override

@@ -29,7 +29,6 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return an empty set of the specified element type.
      * @param <T> the element type of the returned set
      */
-    @SuppressWarnings("unchecked")
     @Override
     @NonNull <T> ImmutableSet<T> empty();
 

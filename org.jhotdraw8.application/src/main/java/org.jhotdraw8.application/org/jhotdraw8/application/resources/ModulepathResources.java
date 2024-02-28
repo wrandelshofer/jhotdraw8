@@ -13,10 +13,12 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.SequencedSet;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -255,7 +257,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
 
     @Override
     public @NonNull Enumeration<String> getKeys() {
-        Set<String> keys = new LinkedHashSet<>();
+        SequencedSet<String> keys = new LinkedHashSet<>();
 
         for (String key : (Iterable<String>) () -> resource.getKeys().asIterator()) {
             keys.add(key);

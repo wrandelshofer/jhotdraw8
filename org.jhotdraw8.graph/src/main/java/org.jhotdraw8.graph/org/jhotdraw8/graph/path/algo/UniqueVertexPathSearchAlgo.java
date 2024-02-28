@@ -14,7 +14,7 @@ import org.jhotdraw8.icollection.ChampAddOnlySet;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.SequencedMap;
 import java.util.Queue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -23,16 +23,16 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
- * See {@link UniqueOnDigArcPathSearchAlgo} for a description of this
+ * See {@link UniqueArcPathSearchAlgo} for a description of this
  * algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     private enum SearchResultType {SUCCESS_UNIQUE_PATH, FAILURE_NO_PATH, FAILURE_NOT_UNIQUE}
 
-    public UniqueOnDigVertexPathSearchAlgo() {
+    public UniqueVertexPathSearchAlgo() {
     }
 
     /**
@@ -118,7 +118,7 @@ public class UniqueOnDigVertexPathSearchAlgo<V, C extends Number & Comparable<C>
                             final @NonNull Function<V, Iterable<V>> nextVerticesFunction,
                             final int maxDepth) {
         final Queue<VertexBackLinkWithAncestorSet<V>> queue = new ArrayDeque<>(16);
-        final Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
+        final SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
         queue.add(new VertexBackLinkWithAncestorSet<>(startVertex, null, ChampAddOnlySet.of(startVertex)));
 

@@ -11,7 +11,9 @@ import org.jhotdraw8.icollection.ChampMap;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
+import java.util.SequencedMap;
 
 /**
  * Represents a system color in a cascading stylesheet.
@@ -82,7 +84,7 @@ public class SystemCssColor extends CssColor {
 
     static {
         // Workaround for Java SE 8: javac hangs if ImmutableMap.ofEntries() has many entries.
-        Map<String, SystemCssColor> m = new LinkedHashMap<>();
+        SequencedMap<String, SystemCssColor> m = new LinkedHashMap<>();
 
 
         m.put(CANVAS.getName(), CANVAS);

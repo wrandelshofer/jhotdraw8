@@ -16,10 +16,13 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.SequencedMap;
 import java.util.Set;
 import java.util.function.Function;
 
@@ -230,7 +233,7 @@ public class TopologicalSortAlgo {
         Set<V> verticesInLoops = null;
 
         // Step 1: compute number of incoming arrows for each vertex
-        final Map<V, Integer> deg = new LinkedHashMap<>(n); // deg is the number of unprocessed incoming arrows on vertex
+        final SequencedMap<V, Integer> deg = new LinkedHashMap<>(n); // deg is the number of unprocessed incoming arrows on vertex
         for (V v : vertices) {
             deg.putIfAbsent(v, 0);
             for (V u : nextVertices.apply(v)) {

@@ -12,21 +12,21 @@ import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.SequencedMap;
 import java.util.Queue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * See {@link UniqueOnDagArcPathSearchAlgo} for a description of this
+ * See {@link UniqueOnAcyclicGraphArcPathSearchAlgo} for a description of this
  * algorithm.
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-public class UniqueOnDagVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
-    public UniqueOnDagVertexPathSearchAlgo() {
+public class UniqueOnAcyclicGraphVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
+    public UniqueOnAcyclicGraphVertexPathSearchAlgo() {
     }
 
     /**
@@ -77,7 +77,7 @@ public class UniqueOnDagVertexPathSearchAlgo<V, C extends Number & Comparable<C>
         AlgoArguments.checkMaxDepth(maxDepth);
 
         Queue<VertexBackLink<V>> queue = new ArrayDeque<>(16);
-        Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
+        SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);
         for (V s : startVertices) {
             if (visitedCount.put(s, 1) == null) {
                 queue.add(new VertexBackLink<>(s, null));

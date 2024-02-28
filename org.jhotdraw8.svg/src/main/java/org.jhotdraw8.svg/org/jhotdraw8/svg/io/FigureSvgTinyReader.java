@@ -75,6 +75,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
@@ -123,9 +124,9 @@ public class FigureSvgTinyReader {
     private static final @NonNull Map<Type, Converter<?>> converterMap;
 
     static {
-        final LinkedHashMap<String, Map<String, MapAccessor<?>>> mutableAccessorMap = new LinkedHashMap<>();
-        final LinkedHashMap<QName, Supplier<Figure>> mutableFigureMap = new LinkedHashMap<>();
-        final LinkedHashMap<Type, Converter<?>> mutableConverterMap = new LinkedHashMap<>();
+        final SequencedMap<String, SequencedMap<String, MapAccessor<?>>> mutableAccessorMap = new LinkedHashMap<>();
+        final SequencedMap<QName, Supplier<Figure>> mutableFigureMap = new LinkedHashMap<>();
+        final SequencedMap<Type, Converter<?>> mutableConverterMap = new LinkedHashMap<>();
 
         for (Map.Entry<String, ? extends Class<? extends Figure>> e : Arrays.asList(
                 MapEntries.entry("svg", SvgDrawing.class),
@@ -144,9 +145,14 @@ public class FigureSvgTinyReader {
         )) {
             String elem = e.getKey();
             Class<? extends Figure> figureClass = e.getValue();
-            Map<String, MapAccessor<?>> m = Figure.getDeclaredAndInheritedMapAccessors(figureClass).stream()
-                    .collect(Collectors.toMap(MapAccessor::getName, Function.identity()
+            Map<String, MapAccessor<?>> m0 = Figure.getDeclaredAndInheritedMapAccessors(figureClass).stream()
+                    .collect(Collectors.toMap(MapAccessor::getName, Function.identity()));
+            SequencedMap<String, MapAccessor<?>> m = Figure.getDeclaredAndInheritedMapAccessors(figureClass).stream()
+                    .collect(Collectors.toMap(MapAccessor::getName, Function.identity(), (a, b) -> a, LinkedHashMap::new
                     ));
+            if (!m0.equals(m)) {
+                throw new RuntimeException("m0!=m");
+            }
             mutableAccessorMap.put(elem, m);
             for (MapAccessor<?> acc : m.values()) {
                 if (acc instanceof ReadOnlyStyleableMapAccessor) {

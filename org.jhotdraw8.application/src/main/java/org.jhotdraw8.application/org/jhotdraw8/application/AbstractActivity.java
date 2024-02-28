@@ -23,6 +23,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.List;
 
 /**

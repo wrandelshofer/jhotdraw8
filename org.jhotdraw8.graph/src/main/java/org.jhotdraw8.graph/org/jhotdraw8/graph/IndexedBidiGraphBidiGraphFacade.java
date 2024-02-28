@@ -8,6 +8,7 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.Set;
 
 /**

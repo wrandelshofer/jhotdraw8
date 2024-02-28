@@ -265,7 +265,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     }
 
     @Override
-    public PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
+    public @NonNull PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
         double totalArcLength = arcLength();
         if (s0 > totalArcLength || s1 < s0) {
             return new EmptyPathIterator();

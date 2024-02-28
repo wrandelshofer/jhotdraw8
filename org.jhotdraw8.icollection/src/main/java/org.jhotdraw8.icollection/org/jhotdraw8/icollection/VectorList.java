@@ -106,7 +106,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
 
-    VectorList(BitMappedTrie<E> trie) {
+    VectorList(@NonNull BitMappedTrie<E> trie) {
         this.trie = trie;
     }
 
@@ -257,7 +257,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull VectorList<E> remove(@NonNull E element) {
+    public @NonNull VectorList<E> remove(E element) {
         int index = indexOf(element);
         return index < 0 ? this : removeAt(index);
     }
@@ -273,7 +273,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public VectorList<E> removeLast() {
+    public @NonNull VectorList<E> removeLast() {
         return (VectorList<E>) ImmutableList.super.removeLast();
     }
 

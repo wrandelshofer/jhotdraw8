@@ -12,7 +12,9 @@ import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 import java.util.ArrayDeque;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.Queue;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -71,7 +73,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
         }
 
         VertexBackLinkWithCost<V, C> found = null;
-        Set<V> nonUnique = new LinkedHashSet<>();
+        SequencedSet<V> nonUnique = new LinkedHashSet<>();
         while (!queue.isEmpty()) {
             VertexBackLinkWithCost<V, C> u = queue.remove();
             if (goalPredicate.test(u.getVertex())) {

@@ -15,9 +15,12 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedSet;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -82,7 +85,7 @@ public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
     private @NonNull FontCollection readFontCollection(@NonNull Map<String, FontFamily> families, @NonNull Path path) throws IOException {
         try {
             var map = PListParsers.toMap(PListParsers.readPList(path.toFile()));
-            Set<FontFamily> fontFamilies = new LinkedHashSet<>();
+            SequencedSet<FontFamily> fontFamilies = new LinkedHashSet<>();
 
             List<LinkedHashMap<String, Object>> plist = (List<LinkedHashMap<String, Object>>) map.getOrDefault("plist", List.of());
             if (plist.isEmpty()) throw new IOException("Could not find a plist. path=" + path);

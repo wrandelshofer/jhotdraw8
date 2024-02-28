@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.SequencedMap;
 import java.util.stream.StreamSupport;
 
 /**
@@ -81,7 +82,7 @@ public class PListParsers {
     }
 
     public static Map<String, Object> toMap(@NonNull Document plist) throws IOException {
-        Map<String, Object> map = new LinkedHashMap<>();
+        SequencedMap<String, Object> map = new LinkedHashMap<>();
         map.put("plist", readNode(plist.getDocumentElement()));
         return map;
     }

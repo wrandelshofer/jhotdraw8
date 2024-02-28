@@ -151,6 +151,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         return removeAll((Iterable<?>) c);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean removeAll(@NonNull Iterable<?> c) {
         if (isEmpty()
@@ -179,6 +180,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         return super.removeAll(c);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean retainAll(@NonNull Collection<?> c) {
         if (isEmpty()) {

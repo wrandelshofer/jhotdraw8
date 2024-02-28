@@ -33,9 +33,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.SequencedMap;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
@@ -112,7 +114,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     private WritableStyleableMapAccessor<?> findKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
         Map<QualifiedName, WritableStyleableMapAccessor<?>> mm = nameToKeyMap.computeIfAbsent(element.getClass(), k -> {
-            Map<QualifiedName, WritableStyleableMapAccessor<?>> m = new LinkedHashMap<>();
+            SequencedMap<QualifiedName, WritableStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
                 if (kk instanceof WritableStyleableMapAccessor) {
                     WritableStyleableMapAccessor<?> sk = (WritableStyleableMapAccessor<?>) kk;
@@ -129,7 +131,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     private ReadOnlyStyleableMapAccessor<?> findReadableKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
         Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>> mm = nameToReadableKeyMap.computeIfAbsent(element.getClass(), k -> {
-            Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>> m = new LinkedHashMap<>();
+            SequencedMap<QualifiedName, ReadOnlyStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
                 if (kk instanceof ReadOnlyStyleableMapAccessor) {
                     ReadOnlyStyleableMapAccessor<?> sk = (ReadOnlyStyleableMapAccessor<?>) kk;

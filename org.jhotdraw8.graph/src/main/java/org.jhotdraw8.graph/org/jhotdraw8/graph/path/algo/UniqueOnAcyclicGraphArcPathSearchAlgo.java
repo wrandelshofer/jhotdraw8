@@ -14,7 +14,7 @@ import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.SequencedMap;
 import java.util.Queue;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -23,7 +23,7 @@ import java.util.function.Predicate;
 /**
  * Searches a globally unique vertex path from a set of start vertices to a
  * set of goal vertices using a breadth-first search algorithm on a directed
- * acyclic graph (DAG).
+ * acyclic graph.
  * <p>
  * Uniqueness is global up to (inclusive) the specified maximal depth.
  * <p>
@@ -56,8 +56,8 @@ import java.util.function.Predicate;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-public class UniqueOnDagArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
-    public UniqueOnDagArcPathSearchAlgo() {
+public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> implements ArcPathSearchAlgo<V, A, C> {
+    public UniqueOnAcyclicGraphArcPathSearchAlgo() {
     }
 
     /**
@@ -110,7 +110,7 @@ public class UniqueOnDagArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
         AlgoArguments.checkMaxDepth(maxDepth);
 
         Queue<ArcBackLink<V, A>> queue = new ArrayDeque<>(16);
-        Map<V, Integer> visitedCount = new LinkedHashMap<>(16);
+        SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);
         for (V s : startVertices) {
             if (visitedCount.put(s, 1) == null) {
                 queue.add(new ArcBackLink<>(s, null, null));

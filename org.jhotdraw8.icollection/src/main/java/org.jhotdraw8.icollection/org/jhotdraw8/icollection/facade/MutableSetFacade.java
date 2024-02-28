@@ -31,6 +31,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
     }
 
 
+    @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
         ImmutableSet<E> oldSet = backingSet;

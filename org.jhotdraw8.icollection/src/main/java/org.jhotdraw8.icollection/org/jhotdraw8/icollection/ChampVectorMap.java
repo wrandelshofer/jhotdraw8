@@ -469,6 +469,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
         return size;
     }
 
+    @SuppressWarnings("unchecked")
     public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
         return new TombSkippingVectorSpliterator<>(vector.trie,
                 e -> ((Map.Entry<K, V>) e),

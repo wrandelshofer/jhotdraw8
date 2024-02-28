@@ -252,17 +252,17 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Override
-    public SortedMap<K, V> subMap(K fromKey, K toKey) {
+    public @NonNull SortedMap<K, V> subMap(K fromKey, K toKey) {
         return null;
     }
 
     @Override
-    public SortedMap<K, V> headMap(K toKey) {
+    public @NonNull SortedMap<K, V> headMap(K toKey) {
         return null;
     }
 
     @Override
-    public SortedMap<K, V> tailMap(K fromKey) {
+    public @NonNull SortedMap<K, V> tailMap(K fromKey) {
         return null;
     }
 
@@ -379,7 +379,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
 
     @Override
-    public Set<Entry<K, V>> entrySet() {
+    public @NonNull Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
                 this::iterator,
                 this::spliterator,
@@ -393,7 +393,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
 
     @Override
-    public Set<K> keySet() {
+    public @NonNull Set<K> keySet() {
         return new SetFacade<>(
                 () -> new MappedIterator<>(iterator(), Entry::getKey),
                 () -> new MappedSpliterator<>(spliterator(), Entry::getKey, characteristics(), comparator()),
@@ -445,7 +445,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Override
-    public V getOrDefault(Object key, V defaultValue) {
+    public V getOrDefault(@NonNull Object key, V defaultValue) {
         return super.getOrDefault(key, defaultValue);
     }
 

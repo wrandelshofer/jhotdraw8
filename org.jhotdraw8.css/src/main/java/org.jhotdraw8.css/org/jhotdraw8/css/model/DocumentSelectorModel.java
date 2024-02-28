@@ -22,8 +22,10 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
+import java.util.SequencedSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.SequencedSet;
 import java.util.Set;
 
 /**
@@ -269,7 +271,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 
     @Override
     public @NonNull Set<QualifiedName> getAttributeNames(@NonNull Element element) {
-        Set<QualifiedName> attr = new LinkedHashSet<>();
+        SequencedSet<QualifiedName> attr = new LinkedHashSet<>();
         NamedNodeMap nnm = element.getAttributes();
         for (int i = 0, n = nnm.getLength(); i < n; i++) {
             Node node = nnm.item(i);

@@ -26,7 +26,7 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
     protected final IntArrayList offsets = new IntArrayList();
     @NonNull
     protected final DoubleArrayList coords = new DoubleArrayList();
-    protected @NonNull
+    protected
     final double[] temp = new double[8];
     protected int windingRule = PathIterator.WIND_EVEN_ODD;
 

@@ -13,11 +13,11 @@ import org.jhotdraw8.geom.shape.BezierPath;
 public abstract class AbstractBezierNodeHandleAction extends AbstractAction {
     protected final @NonNull Figure owner;
     protected final @NonNull MapAccessor<BezierPath> pathKey;
-    protected final @NonNull int nodeIndex;
+    protected final int nodeIndex;
 
     protected final @NonNull DrawingView view;
 
-    public AbstractBezierNodeHandleAction(final @NonNull String id, @NonNull Figure owner, @NonNull MapAccessor<BezierPath> pathKey, @NonNull int nodeIndex, @NonNull DrawingView view) {
+    public AbstractBezierNodeHandleAction(final @NonNull String id, @NonNull Figure owner, @NonNull MapAccessor<BezierPath> pathKey, int nodeIndex, @NonNull DrawingView view) {
         super(id);
         this.owner = owner;
         this.pathKey = pathKey;

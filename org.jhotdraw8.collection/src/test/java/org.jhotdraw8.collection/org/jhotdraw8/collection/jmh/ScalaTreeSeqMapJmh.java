@@ -78,6 +78,7 @@ public class ScalaTreeSeqMapJmh {
         return sum;
     }
 
+    @SuppressWarnings("unchecked")
     @Benchmark
     public Object mRemoveThenAdd() {
         Key key = data.nextKeyInA();

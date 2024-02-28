@@ -1,6 +1,16 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 import scala.Tuple2;
 import scala.collection.Iterator;
 import scala.collection.immutable.HashMap;
@@ -72,6 +82,7 @@ import java.util.concurrent.TimeUnit;
  * ScalaHashMapJmh.mTail                 -65  10000000  avgt              143.238          ns/op
  * </pre>
  */
+@SuppressWarnings("unchecked")
 @State(Scope.Benchmark)
 @Measurement(iterations = 1)
 @Warmup(iterations = 1)

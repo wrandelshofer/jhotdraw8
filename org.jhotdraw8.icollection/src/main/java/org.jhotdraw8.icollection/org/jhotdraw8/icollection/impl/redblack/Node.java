@@ -323,7 +323,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> ceiling(K value, Comparator<? super K> comparator) {
+    public @NonNull RedBlackTree<K, V> ceiling(K value, @NonNull Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.ceiling(value, comparator);
@@ -380,7 +380,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> floor(K value, Comparator<? super K> comparator) {
+    public @NonNull RedBlackTree<K, V> floor(K value, @NonNull Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.floor(value, comparator).orElse(this);
@@ -408,7 +408,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> higher(K value, Comparator<? super K> comparator) {
+    public @NonNull RedBlackTree<K, V> higher(K value, @NonNull Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.higher(value, comparator);
@@ -444,7 +444,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> lower(K value, Comparator<? super K> comparator) {
+    public @NonNull RedBlackTree<K, V> lower(K value, @NonNull Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.lower(value, comparator).orElse(this);
@@ -466,7 +466,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public RedBlackTree<K, V> right() {
+    public @NonNull RedBlackTree<K, V> right() {
         return right;
     }
 

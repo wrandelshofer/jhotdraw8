@@ -12,7 +12,9 @@ import org.jhotdraw8.icollection.ChampMap;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.util.LinkedHashMap;
+import java.util.SequencedMap;
 import java.util.Map;
+import java.util.SequencedMap;
 
 /**
  * Represents a named color in a cascading stylesheet.
@@ -202,7 +204,7 @@ public class NamedCssColor extends CssColor {
 
     static {
         // Workaround for Java SE 8: javac hangs if ImmutableMap.ofEntries() has many entries.
-        Map<String, NamedCssColor> m = new LinkedHashMap<>();
+        SequencedMap<String, NamedCssColor> m = new LinkedHashMap<>();
 
         m.put(TRANSPARENT.getName(), TRANSPARENT);
         m.put(ALICEBLUE.getName(), ALICEBLUE);

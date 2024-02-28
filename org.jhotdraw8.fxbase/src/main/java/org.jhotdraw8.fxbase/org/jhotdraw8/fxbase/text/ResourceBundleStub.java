@@ -14,7 +14,7 @@ import java.util.ResourceBundle;
  * This resource bundle can be used as a stub.
  */
 public class ResourceBundleStub extends ResourceBundle {
-    public Enumeration<String> getKeys() {
+    public @NonNull Enumeration<String> getKeys() {
         return null;
     }
 

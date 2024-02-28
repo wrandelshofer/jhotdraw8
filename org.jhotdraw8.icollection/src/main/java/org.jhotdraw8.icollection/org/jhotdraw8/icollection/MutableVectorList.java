@@ -127,7 +127,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends E> c) {
+    public boolean addAll(int index, @NonNull Collection<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
         VectorList<E> immutable = toImmutable().addAll(index, c);

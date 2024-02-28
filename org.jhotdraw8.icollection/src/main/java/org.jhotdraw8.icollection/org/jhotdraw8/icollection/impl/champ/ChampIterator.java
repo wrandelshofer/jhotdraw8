@@ -36,6 +36,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
     @SuppressWarnings("unchecked")
     Node<K>[] nodes = new Node[MAX_DEPTH];
 
+    @SuppressWarnings("unchecked")
     public ChampIterator(@NonNull Node<K> rootNode, @Nullable Function<K, E> mappingFunction) {
         this.mappingFunction = mappingFunction == null ? k -> (E) k : mappingFunction;
         if (rootNode.hasNodes()) {
