@@ -15,6 +15,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
 import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
@@ -31,7 +32,6 @@ import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.draw.xml.converter.PathConnectionBezierPathXmlConverter;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
@@ -65,7 +65,7 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public static final @NonNull NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new PathConnectionBezierPathXmlConverter(), BezierPath.of());
+    public static final @NonNull NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(true), BezierPath.of());
 
 
 
