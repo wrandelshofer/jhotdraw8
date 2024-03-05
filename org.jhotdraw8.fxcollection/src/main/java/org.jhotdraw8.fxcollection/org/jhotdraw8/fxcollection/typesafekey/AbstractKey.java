@@ -160,17 +160,4 @@ public abstract class AbstractKey<T> implements Key<T> {
     public int ordinal() {
         return ordinal;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AbstractKey)) return false;
-        AbstractKey<?> that = (AbstractKey<?>) o;
-        return Objects.equals(getName(), that.getName());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getName());
-    }
 }

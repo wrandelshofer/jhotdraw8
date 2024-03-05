@@ -14,7 +14,7 @@ import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
- * SimpleReadOnlyStyleableKey.
+ * AbstractReadOnlyStyleableKey.
  *
  * @param <T> the value type
  * @author Werner Randelshofer
