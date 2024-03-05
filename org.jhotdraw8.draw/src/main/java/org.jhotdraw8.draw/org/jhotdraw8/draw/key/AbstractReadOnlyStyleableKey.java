@@ -58,16 +58,16 @@ public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> imp
     /**
      * Creates a new key.
      *
-     * @param xmlName the XML name of the key
+     * @param name the model name of the key
      * @param cssName the CSS name of the key
      * @param clazz the type of the value
      * @param converter the CSS converter for the value
      * @param defaultValue the default value
      */
-    public AbstractReadOnlyStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type clazz,
+    public AbstractReadOnlyStyleableKey(@NonNull String name, @NonNull String cssName, @NonNull Type clazz,
                                         @NonNull Converter<T> converter,
                                         @Nullable T defaultValue) {
-        super(xmlName, clazz, defaultValue == null, defaultValue);
+        super(name, clazz, defaultValue == null, defaultValue);
         this.converter = converter;
         this.cssName = cssName;
     }

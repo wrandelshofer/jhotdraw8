@@ -12,6 +12,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
+import javax.xml.stream.XMLStreamException;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -64,7 +65,11 @@ public interface InputFormat {
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(in, drawing, documentHome, workState);
         } catch (IOException e) {
-            throw new IOException("Error reading file " + file, e);
+            if (e.getCause() instanceof XMLStreamException xse && xse.getLocation() != null && xse.getLocation().getSystemId() != null) {
+                throw new IOException("Error reading file " + xse.getLocation().getSystemId(), xse);
+            } else {
+                throw new IOException("Error reading file " + file.toAbsolutePath().toUri(), e);
+            }
         }
     }
 

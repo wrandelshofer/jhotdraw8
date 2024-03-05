@@ -116,7 +116,7 @@ public abstract class AbstractKey<T> implements Key<T> {
         this.isNullable = isNullable;
         this.isTransient = isTransient;
         this.initialValue = initialValue;
-        this.ordinal = Key.createNextOrdinal();
+        this.ordinal = Key.createNextOrdinal(name);
     }
 
     /**
@@ -157,9 +157,20 @@ public abstract class AbstractKey<T> implements Key<T> {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
     }
-
-    @Override
     public int ordinal() {
         return ordinal;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof AbstractKey)) return false;
+        AbstractKey<?> that = (AbstractKey<?>) o;
+        return Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName());
     }
 }

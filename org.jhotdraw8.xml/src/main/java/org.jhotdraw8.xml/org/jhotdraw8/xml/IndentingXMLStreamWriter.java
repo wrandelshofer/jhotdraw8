@@ -235,35 +235,36 @@ import java.util.TreeSet;
  * </dl>
  */
 public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable {
-    public static final String DEFAULT_PREFIX = "";
     public static final String DEFAULT_NAMESPACE = "";
-    public static final String START_CHAR_REF = "&#x";
+    public static final String DEFAULT_PREFIX = "";
     public static final String END_CHAR_REF = ";";
-    public static final String START_ENTITY_REF = "&";
     public static final String END_ENTITY_REF = ";";
-    public static final String START_PROCESSING_INSTRUCTION = "<?";
     public static final String END_PROCESSING_INSTRUCTION = "?>";
-    private static final String START_COMMENT = "<!--";
-    private static final String END_COMMENT = "-->";
-    private static final String START_ENCODING = " encoding=\"";
-    private static final String END_ENCODING = "\"";
-    private static final String START_VERSION = " version=\"";
-    private static final String END_VERSION = "\"";
-    private static final String STANDALONE = " standalone=\"no\"";
-    private static final String START_XML_DECLARATION = "<?xml";
-    private static final String END_XML_DECLARATION = "?>";
-    private static final String DEFAULT_XML_VERSION = "1.0";
-    private static final String CLOSE_START_TAG = ">";
-    private static final String OPEN_START_TAG = "<";
-    private static final String OPEN_END_TAG = "</";
-    private static final String CLOSE_END_TAG = ">";
-    private static final String START_CDATA = "<![CDATA[";
-    private static final String END_CDATA = "]]>";
+    public static final String START_CHAR_REF = "&#x";
+    public static final String START_ENTITY_REF = "&";
+    public static final String START_PROCESSING_INSTRUCTION = "<?";
     private static final String CLOSE_EMPTY_ELEMENT = "/>";
+    private static final String CLOSE_END_TAG = ">";
+    private static final String CLOSE_START_TAG = ">";
+    private static final String DEFAULT_XML_VERSION = "1.0";
+    private static final String END_ATTRIBUTE_VALUE = "\"";
+    private static final String END_CDATA = "]]>";
+    private static final String END_COMMENT = "-->";
+    private static final String END_ENCODING = "\"";
+    private static final String END_VERSION = "\"";
+    private static final String END_XML_DECLARATION = "?>";
+    private static final String OPEN_END_TAG = "</";
+    private static final String OPEN_START_TAG = "<";
     private static final String PREFIX_SEPARATOR = ":";
     private static final String SPACE = " ";
+    private static final String STANDALONE = " standalone=\"no\"";
     private static final String START_ATTRIBUTE_VALUE = "=\"";
-    private static final String END_ATTRIBUTE_VALUE = "\"";
+    private static final String START_CDATA = "<![CDATA[";
+    private static final String START_COMMENT = "<!--";
+    private static final String START_ENCODING = " encoding=\"";
+    private static final String START_VERSION = " version=\"";
+    private static final String START_XML_DECLARATION = "<?xml";
+    private static final String XMLNS_NAMESPACE = "https://www.w3.org/TR/REC-xml-names/";
     private static final String XMLNS_PREFIX = "xmlns";
     private static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
     /**
@@ -274,20 +275,20 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
      * The value of the special {@code xml:space="preserve"} attribute.
      */
     private static final String XML_SPACE_PRESERVE_VALUE = "preserve";
-    private static final String XMLNS_NAMESPACE = "https://www.w3.org/TR/REC-xml-names/";
-    private String indentation = "  ";
-    private String lineSeparator = "\n";
-    private final Writer w;
+    private final StringBuffer charBuffer = new StringBuffer();
+    private final CharsetEncoder encoder;
     /**
      * Invariant: this stack always contains at least the root element.
      */
     private final Deque<Element> stack = new ArrayDeque<>();
+    private final Writer w;
     private Set<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName));
-    private final CharsetEncoder encoder;
-    private boolean isStartTagOpen = false;
     private boolean escapeClosingAngleBracket = true;
     private boolean hasContent;
-    private final StringBuffer charBuffer = new StringBuffer();
+    private String indentation = "  ";
+    private boolean isFirstWrite = true;
+    private boolean isStartTagOpen = false;
+    private String lineSeparator = "\n";
 
     public IndentingXMLStreamWriter(@NonNull Writer w) {
         this.w = w;
@@ -314,51 +315,10 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         }
     }
 
-    public String getIndentation() {
-        return indentation;
-    }
-
-    public void setSortAttributes(boolean b) {
-        attributes = b ? new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName))
-                : new LinkedHashSet<>();
-    }
-
-    public boolean isSortAttributes() {
-        return attributes instanceof SortedSet<Attribute>;
-    }
-
-    /**
-     * Whether to replace {@literal '<'} and {@literal '>} characters by
-     * entity references.
-     * <p>
-     * These characters should always be replaced by entity references,
-     * but some non-conforming parsers can not handle the entities.
-     *
-     * @param b true if less-than sign and greater-than sign shall be replaced
-     */
-    public void setEscapeClosingAngleBracket(boolean b) {
-        escapeClosingAngleBracket = b;
-    }
-
-    public boolean isEscapeClosingAngleBracket() {
-        return escapeClosingAngleBracket;
-    }
-
-    public void setIndentation(String indentation) {
-        this.indentation = indentation;
-    }
-
-    public String getLineSeparator() {
-        return lineSeparator;
-    }
-
-    public void setLineSeparator(String lineSeparator) {
-        this.lineSeparator = lineSeparator;
-    }
-
     private void closeStartTagOrCloseEmptyElemTag() throws XMLStreamException {
         charBuffer.setLength(0);
         if (isStartTagOpen) {
+            isStartTagOpen = false;
             doWriteAttributes();
             Element peeked = stack.peek();
             if (peeked != null) {
@@ -370,7 +330,6 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                 }
             }
         }
-        isStartTagOpen = false;
     }
 
     private void doWriteAttribute(@NonNull Attribute attribute) throws XMLStreamException {
@@ -400,6 +359,22 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         } catch (IOException e) {
             throw new XMLStreamException(e);
         }
+    }
+
+    public String getIndentation() {
+        return indentation;
+    }
+
+    public void setIndentation(String indentation) {
+        this.indentation = indentation;
+    }
+
+    public String getLineSeparator() {
+        return lineSeparator;
+    }
+
+    public void setLineSeparator(String lineSeparator) {
+        this.lineSeparator = lineSeparator;
     }
 
     @Override
@@ -465,12 +440,38 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         return left == length;
     }
 
+    public boolean isEscapeClosingAngleBracket() {
+        return escapeClosingAngleBracket;
+    }
+
+    /**
+     * Whether to replace {@literal '<'} and {@literal '>} characters by
+     * entity references.
+     * <p>
+     * These characters should always be replaced by entity references,
+     * but some non-conforming parsers can not handle the entities.
+     *
+     * @param b true if less-than sign and greater-than sign shall be replaced
+     */
+    public void setEscapeClosingAngleBracket(boolean b) {
+        escapeClosingAngleBracket = b;
+    }
+
     public boolean isPreserveSpace() {
         return stack.getFirst().isPreserveSpace();
     }
 
     public void setPreserveSpace(boolean preserveSpace) {
         stack.getFirst().setPreserveSpace(preserveSpace);
+    }
+
+    public boolean isSortAttributes() {
+        return attributes instanceof SortedSet<Attribute>;
+    }
+
+    public void setSortAttributes(boolean b) {
+        attributes = b ? new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName))
+                : new LinkedHashSet<>();
     }
 
     private void requireStartTagOpened() {
@@ -492,11 +493,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     public void setPrefix(String prefix, String uri) {
         requireStartTagOpened();
         getOrCreateNamespaceContext().setNamespace(uri, prefix);
-
     }
 
     private void write(String str) throws XMLStreamException {
         try {
+            isFirstWrite = false;
             w.write(str);
         } catch (IOException e) {
             throw new XMLStreamException(e);
@@ -505,6 +506,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
 
     private void write(char ch) throws XMLStreamException {
         try {
+            isFirstWrite = false;
             w.write(ch);
         } catch (IOException e) {
             throw new XMLStreamException(e);
@@ -613,7 +615,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
 
         closeStartTagOrCloseEmptyElemTag();
         stack.push(new Element(DEFAULT_PREFIX, DEFAULT_NAMESPACE, START_COMMENT, true));
-        if (!hasContent) {
+        if (!hasContent && !isFirstWrite) {
             writeLineBreakAndIndentation();
         }
         write(START_COMMENT);
@@ -832,11 +834,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                 continue;
             }
             if (isDoubleQuoted &&
-                    ((Character.isWhitespace(ch) && ch != ' ')
-                            || Character.isISOControl(ch)
-                            || index != end - 1
-                            && Character.isSurrogatePair(ch, content.charAt(index + 1))
-                            && Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1))))
+                ((Character.isWhitespace(ch) && ch != ' ')
+                 || Character.isISOControl(ch)
+                 || index != end - 1
+                    && Character.isSurrogatePair(ch, content.charAt(index + 1))
+                    && Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1))))
             ) {
                 writeCharRef(ch);
                 continue;
@@ -851,8 +853,8 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                     if (isComment) {
                         writeLineBreakAndIndentation();
                         while (index < end - 1
-                                && '\n' != content.charAt(index + 1)
-                                && Character.isWhitespace(content.charAt(index + 1))) {
+                               && '\n' != content.charAt(index + 1)
+                               && Character.isWhitespace(content.charAt(index + 1))) {
                             index++;
                         }
                     } else {
@@ -947,10 +949,10 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     private static class Element {
+        private final boolean isEmpty;
         private final @NonNull String localName;
         private final @NonNull String namespaceUri;
         private final @NonNull String prefix;
-        private final boolean isEmpty;
         private NamespaceContext namespaceContext = new MyNamespaceContext();
         private boolean preserveSpace;
 
@@ -988,10 +990,9 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
      */
     private static class Attribute {
         private final @NonNull String localName;
-        private final @NonNull String value;
-
         private final @NonNull String namespace;
         private final @Nullable String prefix;
+        private final @NonNull String value;
 
         public Attribute(@Nullable String prefix, @NonNull String namespace, @NonNull String localName, @NonNull String value) {
             this.localName = localName;

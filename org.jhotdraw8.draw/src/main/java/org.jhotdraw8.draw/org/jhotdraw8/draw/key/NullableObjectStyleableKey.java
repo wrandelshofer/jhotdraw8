@@ -49,14 +49,14 @@ public class NullableObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<
     /**
      * Creates a new instance.
      *
-     * @param xmlName      The XML name of the key.
+     * @param name      The name of the key.
      * @param cssName      The CSS name of the key.
      * @param type         The type of the value.
      * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public NullableObjectStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
-        super(xmlName, cssName, type, converter, defaultValue);
+    public NullableObjectStyleableKey(@NonNull String name, @NonNull String cssName, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
+        super(name, cssName, type, converter, defaultValue);
     }
 
 

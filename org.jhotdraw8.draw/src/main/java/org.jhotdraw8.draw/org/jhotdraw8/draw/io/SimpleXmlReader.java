@@ -38,7 +38,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.SequencedSet;
 import java.util.concurrent.ExecutionException;
@@ -139,7 +138,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
             throw new IOException(e);
         }
         if (stack.size() != 1) {
-            throw new IOException("The file does not contain a drawing in namespace=\"" + namespaceURI + "\".");
+            throw new IOException("The file does not contain a root element in namespace=\"" + namespaceURI + "\".");
         }
 
         for (Consumer<Figure> processingInstruction : processingInstructions) {

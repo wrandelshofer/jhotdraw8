@@ -98,6 +98,33 @@ public class NaturalSortCollator extends Collator {
         this.collator = c;
     }
 
+    public static <T> @NonNull Comparator<T> comparing(
+            @NonNull Function<? super T, String> keyExtractor) {
+        NaturalSortCollator collator = new NaturalSortCollator();
+        Objects.requireNonNull(keyExtractor, "keyExtractor");
+        return (Comparator<T> & Serializable)
+                (c1, c2) -> collator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));
+    }
+
+    /**
+     * Prepends the specified group of digits with the number of digits - 1.
+     * The number of digits - 1 is always two digits long.
+     *
+     * @param out   output
+     * @param s     string
+     * @param start start index of digit group
+     * @param end   end index+ 1 of digit group
+     */
+    private void appendDigitGroup(@NonNull StringBuilder out, @NonNull String s, int start, int end) {
+        assert start < end : "start:" + start + " end:" + end;
+        int num = Math.min(100, end - start) - 1;
+        out.append((char) (num / 10 + '0'));
+        out.append((char) (num % 10 + '0'));
+        for (int j = start; j < end; j++) {
+            out.append(s.charAt(j));
+        }
+    }
+
     @Override
     public int compare(@Nullable String source, @Nullable String target) {
         if (source == null) {
@@ -110,22 +137,12 @@ public class NaturalSortCollator extends Collator {
     }
 
     @Override
-    public @NonNull CollationKey getCollationKey(@NonNull String source) {
-        return collator.getCollationKey(expandNumbers(source));
-    }
-
-    @Override
     public boolean equals(@Nullable Object o) {
         if (o instanceof NaturalSortCollator that) {
             return this.collator.equals(that.collator);
         } else {
             return false;
         }
-    }
-
-    @Override
-    public int hashCode() {
-        return collator.hashCode();
     }
 
     /**
@@ -165,30 +182,13 @@ public class NaturalSortCollator extends Collator {
         return out.toString();
     }
 
-    /**
-     * Prepends the specified group of digits with the number of digits - 1.
-     * The number of digits - 1 is always two digits long.
-     *
-     * @param out   output
-     * @param s     string
-     * @param start start index of digit group
-     * @param end   end index+ 1 of digit group
-     */
-    private void appendDigitGroup(@NonNull StringBuilder out, @NonNull String s, int start, int end) {
-        assert start < end : "start:" + start + " end:" + end;
-        int num = Math.min(100, end - start) - 1;
-        out.append((char) (num / 10 + '0'));
-        out.append((char) (num % 10 + '0'));
-        for (int j = start; j < end; j++) {
-            out.append(s.charAt(j));
-        }
+    @Override
+    public @NonNull CollationKey getCollationKey(@NonNull String source) {
+        return collator.getCollationKey(expandNumbers(source));
     }
 
-    public static <T> @NonNull Comparator<T> comparing(
-            @NonNull Function<? super T, String> keyExtractor) {
-        NaturalSortCollator collator = new NaturalSortCollator();
-        Objects.requireNonNull(keyExtractor, "keyExtractor");
-        return (Comparator<T> & Serializable)
-                (c1, c2) -> collator.compare(keyExtractor.apply(c1), keyExtractor.apply(c2));
+    @Override
+    public int hashCode() {
+        return collator.hashCode();
     }
 }
