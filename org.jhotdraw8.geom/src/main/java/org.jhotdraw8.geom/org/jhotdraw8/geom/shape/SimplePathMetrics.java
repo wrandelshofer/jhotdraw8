@@ -7,6 +7,7 @@ package org.jhotdraw8.geom.shape;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.AbstractShape;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.CubicCurves;
@@ -94,10 +95,14 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     /**
      * Evaluates the path at the specified arc length
      *
-     * @param s the arc length
+     * @param s the arc length, the value will be clamped to [0,arcLength()]
      * @return point and tangent at s
      */
     public @NonNull PointAndDerivative evalAtArcLength(double s) {
+        if (commands.length == 0) {
+            return new PointAndDerivative(0, 0, 1, 0);
+        }
+        s = MathUtil.clamp(s, 0, arcLength());
         int search = Arrays.binarySearch(lengths, s);
         int i = search < 0 ? Math.min(commands.length - 1, ~search) : search;
 
@@ -264,10 +269,18 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
+    /**
+     * Gets an iterator over a segment of the path from arc length s0 to arc length s1.
+     *
+     * @param s0 the arc length at which the sub-path starts, the value will be clamped to [0,arcLength()].
+     * @param s1 the arc length at which the sub-path ends, the value will be clamped to [0,arcLength()].
+     * @param tx an optional transformation for the path iterator
+     * @return the path iterator
+     */
     @Override
     public @NonNull PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
         double totalArcLength = arcLength();
-        if (s0 > totalArcLength || s1 < s0) {
+        if (commands.length == 0 || s0 > totalArcLength || s1 < s0) {
             return new EmptyPathIterator();
         }
 
@@ -403,6 +416,12 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         private @NonNull State state;
         private boolean startsAtSegment, endsAtSegment;
 
+        /**
+         * @param s0
+         * @param s1
+         * @param m
+         * @param tt
+         */
         public SubPathIterator(double s0, double s1, @NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
             double totalArcLength = m.arcLength();
             this.s0 = s0 = Math.max(0, s0);

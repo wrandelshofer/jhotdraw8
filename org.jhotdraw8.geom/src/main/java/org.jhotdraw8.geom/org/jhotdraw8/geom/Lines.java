@@ -169,6 +169,7 @@ public class Lines {
         return sqrt(Points.squaredDistance(coords[offset], coords[offset + 1], coords[offset + 2], coords[offset + 3]));
     }
 
+
     /**
      * Gets the arc length s at the given time t.
      *

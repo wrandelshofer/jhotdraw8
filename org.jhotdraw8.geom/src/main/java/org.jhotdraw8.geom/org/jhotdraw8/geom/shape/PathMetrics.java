@@ -40,7 +40,7 @@ public interface PathMetrics extends Shape {
     /**
      * Evaluates the path at the specified arc length
      *
-     * @param s the arc length
+     * @param s the arc length, the value will be clamped to [0,arcLength()]
      * @return point and tangent at s
      */
     @NonNull PointAndDerivative evalAtArcLength(double s);
@@ -61,10 +61,10 @@ public interface PathMetrics extends Shape {
     }
 
     /**
-     * Returns a path iterator of the specified sub-path.
+     * Returns a path iterator over the specified sub-path.
      *
-     * @param s0 the arc length at which the sub-path starts, in [0,arcLength()].
-     * @param s1 the arc length at which the sub-path ends, in [0,arcLength()].
+     * @param s0 the arc length at which the sub-path starts, the value will be clamped to [0,arcLength()].
+     * @param s1 the arc length at which the sub-path ends, the value will be clamped to [0,arcLength()].
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */

@@ -343,6 +343,21 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
     }
 
     /**
+     * Replaces the item at the specified index.
+     *
+     * @param index   an index
+     * @param newItem the new item
+     * @return the old item
+     */
+    @Override
+    public Double set(int index, Double newItem) {
+        Objects.checkIndex(index, size);
+        double removedItem = items[index];
+        items[index] = newItem;
+        return removedItem;
+    }
+
+    /**
      * Returns the size of the list.
      *
      * @return the size
@@ -512,6 +527,11 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         );
     }
 
+    /**
+     * Gets the array that is used internally by this list.
+     *
+     * @return the internal array
+     */
     public double[] getArray() {
         return items;
     }

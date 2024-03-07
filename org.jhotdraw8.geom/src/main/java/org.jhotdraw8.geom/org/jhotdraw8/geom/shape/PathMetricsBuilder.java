@@ -33,7 +33,7 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
      * Creates a path metrics builder with an accuracy of 0.125 pixels.
      */
     public PathMetricsBuilder() {
-        this(0.125);
+        this(0.03125);
     }
 
     /**

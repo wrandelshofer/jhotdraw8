@@ -14,6 +14,7 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.fxbase.control.Disableable;
 
+import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -47,7 +48,9 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         for (; t != null; t = t.getCause()) {
             if (t.getCause() != null
                     && ((t instanceof RuntimeException)
-                    || (t instanceof ExecutionException))) {
+                    || (t instanceof ExecutionException)
+                    || (t instanceof UncheckedIOException)
+            )) {
                 continue;
             }
 

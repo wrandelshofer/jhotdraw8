@@ -86,29 +86,10 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return new IntArrayList(items);
     }
 
-    /**
-     * Adds a new item to the end of the list.
-     *
-     * @param newItem the new item
-     */
     @Override
-    public void addAsInt(int newItem) {
-        grow(size + 1);
-        items[size++] = newItem;
-    }
-
-    /**
-     * Inserts a new item at the specified index into this list.
-     *
-     * @param index   the index
-     * @param newItem the new item
-     */
-    @Override
-    public void addAsInt(int index, int newItem) {
-        Objects.checkIndex(index, size + 1);
-        grow(size + 1);
-        items[index] = newItem;
-        ++size;
+    public boolean add(Integer integer) {
+        addAsInt(integer);
+        return true;
     }
 
     /**
@@ -140,12 +121,45 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     /**
+     * Adds a new item to the end of the list.
+     *
+     * @param newItem the new item
+     */
+    @Override
+    public void addAsInt(int newItem) {
+        grow(size + 1);
+        items[size++] = newItem;
+    }
+
+    /**
+     * Inserts a new item at the specified index into this list.
+     *
+     * @param index   the index
+     * @param newItem the new item
+     */
+    @Override
+    public void addAsInt(int index, int newItem) {
+        Objects.checkIndex(index, size + 1);
+        grow(size + 1);
+        items[index] = newItem;
+        ++size;
+    }
+
+    /**
      * Clears the list in O(1).
      */
     @Override
     public void clear() {
         // Performance: do not fill array with 0 values
         size = 0;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        if (o instanceof Integer e) {
+            return indexOfAsInt(e) != -1;
+        }
+        return false;
     }
 
     /**
@@ -182,18 +196,6 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return true;
     }
 
-    /**
-     * Gets the item at the specified index.
-     *
-     * @param index an index
-     * @return the item at the index
-     */
-    @Override
-    public int getAsInt(int index) {
-        Objects.checkIndex(index, size);
-        return items[index];
-    }
-
     /*
      * Gets the item at the specified index.
      *
@@ -206,9 +208,25 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return items[index];
     }
 
+    /**
+     * Gets the array that is used internally by this list.
+     *
+     * @return the internal array
+     */
+    public int[] getArray() {
+        return items;
+    }
+
+    /**
+     * Gets the item at the specified index.
+     *
+     * @param index an index
+     * @return the item at the index
+     */
     @Override
-    public int getLastAsInt() {
-        return getAsInt(size - 1);
+    public int getAsInt(int index) {
+        Objects.checkIndex(index, size);
+        return items[index];
     }
 
     @Override
@@ -216,20 +234,15 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return getAsInt(0);
     }
 
-    /**
-     * Sets the size of this list. If the new size is greater than the current
-     * size, new {@code 0} items are added to the end of the list. If the new
-     * size is less than the current size, all items at indices greater or
-     * equal {@code newSize} are discarded.
-     *
-     * @param newSize the new size
-     */
-    public void setSize(int newSize) {
-        grow(newSize);
-        if (newSize > size) {
-            Arrays.fill(items, size, newSize, 0);
+    @Override
+    public int getLastAsInt() {
+        return getAsInt(size - 1);
+    }
+
+    private void grow(int capacity) {
+        if (items.length < capacity) {
+            items = ListHelper.grow(Math.max(1, items.length * 2), 1, items);
         }
-        size = newSize;
     }
 
     @Override
@@ -240,12 +253,6 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         }
 
         return result;
-    }
-
-    private void grow(int capacity) {
-        if (items.length < capacity) {
-            items = ListHelper.grow(Math.max(1, items.length * 2), 1, items);
-        }
     }
 
     @Override
@@ -262,6 +269,52 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return -1;
     }
 
+    /**
+     * Returns a stream for processing the items of this list.
+     *
+     * @return a stream
+     */
+    public @NonNull IntStream intStream() {
+        return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
+    }
+
+    /**
+     * Returns true if size==0.
+     *
+     * @return true if empty
+     */
+    @Override
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /**
+     * Returns an iterator for this list.
+     *
+     * @return an iterator over the elements of this list
+     */
+    @Override
+    public PrimitiveIterator.@NonNull OfInt iterator() {
+        return new PrimitiveIterator.OfInt() {
+            private final int[] items = IntArrayList.this.items;
+            private final int size = IntArrayList.this.size;
+            private int index = 0;
+
+            @Override
+            public boolean hasNext() {
+                return index < size;
+            }
+
+            @Override
+            public int nextInt() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return items[index++];
+            }
+        };
+    }
+
     @Override
     public int lastIndexOfAsInt(int item) {
         return lastIndexOfAsInt(item, size - 1);
@@ -276,21 +329,14 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         return -1;
     }
 
-    /**
-     * Returns true if size==0.
-     *
-     * @return true if empty
-     */
     @Override
-    public boolean isEmpty() {
-        return size == 0;
-    }
-
-
-    @Override
-    public boolean contains(Object o) {
-        if (o instanceof Integer e) {
-            return indexOfAsInt(e) != -1;
+    public boolean remove(Object o) {
+        if (o instanceof Integer) {
+            int index = indexOfAsInt((int) o);
+            if (index != -1) {
+                removeAtAsInt(index);
+                return true;
+            }
         }
         return false;
     }
@@ -314,148 +360,6 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
     }
 
     /**
-     * Removes the last item
-     *
-     * @return the removed item
-     * @throws NoSuchElementException if the list is empty
-     */
-    @Override
-    public int removeLastAsInt() {
-        if (isEmpty()) {
-            throw new NoSuchElementException("List is empty.");
-        }
-        return removeAtAsInt(size - 1);
-    }
-
-    /**
-     * Replaces the item at the specified index.
-     *
-     * @param index   an index
-     * @param newItem the new item
-     * @return the old item
-     */
-    public int setAsInt(int index, int newItem) {
-        Objects.checkIndex(index, size);
-        int removedItem = items[index];
-        items[index] = newItem;
-        return removedItem;
-    }
-
-    /**
-     * Returns the size of the list.
-     *
-     * @return the size
-     */
-    @Override
-    public int size() {
-        return size;
-    }
-
-    /**
-     * Trims the capacity of the list its current size.
-     */
-    public void trimToSize() {
-        items = ListHelper.trimToSize(size, 1, items);
-    }
-
-    /**
-     * Returns an iterator for this list.
-     *
-     * @return an iterator over the elements of this list
-     */
-    @Override
-    public PrimitiveIterator.@NonNull OfInt iterator() {
-        return new PrimitiveIterator.OfInt() {
-            private int index = 0;
-            private final int size = IntArrayList.this.size;
-            private final int[] items = IntArrayList.this.items;
-
-            @Override
-            public int nextInt() {
-                if (!hasNext()) {
-                    throw new NoSuchElementException();
-                }
-                return items[index++];
-            }
-
-            @Override
-            public boolean hasNext() {
-                return index < size;
-            }
-        };
-    }
-
-    /**
-     * Returns a spliterator for this list.
-     *
-     * @return a spliterator over the elements of this list
-     */
-    @Override
-    public Spliterator.@NonNull OfInt spliterator() {
-        return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
-    }
-
-    /**
-     * Returns a stream for processing the items of this list.
-     *
-     * @return a stream
-     */
-    public @NonNull IntStream intStream() {
-        return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
-    }
-
-    /**
-     * Returns a new array containing all the elements in this collection.
-     *
-     * @return array
-     */
-    public int @NonNull [] toIntArray() {
-        int[] result = new int[size];
-        System.arraycopy(items, 0, result, 0, size);
-        return result;
-    }
-
-    @Override
-    public boolean add(Integer integer) {
-        addAsInt(integer);
-        return true;
-    }
-
-
-    @Override
-    public boolean remove(Object o) {
-        if (o instanceof Integer) {
-            int index = indexOfAsInt((int) o);
-            if (index != -1) {
-                removeAtAsInt(index);
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-    @Override
-    public @NonNull String toString() {
-        StringBuilder b = new StringBuilder();
-        b.append('[');
-        for (int i = 0; i < size; i++) {
-            if (i > 0) {
-                b.append(", ");
-            }
-            b.append(items[i]);
-        }
-        return b.append(']').toString();
-    }
-
-    /**
-     * Sorts the items in ascending order.
-     */
-    public void sort() {
-        Arrays.sort(items, 0, size);
-    }
-
-    /**
      * Removes all the elements of this collection that satisfy the given
      * predicate.
      *
@@ -473,6 +377,90 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
             }
         }
         return hasRemoved;
+    }
+
+    /**
+     * Removes the last item
+     *
+     * @return the removed item
+     * @throws NoSuchElementException if the list is empty
+     */
+    @Override
+    public int removeLastAsInt() {
+        if (isEmpty()) {
+            throw new NoSuchElementException("List is empty.");
+        }
+        return removeAtAsInt(size - 1);
+    }
+
+    @Override
+    public @NonNull List<Integer> reversed() {
+        return new ListFacade<>(
+                this::size,
+                i -> get(size() - i)
+        );
+    }
+
+    /**
+     * Replaces the item at the specified index.
+     *
+     * @param index   an index
+     * @param newItem the new item
+     * @return the old item
+     */
+    @Override
+    public Integer set(int index, Integer newItem) {
+        Objects.checkIndex(index, size);
+        int removedItem = items[index];
+        items[index] = newItem;
+        return removedItem;
+    }
+
+    /**
+     * Replaces the item at the specified index.
+     *
+     * @param index   an index
+     * @param newItem the new item
+     * @return the old item
+     */
+    public int setAsInt(int index, int newItem) {
+        Objects.checkIndex(index, size);
+        int removedItem = items[index];
+        items[index] = newItem;
+        return removedItem;
+    }
+
+    /**
+     * Sets the size of this list. If the new size is greater than the current
+     * size, new {@code 0} items are added to the end of the list. If the new
+     * size is less than the current size, all items at indices greater or
+     * equal {@code newSize} are discarded.
+     *
+     * @param newSize the new size
+     */
+    public void setSize(int newSize) {
+        grow(newSize);
+        if (newSize > size) {
+            Arrays.fill(items, size, newSize, 0);
+        }
+        size = newSize;
+    }
+
+    /**
+     * Returns the size of the list.
+     *
+     * @return the size
+     */
+    @Override
+    public int size() {
+        return size;
+    }
+
+    /**
+     * Sorts the items in ascending order.
+     */
+    public void sort() {
+        Arrays.sort(items, 0, size);
     }
 
     /**
@@ -503,12 +491,45 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         }
     }
 
+    /**
+     * Returns a spliterator for this list.
+     *
+     * @return a spliterator over the elements of this list
+     */
     @Override
-    public @NonNull List<Integer> reversed() {
-        return new ListFacade<>(
-                this::size,
-                i -> get(size() - i)
-        );
+    public Spliterator.@NonNull OfInt spliterator() {
+        return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
+    }
+
+    /**
+     * Returns a new array containing all the elements in this collection.
+     *
+     * @return array
+     */
+    public int @NonNull [] toIntArray() {
+        int[] result = new int[size];
+        System.arraycopy(items, 0, result, 0, size);
+        return result;
+    }
+
+    @Override
+    public @NonNull String toString() {
+        StringBuilder b = new StringBuilder();
+        b.append('[');
+        for (int i = 0; i < size; i++) {
+            if (i > 0) {
+                b.append(", ");
+            }
+            b.append(items[i]);
+        }
+        return b.append(']').toString();
+    }
+
+    /**
+     * Trims the capacity of the list its current size.
+     */
+    public void trimToSize() {
+        items = ListHelper.trimToSize(size, 1, items);
     }
 
 
