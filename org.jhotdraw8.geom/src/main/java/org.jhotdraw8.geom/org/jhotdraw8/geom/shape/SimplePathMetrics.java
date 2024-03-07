@@ -273,19 +273,21 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * Gets an iterator over a segment of the path from arc length s0 to arc length s1.
      *
      * @param s0 the arc length at which the sub-path starts, the value will be clamped to [0,arcLength()].
-     * @param s1 the arc length at which the sub-path ends, the value will be clamped to [0,arcLength()].
+     * @param s1 the arc length at which the sub-path ends, the value will be clamped to [s0,arcLength()].
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */
     @Override
     public @NonNull PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
-        double totalArcLength = arcLength();
-        if (commands.length == 0 || s0 > totalArcLength || s1 < s0) {
+        if (commands.length == 0) {
             return new EmptyPathIterator();
         }
 
-        boolean startsAtFirstSegment = s0 <= 0;
-        boolean endsAtLastSegment = s1 >= totalArcLength;
+        double totalArcLength = arcLength();
+        s0 = MathUtil.clamp(s0, 0, totalArcLength);
+        s1 = MathUtil.clamp(s1, s0, totalArcLength);
+        boolean startsAtFirstSegment = s0 == 0;
+        boolean endsAtLastSegment = s1 == totalArcLength;
 
         if (startsAtFirstSegment && endsAtLastSegment) {
             return new FullPathIterator(this, tx);
