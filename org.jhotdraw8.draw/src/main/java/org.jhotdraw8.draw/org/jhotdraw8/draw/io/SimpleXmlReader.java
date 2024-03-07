@@ -316,7 +316,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         futures.add(task);
     }
 
-    private Consumer<Figure> readProcessingInstruction(XMLStreamReader r, @NonNull Deque<Figure> stack, List<Runnable> secondPass) {
+    private @Nullable Consumer<Figure> readProcessingInstruction(XMLStreamReader r, @NonNull Deque<Figure> stack, List<Runnable> secondPass) {
         if (figureFactory.getStylesheetsKey() != null) {
             String piTarget = r.getPITarget();
             String piData = r.getPIData();
