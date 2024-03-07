@@ -30,10 +30,10 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
 
     /**
-     * Creates a path metrics builder with an accuracy of 0.125 pixels.
+     * Creates a path metrics builder with an accuracy of 1/8 (=0.125) pixels.
      */
     public PathMetricsBuilder() {
-        this(0.03125);
+        this(0.125);
     }
 
     /**
