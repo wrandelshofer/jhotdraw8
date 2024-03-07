@@ -284,6 +284,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     private final Writer w;
     private Set<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName));
     private boolean escapeClosingAngleBracket = true;
+    private boolean escapeLineBreak = true;
     private boolean hasContent;
     private String indentation = "  ";
     private boolean isFirstWrite = true;
@@ -455,6 +456,23 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
      */
     public void setEscapeClosingAngleBracket(boolean b) {
         escapeClosingAngleBracket = b;
+    }
+
+    public boolean isEscapeLineBreak() {
+        return escapeLineBreak;
+    }
+
+    /**
+     * Whether to replace the {@literal '\n'} character by an
+     * entity references.
+     * <p>
+     * This character should always be replaced by an entity reference,
+     * but some non-conforming parsers can not handle the entities.
+     *
+     * @param escapeLineBreak true if line break shall be replaced
+     */
+    public void setEscapeLineBreak(boolean escapeLineBreak) {
+        this.escapeLineBreak = escapeLineBreak;
     }
 
     public boolean isPreserveSpace() {
@@ -840,8 +858,10 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
                     && Character.isSurrogatePair(ch, content.charAt(index + 1))
                     && Character.isISOControl(Character.toCodePoint(ch, content.charAt(index + 1))))
             ) {
-                writeCharRef(ch);
-                continue;
+                if (escapeLineBreak || ch != '\n') {
+                    writeCharRef(ch);
+                    continue;
+                }
             }
 
             switch (ch) {
