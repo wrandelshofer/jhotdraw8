@@ -66,9 +66,9 @@ public interface InputFormat {
             return read(in, drawing, documentHome, workState);
         } catch (IOException e) {
             if (e.getCause() instanceof XMLStreamException xse && xse.getLocation() != null && xse.getLocation().getSystemId() != null) {
-                throw new IOException("Error reading file " + xse.getLocation().getSystemId(), xse);
+                throw new IOException("Error reading " + xse.getLocation().getSystemId(), xse);
             } else {
-                throw new IOException("Error reading file " + file.toAbsolutePath().toUri(), e);
+                throw new IOException("Error reading " + file.toAbsolutePath().toUri(), e);
             }
         }
     }
