@@ -241,7 +241,6 @@ public class CubicCurveCharacteristics {
      *     value, we have a cusp.</li>
      * </ul>
      * <p>
-     * <p>
      * References:
      * <dl>
      *     <dt>Stackoverflow, Calculating the Inflection Point of a Cubic Bezier Curve,

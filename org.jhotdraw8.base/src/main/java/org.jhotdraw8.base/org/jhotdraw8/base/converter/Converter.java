@@ -39,7 +39,6 @@ public interface Converter<T> {
      * @throws ParseException if conversion failed. The error offset field is
      *                        set to the position where parsing failed. The position of the buffer is
      *                        undefined.
-     * @throws IOException    Thrown by the CharBuffer.
      */
     default @Nullable T fromString(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
         return fromString(CharBuffer.wrap(in), idResolver);
@@ -63,7 +62,6 @@ public interface Converter<T> {
      * @throws ParseException if conversion failed. The error offset field is
      *                        set to the position where parsing failed. The position of the buffer is
      *                        undefined.
-     * @throws IOException    Thrown by the CharBuffer.
      */
     @Nullable
     T fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException;
@@ -99,7 +97,6 @@ public interface Converter<T> {
      * @throws ParseException if conversion failed. The error offset field is
      *                        set to the position where parsing failed. The position of the buffer is
      *                        undefined.
-     * @throws IOException    Thrown by the CharBuffer.
      */
     default @Nullable T fromString(@NonNull CharBuffer in) throws ParseException {
         return fromString(in, null);
@@ -119,7 +116,6 @@ public interface Converter<T> {
      * @param in The String.
      * @return The value. Nullable.
      * @throws ParseException on conversion failure
-     * @throws IOException    on IO failure
      */
     default @Nullable T fromString(@NonNull CharSequence in) throws ParseException {
         CharBuffer buf = CharBuffer.wrap(in);

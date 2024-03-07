@@ -233,7 +233,6 @@ public class FXTransforms {
      * Rotates from tangent vector.
      * <p>
      * A tangent vector pointing to (1,0) results in an identity matrix.
-     * <p>
      *
      * @param tangent a tangent vector
      * @param pivot   the pivot of the rotation
@@ -261,7 +260,6 @@ public class FXTransforms {
      * Rotates from tangent vector.
      * <p>
      * A tangent vector pointing to (1,0) results in an identity matrix.
-     * <p>
      *
      * @param tangentX a tangent vector
      * @param tangentY a tangent vector

@@ -44,11 +44,9 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.SequencedSet;
-import java.util.Set;
 import java.util.function.Predicate;
 
 
@@ -85,9 +83,6 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      */
     private final SequencedSet<Figure> dirtyFigureNodes = new LinkedHashSet<>();
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
-    /**
-     * @see #updateLimitProperty()
-     */
     private final IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 10_000);
     private final Map<Figure, Node> figureToNodeMap = new IdentityHashMap<>();
     private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();

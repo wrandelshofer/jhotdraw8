@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  * Processes the {@code round()} function.
  * <pre>
  * round               = "round(", [ rounding-strategy , "," ] , calc-sum , [ "," , calc-sum ] ")" ;
- * <rounding-strategy> = "nearest" | "up" | "down" | "to-zero" ;
+ * rounding-strategy   = "nearest" | "up" | "down" | "to-zero" ;
  * calc-sum            = (* see superclass *)
  * </pre>
  * <dl>
