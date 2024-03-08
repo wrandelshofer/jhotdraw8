@@ -8,12 +8,11 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.icollection.ChampVectorSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 import java.io.Serial;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 
 /**
@@ -41,7 +40,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
      */
     private final @NonNull Type type;
 
-    private final @NonNull List<MapAccessor<?>> subAccessors;
+    private final @NonNull ImmutableSequencedSet<MapAccessor<?>> subAccessors;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -75,7 +74,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
         this.name = name;
         this.type = type;
         this.defaultValue = defaultValue;
-        this.subAccessors = Arrays.asList(subAccessors.clone());
+        this.subAccessors = ChampVectorSet.of(subAccessors);
     }
 
     /**
@@ -114,7 +113,7 @@ public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> 
     }
 
     @Override
-    public @NonNull Collection<MapAccessor<?>> getSubAccessors() {
+    public @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 

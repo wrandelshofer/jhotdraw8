@@ -11,16 +11,13 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jhotdraw8.icollection.ChampVectorSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 import java.io.Serial;
 import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * AbstractStyleableMapAccessor.
@@ -49,7 +46,7 @@ public abstract class AbstractStyleableMapAccessor<T>
      */
     private final @NonNull Type type;
 
-    private final @NonNull Set<MapAccessor<?>> subAccessors;
+    private final @NonNull ImmutableSequencedSet<MapAccessor<?>> subAccessors;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -84,10 +81,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         this.type = type;
         this.defaultValue = defaultValue;
 
-        // Replace with Set.of once we are on Java 11
-        //this.subAccessors = Set.of(subAccessors);
-        this.subAccessors = Collections.unmodifiableSet(new LinkedHashSet<>(Arrays.asList(subAccessors)));
-
+        this.subAccessors = ChampVectorSet.of(subAccessors);
         cssName = ReadOnlyStyleableMapAccessor.toCssName(name);
     }
 
@@ -139,7 +133,7 @@ public abstract class AbstractStyleableMapAccessor<T>
     }
 
     @Override
-    public @NonNull Set<MapAccessor<?>> getSubAccessors() {
+    public @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 

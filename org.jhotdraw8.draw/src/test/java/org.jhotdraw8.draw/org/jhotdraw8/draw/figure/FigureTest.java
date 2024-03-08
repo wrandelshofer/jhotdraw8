@@ -25,6 +25,7 @@ import org.jhotdraw8.fxbase.styleable.StyleableBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
 
@@ -46,11 +47,11 @@ public class FigureTest {
      */
     @Test
     public void testGetDeclaredAndInheritedKeys() {
-        Set<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
-        Set<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
-        //System.out.println("rr:" + rectangleFigureKeys);
-        Set<MapAccessor<?>> intersection = new HashSet<>(figureKeys);
-        intersection.retainAll(rectangleFigureKeys);
+        ImmutableSet<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
+        ImmutableSet<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
+        //System.out.println("rr:" + rectangleFigureKeys.asSet());
+        Set<MapAccessor<?>> intersection = new HashSet<>(figureKeys.asSet());
+        intersection.retainAll(rectangleFigureKeys.asSet());
         //System.out.println("ri:" + intersection);
         assertEquals(figureKeys, intersection);
     }

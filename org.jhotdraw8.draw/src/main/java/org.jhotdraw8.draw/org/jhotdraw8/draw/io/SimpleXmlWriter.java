@@ -285,7 +285,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
                 done.add(k);
                 if (!k.isTransient()) {
                     @SuppressWarnings("unchecked") CompositeMapAccessor<Object> cmap = (CompositeMapAccessor<Object>) k;
-                    done.addAll(cmap.getSubAccessors());
+                    done.addAll(cmap.getSubAccessors().asSet());
                     writeElementAttribute(w, figure, cmap);
                 }
             }

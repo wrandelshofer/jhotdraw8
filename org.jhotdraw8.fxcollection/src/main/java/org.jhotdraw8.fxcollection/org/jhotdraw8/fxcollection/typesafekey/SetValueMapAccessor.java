@@ -6,15 +6,15 @@ package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 
 import java.io.Serial;
-import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Set;
 
 /**
  * SetValueMapAccessor.
@@ -67,8 +67,8 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public @NonNull Set<MapAccessor<?>> getSubAccessors() {
-        return Collections.singleton(setAccessor);
+    public @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
+        return ChampVectorSet.of(setAccessor);
     }
 
     @Override

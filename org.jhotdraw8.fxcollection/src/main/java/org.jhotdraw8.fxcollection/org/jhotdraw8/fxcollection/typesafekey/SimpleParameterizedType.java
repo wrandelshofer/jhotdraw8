@@ -4,6 +4,8 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Arrays;
+import java.util.Objects;
 
 public record SimpleParameterizedType(@NonNull Type rawType,
                                       @NonNull Type... actualTypeArguments) implements ParameterizedType {
@@ -43,5 +45,20 @@ public record SimpleParameterizedType(@NonNull Type rawType,
     @Override
     public Type getOwnerType() {
         return null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleParameterizedType that = (SimpleParameterizedType) o;
+        return Objects.equals(rawType, that.rawType) && Arrays.equals(actualTypeArguments, that.actualTypeArguments);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(rawType);
+        result = 31 * result + Arrays.hashCode(actualTypeArguments);
+        return result;
     }
 }

@@ -106,7 +106,6 @@ import org.jhotdraw8.xml.converter.WordSetXmlConverter;
 
 import java.net.URI;
 import java.net.URL;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -136,7 +135,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addFigureKeysAndNames("CombinedPath", CombinedPathFigure.class);
 
         {
-            Set<MapAccessor<?>> keys = new HashSet<>(Figure.getDeclaredAndInheritedMapAccessors(AbstractDrawing.class));
+            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedMapAccessors(AbstractDrawing.class).asSet();
             keys.remove(Drawing.USER_AGENT_STYLESHEETS);
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
             keys.remove(Drawing.INLINE_STYLESHEETS);

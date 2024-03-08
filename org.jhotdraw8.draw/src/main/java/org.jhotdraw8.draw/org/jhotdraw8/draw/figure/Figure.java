@@ -39,13 +39,13 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -176,9 +176,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * FIXME should be private!
      */
-    Map<Class<?>, Set<MapAccessor<?>>> declaredAndInheritedKeys = new ConcurrentHashMap<>();
+    Map<Class<?>, ImmutableSet<MapAccessor<?>>> declaredAndInheritedKeys = new ConcurrentHashMap<>();
 
-    static void getDeclaredMapAccessors(@NonNull Class<?> clazz, @NonNull Collection<MapAccessor<?>> keys) {
+    static ImmutableSet<MapAccessor<?>> getDeclaredMapAccessors(@NonNull Class<?> clazz, @NonNull ImmutableSet<MapAccessor<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (Modifier.isStatic(f.getModifiers())
@@ -187,12 +187,13 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     if (k == null) {
                         throw new RuntimeException(clazz + " has null value for key: " + f);
                     }
-                    keys.add(k);
+                    keys = keys.add(k);
                 }
             }
         } catch (IllegalArgumentException | IllegalAccessException ex) {
             throw new RuntimeException(clazz + " has non-public keys", ex);
         }
+        return keys;
     }
 
     static void getDeclaredKeys(@NonNull Class<?> clazz, @NonNull Collection<Key<?>> keys) {
@@ -215,16 +216,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param clazz A figure class.
      * @return an unmodifiable set of the keys
      */
-    static Set<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
-        Set<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
+    static ImmutableSet<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
+        ImmutableSet<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
         if (keys == null) {
-            keys = new HashSet<>();
+            keys = ChampSet.of();
             ArrayDeque<Class<?>> todo = new ArrayDeque<>();
             Set<Class<?>> done = new HashSet<>();
             todo.add(clazz);
             while (!todo.isEmpty()) {
                 Class<?> c = todo.removeFirst();
-                getDeclaredMapAccessors(c, keys);
+                keys = getDeclaredMapAccessors(c, keys);
                 if (c.getSuperclass() != null) {
                     todo.add(c.getSuperclass());
                 }
@@ -235,7 +236,6 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                 }
 
             }
-            keys = Collections.unmodifiableSet(keys);
             declaredAndInheritedKeys.put(clazz, keys);
         }
         return keys;
@@ -786,7 +786,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return an unmodifiable set of keys
      */
-    default @NonNull Set<MapAccessor<?>> getSupportedKeys() {
+    default @NonNull ImmutableSet<MapAccessor<?>> getSupportedKeys() {
         return Figure.getDeclaredAndInheritedMapAccessors(this.getClass());
     }
 

@@ -257,7 +257,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         }
         for (MapAccessor<?> key : element.getSupportedKeys()) {
             if (key instanceof CompositeMapAccessor) {
-                attrk.removeAll(((CompositeMapAccessor<?>) key).getSubAccessors());
+                attrk.removeAll(((CompositeMapAccessor<?>) key).getSubAccessors().asSet());
             }
         }
         for (WritableStyleableMapAccessor<?> key : attrk) {

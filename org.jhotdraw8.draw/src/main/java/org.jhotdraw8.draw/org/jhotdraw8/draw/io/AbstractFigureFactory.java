@@ -142,17 +142,17 @@ public abstract class AbstractFigureFactory implements FigureFactory {
      * @param f    the figure
      * @param keys the keys
      */
-    public void addFigureAttributeKeys(Class<? extends Figure> f, @NonNull Collection<MapAccessor<?>> keys) {
+    public void addFigureAttributeKeys(Class<? extends Figure> f, @NonNull Iterable<MapAccessor<?>> keys) {
         for (MapAccessor<?> key : keys) {
             addKey(f, key.getName(), key);
         }
     }
 
     public void addFigureKeysAndNames(String figureName, @NonNull Class<? extends Figure> f) {
-        addFigureKeysAndNames(figureName, f, Figure.getDeclaredAndInheritedMapAccessors(f));
+        addFigureKeysAndNames(figureName, f, Figure.getDeclaredAndInheritedMapAccessors(f).asSet());
     }
 
-    public void addFigureKeysAndNames(String figureName, @NonNull Class<? extends Figure> f, @NonNull Collection<MapAccessor<?>> keys) {
+    public void addFigureKeysAndNames(String figureName, @NonNull Class<? extends Figure> f, @NonNull Iterable<MapAccessor<?>> keys) {
         addFigure(figureName, f);
         addFigureAttributeKeys(f, keys);
         for (MapAccessor<?> key : keys) {

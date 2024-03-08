@@ -5,8 +5,8 @@
 package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
-import java.util.Collection;
 import java.util.Map;
 
 /**
@@ -29,8 +29,7 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
         return true;
     }
 
-    // FIXME refactor this to ReadOnlyCollection, because we do not allow writes
-    @NonNull
-    Collection<MapAccessor<?>> getSubAccessors();
+
+    @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors();
 
 }

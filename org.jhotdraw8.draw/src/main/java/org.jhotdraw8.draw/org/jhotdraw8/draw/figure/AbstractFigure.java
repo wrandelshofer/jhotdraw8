@@ -20,6 +20,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
+import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.util.Collections;
@@ -55,7 +56,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         return keyMaps.computeIfAbsent(getClass(), k -> {
             int index = 0;
 
-            Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
+            ImmutableSet<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
             Map<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
             for (MapAccessor<?> accessor : accessors) {
                 if (accessor instanceof Key<?>) {
