@@ -128,12 +128,12 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
         return backingList.contains(o);
     }
 
-    class MyIterator<E> implements Iterator<E> {
-        final @NonNull Iterator<E> b;
-        @Nullable E current;
+    class MyIterator<EE> implements Iterator<EE> {
+        final @NonNull Iterator<EE> b;
+        @Nullable EE current;
         boolean canRemove;
 
-        MyIterator(@NonNull Iterator<E> b) {
+        MyIterator(@NonNull Iterator<EE> b) {
             this.b = b;
         }
 
@@ -143,7 +143,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
         }
 
         @Override
-        public E next() {
+        public EE next() {
             current = b.next();
             canRemove = true;
             return current;

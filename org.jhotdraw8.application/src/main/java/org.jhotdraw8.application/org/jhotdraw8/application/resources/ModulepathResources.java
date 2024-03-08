@@ -13,14 +13,12 @@ import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.SequencedSet;
 import java.util.ServiceLoader;
-import java.util.Set;
 import java.util.logging.Logger;
 import java.util.spi.ResourceBundleProvider;
 
@@ -135,19 +133,19 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
             String[] split = moduleAndParentBaseName.split("\\s+|\\s*,\\s*");
             String parentBaseName;
             Module parentModule;
-            switch (split.length) {
-            case 1:
-                parentModule = module;
-                parentBaseName = split[0];
-                break;
-            case 2:
-                parentModule = ModuleLayer.boot().findModule(split[0]).orElseThrow(
-                        () -> new MissingResourceException("Can't find module " + split[0], baseName, locale.toString()));
-                parentBaseName = split[1];
-                break;
-            default:
-                throw new IllegalArgumentException("Illegal " + PARENT_RESOURCE_KEY + " resource " + moduleAndParentBaseName);
-            }
+            parentBaseName = switch (split.length) {
+                case 1 -> {
+                    parentModule = module;
+                    yield split[0];
+                }
+                case 2 -> {
+                    parentModule = ModuleLayer.boot().findModule(split[0]).orElseThrow(
+                            () -> new MissingResourceException("Can't find module " + split[0], baseName, locale.toString()));
+                    yield split[1];
+                }
+                default ->
+                        throw new IllegalArgumentException("Illegal " + PARENT_RESOURCE_KEY + " resource " + moduleAndParentBaseName);
+            };
             try {
                 potentialParent = new ModulepathResources(parentModule, parentBaseName, locale);
             } catch (MissingResourceException e) {

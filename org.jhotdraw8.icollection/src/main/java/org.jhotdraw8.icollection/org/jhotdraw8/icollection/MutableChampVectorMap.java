@@ -181,7 +181,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
 
     @SuppressWarnings("unchecked")
     private @NonNull Spliterator<Entry<K, V>> reverseSpliterator() {
-        return new ReverseTombSkippingVectorSpliterator<Entry<K, V>>(vector,
+        return new ReverseTombSkippingVectorSpliterator<>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
                 size(), characteristics() | Spliterator.NONNULL);
@@ -190,7 +190,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull Spliterator<Entry<K, V>> spliterator() {
-        return new TombSkippingVectorSpliterator<Entry<K, V>>(vector.trie,
+        return new TombSkippingVectorSpliterator<>(vector.trie,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
                 0, size(), vector.size(), characteristics() | Spliterator.NONNULL);

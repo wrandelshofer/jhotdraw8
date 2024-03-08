@@ -113,13 +113,9 @@ public class FXWorker {
             try {
                 w.updateState(Worker.State.RUNNING);
                 T result = supplier.apply(workState);
-                Platform.runLater(() -> {
-                    w.complete(result);
-                });
+                Platform.runLater(() -> w.complete(result));
             } catch (Throwable e) {
-                Platform.runLater(() -> {
-                    w.completeExceptionally(e);
-                });
+                Platform.runLater(() -> w.completeExceptionally(e));
             }
         });
         return w;

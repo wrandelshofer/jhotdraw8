@@ -158,20 +158,13 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     public void trackKeyPressed(KeyEvent event, DrawingView view) {
         CssPoint2D translate = null;
         if (event.getEventType() == KeyEvent.KEY_PRESSED) {
-            switch (event.getCode()) {
-            case UP:
-                translate = new CssPoint2D(0, -1);
-                break;
-            case DOWN:
-                translate = new CssPoint2D(0, 1);
-                break;
-            case LEFT:
-                translate = new CssPoint2D(-1, 0);
-                break;
-            case RIGHT:
-                translate = new CssPoint2D(1, 0);
-                break;
-            }
+            translate = switch (event.getCode()) {
+                case UP -> new CssPoint2D(0, -1);
+                case DOWN -> new CssPoint2D(0, 1);
+                case LEFT -> new CssPoint2D(-1, 0);
+                case RIGHT -> new CssPoint2D(1, 0);
+                default -> null;
+            };
         }
         if (translate != null) {
             event.consume();

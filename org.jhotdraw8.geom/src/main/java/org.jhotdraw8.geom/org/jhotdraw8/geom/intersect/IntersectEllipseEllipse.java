@@ -84,23 +84,23 @@ public class IntersectEllipseEllipse {
         double norm1 = (b[0] * b[0] + 2 * b[1] * b[1] + b[2] * b[2]) * Intersections.EPSILON;
         List<IntersectionPoint> result = new ArrayList<>();
 
-        for (int y = 0; y < yRoots.length; y++) {
+        for (double yRoot : yRoots) {
             Polynomial xPoly = new Polynomial(
                     a[0],
-                    a[3] + yRoots[y] * a[1],
-                    a[5] + yRoots[y] * (a[4] + yRoots[y] * a[2])
+                    a[3] + yRoot * a[1],
+                    a[5] + yRoot * (a[4] + yRoot * a[2])
             );
             double[] xRoots = xPoly.getRoots();
 
-            for (int x = 0; x < xRoots.length; x++) {
-                double test = (a[0] * xRoots[x] + a[1] * yRoots[y] + a[3]) * xRoots[x]
-                        + (a[2] * yRoots[y] + a[4]) * yRoots[y] + a[5];
+            for (double xRoot : xRoots) {
+                double test = (a[0] * xRoot + a[1] * yRoot + a[3]) * xRoot
+                        + (a[2] * yRoot + a[4]) * yRoot + a[5];
                 if (Math.abs(test) < norm0) {
-                    test = (b[0] * xRoots[x] + b[1] * yRoots[y] + b[3]) * xRoots[x]
-                            + (b[2] * yRoots[y] + b[4]) * yRoots[y] + b[5];
+                    test = (b[0] * xRoot + b[1] * yRoot + b[3]) * xRoot
+                            + (b[2] * yRoot + b[4]) * yRoot + b[5];
                     if (Math.abs(test) < norm1) {
                         // FIXME compute angle in radians
-                        result.add(new IntersectionPoint(new Point2D.Double(xRoots[x], yRoots[y]), Double.NaN));
+                        result.add(new IntersectionPoint(new Point2D.Double(xRoot, yRoot), Double.NaN));
                     }
                 }
             }

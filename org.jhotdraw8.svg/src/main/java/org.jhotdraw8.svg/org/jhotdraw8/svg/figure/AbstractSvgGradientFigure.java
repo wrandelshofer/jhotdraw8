@@ -54,7 +54,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
      */
     public static final @NonNull NonNullObjectStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
             new NonNullObjectStyleableKey<>("gradientUnits", SvgGradientUnits.class,
-                    new MappedConverter<SvgGradientUnits>(Map.of(
+                    new MappedConverter<>(Map.of(
                             "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
                             "objectBoundingBox", SvgGradientUnits.OBJECT_BOUNDING_BOX
                     )),
@@ -66,7 +66,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
      */
     public static final @NonNull NonNullObjectStyleableKey<CycleMethod> SPREAD_METHOD =
             new NonNullObjectStyleableKey<>("spreadMethod", CycleMethod.class,
-                    new MappedConverter<CycleMethod>(Map.of(
+                    new MappedConverter<>(Map.of(
                             "pad", CycleMethod.NO_CYCLE,
                             "reflect", CycleMethod.REFLECT,
                             "repeat", CycleMethod.REPEAT
@@ -75,7 +75,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
             );
 
 
-    public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new NonNullObjectKey<ImmutableList<SvgStop>>("stops",
+    public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new NonNullObjectKey<>("stops",
             new SimpleParameterizedType(ImmutableList.class, SvgStop.class), VectorList.of());
 
     public AbstractSvgGradientFigure() {
@@ -102,35 +102,26 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
         ArrayList<Stop> stops = new ArrayList<>(cssStops.size());
         double maxOffset = 0;
         for (SvgStop cssStop : cssStops) {
-            SvgDefaultablePaint<CssColor> colorDef = cssStop.getColor();
+            SvgDefaultablePaint<CssColor> colorDef = cssStop.color();
             CssColor cssColor;
             if (colorDef == null) {
                 cssColor = NamedCssColor.BLACK;
             } else if (colorDef.getDefaulting() == null) {
                 cssColor = colorDef.getValue();
             } else {
-                switch (colorDef.getDefaulting()) {
-                    default:
-                    case INHERIT:
-                        cssColor = getDefaultableStyled(STOP_COLOR_KEY);
-                        break;
-                    case CURRENT_COLOR:
-                        cssColor = getDefaultableStyled(COLOR_KEY);
-                        break;
-                }
+                cssColor = switch (colorDef.getDefaulting()) {
+                    default -> getDefaultableStyled(STOP_COLOR_KEY);
+                    case CURRENT_COLOR -> getDefaultableStyled(COLOR_KEY);
+                };
             }
-            Double offset = cssStop.getOffset();
-            CssDefaultableValue<CssSize> opacityDef = cssStop.getOpacity();
+            Double offset = cssStop.offset();
+            CssDefaultableValue<CssSize> opacityDef = cssStop.opacity();
             CssSize opacity;
             if (opacityDef.getDefaulting() != null) {
-                switch (opacityDef.getDefaulting()) {
-                    case INHERIT:
-                        opacity = getDefaultableStyled(STOP_OPACITY_KEY);
-                        break;
-                    default:
-                        opacity = CssSize.ONE;
-                        break;
-                }
+                opacity = switch (opacityDef.getDefaulting()) {
+                    case INHERIT -> getDefaultableStyled(STOP_OPACITY_KEY);
+                    default -> CssSize.ONE;
+                };
             } else {
                 opacity = opacityDef.getValue();
             }

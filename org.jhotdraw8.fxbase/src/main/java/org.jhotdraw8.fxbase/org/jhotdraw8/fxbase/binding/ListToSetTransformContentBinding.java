@@ -82,8 +82,7 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
             return true;
         }
 
-        if (obj instanceof ListToSetTransformContentBinding) {
-            final ListToSetTransformContentBinding<?, ?> that = (ListToSetTransformContentBinding<?, ?>) obj;
+        if (obj instanceof ListToSetTransformContentBinding<?, ?> that) {
             // Compare identity of collections and not their content.
             return this.dest == that.dest && this.source == that.source;
         }

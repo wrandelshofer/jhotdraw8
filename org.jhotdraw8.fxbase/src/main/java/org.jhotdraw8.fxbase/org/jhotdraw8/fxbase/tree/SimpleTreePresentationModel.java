@@ -43,36 +43,36 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
      * an equality-based map.
      */
     private final Map<N, TreeItem<N>> items;
-    private final Listener<TreeModelEvent<N>> modelHandler = new Listener<TreeModelEvent<N>>() {
+    private final Listener<TreeModelEvent<N>> modelHandler = new Listener<>() {
         @Override
         public void handle(@NonNull TreeModelEvent<N> event) {
             updating++;
             try {
                 N f = event.getNode();
                 switch (event.getEventType()) {
-                case NODE_ADDED_TO_PARENT:
-                    onNodeAdded(f, event.getParent(), event.getChildIndex());
-                    break;
-                case NODE_REMOVED_FROM_PARENT:
-                    onNodeRemoved(f, event.getParent(), event.getChildIndex());
-                    break;
-                case NODE_ADDED_TO_TREE:
-                    onNodeAddedToTree(f, event.getParent(), event.getChildIndex());
-                    break;
-                case NODE_REMOVED_FROM_TREE:
-                    onNodeRemovedFromTree(f);
-                    break;
-                case NODE_CHANGED:
-                    onNodeInvalidated(f);
-                    break;
-                case ROOT_CHANGED:
-                    onRootChanged();
-                    break;
-                case SUBTREE_NODES_CHANGED:
-                    break;
-                default:
-                    throw new UnsupportedOperationException(event.getEventType()
-                            + " not supported");
+                    case NODE_ADDED_TO_PARENT:
+                        onNodeAdded(f, event.getParent(), event.getChildIndex());
+                        break;
+                    case NODE_REMOVED_FROM_PARENT:
+                        onNodeRemoved(f, event.getParent(), event.getChildIndex());
+                        break;
+                    case NODE_ADDED_TO_TREE:
+                        onNodeAddedToTree(f, event.getParent(), event.getChildIndex());
+                        break;
+                    case NODE_REMOVED_FROM_TREE:
+                        onNodeRemovedFromTree(f);
+                        break;
+                    case NODE_CHANGED:
+                        onNodeInvalidated(f);
+                        break;
+                    case ROOT_CHANGED:
+                        onRootChanged();
+                        break;
+                    case SUBTREE_NODES_CHANGED:
+                        break;
+                    default:
+                        throw new UnsupportedOperationException(event.getEventType()
+                                + " not supported");
                 }
             } finally {
                 updating--;

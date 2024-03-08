@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -53,7 +52,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Supplier;
@@ -81,7 +79,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private final @NonNull HashMap<Layer, Integer> selectionCount = new HashMap<>();
 
-    private final @Nullable ChangeListener<Figure> selectedLayerHandler = new ChangeListener<Figure>() {
+    private final @Nullable ChangeListener<Figure> selectedLayerHandler = new ChangeListener<>() {
         int changedRecursion = 0;
 
         @Override
@@ -94,17 +92,15 @@ public class LayersInspector extends AbstractDrawingInspector {
             changedRecursion--;
         }
     };
-    private final @Nullable Listener<TreeModelEvent<Figure>> listInvalidationListener = new Listener<TreeModelEvent<Figure>>() {
-        @Override
-        public void handle(@NonNull TreeModelEvent<Figure> event) {
-            boolean fire = false;
-            Figure root = event.getSource().getRoot();
-            switch (event.getEventType()) {
+    private final @Nullable Listener<TreeModelEvent<Figure>> listInvalidationListener = event -> {
+        boolean fire = false;
+        Figure root = event.getSource().getRoot();
+        switch (event.getEventType()) {
 
-                case ROOT_CHANGED:
-                    fire = true;
-                    break;
-                case SUBTREE_NODES_CHANGED:
+            case ROOT_CHANGED:
+                fire = true;
+                break;
+            case SUBTREE_NODES_CHANGED:
                 if (event.getNode() == root) {
                     fire = true;
                 }
@@ -119,23 +115,17 @@ public class LayersInspector extends AbstractDrawingInspector {
             case NODE_REMOVED_FROM_TREE:
             case NODE_CHANGED:
                 break;
-            }
+        }
 
-            // FIXME why do we call fireNodeInvalidated? The model should do this for us???
-            // FIXME must perform change via the model so that undo/redo will work
-            if (fire && subject != null) {
-                getModel().fireNodeInvalidated(getDrawing());
-            }
+        // FIXME why do we call fireNodeInvalidated? The model should do this for us???
+        // FIXME must perform change via the model so that undo/redo will work
+        if (fire) {
+            getModel().fireNodeInvalidated(getDrawing());
         }
     };
 
 
-    private final @NonNull InvalidationListener selectionInvalidationListener = new InvalidationListener() {
-        @Override
-        public void invalidated(Observable observable) {
-            onSelectionChanged();
-        }
-    };
+    private final @NonNull InvalidationListener selectionInvalidationListener = observable -> onSelectionChanged();
 
     public LayersInspector() {
         this(LayersInspector.class.getResource("LayersInspector.fxml"));
@@ -241,7 +231,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
             });
 
-            ClipboardIO<Figure> io = new ClipboardIO<Figure>() {
+            ClipboardIO<Figure> io = new ClipboardIO<>() {
 
                 @Override
                 public void write(@NonNull Clipboard clipboard, @NonNull List<Figure> items) {
@@ -308,7 +298,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             }
         }
         if (newValue != null && newValue.getRoot() != null && drawingModel != null) {
-            layers = new ReversedObservableList<Figure>(
+            layers = new ReversedObservableList<>(
                     new DrawingModelFigureChildrenObservableList(drawingModel, newValue));
             listView.setItems(layers);
         }
@@ -367,7 +357,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             this.io = io;
         }
 
-        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {
@@ -403,7 +393,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         };
 
         @NonNull
-        EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
+        final EventHandler<? super DragEvent> cellDragHandler = new EventHandler<>() {
 
             @Override
             public void handle(@NonNull DragEvent event) {

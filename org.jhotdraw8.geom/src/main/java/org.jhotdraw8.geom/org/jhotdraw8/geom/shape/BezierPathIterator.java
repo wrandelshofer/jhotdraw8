@@ -77,9 +77,7 @@ public class BezierPathIterator implements PathIterator {
     public void next() {
         if (isDone()) return;
         switch (state) {
-            case FINAL_SEGMENT -> {
-                state = State.DONE;
-            }
+            case FINAL_SEGMENT -> state = State.DONE;
             case PRODUCE_SEGMENT -> {
                 BezierNode prev = path.get(index - 1);
                 BezierNode current = path.get(index);
@@ -172,9 +170,7 @@ public class BezierPathIterator implements PathIterator {
                 }
             }
 
-            default -> {
-                throw new NoSuchElementException();
-            }
+            default -> throw new NoSuchElementException();
 
         }
     }

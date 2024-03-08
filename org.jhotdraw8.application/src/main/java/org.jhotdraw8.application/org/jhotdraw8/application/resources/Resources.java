@@ -124,7 +124,7 @@ public interface Resources {
     default void configureAction(@NonNull Action action, String argument, @NonNull Class<?> baseClass) {
         action.set(Action.LABEL, getTextProperty(argument));
         String shortDescription = getToolTipTextProperty(argument);
-        if (shortDescription != null && shortDescription.length() > 0) {
+        if (shortDescription != null && !shortDescription.isEmpty()) {
             action.set(Action.SHORT_DESCRIPTION, shortDescription);
         }
         action.set(Action.ACCELERATOR_KEY, getAcceleratorProperty(argument));
@@ -313,7 +313,7 @@ public interface Resources {
      */
     default char getMnemonic(@NonNull String key) {
         String s = getString(key);
-        return (s == null || s.length() == 0) ? '\0' : s.charAt(0);
+        return (s == null || s.isEmpty()) ? '\0' : s.charAt(0);
     }
 
     /**
@@ -333,7 +333,7 @@ public interface Resources {
             ResourcesHelper.LOG.warning("Warning ClasspathResources[" + getBaseName() + "] \"" + key + ".mnemonic\" not found.");
             s = null;
         }
-        return (s == null || s.length() == 0) ? null : KeyCombination.valueOf(s);
+        return (s == null || s.isEmpty()) ? null : KeyCombination.valueOf(s);
     }
 
     /**

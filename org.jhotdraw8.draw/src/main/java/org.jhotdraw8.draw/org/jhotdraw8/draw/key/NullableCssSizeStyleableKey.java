@@ -19,7 +19,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
         implements WritableStyleableMapAccessor<CssSize> {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final Converter<CssSize> converter = new SizeCssConverter(true);
 

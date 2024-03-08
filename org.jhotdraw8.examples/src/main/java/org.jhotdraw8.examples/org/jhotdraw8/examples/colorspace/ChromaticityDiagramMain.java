@@ -33,7 +33,7 @@ public class ChromaticityDiagramMain extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         ChromaticityDiagram chromaticityDiagram = new ChromaticityDiagram();
-        ComboBox<NamedColorSpace> csComboBox = new ComboBox<NamedColorSpace>();
+        ComboBox<NamedColorSpace> csComboBox = new ComboBox<>();
         csComboBox.getItems().setAll(
                 new A98RgbColorSpace(),
                 //new CieLabColorSpace(),
@@ -59,7 +59,7 @@ public class ChromaticityDiagramMain extends Application {
                 new SrgbColorSpace()
         );
         csComboBox.setValue(csComboBox.getItems().getFirst());
-        ComboBox<NamedColorSpace> displayCsComboBox = new ComboBox<NamedColorSpace>();
+        ComboBox<NamedColorSpace> displayCsComboBox = new ComboBox<>();
         displayCsComboBox.getItems().setAll(
                 new SrgbColorSpace(),
                 new DisplayP3ColorSpace()

@@ -33,9 +33,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
@@ -151,7 +149,7 @@ public abstract class AbstractApplication extends javafx.application.Application
                 if (skip-- > 0) {
                     continue;
                 }
-                if (buf.length() != 0) {
+                if (!buf.isEmpty()) {
                     buf.append('\n');
                 }
                 URI uri = entry.getKey();

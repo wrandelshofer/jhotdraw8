@@ -52,17 +52,15 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
         }
         try {
             Path path = Paths.get(uri);
-            if (path != null) {
-                //Desktop.getDesktop().browseFileDirectory(path.toFile());
+            //Desktop.getDesktop().browseFileDirectory(path.toFile());
+            try {
                 try {
-                    try {
-                        Desktop.class.getMethod("browseFileDirectory", File.class).invoke(Desktop.getDesktop(), path.toFile());
-                    } catch (IllegalAccessException | InvocationTargetException e) {
-                        e.printStackTrace();
-                    }
-                } catch (NoSuchMethodException e) {
+                    Desktop.class.getMethod("browseFileDirectory", File.class).invoke(Desktop.getDesktop(), path.toFile());
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
             }
         } catch (FileSystemNotFoundException e) {
             Logger.getLogger(BrowseFileDirectoryAction.class.getName()).warning(e.getMessage());

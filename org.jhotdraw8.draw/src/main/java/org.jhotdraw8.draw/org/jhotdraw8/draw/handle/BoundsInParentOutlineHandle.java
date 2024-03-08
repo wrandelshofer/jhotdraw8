@@ -79,9 +79,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t != null) {
-            FXTransforms.transform2DPoints(t, points, 0, points, 0, 4);
-        }
+        FXTransforms.transform2DPoints(t, points, 0, points, 0, 4);
 
         ObservableList<Double> pp = node.getPoints();
         for (int i = 0; i < points.length; i++) {

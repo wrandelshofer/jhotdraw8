@@ -113,7 +113,6 @@ public abstract class Node<K, V> {
                     entries[1] = v0;
                     entries[ENTRY_LENGTH + 1] = v1;
                 }
-                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             } else {
                 entries[0] = k1;
                 entries[ENTRY_LENGTH] = k0;
@@ -121,8 +120,8 @@ public abstract class Node<K, V> {
                     entries[1] = v1;
                     entries[ENTRY_LENGTH + 1] = v0;
                 }
-                return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
             }
+            return ChampTrie.newBitmapIndexedNode(mutator, (0), dataMap, entries);
         } else {
             final Node<K, V> node = mergeTwoDataEntriesIntoNode(mutator,
                     k0, v0, keyHash0,

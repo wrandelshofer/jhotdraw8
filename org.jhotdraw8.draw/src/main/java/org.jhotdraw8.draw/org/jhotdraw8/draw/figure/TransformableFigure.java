@@ -33,7 +33,6 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.SequencedSet;
@@ -231,7 +230,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
 
             if (tx != 0.0 || ty != 0.0) {
                 Translate tt = new Translate(tx, ty);
-                l2p = FXTransforms.concat(l2p, tt);
+                l2p = FXTransforms.concat(null, tt);
             }
             if (r != 0) {
                 CssPoint2D cssPivot = getStyledNonNull(ROTATION_PIVOT);
@@ -425,8 +424,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (t.isIdentity()) {
             return;
         }
-        if (t instanceof Translate) {
-            Translate tr = (Translate) t;
+        if (t instanceof Translate tr) {
             flattenTransforms();
             ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {

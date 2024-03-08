@@ -19,7 +19,11 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.AnchorableFigure;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
+import org.jhotdraw8.draw.figure.TextEditableFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
 
@@ -92,7 +96,7 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
             DrawingView drawingView = getDrawingView();
             if (drawingView != null) {
                 DrawingModel model = drawingView.getModel();
-                model.set(editorData.figure, editorData.textKey, textArea.getText());
+                model.set(editorData.figure(), editorData.textKey(), textArea.getText());
             }
             editorData = null;
         }
@@ -140,14 +144,14 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
     private void startEditing(TextEditableFigure.@NonNull TextEditorData data, @NonNull DrawingView dv) {
         dv.getSelectedFigures().clear();
         dv.getEditor().setHandleType(HandleType.SELECT);
-        dv.getSelectedFigures().add(data.figure);
+        dv.getSelectedFigures().add(data.figure());
         editorData = data;
         textArea.setManaged(false);
         node.getChildren().add(textArea);
-        Bounds bounds = dv.worldToView(data.figure.localToWorld(data.boundsInLocal));
+        Bounds bounds = dv.worldToView(data.figure().localToWorld(data.boundsInLocal()));
         textArea.resizeRelocate(bounds.getMinX(), bounds.getMinY(), max(80, max(textArea.getMinWidth(), bounds.getWidth())),
                 max(40, max(textArea.getMinHeight(), bounds.getHeight())));
-        textArea.setText(data.figure.get(editorData.textKey));
+        textArea.setText(data.figure().get(editorData.textKey()));
         textArea.requestFocus();
     }
 
@@ -234,10 +238,11 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     public @NonNull String getHelpText() {
-        return "CreationTool"
-                + "\n  Click on the drawing view. The tool will create a new figure with default size at the clicked location."
-                + "\nOr:"
-                + "\n  Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.";
+        return """
+               CreationTool
+                 Click on the drawing view. The tool will create a new figure with default size at the clicked location.
+               Or:
+                 Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.""";
     }
 
 }

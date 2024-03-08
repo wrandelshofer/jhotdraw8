@@ -71,14 +71,14 @@ public class CssLinearGradient implements Paintable {
             for (int i = 0; i < cstops.length; i++) {
                 CssStop cstop = cstops[i];
                 double offset;
-                if (cstop.getOffset() == null) {
+                if (cstop.offset() == null) {
                     int left = i, right = i;
-                    for (; left > 0 && cstops[left].getOffset() == null; left--) {
+                    for (; left > 0 && cstops[left].offset() == null; left--) {
                     }
-                    for (; right < cstops.length - 1 && cstops[right].getOffset() == null; right++) {
+                    for (; right < cstops.length - 1 && cstops[right].offset() == null; right++) {
                     }
-                    double leftOffset = cstops[left].getOffset() == null ? 0.0 : cstops[left].getOffset();
-                    double rightOffset = cstops[right].getOffset() == null ? 1.0 : cstops[right].getOffset();
+                    double leftOffset = cstops[left].offset() == null ? 0.0 : cstops[left].offset();
+                    double rightOffset = cstops[right].offset() == null ? 1.0 : cstops[right].offset();
                     if (i == left) {
                         offset = leftOffset;
                     } else if (i == right) {
@@ -88,10 +88,10 @@ public class CssLinearGradient implements Paintable {
                         offset = leftOffset * (1 - mix) + rightOffset * mix;
                     }
                 } else {
-                    offset = cstop.getOffset();
+                    offset = cstop.offset();
                 }
 
-                stops[i] = new Stop(offset, cstop.getColor().getColor());
+                stops[i] = new Stop(offset, cstop.color().getColor());
             }
             linearGradient = new LinearGradient(startX, startY, endX, endY, proportional, cycleMethod, stops);
         }

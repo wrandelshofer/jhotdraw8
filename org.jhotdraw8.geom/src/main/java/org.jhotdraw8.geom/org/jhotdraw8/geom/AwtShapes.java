@@ -61,30 +61,26 @@ public class AwtShapes {
         double moveX = 0, moveY = 0;
         for (PathIterator i = new FlatteningPathIterator(shape.getPathIterator(new AffineTransform(), tolerance), Math.abs(tolerance + 0.1e-4)); !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-                case PathIterator.SEG_CLOSE:
+                case PathIterator.SEG_CLOSE -> {
                     if (IntersectLinePoint.lineContainsPoint(
                             prevX, prevY, moveX, moveY,
                             p.x, p.y, tolerance)) {
                         return true;
                     }
-                    break;
-                case PathIterator.SEG_CUBICTO:
-                    break;
-                case PathIterator.SEG_LINETO:
+                }
+                case PathIterator.SEG_LINETO -> {
                     if (IntersectLinePoint.lineContainsPoint(
                             prevX, prevY, coords[0], coords[1],
                             p.x, p.y, tolerance)) {
                         return true;
                     }
-                    break;
-                case PathIterator.SEG_MOVETO:
+                }
+                case PathIterator.SEG_MOVETO -> {
                     moveX = coords[0];
                     moveY = coords[1];
-                    break;
-                case PathIterator.SEG_QUADTO:
-                    break;
-                default:
-                    break;
+                }
+                default -> {
+                }
             }
             prevX = coords[0];
             prevY = coords[1];

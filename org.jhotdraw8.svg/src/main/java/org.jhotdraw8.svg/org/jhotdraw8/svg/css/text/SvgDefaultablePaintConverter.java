@@ -80,7 +80,7 @@ public class SvgDefaultablePaintConverter<T extends Paintable> implements CssCon
     }
 
     @Override
-    public boolean isNullable() {
-        return valueConverter.isNullable();
+    public boolean nullable() {
+        return valueConverter.nullable();
     }
 }

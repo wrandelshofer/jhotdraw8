@@ -53,58 +53,27 @@ public interface CssTokenizer {
      * @return the current value
      */
     default @Nullable String currentValue() {
-        switch (current()) {
-        case TT_AT_KEYWORD:
-            return "@" + currentString();
-        case TT_BAD_COMMENT:
-            return "bad comment";
-        case TT_BAD_STRING:
-            return "bad string";
-        case TT_BAD_URI:
-            return "bad uri";
-        case TT_CDC:
-            return "<!--";
-        case TT_CDO:
-            return "-->";
-        case TT_COLUMN:
-            return "|";
-        case TT_COMMENT:
-            return currentString();
-        case TT_DASH_MATCH:
-            return "|=";
-        case TT_DIMENSION:
-            return currentNumber() + currentString();
-        case TT_EOF:
-            return "eof";
-        case TT_FUNCTION:
-            return currentString();
-        case TT_HASH:
-            return currentString();
-        case TT_IDENT:
-            return currentString();
-        case TT_INCLUDE_MATCH:
-            return "~=";
-        case TT_NUMBER:
-            return "" + currentNumber();
-        case TT_PERCENTAGE:
-            return currentNumber() + "%";
-        case TT_PREFIX_MATCH:
-            return "^=";
-        case TT_S:
-            return " ";
-        case TT_STRING:
-            return currentString();
-        case TT_SUBSTRING_MATCH:
-            return "*=";
-        case TT_SUFFIX_MATCH:
-            return "$=";
-        case TT_UNICODE_RANGE:
-            return currentString();
-        case TT_URL:
-            return currentString();
-        default:
-            return Character.toString((char) current());
-        }
+        return switch (current()) {
+            case TT_AT_KEYWORD -> "@" + currentString();
+            case TT_BAD_COMMENT -> "bad comment";
+            case TT_BAD_STRING -> "bad string";
+            case TT_BAD_URI -> "bad uri";
+            case TT_CDC -> "<!--";
+            case TT_CDO -> "-->";
+            case TT_COLUMN -> "|";
+            case TT_COMMENT, TT_URL, TT_UNICODE_RANGE, TT_STRING, TT_IDENT, TT_HASH, TT_FUNCTION -> currentString();
+            case TT_DASH_MATCH -> "|=";
+            case TT_DIMENSION -> currentNumber() + currentString();
+            case TT_EOF -> "eof";
+            case TT_INCLUDE_MATCH -> "~=";
+            case TT_NUMBER -> "" + currentNumber();
+            case TT_PERCENTAGE -> currentNumber() + "%";
+            case TT_PREFIX_MATCH -> "^=";
+            case TT_S -> " ";
+            case TT_SUBSTRING_MATCH -> "*=";
+            case TT_SUFFIX_MATCH -> "$=";
+            default -> Character.toString((char) current());
+        };
     }
 
     @Nullable

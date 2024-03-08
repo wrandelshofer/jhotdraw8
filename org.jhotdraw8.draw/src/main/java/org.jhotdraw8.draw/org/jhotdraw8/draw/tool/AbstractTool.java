@@ -54,9 +54,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     private final ObjectProperty<DrawingEditor> drawingEditor = new SimpleObjectProperty<>(this, DRAWING_EDITOR_PROPERTY);
 
     {
-        drawingView.addListener((ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) -> {
-            stopEditing();
-        });
+        drawingView.addListener((ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) -> stopEditing());
     }
 
 

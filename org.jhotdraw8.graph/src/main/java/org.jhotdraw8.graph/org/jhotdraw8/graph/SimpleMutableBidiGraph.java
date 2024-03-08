@@ -11,7 +11,12 @@ import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.util.ListHelper;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 
 /**
@@ -218,7 +223,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     @Override
     public @NonNull V getVertex(int index) {
         if (cachedVertices == null) {
-            cachedVertices = Collections.unmodifiableList(new ArrayList<>(nodeMap.keySet()));
+            cachedVertices = List.copyOf(nodeMap.keySet());
         }
 
         return cachedVertices.get(index);
@@ -360,7 +365,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
         private @NonNull Enumerator<Node<V, A>> nodesEnumerator() {
             // We must use explicit type arguments in Java 8!
-            return new AbstractEnumerator<Node<V, A>>(size, 0) {
+            return new AbstractEnumerator<>(size, 0) {
                 int index = 0;
 
                 @Override

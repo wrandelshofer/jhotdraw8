@@ -6,6 +6,7 @@ package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -17,6 +18,7 @@ import java.lang.reflect.Type;
 public class NonNullObjectKey<@NonNull T> extends AbstractKey<@NonNull T> implements
         NonNullKey<@NonNull T> {
 
+    @Serial
     private static final long serialVersionUID = 1L;
 
     /**

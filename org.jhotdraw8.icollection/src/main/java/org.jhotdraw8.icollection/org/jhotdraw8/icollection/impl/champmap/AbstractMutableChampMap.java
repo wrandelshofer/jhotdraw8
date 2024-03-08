@@ -91,8 +91,7 @@ public abstract class AbstractMutableChampMap<K, V> extends AbstractMap<K, V> im
         if (o == this) {
             return true;
         }
-        if (o instanceof AbstractMutableChampMap<?, ?>) {
-            AbstractMutableChampMap<?, ?> that = (AbstractMutableChampMap<?, ?>) o;
+        if (o instanceof AbstractMutableChampMap<?, ?> that) {
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);

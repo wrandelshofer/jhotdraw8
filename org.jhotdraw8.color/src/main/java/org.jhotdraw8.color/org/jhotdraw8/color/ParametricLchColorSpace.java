@@ -104,14 +104,11 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float getMaxValue(int component) {
-        switch (component) {
-        case 0:
-        case 1:
-            return labColorSpace.getMaxValue(component);
-        case 2:
-            return 360f;
-        }
-        throw new IllegalArgumentException("Illegal component:" + component);
+        return switch (component) {
+            case 0, 1 -> labColorSpace.getMaxValue(component);
+            case 2 -> 360f;
+            default -> throw new IllegalArgumentException("Illegal component:" + component);
+        };
     }
 
 

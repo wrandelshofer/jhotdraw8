@@ -18,7 +18,7 @@ public interface FontCollectionsFactory {
      */
     default @NonNull CompletableFuture<List<FontCollection>> createAsync() {
         CompletableFuture<List<FontCollection>> future = new CompletableFuture<>();
-        Task<List<FontCollection>> task = new Task<List<FontCollection>>() {
+        Task<List<FontCollection>> task = new Task<>() {
             @Override
             protected List<FontCollection> call() throws Exception {
                 return create();

@@ -70,14 +70,12 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     private PathIterator getStyledPathIteratorInParent(RenderContext ctx, @NonNull PathIterableFigure f, @Nullable AffineTransform tx) {
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
-        if (localToParent != null) {
-            AffineTransform ltpTx = FXTransforms.toAwt(localToParent);
-            if (tx != null) {
-                childTx = (AffineTransform) tx.clone();
-                childTx.concatenate(ltpTx);
-            } else {
-                childTx = ltpTx;
-            }
+        AffineTransform ltpTx = FXTransforms.toAwt(localToParent);
+        if (tx != null) {
+            childTx = (AffineTransform) tx.clone();
+            childTx.concatenate(ltpTx);
+        } else {
+            childTx = ltpTx;
         }
         PathIterator iter = f.getPathIterator(ctx, childTx);
         if (f instanceof StrokableFigure) {

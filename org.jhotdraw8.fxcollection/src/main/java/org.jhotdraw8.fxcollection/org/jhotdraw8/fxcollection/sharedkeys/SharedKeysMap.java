@@ -104,14 +104,14 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     @Override
     public boolean containsValue(@Nullable Object value) {
         if (value == null) {
-            for (int i = 0, n = values.length; i < n; i++) {
-                if (values[i] == NULL_VALUE) {
+            for (Object o : values) {
+                if (o == NULL_VALUE) {
                     return true;
                 }
             }
         } else {
-            for (int i = 0, n = values.length; i < n; i++) {
-                if (Objects.equals(values[i], value)) {
+            for (Object o : values) {
+                if (Objects.equals(o, value)) {
                     return true;
                 }
             }
@@ -311,7 +311,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
         @Override
         public @NonNull Iterator<Entry<K, V>> iterator() {
-            return new Iterator<Entry<K, V>>() {
+            return new Iterator<>() {
                 private final @NonNull Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
@@ -403,7 +403,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
         @Override
         public @NonNull Iterator<K> iterator() {
-            return new Iterator<K>() {
+            return new Iterator<>() {
                 private final @NonNull Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
@@ -496,10 +496,10 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
             Map.Entry<K, V> e = (Map.Entry<K, V>) o;
             Object k1 = getKey();
             Object k2 = e.getKey();
-            if (k1 == k2 || (k1 != null && k1.equals(k2))) {
+            if (Objects.equals(k1, k2)) {
                 Object v1 = getValue();
                 Object v2 = e.getValue();
-                return v1 == v2 || (v1 != null && v1.equals(v2));
+                return Objects.equals(v1, v2);
             }
             return false;
         }
@@ -539,7 +539,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
 
         @Override
         public @NonNull Iterator<V> iterator() {
-            return new Iterator<V>() {
+            return new Iterator<>() {
 
                 private final @NonNull Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
                 private boolean hasNext;

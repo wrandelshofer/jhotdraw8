@@ -113,8 +113,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     private static <K, V> Tuple2<? extends RedBlackTree<K, V>, Boolean> blackify(RedBlackTree<K, V> tree) {
-        if (tree instanceof Node) {
-            final Node<K, V> node = (Node<K, V>) tree;
+        if (tree instanceof Node<K, V> node) {
             if (node.color() == Color.RED) {
                 return Tuple.of(node.color(Color.BLACK), false);
             }

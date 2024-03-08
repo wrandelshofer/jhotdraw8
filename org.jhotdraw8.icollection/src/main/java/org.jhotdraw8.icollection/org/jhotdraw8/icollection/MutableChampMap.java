@@ -146,7 +146,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     @Override
     public @NonNull Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
-                new EntryIterator<K, V>(root,
+                new EntryIterator<>(root,
                         this::iteratorRemoveKey, this::iteratorPutIfPresent), this::getModCount
         );
     }

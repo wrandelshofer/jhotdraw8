@@ -36,7 +36,7 @@ import static org.jhotdraw8.icollection.MapEntries.ofEntries;
 public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
     private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
-            new MappedConverter<SvgFontSize.SizeKeyword>(linkedHashMap(ofEntries(
+            new MappedConverter<>(linkedHashMap(ofEntries(
                     entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
                     entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
                     entry("small", SvgFontSize.SizeKeyword.SMALL),
@@ -76,10 +76,10 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
     @Override
     protected <TT extends SvgFontSize> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
-        if (value.getKeyword() != null) {
-            out.accept(new CssToken(CssTokenType.TT_IDENT, mappedConverter.toString(value.getKeyword())));
-        } else if (value.getLength() != null) {
-            sizeConverter.produceTokens(value.getLength(), idSupplier, out);
+        if (value.keyword() != null) {
+            out.accept(new CssToken(CssTokenType.TT_IDENT, mappedConverter.toString(value.keyword())));
+        } else if (value.length() != null) {
+            sizeConverter.produceTokens(value.length(), idSupplier, out);
         } else {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         }

@@ -367,21 +367,14 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
                 return bimgType;
             }
         }
-        switch (fxFormat.getType()) {
-            default:
-            case BYTE_BGRA_PRE:
-            case INT_ARGB_PRE:
-                return BufferedImage.TYPE_INT_ARGB_PRE;
-            case BYTE_BGRA:
-            case INT_ARGB:
-                return BufferedImage.TYPE_INT_ARGB;
-            case BYTE_RGB:
-                return BufferedImage.TYPE_INT_RGB;
-            case BYTE_INDEXED:
-                return (fxFormat.isPremultiplied()
-                        ? BufferedImage.TYPE_INT_ARGB_PRE
-                        : BufferedImage.TYPE_INT_ARGB);
-        }
+        return switch (fxFormat.getType()) {
+            default -> BufferedImage.TYPE_INT_ARGB_PRE;
+            case BYTE_BGRA, INT_ARGB -> BufferedImage.TYPE_INT_ARGB;
+            case BYTE_RGB -> BufferedImage.TYPE_INT_RGB;
+            case BYTE_INDEXED -> (fxFormat.isPremultiplied()
+                    ? BufferedImage.TYPE_INT_ARGB_PRE
+                    : BufferedImage.TYPE_INT_ARGB);
+        };
     }
 
     /**
@@ -395,19 +388,15 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     private static @NonNull WritablePixelFormat<IntBuffer>
     getAssociatedPixelFormat(@NonNull BufferedImage bimg) {
         // This method has been copied from class SwingFXUtils.
-        switch (bimg.getType()) {
+        // Should not happen...
+        return switch (bimg.getType()) {
             // We lie here for xRGB, but we vetted that the src data was opaque
             // so we can ignore the alpha.  We use ArgbPre instead of Argb
             // just to get a loop that does not have divides in it if the
             // PixelReader happens to not know the data is opaque.
-            case BufferedImage.TYPE_INT_RGB:
-            case BufferedImage.TYPE_INT_ARGB_PRE:
-                return PixelFormat.getIntArgbPreInstance();
-            case BufferedImage.TYPE_INT_ARGB:
-                return PixelFormat.getIntArgbInstance();
-            default:
-                // Should not happen...
-                throw new InternalError("Failed to validate BufferedImage type");
-        }
+            case BufferedImage.TYPE_INT_RGB, BufferedImage.TYPE_INT_ARGB_PRE -> PixelFormat.getIntArgbPreInstance();
+            case BufferedImage.TYPE_INT_ARGB -> PixelFormat.getIntArgbInstance();
+            default -> throw new InternalError("Failed to validate BufferedImage type");
+        };
     }
 }

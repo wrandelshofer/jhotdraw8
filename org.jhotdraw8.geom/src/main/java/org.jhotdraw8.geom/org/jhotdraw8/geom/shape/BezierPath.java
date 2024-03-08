@@ -180,9 +180,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
                                 result[0] = result[0].set(prevSegment, middle.withOx(x1).withOy(y1));
                                 result[0] = result[0].set(segment, result[0].get(segment).withPx(x2).withPointY(y2));
                             },
-                            (x1, y1, x2, y2) -> {
-                                result[0] = result[0].set(segment, result[0].get(segment).withOx(x1).withOy(y1));
-                            }
+                            (x1, y1, x2, y2) -> result[0] = result[0].set(segment, result[0].get(segment).withOx(x1).withOy(y1))
                     );
                 }
             } else if (nc1) {
@@ -191,12 +189,8 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
                 result[0] = result[0].add(segment, middle);
                 QuadCurves.split(prev.pointX(), prev.pointY(),
                         next.inX(), next.inY(), next.pointX(), next.pointY(), t,
-                        (x1, y1, x2, y2) -> {
-                            result[0] = result[0].set(segment, middle.withIx(x1).withIy(y1).withPx(x2).withPointY(y2));
-                        },
-                        (x1, y1, x2, y2) -> {
-                            result[0] = result[0].set(segment + 1, next.withIx(x1).withIy(y1).withCollinear(true));
-                        }
+                        (x1, y1, x2, y2) -> result[0] = result[0].set(segment, middle.withIx(x1).withIy(y1).withPx(x2).withPointY(y2)),
+                        (x1, y1, x2, y2) -> result[0] = result[0].set(segment + 1, next.withIx(x1).withIy(y1).withCollinear(true))
                 );
             } else {
                 // line
@@ -233,7 +227,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
             if (p != null) {
                 result[0] = result[0].set(prevSegment, prev.withOx(p[2]).withOy(p[3]));
             }
-        } else if (pc2 && mc1 && mc2 && nc1) {
+        } else if (pc2 && mc1 && mc2) {
             double[] p = CubicCurves.merge(
                     prev.pointX(), prev.pointY(), prev.outX(), prev.outY(), middle.inX(), middle.inY(), middle.pointX(), middle.pointY(),
                     middle.outX(), middle.outY(), next.inX(), next.inY(), next.pointX(), next.pointY(), tolerance);
@@ -275,40 +269,6 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     @Override
     public @NonNull BezierPath reverse() {
         return AwtShapes.buildFromPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
-        /*
-        int size = size();
-        ArrayList<BezierNode> temp = new ArrayList<>(size);
-        int lastMoveTo = -1;
-        for (int i = 0; i < size; i++) {
-            var n = get(i);
-            BezierNode reversed = n;
-            if (reversed.isMoveTo()) {
-                lastMoveTo = i;
-                if (i < size && !get(i + 1).isMoveTo()) {
-                    // keep a move to, if it is followed by another move to
-                    reversed = reversed.withClearMaskBits(BezierNode.MOVE_MASK);
-                }
-            } else if (reversed.isClosePath()) {
-                temp.set(lastMoveTo, temp.get(lastMoveTo).withMaskBits(BezierNode.CLOSE_MASK));
-                reversed = reversed.withClearMaskBits(BezierNode.CLOSE_MASK);
-            }
-            reversed = reversed.setX1(n.getX2()).setY1(n.getY2())
-                    .setX2(n.getX1()).setY2(n.getY1());
-            reversed = reversed.withClearMaskBits(BezierNode.C1C2_MASK);
-            if (n.isC1()) {
-                reversed = reversed.withMaskBits(BezierNode.C2_MASK);
-            }
-            if (n.isC2()) {
-                reversed = reversed.withMaskBits(BezierNode.C1_MASK);
-            }
-            if (i == size - 1) {
-                reversed = reversed.withMaskBits(BezierNode.MOVE_MASK);
-            }
-            temp.add(reversed);
-        }
-        return new BezierPath(temp, windingRule);
-
-         */
     }
 
     private static final BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);

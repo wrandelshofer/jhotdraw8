@@ -17,13 +17,12 @@ module org.jhotdraw8.fxcontrols {
     requires transitive javafx.fxml;
     requires static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.application;
-    requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.fxbase;
     requires transitive org.jhotdraw8.os;
     requires transitive org.jhotdraw8.color;
     requires transitive org.jhotdraw8.geom;
-    requires org.jhotdraw8.icollection;
+    requires transitive org.jhotdraw8.icollection;
     requires java.logging;
     exports org.jhotdraw8.fxcontrols.dock;
     exports org.jhotdraw8.fxcontrols.colorchooser;

@@ -15,23 +15,7 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public class CssStop {
-
-    final Double offset;
-    final CssColor color;
-
-    public CssStop(Double offset, CssColor color) {
-        this.offset = offset;
-        this.color = color;
-    }
-
-    public Double getOffset() {
-        return offset;
-    }
-
-    public CssColor getColor() {
-        return color;
-    }
+public record CssStop(Double offset, CssColor color) {
 
     @Override
     public int hashCode() {

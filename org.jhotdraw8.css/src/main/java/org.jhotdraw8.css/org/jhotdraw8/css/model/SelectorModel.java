@@ -67,8 +67,8 @@ public interface SelectorModel<T> {
         String value = getAttributeAsString(element, namespacePattern, attributeName);
         if (value != null) {
             String[] words = value.split("\\s+");
-            for (int i = 0; i < words.length; i++) {
-                if (word.equals(words[i])) {
+            for (String s : words) {
+                if (word.equals(s)) {
                     return true;
                 }
             }

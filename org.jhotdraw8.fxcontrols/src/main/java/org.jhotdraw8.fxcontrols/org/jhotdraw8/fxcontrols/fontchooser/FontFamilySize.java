@@ -4,20 +4,5 @@
  */
 package org.jhotdraw8.fxcontrols.fontchooser;
 
-public class FontFamilySize {
-    private final String family;
-    private final double size;
-
-    public FontFamilySize(String family, double size) {
-        this.family = family;
-        this.size = size;
-    }
-
-    public String getFamily() {
-        return family;
-    }
-
-    public double getSize() {
-        return size;
-    }
+public record FontFamilySize(String family, double size) {
 }

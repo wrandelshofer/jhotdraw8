@@ -102,6 +102,6 @@ public class ComputedList<E> extends AbstractReadOnlyList<E> {
 
     @Override
     public @NonNull ComputedList<E> readOnlyReversed() {
-        return new ComputedList<E>(from, to, function, !descending);
+        return new ComputedList<>(from, to, function, !descending);
     }
 }

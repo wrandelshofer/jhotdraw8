@@ -267,33 +267,17 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         final double originX = getNonNull(ORIGIN_X).getConvertedValue(units);
         final double originY = getNonNull(ORIGIN_Y).getConvertedValue(units);
         final double x, y;
-        switch (getStyledNonNull(TEXT_HPOS)) {
-            default:
-            case LEFT:
-                x = originX;
-                break;
-            case CENTER:
-                x = originX - width * 0.5;
-                break;
-            case RIGHT:
-                x = originX - width;
-                break;
-        }
-        switch (getStyledNonNull(TEXT_VPOS)) {
-            case TOP:
-                y = originY;
-                break;
-            case CENTER:
-                y = originY - height * 0.5;
-                break;
-            default:
-            case BASELINE:
-                y = originY - textNode.getBaselineOffset();
-                break;
-            case BOTTOM:
-                y = originY - height;
-                break;
-        }
+        x = switch (getStyledNonNull(TEXT_HPOS)) {
+            default -> originX;
+            case CENTER -> originX - width * 0.5;
+            case RIGHT -> originX - width;
+        };
+        y = switch (getStyledNonNull(TEXT_VPOS)) {
+            case TOP -> originY;
+            case CENTER -> originY - height * 0.5;
+            default -> originY - textNode.getBaselineOffset();
+            case BOTTOM -> originY - height;
+        };
 
         final Bounds b = new BoundingBox(
                 x - padding.getLeft(),

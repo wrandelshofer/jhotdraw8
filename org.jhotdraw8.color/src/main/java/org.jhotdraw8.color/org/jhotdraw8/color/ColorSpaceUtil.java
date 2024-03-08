@@ -42,8 +42,7 @@ public class ColorSpaceUtil {
         if (a instanceof NamedColorSpace) {
             return ((NamedColorSpace) a).getName();
         }
-        if ((a instanceof ICC_ColorSpace)) {
-            ICC_ColorSpace icc = (ICC_ColorSpace) a;
+        if ((a instanceof ICC_ColorSpace icc)) {
             ICC_Profile p = icc.getProfile();
             // Get the name from the profile description tag
             byte[] desc = p.getData(ICC_Profile.icSigProfileDescriptionTag);
@@ -75,7 +74,7 @@ public class ColorSpaceUtil {
             // Fall back if no description is available
             StringBuilder buf = new StringBuilder();
             for (int i = 0; i < a.getNumComponents(); i++) {
-                if (buf.length() > 0) {
+                if (!buf.isEmpty()) {
                     buf.append("-");
                 }
                 buf.append(a.getName(i));

@@ -35,7 +35,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -170,31 +169,27 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     }
 
     private LinkedHashMap<Object, StylesheetEntry> getMap(@NonNull StyleOrigin origin) {
-        switch (origin) {
-        case AUTHOR:
-            return authorList;
-        case USER_AGENT:
-            return userAgentList;
-        case INLINE:
-            return inlineList;
-        default:
-            throw new IllegalArgumentException("illegal origin:" + origin);
-        }
+        return switch (origin) {
+            case AUTHOR -> authorList;
+            case USER_AGENT -> userAgentList;
+            case INLINE -> inlineList;
+            default -> throw new IllegalArgumentException("illegal origin:" + origin);
+        };
     }
 
     private void setMap(@NonNull StyleOrigin origin, LinkedHashMap<Object, StylesheetEntry> newValue) {
         switch (origin) {
-        case AUTHOR:
-            authorList = newValue;
-            break;
-        case USER_AGENT:
-            userAgentList = newValue;
-            break;
-        case INLINE:
-            inlineList = newValue;
-            break;
-        default:
-            throw new IllegalArgumentException("illegal origin:" + origin);
+            case AUTHOR:
+                authorList = newValue;
+                break;
+            case USER_AGENT:
+                userAgentList = newValue;
+                break;
+            case INLINE:
+                inlineList = newValue;
+                break;
+            default:
+                throw new IllegalArgumentException("illegal origin:" + origin);
         }
     }
 
@@ -208,18 +203,13 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         }
         LinkedHashMap<Object, StylesheetEntry> newMap = new LinkedHashMap<>();
         for (T t : stylesheets) {
-            if (t instanceof URI) {
-                URI uri = (URI) t;
+            if (t instanceof URI uri) {
                 URI absolutizedUri = uriResolver.absolutize(documentHome, uri);
                 StylesheetEntry old = oldMap.get(absolutizedUri);
                 newMap.put(absolutizedUri, new StylesheetEntry(origin, absolutizedUri, documentHome, logger));
             } else if (t instanceof String) {
                 StylesheetEntry old = oldMap.get(t);
-                if (old != null) {
-                    newMap.put(t, old);
-                } else {
-                    newMap.put(t, new StylesheetEntry(origin, (String) t, null, documentHome, logger));
-                }
+                newMap.put(t, old != null ? old : new StylesheetEntry(origin, (String) t, null, documentHome, logger));
             } else {
                 throw new IllegalArgumentException("illegal item " + t);
             }
@@ -252,7 +242,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
         Map<String, ImmutableList<CssToken>> customProperties = computeCustomProperties();
         final CssFunctionProcessor<E> functionProcessor = functions.isEmpty() ? null : createCssFunctionProcessor(selectorModel, customProperties);
 
-        StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())
+        StreamSupport.stream(iterable.spliterator(), false).toList()
                 .stream()
                 .parallel()
                 .forEach(elem -> {
@@ -262,8 +252,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // The stylesheet is a user-agent stylesheet
                     for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getUserAgentStylesheets())) {
                         try {
-                            Declaration d = entry.getDeclaration();
-                            doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
+                            Declaration d = entry.declaration();
+                            doSetAttribute(entry.stylesheet(), selectorModel, elem, StyleOrigin.USER_AGENT, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             logger.accept(Level.FINE, "user-agent stylesheet=" + entry.stylesheet.getUri() + " line=" + entry.declaration.getLineNumber(), e);
                         }
@@ -275,8 +265,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // The stylesheet is an external file
                     for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getAuthorStylesheets())) {
                         try {
-                            Declaration d = entry.getDeclaration();
-                            doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
+                            Declaration d = entry.declaration();
+                            doSetAttribute(entry.stylesheet(), selectorModel, elem, StyleOrigin.AUTHOR, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             logger.accept(Level.FINE, "external stylesheet=" + entry.stylesheet.getUri() + " line=" + entry.declaration.getLineNumber(), e);
                         }
@@ -285,8 +275,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // The stylesheet is an internal file
                     for (ApplicableDeclaration entry : collectApplicableDeclarations(elem, getInlineStylesheets())) {
                         try {
-                            Declaration d = entry.getDeclaration();
-                            doSetAttribute(entry.getStylesheet(), selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
+                            Declaration d = entry.declaration();
+                            doSetAttribute(entry.stylesheet(), selectorModel, elem, StyleOrigin.INLINE, d.getNamespace(), d.getPropertyName(), d.getTerms(), customProperties, functionProcessor);
                         } catch (ParseException e) {
                             logger.accept(Level.FINE, "internal stylesheet=" + entry.stylesheet.getUri() + " line=" + entry.declaration.getLineNumber(), e);
                         }
@@ -315,7 +305,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                         Map<String, ImmutableList<CssToken>> inlineStyleAttrCustomProperties = Collections.emptyMap();
                         for (Map.Entry<QualifiedName, ImmutableList<CssToken>> entry : inlineDeclarations.entrySet()) {
                             try {
-                                doSetAttribute(null, selectorModel, elem, StyleOrigin.INLINE, entry.getKey().getNamespace(), entry.getKey().getName(), entry.getValue(), inlineStyleAttrCustomProperties, functionProcessor);
+                                doSetAttribute(null, selectorModel, elem, StyleOrigin.INLINE, entry.getKey().namespace(), entry.getKey().name(), entry.getValue(), inlineStyleAttrCustomProperties, functionProcessor);
                             } catch (ParseException e) {
                                 logger.accept(Level.WARNING, "error applying inline style attribute. style=" + styleValue, e);
                             }
@@ -374,32 +364,12 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             collectApplicableDeclarations(elem, s, applicableDeclarations);
         }
 
-        applicableDeclarations.sort(Comparator.comparingInt(ApplicableDeclaration::getSpecificity));
+        applicableDeclarations.sort(Comparator.comparingInt(ApplicableDeclaration::specificity));
         return applicableDeclarations;
     }
 
-    private static class ApplicableDeclaration {
-        private final int specificity;
-        private final @NonNull Stylesheet stylesheet;
-        private final @NonNull Declaration declaration;
-
-        public ApplicableDeclaration(int specificity, @NonNull Stylesheet stylesheet, @NonNull Declaration declaration) {
-            this.specificity = specificity;
-            this.stylesheet = stylesheet;
-            this.declaration = declaration;
-        }
-
-        public @NonNull Stylesheet getStylesheet() {
-            return stylesheet;
-        }
-
-        public @NonNull Declaration getDeclaration() {
-            return declaration;
-        }
-
-        public int getSpecificity() {
-            return specificity;
-        }
+    private record ApplicableDeclaration(int specificity, @NonNull Stylesheet stylesheet,
+                                         @NonNull Declaration declaration) {
     }
 
     private final @NonNull ConcurrentHashMap<OrderedPair<Stylesheet, QualifiedName>, List<StyleRule>>
@@ -407,7 +377,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     private Iterable<StyleRule> getCandidateStyleRules(@NonNull Stylesheet s, @NonNull E elem) {
         QualifiedName qualifiedTypeName = getSelectorModel().getType(elem);
-        String typeName = qualifiedTypeName.getName();
+        String typeName = qualifiedTypeName.name();
         OrderedPair<Stylesheet, QualifiedName> key = new SimpleOrderedPair<>(s, qualifiedTypeName);
         return candidateRules.computeIfAbsent(key, k -> {
             List<StyleRule> candidates = new ArrayList<>();
@@ -458,21 +428,17 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
             return false;
         }
         for (ApplicableDeclaration entry : applicableDeclarations) {
-            Declaration d = entry.getDeclaration();
+            Declaration d = entry.declaration();
             ImmutableList<CssToken> value = preprocessTerms(s, elem, processor, d.getTerms());
             try {
 
                 ReadOnlyList<CssToken> appliedValue;
-                CssToken first = value.size() == 0 ? null : value.getFirst();
+                CssToken first = value.isEmpty() ? null : value.getFirst();
                 if (first != null && first.getType() == CssTokenType.TT_IDENT) {
-                    switch (first.getStringValueNonNull()) {
-                    case CssTokenType.IDENT_UNSET:
-                        appliedValue = null;
-                        break;
-                    default:
-                        appliedValue = value;
-                        break;
-                    }
+                    appliedValue = switch (first.getStringValueNonNull()) {
+                        case CssTokenType.IDENT_UNSET -> null;
+                        default -> value;
+                    };
                 } else {
                     appliedValue = value;
                 }
@@ -508,7 +474,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
     public @NonNull String getHelpText() {
         StringBuilder buf = new StringBuilder();
         for (CssFunction<E> value : functions) {
-            if (buf.length() != 0) {
+            if (!buf.isEmpty()) {
                 buf.append("\n");
             }
             buf.append(value.getHelpText());

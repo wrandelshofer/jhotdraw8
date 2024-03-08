@@ -33,7 +33,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -116,8 +115,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         Map<QualifiedName, WritableStyleableMapAccessor<?>> mm = nameToKeyMap.computeIfAbsent(element.getClass(), k -> {
             SequencedMap<QualifiedName, WritableStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
-                if (kk instanceof WritableStyleableMapAccessor) {
-                    WritableStyleableMapAccessor<?> sk = (WritableStyleableMapAccessor<?>) kk;
+                if (kk instanceof WritableStyleableMapAccessor<?> sk) {
                     m.put(new QualifiedName(sk.getCssNamespace(), element.getClass() + "$" + sk.getCssName()), sk);
                     if (sk.getCssNamespace() != null) {
                         m.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
@@ -133,8 +131,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>> mm = nameToReadableKeyMap.computeIfAbsent(element.getClass(), k -> {
             SequencedMap<QualifiedName, ReadOnlyStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
-                if (kk instanceof ReadOnlyStyleableMapAccessor) {
-                    ReadOnlyStyleableMapAccessor<?> sk = (ReadOnlyStyleableMapAccessor<?>) kk;
+                if (kk instanceof ReadOnlyStyleableMapAccessor<?> sk) {
                     m.put(new QualifiedName(sk.getCssNamespace(), element.getClass() + "$" + sk.getCssName()), sk);
                     if (sk.getCssNamespace() != null) {
                         m.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
@@ -202,8 +199,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
             return false;
         }
         Object value = element.get(k);
-        if (value instanceof Collection) {
-            Collection<?> c = (Collection<?>) value;
+        if (value instanceof Collection<?> c) {
             for (Object o : c) {
                 if (o != null && word.equals(o.toString())) {
                     return true;
@@ -255,8 +251,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         Set<QualifiedName> attr = new HashSet<>();
         Set<WritableStyleableMapAccessor<?>> attrk = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if (key instanceof WritableStyleableMapAccessor) {
-                WritableStyleableMapAccessor<?> sk = (WritableStyleableMapAccessor<?>) key;
+            if (key instanceof WritableStyleableMapAccessor<?> sk) {
                 attrk.add(sk);
             }
         }
@@ -277,8 +272,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         Set<QualifiedName> attr = new HashSet<>();
         Set<WritableStyleableMapAccessor<?>> attrk = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {
-            if ((key instanceof WritableStyleableMapAccessor) && !(key instanceof CompositeMapAccessor)) {
-                WritableStyleableMapAccessor<?> sk = (WritableStyleableMapAccessor<?>) key;
+            if ((key instanceof WritableStyleableMapAccessor<?> sk) && !(key instanceof CompositeMapAccessor)) {
                 attrk.add(sk);
             }
         }
@@ -316,8 +310,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         StringBuilder buf = new StringBuilder();
         @SuppressWarnings("unchecked")
         Converter<Object> converter = (Converter<Object>) key.getCssConverter();
-        if (converter instanceof CssConverter) {
-            CssConverter<Object> c = (CssConverter<Object>) converter;
+        if (converter instanceof CssConverter<Object> c) {
             try {
                 List<CssToken> cssTokens = c.toTokens(element.getStyled(origin, key), null);
                 if (cssTokens.size() == 1) {

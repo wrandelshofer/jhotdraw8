@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
  */
 public class NullableObjectKey<T> extends AbstractKey<T> implements NullableKey<T> {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance with the specified name, type token class, and

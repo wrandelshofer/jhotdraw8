@@ -44,19 +44,13 @@ public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType
     public @NonNull StrokeType parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StrokeType type;
         tt.requireNextToken(CssTokenType.TT_IDENT, "One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.");
-        switch (tt.currentStringNonNull()) {
-            case INSIDE:
-                type = StrokeType.INSIDE;
-                break;
-            case OUTSIDE:
-                type = StrokeType.OUTSIDE;
-                break;
-            case CENTERED:
-                type = StrokeType.CENTERED;
-                break;
-            default:
-                throw tt.createParseException("One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.");
-        }
+        type = switch (tt.currentStringNonNull()) {
+            case INSIDE -> StrokeType.INSIDE;
+            case OUTSIDE -> StrokeType.OUTSIDE;
+            case CENTERED -> StrokeType.CENTERED;
+            default ->
+                    throw tt.createParseException("One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.");
+        };
         return type;
     }
 

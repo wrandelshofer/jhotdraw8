@@ -115,7 +115,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
                 if (event.isMetaDown()) {
                     dv.getSelectedFigures().retainAll(f);
                 } else {
-                    dv.getSelectedFigures().removeAll(f);
+                    f.forEach(dv.getSelectedFigures()::remove);
                 }
             } else {
                 dv.selectedFiguresProperty().addAll(f);

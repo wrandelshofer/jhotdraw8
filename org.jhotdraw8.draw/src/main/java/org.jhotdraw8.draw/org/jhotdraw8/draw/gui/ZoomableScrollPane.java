@@ -302,8 +302,8 @@ public class ZoomableScrollPane extends GridPane {
     private static class StyleableProperties {
         @SuppressWarnings("unchecked")
         private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> HBAR_POLICY =
-                new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-hbar-policy",
-                        (StyleConverter<?, ScrollPane.ScrollBarPolicy>) StyleConverter.<ScrollPane.ScrollBarPolicy>getEnumConverter(ScrollPane.ScrollBarPolicy.class),
+                new CssMetaData<>("-fx-hbar-policy",
+                        StyleConverter.getEnumConverter(ScrollPane.ScrollBarPolicy.class),
                         ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
                     @Override
@@ -319,8 +319,8 @@ public class ZoomableScrollPane extends GridPane {
 
         @SuppressWarnings("unchecked")
         private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> VBAR_POLICY =
-                new CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy>("-fx-vbar-policy",
-                        (StyleConverter<?, ScrollPane.ScrollBarPolicy>) StyleConverter.<ScrollPane.ScrollBarPolicy>getEnumConverter(ScrollPane.ScrollBarPolicy.class),
+                new CssMetaData<>("-fx-vbar-policy",
+                        StyleConverter.getEnumConverter(ScrollPane.ScrollBarPolicy.class),
                         ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
                     @Override
@@ -335,7 +335,7 @@ public class ZoomableScrollPane extends GridPane {
                 };
 
         private static final CssMetaData<ZoomableScrollPane, Boolean> PANNABLE =
-                new CssMetaData<ZoomableScrollPane, Boolean>("-fx-pannable",
+                new CssMetaData<>("-fx-pannable",
                         StyleConverter.getBooleanConverter(), Boolean.FALSE) {
 
                     @Override
@@ -345,7 +345,7 @@ public class ZoomableScrollPane extends GridPane {
 
                     @Override
                     public StyleableProperty<Boolean> getStyleableProperty(ZoomableScrollPane n) {
-                        return (StyleableProperty<Boolean>) n.pannableProperty();
+                        return n.pannableProperty();
                     }
                 };
 
@@ -353,7 +353,7 @@ public class ZoomableScrollPane extends GridPane {
 
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables =
-                    new ArrayList<CssMetaData<? extends Styleable, ?>>(Control.getClassCssMetaData());
+                    new ArrayList<>(Control.getClassCssMetaData());
             styleables.add(HBAR_POLICY);
             styleables.add(VBAR_POLICY);
             styleables.add(PANNABLE);
@@ -692,7 +692,7 @@ public class ZoomableScrollPane extends GridPane {
 
     public final ObjectProperty<ScrollPane.ScrollBarPolicy> hbarPolicyProperty() {
         if (hbarPolicy == null) {
-            hbarPolicy = new StyleableObjectProperty<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
+            hbarPolicy = new StyleableObjectProperty<>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
                 @Override
                 public CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> getCssMetaData() {
@@ -728,7 +728,7 @@ public class ZoomableScrollPane extends GridPane {
 
     public final ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicyProperty() {
         if (vbarPolicy == null) {
-            vbarPolicy = new StyleableObjectProperty<ScrollPane.ScrollBarPolicy>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
+            vbarPolicy = new StyleableObjectProperty<>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
                 @Override
                 public CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> getCssMetaData() {

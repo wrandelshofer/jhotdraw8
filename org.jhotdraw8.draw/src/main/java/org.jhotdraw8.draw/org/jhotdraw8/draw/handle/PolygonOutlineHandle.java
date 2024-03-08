@@ -29,7 +29,11 @@ import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.intersect.*;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
+import org.jhotdraw8.geom.intersect.IntersectionResult;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.PathIterator;
@@ -167,9 +171,9 @@ FXTransforms.transform2DPoints(t, points, 0, points, 0, points.length / 2);
         ObservableList<Double> pp2 = poly2.getPoints();
         pp2.clear();
         pp1.clear();
-        for (int i = 0; i < points.length; i++) {
-            pp1.add(points[i]);
-            pp2.add(points[i]);
+        for (double point : points) {
+            pp1.add(point);
+            pp2.add(point);
         }
     }
 }

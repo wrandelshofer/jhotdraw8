@@ -39,22 +39,22 @@ public interface Tool extends PropertyBean, Disableable {
      * The key used for storing the action in an action map, and for accessing
      * resources in resource bundles.
      */
-    NullableKey<String> NAME = new NullableObjectKey<String>("name", String.class);
+    NullableKey<String> NAME = new NullableObjectKey<>("name", String.class);
     /**
      * The key used for storing the {@code String} name for the action, used for
      * a menu or button.
      */
-    NullableKey<String> LABEL = new NullableObjectKey<String>("label", String.class);
+    NullableKey<String> LABEL = new NullableObjectKey<>("label", String.class);
     /**
      * The key used for storing a short {@code String} description for the
      * action, used for tooltip text.
      */
-    NullableKey<String> SHORT_DESCRIPTION = new NullableObjectKey<String>("ShortDescription", String.class);
+    NullableKey<String> SHORT_DESCRIPTION = new NullableObjectKey<>("ShortDescription", String.class);
     /**
      * The key used for storing a longer {@code String} description for the
      * action, could be used for context-sensitive help.
      */
-    NullableKey<String> LONG_DESCRIPTION = new NullableObjectKey<String>("LongDescription", String.class);
+    NullableKey<String> LONG_DESCRIPTION = new NullableObjectKey<>("LongDescription", String.class);
     /**
      * The key used for storing a small icon, such as {@code ImageView}. This is
      * typically used with menus.
@@ -90,7 +90,7 @@ public interface Tool extends PropertyBean, Disableable {
      */
     Key<Node> LARGE_ICON_KEY = new NullableObjectKey<>("LargeIconKey", Node.class);
 
-    Key<String> STYLE_CLASS_KEY = new NullableObjectKey<String>("StyleClass", String.class);
+    Key<String> STYLE_CLASS_KEY = new NullableObjectKey<>("StyleClass", String.class);
 
     // ---
     // Properties

@@ -39,9 +39,7 @@ public class NewFileAction extends AbstractApplicationAction {
         app.createActivity().thenAccept(newView -> {
             FileBasedActivity newDOView = (FileBasedActivity) newView;
             app.getActivities().add(newDOView);
-            newDOView.clear().thenRun(() -> {
-                newDOView.clearModified();
-            });
+            newDOView.clear().thenRun(newDOView::clearModified);
         });
     }
 }

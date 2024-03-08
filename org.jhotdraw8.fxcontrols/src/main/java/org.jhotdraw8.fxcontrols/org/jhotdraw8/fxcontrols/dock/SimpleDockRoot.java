@@ -74,20 +74,11 @@ public class SimpleDockRoot
     }
 
     private Track createDock(@NonNull TrackAxis zoneAxis, @Nullable DockParent parent, boolean isRootPicked) {
-        Supplier<Track> supplier;
-        switch (zoneAxis) {
-        case X:
-            supplier = isRootPicked ? rootXSupplier : subXSupplier;
-            break;
-        case Y:
-            supplier = isRootPicked ? rootYSupplier : subYSupplier;
-            break;
-        case Z:
-            supplier = zSupplier;
-            break;
-        default:
-            throw new IllegalStateException("Unexpected value: " + zoneAxis);
-        }
+        Supplier<Track> supplier = switch (zoneAxis) {
+            case X -> isRootPicked ? rootXSupplier : subXSupplier;
+            case Y -> isRootPicked ? rootYSupplier : subYSupplier;
+            case Z -> zSupplier;
+        };
         return supplier.get();
     }
 
@@ -141,7 +132,7 @@ public class SimpleDockRoot
         switch (zone) {
         case TOP:
         case LEFT:
-            children.add(insertionIndex < 0 ? 0 : insertionIndex, child);
+            children.add(Math.max(insertionIndex, 0), child);
             break;
         case RIGHT:
         case BOTTOM:
@@ -187,14 +178,11 @@ public class SimpleDockRoot
                 zone = null;
             }
             if (zone == DropZone.CENTER) {
-                switch (pickedDock.getDockAxis()) {
-                case X:
-                    zone = DropZone.RIGHT;
-                    break;
-                case Y:
-                    zone = DropZone.BOTTOM;
-                    break;
-                }
+                zone = switch (pickedDock.getDockAxis()) {
+                    case X -> DropZone.RIGHT;
+                    case Y -> DropZone.BOTTOM;
+                    default -> zone;
+                };
             }
         } else {
             insets = null;
@@ -222,17 +210,11 @@ public class SimpleDockRoot
     }
 
     private TrackAxis getZoneAxis(DropZone zone) {
-        switch (zone) {
-        case TOP:
-        case BOTTOM:
-            return TrackAxis.Y;
-        case LEFT:
-        case RIGHT:
-            return TrackAxis.X;
-        case CENTER:
-        default:
-            return TrackAxis.Z;
-        }
+        return switch (zone) {
+            case TOP, BOTTOM -> TrackAxis.Y;
+            case LEFT, RIGHT -> TrackAxis.X;
+            default -> TrackAxis.Z;
+        };
     }
 
     private boolean isAcceptable(@NonNull DragEvent e) {
@@ -357,25 +339,13 @@ public class SimpleDockRoot
                 lft = ins.getLeft(),
                 rgt = ins.getRight(),
                 top = ins.getTop();
-        BoundingBox rect;
-        switch (dragData.zone) {
-        case BOTTOM:
-            rect = new BoundingBox(x, y + h - btm, w, btm);
-            break;
-        case LEFT:
-            rect = new BoundingBox(x, y, lft, h);
-            break;
-        case RIGHT:
-            rect = new BoundingBox(x + w - rgt, y, rgt, h);
-            break;
-        case TOP:
-            rect = new BoundingBox(x, y, w, top);
-            break;
-        case CENTER:
-        default:
-            rect = new BoundingBox(x + lft, y + top, w - lft - rgt, h - top - btm);
-            break;
-        }
+        BoundingBox rect = switch (dragData.zone) {
+            case BOTTOM -> new BoundingBox(x, y + h - btm, w, btm);
+            case LEFT -> new BoundingBox(x, y, lft, h);
+            case RIGHT -> new BoundingBox(x + w - rgt, y, rgt, h);
+            case TOP -> new BoundingBox(x, y, w, top);
+            default -> new BoundingBox(x + lft, y + top, w - lft - rgt, h - top - btm);
+        };
         if (dropRect.isVisible() && !dropRect.getBoundsInLocal().isEmpty()) {
             if (transition == null || !transition.getToBounds().equals(rect)) {
                 if (transition != null) {
@@ -394,20 +364,7 @@ public class SimpleDockRoot
         }
     }
 
-    private static class DragData {
-        final DockParent pickedDock;
-        final DropZone zone;
-        final Bounds bounds;
-        final Insets insets;
-        final boolean isRootPicked;
-
-        public DragData(DockParent pickedDock, DropZone zone, Bounds bounds, Insets insets, boolean isRootPicked) {
-            this.pickedDock = pickedDock;
-            this.zone = zone;
-            this.bounds = bounds;
-            this.insets = insets;
-            this.isRootPicked = isRootPicked;
-        }
+    private record DragData(DockParent pickedDock, DropZone zone, Bounds bounds, Insets insets, boolean isRootPicked) {
     }
 
     public Supplier<Track> getZSupplier() {

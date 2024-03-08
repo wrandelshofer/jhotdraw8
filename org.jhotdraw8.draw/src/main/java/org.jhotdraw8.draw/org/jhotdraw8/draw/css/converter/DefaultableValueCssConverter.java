@@ -88,7 +88,7 @@ public class DefaultableValueCssConverter<T> implements CssConverter<CssDefaulta
     }
 
     @Override
-    public boolean isNullable() {
-        return valueConverter.isNullable();
+    public boolean nullable() {
+        return valueConverter.nullable();
     }
 }

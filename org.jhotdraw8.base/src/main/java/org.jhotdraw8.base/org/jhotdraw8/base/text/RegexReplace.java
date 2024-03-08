@@ -56,7 +56,7 @@ public class RegexReplace {
      */
     public @Nullable String apply(@Nullable String str) {
         if (str == null) {
-            return str;
+            return null;
         }
         if (find == null) {
             return replace == null ? str : replace;

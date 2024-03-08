@@ -49,6 +49,6 @@ public interface ReadOnlySequencedCollection<E> extends ReadOnlyCollection<E> {
 
     @Override
     default @NonNull SequencedCollection<E> asCollection() {
-        return new SequencedCollectionFacade<E>(this);
+        return new SequencedCollectionFacade<>(this);
     }
 }

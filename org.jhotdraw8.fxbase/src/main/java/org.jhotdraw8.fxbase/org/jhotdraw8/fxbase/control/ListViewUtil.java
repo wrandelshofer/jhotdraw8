@@ -60,7 +60,7 @@ public class ListViewUtil {
             this.undoHelper = new UndoableEditHelper(listView, undoableEditEventConsumer);
         }
 
-        private final @NonNull EventHandler<? super DragEvent> cellDragHandler = new EventHandler<DragEvent>() {
+        private final @NonNull EventHandler<? super DragEvent> cellDragHandler = new EventHandler<>() {
             @Override
             public void handle(@NonNull DragEvent event) {
                 if (event.isConsumed()) {
@@ -91,8 +91,7 @@ public class ListViewUtil {
 
             private TransferMode[] acceptModes(@NonNull DragEvent event) {
                 ListView<?> gestureTargetListView = null;
-                if (event.getGestureSource() instanceof ListCell) {
-                    ListCell<?> gestureTargetCell = (ListCell<?>) event.getGestureSource();
+                if (event.getGestureSource() instanceof ListCell<?> gestureTargetCell) {
                     gestureTargetListView = gestureTargetCell.getListView();
                 }
                 TransferMode[] mode;
@@ -158,7 +157,7 @@ public class ListViewUtil {
             }
         };
 
-        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<MouseEvent>() {
+        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<>() {
 
             @Override
             public void handle(@NonNull MouseEvent event) {
@@ -186,7 +185,7 @@ public class ListViewUtil {
         };
 
         @NonNull
-        EventHandler<? super DragEvent> listDragHandler = new EventHandler<DragEvent>() {
+        final EventHandler<? super DragEvent> listDragHandler = new EventHandler<>() {
 
             @Override
             public void handle(@NonNull DragEvent event) {
@@ -203,8 +202,7 @@ public class ListViewUtil {
 
             private TransferMode[] acceptModes(@NonNull DragEvent event) {
                 ListView<?> gestureTargetListView = null;
-                if (event.getGestureSource() instanceof ListCell) {
-                    ListCell<?> gestureTargetCell = (ListCell<?>) event.getGestureSource();
+                if (event.getGestureSource() instanceof ListCell<?> gestureTargetCell) {
                     gestureTargetListView = gestureTargetCell.getListView();
                 }
                 TransferMode[] mode;
@@ -363,7 +361,7 @@ public class ListViewUtil {
      */
     public static <T> void addReorderingSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         if (clipboardIO == null) {
-            clipboardIO = new ClipboardIO<T>() {
+            clipboardIO = new ClipboardIO<>() {
                 @Override
                 public void write(@NonNull Clipboard clipboard, @NonNull List<T> items) {
                     // We just write the index of the selected item in the clipboard.
@@ -394,18 +392,17 @@ public class ListViewUtil {
         public void updateItem(T var1, boolean var2) {
             super.updateItem(var1, var2);
             if (var2) {
-                this.setText((String) null);
-                this.setGraphic((Node) null);
-            } else if (var1 instanceof Node) {
-                this.setText((String) null);
+                this.setText(null);
+                this.setGraphic(null);
+            } else if (var1 instanceof Node var4) {
+                this.setText(null);
                 Node var3 = this.getGraphic();
-                Node var4 = (Node) var1;
                 if (var3 == null || !var3.equals(var4)) {
                     this.setGraphic(var4);
                 }
             } else {
                 this.setText(var1 == null ? "null" : var1.toString());
-                this.setGraphic((Node) null);
+                this.setGraphic(null);
             }
 
         }

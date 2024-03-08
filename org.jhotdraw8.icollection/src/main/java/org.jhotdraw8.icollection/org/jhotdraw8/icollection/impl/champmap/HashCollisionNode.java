@@ -85,7 +85,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     Object findByKey(final K key, final int keyHash, final int shift) {
         for (int i = 0; i < entries.length; i += ENTRY_LENGTH) {
             if (Objects.equals(key, entries[i])) {
-                return ENTRY_LENGTH > 1 ? entries[i + 1] : null;
+                return entries[i + 1];
             }
         }
         return NO_DATA;
@@ -109,7 +109,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @Override
     @NonNull
     EditableMapEntry<K, V> getMapEntry(final int index) {
-        return new EditableMapEntry<K, V>(
+        return new EditableMapEntry<>(
                 (K) entries[index * ENTRY_LENGTH],
                 (V) entries[index * ENTRY_LENGTH + 1],
                 0

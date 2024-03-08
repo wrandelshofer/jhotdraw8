@@ -150,9 +150,7 @@ public class IntersectQuadCurveQuadCurve {
         double[] roots = poly.getRoots();
 
         List<IntersectionPoint> result = new ArrayList<>();
-        for (int i = 0; i < roots.length; i++) {
-            double s = roots[i];
-
+        for (double s : roots) {
             if (-epsilon <= s && s <= 1 + epsilon) {
                 double[] xRoots = new Polynomial(
                         c12x, c11x,
@@ -165,12 +163,10 @@ public class IntersectQuadCurveQuadCurve {
 
                 if (xRoots.length > 0 && yRoots.length > 0) {
                     checkRoots:
-                    for (int j = 0; j < xRoots.length; j++) {
-                        double xRoot = xRoots[j];
-
+                    for (double xRoot : xRoots) {
                         if (0 <= xRoot && xRoot <= 1) {
-                            for (int k = 0; k < yRoots.length; k++) {
-                                if (Math.abs(xRoot - yRoots[k]) < ROOT_X_Y_TOLERANCE) {
+                            for (double yRoot : yRoots) {
+                                if (Math.abs(xRoot - yRoot) < ROOT_X_Y_TOLERANCE) {
                                     result.add(new IntersectionPoint(
                                             Points2D.add(Points2D.multiply(c22, s * s), Points2D.add(Points2D.multiply(c21, s), c20)),
                                             xRoot));

@@ -65,7 +65,7 @@ public class CustomBinding {
     public static <T, M> void bindBidirectionalStrongly(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
-        final ChangeListener<M> changeListener = new ChangeListener<M>() {
+        final ChangeListener<M> changeListener = new ChangeListener<>() {
             private Property<T> strongReference;
 
             @Override
@@ -87,7 +87,7 @@ public class CustomBinding {
     public static <T, M> void bindBidirectionalStrongly2(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
-        final ChangeListener<M> changeListener = new ChangeListener<M>() {
+        final ChangeListener<M> changeListener = new ChangeListener<>() {
             private Property<T> strongReference;
 
             @Override
@@ -119,15 +119,12 @@ public class CustomBinding {
     public static <T, M> void bindBidirectional(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
-        final ChangeListener<M> changeListener = new ChangeListener<M>() {
-            @Override
-            public void changed(ObservableValue<? extends M> o, M oldv, M newv) {
-                if (oldv != null) {
-                    propertyA.unbindBidirectional(propertyB.apply(oldv));
-                }
-                if (newv != null) {
-                    propertyA.bindBidirectional(propertyB.apply(newv));
-                }
+        final ChangeListener<M> changeListener = (o, oldv, newv) -> {
+            if (oldv != null) {
+                propertyA.unbindBidirectional(propertyB.apply(oldv));
+            }
+            if (newv != null) {
+                propertyA.bindBidirectional(propertyB.apply(newv));
             }
         };
         changeListener.changed(mediator, null, mediator.getValue());
@@ -563,7 +560,7 @@ public class CustomBinding {
      * @return a new binding
      */
     public static <T> ObjectBinding<T> compute(Supplier<T> op, ObservableValue<?>... dependencies) {
-        return new ObjectBinding<T>() {
+        return new ObjectBinding<>() {
             {
                 super.bind(dependencies);
             }
@@ -595,7 +592,7 @@ public class CustomBinding {
      * @return a new binding
      */
     public static <A, B> ObjectBinding<B> convert(@NonNull ObservableValue<A> a, @NonNull Function<A, B> convert) {
-        return new ObjectBinding<B>() {
+        return new ObjectBinding<>() {
             {
                 super.bind(a);
             }
@@ -705,15 +702,12 @@ public class CustomBinding {
      */
     public static <A, B> Property<B> viaBidirectional(ObservableValue<A> root, Function<A, Property<B>> step) {
         SimpleObjectProperty<B> viaProperty = new SimpleObjectProperty<>();
-        ChangeListener<A> changeListener = new ChangeListener<A>() {
-            @Override
-            public void changed(ObservableValue<? extends A> o, A oldValue, A newValue) {
-                if (oldValue != null) {
-                    viaProperty.unbindBidirectional(step.apply(newValue));
-                }
-                if (newValue != null) {
-                    viaProperty.bindBidirectional(step.apply(newValue));
-                }
+        ChangeListener<A> changeListener = (o, oldValue, newValue) -> {
+            if (oldValue != null) {
+                viaProperty.unbindBidirectional(step.apply(newValue));
+            }
+            if (newValue != null) {
+                viaProperty.bindBidirectional(step.apply(newValue));
             }
         };
         root.addListener(changeListener);

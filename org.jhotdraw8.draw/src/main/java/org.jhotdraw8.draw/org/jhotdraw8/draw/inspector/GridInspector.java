@@ -123,22 +123,22 @@ public class GridInspector extends AbstractDrawingViewInspector {
         ChangeListener<CssSize> prefsGridX = (o, oldv, newv) -> {
             prefs.putDouble("gridX", newv.getValue());
             String units = newv.getUnits();
-            prefs.put("gridXUnits", units == null ? "" : units);
+            prefs.put("gridXUnits", units);
         };
         ChangeListener<CssSize> prefsGridY = (o, oldv, newv) -> {
             prefs.putDouble("gridY", newv.getValue());
             String units = newv.getUnits();
-            prefs.put("gridYUnits", units == null ? "" : units);
+            prefs.put("gridYUnits", units);
         };
         ChangeListener<CssSize> prefsGridWidth = (o, oldv, newv) -> {
             prefs.putDouble("gridWidth", newv.getValue());
             String units = newv.getUnits();
-            prefs.put("gridWidthUnits", units == null ? "" : units);
+            prefs.put("gridWidthUnits", units);
         };
         ChangeListener<CssSize> prefsGridHeight = (o, oldv, newv) -> {
             prefs.putDouble("gridHeight", newv.getValue());
             String units = newv.getUnits();
-            prefs.put("gridHeightUnits", units == null ? "" : units);
+            prefs.put("gridHeightUnits", units);
         };
         ChangeListener<Number> prefsGridAngle = (o, oldv, newv) -> prefs.putDouble("gridAngle", newv.doubleValue());
         ChangeListener<Number> prefsGridMajorX = (o, oldv, newv) -> prefs.putInt("gridMajorX", newv.intValue());
@@ -155,30 +155,24 @@ public class GridInspector extends AbstractDrawingViewInspector {
             angleField.textProperty().unbind();
             drawGridCheckBox.selectedProperty().unbind();
             snapToGridCheckBox.selectedProperty().unbind();
-            if (oldValue instanceof GridConstrainer) {
-                GridConstrainer gc = (GridConstrainer) oldValue;
+            if (oldValue instanceof GridConstrainer gc) {
                 gridColorProperty.unbindBidirectional(gc.gridColorProperty());
             }
         }
         if (newValue != null) {
-            if (false && (newValue.getConstrainer() instanceof GridConstrainer)) {
-                gridConstrainer = (GridConstrainer) newValue.getConstrainer();
-            } else {
-
-                gridConstrainer = new GridConstrainer(
-                        CssSize.of(prefs.getDouble("gridX", 0), prefs.get("gridXUnits", null)),
-                        CssSize.of(prefs.getDouble("gridY", 0), prefs.get("gridYUnits", null)),
-                        CssSize.of(prefs.getDouble("gridWidth", 0), prefs.get("gridWidthUnits", null)),
-                        CssSize.of(prefs.getDouble("gridHeight", 0), prefs.get("gridHeightUnits", null)),
-                        prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
-                Converter<CssColor> converter = new ColorCssConverter(true);
-                try {
-                    gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor", gridConstrainer.getGridColor().getName())));
-                } catch (ParseException ex) {
-                    // don't set color if preferences is bogus
-                }
-                newValue.setConstrainer(gridConstrainer);
+            gridConstrainer = new GridConstrainer(
+                    CssSize.of(prefs.getDouble("gridX", 0), prefs.get("gridXUnits", null)),
+                    CssSize.of(prefs.getDouble("gridY", 0), prefs.get("gridYUnits", null)),
+                    CssSize.of(prefs.getDouble("gridWidth", 0), prefs.get("gridWidthUnits", null)),
+                    CssSize.of(prefs.getDouble("gridHeight", 0), prefs.get("gridHeightUnits", null)),
+                    prefs.getDouble("gridAngle", 11.25), prefs.getInt("gridMajorX", 5), prefs.getInt("gridMajorY", 5));
+            Converter<CssColor> converter = new ColorCssConverter(true);
+            try {
+                gridConstrainer.setGridColor(converter.fromString(prefs.get("gridColor", gridConstrainer.getGridColor().getName())));
+            } catch (ParseException ex) {
+                // don't set color if preferences is bogus
             }
+            newValue.setConstrainer(gridConstrainer);
             StringConverter<CssSize> sc
                     = new StringConverterAdapter<>(new SizeCssConverter(false));
             StringConverter<Number> nc

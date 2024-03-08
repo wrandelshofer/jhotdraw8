@@ -34,27 +34,24 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class TreeModelUndoAdapter<E> {
     public static final @NonNull String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
     private final @NonNull CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
-    private final @NonNull Listener<TreeModelEvent<E>> treeModelListener = new Listener<TreeModelEvent<E>>() {
-        @Override
-        public void handle(@NonNull TreeModelEvent<E> event) {
-            UndoableEdit edit = switch (event.getEventType()) {
-                case ROOT_CHANGED -> new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
-                case SUBTREE_NODES_CHANGED,
-                        NODE_ADDED_TO_TREE,
-                        NODE_REMOVED_FROM_TREE,
-                        NODE_CHANGED -> null;
-                case NODE_ADDED_TO_PARENT ->
-                        new NodeAddedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
-                case NODE_REMOVED_FROM_PARENT ->
-                        new NodeRemovedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
+    private final @NonNull Listener<TreeModelEvent<E>> treeModelListener = event -> {
+        UndoableEdit edit = switch (event.getEventType()) {
+            case ROOT_CHANGED -> new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
+            case SUBTREE_NODES_CHANGED,
+                    NODE_ADDED_TO_TREE,
+                    NODE_REMOVED_FROM_TREE,
+                    NODE_CHANGED -> null;
+            case NODE_ADDED_TO_PARENT ->
+                    new NodeAddedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
+            case NODE_REMOVED_FROM_PARENT ->
+                    new NodeRemovedEdit<>(event.getSource(), event.getParent(), event.getChildIndex(), event.getChild());
 
-            };
-            if (edit != null) {
-                fireUndoableEdit(event.getSource(), edit);
-            }
+        };
+        if (edit != null) {
+            fireUndoableEdit(event.getSource(), edit);
         }
     };
-    private NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
+    final private NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
 
     public TreeModelUndoAdapter() {
     }
@@ -97,12 +94,12 @@ public class TreeModelUndoAdapter<E> {
         model.removeTreeModelListener(treeModelListener);
     }
 
-    class RootChangedEdit<E> extends AbstractUndoableEdit {
-        private final @NonNull TreeModel<E> model;
-        private final @Nullable E oldRoot;
-        private final @Nullable E newRoot;
+    class RootChangedEdit<EE> extends AbstractUndoableEdit {
+        private final @NonNull TreeModel<EE> model;
+        private final @Nullable EE oldRoot;
+        private final @Nullable EE newRoot;
 
-        public RootChangedEdit(@NonNull TreeModel<E> model, @Nullable E oldRoot, @Nullable E newRoot) {
+        public RootChangedEdit(@NonNull TreeModel<EE> model, @Nullable EE oldRoot, @Nullable EE newRoot) {
             this.model = model;
             this.oldRoot = oldRoot;
             this.newRoot = newRoot;
@@ -126,13 +123,13 @@ public class TreeModelUndoAdapter<E> {
         }
     }
 
-    class NodeAddedEdit<E> extends AbstractUndoableEdit {
-        private final @NonNull TreeModel<E> model;
-        private final @NonNull E parent;
+    class NodeAddedEdit<EE> extends AbstractUndoableEdit {
+        private final @NonNull TreeModel<EE> model;
+        private final @NonNull EE parent;
         private final int childIndex;
-        private final @NonNull E child;
+        private final @NonNull EE child;
 
-        public NodeAddedEdit(@NonNull TreeModel<E> model, @NonNull E parent, int childIndex, @NonNull E child) {
+        public NodeAddedEdit(@NonNull TreeModel<EE> model, @NonNull EE parent, int childIndex, @NonNull EE child) {
             this.model = model;
             this.parent = parent;
             this.childIndex = childIndex;
@@ -157,13 +154,13 @@ public class TreeModelUndoAdapter<E> {
         }
     }
 
-    class NodeRemovedEdit<E> extends AbstractUndoableEdit {
-        private final @NonNull TreeModel<E> model;
-        private final @NonNull E parent;
+    class NodeRemovedEdit<EE> extends AbstractUndoableEdit {
+        private final @NonNull TreeModel<EE> model;
+        private final @NonNull EE parent;
         private final int childIndex;
-        private final @NonNull E child;
+        private final @NonNull EE child;
 
-        public NodeRemovedEdit(@NonNull TreeModel<E> model, @NonNull E parent, int childIndex, @NonNull E child) {
+        public NodeRemovedEdit(@NonNull TreeModel<EE> model, @NonNull EE parent, int childIndex, @NonNull EE child) {
             this.model = model;
             this.parent = parent;
             this.childIndex = childIndex;

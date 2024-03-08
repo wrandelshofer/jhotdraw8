@@ -42,7 +42,7 @@ public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
      */
     public WordSetStyleableKey(@NonNull String name, @NonNull ImmutableSequencedSet<String> defaultValue) {
         this(name,
-                new SetCssConverter<String>(new IdentCssConverter(false)),
+                new SetCssConverter<>(new IdentCssConverter(false)),
                 defaultValue);
     }
 

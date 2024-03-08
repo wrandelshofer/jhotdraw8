@@ -85,17 +85,7 @@ public class FXPreciseRotate extends Rotate {
     }
 
 
-    private static class Matrix {
-        final double mxx, mxy, tx, myx, myy, ty;
-
-        public Matrix(double mxx, double mxy, double tx, double myx, double myy, double ty) {
-            this.mxx = mxx;
-            this.mxy = mxy;
-            this.tx = tx;
-            this.myx = myx;
-            this.myy = myy;
-            this.ty = ty;
-        }
+    private record Matrix(double mxx, double mxy, double tx, double myx, double myy, double ty) {
     }
 
     /**

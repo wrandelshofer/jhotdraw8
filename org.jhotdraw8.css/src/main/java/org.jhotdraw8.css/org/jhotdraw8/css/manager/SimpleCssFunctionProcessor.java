@@ -21,7 +21,6 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -103,7 +102,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     public String getHelpText() {
         StringBuilder buf = new StringBuilder();
         for (CssFunction<T> value : functions.values()) {
-            if (buf.length() != 0) {
+            if (!buf.isEmpty()) {
                 buf.append("\n");
             }
             buf.append(value.getHelpText());

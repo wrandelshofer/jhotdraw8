@@ -73,7 +73,6 @@ import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -277,7 +276,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 for (Activity v : list) {
                     max = Math.max(max, v.getDisambiguation());
                 }
-                Collections.sort(list, Comparator.comparingInt(Activity::getDisambiguation));
+                list.sort(Comparator.comparingInt(Activity::getDisambiguation));
                 int prev = 0;
                 for (Activity v : list) {
                     int current = v.getDisambiguation();
@@ -450,11 +449,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         // https://bugs.openjdk.java.net/browse/JDK-8092779
         // https://bugs.openjdk.java.net/browse/JDK-8269907
         // Wait two pulses to allow for the scene to clean up its dirty nodes.
-        FXWorker.run(() -> {
-            Thread.sleep(2 * 1000 / 60);
-        }).thenRun(() -> {
-            stage.close();
-        });
+        FXWorker.run(() -> Thread.sleep(2 * 1000 / 60)).thenRun(stage::close);
 
         System.gc();
 
@@ -516,8 +511,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             if (node instanceof Menu) {
                 CustomBinding.unbindListContentToSet(
                         ((Menu) node).getItems(), getActivities());
-            } else if (node instanceof MenuItem) {
-                MenuItem menuItem = (MenuItem) node;
+            } else if (node instanceof MenuItem menuItem) {
                 menuItem.setOnAction(null);
                 menuItem.textProperty().unbind();
                 @SuppressWarnings("unchecked")
@@ -556,14 +550,14 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             /*
             Platform.setImplicitExit(false);
             systemMenus = new ArrayList<>();
-            ArrayList<MenuBase> menus = new ArrayList<>();
+            ArrayList<MenuItem> menus = new ArrayList<>();
             MenuBar mb = createMenuBar(null, getActionMap());
             for (Menu m : mb.getMenus()) {
                 systemMenus.add(m);
                 menus.add(GlobalMenuAdapter.adapt(m));
             }
             Toolkit.getToolkit().getSystemMenu().setMenus(menus);
-*/
+             */
         }
 
         List<URI> urisToOpen = getUrisToOpen();
@@ -592,7 +586,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             v.addDisabler(this);
             v.read(uri, null,
                     ChampMap.of(),
-                    false, new SimpleWorkState<Void>()).whenComplete((result, ex) -> {
+                    false, new SimpleWorkState<>()).whenComplete((result, ex) -> {
                 if (ex != null) {
                     ex.printStackTrace();
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
@@ -696,8 +690,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         todo.add(mb);
         while (!todo.isEmpty()) {
             for (Object mi : todo.remove()) {
-                if (mi instanceof Menu) {
-                    Menu mmi = (Menu) mi;
+                if (mi instanceof Menu mmi) {
                     if (FILE_OPEN_RECENT_MENU.equals(mmi.getId())) {
                         mmi.getItems().clear();
                         List<Map.Entry<URI, DataFormat>> list =

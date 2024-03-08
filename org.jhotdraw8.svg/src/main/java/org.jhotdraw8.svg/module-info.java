@@ -23,6 +23,7 @@ module org.jhotdraw8.svg {
     exports org.jhotdraw8.svg.io;
     exports org.jhotdraw8.svg.gui;
     exports org.jhotdraw8.svg.figure;
+    exports org.jhotdraw8.svg.text;
     exports org.jhotdraw8.svg.draw.figure;
 
     opens org.jhotdraw8.svg.gui to javafx.fxml;

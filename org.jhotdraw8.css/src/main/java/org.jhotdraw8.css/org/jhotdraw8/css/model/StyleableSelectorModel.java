@@ -21,6 +21,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -159,9 +160,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
                     Set<String> slist = new HashSet<>();
                     if (value != null) {
                         String[] words = value.toString().split("\\s+");
-                        for (String word : words) {
-                            slist.add(word);
-                        }
+                        slist.addAll(Arrays.asList(words));
                     }
 
                     return slist;

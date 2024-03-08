@@ -41,8 +41,8 @@ public class Solvers {
     public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> polynomialApprox3(@NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
                                                                                            @NonNull ToDoubleFunction<Double> fp,
                                                                                            double xmin, double xmax) {
-        double y1 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) * 1.0 / 3.0);
-        double y2 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) * 2.0 / 3.0);
+        double y1 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) / 3.0);
+        double y2 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) / 1.5);
         double y3 = quadratureFunction.apply(fp, xmin, xmax);
 
         // We have four points on the y(x) curve at x0=0, x1=1/3, x2=2/3 and x3=1

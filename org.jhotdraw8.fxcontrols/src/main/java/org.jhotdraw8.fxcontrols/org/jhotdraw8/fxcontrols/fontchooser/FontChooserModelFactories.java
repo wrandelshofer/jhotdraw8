@@ -28,9 +28,7 @@ public class FontChooserModelFactories {
     public static @NonNull FontChooserModel create() {
         FontChooserModel model = new FontChooserModel();
         if (Platform.isFxApplicationThread()) {
-            singleton.get().createAsync().thenAccept(m -> {
-                model.getFontCollections().addAll(m);
-            });
+            singleton.get().createAsync().thenAccept(m -> model.getFontCollections().addAll(m));
         } else {
             model.getFontCollections().addAll(singleton.get().create());
         }

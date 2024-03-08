@@ -90,11 +90,9 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
     @Override
     public void unbind() {
         super.unbind();
-        if (map != null) {
-            map.removeListener(weakListener);
-            weakListener = null;
-            map = null;
-            key = null;
-        }
+        map.removeListener(weakListener);
+        weakListener = null;
+        map = null;
+        key = null;
     }
 }

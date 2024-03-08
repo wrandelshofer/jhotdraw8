@@ -191,6 +191,6 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return breadth first search
      */
     default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
-        return new BfsDfsVertexSpliterator<V>(this::getNextVertices, start, visited, dfs);
+        return new BfsDfsVertexSpliterator<>(this::getNextVertices, start, visited, dfs);
     }
 }

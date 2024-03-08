@@ -35,7 +35,7 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
         return fromLinear(linearCS.fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
-    protected float[] fromLinear(float linear[], float corrected[]) {
+    protected float[] fromLinear(float[] linear, float[] corrected) {
         corrected[0] = fromLinear.apply(linear[0]);
         corrected[1] = fromLinear.apply(linear[1]);
         corrected[2] = fromLinear.apply(linear[2]);
@@ -69,7 +69,7 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
         return linearCS.toCIEXYZ(toLinear(colorvalue, xyz), xyz);
     }
 
-    protected float[] toLinear(float corrected[], float linear[]) {
+    protected float[] toLinear(float[] corrected, float[] linear) {
         linear[0] = toLinear.apply(corrected[0]);
         linear[1] = toLinear.apply(corrected[1]);
         linear[2] = toLinear.apply(corrected[2]);

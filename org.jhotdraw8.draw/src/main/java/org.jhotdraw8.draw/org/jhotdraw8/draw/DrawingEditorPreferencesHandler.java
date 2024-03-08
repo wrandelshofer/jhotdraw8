@@ -47,12 +47,8 @@ public class DrawingEditorPreferencesHandler {
 
         readPreferences();
 
-        final ChangeListener<Number> doublePropertyListener = (o, oldv, newv) -> {
-            prefs.putDouble(prefix + ((Property<?>) o).getName(), newv.doubleValue());
-        };
-        final ChangeListener<CssColor> colorPropertyListener = (o, oldv, newv) -> {
-            prefs.put(prefix + ((Property<?>) o).getName(), newv.getName());
-        };
+        final ChangeListener<Number> doublePropertyListener = (o, oldv, newv) -> prefs.putDouble(prefix + ((Property<?>) o).getName(), newv.doubleValue());
+        final ChangeListener<CssColor> colorPropertyListener = (o, oldv, newv) -> prefs.put(prefix + ((Property<?>) o).getName(), newv.getName());
         editor.handleSizeProperty().addListener(doublePropertyListener);
         editor.handleStrokeWidthProperty().addListener(doublePropertyListener);
         editor.toleranceProperty().addListener(doublePropertyListener);

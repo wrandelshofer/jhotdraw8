@@ -45,7 +45,7 @@ public class WordCssConverter implements Converter<String> {
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {
             out.append(in.get());
         }
-        if (out.length() == 0) {
+        if (out.isEmpty()) {
             in.position(pos);
             throw new ParseException("word expected", pos);
         }

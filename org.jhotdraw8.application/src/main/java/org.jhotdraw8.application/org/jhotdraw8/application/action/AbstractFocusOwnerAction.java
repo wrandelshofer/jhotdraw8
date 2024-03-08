@@ -59,7 +59,7 @@ public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction
         this.target = target;
 
         app.activeActivityProperty().addListener(activeViewListener);
-        activeViewListener.changed(null, null, app == null ? null : app.getActiveActivity());
+        activeViewListener.changed(null, null, app.getActiveActivity());
 
     }
 }

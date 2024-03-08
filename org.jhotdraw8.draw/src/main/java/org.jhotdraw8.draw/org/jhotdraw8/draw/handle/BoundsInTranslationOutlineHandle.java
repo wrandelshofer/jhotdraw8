@@ -83,8 +83,7 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     public void updateNode(@NonNull DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getParentToWorld());
-        if (f instanceof TransformableFigure) {
-            TransformableFigure tf = (TransformableFigure) f;
+        if (f instanceof TransformableFigure tf) {
             t = FXTransforms.concat(t, new Translate(tf.getNonNull(TRANSLATE_X), tf.getNonNull(TRANSLATE_Y)));
         }
         t = FXTransforms.concat(Transform.translate(0.5, 0.5), t);

@@ -88,7 +88,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
         points[5] = b.getMaxY();
         points[6] = b.getMinX();
         points[7] = b.getMaxY();
-        if (t != null && t.isType2D()) {
+        if (t.isType2D()) {
            FXTransforms.transform2DPoints(t, points, 0, points, 0, 4);
         }
 

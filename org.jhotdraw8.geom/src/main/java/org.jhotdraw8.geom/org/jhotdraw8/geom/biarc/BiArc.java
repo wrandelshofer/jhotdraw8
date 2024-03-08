@@ -11,9 +11,7 @@ import org.jhotdraw8.geom.Points2D;
 import java.awt.geom.Point2D;
 
 
-public class BiArc {
-    public final Arc a1;
-    public final Arc a2;
+public record BiArc(Arc a1, Arc a2) {
 
     /**
      * Creates a new instance.
@@ -24,7 +22,7 @@ public class BiArc {
      * @param t2 Tangent vector at P2
      * @param tp Transition point
      */
-    public BiArc(Point2D.Double p1, Point2D.Double t1, Point2D.Double p2, Point2D.Double t2, Point2D.Double tp) {
+    public static BiArc create(Point2D.Double p1, Point2D.Double t1, Point2D.Double p2, Point2D.Double t2, Point2D.Double tp) {
         // Calculate the orientation
         // https://en.wikipedia.org/wiki/Curve_orientation
 
@@ -80,8 +78,9 @@ public class BiArc {
             sweepAngle2 = sweepAngle2 - 2 * Math.PI;
         }
 
-        a1 = new Arc(C1, r1, startAngle1, sweepAngle1, p1, tp);
-        a2 = new Arc(C2, r2, startAngle2, sweepAngle2, tp, p2);
+        return new BiArc(
+                new Arc(C1, r1, startAngle1, sweepAngle1, p1, tp),
+                new Arc(C2, r2, startAngle2, sweepAngle2, tp, p2));
     }
 
     /**

@@ -13,7 +13,6 @@ import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIExtensionFilter;
 import org.jhotdraw8.fxbase.fxml.FxmlUtil;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.jhotdraw8.application.action.file.AbstractOpenFileAction.OPEN_CHOOSER_FACTORY_KEY;
@@ -47,7 +46,7 @@ public class TeddyApplication extends AbstractFileBasedApplication {
         set(NAME_KEY, "Teddy");
         set(COPYRIGHT_KEY, "The authors and contributors of JHotDraw.");
         set(LICENSE_KEY, "MIT License");
-        List<URIExtensionFilter> extensions = Arrays.asList(new URIExtensionFilter("Text Files", "text/plain", "*.txt"));
+        List<URIExtensionFilter> extensions = List.of(new URIExtensionFilter("Text Files", "text/plain", "*.txt"));
         set(SAVE_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.SAVE, extensions));
         set(OPEN_CHOOSER_FACTORY_KEY, () -> new FileURIChooser(FileURIChooser.Mode.OPEN, extensions));
     }

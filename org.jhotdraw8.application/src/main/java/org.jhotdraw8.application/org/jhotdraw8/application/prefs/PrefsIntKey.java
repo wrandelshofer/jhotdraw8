@@ -44,6 +44,6 @@ public class PrefsIntKey {
      * @return the constrained value
      */
     private int clamp(int value, int min, int max) {
-        return min <= value ? (value <= max ? value : max) : min;
+        return min <= value ? (Math.min(value, max)) : min;
     }
 }

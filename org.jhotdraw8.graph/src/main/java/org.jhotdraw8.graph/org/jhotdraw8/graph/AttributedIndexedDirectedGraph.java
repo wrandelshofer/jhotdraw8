@@ -112,7 +112,7 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
             }
         }
 
-        return new AbstractCollection<Map.Entry<Integer, A>>() {
+        return new AbstractCollection<>() {
             @Override
             public @NonNull Iterator<Map.Entry<Integer, A>> iterator() {
                 return new NextVertexAndArrowIterator(vertexIndex);

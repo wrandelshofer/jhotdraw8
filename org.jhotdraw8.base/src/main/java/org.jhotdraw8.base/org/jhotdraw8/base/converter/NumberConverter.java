@@ -271,7 +271,7 @@ public class NumberConverter implements Converter<Number> {
     @Override
     public @Nullable Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws
             ParseException {
-        if ((str.length() == 0) && getAllowsNullValue()) {
+        if ((str.isEmpty()) && getAllowsNullValue()) {
             return null;
         }
         if (str == null) {
@@ -432,7 +432,7 @@ public class NumberConverter implements Converter<Number> {
     @SuppressWarnings({"unchecked", "WeakerAccess"})
     private boolean isValidValue(@NonNull Number value, boolean wantsCCE) {
         try {
-            if (min instanceof Comparable c && c.compareTo(value) > 0) {
+            if (((Comparable<Number>) min).compareTo(value) > 0) {
                 return false;
             }
         } catch (ClassCastException cce) {
@@ -443,7 +443,7 @@ public class NumberConverter implements Converter<Number> {
         }
 
         try {
-            if (max instanceof Comparable c && c.compareTo(value) < 0) {
+            if (((Comparable<Number>) max).compareTo(value) < 0) {
                 return false;
             }
         } catch (ClassCastException cce) {

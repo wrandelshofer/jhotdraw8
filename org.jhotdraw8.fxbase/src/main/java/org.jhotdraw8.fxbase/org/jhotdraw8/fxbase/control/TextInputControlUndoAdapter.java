@@ -40,7 +40,7 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
     }
 
     public void bind(@NonNull TextInputControl control) {
-        control.setTextFormatter(new TextFormatter<Object>(this));
+        control.setTextFormatter(new TextFormatter<>(this));
     }
 
     public void unbind(@NonNull TextInputControl control) {

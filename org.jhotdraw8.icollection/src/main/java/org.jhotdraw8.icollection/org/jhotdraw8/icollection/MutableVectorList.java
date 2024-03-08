@@ -93,7 +93,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public @NonNull List<E> reversed() {
-        return new ReversedListView<E>(this, this::modCount);
+        return new ReversedListView<>(this, this::modCount);
     }
 
     private int modCount() {

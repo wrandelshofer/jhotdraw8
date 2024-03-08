@@ -31,8 +31,7 @@ public class SvgPaintCssConverter extends PaintCssConverter {
 
     @Override
     protected <TT extends Paint> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
-        if ((value instanceof Color) && !value.isOpaque()) {
-            Color c = (Color) value;
+        if ((value instanceof Color c) && !value.isOpaque()) {
             Color opaqueColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), 1.0);
             super.produceTokensNonNull(opaqueColor, idSupplier, out);
         } else {

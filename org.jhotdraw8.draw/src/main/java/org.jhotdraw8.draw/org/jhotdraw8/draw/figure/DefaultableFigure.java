@@ -53,18 +53,12 @@ public interface DefaultableFigure extends Figure {
                 return key.getInitialValue();
             }
         case REVERT:
-            switch (origin) {
-            case USER_AGENT:
-                return key.getInitialValue();
-            case USER:
-                return getDefaultableStyled(StyleOrigin.USER_AGENT, key);
-            case AUTHOR:
-                return getDefaultableStyled(StyleOrigin.USER, key);
-            case INLINE:
-                return getDefaultableStyled(StyleOrigin.AUTHOR, key);
-            default:
-                throw new IllegalStateException("Unexpected value: " + origin);
-            }
+            return switch (origin) {
+                case USER_AGENT -> key.getInitialValue();
+                case USER -> getDefaultableStyled(StyleOrigin.USER_AGENT, key);
+                case AUTHOR -> getDefaultableStyled(StyleOrigin.USER, key);
+                case INLINE -> getDefaultableStyled(StyleOrigin.AUTHOR, key);
+            };
         default:
             throw new UnsupportedOperationException("unsupported defaulting: " + dv.getDefaulting());
         }

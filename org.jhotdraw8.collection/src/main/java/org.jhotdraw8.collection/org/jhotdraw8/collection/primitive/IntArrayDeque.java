@@ -176,10 +176,9 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         if (this == o) {
             return true;
         }
-        if (!(o instanceof IntArrayDeque)) {
+        if (!(o instanceof IntArrayDeque that)) {
             return false;
         }
-        IntArrayDeque that = (IntArrayDeque) o;
         if (this.size() != that.size()) {
             return false;
         }

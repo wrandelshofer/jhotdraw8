@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 
 public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
@@ -29,9 +28,6 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
 
     @Override
     public @Nullable E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
-        if (in == null) {
-            throw new ParseException("Illegal value=null", 0);
-        }
         String str = in.toString();
         in.position(in.length());
         E e = fromStringMap.get(str.toLowerCase());

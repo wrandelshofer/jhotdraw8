@@ -196,7 +196,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
             inRadio = null;
         }
         RadioMenuItem outRadio;
-        int nodeListSize = path == null ? 0 : path.size();
+        int nodeListSize = path.size();
         if (nodeIndex < nodeListSize - 1) {
             outRadio = new RadioMenuItem();
             Actions.bindMenuItem(outRadio, new BezierNodeHandleOutgoingTangentAction(owner, pathKey, nodeIndex, view));

@@ -15,16 +15,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
  * locations on the figure.
  */
 public interface TextEditableFigure extends Figure {
-    class TextEditorData {
-        public final TextEditableFigure figure;
-        public final Bounds boundsInLocal;
-        public final MapAccessor<String> textKey;
-
-        public TextEditorData(TextEditableFigure figure, Bounds boundsInLocal, MapAccessor<String> textKey) {
-            this.figure = figure;
-            this.boundsInLocal = boundsInLocal;
-            this.textKey = textKey;
-        }
+    record TextEditorData(TextEditableFigure figure, Bounds boundsInLocal, MapAccessor<String> textKey) {
     }
 
     /**

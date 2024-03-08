@@ -11,7 +11,6 @@ import javafx.beans.binding.ObjectBinding;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
@@ -31,7 +30,6 @@ import org.jhotdraw8.color.SrgbColorSpace;
 
 import java.awt.color.ColorSpace;
 import java.util.Arrays;
-import java.util.concurrent.Callable;
 
 public class ColorSpaceMain extends Application {
     public ColorSpaceMain() {
@@ -57,7 +55,7 @@ public class ColorSpaceMain extends Application {
         Label to1Label = new Label();
         Label from2Label = new Label();
         Label to2Label = new Label();
-        VBox vbox1 = new VBox(fromPicker, (Node) from1Label, (Node) from2Label);
+        VBox vbox1 = new VBox(fromPicker, from1Label, from2Label);
         VBox vbox2 = new VBox(toPicker, to1Label, to2Label);
         hbox.getChildren().addAll(vbox1, vbox2);
 
@@ -127,21 +125,18 @@ public class ColorSpaceMain extends Application {
     @NonNull
     private static ObjectBinding<String> createColorLabelBinding(ComboBox<NamedColorSpace> colorSpace1ComboBox, ColorPicker fromPicker) {
         ObjectProperty<NamedColorSpace> colorSpaceProperty = colorSpace1ComboBox.valueProperty();
-        return Bindings.createObjectBinding(new Callable<String>() {
-                                                @Override
-                                                public String call() throws Exception {
-                                                    NamedColorSpace value = colorSpace1ComboBox.getValue();
-                                                    return
-                                                            colorSpaceProperty.get().getName()
-                                                                    + ": "
-                                                                    + (value == null ? "null" : Arrays.toString(value.fromRGB(
-                                                                    new float[]{
-                                                                            (float) fromPicker.getValue().getRed(),
-                                                                            (float) fromPicker.getValue().getGreen(),
-                                                                            (float) fromPicker.getValue().getBlue()
-                                                                    })));
-                                                }
-                                            },
+        return Bindings.createObjectBinding(() -> {
+                    NamedColorSpace value = colorSpace1ComboBox.getValue();
+                    return
+                            colorSpaceProperty.get().getName()
+                                    + ": "
+                                    + (value == null ? "null" : Arrays.toString(value.fromRGB(
+                                    new float[]{
+                                            (float) fromPicker.getValue().getRed(),
+                                            (float) fromPicker.getValue().getGreen(),
+                                            (float) fromPicker.getValue().getBlue()
+                                    })));
+                },
                 fromPicker.valueProperty(),
                 colorSpaceProperty);
     }
@@ -170,7 +165,7 @@ public class ColorSpaceMain extends Application {
         );
         colorSpaceBox.setItems(list);
         colorSpaceBox.setValue(new NamedColorSpaceAdapter("linear RGB", ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB)));
-        colorSpaceBox.setConverter(new StringConverter<NamedColorSpace>() {
+        colorSpaceBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(NamedColorSpace object) {
                 return object.getName();

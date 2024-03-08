@@ -51,20 +51,12 @@ public class NumberCssConverter extends AbstractCssConverter<Number> {
         case CssTokenType.TT_NUMBER:
             return tt.currentNumberNonNull();
         case CssTokenType.TT_IDENT: {
-            double value;
-            switch (tt.currentStringNonNull()) {
-            case "INF":
-                value = Double.POSITIVE_INFINITY;
-                break;
-            case "-INF":
-                value = Double.NEGATIVE_INFINITY;
-                break;
-            case "NaN":
-                value = Double.NaN;
-                break;
-            default:
-                throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
-            }
+            double value = switch (tt.currentStringNonNull()) {
+                case "INF" -> Double.POSITIVE_INFINITY;
+                case "-INF" -> Double.NEGATIVE_INFINITY;
+                case "NaN" -> Double.NaN;
+                default -> throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
+            };
             return value;
         }
         default:

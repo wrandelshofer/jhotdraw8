@@ -57,10 +57,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         this.listenOnDrawing = listenOnDrawing;
     }
 
-    @Override
-    public void invalidated() {
-        // empty
-    }
 
     private static class MapProxy extends AbstractMap<Key<?>, Object> {
 
@@ -113,7 +109,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     private final @NonNull Set<Figure> dirties = Collections.newSetFromMap(new IdentityHashMap<>());
     private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
 
-    private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<Drawing>(this, ROOT_PROPERTY) {
+    private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<>(this, ROOT_PROPERTY) {
         @Override
         public void set(@Nullable Drawing newValue) {
             Drawing oldValue = get();
@@ -466,7 +462,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-            case TRANSFORM_CHANGED:
+            case TRANSFORM_CHANGED, STYLE_CHANGED, LAYOUT_CHANGED:
                 markDirty(figure);
                 invalidate();
                 break;
@@ -479,14 +475,6 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
                 invalidate();
                 break;
             }
-            case LAYOUT_CHANGED:
-                markDirty(figure);
-                invalidate();
-                break;
-            case STYLE_CHANGED:
-                markDirty(figure);
-                invalidate();
-                break;
 
             default:
                 throw new UnsupportedOperationException(event.getEventType()

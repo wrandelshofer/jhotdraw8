@@ -18,7 +18,6 @@ import org.jhotdraw8.css.value.UnitConverter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
@@ -113,7 +112,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     }
 
     private void applyFunction(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack, int line, int start, QualifiedName attrName, String typeOrUnit, List<CssToken> attrFallback, int end) throws IOException, ParseException {
-        @Nullable List<CssToken> tokenizedValue = model.getAttribute(element, null, attrName.getNamespace(), attrName.getName());
+        @Nullable List<CssToken> tokenizedValue = model.getAttribute(element, null, attrName.namespace(), attrName.name());
         if (tokenizedValue != null) {
             switch (typeOrUnit == null ? "string" : typeOrUnit) {
             default:
@@ -122,19 +121,19 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                     return;
                 }
                 if (attrFallback.isEmpty()) {
-                    attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_STRING, ""));
+                    attrFallback = List.of(new CssToken(CssTokenType.TT_STRING, ""));
                 }
                 break;
             case "color":
                 // FIXME implement applyAsColor
                 if (attrFallback.isEmpty()) {
-                    attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_IDENT, "currentcolor"));
+                    attrFallback = List.of(new CssToken(CssTokenType.TT_IDENT, "currentcolor"));
                 }
                 break;
             case "url":
                 // FIXME implement applyAsURL
                 if (attrFallback.isEmpty()) {
-                    attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_URL, "about:invalid"));
+                    attrFallback = List.of(new CssToken(CssTokenType.TT_URL, "about:invalid"));
                 }
                 break;
             case "em":
@@ -154,7 +153,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                     return;
                 }
                 if (attrFallback.isEmpty()) {
-                    attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_DIMENSION, 0, typeOrUnit));
+                    attrFallback = List.of(new CssToken(CssTokenType.TT_DIMENSION, 0, typeOrUnit));
                 }
                 break;
 
@@ -164,7 +163,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                     return;
                 }
                 if (attrFallback.isEmpty()) {
-                    attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
+                    attrFallback = List.of(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
                 }
                 break;
             case "length":
@@ -172,7 +171,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                     return;
                 }
                 if (attrFallback.isEmpty()) {
-                    attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
+                    attrFallback = List.of(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
                 }
                 break;
             case "%":
@@ -180,7 +179,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
                     return;
                 }
                 if (attrFallback.isEmpty()) {
-                    attrFallback = Arrays.asList(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
+                    attrFallback = List.of(new CssToken(CssTokenType.TT_NUMBER, 0, typeOrUnit));
                 }
                 break;
             case "angle":
@@ -386,7 +385,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
      * @return true on success
      */
     private boolean applyAsString(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull Consumer<CssToken> out, int line, int start, QualifiedName attrName, int end) {
-        String attributeAsString = model.getAttributeAsString(element, null, attrName.getNamespace(), attrName.getName());
+        String attributeAsString = model.getAttributeAsString(element, null, attrName.namespace(), attrName.name());
         if (attributeAsString == null) {
             return false;
         } else {

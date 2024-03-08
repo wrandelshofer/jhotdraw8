@@ -78,7 +78,7 @@ public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, Attr
             }
 
         }
-        return new AbstractCollection<Map.Entry<Integer, A>>() {
+        return new AbstractCollection<>() {
             @Override
             public @NonNull Iterator<Map.Entry<Integer, A>> iterator() {
                 return new PrevVertexAndArrowIterator(vertexIndex);

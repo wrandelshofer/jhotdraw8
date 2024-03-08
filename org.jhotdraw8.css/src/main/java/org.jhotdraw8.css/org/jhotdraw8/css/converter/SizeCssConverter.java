@@ -32,13 +32,7 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class SizeCssConverter implements CssConverter<CssSize> {
-
-    private final boolean nullable;
-
-    public SizeCssConverter(boolean nullable) {
-        this.nullable = nullable;
-    }
+public record SizeCssConverter(boolean nullable) implements CssConverter<CssSize> {
 
 
     @Override
@@ -54,49 +48,34 @@ public class SizeCssConverter implements CssConverter<CssSize> {
     }
 
     public static CssSize parseSize(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return CssSize.of(tt.currentNumberNonNull().doubleValue());
-        case CssTokenType.TT_DIMENSION:
-            return CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentString());
-        case CssTokenType.TT_IDENT:
-            switch (tt.currentStringNonNull()) {
-            case "NaN":
-                return CssSize.of(Double.NaN);
-            case "INF":
-                return CssSize.of(Double.POSITIVE_INFINITY);
-            case "-INF":
-                return CssSize.of(Double.NEGATIVE_INFINITY);
-            default:
-                throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-            }
-        default:
-            throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-        }
+        return switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> CssSize.of(tt.currentNumberNonNull().doubleValue());
+            case CssTokenType.TT_DIMENSION -> CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentString());
+            case CssTokenType.TT_IDENT -> switch (tt.currentStringNonNull()) {
+                case "NaN" -> CssSize.of(Double.NaN);
+                case "INF" -> CssSize.of(Double.POSITIVE_INFINITY);
+                case "-INF" -> CssSize.of(Double.NEGATIVE_INFINITY);
+                default ->
+                        throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+            };
+            default -> throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+        };
     }
 
     public static CssSize parseSizeOrPercentage(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return CssSize.of(tt.currentNumberNonNull().doubleValue());
-        case CssTokenType.TT_DIMENSION:
-            return CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentString());
-        case CssTokenType.TT_PERCENTAGE:
-            return CssSize.of(tt.currentNumberNonNull().doubleValue(), "%");
-        case CssTokenType.TT_IDENT:
-            switch (tt.currentStringNonNull()) {
-            case "NaN":
-                return CssSize.of(Double.NaN);
-            case "INF":
-                return CssSize.of(Double.POSITIVE_INFINITY);
-            case "-INF":
-                return CssSize.of(Double.NEGATIVE_INFINITY);
-            default:
-                throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-            }
-        default:
-            throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
-        }
+        return switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> CssSize.of(tt.currentNumberNonNull().doubleValue());
+            case CssTokenType.TT_DIMENSION -> CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentString());
+            case CssTokenType.TT_PERCENTAGE -> CssSize.of(tt.currentNumberNonNull().doubleValue(), "%");
+            case CssTokenType.TT_IDENT -> switch (tt.currentStringNonNull()) {
+                case "NaN" -> CssSize.of(Double.NaN);
+                case "INF" -> CssSize.of(Double.POSITIVE_INFINITY);
+                case "-INF" -> CssSize.of(Double.NEGATIVE_INFINITY);
+                default ->
+                        throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+            };
+            default -> throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+        };
     }
 
 
@@ -108,12 +87,12 @@ public class SizeCssConverter implements CssConverter<CssSize> {
             out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getValue(), ""));
         } else {
             switch (value.getUnits()) {
-            case UnitConverter.PERCENTAGE:
-                out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, value.getValue(), "%"));
-                break;
-            default:
-                out.accept(new CssToken(CssTokenType.TT_DIMENSION, value.getValue(), value.getUnits()));
-                break;
+                case UnitConverter.PERCENTAGE:
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, value.getValue(), "%"));
+                    break;
+                default:
+                    out.accept(new CssToken(CssTokenType.TT_DIMENSION, value.getValue(), value.getUnits()));
+                    break;
             }
         }
     }
@@ -121,11 +100,6 @@ public class SizeCssConverter implements CssConverter<CssSize> {
     @Override
     public @Nullable CssSize getDefaultValue() {
         return nullable ? null : CssSize.ZERO;
-    }
-
-    @Override
-    public boolean isNullable() {
-        return nullable;
     }
 
     @Override

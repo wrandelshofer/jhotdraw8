@@ -69,30 +69,22 @@ public class FXShapes {
         if (cap == null) {
             return BasicStroke.CAP_BUTT;
         }
-        switch (cap) {
-            case BUTT:
-            default:
-                return BasicStroke.CAP_BUTT;
-            case ROUND:
-                return BasicStroke.CAP_ROUND;
-            case SQUARE:
-                return BasicStroke.CAP_SQUARE;
-        }
+        return switch (cap) {
+            default -> BasicStroke.CAP_BUTT;
+            case ROUND -> BasicStroke.CAP_ROUND;
+            case SQUARE -> BasicStroke.CAP_SQUARE;
+        };
     }
 
     public static int awtJoinFromFX(@Nullable StrokeLineJoin join) {
         if (join == null) {
             return BasicStroke.JOIN_BEVEL;
         }
-        switch (join) {
-            default:
-            case BEVEL:
-                return BasicStroke.JOIN_BEVEL;
-            case MITER:
-                return BasicStroke.JOIN_MITER;
-            case ROUND:
-                return BasicStroke.JOIN_ROUND;
-        }
+        return switch (join) {
+            default -> BasicStroke.JOIN_BEVEL;
+            case MITER -> BasicStroke.JOIN_MITER;
+            case ROUND -> BasicStroke.JOIN_ROUND;
+        };
     }
 
     public static PathIterator awtPathIteratorFromFXPathElements(List<PathElement> pathElements, int windingRule, AffineTransform tx) {
@@ -178,40 +170,54 @@ public class FXShapes {
      * @return AWT Shape or Rectangle
      */
     public static Shape awtShapeFromFX(javafx.scene.shape.Shape fx) {
-        if (fx instanceof Arc) {
-            return awtShapeFromFXArc((Arc) fx);
-        } else if (fx instanceof Circle) {
-            return awtShapeFromFXCircle((Circle) fx);
-        } else if (fx instanceof CubicCurve) {
-            return awtShapeFromFXCubicCurve((CubicCurve) fx);
-        } else if (fx instanceof Ellipse) {
-            return awtShapeFromFXEllipse((Ellipse) fx);
-        } else if (fx instanceof Line) {
-            return awtShapeFromFXLine((Line) fx);
-        } else if (fx instanceof Path) {
-            return awtShapeFromFXPath((Path) fx);
-        } else if (fx instanceof Polygon) {
-            return awtShapeFromFXPolygon((Polygon) fx);
-        } else if (fx instanceof Polyline) {
-            return awtShapeFromFXPolyline((Polyline) fx);
-        } else if (fx instanceof QuadCurve) {
-            return awtShapeFromFXQuadCurve((QuadCurve) fx);
-        } else if (fx instanceof Rectangle) {
-            return awtShapeFromFXRectangle((Rectangle) fx);
-        } else if (fx instanceof SVGPath) {
-            try {
-                return awtShapeFromFXSvgPath((SVGPath) fx);
-            } catch (ParseException e) {
-                LOGGER.warning("Illegal path: " + e.getMessage());
+        switch (fx) {
+            case Arc arc -> {
+                return awtShapeFromFXArc(arc);
+            }
+            case Circle circle -> {
+                return awtShapeFromFXCircle(circle);
+            }
+            case CubicCurve cubicCurve -> {
+                return awtShapeFromFXCubicCurve(cubicCurve);
+            }
+            case Ellipse ellipse -> {
+                return awtShapeFromFXEllipse(ellipse);
+            }
+            case Line line -> {
+                return awtShapeFromFXLine(line);
+            }
+            case Path path -> {
+                return awtShapeFromFXPath(path);
+            }
+            case Polygon polygon -> {
+                return awtShapeFromFXPolygon(polygon);
+            }
+            case Polyline polyline -> {
+                return awtShapeFromFXPolyline(polyline);
+            }
+            case QuadCurve quadCurve -> {
+                return awtShapeFromFXQuadCurve(quadCurve);
+            }
+            case Rectangle rectangle -> {
+                return awtShapeFromFXRectangle(rectangle);
+            }
+            case SVGPath svgPath -> {
+                try {
+                    return awtShapeFromFXSvgPath((SVGPath) fx);
+                } catch (ParseException e) {
+                    LOGGER.warning("Illegal path: " + e.getMessage());
+                    Bounds b = fx.getLayoutBounds();
+                    return new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
+                }
+            }
+            case Text text -> {
+                return awtShapeFromFXText(text);
+            }
+            case null, default -> {
+                LOGGER.warning("Unsupported shape: " + fx);
                 Bounds b = fx.getLayoutBounds();
                 return new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
             }
-        } else if (fx instanceof Text) {
-            return awtShapeFromFXText((Text) fx);
-        } else {
-            LOGGER.warning("Unsupported shape: " + fx);
-            Bounds b = fx.getLayoutBounds();
-            return new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
         }
     }
 
@@ -302,8 +308,7 @@ public class FXShapes {
         double x = 0;
         double y = 0;
         for (PathElement pe : pathElements) {
-            if (pe instanceof MoveTo) {
-                MoveTo e = (MoveTo) pe;
+            if (pe instanceof MoveTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -312,8 +317,7 @@ public class FXShapes {
                     y += e.getY();
                 }
                 p.moveTo(x, y);
-            } else if (pe instanceof LineTo) {
-                LineTo e = (LineTo) pe;
+            } else if (pe instanceof LineTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -322,8 +326,7 @@ public class FXShapes {
                     y += e.getY();
                 }
                 p.lineTo(x, y);
-            } else if (pe instanceof CubicCurveTo) {
-                CubicCurveTo e = (CubicCurveTo) pe;
+            } else if (pe instanceof CubicCurveTo e) {
                 final double cx1, cy1, cx2, cy2;
                 if (e.isAbsolute()) {
                     cx1 = e.getControlX1();
@@ -341,8 +344,7 @@ public class FXShapes {
                     y += e.getY();
                 }
                 p.curveTo(cx1, cy1, cx2, cy2, x, y);
-            } else if (pe instanceof QuadCurveTo) {
-                QuadCurveTo e = (QuadCurveTo) pe;
+            } else if (pe instanceof QuadCurveTo e) {
                 final double cx, cy;
                 if (e.isAbsolute()) {
                     cx = e.getControlX();
@@ -356,8 +358,7 @@ public class FXShapes {
                     y += e.getY();
                 }
                 p.quadTo(cx, cy, x, y);
-            } else if (pe instanceof ArcTo) {
-                ArcTo e = (ArcTo) pe;
+            } else if (pe instanceof ArcTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -366,16 +367,14 @@ public class FXShapes {
                     y += e.getY();
                 }
                 p.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), x, y, e.isLargeArcFlag(), e.isSweepFlag());
-            } else if (pe instanceof HLineTo) {
-                HLineTo e = (HLineTo) pe;
+            } else if (pe instanceof HLineTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                 } else {
                     x += e.getX();
                 }
                 p.lineTo(x, y);
-            } else if (pe instanceof VLineTo) {
-                VLineTo e = (VLineTo) pe;
+            } else if (pe instanceof VLineTo e) {
                 if (e.isAbsolute()) {
                     y = e.getY();
                 } else {
@@ -473,7 +472,7 @@ public class FXShapes {
         }
 
         double[] m = fxT.toArray(MatrixType.MT_2D_2x3);
-        return fxT == null ? null : new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
+        return new AffineTransform(m[0], m[3], m[1], m[4], m[2], m[5]);
     }
 
     /**

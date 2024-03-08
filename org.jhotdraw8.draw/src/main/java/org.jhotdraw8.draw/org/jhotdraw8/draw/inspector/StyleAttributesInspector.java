@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -47,18 +46,9 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return subject;
     }
 
-    private final InvalidationListener modelInvalidationHandler = new InvalidationListener() {
+    private final InvalidationListener modelInvalidationHandler = this::invalidateTextArea;
 
-        @Override
-        public void invalidated(Observable observable) {
-            invalidateTextArea(observable);
-        }
-
-    };
-
-    private final Listener<TreeModelEvent<Figure>> treeModelListener = event -> {
-        invalidateTextArea(event.getSource());
-    };
+    private final Listener<TreeModelEvent<Figure>> treeModelListener = event -> invalidateTextArea(event.getSource());
 
     private final @NonNull ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
         if (oldValue != null) {
@@ -92,8 +82,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
     @Override
     protected @Nullable WritableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, @NonNull Figure f, String propertyNamespace, String propertyName) {
-        if (selectorModel instanceof FigureSelectorModel) {
-            FigureSelectorModel m = (FigureSelectorModel) selectorModel;
+        if (selectorModel instanceof FigureSelectorModel m) {
             return m.getAccessor(f, propertyNamespace, propertyName);
         }
         return null;
@@ -101,8 +90,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
     @Override
     protected @Nullable Converter<?> getConverter(SelectorModel<Figure> selectorModel, @NonNull Figure f, String namespace, String name) {
-        if (selectorModel instanceof FigureSelectorModel) {
-            FigureSelectorModel m = (FigureSelectorModel) selectorModel;
+        if (selectorModel instanceof FigureSelectorModel m) {
             return m.getConverter(f, namespace, name);
         }
         return null;

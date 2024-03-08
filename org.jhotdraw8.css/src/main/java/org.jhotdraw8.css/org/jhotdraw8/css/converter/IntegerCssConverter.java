@@ -31,12 +31,10 @@ public class IntegerCssConverter extends AbstractCssConverter<Integer> {
 
     @Override
     public @NonNull Integer parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return tt.currentNumberNonNull().intValue();
-        default:
-            throw tt.createParseException("⟨Integer⟩: integer expected.");
-        }
+        return switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().intValue();
+            default -> throw tt.createParseException("⟨Integer⟩: integer expected.");
+        };
     }
 
     @Override

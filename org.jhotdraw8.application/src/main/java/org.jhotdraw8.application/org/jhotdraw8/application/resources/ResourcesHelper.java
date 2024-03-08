@@ -34,7 +34,7 @@ class ResourcesHelper {
      * name of the property name modifier, the value of this map is a fallback
      * chain.
      */
-    static @NonNull Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
+    final static @NonNull Map<String, String[]> propertyNameModifiers = Collections.synchronizedMap(new HashMap<>());
 
 
     static {
@@ -56,7 +56,7 @@ class ResourcesHelper {
      * List of decoders. The first decoder which can decode a resource value is
      * will be used to convert the resource value to an object.
      */
-    static @NonNull List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
+    final static @NonNull List<ResourceDecoder> decoders = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Generates fallback keys by processing all property name modifiers in the
@@ -85,7 +85,7 @@ class ResourcesHelper {
     static @Nullable Node getIconProperty(@NonNull Resources r, String key, String suffix, @NonNull Class<?> baseClass) {
         try {
             String rsrcName = r.getString(key + suffix);
-            if ("".equals(rsrcName)) {
+            if (rsrcName.isEmpty()) {
                 return null;
             }
 

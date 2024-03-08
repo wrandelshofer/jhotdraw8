@@ -35,7 +35,7 @@ public class IntersectEllipsePoint {
         double cx = center.getX();
         double cy = center.getY();
 
-        double det = (px - cx) * (px - cx) / (rx * rx) + (py - py) * (py - py) / (ry * ry);
+        double det = (px - cx) * (px - cx) / (rx * rx) + (py - cy) * (py - cy) / (ry * ry);
         IntersectionStatus status;
         if (abs(det) - 1 >= Rectangles.REAL_THRESHOLD) {
             status = IntersectionStatus.INTERSECTION;

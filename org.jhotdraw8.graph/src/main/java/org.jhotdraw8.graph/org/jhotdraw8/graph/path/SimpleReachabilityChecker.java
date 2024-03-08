@@ -75,7 +75,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull Function3<VV, VV, AA, Integer> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
-        return new SimpleReachabilityChecker<VV, AA, Integer>(0, nextArcsFunction, costFunction, Integer::sum, algo);
+        return new SimpleReachabilityChecker<>(0, nextArcsFunction, costFunction, Integer::sum, algo);
     }
 
     /**
@@ -92,7 +92,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
-        return new SimpleReachabilityChecker<VV, AA, Integer>(0, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
+        return new SimpleReachabilityChecker<>(0, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
     }
 
     /**
@@ -111,7 +111,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
             @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
             @NonNull Function3<VV, VV, AA, Long> costFunction,
             @NonNull ArcReachabilityAlgo<VV, AA, Long> algo) {
-        return new SimpleReachabilityChecker<VV, AA, Long>(0L, nextArcsFunction, costFunction, Long::sum, algo);
+        return new SimpleReachabilityChecker<>(0L, nextArcsFunction, costFunction, Long::sum, algo);
     }
 
 

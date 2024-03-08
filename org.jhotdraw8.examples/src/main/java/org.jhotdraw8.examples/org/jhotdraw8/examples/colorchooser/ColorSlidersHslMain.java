@@ -73,9 +73,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
     public void start(@NonNull Stage primaryStage) {
         // start is called on the FX Application Thread,
         // so Thread.currentThread() is the FX application thread:
-        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> {
-            System.out.println("Handler caught exception: " + throwable.getMessage());
-        });
+        Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> System.out.println("Handler caught exception: " + throwable.getMessage()));
 
         VBox vbox = new VBox();
 
@@ -147,8 +145,6 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
             int argb = displayBitDepth.get().applyAsInt(RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue()));
             Color previewColorWithoutAlpha = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, 1);
             Color previewColorWithAlpha = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, alpha.floatValue());
-            //Color previewColor = new Color(clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1), 1);
-            //Color previewColorWithAlpha = new Color(clamp(rgb[0], 0, 1), clamp(rgb[1], 0, 1), clamp(rgb[2], 0, 1), alpha.floatValue());
             selectedColor.setBackground(new Background(
                     new BackgroundFill(new LinearGradient(0, 0, 1, 1, true, CycleMethod.NO_CYCLE,
                             new Stop(0.5, Color.WHITE),

@@ -191,10 +191,11 @@ public class CreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     public @NonNull String getHelpText() {
-        return "CreationTool"
-                + "\n  Click on the drawing view. The tool will create a new figure with default size at the clicked location."
-                + "\nOr:"
-                + "\n  Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.";
+        return """
+               CreationTool
+                 Click on the drawing view. The tool will create a new figure with default size at the clicked location.
+               Or:
+                 Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.""";
     }
 
 }

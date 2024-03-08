@@ -41,8 +41,7 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
 
     @Override
     protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
-        if (value instanceof CssColor) {
-            CssColor c = (CssColor) value;
+        if (value instanceof CssColor c) {
             colorConverter.produceTokens(c, idSupplier, out);
         } else {
             throw new UnsupportedOperationException("not yet implemented for " + value);
@@ -74,7 +73,7 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
         Set<String> duplicateLines = new HashSet<>();
         for (String line : lines) {
             if (duplicateLines.add(line)) {
-                if (buf.length() != 0) {
+                if (!buf.isEmpty()) {
                     buf.append('\n');
                 }
                 buf.append(line);

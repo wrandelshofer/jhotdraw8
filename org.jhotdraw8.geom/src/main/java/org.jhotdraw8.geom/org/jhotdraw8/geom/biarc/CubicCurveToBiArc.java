@@ -41,7 +41,7 @@ public class CubicCurveToBiArc {
         int maxCurves = 1024;
 
         // The bezier curves to approximate
-        ArrayDeque<CubicCurve2D.Double> stack = new ArrayDeque<CubicCurve2D.Double>();
+        ArrayDeque<CubicCurve2D.Double> stack = new ArrayDeque<>();
 
         // ---------------------------------------------------------------------------
         // First, calculate the inflection points and split the bezier at them (if any)
@@ -86,7 +86,7 @@ public class CubicCurveToBiArc {
 
             // ---------------------------------------------------------------------------
             // Calculate the BiArc
-            BiArc biarc = new BiArc(P1,
+            BiArc biarc = BiArc.create(P1,
                     Points2D.subtract(P1, C1), P2,
                     Points2D.subtract(P2, C2), G);
 

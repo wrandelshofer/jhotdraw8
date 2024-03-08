@@ -72,13 +72,9 @@ public class CssPrettyPrinter implements Appendable {
 
             int oldsize = stack.size();
             parseToken(token);
-            if (stack.size() > oldsize) {
-                // increase has only an effect on the next token
-                indentation = oldsize;
-            } else {
-                // decrease (or no change) affects the current token
-                indentation = stack.size();
-            }
+            // increase has only an effect on the next token
+            // decrease (or no change) affects the current token
+            indentation = Math.min(stack.size(), oldsize);
             //
             switch (token.getType()) {
             case CssTokenType.TT_S:
@@ -146,7 +142,7 @@ public class CssPrettyPrinter implements Appendable {
 
     private void parseToken(@NonNull CssToken token) {
         switch (token.getType()) {
-        case CssTokenType.TT_S:
+            case CssTokenType.TT_S, CssTokenType.TT_AT_KEYWORD, CssTokenType.TT_BAD_COMMENT, CssTokenType.TT_BAD_STRING, CssTokenType.TT_BAD_URI, CssTokenType.TT_CDC, CssTokenType.TT_CDO, CssTokenType.TT_COLUMN, CssTokenType.TT_COMMA, CssTokenType.TT_COMMENT, CssTokenType.TT_DASH_MATCH, CssTokenType.TT_DIMENSION, CssTokenType.TT_EOF, CssTokenType.TT_HASH, CssTokenType.TT_INCLUDE_MATCH, CssTokenType.TT_NUMBER, CssTokenType.TT_PERCENT_DELIM, CssTokenType.TT_PERCENTAGE, CssTokenType.TT_PLUS, CssTokenType.TT_PREFIX_MATCH, CssTokenType.TT_SLASH, CssTokenType.TT_STRING, CssTokenType.TT_SUBSTRING_MATCH, CssTokenType.TT_SUFFIX_MATCH, CssTokenType.TT_UNICODE_RANGE, CssTokenType.TT_URL, CssTokenType.TT_VERTICAL_LINE:
             break;
         case CssTokenType.TT_FUNCTION:
         case CssTokenType.TT_LEFT_BRACKET:
@@ -184,33 +180,6 @@ public class CssPrettyPrinter implements Appendable {
             if (stack.peek() == Syntax.CURLY_BLOCK) {
                 stack.push(Syntax.DECLARATION_KEY);
             }
-            break;
-        case CssTokenType.TT_AT_KEYWORD:
-        case CssTokenType.TT_BAD_COMMENT:
-        case CssTokenType.TT_BAD_STRING:
-        case CssTokenType.TT_BAD_URI:
-        case CssTokenType.TT_CDC:
-        case CssTokenType.TT_CDO:
-        case CssTokenType.TT_COLUMN:
-        case CssTokenType.TT_COMMA:
-        case CssTokenType.TT_COMMENT:
-        case CssTokenType.TT_DASH_MATCH:
-        case CssTokenType.TT_DIMENSION:
-        case CssTokenType.TT_EOF:
-        case CssTokenType.TT_HASH:
-        case CssTokenType.TT_INCLUDE_MATCH:
-        case CssTokenType.TT_NUMBER:
-        case CssTokenType.TT_PERCENT_DELIM:
-        case CssTokenType.TT_PERCENTAGE:
-        case CssTokenType.TT_PLUS:
-        case CssTokenType.TT_PREFIX_MATCH:
-        case CssTokenType.TT_SLASH:
-        case CssTokenType.TT_STRING:
-        case CssTokenType.TT_SUBSTRING_MATCH:
-        case CssTokenType.TT_SUFFIX_MATCH:
-        case CssTokenType.TT_UNICODE_RANGE:
-        case CssTokenType.TT_URL:
-        case CssTokenType.TT_VERTICAL_LINE:
             break;
         }
     }

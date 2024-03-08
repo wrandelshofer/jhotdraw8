@@ -23,8 +23,8 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -110,7 +110,7 @@ public class ContourBuilder {
 
     void addOrReplaceIfSamePos(PlinePath pline, final PlineVertex vertex,
                                double epsilon) {
-        if (pline.size() == 0) {
+        if (pline.isEmpty()) {
             pline.addVertex(vertex);
             return;
         }
@@ -126,17 +126,17 @@ public class ContourBuilder {
     void arcToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                       boolean connectionArcsAreCCW, PlinePath result) {
 
-        final PlineVertex v1 = s1.v1;
-        final PlineVertex v2 = s1.v2;
-        final PlineVertex u1 = s2.v1;
-        final PlineVertex u2 = s2.v2;
+        final PlineVertex v1 = s1.v1();
+        final PlineVertex v2 = s1.v2();
+        final PlineVertex u1 = s2.v1();
+        final PlineVertex u2 = s2.v2();
         assert !v1.bulgeIsZero() && !u1.bulgeIsZero() : "both segs should be arcs";
 
         final BulgeConversionFunctions.ArcRadiusAndCenter arc1 = arcRadiusAndCenter(v1, v2);
         final BulgeConversionFunctions.ArcRadiusAndCenter arc2 = arcRadiusAndCenter(u1, u2);
 
         Runnable connectUsingArc = () -> {
-            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double arcCenter = s1.origV2Pos();
             final Point2D.Double sp = v2.pos();
             final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
@@ -196,8 +196,8 @@ public class ContourBuilder {
                     processIntersect.accept(intersections.getFirst());
                 } else {
                     assert intersections.size() == 2 : "there must be 2 intersections";
-                    double dist1 = intersections.getFirst().distanceSq(s1.origV2Pos);
-                    double dist2 = intersections.getLast().distanceSq(s1.origV2Pos);
+                    double dist1 = intersections.getFirst().distanceSq(s1.origV2Pos());
+                    double dist2 = intersections.getLast().distanceSq(s1.origV2Pos());
                     if (dist1 < dist2) {
                         processIntersect.accept(intersections.getFirst());
                     } else {
@@ -215,15 +215,15 @@ public class ContourBuilder {
     void arcToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                        boolean connectionArcsAreCCW, PlinePath result) {
 
-        final PlineVertex v1 = s1.v1;
-        final PlineVertex v2 = s1.v2;
-        final PlineVertex u1 = s2.v1;
-        final PlineVertex u2 = s2.v2;
+        final PlineVertex v1 = s1.v1();
+        final PlineVertex v2 = s1.v2();
+        final PlineVertex u1 = s2.v1();
+        final PlineVertex u2 = s2.v2();
         assert !v1.bulgeIsZero() && u1.bulgeIsZero() :
                 "first seg should be line, second seg should be arc";
 
         Runnable connectUsingArc = () -> {
-            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double arcCenter = s1.origV2Pos();
             final Point2D.Double sp = v2.pos();
             final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
@@ -263,14 +263,14 @@ public class ContourBuilder {
 
         IntersectionResult intrResult = intrLineSeg2Circle2(u1.pos(), u2.pos(), arc.radius, arc.center);
         ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
-        if (intersections.size() == 0) {
+        if (intersections.isEmpty()) {
             connectUsingArc.run();
         } else if (intersections.size() == 1) {
             processIntersect.accept(intersections.getFirst().getArgumentA(),
                     pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().getArgumentA()));
         } else {
             assert intersections.size() == 2 : "should have 2 intersects here";
-            final Point2D.Double origPoint = s2.collapsedArc ? u1.pos() : s1.origV2Pos;
+            final Point2D.Double origPoint = s2.collapsedArc() ? u1.pos() : s1.origV2Pos();
             Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().getArgumentA());
             double dist1 = i1.distanceSq(origPoint);
             Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intersections.getLast().getArgumentA());
@@ -312,13 +312,13 @@ public class ContourBuilder {
         }
 
         List<PlineOffsetSegment> rawOffsets = createUntrimmedOffsetSegments(pline, offset);
-        if (rawOffsets.size() == 0) {
+        if (rawOffsets.isEmpty()) {
             return result;
         }
 
         // detect single collapsed arc segment (this may be removed in the future if invalid segments are
         // tracked in join functions to be pruned at slice creation)
-        if (rawOffsets.size() == 1 && rawOffsets.getFirst().collapsedArc) {
+        if (rawOffsets.size() == 1 && rawOffsets.getFirst().collapsedArc()) {
             return result;
         }
 
@@ -328,8 +328,8 @@ public class ContourBuilder {
         final boolean connectionArcsAreCCW = offset < 0;
 
         Consumer3<PlineOffsetSegment, PlineOffsetSegment, PlinePath> joinResultVisitor = (s1, s2, presult) -> {
-            final boolean s1IsLine = s1.v1.bulgeIsZero();
-            final boolean s2IsLine = s2.v1.bulgeIsZero();
+            final boolean s1IsLine = s1.v1().bulgeIsZero();
+            final boolean s2IsLine = s2.v1().bulgeIsZero();
             if (s1IsLine && s2IsLine) {
                 lineToLineJoin(s1, s2, connectionArcsAreCCW, presult);
             } else if (s1IsLine) {
@@ -341,7 +341,7 @@ public class ContourBuilder {
             }
         };
 
-        result.addVertex(rawOffsets.get(0).v1);
+        result.addVertex(rawOffsets.get(0).v1());
 
         // join first two segments and determine if first vertex was replaced (to know how to handle last
         // two segment joins for closed polyline)
@@ -405,7 +405,7 @@ public class ContourBuilder {
                 result.removeFirst();
             }
         } else {
-            addOrReplaceIfSamePos(result, rawOffsets.getLast().v2);
+            addOrReplaceIfSamePos(result, rawOffsets.getLast().v2());
         }
 
         // if due to joining of segments we are left with only 1 vertex then return no raw offset (empty
@@ -491,7 +491,7 @@ public class ContourBuilder {
         Map<Integer, List<Point2D.Double>> intersectsLookup = computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(originalPline, rawOffsetPline, dualRawOffsetPline, offset);
 
         IntArrayDeque queryStack = new IntArrayDeque(8);
-        if (intersectsLookup.size() == 0) {
+        if (intersectsLookup.isEmpty()) {
             if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.getFirst().pos(),
                     queryStack)) {
                 return result;
@@ -792,15 +792,15 @@ public class ContourBuilder {
     void lineToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                        boolean connectionArcsAreCCW, PlinePath result) {
 
-        final PlineVertex v1 = s1.v1;
-        final PlineVertex v2 = s1.v2;
-        final PlineVertex u1 = s2.v1;
-        final PlineVertex u2 = s2.v2;
+        final PlineVertex v1 = s1.v1();
+        final PlineVertex v2 = s1.v2();
+        final PlineVertex u1 = s2.v1();
+        final PlineVertex u2 = s2.v2();
         assert v1.bulgeIsZero() && !u1.bulgeIsZero() :
                 "first seg should be arc, second seg should be line";
 
         Runnable connectUsingArc = () -> {
-            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double arcCenter = s1.origV2Pos();
             final Point2D.Double sp = v2.pos();
             final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
@@ -828,7 +828,7 @@ public class ContourBuilder {
                 }
             } else if (t > 1.0 && !trueArcIntersect) {
                 connectUsingArc.run();
-            } else if (s1.collapsedArc) {
+            } else if (s1.collapsedArc()) {
                 // collapsed arc connecting to arc, connect using arc
                 connectUsingArc.run();
             } else {
@@ -840,7 +840,7 @@ public class ContourBuilder {
 
         IntersectionResult intrResult = intrLineSeg2Circle2(v1.pos(), v2.pos(), arc.radius, arc.center);
         ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
-        if (intersections.size() == 0) {
+        if (intersections.isEmpty()) {
             connectUsingArc.run();
         } else if (intersections.size() == 1) {
             processIntersect.accept(intersections.getFirst().getArgumentA(),
@@ -849,9 +849,9 @@ public class ContourBuilder {
             assert intersections.size() == 2 : "should have 2 intersects here";
             // always use intersect closest to original point
             Point2D.Double i1 = intersections.getFirst();
-            double dist1 = i1.distanceSq(s1.origV2Pos);
+            double dist1 = i1.distanceSq(s1.origV2Pos());
             Point2D.Double i2 = intersections.getLast();
-            double dist2 = i2.distanceSq(s1.origV2Pos);
+            double dist2 = i2.distanceSq(s1.origV2Pos());
 
             if (dist1 < dist2) {
                 processIntersect.accept(intersections.getFirst().getArgumentA(), i1);
@@ -864,14 +864,14 @@ public class ContourBuilder {
 
     void lineToLineJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
                         boolean connectionArcsAreCCW, PlinePath result) {
-        final PlineVertex v1 = s1.v1;
-        final PlineVertex v2 = s1.v2;
-        final PlineVertex u1 = s2.v1;
-        final PlineVertex u2 = s2.v2;
+        final PlineVertex v1 = s1.v1();
+        final PlineVertex v2 = s1.v2();
+        final PlineVertex u1 = s2.v1();
+        final PlineVertex u2 = s2.v2();
         assert v1.bulgeIsZero() && u1.bulgeIsZero() : "both segs should be lines";
 
         Runnable connectUsingArc = () -> {
-            final Point2D.Double arcCenter = s1.origV2Pos;
+            final Point2D.Double arcCenter = s1.origV2Pos();
             final Point2D.Double sp = v2.pos();
             final Point2D.Double ep = u1.pos();
             double bulge = bulgeForConnection(arcCenter, sp, ep, connectionArcsAreCCW);
@@ -879,7 +879,7 @@ public class ContourBuilder {
             addOrReplaceIfSamePos(result, new PlineVertex(ep, 0.0));
         };
 
-        if (s1.collapsedArc || s2.collapsedArc) {
+        if (s1.collapsedArc() || s2.collapsedArc()) {
             // connecting to/from collapsed arc, always connect using arc
             connectUsingArc.run();
         } else {
@@ -956,22 +956,21 @@ public class ContourBuilder {
                 IntersectionResult intrResult =
                         intrLineSeg2Circle2(v1.pos(), v2.pos(), circleRadius, circleCenter);
                 ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
-                if (intersections.size() == 0) {
-                    continue;
+                if (intersections.isEmpty()) {
                 } else if (intersections.size() == 1) {
                     if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
                         output.add(new SimpleOrderedPair<>(sIndex,
-                                Arrays.asList(intersections.getFirst())));
+                                Collections.singletonList(intersections.getFirst())));
                     }
                 } else {
                     assert intersections.size() == 2 : "should be two intersects here";
                     if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
                         output.add(new SimpleOrderedPair<>(sIndex,
-                                Arrays.asList(intersections.getFirst())));
+                                Collections.singletonList(intersections.getFirst())));
                     }
                     if (validLineSegIntersect.test(intersections.getLast().getArgumentA())) {
                         output.add(new SimpleOrderedPair<>(sIndex,
-                                Arrays.asList(intersections.getLast())));
+                                Collections.singletonList(intersections.getLast())));
                     }
                 }
             } else {
@@ -980,26 +979,24 @@ public class ContourBuilder {
                         intrCircle2Circle2(arc.radius, arc.center, circleRadius, circleCenter);
                 switch (intrResult.getStatus()) {
                     case NO_INTERSECTION_OUTSIDE:
-                    case NO_INTERSECTION_INSIDE:
+                    case NO_INTERSECTION_INSIDE, NO_INTERSECTION_COINCIDENT:
                         break;
                     case INTERSECTION:
                         ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
                         if (intersections.size() == 1) {
                             if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getFirst())) {
-                                output.add(new SimpleOrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
+                                output.add(new SimpleOrderedPair<>(sIndex, Collections.singletonList(intersections.getFirst())));
                             }
                         } else {
                             assert intersections.size() == 2 : "there must be 2 intersections";
 
                             if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getFirst())) {
-                                output.add(new SimpleOrderedPair<>(sIndex, Arrays.asList(intersections.getFirst())));
+                                output.add(new SimpleOrderedPair<>(sIndex, Collections.singletonList(intersections.getFirst())));
                             }
                             if (validArcSegIntersect.apply(arc.center, v1.pos(), v2.pos(), v1.bulge(), intersections.getLast())) {
-                                output.add(new SimpleOrderedPair<>(sIndex, Arrays.asList(intersections.getLast())));
+                                output.add(new SimpleOrderedPair<>(sIndex, Collections.singletonList(intersections.getLast())));
                             }
                         }
-                        break;
-                    case NO_INTERSECTION_COINCIDENT:
                         break;
                 }
             }
@@ -1062,7 +1059,7 @@ public class ContourBuilder {
         allSelfIntersects(rawOffsetPline, selfIntersects, rawOffsetPlineSpatialIndex);
 
         IntArrayDeque queryStack = new IntArrayDeque(8);
-        if (selfIntersects.size() == 0) {
+        if (selfIntersects.isEmpty()) {
             if (!pointValidForOffset(originalPline, offset, origPlineSpatialIndex, rawOffsetPline.getFirst().pos(),
                     queryStack)) {
                 return result;
@@ -1266,7 +1263,7 @@ public class ContourBuilder {
             double joinThreshold) {
 
         List<PlinePath> result = new ArrayList<>();
-        if (slices.size() == 0) {
+        if (slices.isEmpty()) {
             return result;
         }
 
@@ -1350,7 +1347,7 @@ public class ContourBuilder {
                             return distAndEqualInitial2.first() - distAndEqualInitial1.first();
                         });
 
-                if (queryResults.size() == 0) {
+                if (queryResults.isEmpty()) {
                     // we're done
                     if (currPline.size() > 1) {
                         if (closedPolyline && Points.almostEqual(currPline.getFirst().pos(), currPline.lastVertex().pos(),

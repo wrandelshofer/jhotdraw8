@@ -10,7 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.FillRule;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.Polyline;
+import javafx.scene.shape.StrokeLineCap;
+import javafx.scene.shape.StrokeLineJoin;
 import javafx.stage.Stage;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
@@ -27,7 +32,7 @@ public class LineMain extends Application {
         for (int i = 0; i < 5; i++) {
             switch (i) {
             case 0: {
-                Line line = new Line(100, 100 + 20 * i, 200, 100 + 20 * i);
+                Line line = new Line(100, 100, 200, 100);
                 line.setStrokeWidth(v);
                 line.setManaged(false);
                 line.setStrokeLineCap(StrokeLineCap.ROUND);

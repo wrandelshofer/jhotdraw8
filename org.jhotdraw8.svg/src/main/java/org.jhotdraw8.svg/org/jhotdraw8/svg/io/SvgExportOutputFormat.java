@@ -114,8 +114,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         boolean intersects = node.intersects(node.sceneToLocal(sceneBounds));
         if (intersects) {
             node.getProperties().put(SKIP_KEY, false);
-            if (node instanceof Parent) {
-                Parent parent = (Parent) node;
+            if (node instanceof Parent parent) {
                 for (Node child : parent.getChildrenUnmodifiable()) {
                     markNodesOutsideBoundsWithSkip(child, sceneBounds);
                 }

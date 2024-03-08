@@ -258,7 +258,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
             return VectorList.<Node<K, V>>of().iterator();
         } else {
             final Node<K, V> that = (Node<K, V>) this;
-            return new Iterator<Node<K, V>>() {
+            return new Iterator<>() {
 
                 final Deque<Node<K, V>> stack = pushLeftChildren(new ArrayDeque<>(), that);
 
@@ -314,7 +314,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
             return VectorList.<Node<K, V>>of().iterator();
         } else {
             final Node<K, V> that = (Node<K, V>) this;
-            return new Iterator<Node<K, V>>() {
+            return new Iterator<>() {
 
                 final Deque<Node<K, V>> stack = pushRightChildren(new ArrayDeque<>(), that);
 

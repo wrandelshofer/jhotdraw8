@@ -131,7 +131,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
         return fromLinearRGB(linearSrgb.fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
-    protected float[] fromLinear(float linear[], float corrected[]) {
+    protected float[] fromLinear(float[] linear, float[] corrected) {
         corrected[0] = SrgbColorSpace.fromLinear(linear[0]);
         corrected[1] = SrgbColorSpace.fromLinear(linear[1]);
         corrected[2] = SrgbColorSpace.fromLinear(linear[2]);
@@ -159,26 +159,20 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float getMaxValue(int component) {
-        switch (component) {
-            case 0:
-                return 1f;
-            case 1:
-            case 2:
-                return 0.4f;
-        }
-        throw new IllegalArgumentException("Illegal component:" + component);
+        return switch (component) {
+            case 0 -> 1f;
+            case 1, 2 -> 0.4f;
+            default -> throw new IllegalArgumentException("Illegal component:" + component);
+        };
     }
 
     @Override
     public float getMinValue(int component) {
-        switch (component) {
-            case 0:
-                return 0f;
-            case 1:
-            case 2:
-                return -0.4f;
-        }
-        throw new IllegalArgumentException("Illegal component:" + component);
+        return switch (component) {
+            case 0 -> 0f;
+            case 1, 2 -> -0.4f;
+            default -> throw new IllegalArgumentException("Illegal component:" + component);
+        };
     }
 
     @Override
@@ -191,7 +185,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
         return linearSrgb.toCIEXYZ(toLinearRGB(colorvalue, xyz), xyz);
     }
 
-    protected float[] toLinear(float corrected[], float linear[]) {
+    protected float[] toLinear(float[] corrected, float[] linear) {
         linear[0] = SrgbColorSpace.toLinear(corrected[0]);
         linear[1] = SrgbColorSpace.toLinear(corrected[1]);
         linear[2] = SrgbColorSpace.toLinear(corrected[2]);

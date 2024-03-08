@@ -14,7 +14,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.fxbase.control.Disableable;
 
-import java.io.UncheckedIOException;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
@@ -29,7 +28,7 @@ import java.util.concurrent.ExecutionException;
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 
-    protected @NonNull Application app;
+    protected final @NonNull Application app;
 
     /**
      * Creates a new instance.
@@ -46,17 +45,14 @@ public abstract class AbstractApplicationAction extends AbstractAction {
     protected @NonNull String createErrorMessage(@Nullable Throwable t) {
         StringBuilder buf = new StringBuilder();
         for (; t != null; t = t.getCause()) {
-            if (t.getCause() != null
-                    && ((t instanceof RuntimeException)
-                    || (t instanceof ExecutionException)
-                    || (t instanceof UncheckedIOException)
+            if (t.getCause() != null && (t instanceof RuntimeException || t instanceof ExecutionException
             )) {
                 continue;
             }
 
             final String msg = t.getLocalizedMessage();
             if (buf.indexOf(msg) < 0) {
-                if (buf.length() != 0) {
+                if (!buf.isEmpty()) {
                     buf.append('\n');
                 }
                 buf.append(msg == null ? t.toString() : t.getClass().getSimpleName() + ": " + msg);

@@ -12,14 +12,19 @@ import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.figure.*;
+import org.jhotdraw8.draw.figure.ConnectableFigure;
+import org.jhotdraw8.draw.figure.ConnectingFigure;
+import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.Figure;
+import org.jhotdraw8.draw.figure.Layer;
+import org.jhotdraw8.draw.figure.LayerFigure;
+import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 /**
  * ConnectionTool.
@@ -125,12 +130,11 @@ public class ConnectionTool extends AbstractTool {
             model.set(figure, LineConnectionFigure.END_TARGET, null);
             if (!event.isMetaDown()) {
                 List<Figure> list = view.findFigures(pointInViewCoordinates, true)
-                        .stream().map(Map.Entry::getKey).collect(Collectors.toList());
+                        .stream().map(Map.Entry::getKey).toList();
                 SearchLoop:
                 for (Figure f1 : list) {
                     for (Figure ff : f1.breadthFirstIterable()) {
-                        if (figure != ff && (ff instanceof ConnectableFigure)) {
-                            ConnectableFigure cff = (ConnectableFigure) ff;
+                        if (figure != ff && (ff instanceof ConnectableFigure cff)) {
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                             if (ff.getLayoutBounds().contains(pointInLocal)) {
                                 newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure, tolerance);
@@ -179,13 +183,12 @@ public class ConnectionTool extends AbstractTool {
         Figure newConnectedFigure = null;
         if (!event.isMetaDown()) {
             List<Figure> list = view.findFigures(pointInViewCoordinates, true)
-                    .stream().map(Map.Entry::getKey).collect(Collectors.toList());
+                    .stream().map(Map.Entry::getKey).toList();
 
             SearchLoop:
             for (Figure f1 : list) {
                 for (Figure ff : f1.breadthFirstIterable()) {
-                    if (figure != ff && (ff instanceof ConnectableFigure)) {
-                        ConnectableFigure cff = (ConnectableFigure) ff;
+                    if (figure != ff && (ff instanceof ConnectableFigure cff)) {
                         Point2D pointInLocal = cff.worldToLocal(unconstrainedPoint);
                         if (ff.getLayoutBounds().contains(pointInLocal)) {
                             newConnector = cff.findConnector(cff.worldToLocal(constrainedPoint), figure, tolerance);

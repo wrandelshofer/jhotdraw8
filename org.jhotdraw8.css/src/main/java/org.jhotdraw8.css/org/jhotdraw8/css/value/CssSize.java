@@ -70,10 +70,9 @@ public class CssSize {
         if (obj == null) {
             return false;
         }
-        if (!(obj instanceof CssSize)) {
+        if (!(obj instanceof CssSize other)) {
             return false;
         }
-        final CssSize other = (CssSize) obj;
         if (Double.doubleToLongBits(this.value) != Double.doubleToLongBits(other.value)) {
             return false;
         }

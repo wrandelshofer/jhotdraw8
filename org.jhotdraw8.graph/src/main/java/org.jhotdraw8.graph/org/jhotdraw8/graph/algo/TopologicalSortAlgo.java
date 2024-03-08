@@ -16,9 +16,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -53,8 +51,8 @@ public class TopologicalSortAlgo {
         }
         int[] a = sortTopologicallyInt(im);
         List<V> result = new ArrayList<>(a.length);
-        for (int i = 0; i < a.length; i++) {
-            result.add(im.getVertex(a[i]));
+        for (int j : a) {
+            result.add(im.getVertex(j));
         }
         return result;
     }

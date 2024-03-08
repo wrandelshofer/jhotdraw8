@@ -12,13 +12,11 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.SequencedSet;
-import java.util.Set;
 import java.util.logging.Logger;
 
 
@@ -72,18 +70,18 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
             String[] split = moduleAndParentBaseName.split("\\s+|\\s*,\\s*");
             String parentBaseName;
             String moduleName;
-            switch (split.length) {
-            case 1:
-                moduleName = "";
-                parentBaseName = split[0];
-                break;
-            case 2:
-                moduleName = split[0];
-                parentBaseName = split[1];
-                break;
-            default:
-                throw new IllegalArgumentException("Illegal " + PARENT_RESOURCE_KEY + " resource " + moduleAndParentBaseName);
-            }
+            parentBaseName = switch (split.length) {
+                case 1 -> {
+                    moduleName = "";
+                    yield split[0];
+                }
+                case 2 -> {
+                    moduleName = split[0];
+                    yield split[1];
+                }
+                default ->
+                        throw new IllegalArgumentException("Illegal " + PARENT_RESOURCE_KEY + " resource " + moduleAndParentBaseName);
+            };
             try {
                 potentialParent = new ClasspathResources(parentBaseName, locale);
             } catch (MissingResourceException e) {

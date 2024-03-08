@@ -211,19 +211,11 @@ public interface StrokableFigure extends Figure {
         double width = ctx == null ? cssSize.getConvertedValue()
                 : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
         final StrokeLineCap cap = getStyledNonNull(STROKE_LINE_CAP);
-        final int basicCap;
-        switch (cap) {
-        case BUTT:
-        default:
-            basicCap = BasicStroke.CAP_BUTT;
-            break;
-        case ROUND:
-            basicCap = BasicStroke.CAP_ROUND;
-            break;
-        case SQUARE:
-            basicCap = BasicStroke.CAP_SQUARE;
-            break;
-        }
+        final int basicCap = switch (cap) {
+            default -> BasicStroke.CAP_BUTT;
+            case ROUND -> BasicStroke.CAP_ROUND;
+            case SQUARE -> BasicStroke.CAP_SQUARE;
+        };
         final ImmutableList<CssSize> dashlist = getStyledNonNull(STROKE_DASH_ARRAY);
         float[] dasharray;
         if (dashlist.isEmpty()) {
@@ -237,19 +229,11 @@ public interface StrokableFigure extends Figure {
         }
         final double dashoffset = getStyledNonNull(STROKE_DASH_OFFSET).getConvertedValue();
         final StrokeLineJoin join = getStyledNonNull(STROKE_LINE_JOIN);
-        final int basicJoin;
-        switch (join) {
-        case BEVEL:
-        default:
-            basicJoin = BasicStroke.JOIN_BEVEL;
-            break;
-        case MITER:
-            basicJoin = BasicStroke.JOIN_MITER;
-            break;
-        case ROUND:
-            basicJoin = BasicStroke.JOIN_ROUND;
-            break;
-        }
+        final int basicJoin = switch (join) {
+            default -> BasicStroke.JOIN_BEVEL;
+            case MITER -> BasicStroke.JOIN_MITER;
+            case ROUND -> BasicStroke.JOIN_ROUND;
+        };
         final double miterlimit = getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue();
 
         return new BasicStroke((float) width, basicCap, basicJoin, (float) miterlimit, dasharray, (float) dashoffset);
@@ -268,14 +252,10 @@ public interface StrokableFigure extends Figure {
             return layoutBounds;
         }
         StrokeType strokeType = getNonNull(STROKE_TYPE);
-        switch (strokeType) {
-        case INSIDE:
-        default:
-            return layoutBounds;
-        case OUTSIDE:
-            return FXRectangles.grow(layoutBounds, strokeWidth * 2, strokeWidth * 2);
-        case CENTERED:
-            return FXRectangles.grow(layoutBounds, strokeWidth, strokeWidth);
-        }
+        return switch (strokeType) {
+            default -> layoutBounds;
+            case OUTSIDE -> FXRectangles.grow(layoutBounds, strokeWidth * 2, strokeWidth * 2);
+            case CENTERED -> FXRectangles.grow(layoutBounds, strokeWidth, strokeWidth);
+        };
     }
 }

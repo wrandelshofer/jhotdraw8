@@ -53,23 +53,12 @@ public class CubicCurveCharacteristics {
 
 
     public static Characteristics characteristics(double[] b, int o) {
-        return characteristics(b[o + 0], b[o + 1],
+        return characteristics(b[o], b[o + 1],
                 b[o + 2], b[o + 3],
                 b[o + 4], b[o + 5],
                 b[o + 6], b[o + 7]);
     }
 
-    /**
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
-     * @param x2
-     * @param y2
-     * @param x3
-     * @param y3
-     * @return
-     */
     public static Characteristics characteristics(double x0, double y0,
                                                   double x1, double y1,
                                                   double x2, double y2,
@@ -216,14 +205,14 @@ public class CubicCurveCharacteristics {
     }
 
     public static @NonNull DoubleArrayList inflectionPoints(double[] b, int o) {
-        return inflectionPoints(b[o + 0], b[o + 1],
+        return inflectionPoints(b[o], b[o + 1],
                 b[o + 2], b[o + 3],
                 b[o + 4], b[o + 5],
                 b[o + 6], b[o + 7]);
     }
 
     public static @Nullable Double singularPoint(double[] b, int o) {
-        return singularPoint(b[o + 0], b[o + 1],
+        return singularPoint(b[o], b[o + 1],
                 b[o + 2], b[o + 3],
                 b[o + 4], b[o + 5],
                 b[o + 6], b[o + 7]);

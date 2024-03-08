@@ -45,15 +45,15 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
     /**
      * The X coordinate of the reference white.
      */
-    private double Xw;
+    final private double Xw;
     /**
      * The Y coordinate of the reference white.
      */
-    private double Yw;
+    final private double Yw;
     /**
      * The Z coordinate of the reference white.
      */
-    private double Zw;
+    final private double Zw;
     /**
      * Epsilon
      */
@@ -245,25 +245,19 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
 
     @Override
     public float getMinValue(int component) {
-        switch (component) {
-            case 0:
-                return 0f;
-            case 1:
-            case 2:
-                return -128f;
-        }
-        throw new IllegalArgumentException("Illegal component:" + component);
+        return switch (component) {
+            case 0 -> 0f;
+            case 1, 2 -> -128f;
+            default -> throw new IllegalArgumentException("Illegal component:" + component);
+        };
     }
 
     @Override
     public float getMaxValue(int component) {
-        switch (component) {
-            case 0:
-                return 100f;
-            case 1:
-            case 2:
-                return 127f;
-        }
-        throw new IllegalArgumentException("Illegal component:" + component);
+        return switch (component) {
+            case 0 -> 100f;
+            case 1, 2 -> 127f;
+            default -> throw new IllegalArgumentException("Illegal component:" + component);
+        };
     }
 }

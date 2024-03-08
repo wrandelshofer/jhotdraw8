@@ -162,7 +162,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new Iterator<E>() {
+        return new Iterator<>() {
             private final Iterator<? extends E> i = backingSetIterator();
             private @Nullable E current;
 

@@ -10,7 +10,12 @@ package org.jhotdraw8.fxcontrols.colorchooser;
  */
 
 import javafx.beans.InvalidationListener;
-import javafx.beans.property.*;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
@@ -114,12 +119,10 @@ public class AlphaSlider extends AbstractColorSlider {
         float vmax = getAlphaMaxValue();
         float vmin = getAlphaMinValue();
         switch (getOrientation()) {
-            case HORIZONTAL -> {
-                setAlpha(maybeSnapToTicks(x * (vmax - vmin) / width + vmin, getMinorTickUnit(), mouseEvent));
-            }
-            case VERTICAL -> {
-                setAlpha(maybeSnapToTicks((height - y) * (vmax - vmin) / height + vmin, getMinorTickUnit(), mouseEvent));
-            }
+            case HORIZONTAL ->
+                    setAlpha(maybeSnapToTicks(x * (vmax - vmin) / width + vmin, getMinorTickUnit(), mouseEvent));
+            case VERTICAL ->
+                    setAlpha(maybeSnapToTicks((height - y) * (vmax - vmin) / height + vmin, getMinorTickUnit(), mouseEvent));
         }
         requestLayout();
     }
@@ -316,7 +319,6 @@ public class AlphaSlider extends AbstractColorSlider {
                 setAlpha(clamp((float) vSnappedToTick, vMin, vMax));
             }
         }
-        ;
     }
 
     public double getMajorTickUnit() {

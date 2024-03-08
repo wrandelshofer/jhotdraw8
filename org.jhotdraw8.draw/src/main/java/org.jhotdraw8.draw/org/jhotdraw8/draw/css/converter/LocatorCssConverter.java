@@ -46,16 +46,11 @@ public class LocatorCssConverter extends AbstractCssConverter<Locator> {
         }
 
         double x, y;
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            x = tt.currentNumberNonNull().doubleValue();
-            break;
-        case CssTokenType.TT_PERCENTAGE:
-            x = tt.currentNumberNonNull().doubleValue() / 100.0;
-            break;
-        default:
-            throw tt.createParseException("BoundsLocator: x-value expected.");
-        }
+        x = switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().doubleValue();
+            case CssTokenType.TT_PERCENTAGE -> tt.currentNumberNonNull().doubleValue() / 100.0;
+            default -> throw tt.createParseException("BoundsLocator: x-value expected.");
+        };
         switch (tt.next()) {
         case ',':
             break;
@@ -63,16 +58,11 @@ public class LocatorCssConverter extends AbstractCssConverter<Locator> {
             tt.pushBack();
             break;
         }
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            y = tt.currentNumberNonNull().doubleValue();
-            break;
-        case CssTokenType.TT_PERCENTAGE:
-            y = tt.currentNumberNonNull().doubleValue() / 100.0;
-            break;
-        default:
-            throw tt.createParseException("BoundsLocator: y-value expected.");
-        }
+        y = switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().doubleValue();
+            case CssTokenType.TT_PERCENTAGE -> tt.currentNumberNonNull().doubleValue() / 100.0;
+            default -> throw tt.createParseException("BoundsLocator: y-value expected.");
+        };
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "BoundsLocator: ')' expected.");
 
         return new BoundsLocator(x, y);
@@ -85,8 +75,7 @@ public class LocatorCssConverter extends AbstractCssConverter<Locator> {
 
     @Override
     protected <TT extends Locator> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        if (value instanceof BoundsLocator) {
-            BoundsLocator rl = (BoundsLocator) value;
+        if (value instanceof BoundsLocator rl) {
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, RELATIVE_FUNCTION));
             out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, rl.getRelativeX() * 100));
             out.accept(new CssToken(CssTokenType.TT_COMMA));

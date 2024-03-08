@@ -100,7 +100,7 @@ public class StrongBidirectionalBinding<T> implements InvalidationListener {
     }
 
     public static <T> void unbind(Property<T> property1, Property<T> property2) {
-        final StrongBidirectionalBinding<T> binding = new StrongBidirectionalBinding<T>(property1, property2);
+        final StrongBidirectionalBinding<T> binding = new StrongBidirectionalBinding<>(property1, property2);
         property1.removeListener(binding);
         property2.removeListener(binding);
     }

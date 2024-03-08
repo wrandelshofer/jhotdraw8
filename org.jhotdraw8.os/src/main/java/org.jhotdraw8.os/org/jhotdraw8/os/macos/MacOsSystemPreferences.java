@@ -21,8 +21,8 @@ public class MacOsSystemPreferences extends AbstractSystemPreferences {
         LinkedHashMap<String, Object> prefs = new LinkedHashMap<>();
         MacOSPreferencesUtil.readPreferences(MacOSPreferencesUtil.GLOBAL_PREFERENCES, prefs);
         Object interfaceStyleValue = MacOSPreferencesUtil.get(prefs, "AppleInterfaceStyle");
-        if (interfaceStyleValue instanceof String appearance) {
-            this.appearance.set(appearance);
+        if (interfaceStyleValue instanceof String str) {
+            this.appearance.set(str);
         }
         Object accentColorValue = MacOSPreferencesUtil.get(prefs, "AppleAccentColor");
         Color accentColor = Color.BLACK;

@@ -150,25 +150,23 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
     @Override
     public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-        if (pathKey != null) {
-            if (event.getClickCount() == 1) {
-                if (event.isControlDown() || event.isAltDown()) {
-                    BezierNode bn = getBezierNode();
-                    if (bn == null) return;
-                    BezierPath path = owner.get(pathKey);
-                    BezierNode newbn;
-                    if (bn.isCollinear()) {
-                        if (bn.isEquidistant()) {
-                            newbn = bn.withCollinear(false).withEquidistant(false);
-                        } else {
-                            newbn = bn.withCollinear(true).withEquidistant(true);
-                        }
+        if (event.getClickCount() == 1) {
+            if (event.isControlDown() || event.isAltDown()) {
+                BezierNode bn = getBezierNode();
+                if (bn == null) return;
+                BezierPath path = owner.get(pathKey);
+                BezierNode newbn;
+                if (bn.isCollinear()) {
+                    if (bn.isEquidistant()) {
+                        newbn = bn.withCollinear(false).withEquidistant(false);
                     } else {
-                        newbn = bn.withCollinear(true).withEquidistant(false);
+                        newbn = bn.withCollinear(true).withEquidistant(true);
                     }
-                    dv.getModel().set(owner, pathKey,
-                            path.set(nodeIndex, newbn));
+                } else {
+                    newbn = bn.withCollinear(true).withEquidistant(false);
                 }
+                dv.getModel().set(owner, pathKey,
+                        path.set(nodeIndex, newbn));
             }
         }
     }

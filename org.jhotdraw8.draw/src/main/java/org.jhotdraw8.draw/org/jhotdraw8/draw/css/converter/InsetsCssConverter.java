@@ -95,13 +95,12 @@ public class InsetsCssConverter extends AbstractCssConverter<CssInsets> {
             if (top == bottom) {
                 if (top == left) {
                     out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getValue(), top.getUnits()));
-                    return;
                 } else {
                     out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getValue(), top.getUnits()));
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                     out.accept(new CssToken(CssTokenType.TT_DIMENSION, right.getValue(), right.getUnits()));
-                    return;
                 }
+                return;
             }
         }
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, top.getValue(), top.getUnits()));

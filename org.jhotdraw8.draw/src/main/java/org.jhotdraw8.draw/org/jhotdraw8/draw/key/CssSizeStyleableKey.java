@@ -19,7 +19,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> implements WritableStyleableMapAccessor<@NonNull CssSize>,
         NonNullKey<@NonNull CssSize> {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final Converter<@NonNull CssSize> converter = new SizeCssConverter(false);
 

@@ -43,9 +43,7 @@ public class UndoAction extends AbstractActivityAction<Activity> {
         if (!manager.canUndo()) {
             disablers.add(this);
         }
-        manager.undoPresentationNameProperty().addListener((ChangeListener<? super String>) (o, oldv, newv) -> {
-            set(Action.LABEL, newv);
-        });
+        manager.undoPresentationNameProperty().addListener((ChangeListener<? super String>) (o, oldv, newv) -> set(Action.LABEL, newv));
     }
 
     @Override

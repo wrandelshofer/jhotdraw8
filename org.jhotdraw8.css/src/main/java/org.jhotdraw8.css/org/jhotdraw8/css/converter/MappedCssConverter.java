@@ -16,7 +16,6 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -118,7 +117,7 @@ public class MappedCssConverter<E> implements CssConverter<E> {
     }
 
     @Override
-    public boolean isNullable() {
+    public boolean nullable() {
         return nullable;
     }
 

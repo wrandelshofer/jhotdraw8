@@ -39,7 +39,7 @@ public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
         return toLinear(rgb, colorvalue);
     }
 
-    protected static float[] fromLinear(float linear[], float corrected[]) {
+    protected static float[] fromLinear(float[] linear, float[] corrected) {
         corrected[0] = LinearSrgbColorSpace.fromLinear(linear[0]);
         corrected[1] = LinearSrgbColorSpace.fromLinear(linear[1]);
         corrected[2] = LinearSrgbColorSpace.fromLinear(linear[2]);
@@ -47,7 +47,7 @@ public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
     }
 
 
-    protected static float[] toLinear(float corrected[], float linear[]) {
+    protected static float[] toLinear(float[] corrected, float[] linear) {
         linear[0] = LinearSrgbColorSpace.toLinear(corrected[0]);
         linear[1] = LinearSrgbColorSpace.toLinear(corrected[1]);
         linear[2] = LinearSrgbColorSpace.toLinear(corrected[2]);

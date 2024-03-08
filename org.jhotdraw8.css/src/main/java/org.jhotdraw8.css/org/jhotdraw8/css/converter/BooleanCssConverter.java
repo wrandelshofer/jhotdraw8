@@ -36,14 +36,12 @@ public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
     public @NonNull Boolean parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨Boolean⟩ identifier expected.");
         String s = tt.currentStringNonNull();
-        switch (s) {
-        case trueString:
-            return Boolean.TRUE;
-        case falseString:
-            return Boolean.FALSE;
-        default:
-            throw new ParseException("⟨Boolean⟩ " + trueString + " or " + falseString + " expected.", tt.getStartPosition());
-        }
+        return switch (s) {
+            case trueString -> Boolean.TRUE;
+            case falseString -> Boolean.FALSE;
+            default ->
+                    throw new ParseException("⟨Boolean⟩ " + trueString + " or " + falseString + " expected.", tt.getStartPosition());
+        };
     }
 
     @Override
@@ -53,7 +51,7 @@ public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
 
     @Override
     public @NonNull String getHelpText() {
-        if (isNullable()) {
+        if (nullable()) {
             return "Format of ⟨NullableBoolean⟩: none｜true｜false";
         } else {
             return "Format of ⟨Boolean⟩: true｜false";

@@ -61,84 +61,62 @@ public class NodeFinder {
         }
 
 
-        if (node instanceof Shape) {
-            Shape shape = (Shape) node;
+        switch (node) {
+            case Shape shape -> {
 
-            if (shape.contains(pointInLocal)) {
-                return 0.0;
-            }
-
-            double widthFactor;
-            switch (shape.getStrokeType()) {
-            case CENTERED:
-            default:
-                widthFactor = 0.5;
-                break;
-            case INSIDE:
-                widthFactor = 0;
-                break;
-            case OUTSIDE:
-                widthFactor = 1;
-                break;
-            }
-            if (FXRectangles.contains(shape.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
-                int cap;
-                switch (shape.getStrokeLineCap()) {
-                    case SQUARE:
-                        cap = BasicStroke.CAP_SQUARE;
-                        break;
-                    case BUTT:
-                        cap = (toleranceInLocal > 0) ? BasicStroke.CAP_ROUND : BasicStroke.CAP_BUTT;
-                        break;
-                    case ROUND:
-                        cap = BasicStroke.CAP_ROUND;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-                }
-                int join;
-                switch (shape.getStrokeLineJoin()) {
-                case MITER:
-                    join = BasicStroke.JOIN_MITER;
-                    break;
-                case BEVEL:
-                    join = BasicStroke.JOIN_BEVEL;
-                    break;
-                case ROUND:
-                    join = BasicStroke.JOIN_ROUND;
-                    break;
-                default:
-                    throw new IllegalArgumentException();
-                }
-                final java.awt.Shape awtShape = FXShapes.awtShapeFromFX(shape);
-                return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
-                        cap, join, (float) shape.getStrokeMiterLimit()
-                ).createStrokedShape(awtShape)
-                        .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()))
-                        ? Points.distanceFromShape(awtShape, pointInLocal.getX(), pointInLocal.getY()) : null;
-            } else {
-                return null;
-            }
-        } else if (node instanceof Group) {
-            if (FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
-                return childContains((Parent) node, pointInLocal, radiusInLocal);
-
-            }
-            return null;
-        } else if (node instanceof Region) {
-            if (FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
-                Region region = (Region) node;
-                final Background bg = region.getBackground();
-                final Border border = region.getBorder();
-                if ((bg == null || bg.isEmpty()) && (border == null || border.isEmpty())) {
-                    return childContains((Parent) node, pointInLocal, radiusInLocal);
-                } else {
+                if (shape.contains(pointInLocal)) {
                     return 0.0;
                 }
+
+                double widthFactor = switch (shape.getStrokeType()) {
+                    default -> 0.5;
+                    case INSIDE -> 0;
+                    case OUTSIDE -> 1;
+                };
+                if (FXRectangles.contains(shape.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
+                    int cap = switch (shape.getStrokeLineCap()) {
+                        case SQUARE -> BasicStroke.CAP_SQUARE;
+                        case BUTT -> (toleranceInLocal > 0) ? BasicStroke.CAP_ROUND : BasicStroke.CAP_BUTT;
+                        case ROUND -> BasicStroke.CAP_ROUND;
+                    };
+                    int join = switch (shape.getStrokeLineJoin()) {
+                        case MITER -> BasicStroke.JOIN_MITER;
+                        case BEVEL -> BasicStroke.JOIN_BEVEL;
+                        case ROUND -> BasicStroke.JOIN_ROUND;
+                    };
+                    final java.awt.Shape awtShape = FXShapes.awtShapeFromFX(shape);
+                    return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
+                            cap, join, (float) shape.getStrokeMiterLimit()
+                    ).createStrokedShape(awtShape)
+                            .contains(new java.awt.geom.Point2D.Double(pointInLocal.getX(), pointInLocal.getY()))
+                            ? Points.distanceFromShape(awtShape, pointInLocal.getX(), pointInLocal.getY()) : null;
+                } else {
+                    return null;
+                }
             }
-            return null;
-        } else { // foolishly assumes that all other nodes are rectangular
-            return FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, radiusInLocal) ? 0.0 : null;
+            case Group group -> {
+                if (FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
+                    return childContains((Parent) node, pointInLocal, radiusInLocal);
+
+                }
+                return null;
+            }
+            case Region region1 -> {
+                if (FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, toleranceInLocal)) {
+                    Region region = (Region) node;
+                    final Background bg = region.getBackground();
+                    final Border border = region.getBorder();
+                    if ((bg == null || bg.isEmpty()) && (border == null || border.isEmpty())) {
+                        return childContains((Parent) node, pointInLocal, radiusInLocal);
+                    } else {
+                        return 0.0;
+                    }
+                }
+                return null;
+            }
+            default -> {
+                return FXRectangles.contains(node.getBoundsInLocal(), pointInLocal, radiusInLocal) ? 0.0 : null;  // foolishly assumes that all other nodes are rectangular
+            }
         }
     }
 
@@ -157,9 +135,8 @@ public class NodeFinder {
         if (contains(n, new Point2D(vx, vy), radius) != null) {
             if (n instanceof Shape) {
                 return n;
-            } else if (n instanceof Group) {
+            } else if (n instanceof Group group) {
                 Point2D pl = n.parentToLocal(vx, vy);
-                Group group = (Group) n;
                 ObservableList<Node> children = group.getChildren();
                 // FIXME should take viewOrder into account
                 for (int i = children.size() - 1; i >= 0; i--) {// front to back

@@ -146,8 +146,6 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
                                       int size, int offset) {
     }
 
-    ;
-
     /**
      * Creates a new instance with the provided privateData data object.
      * <p>
@@ -248,8 +246,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
         if (other == this) {
             return true;
         }
-        if (other instanceof ChampVectorMap) {
-            ChampVectorMap<?, ?> that = (ChampVectorMap<?, ?>) other;
+        if (other instanceof ChampVectorMap<?, ?> that) {
             return size == that.size && root.equivalent(that.root);
         } else {
             return ReadOnlyMap.mapEquals(this, other);

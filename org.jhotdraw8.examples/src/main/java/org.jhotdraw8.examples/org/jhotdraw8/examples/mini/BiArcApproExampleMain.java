@@ -159,8 +159,7 @@ public class BiArcApproExampleMain extends Application {
             } else if (e instanceof LineTo) {
                 x = ((LineTo) e).getX();
                 y = ((LineTo) e).getY();
-            } else if (e instanceof QuadCurveTo) {
-                QuadCurveTo c = (QuadCurveTo) e;
+            } else if (e instanceof QuadCurveTo c) {
                 double x1 = x + (c.getControlX() - x) * 2.0 / 3.0;
                 double y1 = y + (c.getControlY() - y) * 2.0 / 3.0;
                 double x3 = c.getX();
@@ -172,8 +171,7 @@ public class BiArcApproExampleMain extends Application {
                 x = x3;
                 y = y3;
 
-            } else if (e instanceof CubicCurveTo) {
-                CubicCurveTo c = (CubicCurveTo) e;
+            } else if (e instanceof CubicCurveTo c) {
 
                 double x1 = c.getControlX1();
                 double y1 = c.getControlY1();
@@ -213,14 +211,14 @@ public class BiArcApproExampleMain extends Application {
                 x, y, x1, y1, x2, y2, x3, y3).size());
         System.out.println("#biArcs: " + biArcs.size());
         for (BiArc biArc : biArcs) {
-            appr.add(appr.isEmpty() ? new MoveTo(biArc.a1.p1.getX(), biArc.a1.p1.getY()) : new LineTo(biArc.a1.p1.getX(), biArc.a1.p1.getY()));
-            appr.add(new ArcTo(biArc.a1.r, biArc.a1.r, 0,
-                    biArc.a1.p2.getX(), biArc.a1.p2.getY(),
-                    Math.abs(biArc.a1.sweepAngle) > Math.PI, biArc.a1.isClockwise()
+            appr.add(appr.isEmpty() ? new MoveTo(biArc.a1().p1().getX(), biArc.a1().p1().getY()) : new LineTo(biArc.a1().p1().getX(), biArc.a1().p1().getY()));
+            appr.add(new ArcTo(biArc.a1().r(), biArc.a1().r(), 0,
+                    biArc.a1().p2().getX(), biArc.a1().p2().getY(),
+                    Math.abs(biArc.a1().sweepAngle()) > Math.PI, biArc.a1().isClockwise()
             ));
-            appr.add(new ArcTo(biArc.a2.r, biArc.a2.r, 0,
-                    biArc.a2.p2.getX(), biArc.a2.p2.getY(),
-                    Math.abs(biArc.a2.sweepAngle) > Math.PI, biArc.a2.isClockwise()
+            appr.add(new ArcTo(biArc.a2().r(), biArc.a2().r(), 0,
+                    biArc.a2().p2().getX(), biArc.a2().p2().getY(),
+                    Math.abs(biArc.a2().sweepAngle()) > Math.PI, biArc.a2().isClockwise()
             ));
         }
     }

@@ -237,11 +237,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
      * @param attributeName the attribute name
      */
     public void addSkipAttribute(Class<? extends Figure> figure, String attributeName) {
-        HashSet<Class<? extends Figure>> set = skipAttributes.get(attributeName);
-        if (set == null) {
-            set = new HashSet<>();
-            skipAttributes.put(attributeName, set);
-        }
+        HashSet<Class<? extends Figure>> set = skipAttributes.computeIfAbsent(attributeName, k -> new HashSet<>());
         set.add(figure);
     }
 
@@ -532,47 +528,10 @@ public abstract class AbstractFigureFactory implements FigureFactory {
 
     @Override
     public @NonNull <T> String valueToString(@NonNull MapAccessor<T> key, T value) throws IOException {
-        Converter<T> converter = getConverter(key);
-        StringBuilder builder = new StringBuilder();
-        converter.toString(builder, idFactory, value);
-        return builder.toString();
+        return getConverter(key).toString(idFactory, value);
     }
 
-    private static final class FigureAccessorKey<T> {
-        private final Class<? extends Figure> figure;
-        private final MapAccessor<T> acc;
-
-        private FigureAccessorKey(Class<? extends Figure> figure,
-                                  MapAccessor<T> acc) {
-            this.figure = figure;
-            this.acc = acc;
-        }
-
-        public Class<? extends Figure> figure() {
-            return figure;
-        }
-
-        public MapAccessor<T> acc() {
-            return acc;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (obj == null || obj.getClass() != this.getClass()) {
-                return false;
-            }
-            FigureAccessorKey that = (FigureAccessorKey) obj;
-            return Objects.equals(this.figure, that.figure) &&
-                    Objects.equals(this.acc, that.acc);
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(figure, acc);
-        }
+    private record FigureAccessorKey<T>(Class<? extends Figure> figure, MapAccessor<T> acc) {
 
         @Override
         public String toString() {

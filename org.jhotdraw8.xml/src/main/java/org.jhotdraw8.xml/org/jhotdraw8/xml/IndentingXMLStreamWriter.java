@@ -282,7 +282,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
      */
     private final Deque<Element> stack = new ArrayDeque<>();
     private final Writer w;
-    private Set<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName));
+    private Set<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::namespace).thenComparing(Attribute::localName));
     private boolean escapeClosingAngleBracket = true;
     private boolean escapeLineBreak = true;
     private boolean hasContent;
@@ -335,12 +335,12 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
 
     private void doWriteAttribute(@NonNull Attribute attribute) throws XMLStreamException {
         write(" ");
-        String prefix = attribute.getPrefix() == null ? getPrefixNonNull(attribute.getNamespace()) : attribute.getPrefix();
+        String prefix = attribute.prefix() == null ? getPrefixNonNull(attribute.namespace()) : attribute.prefix();
         if (!prefix.equals(DEFAULT_PREFIX)) {
             write(prefix);
             write(PREFIX_SEPARATOR);
         }
-        write(attribute.getLocalName());
+        write(attribute.localName());
         write(START_ATTRIBUTE_VALUE);
         writeXmlContent(attribute.value, true, false);
         write(END_ATTRIBUTE_VALUE);
@@ -488,7 +488,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     public void setSortAttributes(boolean b) {
-        attributes = b ? new TreeSet<>(Comparator.comparing(Attribute::getNamespace).thenComparing(Attribute::getLocalName))
+        attributes = b ? new TreeSet<>(Comparator.comparing(Attribute::namespace).thenComparing(Attribute::localName))
                 : new LinkedHashSet<>();
     }
 
@@ -1008,34 +1008,8 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
      * In a valid XML there can only be one attribute with the same local name
      * in the same name space.
      */
-    private static class Attribute {
-        private final @NonNull String localName;
-        private final @NonNull String namespace;
-        private final @Nullable String prefix;
-        private final @NonNull String value;
-
-        public Attribute(@Nullable String prefix, @NonNull String namespace, @NonNull String localName, @NonNull String value) {
-            this.localName = localName;
-            this.value = value;
-            this.namespace = namespace;
-            this.prefix = prefix;
-        }
-
-        public @NonNull String getLocalName() {
-            return localName;
-        }
-
-        public @NonNull String getNamespace() {
-            return namespace;
-        }
-
-        public @Nullable String getPrefix() {
-            return prefix;
-        }
-
-        public @NonNull String getValue() {
-            return value;
-        }
+    private record Attribute(@Nullable String prefix, @NonNull String namespace, @NonNull String localName,
+                             @NonNull String value) {
 
     }
 }

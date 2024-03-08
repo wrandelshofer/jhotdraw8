@@ -548,8 +548,7 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
 
     public static @NonNull ArrayList<FontFamily> collectFamiliesNamed(@NonNull List<FontFamily> allFamilies, String... names) {
         ArrayList<FontFamily> coll = new ArrayList<>();
-        HashSet<String> nameMap = new HashSet<>();
-        nameMap.addAll(Arrays.asList(names));
+        HashSet<String> nameMap = new HashSet<>(Arrays.asList(names));
         for (FontFamily family : allFamilies) {
             if (nameMap.contains(family.getName())) {
                 coll.add(family);

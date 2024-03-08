@@ -127,7 +127,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
             return s;
         }
         if (!(c instanceof ReadOnlyCollection<?>)) {
-            ImmutableSet<Object> clear = (ImmutableSet<Object>) empty();
+            ImmutableSet<Object> clear = empty();
             c = clear.addAll(c);
         }
         var rc = (ReadOnlyCollection<?>) c;

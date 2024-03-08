@@ -46,8 +46,8 @@ import static java.lang.Math.PI;
  */
 public class LabelConnectorHandle extends AbstractConnectorHandle {
 
-    protected @NonNull Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
-    protected @Nullable Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
+    protected @NonNull Background regionBackgroundConnected = new Background(new BackgroundFill(Color.BLUE, null, null));
+    protected final @NonNull Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(2)),
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
@@ -98,7 +98,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         CssColor color = view.getEditor().getHandleColor();
         Color color1 = (Color) Paintable.getPaint(color);
         targetNode.setBorder(REGION_BORDER.apply(color.getColor()));
-        REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(color1, null, null));
+        regionBackgroundConnected = new Background(new BackgroundFill(color1, null, null));
         lineNode.setStroke(color.getColor());
         updateNode(view);
         return groupNode;
@@ -113,7 +113,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
         final Connector connector = f.get(connectorKey);
         final Figure target = f.get(targetKey);
         boolean isConnected = connector != null && target != null;
-        targetNode.setBackground(isConnected ? REGION_BACKGROUND_CONNECTED : REGION_BACKGROUND_DISCONNECTED);
+        targetNode.setBackground(isConnected ? regionBackgroundConnected : REGION_BACKGROUND_DISCONNECTED);
         double size = targetNode.getWidth();
         // rotates the node:
         final double a = connectorDerivative == null ? 0 : Angles.atan2(connectorDerivative.getY(), connectorDerivative.getX());

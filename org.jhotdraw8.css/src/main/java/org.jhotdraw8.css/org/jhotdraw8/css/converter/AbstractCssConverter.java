@@ -26,7 +26,7 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
 
     @Override
     public final @Nullable T parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        if (isNullable()) {
+        if (nullable()) {
             if (tt.nextIsIdentNone()) {
                 return null;
             }
@@ -55,7 +55,7 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
     }
 
     @Override
-    public boolean isNullable() {
+    public boolean nullable() {
         return nullable;
     }
 }

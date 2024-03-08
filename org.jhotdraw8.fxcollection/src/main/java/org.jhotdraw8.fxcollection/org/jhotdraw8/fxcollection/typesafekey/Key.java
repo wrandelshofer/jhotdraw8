@@ -212,14 +212,11 @@ public interface Key<T> extends MapAccessor<T> {
      * @return True if assignable.
      */
     default boolean isAssignable(@Nullable Object value) {
-        if (getValueType() instanceof Class<?>) {
-            final Class<?> clazz = (Class<?>) getValueType();
+        if (getValueType() instanceof Class<?> clazz) {
             return value == null && isNullable() || clazz.isInstance(value);
         }
-        if (getValueType() instanceof ParameterizedType) {
-            ParameterizedType pt = (ParameterizedType) getValueType();
-            if (pt.getRawType() instanceof Class<?>) {
-                Class<?> clazz = (Class<?>) pt.getRawType();
+        if (getValueType() instanceof ParameterizedType pt) {
+            if (pt.getRawType() instanceof Class<?> clazz) {
                 return value == null && isNullable() || clazz.isInstance(value);
             }
         }

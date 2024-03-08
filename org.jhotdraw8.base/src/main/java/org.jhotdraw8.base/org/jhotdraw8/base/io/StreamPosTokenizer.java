@@ -475,7 +475,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private int read() throws IOException {
         // rlw
         int data;
-        if (unread.size() > 0) {
+        if (!unread.isEmpty()) {
             data = unread.removeLastAsInt();
         } else {
             data = reader.read();
@@ -703,7 +703,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                         read(); // consume full stop
                         c = '.';
                     }
-                    break digit;
                 } else {
                     return ttype = '.';
                 }
@@ -725,13 +724,9 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                         }
                         v = 0;
                         decexp = 0;
-                        while (true) {
-                            if ('0' <= c && c <= '9') {
-                                digits++;
-                                v = v * 10 + (c - '0');
-                            } else {
-                                break;
-                            }
+                        while ('0' <= c && c <= '9') {
+                            digits++;
+                            v = v * 10 + (c - '0');
                             c = read();
                         }
                         peekc = c;
@@ -793,29 +788,16 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
                             d = c2;
                         }
                     } else {
-                        switch (c) {
-                        case 'a':
-                            c = 0x7;
-                            break;
-                        case 'b':
-                            c = '\b';
-                            break;
-                        case 'f':
-                            c = 0xC;
-                            break;
-                        case 'n':
-                            c = '\n';
-                            break;
-                        case 'r':
-                            c = '\r';
-                            break;
-                        case 't':
-                            c = '\t';
-                            break;
-                        case 'v':
-                            c = 0xB;
-                            break;
-                        }
+                        c = switch (c) {
+                            case 'a' -> 0x7;
+                            case 'b' -> '\b';
+                            case 'f' -> 0xC;
+                            case 'n' -> '\n';
+                            case 'r' -> '\r';
+                            case 't' -> '\t';
+                            case 'v' -> 0xB;
+                            default -> c;
+                        };
                         d = read();
                     }
                 } else {
@@ -1029,7 +1011,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
         if (slashStar.length() != starSlash.length()) {
             throw new IllegalArgumentException("SlashStar and StarSlash tokens must be of same length: '" + slashStar + "' '" + starSlash + "'");
         }
-        if (slashStar.length() < 1 || slashStar.length() > 2) {
+        if (slashStar.isEmpty() || slashStar.length() > 2) {
             throw new IllegalArgumentException("SlashStar and StarSlash tokens must be of length 1 or 2: '" + slashStar + "' '" + starSlash + "'");
         }
         this.slashStar = slashStar.toCharArray();
@@ -1044,7 +1026,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @param slashSlash token
      */
     public void setSlashSlashToken(@NonNull String slashSlash) {
-        if (slashSlash.length() < 1 || slashSlash.length() > 2) {
+        if (slashSlash.isEmpty() || slashSlash.length() > 2) {
             throw new IllegalArgumentException("SlashSlash token must be of length 1 or 2: '" + slashSlash + "'");
         }
         this.slashSlash = slashSlash.toCharArray();

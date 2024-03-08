@@ -9,42 +9,16 @@ import java.awt.geom.Point2D;
 
 /**
  * Definition of an Arc. It contains redundant information.
+ *
+ * @param c          Center point.
+ * @param r          Radius.
+ * @param startAngle Start angle in radian.
+ * @param sweepAngle Sweep angle in radian.
+ * @param p1         Start point of the arc.
+ * @param p2         End point of the arc.
  */
-public class Arc {
-
-    /**
-     * Center point.
-     */
-    public final Point2D.Double c;
-    /**
-     * Radius.
-     */
-    public final double r;
-    /**
-     * Start angle in radian.
-     */
-    public final double startAngle;
-    /**
-     * Sweep angle in radian.
-     */
-    public final double sweepAngle;
-    /**
-     * Start point of the arc.
-     */
-    public final Point2D.Double p1;
-    /**
-     * End point of the arc.
-     */
-    public final Point2D.Double p2;
-
-    public Arc(Point2D.Double c, double r, double startAngle, double sweepAngle, Point2D.Double p1, Point2D.Double p2) {
-        this.c = c;
-        this.r = r;
-        this.startAngle = startAngle;
-        this.sweepAngle = sweepAngle;
-        this.p1 = p1;
-        this.p2 = p2;
-    }
+public record Arc(Point2D.Double c, double r, double startAngle, double sweepAngle, Point2D.Double p1,
+                  Point2D.Double p2) {
 
     /**
      * Orientation of the arc.

@@ -16,15 +16,54 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.ArcTo;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.CubicCurve;
+import javafx.scene.shape.Ellipse;
+import javafx.scene.shape.Line;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.QuadCurve;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.intersect.*;
+import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
+import org.jhotdraw8.geom.intersect.IntersectCircleCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleEllipse;
+import org.jhotdraw8.geom.intersect.IntersectCircleLine;
+import org.jhotdraw8.geom.intersect.IntersectCirclePoint;
+import org.jhotdraw8.geom.intersect.IntersectCircleQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectCircleRectangle;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveCubicCurve;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveEllipse;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveLine;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurvePoint;
+import org.jhotdraw8.geom.intersect.IntersectCubicCurveQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectEllipseEllipse;
+import org.jhotdraw8.geom.intersect.IntersectEllipseLine;
+import org.jhotdraw8.geom.intersect.IntersectEllipseQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectEllipseRectangle;
+import org.jhotdraw8.geom.intersect.IntersectLineLine;
+import org.jhotdraw8.geom.intersect.IntersectLinePoint;
+import org.jhotdraw8.geom.intersect.IntersectLineQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectPointQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectQuadCurveQuadCurve;
+import org.jhotdraw8.geom.intersect.IntersectRectangleRectangle;
+import org.jhotdraw8.geom.intersect.IntersectionPointEx;
+import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jhotdraw8.geom.intersect.IntersectionStatus;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 /**
@@ -38,7 +77,7 @@ public class IntersectionExampleMain extends Application {
     ChoiceBox<String> choice1;
     ChoiceBox<String> choice2;
     @NonNull
-    List<Map.Entry<Shape, List<Handle>>> shapes = new ArrayList<>();
+    final List<Map.Entry<Shape, List<Handle>>> shapes = new ArrayList<>();
 
     {
         shapes.add(null);
@@ -46,7 +85,7 @@ public class IntersectionExampleMain extends Application {
     }
 
     @NonNull
-    Path isectPath = new Path();
+    final Path isectPath = new Path();
 
     private static class Point extends Circle {
 
@@ -71,9 +110,7 @@ public class IntersectionExampleMain extends Application {
                 };
                 Handle rxHandle = new Handle(handleColor);
                 rxHandle.updateHandle = () -> rxHandle.setPosition(circle.getCenterX() + circle.getRadius(), circle.getCenterY());
-                rxHandle.updateShape = (p) -> {
-                    circle.setRadius(p.getX() - circle.getCenterX());
-                };
+                    rxHandle.updateShape = (p) -> circle.setRadius(p.getX() - circle.getCenterX());
                 handles.add(centerHandle);
                 handles.add(rxHandle);
                 break;
@@ -123,14 +160,10 @@ public class IntersectionExampleMain extends Application {
                 };
                 Handle rxHandle = new Handle(handleColor);
                 rxHandle.updateHandle = () -> rxHandle.setPosition(ellipse.getCenterX() + ellipse.getRadiusX(), ellipse.getCenterY());
-                rxHandle.updateShape = (p) -> {
-                    ellipse.setRadiusX(p.getX() - ellipse.getCenterX());
-                };
+                rxHandle.updateShape = (p) -> ellipse.setRadiusX(p.getX() - ellipse.getCenterX());
                 Handle ryHandle = new Handle(handleColor);
                 ryHandle.updateHandle = () -> ryHandle.setPosition(ellipse.getCenterX(), ellipse.getCenterY() - ellipse.getRadiusY());
-                ryHandle.updateShape = (p) -> {
-                    ellipse.setRadiusY(-p.getY() + ellipse.getCenterY());
-                };
+                ryHandle.updateShape = (p) -> ellipse.setRadiusY(-p.getY() + ellipse.getCenterY());
                 handles.add(centerHandle);
                 handles.add(rxHandle);
                 handles.add(ryHandle);
@@ -166,9 +199,7 @@ public class IntersectionExampleMain extends Application {
                 };
                 Handle rxHandle = new Handle(handleColor);
                 rxHandle.updateHandle = () -> rxHandle.setPosition(point.getCenterX() + point.getRadius(), point.getCenterY());
-                rxHandle.updateShape = (p) -> {
-                    point.setRadius(p.getX() - point.getCenterX());
-                };
+                rxHandle.updateShape = (p) -> point.setRadius(p.getX() - point.getCenterX());
                 handles.add(centerHandle);
                 handles.add(rxHandle);
                 break;
@@ -236,7 +267,7 @@ public class IntersectionExampleMain extends Application {
     private class Handle {
 
         @NonNull
-        Rectangle node = new Rectangle(5, 5);
+        final Rectangle node = new Rectangle(5, 5);
         Runnable updateHandle;
         Consumer<Point2D> updateShape;
 
@@ -516,7 +547,7 @@ public class IntersectionExampleMain extends Application {
                     System.out.println("  right:" + Arrays.toString(right));
                     double[] newControlPoint = QuadCurves.merge(
                             l0.getStartX(), l0.getStartY(), left[0], left[1], left[2], left[3], right[0], right[1], right[2], right[3], 1.0);
-                    System.out.println("  new ctrlPoints:" + newControlPoint);
+                    System.out.println("  new ctrlPoints:" + Arrays.toString(newControlPoint));
                 }
 
             } else if (shape0.getClass() == QuadCurve.class && shape1.getClass() == Line.class) {

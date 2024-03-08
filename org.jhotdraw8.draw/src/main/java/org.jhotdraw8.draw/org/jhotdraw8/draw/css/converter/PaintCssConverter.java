@@ -68,16 +68,12 @@ public class PaintCssConverter extends AbstractCssConverter<Paint> {
 
     @Override
     protected <TT extends Paint> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
-        Paintable p;
-        if (value instanceof Color) {
-            p = new CssColor((Color) value);
-        } else if (value instanceof LinearGradient) {
-            p = new CssLinearGradient((LinearGradient) value);
-        } else if (value instanceof RadialGradient) {
-            p = new CssRadialGradient((RadialGradient) value);
-        } else {
-            throw new UnsupportedOperationException("unsupported value:" + value);
-        }
+        Paintable p = switch (value) {
+            case Color color -> new CssColor(color);
+            case LinearGradient linearGradient -> new CssLinearGradient(linearGradient);
+            case RadialGradient radialGradient -> new CssRadialGradient(radialGradient);
+            default -> throw new UnsupportedOperationException("unsupported value:" + value);
+        };
         paintableConverter.produceTokensNonNull(p, idSupplier, out);
     }
 }

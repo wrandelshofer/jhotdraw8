@@ -103,7 +103,7 @@ public class ContourIntersections {
                                 PlinePath pline1, PlinePath pline2) {
         CoincidentSlicesResult result = new CoincidentSlicesResult();
 
-        if (coincidentIntrs.size() == 0) {
+        if (coincidentIntrs.isEmpty()) {
             return result;
         }
 
@@ -541,7 +541,7 @@ public class ContourIntersections {
             IntersectionResultEx intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
             ImmutableList<IntersectionPointEx> intersections = intrResult.intersections();
             switch (intrResult.getStatus()) {
-                case NO_INTERSECTION_PARALLEL:
+                case NO_INTERSECTION_PARALLEL, NO_INTERSECTION:
                     result.intrType = PlineSegIntrType.NoIntersect;
                     break;
                 case INTERSECTION:
@@ -560,9 +560,6 @@ public class ContourIntersections {
                         result.point1 = pointFromParametric(u1.pos(), u2.pos(), secondB);
                         result.point2 = pointFromParametric(u1.pos(), u2.pos(), firstB);
                     }
-                    break;
-                case NO_INTERSECTION:
-                    result.intrType = PlineSegIntrType.NoIntersect;
                     break;
             }
 

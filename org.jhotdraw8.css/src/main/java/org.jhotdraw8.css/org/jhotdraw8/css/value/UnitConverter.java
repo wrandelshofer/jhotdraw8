@@ -84,53 +84,22 @@ public interface UnitConverter {
     }
 
     default double getFactor(@NonNull String unit) {
-        final double factor;
-        switch (unit) {
-        case PERCENTAGE:
-            factor = getPercentageFactor();
-            break;
-        case CENTIMETERS:
-            factor = 2.54 / getDpi();
-            break;
-        case MILLIMETERS:
-            factor = 25.4 / getDpi();
-            break;
-        case QUARTER_MILLIMETERS:
-            factor = 25.4 * 0.25 / getDpi();
-            break;
-        case INCH:
-            factor = 1.0 / getDpi();
-            break;
-        case POINTS:
-            factor = 72 / getDpi();
-            break;
-        case PICAS:
-            factor = 72 * 12.0 / getDpi();
-            break;
-        case EM:
-            factor = 1.0 / getFontSize();
-            break;
-        case EX:
-            factor = 1.0 / getFontXHeight();
-            break;
-        case VIEWPORT_HEIGHT_PERCENTAGE:
-            factor = 100.0 / getViewportHeight();
-            break;
-        case VIEWPORT_WIDTH_PERCENTAGE:
-            factor = 100.0 / getViewportWidth();
-            break;
-        case VIEWPORT_MIN_PERCENTAGE:
-            factor = 100.0 / min(getViewportHeight(), getViewportWidth());
-            break;
-        case VIEWPORT_MAX_PERCENTAGE:
-            factor = 100.0 / max(getViewportHeight(), getViewportWidth());
-            break;
-        case DEFAULT:
-        case PIXELS:
-        default:
-            factor = 1.0;
-            break;
-        }
+        final double factor = switch (unit) {
+            case PERCENTAGE -> getPercentageFactor();
+            case CENTIMETERS -> 2.54 / getDpi();
+            case MILLIMETERS -> 25.4 / getDpi();
+            case QUARTER_MILLIMETERS -> 25.4 * 0.25 / getDpi();
+            case INCH -> 1.0 / getDpi();
+            case POINTS -> 72 / getDpi();
+            case PICAS -> 72 * 12.0 / getDpi();
+            case EM -> 1.0 / getFontSize();
+            case EX -> 1.0 / getFontXHeight();
+            case VIEWPORT_HEIGHT_PERCENTAGE -> 100.0 / getViewportHeight();
+            case VIEWPORT_WIDTH_PERCENTAGE -> 100.0 / getViewportWidth();
+            case VIEWPORT_MIN_PERCENTAGE -> 100.0 / min(getViewportHeight(), getViewportWidth());
+            case VIEWPORT_MAX_PERCENTAGE -> 100.0 / max(getViewportHeight(), getViewportWidth());
+            default -> 1.0;
+        };
         return factor;
     }
 

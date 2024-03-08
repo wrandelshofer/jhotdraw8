@@ -12,10 +12,8 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
-import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
-import org.jhotdraw8.application.FileBasedApplication;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
@@ -30,7 +28,6 @@ import org.jhotdraw8.icollection.ChampMap;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.SequencedMap;
@@ -101,22 +98,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
     protected void saveFileChooseUri(final @NonNull FileBasedActivity v, WorkState<Void> workState) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
-            //int option = fileChooser.showSaveDialog(this);
-
-            URI uri;
-            Outer:
-            while (true) {
-                uri = chsr.showDialog(v.getNode());
-
-                // Prevent save to URI that is open in another view!
-                // unless  multipe views to same URI are supported
-                if (uri != null && !app.getNonNull(FileBasedApplication.ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI)) {
-                    for (Activity pi : app.getActivities()) {
-                        FileBasedActivity vi = (FileBasedActivity) pi;
-                    }
-                }
-                break;
-            }
+            URI uri = chsr.showDialog(v.getNode());
             if (uri != null) {
                 saveFileChooseOptions(v, uri, chsr.getDataFormat(), workState);
             } else {

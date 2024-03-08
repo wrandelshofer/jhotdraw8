@@ -25,4 +25,4 @@ public class ResourceBundleStub extends ResourceBundle {
     public String toString() {
         return "STUB_BUNDLE";
     }
-};
+}

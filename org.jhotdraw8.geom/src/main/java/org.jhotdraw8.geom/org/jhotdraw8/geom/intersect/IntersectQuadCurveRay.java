@@ -100,9 +100,7 @@ public class IntersectQuadCurveRay {
         // might not be on the line segment.
         // Find intersections and calculate point coordinates
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
-        for (int i = 0; i < roots.length; i++) {
-            double t = roots[i];
-
+        for (double t : roots) {
             if (0 <= t && t <= 1) {
                 // We're within the Bezier curve
                 // Find point on Bezier
@@ -191,9 +189,7 @@ public class IntersectQuadCurveRay {
         // Find intersections and calculate point coordinates
         List<IntersectionPoint> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
-        for (int i = 0; i < roots.length; i++) {
-            double t = roots[i];
-
+        for (double t : roots) {
             if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier

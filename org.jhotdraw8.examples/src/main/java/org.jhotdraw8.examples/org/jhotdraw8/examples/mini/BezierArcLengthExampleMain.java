@@ -49,8 +49,7 @@ import static org.jhotdraw8.geom.CubicCurves.getArcLengthIntegrand;
 public class BezierArcLengthExampleMain extends Application {
     private class Handle {
 
-        @NonNull
-        Rectangle node = new Rectangle(5, 5);
+        final @NonNull Rectangle node = new Rectangle(5, 5);
 
         {
             node.setManaged(false);
@@ -346,17 +345,17 @@ public class BezierArcLengthExampleMain extends Application {
             addPoints(infl, Color.BLACK, null);
         }
         //if (infl.isEmpty()) {
-            Double p = CubicCurveCharacteristics.singularPoint(curve.getStartX(),
-                    curve.getStartY(),
-                    curve.getControlX1(),
-                    curve.getControlY1(),
-                    curve.getControlX2(),
-                    curve.getControlY2(),
-                    curve.getEndX(),
-                    curve.getEndY());
-            if (p != null) {
-                addPoint(p, Color.GRAY, null);
-            }
+        Double p = CubicCurveCharacteristics.singularPoint(curve.getStartX(),
+                curve.getStartY(),
+                curve.getControlX1(),
+                curve.getControlY1(),
+                curve.getControlX2(),
+                curve.getControlY2(),
+                curve.getEndX(),
+                curve.getEndY());
+        if (p != null) {
+            addPoint(p, Color.GRAY, null);
+        }
         //}
     }
 

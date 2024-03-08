@@ -44,9 +44,7 @@ public class RedoAction extends AbstractActivityAction<Activity> {
         if (!manager.canRedo()) {
             disablers.add(this);
         }
-        manager.redoPresentationNameProperty().addListener((ChangeListener<? super String>) (o, oldv, newv) -> {
-            set(Action.LABEL, newv);
-        });
+        manager.redoPresentationNameProperty().addListener((ChangeListener<? super String>) (o, oldv, newv) -> set(Action.LABEL, newv));
     }
 
     @Override

@@ -17,7 +17,6 @@ import java.util.function.BiConsumer;
  * @param <V> the value type
  */
 public class EditableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
-    private final static long serialVersionUID = 0L;
     private final int sequenceNumber;
     private @Nullable BiConsumer<K, V> putIfPresentFunction;
 

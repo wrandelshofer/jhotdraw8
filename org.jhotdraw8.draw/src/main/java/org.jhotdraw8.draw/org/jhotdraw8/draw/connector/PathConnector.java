@@ -39,30 +39,21 @@ public class PathConnector extends LocatorConnector {
 
     @Override
     public IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
-        if (!(target instanceof PathIterableFigure)) {
+        if (!(target instanceof PathIterableFigure pif)) {
             return super.intersect(ctx, connection, target, start, end);
         }
-        PathIterableFigure pif = (PathIterableFigure) target;
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         PathIterator pit;
 
         // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {
-            switch (target.getStyledNonNull(STROKE_TYPE)) {
-            case CENTERED:
-            default:
-                // FIXME must stroke the path
-                pit = pif.getPathIterator(ctx, null);
-                break;
-            case OUTSIDE:
-                // FIXME must stroke the path
-                pit = pif.getPathIterator(ctx, null);
-                break;
-            case INSIDE:
-                pit = pif.getPathIterator(ctx, null);
-                break;
-            }
+            pit = switch (target.getStyledNonNull(STROKE_TYPE)) {
+                default ->
+                    // FIXME must stroke the path
+                        pif.getPathIterator(ctx, null);
+                case INSIDE -> pif.getPathIterator(ctx, null);
+            };
         } else {
             pit = pif.getPathIterator(ctx, null);
         }

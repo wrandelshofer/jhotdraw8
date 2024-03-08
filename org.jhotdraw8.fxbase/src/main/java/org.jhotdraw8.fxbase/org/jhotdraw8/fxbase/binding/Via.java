@@ -109,8 +109,6 @@ public class Via<T> {
         }
     }
 
-    ;
-
     /**
      * Gets the binding that was built.
      *

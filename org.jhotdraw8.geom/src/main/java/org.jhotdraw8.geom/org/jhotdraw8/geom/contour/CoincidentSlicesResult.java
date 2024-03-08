@@ -20,9 +20,9 @@ import java.util.Deque;
  * </dl>
  */
 class CoincidentSlicesResult {
-    Deque<PlinePath> coincidentSlices = new ArrayDeque<>();
-    Deque<PlineIntersect> sliceStartPoints = new ArrayDeque<>();
-    Deque<PlineIntersect> sliceEndPoints = new ArrayDeque<>();
+    final Deque<PlinePath> coincidentSlices = new ArrayDeque<>();
+    final Deque<PlineIntersect> sliceStartPoints = new ArrayDeque<>();
+    final Deque<PlineIntersect> sliceEndPoints = new ArrayDeque<>();
 
     CoincidentSlicesResult() {
     }

@@ -271,18 +271,12 @@ public class ReversePathIterator
      * @return coordinates needed
      */
     private static int coordinatesForSegmentType(int segtype) {
-        switch (segtype) {
-            case SEG_MOVETO:
-            case SEG_LINETO:
-                return 2;
-
-            case SEG_QUADTO:
-                return 4;
-
-            case SEG_CUBICTO:
-                return 6;
-        }
-        return 0;
+        return switch (segtype) {
+            case SEG_MOVETO, SEG_LINETO -> 2;
+            case SEG_QUADTO -> 4;
+            case SEG_CUBICTO -> 6;
+            default -> 0;
+        };
     }
 
     /**

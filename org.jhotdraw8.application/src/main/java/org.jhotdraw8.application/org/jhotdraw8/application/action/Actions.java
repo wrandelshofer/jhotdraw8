@@ -70,14 +70,12 @@ public class Actions {
         }
         control.setOnAction(action);
         control.disableProperty().bind(action.disabledProperty());
-        if (control instanceof CheckMenuItem) {
-            CheckMenuItem cmi = (CheckMenuItem) control;
+        if (control instanceof CheckMenuItem cmi) {
             Property<Boolean> selectedBinding = action.selectedProperty();
             selectedBinding.addListener((o, oldv, newv) -> cmi.setSelected(newv));
             cmi.setSelected(action.isSelected());
-        } else if (control instanceof RadioMenuItem) {
+        } else if (control instanceof RadioMenuItem cmi) {
             Property<Boolean> selectedBinding = action.selectedProperty();
-            RadioMenuItem cmi = (RadioMenuItem) control;
             selectedBinding.addListener((o, oldv, newv) -> cmi.setSelected(newv));
             cmi.setSelected(action.isSelected());
         }

@@ -60,24 +60,24 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     @Override
     public @Nullable ImmutableList<String> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<String> list = new ArrayList<>();
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         Loop:
         while (true) {
             switch (tt.next()) {
                 case CssTokenType.TT_STRING:
-                    if (buf.length() != 0) {
+                    if (!buf.isEmpty()) {
                         throw tt.createParseException("<font-family>: Comma expected.");
                     }
                     list.add(tt.currentStringNonNull());
                     break;
                 case CssTokenType.TT_IDENT:
-                    if (buf.length() != 0) {
+                    if (!buf.isEmpty()) {
                         buf.append(' ');
                     }
                     buf.append(tt.currentStringNonNull());
                     break;
                 case CssTokenType.TT_COMMA:
-                    if (buf.length() != 0) {
+                    if (!buf.isEmpty()) {
                         list.add(buf.toString());
                         buf.setLength(0);
                     }
@@ -126,14 +126,15 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
 
     @Override
     public @Nullable String getHelpText() {
-        return "Format of ⟨font-family⟩: ｛⟨family-name｜generic-family⟩,｝⟨family-name｜generic-family⟩"
-                + "\n  with ⟨family-name⟩: ⟨string⟩"
-                + "\n  with ⟨generic-family⟩: serif｜sans-serif｜cursive｜fantasy｜monospace"
+        return """
+               Format of ⟨font-family⟩: ｛⟨family-name｜generic-family⟩,｝⟨family-name｜generic-family⟩
+                 with ⟨family-name⟩: ⟨string⟩
+                 with ⟨generic-family⟩: serif｜sans-serif｜cursive｜fantasy｜monospace"""
                 ;
     }
 
     @Override
-    public boolean isNullable() {
+    public boolean nullable() {
         return false;
     }
 }

@@ -86,8 +86,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
             return this;
         }
         Map<K, V> clone = cloneFunction.apply(target);
-        if (c instanceof Collection<?>) {
-            Collection<?> coll = (Collection<?>) c;
+        if (c instanceof Collection<?> coll) {
             if (coll.isEmpty()) {
                 return this;
             }
@@ -116,7 +115,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
         } else if (c instanceof Collection<?> cc) {
             collection = (Collection<K>) cc;
         } else {
-            collection = new HashSet<K>();
+            collection = new HashSet<>();
             c.forEach(collection::add);
         }
         return clone.keySet().retainAll(collection) ? new ImmutableMapFacade<>(clone, cloneFunction) : this;

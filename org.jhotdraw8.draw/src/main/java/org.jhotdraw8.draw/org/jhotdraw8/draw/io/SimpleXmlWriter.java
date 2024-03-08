@@ -69,15 +69,15 @@ import java.util.Set;
  */
 public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected FigureFactory figureFactory;
-    protected IdFactory idFactory;
-    protected String namespaceQualifier;
+    final protected IdFactory idFactory;
+    final protected String namespaceQualifier;
     protected String namespaceURI;
     private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
 
     /**
      * Specifies the number of characters that should be used for indentation.
      */
-    public static NonNullObjectKey<Integer> INDENT_AMOUNT = new NonNullObjectKey<Integer>("indent-amount", Integer.class, 2);
+    final public static NonNullObjectKey<Integer> INDENT_AMOUNT = new NonNullObjectKey<>("indent-amount", Integer.class, 2);
 
     public SimpleXmlWriter(FigureFactory factory, IdFactory idFactory) {
         this(factory, idFactory, null, null);
@@ -190,9 +190,9 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         URI documentHome = null;
         try {
             if (selection == null || selection.isEmpty()) {
-                writeDocument(w, documentHome, drawing);
+                writeDocument(w, null, drawing);
             } else {
-                writeClipping(w, drawing, selection, documentHome);
+                writeClipping(w, drawing, selection, null);
             }
         } catch (XMLStreamException e) {
             throw new IOException(e);

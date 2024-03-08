@@ -82,8 +82,7 @@ public class CssPoint2D {
 
     @Override
     public @NonNull String toString() {
-        return "CssPoint2D{" +
-                "" + x +
+        return "CssPoint2D{" + x +
                 ", " + y +
                 '}';
     }
@@ -123,28 +122,16 @@ public class CssPoint2D {
         final double x, y;
         final CssSize px = p.getX();
         final CssSize py = p.getY();
-        switch (px.getUnits()) {
-        case UnitConverter.PERCENTAGE:
-            x = Math.fma(bounds.getWidth(), px.getValue() / 100.0, bounds.getMinX());
-            break;
-        case UnitConverter.DEFAULT:
-            x = Math.fma(bounds.getWidth(), px.getValue(), bounds.getMinX());
-            break;
-        default:
-            x = bounds.getMinX() + px.getConvertedValue();
-            break;
-        }
-        switch (py.getUnits()) {
-        case UnitConverter.PERCENTAGE:
-            y = Math.fma(bounds.getHeight(), py.getValue() / 100.0, bounds.getMinY());
-            break;
-        case UnitConverter.DEFAULT:
-            y = Math.fma(bounds.getHeight(), py.getValue(), bounds.getMinY());
-            break;
-        default:
-            y = bounds.getMinY() + py.getConvertedValue();
-            break;
-        }
+        x = switch (px.getUnits()) {
+            case UnitConverter.PERCENTAGE -> Math.fma(bounds.getWidth(), px.getValue() / 100.0, bounds.getMinX());
+            case UnitConverter.DEFAULT -> Math.fma(bounds.getWidth(), px.getValue(), bounds.getMinX());
+            default -> bounds.getMinX() + px.getConvertedValue();
+        };
+        y = switch (py.getUnits()) {
+            case UnitConverter.PERCENTAGE -> Math.fma(bounds.getHeight(), py.getValue() / 100.0, bounds.getMinY());
+            case UnitConverter.DEFAULT -> Math.fma(bounds.getHeight(), py.getValue(), bounds.getMinY());
+            default -> bounds.getMinY() + py.getConvertedValue();
+        };
         return new Point2D(x, y);
     }
 }

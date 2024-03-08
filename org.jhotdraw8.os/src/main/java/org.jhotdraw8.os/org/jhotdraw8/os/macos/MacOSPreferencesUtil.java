@@ -71,8 +71,8 @@ public class MacOSPreferencesUtil {
     public static @NonNull Map<String, Object> flatten(@NonNull Map<String, Object> map) {
         LinkedHashMap<String, Object> flattened = new LinkedHashMap<>();
         final Object plist = map.get("plist");
-        if (plist instanceof List) {
-            for (Object o : (List) plist) {
+        if (plist instanceof List<?> list) {
+            for (Object o : list) {
                 if (o instanceof Map) {
                     flattened.putAll((Map<String, Object>) o);
                 }
@@ -84,8 +84,8 @@ public class MacOSPreferencesUtil {
     public static @Nullable Object get(@NonNull Map<String, Object> map, @NonNull String key) {
         final String[] split = key.split("\t");
         final Object plist = map.get("plist");
-        if (plist instanceof List) {
-            for (Object o : (List) plist) {
+        if (plist instanceof List<?> list) {
+            for (Object o : list) {
                 if (o instanceof Map) {
                     @SuppressWarnings("unchecked")
                     Map<String, Object> m = (Map<String, Object>) o;
@@ -153,7 +153,7 @@ public class MacOSPreferencesUtil {
             cachedFiles = new ConcurrentHashMap<>();
         }
         if (!cachedFiles.containsKey(file)) {
-            Map<String, Object> cache = new HashMap<String, Object>();
+            Map<String, Object> cache = new HashMap<>();
             try {
                 FileTime lastModifiedTime = Files.getLastModifiedTime(file.toPath());
                 cache.put("lastModifiedTime", lastModifiedTime);

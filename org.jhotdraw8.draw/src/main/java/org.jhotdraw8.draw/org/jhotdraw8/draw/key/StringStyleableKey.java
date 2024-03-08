@@ -18,7 +18,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 public class StringStyleableKey extends AbstractStyleableKey<@NonNull String>
         implements WritableStyleableMapAccessor<@NonNull String>, NonNullKey<@NonNull String> {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final @NonNull StringCssConverter converter;
 
     /**

@@ -115,7 +115,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @return breadth first search
      */
     default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
-        return new BfsDfsVertexSpliterator<V>(this::getPrevVertices, start, visited, dfs);
+        return new BfsDfsVertexSpliterator<>(this::getPrevVertices, start, visited, dfs);
     }
 
 }

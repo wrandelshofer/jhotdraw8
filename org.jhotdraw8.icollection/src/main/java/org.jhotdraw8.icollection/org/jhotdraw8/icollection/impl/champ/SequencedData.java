@@ -81,7 +81,7 @@ public interface SequencedData {
         ChangeEvent<K> details = new ChangeEvent<>();
         BiFunction<K, K, K> forceUpdate = (oldk, newk) -> newk;
         int seq = 0;
-        for (var i = Spliterators.iterator(new TombSkippingVectorSpliterator<K>(vector, o -> (K) o, 0, size, sizeWithTombstones, 0)); i.hasNext(); ) {
+        for (var i = Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector, o -> (K) o, 0, size, sizeWithTombstones, 0)); i.hasNext(); ) {
             K current = i.next();
             K data = factoryFunction.apply(current, seq++);
             renumberedVector = renumberedVector.add(data);

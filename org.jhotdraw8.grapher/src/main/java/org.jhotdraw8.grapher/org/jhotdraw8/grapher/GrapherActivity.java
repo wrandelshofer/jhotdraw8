@@ -362,9 +362,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         //drawingView.setHandleType(HandleType.TRANSFORM);
         //
         DrawingModel model = drawingView.getModel();
-        model.addListener(drawingModel -> {
-            modified.set(true);
-        });
+        model.addListener(drawingModel -> modified.set(true));
         final DrawingModelUndoAdapter undoAdapter = new DrawingModelUndoAdapter(model);
         undoAdapter.setResourceBundle(getApplication().getResources().asResourceBundle());
         undoAdapter.addUndoEditListener(undoManager);
@@ -437,8 +435,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
                 SequencedSet<Dockable> items = new LinkedHashSet<>();
                 for (Track track : list) {
                     for (DockChild n : track.getDockChildren()) {
-                        if (n instanceof Dockable) {
-                            Dockable dd = (Dockable) n;
+                        if (n instanceof Dockable dd) {
                             items.add(dd);
                             @SuppressWarnings("unchecked")
                             Inspector<DrawingView> i = (Inspector<DrawingView>) dd.getNode().getProperties().get("inspector");
@@ -483,9 +480,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             SimpleXmlReader io = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             System.out.println("READING..." + uri);
-            if (drawing != null) {
-                applyUserAgentStylesheet(drawing);
-            }
+            applyUserAgentStylesheet(drawing);
             return drawing;
         }).thenApply(drawing -> {
             drawingView.setDrawing(drawing);

@@ -19,14 +19,10 @@ import org.jhotdraw8.base.function.Function3;
  * @param <A> the arrow data type
  * @param <C> the cost number type
  */
-class CheckedNonNegativeArcCostFunction3<V, A, C extends Number & Comparable<C>> implements Function3<V, V, A, C> {
-    final @NonNull C zero;
-    final @NonNull Function3<V, V, A, C> costFunction;
-
-    public CheckedNonNegativeArcCostFunction3(@NonNull C zero, @NonNull Function3<V, V, A, C> costFunction) {
+record CheckedNonNegativeArcCostFunction3<V, A, C extends Number & Comparable<C>>(@NonNull C zero,
+                                                                                  @NonNull Function3<V, V, A, C> costFunction) implements Function3<V, V, A, C> {
+    CheckedNonNegativeArcCostFunction3 {
         AlgoArguments.checkZero(zero);
-        this.zero = zero;
-        this.costFunction = costFunction;
     }
 
     @Override

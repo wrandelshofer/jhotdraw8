@@ -87,7 +87,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
     public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
-                throw new IllegalArgumentException("value is not nullable. enum type:" + enumClass + " value:" + value);
+                throw new IllegalArgumentException("value is not nullable. enum type:" + enumClass + " value:" + null);
             }
             consumer.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
@@ -114,7 +114,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
     }
 
     @Override
-    public boolean isNullable() {
+    public boolean nullable() {
         return nullable;
     }
 

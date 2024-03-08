@@ -35,7 +35,7 @@ public class CssFontPicker extends AbstractPicker<CssFont> {
         CssFont initial = initialValue == null ? new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, CssSize.of(13)) : initialValue;
         update(anchor);
         Optional<FontFamilySize> s = dialog.showAndWait(new FontFamilySize(initial.getFamily(), initial.getSize().getConvertedValue()));
-        s.ifPresent(v -> callback.accept(true, new CssFont(v.getFamily(), initial.getWeight(), initial.getPosture(),
-                CssSize.of(v.getSize()))));
+        s.ifPresent(v -> callback.accept(true, new CssFont(v.family(), initial.getWeight(), initial.getPosture(),
+                CssSize.of(v.size()))));
     }
 }

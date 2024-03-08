@@ -86,8 +86,7 @@ public class CssPoint3D {
 
     @Override
     public @NonNull String toString() {
-        return "CssPoint3D{" +
-                "" + x +
+        return "CssPoint3D{" + x +
                 ", " + y +
                 ", " + z +
                 '}';

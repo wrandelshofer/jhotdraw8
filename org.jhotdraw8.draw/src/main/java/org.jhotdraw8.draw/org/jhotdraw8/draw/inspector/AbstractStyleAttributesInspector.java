@@ -79,15 +79,12 @@ import java.lang.ref.WeakReference;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -181,9 +178,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     {
-        SetChangeListener<E> listener = change -> {
-            invalidateTextArea(selection);
-        };
+        SetChangeListener<E> listener = change -> invalidateTextArea(selection);
         selection.addListener((o, oldv, newv) -> {
             if (oldv != null) {
                 oldv.removeListener(listener);
@@ -297,18 +292,18 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     if (!filter.test(qname)) {
                         continue;
                     }
-                    String attribute = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
+                    String attribute = buildString(selectorModel.getAttribute(f, origin, qname.namespace(), qname.name()));
                     attr.put(qname, attribute == null ? UNSPECIFIED_VALUE_PLACEHOLDER : attribute);
                 }
             } else {
                 for (Iterator<QualifiedName> i = attr.keySet().iterator(); i.hasNext(); ) {
                     QualifiedName qname = i.next();
-                    if (!selectorModel.hasAttribute(f, qname.getNamespace(), qname.getName())) {
+                    if (!selectorModel.hasAttribute(f, qname.namespace(), qname.name())) {
                         i.remove();
                         continue;
                     }
                     String oldAttrValue = attr.get(qname);
-                    String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.getNamespace(), qname.getName()));
+                    String newAttrValue = buildString(selectorModel.getAttribute(f, origin, qname.namespace(), qname.name()));
                     if (newAttrValue == null) {
                         newAttrValue = UNSPECIFIED_VALUE_PLACEHOLDER;
                     }
@@ -337,7 +332,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         for (E f : figures) {
             for (QualifiedName qname : selectorModel.getAttributeNames(f)) {
-                Converter<?> c = getConverter(selectorModel, f, qname.getNamespace(), qname.getName());
+                Converter<?> c = getConverter(selectorModel, f, qname.namespace(), qname.name());
                 String helpText = c == null ? null : c.getHelpText();
                 if (helpText != null) {
                     helpTexts.put(qname, helpText);
@@ -360,9 +355,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
     protected @NonNull <T> Picker<T> createPicker(@NonNull WritableStyleableMapAccessor<T> acc) {
         Class<T> type = acc.getRawValueType();
         boolean nullable = true;
-        if (acc.getCssConverter() instanceof CssConverter) {
-            CssConverter<T> converter = (CssConverter<T>) acc.getCssConverter();
-            nullable = converter.isNullable();
+        if (acc.getCssConverter() instanceof CssConverter<T> converter) {
+            nullable = converter.nullable();
         }
         Picker<?> p = null;
         if (type == Boolean.class) {
@@ -421,10 +415,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
 
         List<SimpleSelector> selectors = new ArrayList<>();
-        if (type != null && !type.getName().isEmpty()) {
-            selectors.add(new TypeSelector(null, TypeSelector.ANY_NAMESPACE, type.getName()));
+        if (type != null && !type.name().isEmpty()) {
+            selectors.add(new TypeSelector(null, TypeSelector.ANY_NAMESPACE, type.name()));
         }
-        if (id != null && id.length() > 0) {
+        if (id != null && !id.isEmpty()) {
             selectors.add(new IdSelector(null, id));
         }
         for (String clazz : styleClasses) {
@@ -441,7 +435,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 prev = s;
             }
         }
-        return new SelectorGroup(null, Arrays.asList(prev));
+        return new SelectorGroup(null, Collections.singletonList(prev));
     }
 
     /**
@@ -558,14 +552,11 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
-        EventHandler<? super KeyEvent> eventHandler = new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(@NonNull KeyEvent event) {
-                if (event.getCode() == KeyCode.ENTER &&
-                        (event.isAltDown() || event.isControlDown())) {
-                    event.consume();
-                    apply(null);
-                }
+        EventHandler<? super KeyEvent> eventHandler = (EventHandler<KeyEvent>) event -> {
+            if (event.getCode() == KeyCode.ENTER &&
+                    (event.isAltDown() || event.isControlDown())) {
+                event.consume();
+                apply(null);
             }
         };
         textArea.addEventHandler(KeyEvent.KEY_PRESSED, eventHandler);
@@ -694,7 +685,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
             showSelection();
         } catch (IOException ex) {
             ex.printStackTrace();
-            return;
         }
 
     }
@@ -836,14 +826,12 @@ public abstract class AbstractStyleAttributesInspector<E> {
                     stylesheetInfos.add(stylesheet);
                 }
                 break;
-            case USER:
+                case USER, INLINE:
                 break;
             case AUTHOR:
                 if (showStylesheetValues.isSelected()) {
                     stylesheetInfos.add(stylesheet);
                 }
-                break;
-            case INLINE:
                 break;
             }
         }
@@ -921,7 +909,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         selector.produceTokens(t -> pp.append(t.fromToken()));
         pp.append(" {");
         for (Map.Entry<QualifiedName, String> a : attr.entrySet()) {
-            pp.append("\n  ").append(a.getKey().getName()).append(": ");
+            pp.append("\n  ").append(a.getKey().name()).append(": ");
             pp.append(a.getValue());
             pp.append(";");
         }
@@ -948,22 +936,13 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
     }
 
-    private static class LookupEntry implements Comparable<LookupEntry> {
-
-        final int position;
-        final StyleRule styleRule;
-        final Declaration declaration;
-
-        public LookupEntry(int position, StyleRule styleRule, Declaration declaration) {
-            this.position = position;
-            this.styleRule = styleRule;
-            this.declaration = declaration;
-        }
+    private record LookupEntry(int position, StyleRule styleRule,
+                               Declaration declaration) implements Comparable<LookupEntry> {
 
         @Override
-        public int compareTo(@NonNull LookupEntry o) {
-            return this.position - o.position;
-        }
+            public int compareTo(@NonNull LookupEntry o) {
+                return this.position - o.position;
+            }
 
-    }
+        }
 }

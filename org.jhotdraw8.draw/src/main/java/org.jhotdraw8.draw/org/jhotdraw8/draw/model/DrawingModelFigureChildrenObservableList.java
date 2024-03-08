@@ -37,7 +37,7 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
             final Figure node = event.getNode();
             if (node != null && node.getParent() == parent) {
                 final int index = node.getParent().getChildren().indexOf(node);
-                fireChange(new ListChangeListener.Change<Figure>(this) {
+                fireChange(new ListChangeListener.Change<>(this) {
                     private boolean invalid = true;
 
                     @Override
@@ -126,8 +126,7 @@ public class DrawingModelFigureChildrenObservableList extends TransformationList
 
     @Override
     public boolean remove(Object o) {
-        if (o instanceof Figure) {
-            final Figure f = (Figure) o;
+        if (o instanceof Figure f) {
             if (f.getParent() != null) {
                 model.removeFromParent(f);
             }

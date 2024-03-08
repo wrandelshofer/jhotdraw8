@@ -34,7 +34,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
     private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
     @SuppressWarnings("unchecked")
-    Node<K>[] nodes = new Node[MAX_DEPTH];
+    final Node<K>[] nodes = new Node[MAX_DEPTH];
 
     @SuppressWarnings("unchecked")
     public ChampIterator(@NonNull Node<K> rootNode, @Nullable Function<K, E> mappingFunction) {

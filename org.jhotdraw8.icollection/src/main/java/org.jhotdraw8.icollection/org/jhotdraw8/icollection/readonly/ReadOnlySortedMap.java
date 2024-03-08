@@ -64,7 +64,7 @@ public interface ReadOnlySortedMap<K, V> extends ReadOnlySequencedMap<K, V> {
     @NonNull
     @Override
     default Spliterator<Map.Entry<K, V>> spliterator() {
-        return new IteratorSpliterator<Map.Entry<K, V>>(
+        return new IteratorSpliterator<>(
                 iterator(), size(), characteristics(),
                 comparator() == null ? null : Map.Entry.comparingByKey(comparator()));
     }

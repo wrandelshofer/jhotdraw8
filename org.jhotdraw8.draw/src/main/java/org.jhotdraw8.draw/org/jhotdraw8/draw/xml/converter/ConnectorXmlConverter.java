@@ -67,9 +67,8 @@ public class ConnectorXmlConverter implements Converter<Connector> {
         String name = connectorToChoiceMap.get(value.getClass());
         Objects.requireNonNull(name, "unsupported connector:" + value);
         out.append(name);
-        if (value instanceof LocatorConnector) {
+        if (value instanceof LocatorConnector lc) {
             out.append(" ");
-            LocatorConnector lc = (LocatorConnector) value;
             locatorConverter.toString(out, idSupplier, lc.getLocator());
         }
     }

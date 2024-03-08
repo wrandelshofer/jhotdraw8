@@ -109,9 +109,7 @@ public class IntersectCubicCurveRay {
         // might not be on the line segment.
         // Find intersections and calculate point coordinates
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
-        for (int i = 0; i < roots.length; i++) {
-            final double t = roots[i];
-
+        for (final double t : roots) {
             if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier
@@ -228,9 +226,7 @@ public class IntersectCubicCurveRay {
         // might not be on the line segment.
         // Find intersections and calculate point coordinates
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
-        for (int i = 0; i < roots.length; i++) {
-            double t = roots[i];
-
+        for (double t : roots) {
             if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
                 // Find point on Bezier

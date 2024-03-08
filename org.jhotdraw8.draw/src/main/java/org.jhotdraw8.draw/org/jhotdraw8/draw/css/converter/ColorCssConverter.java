@@ -111,7 +111,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
      */
     private final static @NonNull FloatConverter number = new FloatConverter();
 
-    boolean nullable;
+    final boolean nullable;
 
     public ColorCssConverter() {
         this(false);
@@ -147,7 +147,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     }
 
     @Override
-    public boolean isNullable() {
+    public boolean nullable() {
         return nullable;
     }
 
@@ -167,27 +167,10 @@ public class ColorCssConverter implements CssConverter<CssColor> {
             case CssTokenType.TT_FUNCTION -> {
                 tt.pushBack();
                 yield switch (tt.currentStringNonNull().toLowerCase()) {
-                    case "rgb", "rgba" -> {
-                        yield parseRgbFunction(tt);
-                    }
-                    case "hsl", "hsla" -> {
-                        yield parseHslFunction(tt);
-                    }
-                    case "hsb", "hsba" -> {
-                        yield parseHsbFunction(tt);
-                    }
-                    case "hwb" -> {
-                        yield null;
-                    }
-                    case "lab" -> {
-                        yield null;
-                    }
-                    case "oklab" -> {
-                        yield null;
-                    }
-                    case "oklch" -> {
-                        yield null;
-                    }
+                    case "rgb", "rgba" -> parseRgbFunction(tt);
+                    case "hsl", "hsla" -> parseHslFunction(tt);
+                    case "hsb", "hsba" -> parseHsbFunction(tt);
+                    case "hwb", "oklch", "oklab", "lab" -> null;
                     case "color" -> parseColorFunction(tt);
                     default ->
                             throw tt.createParseException("CssColor: unsupported function: " + tt.currentStringNonNull() + "().");
@@ -249,9 +232,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                             if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
                             params.add(CssSize.ZERO);
                         }
-                        default -> {
-                            throw tt.createParseException("CssColor: 'none' expected.");
-                        }
+                        default -> throw tt.createParseException("CssColor: 'none' expected.");
                     }
                 }
             }
@@ -265,18 +246,10 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     private static float toDeg(@NonNull CssSize size, @NonNull CssTokenizer tt) throws ParseException {
         double v = size.getValue();
         return (float) switch (size.getUnits()) {
-            case "", "deg" -> {
-                yield v;
-            }
-            case "grad" -> {
-                yield v * 360f / 400f;
-            }
-            case "rad" -> {
-                yield v * (360f / 2f) / Math.PI;
-            }
-            case "turn" -> {
-                yield v * 360f;
-            }
+            case "", "deg" -> v;
+            case "grad" -> v * 360f / 400f;
+            case "rad" -> v * (360f / 2f) / Math.PI;
+            case "turn" -> v * 360f;
             default -> throw tt.createParseException("CssColor: unsupported dimension: '" + size.getUnits() + "'.");
         };
     }
@@ -438,9 +411,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                     throw tt.createParseException("CssColor: hex color expected.");
                 }
             }
-            case CssTokenType.TT_HASH -> {
-                yield parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
-            }
+            case CssTokenType.TT_HASH -> parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
             default -> throw tt.createParseException("CssColor: hex color expected.");
         };
     }

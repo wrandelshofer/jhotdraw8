@@ -28,19 +28,13 @@ public class TreeModelEventUndoableEdit<T> extends AbstractUndoableEdit {
             case ROOT_CHANGED:
                 event.getSource().setRoot(event.getOldRoot());
                 break;
-            case SUBTREE_NODES_CHANGED:
+            case SUBTREE_NODES_CHANGED, NODE_CHANGED, NODE_REMOVED_FROM_TREE, NODE_ADDED_TO_TREE:
                 break;
             case NODE_ADDED_TO_PARENT:
                 event.getSource().removeFromParent(event.getChild());
                 break;
             case NODE_REMOVED_FROM_PARENT:
                 event.getSource().insertChildAt(event.getChild(), event.getParent(), event.getChildIndex());
-                break;
-            case NODE_ADDED_TO_TREE:
-                break;
-            case NODE_REMOVED_FROM_TREE:
-                break;
-            case NODE_CHANGED:
                 break;
         }
     }
@@ -51,7 +45,7 @@ public class TreeModelEventUndoableEdit<T> extends AbstractUndoableEdit {
             case ROOT_CHANGED:
                 event.getSource().setRoot(event.getNewRoot());
                 break;
-            case SUBTREE_NODES_CHANGED:
+            case SUBTREE_NODES_CHANGED, NODE_CHANGED, NODE_REMOVED_FROM_TREE, NODE_ADDED_TO_TREE:
                 break;
             case NODE_ADDED_TO_PARENT:
                 event.getSource().insertChildAt(event.getChild(), event.getParent(), event.getChildIndex());
@@ -59,35 +53,15 @@ public class TreeModelEventUndoableEdit<T> extends AbstractUndoableEdit {
             case NODE_REMOVED_FROM_PARENT:
                 event.getSource().removeFromParent(event.getChild());
                 break;
-            case NODE_ADDED_TO_TREE:
-                break;
-            case NODE_REMOVED_FROM_TREE:
-                break;
-            case NODE_CHANGED:
-                break;
         }
     }
 
     @Override
     public boolean isSignificant() {
-        switch (event.getEventType()) {
-            case ROOT_CHANGED:
-                return true;
-            case SUBTREE_NODES_CHANGED:
-                return false;
-            case NODE_ADDED_TO_PARENT:
-                return true;
-            case NODE_REMOVED_FROM_PARENT:
-                return true;
-            case NODE_ADDED_TO_TREE:
-                return false;
-            case NODE_REMOVED_FROM_TREE:
-                return false;
-            case NODE_CHANGED:
-                return false;
-            default:
-                throw new IllegalArgumentException();
-        }
+        return switch (event.getEventType()) {
+            case ROOT_CHANGED, NODE_REMOVED_FROM_PARENT, NODE_ADDED_TO_PARENT -> true;
+            case SUBTREE_NODES_CHANGED, NODE_CHANGED, NODE_REMOVED_FROM_TREE, NODE_ADDED_TO_TREE -> false;
+        };
     }
 
     @Override

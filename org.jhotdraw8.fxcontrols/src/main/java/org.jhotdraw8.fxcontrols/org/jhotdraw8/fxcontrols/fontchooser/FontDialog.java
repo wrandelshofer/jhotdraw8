@@ -88,8 +88,8 @@ public class FontDialog extends Dialog<FontFamilySize> {
 
     public final Optional<FontFamilySize> showAndWait(@Nullable FontFamilySize font) {
         if (font != null) {
-            selectFontName(font.getFamily());
-            controller.setFontSize(font.getSize());
+            selectFontName(font.family());
+            controller.setFontSize(font.size());
         }
         return showAndWait();
     }

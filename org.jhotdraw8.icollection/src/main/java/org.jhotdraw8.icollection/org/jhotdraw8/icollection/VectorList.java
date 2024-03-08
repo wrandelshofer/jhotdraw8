@@ -152,12 +152,12 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> VectorList<T> ofIterator(Iterator<T> iterator) {
-        return VectorList.<T>of().addAll(() -> (Iterator<T>) iterator);
+        return VectorList.<T>of().addAll(() -> iterator);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> VectorList<T> ofStream(Stream<T> stream) {
-        return VectorList.<T>of().addAll(() -> (Iterator<T>) stream.iterator());
+        return VectorList.<T>of().addAll(() -> stream.iterator());
     }
 
     @SuppressWarnings("unchecked")
@@ -247,7 +247,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlyListFacade<>(
-                () -> size(),
+                this::size,
                 index -> get(size() - 1 - index),
                 () -> this);
     }

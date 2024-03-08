@@ -44,6 +44,6 @@ public class FontAction extends AbstractActivityAction<FontableActivity> {
         FontableActivity foa = activity;
         Optional<FontFamilySize> fontFamilySize = fontDialog.showAndWait(
                 new FontFamilySize(foa.getFont().getFamily(), foa.getFont().getSize()));
-        fontFamilySize.ifPresent(f -> foa.setFont(Font.font(f.getFamily(), f.getSize())));
+        fontFamilySize.ifPresent(f -> foa.setFont(Font.font(f.family(), f.size())));
     }
 }

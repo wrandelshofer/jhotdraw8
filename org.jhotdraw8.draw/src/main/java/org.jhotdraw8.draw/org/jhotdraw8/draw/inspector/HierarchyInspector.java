@@ -57,7 +57,6 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.IdentityHashMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.ResourceBundle;
@@ -120,7 +119,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             MenuItem deleteMenuItem = new MenuItem(InspectorLabels.getResources().getString("edit.delete.text"));
             contextMenu.getItems().add(deleteMenuItem);
 
-            TreeTableRow<Figure> row = new TreeTableRow<Figure>() {
+            TreeTableRow<Figure> row = new TreeTableRow<>() {
                 @Override
                 public void updateItem(Figure item, boolean empty) {
                     super.updateItem(item, empty);
@@ -180,7 +179,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         }
 
         Supplier<Map<Figure, TreeItem<Figure>>> mapSupplier = IdentityHashMap::new;
-        model = new SimpleTreePresentationModel<Figure>(mapSupplier);
+        model = new SimpleTreePresentationModel<>(mapSupplier);
         stubDrawingModel.setDrawing(new SimpleDrawing());
         model.setTreeModel(stubDrawingModel);
         typeColumn.setCellValueFactory(cell -> new ReadOnlyObjectWrapper<>(
@@ -200,7 +199,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                         cell.getValue() == null ? null : cell.getValue().getValue(), LockableFigure.LOCKED)
         );
         // Type arguments needed for Java 8!
-        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<ImmutableSet<String>>((DrawingModel) model.getTreeModel(),
+        styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
                     @Override
                     public @Nullable ImmutableSet<String> getValue() {
@@ -227,7 +226,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
 
                     @Override
                     public @NonNull TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
-                        return new TextFieldTreeTableCell<Figure, String>(new DefaultStringConverter()) {
+                        return new TextFieldTreeTableCell<>(new DefaultStringConverter()) {
                             @Override
                             public void cancelEdit() {
                                 super.cancelEdit();
@@ -275,14 +274,14 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         // And it ensures, that the users sees the computed style classes, and not the ones that he entered.
         // And it ensures, that the synthetic synthetic style classes are not stored in the STYLE_CLASSES attribute.
         // Type arguments needed for Java 8!
-        styleClassesColumn.setCellFactory(new Callback<TreeTableColumn<Figure, ImmutableSet<String>>, TreeTableCell<Figure, ImmutableSet<String>>>() {
+        styleClassesColumn.setCellFactory(new Callback<>() {
             // FIXME This column should be bound to the styleClasses of the figure,
             //   so that it updates automatically.
 
             @Override
             public @NonNull TreeTableCell<Figure, ImmutableSet<String>> call(TreeTableColumn<Figure, ImmutableSet<String>> paramTableColumn) {
                 // Type arguments needed for Java 8!
-                return new TextFieldTreeTableCell<Figure, ImmutableSet<String>>() {
+                return new TextFieldTreeTableCell<>() {
                     private final @NonNull Set<String> syntheticClasses = new HashSet<>();
 
                     {
@@ -343,7 +342,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             {
                 // FIXME This column should be bound to the pseudoClasses of the figure,
                 //   so that it updates automatically.
-                setConverter(new StringConverterAdapter<ImmutableSet<String>>(wordSetConverter));
+                setConverter(new StringConverterAdapter<>(wordSetConverter));
                 setEditable(false);
                 this.setStyle("-fx-text-fill: grey");
             }

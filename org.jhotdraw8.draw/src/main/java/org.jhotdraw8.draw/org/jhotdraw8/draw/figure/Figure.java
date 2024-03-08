@@ -353,8 +353,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         } else if (handleType == HandleType.TRANSFORM) {
             list.add(new BoundsInTranslationOutlineHandle(this));
             list.add(new BoundsInLocalOutlineHandle(this));
-            if (this instanceof TransformableFigure) {
-                TransformableFigure tf = (TransformableFigure) this;
+            if (this instanceof TransformableFigure tf) {
                 list.add(new RotateHandle(tf));
                 TransformHandleKit.addTransformHandles(tf, list);
             }

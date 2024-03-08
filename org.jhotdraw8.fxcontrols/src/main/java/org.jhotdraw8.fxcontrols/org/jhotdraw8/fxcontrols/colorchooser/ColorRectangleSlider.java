@@ -267,7 +267,6 @@ public class ColorRectangleSlider extends AbstractColorSlider {
                 setXValue(clamp((float) xSnappedToTick, xMin, xMax));
             }
         }
-        ;
     }
 
 

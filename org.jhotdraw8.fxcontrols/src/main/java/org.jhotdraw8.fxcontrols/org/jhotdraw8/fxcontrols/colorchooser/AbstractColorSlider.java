@@ -91,14 +91,14 @@ public abstract class AbstractColorSlider extends Pane {
     /**
      * The color space of the components.
      */
-    protected final @NonNull ObjectProperty<NamedColorSpace> targetColorSpace = new SimpleObjectProperty(this, "targetColorSpace");
-    protected final @NonNull ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty(this, "sourceColorSpace");
+    protected final @NonNull ObjectProperty<NamedColorSpace> targetColorSpace = new SimpleObjectProperty<>(this, "targetColorSpace");
+    protected final @NonNull ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty<>(this, "sourceColorSpace");
     /**
      * The color space of the display.
      */
-    protected final @NonNull ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty(this, "displayColorSpace");
+    protected final @NonNull ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(this, "displayColorSpace");
     protected final @NonNull ObjectProperty<ToIntFunction<Integer>> rgbFilter = new SimpleObjectProperty<>(this, "rgbFilter",
-            i -> (int) i
+            i -> i
     );
     /**
      * Indicates whether the value of the slider should always be aligned with the tick marks.
@@ -292,8 +292,6 @@ public abstract class AbstractColorSlider extends Pane {
         thumb.setShape(path);
         thumb.setBackground(new Background(new BackgroundFill(Color.rgb(250, 250, 250),
                 null, null)));
-        //sliderThumb.setBorder(new Border(new BorderStroke(Color.rgb(128, 128, 128), BorderStrokeStyle.SOLID, null, null)));
-        // sliderThumb.setEffect(new DropShadow(BlurType.GAUSSIAN,Color.BLACK,3,4,0,1));
         thumb.setEffect(new DropShadow(BlurType.THREE_PASS_BOX, Color.BLACK, 2, 0.0, 0, 1));
 
         // XXX this should be done by a stylesheet
@@ -319,10 +317,6 @@ public abstract class AbstractColorSlider extends Pane {
         targetColorSpaceProperty().addListener(propertyListener);
         sourceColorSpaceProperty().addListener(propertyListener);
         displayColorSpaceProperty().addListener(propertyListener);
-        // c0Property().addListener(propertyListener);
-        // c1Property().addListener(propertyListener);
-        // c2Property().addListener(propertyListener);
-        // c3Property().addListener(propertyListener);
         alphaProperty().addListener(propertyListener);
         alphaProperty().addListener(propertyListener);
 
@@ -433,7 +427,7 @@ public abstract class AbstractColorSlider extends Pane {
     ) {
     }
 
-    abstract static class AbstractFillTask implements Consumer<TileTask.Tile> {
+    public abstract static class AbstractFillTask implements Consumer<TileTask.Tile> {
         protected final @NonNull FillTaskRecord record;
 
         public AbstractFillTask(@NonNull FillTaskRecord record) {

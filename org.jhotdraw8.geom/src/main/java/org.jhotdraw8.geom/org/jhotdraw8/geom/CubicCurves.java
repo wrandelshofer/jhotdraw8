@@ -295,7 +295,7 @@ public class CubicCurves {
         y0123 = lerp(y012, y123, t);
 
         if (f != null) {
-            f[fo + 0] = x0;
+            f[fo] = x0;
             f[fo + 1] = y0;
             f[fo + 2] = x01;
             f[fo + 3] = y01;
@@ -305,7 +305,7 @@ public class CubicCurves {
             f[fo + 7] = y0123;
         }
         if (s != null) {
-            s[so + 0] = x0123;
+            s[so] = x0123;
             s[so + 1] = y0123;
             s[so + 2] = x123;
             s[so + 3] = y123;

@@ -31,11 +31,8 @@ import java.io.IOException;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.SequencedMap;
 import java.util.Set;
@@ -111,7 +108,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
         if (out == null) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         } else {
-            SequencedMap<DataFormat, Object> content = new LinkedHashMap<DataFormat, Object>() {
+            SequencedMap<DataFormat, Object> content = new LinkedHashMap<>() {
                 @Serial
                 private static final long serialVersionUID = 0L;
 

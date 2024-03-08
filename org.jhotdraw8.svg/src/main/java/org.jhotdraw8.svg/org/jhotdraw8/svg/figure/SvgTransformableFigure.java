@@ -132,7 +132,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
 
             ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             if (t != null && !t.isEmpty()) {
-                l2p = FXTransforms.concat(l2p, getTransform());
+                l2p = FXTransforms.concat(null, getTransform());
             }
             if (l2p == null) {
                 l2p = FXTransforms.IDENTITY;
@@ -233,8 +233,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         }
         Transform parentToLocal = getParentToLocal();
         if (hasCenters || hasTransforms()) {
-            if (transform instanceof Translate) {
-                Translate translate = (Translate) transform;
+            if (transform instanceof Translate translate) {
                 if (!hasCenters) {
                     Point2D p = parentToLocal == null ? new Point2D(translate.getTx(), translate.getTy())
                             : parentToLocal.deltaTransform(translate.getTx(), translate.getTy());
@@ -285,8 +284,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (t.isIdentity()) {
             return;
         }
-        if (t instanceof Translate) {
-            Translate tr = (Translate) t;
+        if (t instanceof Translate tr) {
             flattenTransforms();
             ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {

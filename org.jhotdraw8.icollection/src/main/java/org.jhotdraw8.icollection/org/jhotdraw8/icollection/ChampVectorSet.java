@@ -152,8 +152,6 @@ public class ChampVectorSet<E>
                                    int size, int offset) {
     }
 
-    ;
-
     /**
      * Creates a new instance with the provided privateData data object.
      * <p>
@@ -290,7 +288,7 @@ public class ChampVectorSet<E>
     private @NonNull ChampVectorSet<E> addLast(@Nullable E e,
                                                boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
-        var newElem = new SequencedElement<E>(e, vector.size() - offset);
+        var newElem = new SequencedElement<>(e, vector.size() - offset);
         var newRoot = root.put(null, newElem,
                 SequencedElement.keyHash(e), 0, details,
                 moveToLast ? SequencedElement::putAndMoveToLast : SequencedElement::put,
@@ -337,8 +335,7 @@ public class ChampVectorSet<E>
         if (other == null) {
             return false;
         }
-        if (other instanceof ChampVectorSet) {
-            ChampVectorSet<?> that = (ChampVectorSet<?>) other;
+        if (other instanceof ChampVectorSet<?> that) {
             return size == that.size && root.equivalent(that.root);
         } else {
             return ReadOnlySet.setEquals(this, other);

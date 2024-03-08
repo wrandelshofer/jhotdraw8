@@ -155,10 +155,11 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     public @NonNull String getHelpText() {
-        return "PolyCreationTool"
-                + "\n  Click on the drawing view. The tool will create a new polygon with a point at that location."
-                + "\n  Continue clicking on the drawing view. The tool will add each clicked point to the created polygon."
-                + "\n  Press enter or escape, when you are done.";
+        return """
+               PolyCreationTool
+                 Click on the drawing view. The tool will create a new polygon with a point at that location.
+                 Continue clicking on the drawing view. The tool will add each clicked point to the created polygon.
+                 Press enter or escape, when you are done.""";
     }
 
 }

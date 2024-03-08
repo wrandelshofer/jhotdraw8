@@ -125,8 +125,7 @@ public class CssInsets {
 
     @Override
     public @NonNull String toString() {
-        return "CssInsets{" +
-                "" + bottom +
+        return "CssInsets{" + bottom +
                 ", " + left +
                 ", " + right +
                 ", " + top +

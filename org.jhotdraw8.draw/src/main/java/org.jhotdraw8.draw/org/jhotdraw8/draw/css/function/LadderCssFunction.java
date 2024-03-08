@@ -80,7 +80,7 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
         tt.pushBack();
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, getName() + "():  ')' expected.");
 
-        double brightness = primaryColor == null || primaryColor.getColor() == null ? 0.0
+        double brightness = primaryColor == null ? 0.0
                 : primaryColor.getColor().getBrightness();
         CssColor computedColor = interpolate(brightness, ladder);
         converter.produceTokens(computedColor, null, out);
@@ -109,17 +109,12 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
     }
 
     protected @NonNull CssSize parsePercentageValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
-        CssSize size = null;
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            size = CssSize.of(tt.currentNumberNonNull().doubleValue());
-            break;
-        case CssTokenType.TT_PERCENTAGE:
-            size = CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
-            break;
-        default:
-            throw tt.createParseException(getName() + "(): percentage value expected.");
-        }
+        CssSize size = switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> CssSize.of(tt.currentNumberNonNull().doubleValue());
+            case CssTokenType.TT_PERCENTAGE ->
+                    CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+            default -> throw tt.createParseException(getName() + "(): percentage value expected.");
+        };
         return size;
 
     }
@@ -134,7 +129,6 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
                 "color value within that gradient. At 0% brightness, the color" +
                 " at the 0.0 end of the gradient is used; at 100% brightness, " +
                 "the color at the 1.0 end of the gradient is used; and at 50% brightness, " +
-                "the color at 0.5, the midway point of the gradient, is used." +
-                "";
+                "the color at 0.5, the midway point of the gradient, is used.";
     }
 }

@@ -50,8 +50,7 @@ public abstract class FxmlApplication extends Application {
             Object root = loader.getRoot();
             Object controller = loader.getController();
 
-            if (controller instanceof Activity) {
-                Activity activity = (Activity) controller;
+            if (controller instanceof Activity activity) {
                 primaryStage.titleProperty().bind(activity.titleProperty());
                 //Bindings.bindContent(              primaryStage.getIcons(), activity.iconsProperty());
             }

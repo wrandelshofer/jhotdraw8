@@ -143,14 +143,14 @@ public class IntersectCubicCurveEllipse {
         );
         DoubleArrayList roots = poly.getRootsInInterval(-epsilon, 1 + epsilon);
 
-        for (int i = 0; i < roots.size(); i++) {
-            double t = MathUtil.clamp(roots.get(i), 0, 1);
+        for (Double root : roots) {
+            double t = MathUtil.clamp(root, 0, 1);
 
             result.add(new IntersectionPoint(
                     Points2D.sum(Points2D.multiply(c3, t * t * t), Points2D.multiply(c2, t * t), Points2D.multiply(c1, t), c0), t));
         }
 
-        if (result.size() > 0) {
+        if (!result.isEmpty()) {
             return new IntersectionResult(
                     IntersectionStatus.INTERSECTION,
                     result);

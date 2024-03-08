@@ -78,7 +78,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Height of a grid cell. The value 0 turns the constrainer off for the
      * vertical axis.
      */
-    private final ObjectProperty<CssSize> height = new SimpleObjectProperty<CssSize>(this, "height") {
+    private final ObjectProperty<CssSize> height = new SimpleObjectProperty<>(this, "height") {
 
         @Override
         public void invalidated() {
@@ -86,7 +86,7 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
-    private final @NonNull ObjectProperty<CssColor> gridColorProperty = new SimpleObjectProperty<CssColor>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,40%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
+    private final @NonNull ObjectProperty<CssColor> gridColorProperty = new SimpleObjectProperty<>(this, "majorGridColor", new CssColor("hsba(226,100%,75%,40%)", Color.hsb(226, 1.0, 0.75, 0.4))) {
         @Override
         public void invalidated() {
             fireInvalidated();
@@ -131,7 +131,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Width of a grid cell. The value 0 turns the constrainer off for the
      * horizontal axis.
      */
-    private final ObjectProperty<CssSize> width = new SimpleObjectProperty<CssSize>(this, "width") {
+    private final ObjectProperty<CssSize> width = new SimpleObjectProperty<>(this, "width") {
 
         @Override
         public void invalidated() {
@@ -141,7 +141,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * The x-origin of the grid.
      */
-    private final ObjectProperty<CssSize> x = new SimpleObjectProperty<CssSize>(this, "x") {
+    private final ObjectProperty<CssSize> x = new SimpleObjectProperty<>(this, "x") {
 
         @Override
         public void invalidated() {
@@ -151,7 +151,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * The y-origin of the grid.
      */
-    private final ObjectProperty<CssSize> y = new SimpleObjectProperty<CssSize>(this, "y") {
+    private final ObjectProperty<CssSize> y = new SimpleObjectProperty<>(this, "y") {
 
         @Override
         public void invalidated() {

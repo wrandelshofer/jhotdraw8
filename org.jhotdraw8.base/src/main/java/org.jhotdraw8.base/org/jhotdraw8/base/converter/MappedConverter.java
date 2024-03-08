@@ -11,7 +11,6 @@ import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 
 /**
@@ -45,9 +44,6 @@ public class MappedConverter<E> implements Converter<E> {
 
     @Override
     public @Nullable E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
-        if (in == null) {
-            throw new ParseException("Illegal value=null", 0);
-        }
         String identifier = in.toString();
         in.position(in.length());
         if (nullValue != null && nullValue.equals(identifier)) {
@@ -71,7 +67,7 @@ public class MappedConverter<E> implements Converter<E> {
             if (nullValue != null) {
                 throw new IOException("Illegal value=null.");
             }
-            out.append(nullValue);
+            out.append(null);
         }
         String s = toStringMap.get(value);
         if (s == null) {

@@ -114,7 +114,7 @@ public class StronglyConnectedComponentsAlgo {
             } else {
                 // Level up:
                 if (enumeratorStack.isEmpty()) {
-                    break STRONGCONNECT;
+                    break;
                 }
 
                 enumerator = enumeratorStack.pop();

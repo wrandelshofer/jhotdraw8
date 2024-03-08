@@ -74,7 +74,7 @@ public class ZoomToolbar extends BorderPane {
 
         zoomSlider.valueProperty().bindBidirectional(zoomPower);
 
-        zoomSlider.setLabelFormatter(new StringConverter<Double>() {
+        zoomSlider.setLabelFormatter(new StringConverter<>() {
             @Override
             public @NonNull String toString(@NonNull Double object) {
                 return Integer.toString(object.intValue());

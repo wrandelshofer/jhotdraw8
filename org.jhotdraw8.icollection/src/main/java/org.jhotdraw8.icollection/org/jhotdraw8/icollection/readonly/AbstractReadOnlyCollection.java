@@ -7,8 +7,6 @@ package org.jhotdraw8.icollection.readonly;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Objects;
-import java.util.stream.Stream;
-import java.util.stream.StreamSupport;
 
 /**
  * Abstract base class for {@link ReadOnlyCollection}s.
@@ -44,10 +42,5 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
             }
         }
         return false;
-    }
-
-    @Override
-    public Stream<E> stream() {
-        return StreamSupport.stream(spliterator(), false);
     }
 }

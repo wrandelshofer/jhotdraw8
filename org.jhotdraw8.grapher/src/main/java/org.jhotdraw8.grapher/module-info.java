@@ -9,11 +9,9 @@ import org.jhotdraw8.grapher.spi.GrapherResourceBundleProvider;
 module org.jhotdraw8.grapher {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
-    requires java.logging;
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive javafx.fxml;
-    requires jdk.javadoc;
     requires transitive org.jhotdraw8.draw;
     requires static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.os;

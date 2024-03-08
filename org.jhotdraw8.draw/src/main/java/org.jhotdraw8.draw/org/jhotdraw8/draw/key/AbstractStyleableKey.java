@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
  */
 public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final @NonNull String cssName;
     private final @Nullable String namespace;
 

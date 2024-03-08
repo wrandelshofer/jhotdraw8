@@ -236,29 +236,21 @@ public class BezierNode {
      * @return the point
      */
     public @NonNull Point2D getC(int mask) {
-        switch (mask) {
-            case POINT_MASK:
-                return getPoint();
-            case IN_MASK:
-                return getIn();
-            case OUT_MASK:
-                return getOut();
-            default:
-                throw new IllegalArgumentException("illegal mask:" + mask);
-        }
+        return switch (mask) {
+            case POINT_MASK -> getPoint();
+            case IN_MASK -> getIn();
+            case OUT_MASK -> getOut();
+            default -> throw new IllegalArgumentException("illegal mask:" + mask);
+        };
     }
 
     public <T> @NonNull T getC(int mask, @NonNull BiFunction<Double, Double, T> f) {
-        switch (mask) {
-            case POINT_MASK:
-                return getPoint(f);
-            case IN_MASK:
-                return getIn(f);
-            case OUT_MASK:
-                return getOut(f);
-            default:
-                throw new IllegalArgumentException("illegal mask:" + mask);
-        }
+        return switch (mask) {
+            case POINT_MASK -> getPoint(f);
+            case IN_MASK -> getIn(f);
+            case OUT_MASK -> getOut(f);
+            default -> throw new IllegalArgumentException("illegal mask:" + mask);
+        };
     }
 
     /**
@@ -384,16 +376,12 @@ public class BezierNode {
      * @return the point
      */
     public double getX(int mask) {
-        switch (mask) {
-            case POINT_MASK:
-                return pointX();
-            case IN_MASK:
-                return inX();
-            case OUT_MASK:
-                return outX();
-            default:
-                throw new IllegalArgumentException("illegal mask:" + mask);
-        }
+        return switch (mask) {
+            case POINT_MASK -> pointX();
+            case IN_MASK -> inX();
+            case OUT_MASK -> outX();
+            default -> throw new IllegalArgumentException("illegal mask:" + mask);
+        };
     }
 
     /**
@@ -442,16 +430,12 @@ public class BezierNode {
     }
 
     public double getY(int mask) {
-        switch (mask) {
-            case POINT_MASK:
-                return pointY();
-            case IN_MASK:
-                return inY();
-            case OUT_MASK:
-                return outY();
-            default:
-                throw new IllegalArgumentException("illegal mask:" + mask);
-        }
+        return switch (mask) {
+            case POINT_MASK -> pointY();
+            case IN_MASK -> inY();
+            case OUT_MASK -> outY();
+            default -> throw new IllegalArgumentException("illegal mask:" + mask);
+        };
     }
 
     /**

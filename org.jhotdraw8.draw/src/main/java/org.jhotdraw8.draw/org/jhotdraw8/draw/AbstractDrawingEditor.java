@@ -28,8 +28,8 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
 import java.util.HashSet;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
-    private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<String>(this, HELP_TEXT_PROPERTY);
-    private final @NonNull NonNullObjectProperty<FXUndoManager> undoManager = new NonNullObjectProperty<FXUndoManager>(this, UNDO_MANAGER_PROPERTY, new FXUndoManager());
+    private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<>(this, HELP_TEXT_PROPERTY);
+    private final @NonNull NonNullObjectProperty<FXUndoManager> undoManager = new NonNullObjectProperty<>(this, UNDO_MANAGER_PROPERTY, new FXUndoManager());
     private final @NonNull DoubleProperty handleSize = new SimpleDoubleProperty(
             this, HANDLE_SIZE_PROPERTY, 5.0) {
         @Override
@@ -54,7 +54,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
-    private final @NonNull NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<CssColor>(this, HANDLE_COLOR_PROPERTY,
+    private final @NonNull NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<>(this, HANDLE_COLOR_PROPERTY,
             CssColor.valueOf("blue")) {
         @Override
         public void set(CssColor newValue) {
@@ -90,9 +90,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
 
     {
-        ChangeListener<Object> recreateHandles = (observable, oldValue, newValue) -> {
-            recreateHandles();
-        };
+        ChangeListener<Object> recreateHandles = (observable, oldValue, newValue) -> recreateHandles();
         multiHandleType.addListener(recreateHandles);
         handleType.addListener(recreateHandles);
     }

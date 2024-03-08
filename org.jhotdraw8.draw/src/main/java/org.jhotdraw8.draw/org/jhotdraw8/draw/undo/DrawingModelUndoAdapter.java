@@ -26,21 +26,18 @@ import java.text.MessageFormat;
  */
 public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
 
-    private final @NonNull Listener<DrawingModelEvent> drawingModelListener = new Listener<DrawingModelEvent>() {
-        @Override
-        public void handle(DrawingModelEvent event) {
-            if (event.getSource().isValidating()) {
-                return;
-            }
-            UndoableEdit edit = switch (event.getEventType()) {
-                case PROPERTY_VALUE_CHANGED ->
-                        new PropertyChangedEdit<>(event.getSource(), event.getNode(), event.getKey(), event.getOldValue(), event.getNewValue(),
-                                event.wasAdded(), event.wasRemoved());
-                case LAYOUT_CHANGED, STYLE_CHANGED, TRANSFORM_CHANGED -> null;
-            };
-            if (edit != null) {
-                fireUndoableEdit(event.getSource(), edit);
-            }
+    private final @NonNull Listener<DrawingModelEvent> drawingModelListener = event -> {
+        if (event.getSource().isValidating()) {
+            return;
+        }
+        UndoableEdit edit = switch (event.getEventType()) {
+            case PROPERTY_VALUE_CHANGED ->
+                    new PropertyChangedEdit<>(event.getSource(), event.getNode(), event.getKey(), event.getOldValue(), event.getNewValue(),
+                            event.wasAdded(), event.wasRemoved());
+            case LAYOUT_CHANGED, STYLE_CHANGED, TRANSFORM_CHANGED -> null;
+        };
+        if (edit != null) {
+            fireUndoableEdit(event.getSource(), edit);
         }
     };
 

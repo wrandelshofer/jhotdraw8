@@ -44,19 +44,11 @@ public class RectangleConnector extends LocatorConnector {
 
         // FIXME does not take line join into account
         if (target.getStyled(STROKE) != null) {
-            double grow;
-            switch (target.getStyledNonNull(STROKE_TYPE)) {
-            case CENTERED:
-            default:
-                grow = target.getStyledNonNull(STROKE_WIDTH).getConvertedValue() / 2d;
-                break;
-            case OUTSIDE:
-                grow = target.getStyledNonNull(STROKE_WIDTH).getConvertedValue();
-                break;
-            case INSIDE:
-                grow = 0d;
-                break;
-            }
+            double grow = switch (target.getStyledNonNull(STROKE_TYPE)) {
+                default -> target.getStyledNonNull(STROKE_WIDTH).getConvertedValue() / 2d;
+                case OUTSIDE -> target.getStyledNonNull(STROKE_WIDTH).getConvertedValue();
+                case INSIDE -> 0d;
+            };
             bounds = FXRectangles.grow(bounds, grow, grow);
         }
 

@@ -41,15 +41,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.SequencedMap;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 public class InteractiveHandleRenderer {
     private static final @NonNull String DRAWING_VIEW = "drawingView";
@@ -224,7 +221,7 @@ public class InteractiveHandleRenderer {
 
     public void jiggleHandles() {
         validateHandles();
-        List<Handle> copiedList = handles.values().stream().flatMap(List::stream).collect(Collectors.toList());
+        List<Handle> copiedList = handles.values().stream().flatMap(List::stream).toList();
 
         // We scale the handles back and forth.
         double amount = 0.1;
@@ -274,14 +271,10 @@ public class InteractiveHandleRenderer {
     private void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
-            case NODE_ADDED_TO_PARENT:
+            case NODE_ADDED_TO_PARENT, NODE_REMOVED_FROM_TREE, NODE_ADDED_TO_TREE:
                 break;
             case NODE_REMOVED_FROM_PARENT:
                 onFigureRemoved(f);
-                break;
-            case NODE_ADDED_TO_TREE:
-                break;
-            case NODE_REMOVED_FROM_TREE:
                 break;
             case NODE_CHANGED:
                 onNodeChanged(f);

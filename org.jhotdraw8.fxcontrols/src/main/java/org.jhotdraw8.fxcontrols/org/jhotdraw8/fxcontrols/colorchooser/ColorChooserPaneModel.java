@@ -43,7 +43,6 @@ import org.jhotdraw8.color.SrgbColorSpace;
 import java.awt.color.ColorSpace;
 import java.util.AbstractMap;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
@@ -101,7 +100,7 @@ public class ColorChooserPaneModel {
     public final @NonNull ObjectProperty<NamedColor> sourceColor = new SimpleObjectProperty<>(this, "chooserColor");
     public final @NonNull ObjectProperty<ChooserType> chooserType = new SimpleObjectProperty<>(this, "ChooserType");
     public final @NonNull ListProperty<ChooserType> chooserTypes = new SimpleListProperty<>(this, "ChooserTypes", FXCollections.observableArrayList());
-    public final @NonNull ObjectProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepth = new SimpleObjectProperty(this, "displayBitDepth");
+    public final @NonNull ObjectProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepth = new SimpleObjectProperty<>(this, "displayBitDepth");
     public final @NonNull ListProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepths = new SimpleListProperty<>(this, "displayBitDepths", FXCollections.observableArrayList());
     public final @NonNull ObjectProperty<NamedColor> displayColor = new SimpleObjectProperty<>(this, "displayColor");
     public final @NonNull ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(this, "displayColorSpace");
@@ -512,32 +511,11 @@ public class ColorChooserPaneModel {
         NamedColorSpace tcs = getTargetColorSpace();
         switch (getTargetColorSyntax()) {
 
-            case AUTOMATIC -> {
+            case AUTOMATIC, COLOR_FUNCTION, HWB_FUNCTION, HSL_FUNCTION, RGB_FUNCTION, NAMED_COLOR, HEX_COLOR -> {
             }
-            case HEX_COLOR -> {
-            }
-            case NAMED_COLOR -> {
-            }
-            case RGB_FUNCTION -> {
-            }
-            case HSL_FUNCTION -> {
-            }
-            case HWB_FUNCTION -> {
-            }
-            case LAB_FUNCTION -> {
-                tcs = CIE_LAB_COLOR_SPACE;
-            }
-            case OKLAB_FUNCTION -> {
-                tcs = OK_LAB_COLOR_SPACE;
-            }
-            case LCH_FUNCTION -> {
-                tcs = CIE_LAB_COLOR_SPACE;
-            }
-            case OKLCH_FUNCTION -> {
-                tcs = OK_LCH_COLOR_SPACE;
-            }
-            case COLOR_FUNCTION -> {
-            }
+            case LAB_FUNCTION, LCH_FUNCTION -> tcs = CIE_LAB_COLOR_SPACE;
+            case OKLAB_FUNCTION -> tcs = OK_LAB_COLOR_SPACE;
+            case OKLCH_FUNCTION -> tcs = OK_LCH_COLOR_SPACE;
         }
         NamedColorSpace scs = getSourceColorSpace();
         if (tcs != null && scs != null) {
@@ -577,18 +555,12 @@ public class ColorChooserPaneModel {
 
         if (colorSyntax == ColorSyntax.AUTOMATIC) {
             switch (cs.getType()) {
-                case NamedColorSpace.TYPE_LCH -> {
-                    colorSyntax = cs instanceof OKLchColorSpace ? ColorSyntax.OKLCH_FUNCTION : ColorSyntax.LCH_FUNCTION;
-                }
-                case ColorSpace.TYPE_HLS -> {
-                    colorSyntax = ColorSyntax.HSL_FUNCTION;
-                }
-                case ColorSpace.TYPE_RGB -> {
-                    colorSyntax = ColorSyntax.COLOR_FUNCTION;
-                }
-                case ColorSpace.TYPE_Lab -> {
-                    colorSyntax = cs instanceof OKLabColorSpace ? ColorSyntax.OKLAB_FUNCTION : ColorSyntax.LAB_FUNCTION;
-                }
+                case NamedColorSpace.TYPE_LCH ->
+                        colorSyntax = cs instanceof OKLchColorSpace ? ColorSyntax.OKLCH_FUNCTION : ColorSyntax.LCH_FUNCTION;
+                case ColorSpace.TYPE_HLS -> colorSyntax = ColorSyntax.HSL_FUNCTION;
+                case ColorSpace.TYPE_RGB -> colorSyntax = ColorSyntax.COLOR_FUNCTION;
+                case ColorSpace.TYPE_Lab ->
+                        colorSyntax = cs instanceof OKLabColorSpace ? ColorSyntax.OKLAB_FUNCTION : ColorSyntax.LAB_FUNCTION;
                 default -> colorSyntax = ColorSyntax.COLOR_FUNCTION;
             }
         }
@@ -599,10 +571,8 @@ public class ColorChooserPaneModel {
             case NAMED_COLOR -> {
                 // TODO lookup components
             }
-            case HEX_COLOR, RGB_FUNCTION -> {
-                // requires sRGB components
-                cs.toRGB(components, components);
-            }
+            case HEX_COLOR, RGB_FUNCTION -> // requires sRGB components
+                    cs.toRGB(components, components);
             case HSL_FUNCTION -> {
                 // requires HLS components
                 if (cs.getType() != ColorSpace.TYPE_HLS || cs instanceof ParametricHlsColorSpace hlsc
@@ -674,21 +644,11 @@ public class ColorChooserPaneModel {
                 b.append(number.toString(alpha * 100));
                 b.append("%)");
             }
-            case HWB_FUNCTION -> {
-                b.append("hwb(");
-            }
-            case LAB_FUNCTION -> {
-                b.append("lab(");
-            }
-            case OKLAB_FUNCTION -> {
-                b.append("oklab(");
-            }
-            case LCH_FUNCTION -> {
-                b.append("lch(");
-            }
-            case OKLCH_FUNCTION -> {
-                b.append("oklch(");
-            }
+            case HWB_FUNCTION -> b.append("hwb(");
+            case LAB_FUNCTION -> b.append("lab(");
+            case OKLAB_FUNCTION -> b.append("oklab(");
+            case LCH_FUNCTION -> b.append("lch(");
+            case OKLCH_FUNCTION -> b.append("oklch(");
             case COLOR_FUNCTION -> {
                 b.append("color(");
                 b.append(colorSpaceNameMap.get(cs.getName()));
@@ -729,12 +689,8 @@ public class ColorChooserPaneModel {
         }
         NamedColorSpace oldScs = sourceColorSpace.get();
         switch (ct) {
-            case OK_HSL_SRGB -> {
-                sourceColorSpace.set(new OKHlsColorSpace());
-            }
-            case SLIDERS, SWATCHES -> {
-                sourceColorSpace.set(tcs);
-            }
+            case OK_HSL_SRGB -> sourceColorSpace.set(new OKHlsColorSpace());
+            case SLIDERS, SWATCHES -> sourceColorSpace.set(tcs);
             case HSL -> {
                 NamedColorSpace cs;
                 if (tcs.getType() == ColorSpace.TYPE_RGB) {
@@ -753,12 +709,8 @@ public class ColorChooserPaneModel {
                 }
                 sourceColorSpace.set(new ParametricHsvColorSpace(cs.getName() + " HSV", cs));
             }
-            case CIE_LCH -> {
-                sourceColorSpace.set(CIE_LCH_COLOR_SPACE);
-            }
-            case OK_LCH -> {
-                sourceColorSpace.set(new OKLchColorSpace());
-            }
+            case CIE_LCH -> sourceColorSpace.set(CIE_LCH_COLOR_SPACE);
+            case OK_LCH -> sourceColorSpace.set(new OKLchColorSpace());
             default -> {
                 sourceColorSpace.set(tcs);
                 hueSliderC0.set(0.5f);
@@ -778,7 +730,7 @@ public class ColorChooserPaneModel {
         }
 
         // convert color components
-        if (oldScs != null && newScs != null) {
+        if (oldScs != null) {
             float[] oldComponents = {getC0(), getC1(), getC2()};
             float[] xyz = oldScs.toCIEXYZ(oldComponents);
             float[] newComponents = newScs.fromCIEXYZ(xyz);

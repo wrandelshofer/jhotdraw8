@@ -53,9 +53,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
         try (InputStream in = fxmlUrl.openStream()) {
             node = loader.load(in);
 
-            removeButton.addEventHandler(ActionEvent.ACTION, o -> {
-                inspector.removeTag(item.getText());
-            });
+            removeButton.addEventHandler(ActionEvent.ACTION, o -> inspector.removeTag(item.getText()));
 
         } catch (IOException ex) {
             throw new InternalError(ex);

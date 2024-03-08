@@ -110,8 +110,7 @@ public class CssRectangle2D {
 
     @Override
     public @NonNull String toString() {
-        return "CssRectangle2D{" +
-                "" + x +
+        return "CssRectangle2D{" + x +
                 ", " + y +
                 ", " + width +
                 ", " + height +

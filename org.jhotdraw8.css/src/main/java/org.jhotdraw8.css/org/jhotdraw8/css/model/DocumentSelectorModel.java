@@ -22,7 +22,6 @@ import org.w3c.dom.NodeList;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.SequencedSet;
@@ -60,7 +59,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     @Override
     public boolean hasId(@NonNull Element elem, @NonNull String id) {
         String value = elem.getAttribute("id");
-        return value != null && value.equals(id);
+        return value.equals(id);
     }
 
     @Override
@@ -91,9 +90,6 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     @Override
     public boolean hasStyleClass(@NonNull Element elem, @NonNull String clazz) {
         String value = elem.getAttribute("class");
-        if (value == null) {
-            return false;
-        }
         String[] clazzes = value.split(" +");
         for (String c : clazzes) {
             if (c.equals(clazz)) {
@@ -106,9 +102,6 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     @Override
     public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Element elem) {
         String value = elem.getAttribute("class");
-        if (value == null) {
-            return ChampSet.of();
-        }
         String[] clazzes = value.split(" +");
         return ChampSet.copyOf(Arrays.asList(clazzes));
     }
@@ -153,27 +146,21 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
      */
     @Override
     public boolean hasPseudoClass(@NonNull Element element, @NonNull String pseudoClass) {
-        switch (pseudoClass) {
-        case "root":
-            return element.getOwnerDocument() != null
+        return switch (pseudoClass) {
+            case "root" -> element.getOwnerDocument() != null
                     && element.getOwnerDocument().getDocumentElement() == element;
-        case "nth-child(even)": {
-            int i = getChildIndex(element);
-            return i != -1 && i % 2 == 0;
-        }
-        case "nth-child(odd)": {
-            int i = getChildIndex(element);
-            return i != -1 && i % 2 == 1;
-        }
-        case "first-child": {
-            return isFirstChild(element);
-        }
-        case "last-child": {
-            return isLastChild(element);
-        }
-        default:
-            return false;
-        }
+            case "nth-child(even)" -> {
+                int i = getChildIndex(element);
+                yield (i & 1) == 0;
+            }
+            case "nth-child(odd)" -> {
+                int i = getChildIndex(element);
+                yield (i & 1) == 1;
+            }
+            case "first-child" -> isFirstChild(element);
+            case "last-child" -> isLastChild(element);
+            default -> false;
+        };
     }
 
     private int getChildIndex(@NonNull Element element) {

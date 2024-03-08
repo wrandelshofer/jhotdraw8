@@ -91,8 +91,7 @@ public abstract class AbstractDockParent
         HPos alignHpos = HPos.LEFT;
         VPos alignVpos = VPos.TOP;
 
-        for (int i = 0, size = managed.size(); i < size; i++) {
-            Node child = managed.get(i);
+        for (Node child : managed) {
             layoutInArea(child, left, top,
                     contentWidth, contentHeight,
                     baselineOffset, null,

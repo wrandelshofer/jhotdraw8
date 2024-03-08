@@ -65,7 +65,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<URI>> AUTHOR_STYLESHEETS = new NonNullListKey<URI>("authorStylesheets",
+    @NonNull NonNullKey<ImmutableList<URI>> AUTHOR_STYLESHEETS = new NonNullListKey<>("authorStylesheets",
             new SimpleParameterizedType(ImmutableList.class, URI.class));
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
@@ -78,14 +78,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new NonNullListKey<URI>("userAgentStylesheets", new SimpleParameterizedType(ImmutableList.class, URI.class));
+    @NonNull NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new NonNullListKey<>("userAgentStylesheets", new SimpleParameterizedType(ImmutableList.class, URI.class));
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new NonNullListKey<String>("inlineStylesheets", new SimpleParameterizedType(ImmutableList.class, String.class));
+    @NonNull NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new NonNullListKey<>("inlineStylesheets", new SimpleParameterizedType(ImmutableList.class, String.class));
 
 
     /**
@@ -188,9 +188,7 @@ public interface Drawing extends Figure {
             int start = 0;
             for (int end : pair.second()) {
                 StreamSupport.intStream(Spliterators.spliterator(sorted, start, end, 0), parallel)
-                        .forEach(i -> {
-                            graphBuilder.getVertex(i).layout(ctx);
-                        });
+                        .forEach(i -> graphBuilder.getVertex(i).layout(ctx));
                 start = end;
             }
         }

@@ -117,9 +117,7 @@ public class IntersectEllipseQuadCurve {
         ).getRoots();
 
         List<IntersectionPoint> result = new ArrayList<>();
-        for (int i = 0; i < roots.length; i++) {
-            double t = roots[i];
-
+        for (double t : roots) {
             if (-epsilon <= t && t <= 1 + epsilon) {
                 result.add(new IntersectionPoint(
                         Points2D.sum(Points2D.multiply(c2, t * t), Points2D.multiply(c1, t), c0), t));
@@ -127,7 +125,7 @@ public class IntersectEllipseQuadCurve {
         }
 
         IntersectionStatus status;
-        if (result.size() > 0) {
+        if (!result.isEmpty()) {
             status = IntersectionStatus.INTERSECTION;
         } else {
             return IntersectEllipsePoint.intersectPointEllipse(p0, c, rx, ry);

@@ -57,7 +57,7 @@ public class CollectionFacade<E> extends AbstractCollection<E> implements ReadOn
                             @Nullable Predicate<E> addFunction,
                             @Nullable Predicate<Object> removeFunction) {
         this.iteratorFunction = iteratorFunction;
-        this.spliteratorFunction = spliteratorFunction == null ? () -> new IteratorSpliterator<E>(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.SIZED, null) : spliteratorFunction;
+        this.spliteratorFunction = spliteratorFunction == null ? () -> new IteratorSpliterator<>(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.SIZED, null) : spliteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsFunction = containsFunction;
         this.addFunction = addFunction == null ? o -> {

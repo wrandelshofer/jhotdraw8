@@ -156,7 +156,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> ChampSet<T> ofIterator(Iterator<T> iterator) {
-        return ChampSet.<T>of().addAll(() -> (Iterator<T>) iterator);
+        return ChampSet.<T>of().addAll(() -> iterator);
     }
     /**
      * Returns an immutable set that contains the provided elements.
@@ -228,8 +228,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         if (other == null) {
             return false;
         }
-        if (other instanceof ChampSet) {
-            ChampSet<?> that = (ChampSet<?>) other;
+        if (other instanceof ChampSet<?> that) {
             return size == that.size && root.equivalent(that.root);
         }
         return ReadOnlySet.setEquals(this, other);
@@ -242,7 +241,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
     @Override
     public @NonNull Iterator<E> iterator() {
-        return new ChampIterator<E, E>(root, null);
+        return new ChampIterator<>(root, null);
     }
 
     @Override

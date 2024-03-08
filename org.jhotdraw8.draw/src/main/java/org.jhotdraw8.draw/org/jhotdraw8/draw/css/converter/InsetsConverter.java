@@ -86,13 +86,12 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {
                     out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getTop()));
-                    return;
                 } else {
                     out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getTop()));
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                     out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getRight()));
-                    return;
                 }
+                return;
             }
         }
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getTop()));

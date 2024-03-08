@@ -27,7 +27,7 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
 
     static class MyTab extends Tab {
         private final DockableDragHandler dockableDragHandler;
-        @NonNull DockChild dockChild;
+        private final @NonNull DockChild dockChild;
 
         MyTab(@NonNull DockChild dockChild, @Nullable String text, @Nullable Node graphic) {
             super(text, graphic);
@@ -82,8 +82,7 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
     }
 
     private @NonNull MyTab makeTab(DockChild c) {
-        if (c instanceof Dockable) {
-            Dockable k = (Dockable) c;
+        if (c instanceof Dockable k) {
             MyTab tab = new MyTab(k, k.getText(), k.getNode());
             tab.graphicProperty().bind(CustomBinding.compute(k::getGraphic, k.graphicProperty(), editableProperty()));
             return tab;

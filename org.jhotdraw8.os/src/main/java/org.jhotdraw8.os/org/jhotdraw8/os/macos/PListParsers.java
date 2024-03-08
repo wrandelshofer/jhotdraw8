@@ -89,26 +89,17 @@ public class PListParsers {
 
     private static Object readNode(@NonNull Element node) throws IOException {
         String name = node.getTagName();
-        Object value;
-        switch (name) {
-            case "plist":
-                value = readPList(node);
-                break;
-            case "dict":
-                value = readDict(node);
-                break;
-            case "array":
-                value = readArray(node);
-                break;
-            default:
-                value = readValue(node);
-                break;
-        }
+        Object value = switch (name) {
+            case "plist" -> readPList(node);
+            case "dict" -> readDict(node);
+            case "array" -> readArray(node);
+            default -> readValue(node);
+        };
         return value;
     }
 
     private static @NonNull Iterable<Node> getChildren(final @NonNull Element elem) {
-        return () -> new Iterator<Node>() {
+        return () -> new Iterator<>() {
             int index = 0;
             final NodeList children = elem.getChildNodes();
 
@@ -131,8 +122,8 @@ public class PListParsers {
 
     private static @NonNull List<Object> readPList(@NonNull Element plistElem) throws IOException {
         List<Object> plist = new ArrayList<>();
-        for (Node child : getChildElements(plistElem)) {
-            plist.add(readNode((Element) child));
+        for (Element child : getChildElements(plistElem)) {
+            plist.add(readNode(child));
         }
         return plist;
     }

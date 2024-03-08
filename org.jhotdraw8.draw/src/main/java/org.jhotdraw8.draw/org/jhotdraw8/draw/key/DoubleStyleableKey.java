@@ -20,7 +20,6 @@ public class DoubleStyleableKey
         extends AbstractStyleableKey<@NonNull Double>
         implements WritableStyleableMapAccessor<@NonNull Double>,
         NonNullKey<@NonNull Double> {
-    private static final long serialVersionUID = 1L;
 
     private final Converter<@NonNull Double> converter;
 

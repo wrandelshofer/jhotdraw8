@@ -18,29 +18,7 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public class SvgStop {
-
-    private final Double offset;
-    private final CssDefaultableValue<CssSize> opacity;
-    private final SvgDefaultablePaint<CssColor> color;
-
-    public SvgStop(Double offset, SvgDefaultablePaint<CssColor> color, CssDefaultableValue<CssSize> opacity) {
-        this.offset = offset;
-        this.color = color;
-        this.opacity = opacity;
-    }
-
-    public Double getOffset() {
-        return offset;
-    }
-
-    public CssDefaultableValue<CssSize> getOpacity() {
-        return opacity;
-    }
-
-    public SvgDefaultablePaint<CssColor> getColor() {
-        return color;
-    }
+public record SvgStop(Double offset, SvgDefaultablePaint<CssColor> color, CssDefaultableValue<CssSize> opacity) {
 
     @Override
     public int hashCode() {

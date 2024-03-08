@@ -15,13 +15,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.List;
 import java.util.Map;
 import java.util.SequencedSet;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -43,7 +40,7 @@ public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
         // Read font collections
         Path dir = Paths.get(System.getProperty("user.home"), "Library", "FontCollections");
         Map<String, FontFamily> familiesMap = families.stream().collect(Collectors.toMap(FontFamily::getName, Function.identity()));
-        families.stream().forEach(ff -> {
+        families.forEach(ff -> {
             String name = ff.getName();
             familiesMap.put(name.replaceAll(" ", ""), ff);
             int pblank = name.indexOf(' ');
@@ -52,8 +49,8 @@ public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
                 familiesMap.putIfAbsent(firstPartOfName, ff);
             }
         });
-        try {
-            Files.list(dir).filter(path ->
+        try (var stream = Files.list(dir)) {
+            stream.filter(path ->
                     {
                         String fileName = path.getFileName().toString();
                         return !"com.apple.Recents.collection".equals(fileName)
@@ -87,10 +84,10 @@ public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
             var map = PListParsers.toMap(PListParsers.readPList(path.toFile()));
             SequencedSet<FontFamily> fontFamilies = new LinkedHashSet<>();
 
-            List<LinkedHashMap<String, Object>> plist = (List<LinkedHashMap<String, Object>>) map.getOrDefault("plist", List.of());
+            @SuppressWarnings("unchecked") List<LinkedHashMap<String, Object>> plist = (List<LinkedHashMap<String, Object>>) map.getOrDefault("plist", List.of());
             if (plist.isEmpty()) throw new IOException("Could not find a plist. path=" + path);
             LinkedHashMap<String, Object> plistMap = plist.getFirst();
-            List<Object> objectsList = (List<Object>) plistMap.getOrDefault("$objects", List.of());
+            @SuppressWarnings("unchecked") List<Object> objectsList = (List<Object>) plistMap.getOrDefault("$objects", List.of());
 
             for (Object o : objectsList) {
                 if (o instanceof String potentialFontFamilyName) {

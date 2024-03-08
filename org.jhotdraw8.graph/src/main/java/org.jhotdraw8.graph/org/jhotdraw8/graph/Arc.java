@@ -46,8 +46,7 @@ public class Arc<V, A> {
 
     @Override
     public @NonNull String toString() {
-        return "Arc{" +
-                "" + start +
+        return "Arc{" + start +
                 "->" + end +
                 ", " + data +
                 '}';
@@ -58,10 +57,9 @@ public class Arc<V, A> {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof Arc)) {
+        if (!(o instanceof Arc<?, ?> arc)) {
             return false;
         }
-        Arc<?, ?> arc = (Arc<?, ?>) o;
         return Objects.equals(start, arc.start) &&
                 end.equals(arc.end) &&
                 Objects.equals(data, arc.data);

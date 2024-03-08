@@ -18,7 +18,7 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
  */
 public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements WritableStyleableMapAccessor<Effect> {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final EffectCssConverter converter = new EffectCssConverter();
 
     /**

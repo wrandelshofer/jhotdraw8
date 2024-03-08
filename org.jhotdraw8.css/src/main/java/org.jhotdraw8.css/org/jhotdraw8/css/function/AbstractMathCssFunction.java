@@ -118,9 +118,7 @@ public abstract class AbstractMathCssFunction<T> extends AbstractCssFunction<T> 
     }
 
     protected void produceNumberPercentageOrDimension(@NonNull Consumer<CssToken> out, @NonNull CssSize dim, int line, int start, int end) {
-        if (dim.getUnits() == null) {
-            out.accept(new CssToken(CssTokenType.TT_NUMBER, null, dim.getValue(), line, start, end));
-        } else if ("%".equals(dim.getUnits())) {
+        if ("%".equals(dim.getUnits())) {
             out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, dim.getValue(), line, start, end));
         } else {
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, dim.getUnits(), dim.getValue(), line, start, end));
@@ -148,27 +146,16 @@ public abstract class AbstractMathCssFunction<T> extends AbstractCssFunction<T> 
                     throw new ParseException(getName() + "(): function " + name + "() must return single value.", tt.getStartPosition());
                 }
                 CssToken token = list.getFirst();
-                switch (token.getType()) {
-                    case CssTokenType.TT_NUMBER:
-                        return CssSize.of(token.getNumericValue().doubleValue());
-                    case CssTokenType.TT_PERCENTAGE:
-                        return CssSize.of(token.getNumericValue().doubleValue(), "%");
-                    case CssTokenType.TT_DIMENSION:
-                        return CssSize.of(token.getNumericValue().doubleValue(), token.getStringValue());
-                    default:
-                        throw new ParseException(getName() + "(): function " + name + "() must return numeric value.", tt.getStartPosition());
-                }
+                return switch (token.getType()) {
+                    case CssTokenType.TT_NUMBER -> CssSize.of(token.getNumericValue().doubleValue());
+                    case CssTokenType.TT_PERCENTAGE -> CssSize.of(token.getNumericValue().doubleValue(), "%");
+                    case CssTokenType.TT_DIMENSION ->
+                            CssSize.of(token.getNumericValue().doubleValue(), token.getStringValue());
+                    default ->
+                            throw new ParseException(getName() + "(): function " + name + "() must return numeric value.", tt.getStartPosition());
+                };
             default:
                 throw tt.createParseException(getName() + "(): number, percentage, dimension or (sum) expected.");
         }
-    }
-
-    @Override
-    public String getHelpText() {
-        return getName() + "(⟨expression⟩)"
-                + "\n    Computes a mathematical expression with addition (+),"
-                + " subtraction (-), multiplication (*), and division (/)."
-                + "\n    It can be used wherever ⟨length⟩, ⟨frequency⟩, "
-                + "⟨angle⟩, ⟨time⟩, ⟨percentage⟩, ⟨number⟩, or ⟨integer⟩ values are allowed. ";
     }
 }

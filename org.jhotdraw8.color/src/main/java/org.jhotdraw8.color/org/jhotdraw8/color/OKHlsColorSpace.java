@@ -63,8 +63,8 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
             return rgb;
         }
 
-        double a_ = (double) Math.cos(h * Math.PI / 180.0);
-        double b_ = (double) Math.sin(h * Math.PI / 180.0);
+        double a_ = Math.cos(h * Math.PI / 180.0);
+        double b_ = Math.sin(h * Math.PI / 180.0);
         double L = toe_inv(l);
 
         Cs cs = get_Cs(L, a_, b_);
@@ -137,7 +137,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
             // Use a soft minimum function, instead of a sharp triangle shape to get a smooth value for chroma.
             double C_a = L * ST_mid.S;
             double C_b = (1.0 - L) * ST_mid.T;
-            C_mid = (double) (0.9 * k * Math.sqrt(Math.sqrt(1.0 / (1.0 / (C_a * C_a * C_a * C_a) + 1.0 / (C_b * C_b * C_b * C_b)))));
+            C_mid = 0.9 * k * Math.sqrt(Math.sqrt(1.0 / (1.0 / (C_a * C_a * C_a * C_a) + 1.0 / (C_b * C_b * C_b * C_b))));
         }
 
         double C_0;
@@ -147,7 +147,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
             double C_b = (1.0 - L) * 0.8;
 
             // Use a soft minimum function, instead of a sharp triangle shape to get a smooth value for chroma.
-            C_0 = (double) Math.sqrt(1.0 / (1.0 / (C_a * C_a) + 1.0 / (C_b * C_b)));
+            C_0 = Math.sqrt(1.0 / (1.0 / (C_a * C_a) + 1.0 / (C_b * C_b)));
         }
 
         return new Cs(C_0, C_mid, C_max);
@@ -192,34 +192,34 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
 
         if (-1.88170328 * a - 0.80936493 * b > 1) {
             // Red component
-            k0 = +1.19086277;
-            k1 = +1.76576728;
-            k2 = +0.59662641;
-            k3 = +0.75515197;
-            k4 = +0.56771245;
-            wl = +4.0767416621;
+            k0 = 1.19086277;
+            k1 = 1.76576728;
+            k2 = 0.59662641;
+            k3 = 0.75515197;
+            k4 = 0.56771245;
+            wl = 4.0767416621;
             wm = -3.3077115913;
-            ws = +0.2309699292;
+            ws = 0.2309699292;
         } else if (1.81444104 * a - 1.19445276 * b > 1) {
             // Green component
-            k0 = +0.73956515;
+            k0 = 0.73956515;
             k1 = -0.45954404;
-            k2 = +0.08285427;
-            k3 = +0.12541070;
-            k4 = +0.14503204;
+            k2 = 0.08285427;
+            k3 = 0.12541070;
+            k4 = 0.14503204;
             wl = -1.2684380046;
-            wm = +2.6097574011;
+            wm = 2.6097574011;
             ws = -0.3413193965;
         } else {
             // Blue component
-            k0 = +1.35733652;
+            k0 = 1.35733652;
             k1 = -0.00915799;
             k2 = -1.15130210;
             k3 = -0.50559606;
-            k4 = +0.00692167;
+            k4 = 0.00692167;
             wl = -0.0041960863;
             wm = -0.7034186147;
-            ws = +1.7076147010;
+            ws = 1.7076147010;
         }
 
         // Approximate max saturation using a polynomial:
@@ -229,7 +229,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
         // this gives an error less than 10e6, except for some blue hues where the dS/dh is close to infinite
         // this should be sufficient for most applications, otherwise do two/three steps
 
-        double k_l = +0.3963377774 * a + 0.2158037573 * b;
+        double k_l = 0.3963377774 * a + 0.2158037573 * b;
         double k_m = -0.1055613458 * a - 0.0638541728 * b;
         double k_s = -0.0894841775 * a - 1.2914855480 * b;
 
@@ -268,12 +268,12 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
         double laba = lab[1];
         double labb = lab[2];
 
-        double C = (double) Math.sqrt(laba * laba + labb * labb);
+        double C = Math.sqrt(laba * laba + labb * labb);
         double a_ = laba / C;
         double b_ = labb / C;
 
         double L = labL;
-        double h = (double) (180 + 180 * Math.atan2(-labb, -laba) / Math.PI);
+        double h = 180 + 180 * Math.atan2(-labb, -laba) / Math.PI;
 
         Cs cs = get_Cs(L, a_, b_);
         double C_0 = cs.C_0;
@@ -333,7 +333,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
                 double dL = L1 - L0;
                 double dC = C1;
 
-                double k_l = +0.3963377774 * a + 0.2158037573 * b;
+                double k_l = 0.3963377774 * a + 0.2158037573 * b;
                 double k_m = -0.1055613458 * a - 0.0638541728 * b;
                 double k_s = -0.0894841775 * a - 1.2914855480 * b;
 
@@ -403,7 +403,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
      */
     private static ST get_ST_mid(double a_, double b_) {
         double S = 0.11516993 + 1.0 / (
-                +7.44778970 + 4.15901240 * b_
+                7.44778970 + 4.15901240 * b_
                         + a_ * (-2.19557347 + 1.75198401 * b_
                         + a_ * (-2.13704948 - 10.02301043 * b_
                         + a_ * (-4.24894561 + 5.38770819 * b_ + 4.69891013 * a_
@@ -411,10 +411,10 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
         );
 
         double T = 0.11239642 + 1.0 / (
-                +1.61320320 - 0.68124379 * b_
-                        + a_ * (+0.40370612 + 0.90148123 * b_
+                1.61320320 - 0.68124379 * b_
+                        + a_ * (0.40370612 + 0.90148123 * b_
                         + a_ * (-0.27087943 + 0.61223990 * b_
-                        + a_ * (+0.00299215 - 0.45399568 * b_ - 0.14661872 * a_
+                        + a_ * (0.00299215 - 0.45399568 * b_ - 0.14661872 * a_
                 )))
         );
 
@@ -425,7 +425,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
         double k_1 = 0.206;
         double k_2 = 0.03;
         double k_3 = (1.0 + k_1) / (1.0 + k_2);
-        return (double) (0.5 * (k_3 * x - k_1 + Math.sqrt((k_3 * x - k_1) * (k_3 * x - k_1) + 4 * k_2 * k_3 * x)));
+        return 0.5 * (k_3 * x - k_1 + Math.sqrt((k_3 * x - k_1) * (k_3 * x - k_1) + 4 * k_2 * k_3 * x));
     }
 
     @Override

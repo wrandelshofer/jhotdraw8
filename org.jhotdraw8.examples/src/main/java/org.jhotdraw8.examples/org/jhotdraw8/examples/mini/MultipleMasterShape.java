@@ -1,6 +1,5 @@
 package org.jhotdraw8.examples.mini;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.AbstractShape;
 import org.jhotdraw8.geom.AwtShapes;
@@ -17,9 +16,9 @@ import java.util.List;
  * A shape that can have multiple style-dimensions like a multiple-master font.
  */
 public class MultipleMasterShape extends AbstractShape {
-    private @NonNull PathData defaultShape;
-    private List<double[]> deltas = new ArrayList<>();
-    private List<Double> weights = new ArrayList<>();
+    private PathData defaultShape;
+    final private List<double[]> deltas = new ArrayList<>();
+    final private List<Double> weights = new ArrayList<>();
 
     /**
      * Creates a new instance from the given shapes.
@@ -33,7 +32,7 @@ public class MultipleMasterShape extends AbstractShape {
     }
 
     public MultipleMasterShape(List<PathIterator> shapes) {
-        if (shapes.size() < 1) throw new IllegalArgumentException("at least one shape must be given");
+        if (shapes.isEmpty()) throw new IllegalArgumentException("at least one shape must be given");
         for (var s : shapes) {
             PathData data = AwtShapes.buildFromPathIterator(new PathDataBuilder(), s).build();
             if (defaultShape == null) {
@@ -113,15 +112,9 @@ public class MultipleMasterShape extends AbstractShape {
             public int currentSegment(float[] coords) {
                 final int offset = offsets[current];
                 switch (commands[current]) {
-                    case SEG_MOVETO, SEG_LINETO -> {
-                        tt.transform(mixedCoords, offset, coords, 0, 1);
-                    }
-                    case SEG_QUADTO -> {
-                        tt.transform(mixedCoords, offset, coords, 0, 2);
-                    }
-                    case SEG_CUBICTO -> {
-                        tt.transform(mixedCoords, offset, coords, 0, 3);
-                    }
+                    case SEG_MOVETO, SEG_LINETO -> tt.transform(mixedCoords, offset, coords, 0, 1);
+                    case SEG_QUADTO -> tt.transform(mixedCoords, offset, coords, 0, 2);
+                    case SEG_CUBICTO -> tt.transform(mixedCoords, offset, coords, 0, 3);
                     default -> {//SEG CLOSE
 
                     }
@@ -133,15 +126,9 @@ public class MultipleMasterShape extends AbstractShape {
             public int currentSegment(double[] coords) {
                 final int offset = offsets[current];
                 switch (commands[current]) {
-                    case SEG_MOVETO, SEG_LINETO -> {
-                        tt.transform(mixedCoords, offset, coords, 0, 1);
-                    }
-                    case SEG_QUADTO -> {
-                        tt.transform(mixedCoords, offset, coords, 0, 2);
-                    }
-                    case SEG_CUBICTO -> {
-                        tt.transform(mixedCoords, offset, coords, 0, 3);
-                    }
+                    case SEG_MOVETO, SEG_LINETO -> tt.transform(mixedCoords, offset, coords, 0, 1);
+                    case SEG_QUADTO -> tt.transform(mixedCoords, offset, coords, 0, 2);
+                    case SEG_CUBICTO -> tt.transform(mixedCoords, offset, coords, 0, 3);
                     default -> {//SEG CLOSE
 
                     }

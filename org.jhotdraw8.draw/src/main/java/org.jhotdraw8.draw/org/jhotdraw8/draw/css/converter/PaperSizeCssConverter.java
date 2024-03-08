@@ -19,7 +19,6 @@ import org.jhotdraw8.draw.css.value.CssDimension2D;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 import java.util.SequencedMap;
 import java.util.function.Consumer;
@@ -147,7 +146,7 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
     public @NonNull String getHelpText() {
         StringBuilder buf = new StringBuilder();
         for (String s : paperSizes.keySet()) {
-            if (buf.length() != 0) {
+            if (!buf.isEmpty()) {
                 buf.append('｜');
             }
             buf.append(s);

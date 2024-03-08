@@ -81,7 +81,7 @@ public class AnyVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implem
         Queue<VertexBackLink<V>> queue = new ArrayDeque<>(16);
         for (V s : startVertices) {
             if (visited.add(s)) {
-                queue.add(new VertexBackLink<V>(s, null));
+                queue.add(new VertexBackLink<>(s, null));
             }
         }
 
@@ -94,7 +94,7 @@ public class AnyVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implem
             if (u.getDepth() < maxDepth) {
                 for (V v : nextVerticesFunction.apply(u.getVertex())) {
                     if (visited.add(v)) {
-                        queue.add(new VertexBackLink<V>(v, u));
+                        queue.add(new VertexBackLink<>(v, u));
                     }
                 }
             }

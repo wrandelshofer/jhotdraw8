@@ -80,7 +80,7 @@ public class AnyShortestArcPathSearchAlgo<V, A, C extends Number & Comparable<C>
         // Priority queue: back-links by lower cost and shallower depth.
         //          Ordering by depth prevents that the algorithm
         //          unnecessarily follows zero-length arrows.
-        PriorityQueue<ArcBackLinkWithCost<V, A, C>> queue = new PriorityQueue<ArcBackLinkWithCost<V, A, C>>(
+        PriorityQueue<ArcBackLinkWithCost<V, A, C>> queue = new PriorityQueue<>(
                 Comparator.<ArcBackLinkWithCost<V, A, C>, C>comparing(ArcBackLinkWithCost::getCost).thenComparing(ArcBackLinkWithCost::getDepth)
         );
 

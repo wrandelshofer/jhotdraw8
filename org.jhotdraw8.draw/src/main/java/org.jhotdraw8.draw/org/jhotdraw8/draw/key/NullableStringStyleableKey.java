@@ -17,7 +17,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WritableStyleableMapAccessor<String> {
 
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
     private final @NonNull StringCssConverter converter;
 
     /**

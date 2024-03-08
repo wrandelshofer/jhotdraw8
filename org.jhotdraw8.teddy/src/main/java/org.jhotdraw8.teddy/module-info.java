@@ -8,14 +8,13 @@ import org.jhotdraw8.teddy.spi.TeddyResourceBundleProvider;
 @SuppressWarnings("module")
 module org.jhotdraw8.teddy {
     requires transitive java.desktop;
-    requires java.prefs;
     requires transitive org.jhotdraw8.application;
     requires static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.fxcontrols;
     requires transitive org.jhotdraw8.fxbase;
     requires transitive org.jhotdraw8.base;
-    requires javafx.base;
+    requires transitive javafx.base;
     provides java.util.spi.ResourceBundleProvider with TeddyResourceBundleProvider;
 
     opens org.jhotdraw8.teddy

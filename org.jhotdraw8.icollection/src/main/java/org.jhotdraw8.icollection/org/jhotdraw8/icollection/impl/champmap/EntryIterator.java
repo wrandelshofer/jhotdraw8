@@ -36,7 +36,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     private final @Nullable Consumer<K> persistentRemoveFunction;
     private final @Nullable BiConsumer<K, V> persistentPutIfPresentFunction;
     @SuppressWarnings({"unchecked", "rawtypes"})
-    Node<K, V> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
+    final Node<K, V> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
 
     /**
      * Creates a new instance.

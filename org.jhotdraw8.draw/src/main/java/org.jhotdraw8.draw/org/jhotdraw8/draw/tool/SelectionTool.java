@@ -415,16 +415,17 @@ public class SelectionTool extends AbstractTool {
 
     @Override
     public @NonNull String getHelpText() {
-        return "SelectionTool"
-                + "\n  Click on the drawing view. The tool will select the figure at that location."
-                + "\nOr:"
-                + "\n  Alt+Click on the drawing view. The tool will select the figure behind the currently selected figure at that location."
-                + "\nOr:"
-                + "\n  Shift+Click on the drawing view. The tool will toggle the figure at that location to/from the selection."
-                + "\nOr:"
-                + "\n  Shift+Command+Click on the drawing view. The tool will deselect all figures except the figure that is on that location."
-                + "\nOr:"
-                + "\n  Press and drag the mouse over the drawing view to draw the diagonal of a rectangle. The tool will select all figures that fit into the rectangle.";
+        return """
+               SelectionTool
+                 Click on the drawing view. The tool will select the figure at that location.
+               Or:
+                 Alt+Click on the drawing view. The tool will select the figure behind the currently selected figure at that location.
+               Or:
+                 Shift+Click on the drawing view. The tool will toggle the figure at that location to/from the selection.
+               Or:
+                 Shift+Command+Click on the drawing view. The tool will deselect all figures except the figure that is on that location.
+               Or:
+                 Press and drag the mouse over the drawing view to draw the diagonal of a rectangle. The tool will select all figures that fit into the rectangle.""";
     }
 
 }

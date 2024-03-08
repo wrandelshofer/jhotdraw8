@@ -178,7 +178,7 @@ public class PolylineToCubicCurve {
 
             double squaredDistance = minDistance * minDistance;
             ArrayList<Point2D> cleaned = new ArrayList<>();
-            if (digitizedPoints.size() > 0) {
+            if (!digitizedPoints.isEmpty()) {
                 Point2D prev = digitizedPoints.getFirst();
                 cleaned.add(prev);
                 for (Point2D p : digitizedPoints) {
@@ -210,7 +210,7 @@ public class PolylineToCubicCurve {
      */
     private static @NonNull ArrayList<Point2D> removeCoincidentPoints(@NonNull List<Point2D> digitizedPoints) {
         ArrayList<Point2D> cleaned = new ArrayList<>();
-        if (digitizedPoints.size() > 0) {
+        if (!digitizedPoints.isEmpty()) {
             Point2D prev = digitizedPoints.getFirst();
             cleaned.add(prev);
             for (Point2D p : digitizedPoints) {
@@ -241,7 +241,7 @@ public class PolylineToCubicCurve {
         IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
         ArrayList<ArrayList<Point2D>> segments = new ArrayList<>(cornerIndices.size() + 1);
 
-        if (cornerIndices.size() == 0) {
+        if (cornerIndices.isEmpty()) {
             segments.add(new ArrayList<>(digitizedPoints));
         } else {
             segments.add(new ArrayList<>(digitizedPoints.subList(0, cornerIndices.getAsInt(0) + 1)));
@@ -331,7 +331,7 @@ public class PolylineToCubicCurve {
      */
     public static @NonNull ArrayList<Point2D> reduceNoise(@NonNull List<Point2D> digitizedPoints, double weight) {
         ArrayList<Point2D> cleaned = new ArrayList<>();
-        if (digitizedPoints.size() > 0) {
+        if (!digitizedPoints.isEmpty()) {
             Point2D prev = digitizedPoints.getFirst();
             cleaned.add(prev);
             double pnWeight = (1d - weight) / 2d; // weight of previous and next

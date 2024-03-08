@@ -12,10 +12,18 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
-import javafx.scene.image.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelBuffer;
+import javafx.scene.image.PixelFormat;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.*;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
+import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
@@ -158,8 +166,6 @@ public class ChromaticityDiagram extends Pane {
             list.add(new Point2D(xyY[0], xyY[1]));
             convertXYZtoChromacity(cs.toCIEXYZ(new float[]{0, 0, 1, 0}, XYZ), xyY);//magenta
             list.add(new Point2D(xyY[0], xyY[1]));
-            //convertXYZtoChromacity(cs.toCIEXYZ(new float[]{0, 0, 0,1}, XYZ), xyY);//black
-            //list.add(new Point2D(xyY[0], xyY[1]));
         } else {
             list.add(new Point2D(0, 0));
             list.add(new Point2D(0.8, 0.0));

@@ -105,19 +105,19 @@ import java.util.Objects;
 import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 
 public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
-    public static final String SVG_MIME_TYPE = "image/svg+xml";
-    public static final String SVG_NS = "http://www.w3.org/2000/svg";
-    protected static final String XLINK_NS = "http://www.w3.org/1999/xlink";
-    protected static final String XLINK_PREFIX = "xlink";
-    protected final DoubleXmlConverter nb = new DoubleXmlConverter();
-    protected final IntegerXmlConverter nbi = new IntegerXmlConverter();
-    protected final FloatXmlConverter nbf = new FloatXmlConverter();
+    public static final @NonNull String SVG_MIME_TYPE = "image/svg+xml";
+    public static final @NonNull String SVG_NS = "http://www.w3.org/2000/svg";
+    protected static final @NonNull String XLINK_NS = "http://www.w3.org/1999/xlink";
+    protected static final @NonNull String XLINK_PREFIX = "xlink";
+    protected final @NonNull DoubleXmlConverter nb = new DoubleXmlConverter();
+    protected final @NonNull IntegerXmlConverter nbi = new IntegerXmlConverter();
+    protected final @NonNull FloatXmlConverter nbf = new FloatXmlConverter();
     private final @Nullable Object imageUriKey;
-    private final Converter<ImmutableList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
-    private final Converter<Paint> paintConverter = new SvgPaintCssConverter(true);
+    private final @NonNull Converter<ImmutableList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
+    private final @NonNull Converter<Paint> paintConverter = new SvgPaintCssConverter(true);
     private final @Nullable Object skipKey;
-    private final Converter<ImmutableList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
-    protected @NonNull IdFactory idFactory = new SimpleIdFactory();
+    private final @NonNull Converter<ImmutableList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
+    protected final @NonNull IdFactory idFactory = new SimpleIdFactory();
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
@@ -319,7 +319,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                 String[] paragraphs = str.split("\n");
 
                 for (int i = 0; i < paragraphs.length; i++) {
-                    if (paragraphs[i].length() == 0) {
+                    if (paragraphs[i].isEmpty()) {
                         paragraphs[i] = " ";
                     }
                     AttributedString as = new AttributedString(paragraphs[i]);
@@ -358,8 +358,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             idFactory.createId(node, node.getTypeSelector().toLowerCase());
         }
 
-        if (node instanceof Parent) {
-            Parent pp = (Parent) node;
+        if (node instanceof Parent pp) {
             for (Node child : pp.getChildrenUnmodifiable()) {
                 initIdFactoryRecursively(child);
             }
@@ -402,8 +401,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                 return true;
             }
 
-            if (node instanceof Shape) {
-                Shape shape = (Shape) node;
+            if (node instanceof Shape shape) {
                 Paint fill = shape.getFill();
                 Paint stroke = shape.getStroke();
                 return fill instanceof LinearGradient
@@ -412,8 +410,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                         || stroke instanceof RadialGradient;
             }
 
-            if (node instanceof Parent) {
-                Parent pp = (Parent) node;
+            if (node instanceof Parent pp) {
                 for (Node child : pp.getChildrenUnmodifiable()) {
                     if (shouldWriteDefsRecursively(child)) {
                         return true;
@@ -432,25 +429,26 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             if (!node.isVisible()) {
                 return false;
             }
-            if (node instanceof Shape) {
-                Shape s = (Shape) node;
+            if (node instanceof Shape s) {
                 if ((s.getFill() == null || ((s.getFill() instanceof Color) && ((Color) s.getFill()).getOpacity() == 0))
                         && (s.getStroke() == null || ((s.getStroke() instanceof Color) && ((Color) s.getStroke()).getOpacity() == 0))
                 ) {
                     return false;
                 }
-                if (node instanceof Path) {
-                    Path p = (Path) node;
-                    return !p.getElements().isEmpty();
-                } else if (node instanceof Polyline) {
-                    Polyline p = (Polyline) node;
-                    return !p.getPoints().isEmpty();
-                } else if (node instanceof Polygon) {
-                    Polygon p = (Polygon) node;
-                    return !p.getPoints().isEmpty();
+                switch (node) {
+                    case Path p -> {
+                        return !p.getElements().isEmpty();
+                    }
+                    case Polyline p -> {
+                        return !p.getPoints().isEmpty();
+                    }
+                    case Polygon p -> {
+                        return !p.getPoints().isEmpty();
+                    }
+                    default -> {
+                    }
                 }
-            } else if (node instanceof Group) {
-                Group g = (Group) node;
+            } else if (node instanceof Group g) {
                 return !g.getChildren().isEmpty();
             }
         }
@@ -626,14 +624,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
         writeClipPathDefs(w, node);
 
-        if (node instanceof Shape) {
-            Shape shape = (Shape) node;
+        if (node instanceof Shape shape) {
             writePaintDefs(w, shape.getFill());
             writePaintDefs(w, shape.getStroke());
         }
 
-        if (node instanceof Parent) {
-            Parent pp = (Parent) node;
+        if (node instanceof Parent pp) {
             for (Node child : pp.getChildrenUnmodifiable()) {
                 writeDefsRecursively(w, child);
             }
@@ -700,8 +696,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("fill", "url(#" + id + ")");
         } else {
             w.writeAttribute("fill", paintConverter.toString(fill));
-            if (fill instanceof Color) {
-                Color c = (Color) fill;
+            if (fill instanceof Color c) {
                 if (!c.isOpaque()) {
                     fillOpacity *= c.getOpacity();
                 }
@@ -712,11 +707,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
 
         final FillRule fillRule;
-        if (shape instanceof Path) {
-            Path path = (Path) shape;
+        if (shape instanceof Path path) {
             fillRule = path.getFillRule();
-        } else if (shape instanceof SVGPath) {
-            SVGPath path = (SVGPath) shape;
+        } else if (shape instanceof SVGPath path) {
             fillRule = path.getFillRule();
         } else {
             fillRule = FillRule.NON_ZERO;
@@ -850,21 +843,19 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             return;
         }
 
-        if (node instanceof Shape) {
-            writeShapeStartElement(w, (Shape) node);
-            writeFillAttributes(w, (Shape) node);
-            if (((Shape) node).getStrokeType() == StrokeType.CENTERED) {
-                writeStrokeAttributes(w, (Shape) node);
+        switch (node) {
+            case Shape shape -> {
+                writeShapeStartElement(w, shape);
+                writeFillAttributes(w, shape);
+                if (shape.getStrokeType() == StrokeType.CENTERED) {
+                    writeStrokeAttributes(w, (Shape) node);
+                }
+                writeClipAttributes(w, node);
             }
-            writeClipAttributes(w, node);
-        } else if (node instanceof Group) {
-            writeGroupStartElement(w, (Group) node);
-        } else if (node instanceof Region) {
-            writeRegionStartElement(w, (Region) node);
-        } else if (node instanceof ImageView) {
-            writeImageViewStartElement(w, (ImageView) node);
-        } else {
-            throw new IOException("not yet implemented for " + node);
+            case Group group -> writeGroupStartElement(w, group);
+            case Region region -> writeRegionStartElement(w, region);
+            case ImageView imageView -> writeImageViewStartElement(w, imageView);
+            default -> throw new IOException("not yet implemented for " + node);
         }
         writeStyleAttributes(w, node);
         writeTransformAttributes(w, node);
@@ -877,8 +868,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             writeRegionChildElements(w, (Region) node);
         }
 
-        if (node instanceof Parent) {
-            final Parent pp = (Parent) node;
+        if (node instanceof Parent pp) {
             for (Node child : pp.getChildrenUnmodifiable()) {
                 writeNodeRecursively(w, child, depth + 1);
             }
@@ -892,11 +882,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
     private void writePaintDefs(@NonNull XMLStreamWriter w, Paint paint) throws IOException, XMLStreamException {
         if (idFactory.getId(paint) == null) {
-            if (paint instanceof LinearGradient) {
-                LinearGradient g = (LinearGradient) paint;
+            if (paint instanceof LinearGradient g) {
                 writeLinearGradientDef(w, g);
-            } else if (paint instanceof RadialGradient) {
-                RadialGradient g = (RadialGradient) paint;
+            } else if (paint instanceof RadialGradient g) {
                 writeRadialGradientDef(w, g);
             }
         }
@@ -917,32 +905,16 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeStartElement("path");
 
         java.awt.Shape shape = FXShapes.awtShapeFromFX(fxShape);
-        int cap;
-        switch (fxShape.getStrokeLineCap()) {
-            case SQUARE:
-                cap = BasicStroke.CAP_SQUARE;
-                break;
-            case BUTT:
-            default:
-                cap = BasicStroke.CAP_BUTT;
-                break;
-            case ROUND:
-                cap = BasicStroke.CAP_ROUND;
-                break;
-        }
-        int join;
-        switch (fxShape.getStrokeLineJoin()) {
-            case MITER:
-            default:
-                join = BasicStroke.JOIN_MITER;
-                break;
-            case BEVEL:
-                join = BasicStroke.JOIN_BEVEL;
-                break;
-            case ROUND:
-                join = BasicStroke.JOIN_ROUND;
-                break;
-        }
+        int cap = switch (fxShape.getStrokeLineCap()) {
+            case SQUARE -> BasicStroke.CAP_SQUARE;
+            default -> BasicStroke.CAP_BUTT;
+            case ROUND -> BasicStroke.CAP_ROUND;
+        };
+        int join = switch (fxShape.getStrokeLineJoin()) {
+            default -> BasicStroke.JOIN_MITER;
+            case BEVEL -> BasicStroke.JOIN_BEVEL;
+            case ROUND -> BasicStroke.JOIN_ROUND;
+        };
         ObservableList<Double> strokeDashArray = fxShape.getStrokeDashArray();
         float[] dashes = new float[strokeDashArray.size()];
         for (int i = 0; i < strokeDashArray.size(); i++) {
@@ -1217,32 +1189,20 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     }
 
     private void writeShapeStartElement(@NonNull XMLStreamWriter w, Shape node) throws IOException, XMLStreamException {
-        if (node instanceof Arc) {
-            writeArcStartElement(w, (Arc) node);
-        } else if (node instanceof Circle) {
-            writeCircleStartElement(w, (Circle) node);
-        } else if (node instanceof CubicCurve) {
-            writeCubicCurveStartElement(w, (CubicCurve) node);
-        } else if (node instanceof Ellipse) {
-            writeEllipseStartElement(w, (Ellipse) node);
-        } else if (node instanceof Line) {
-            writeLineStartElement(w, (Line) node);
-        } else if (node instanceof Path) {
-            writePathStartElement(w, (Path) node);
-        } else if (node instanceof Polygon) {
-            writePolygonStartElement(w, (Polygon) node);
-        } else if (node instanceof Polyline) {
-            writePolylineStartElement(w, (Polyline) node);
-        } else if (node instanceof QuadCurve) {
-            writeQuadCurveStartElement(w, (QuadCurve) node);
-        } else if (node instanceof Rectangle) {
-            writeRectangleStartElement(w, (Rectangle) node);
-        } else if (node instanceof SVGPath) {
-            writeSVGPathStartElement(w, (SVGPath) node);
-        } else if (node instanceof Text) {
-            writeTextStartElement(w, (Text) node);
-        } else {
-            throw new IOException("unknown shape type " + node);
+        switch (node) {
+            case Arc arc -> writeArcStartElement(w, arc);
+            case Circle circle -> writeCircleStartElement(w, circle);
+            case CubicCurve cubicCurve -> writeCubicCurveStartElement(w, cubicCurve);
+            case Ellipse ellipse -> writeEllipseStartElement(w, ellipse);
+            case Line line -> writeLineStartElement(w, line);
+            case Path path -> writePathStartElement(w, path);
+            case Polygon polygon -> writePolygonStartElement(w, polygon);
+            case Polyline polyline -> writePolylineStartElement(w, polyline);
+            case QuadCurve quadCurve -> writeQuadCurveStartElement(w, quadCurve);
+            case Rectangle rectangle -> writeRectangleStartElement(w, rectangle);
+            case SVGPath svgPath -> writeSVGPathStartElement(w, svgPath);
+            case Text text -> writeTextStartElement(w, text);
+            case null, default -> throw new IOException("unknown shape type " + node);
         }
     }
 
@@ -1259,8 +1219,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("stroke", "url(#" + id + ")");
         } else {
             w.writeAttribute("stroke", paintConverter.toString(stroke));
-            if (stroke instanceof Color) {
-                Color c = (Color) stroke;
+            if (stroke instanceof Color c) {
                 if (!c.isOpaque()) {
                     strokeOpacity *= c.getOpacity();
                 }
@@ -1319,8 +1278,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("fill", "url(#" + id + ")");
         } else {
             w.writeAttribute("fill", paintConverter.toString(stroke));
-            if (stroke instanceof Color) {
-                Color c = (Color) stroke;
+            if (stroke instanceof Color c) {
                 if (!c.isOpaque()) {
                     w.writeAttribute("fill-opacity", nb.toString(c.getOpacity()));
                 }
@@ -1395,16 +1353,10 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             w.writeAttribute("text-decoration", "line-through ");
         }
         switch (node.getTextAlignment()) {
-            case LEFT:
-                break;
-            case CENTER:
-                w.writeAttribute("text-anchor", "middle");
-                break;
-            case RIGHT:
-                w.writeAttribute("text-anchor", "end");
-                break;
-            case JUSTIFY:
-                break;
+            case LEFT, JUSTIFY -> {
+            }
+            case CENTER -> w.writeAttribute("text-anchor", "middle");
+            case RIGHT -> w.writeAttribute("text-anchor", "end");
         }
 
         if (hasNoWrapping(node)) {
@@ -1412,16 +1364,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             // text directly into the body of the "text" element.
             Bounds bounds = node.getLayoutBounds();
             switch (node.getTextAlignment()) {
-                case LEFT:
-                case JUSTIFY:
-                    w.writeAttribute("x", nb.toString(node.getX()));
-                    break;
-                case CENTER:
-                    w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth() * 0.5));
-                    break;
-                case RIGHT:
-                    w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth()));
-                    break;
+                case LEFT, JUSTIFY -> w.writeAttribute("x", nb.toString(node.getX()));
+                case CENTER -> w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth() * 0.5));
+                case RIGHT -> w.writeAttribute("x", nb.toString(node.getX() + bounds.getWidth()));
             }
 
             // By adding baselineOffset to layoutBounds.minY we get the correct
@@ -1494,7 +1439,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
     private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull List<Transform> txs) throws XMLStreamException {
 
-        if (txs.size() > 0) {
+        if (!txs.isEmpty()) {
             String value = tx.toString(VectorList.copyOf(txs));
             if (!value.isEmpty()) {
                 w.writeAttribute("transform", value);

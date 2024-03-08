@@ -37,9 +37,7 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     @SuppressWarnings("unchecked")
     @Override
     public <T> @NonNull ImmutableSet<T> empty() {
-        return new ImmutableSetFacade<>(new LinkedHashSet<>(), k -> {
-            return (Set<T>) ((LinkedHashSet<?>) k).clone();
-        });
+        return new ImmutableSetFacade<>(new LinkedHashSet<>(), k -> (Set<T>) ((LinkedHashSet<?>) k).clone());
     }
 
     @Override
@@ -85,7 +83,7 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
         } else if (c instanceof Collection<?> cc) {
             collection = (Collection<E>) cc;
         } else {
-            collection = new HashSet<E>();
+            collection = new HashSet<>();
             c.forEach(e -> collection.add((E) e));
         }
         return clone.retainAll(collection) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;

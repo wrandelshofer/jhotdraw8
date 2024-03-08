@@ -6,7 +6,11 @@ package org.jhotdraw8.collection.primitive;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.ConcurrentModificationException;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * A {@code long}-valued deque backed by a primitive array.
@@ -152,10 +156,9 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         if (this == o) {
             return true;
         }
-        if (!(o instanceof LongArrayDeque)) {
+        if (!(o instanceof LongArrayDeque that)) {
             return false;
         }
-        LongArrayDeque that = (LongArrayDeque) o;
         if (this.size() != that.size()) {
             return false;
         }

@@ -137,17 +137,9 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
                 Shape pageClip = page.getPageClip(internalPageNumber);
                 Transform localToWorld = page.getWorldToLocal();
                 Group parentOfDrawing = new Group();
-                if (localToWorld == null) {
-                    drawingNode.getTransforms().clear();
-                } else {
-                    drawingNode.getTransforms().setAll(localToWorld);
-                    Transform pageLocalToWorld = page.getLocalToWorld();
-                    if (pageLocalToWorld == null) {
-                        parentOfDrawing.getTransforms().clear();
-                    } else {
-                        parentOfDrawing.getTransforms().setAll(pageLocalToWorld);
-                    }
-                }
+                drawingNode.getTransforms().setAll(localToWorld);
+                Transform pageLocalToWorld = page.getLocalToWorld();
+                parentOfDrawing.getTransforms().setAll(pageLocalToWorld);
                 parentOfDrawing.getChildren().add(drawingNode);
                 parentOfDrawing.setClip(pageClip);
 

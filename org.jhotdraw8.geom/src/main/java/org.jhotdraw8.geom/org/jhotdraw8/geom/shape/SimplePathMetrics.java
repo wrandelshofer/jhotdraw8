@@ -183,9 +183,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                     j++;
                     offset += 2;
                 }
-                case SEG_CLOSE -> {
-                    needsClose = true;
-                }
+                case SEG_CLOSE -> needsClose = true;
                 default -> {
                     if (needsMoveTo) {
                         needsMoveTo = false;
@@ -347,15 +345,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         public int currentSegment(float[] coords) {
             final int offset = m.offsets[current];
             switch (m.commands[current]) {
-                case SEG_MOVETO, SEG_LINETO -> {
-                    tt.transform(m.coords, offset, coords, 0, 1);
-                }
-                case SEG_QUADTO -> {
-                    tt.transform(m.coords, offset, coords, 0, 2);
-                }
-                case SEG_CUBICTO -> {
-                    tt.transform(m.coords, offset, coords, 0, 3);
-                }
+                case SEG_MOVETO, SEG_LINETO -> tt.transform(m.coords, offset, coords, 0, 1);
+                case SEG_QUADTO -> tt.transform(m.coords, offset, coords, 0, 2);
+                case SEG_CUBICTO -> tt.transform(m.coords, offset, coords, 0, 3);
                 default -> {//SEG CLOSE
 
                 }
@@ -367,15 +359,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         public int currentSegment(double[] coords) {
             final int offset = m.offsets[current];
             switch (m.commands[current]) {
-                case SEG_MOVETO, SEG_LINETO -> {
-                    tt.transform(m.coords, offset, coords, 0, 1);
-                }
-                case SEG_QUADTO -> {
-                    tt.transform(m.coords, offset, coords, 0, 2);
-                }
-                case SEG_CUBICTO -> {
-                    tt.transform(m.coords, offset, coords, 0, 3);
-                }
+                case SEG_MOVETO, SEG_LINETO -> tt.transform(m.coords, offset, coords, 0, 1);
+                case SEG_QUADTO -> tt.transform(m.coords, offset, coords, 0, 2);
+                case SEG_CUBICTO -> tt.transform(m.coords, offset, coords, 0, 3);
                 default -> {//SEG CLOSE
 
                 }
@@ -401,7 +387,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
          * The index of the first command that ends outside the sub-path.
          */
         int i1;
-        double[] splitCoords = new double[8];
+        final double[] splitCoords = new double[8];
         private final double @NonNull [] segCoords = new double[6];
         private int segType;
 
@@ -416,14 +402,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
         private final double epsilon = 0.125;
         private @NonNull State state;
-        private boolean startsAtSegment, endsAtSegment;
+        final private boolean startsAtSegment, endsAtSegment;
 
-        /**
-         * @param s0
-         * @param s1
-         * @param m
-         * @param tt
-         */
         public SubPathIterator(double s0, double s1, @NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
             double totalArcLength = m.arcLength();
             this.s0 = s0 = Math.max(0, s0);
@@ -464,18 +444,12 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 double ss0 = s0 - m.lengths[i0 - 1];
                 double arcLength = m.lengths[i0] - m.lengths[i0 - 1];
                 switch (m.commands[i0]) {
-                    case SEG_LINETO -> {
-                        Lines.split(m.coords, offset - 2,
-                                ss0 / arcLength, null, 0, splitCoords, 0);
-                    }
-                    case SEG_QUADTO -> {
-                        QuadCurves.split(m.coords, offset - 2,
-                                QuadCurves.invArcLength(m.coords, offset - 2, ss0, arcLength, epsilon), null, 0, splitCoords, 0);
-                    }
-                    case SEG_CUBICTO -> {
-                        CubicCurves.split(m.coords, offset - 2,
-                                CubicCurves.invArcLength(m.coords, offset - 2, ss0, arcLength, epsilon), null, 0, splitCoords, 0);
-                    }
+                    case SEG_LINETO -> Lines.split(m.coords, offset - 2,
+                            ss0 / arcLength, null, 0, splitCoords, 0);
+                    case SEG_QUADTO -> QuadCurves.split(m.coords, offset - 2,
+                            QuadCurves.invArcLength(m.coords, offset - 2, ss0, arcLength, epsilon), null, 0, splitCoords, 0);
+                    case SEG_CUBICTO -> CubicCurves.split(m.coords, offset - 2,
+                            CubicCurves.invArcLength(m.coords, offset - 2, ss0, arcLength, epsilon), null, 0, splitCoords, 0);
                     default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
                 }
                 System.arraycopy(splitCoords, 0, segCoords, 0, 2);
@@ -483,18 +457,12 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                     double ss1 = s1 - m.lengths[i0 - 1];
 
                     switch (m.commands[i0]) {
-                        case SEG_LINETO -> {
-                            Lines.split(m.coords, offset - 2,
-                                    ss1 / arcLength, splitCoords, 0, null, 0);
-                        }
-                        case SEG_QUADTO -> {
-                            QuadCurves.split(splitCoords, 0,
-                                    QuadCurves.invArcLength(splitCoords, 0, ss1 - ss0, arcLength, epsilon), splitCoords, 0, null, 0);
-                        }
-                        case SEG_CUBICTO -> {
-                            CubicCurves.split(splitCoords, 0,
-                                    CubicCurves.invArcLength(splitCoords, 0, ss1 - ss0, arcLength, epsilon), splitCoords, 0, null, 0);
-                        }
+                        case SEG_LINETO -> Lines.split(m.coords, offset - 2,
+                                ss1 / arcLength, splitCoords, 0, null, 0);
+                        case SEG_QUADTO -> QuadCurves.split(splitCoords, 0,
+                                QuadCurves.invArcLength(splitCoords, 0, ss1 - ss0, arcLength, epsilon), splitCoords, 0, null, 0);
+                        case SEG_CUBICTO -> CubicCurves.split(splitCoords, 0,
+                                CubicCurves.invArcLength(splitCoords, 0, ss1 - ss0, arcLength, epsilon), splitCoords, 0, null, 0);
                         default -> throw new AssertionError("unexpected command=" + m.commands[i0] + " at index=" + i0);
                     }
                     state = State.CLIP_FIRST_AND_LAST_SEGMENT;
@@ -520,15 +488,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                 case CLIP_FIRST_SEGMENT -> {
                     segType = m.commands[current];
                     switch (segType) {
-                        case SEG_LINETO -> {
-                            System.arraycopy(splitCoords, 2, segCoords, 0, 2);
-                        }
-                        case SEG_QUADTO -> {
-                            System.arraycopy(splitCoords, 2, segCoords, 0, 4);
-                        }
-                        case SEG_CUBICTO -> {
-                            System.arraycopy(splitCoords, 2, segCoords, 0, 6);
-                        }
+                        case SEG_LINETO -> System.arraycopy(splitCoords, 2, segCoords, 0, 2);
+                        case SEG_QUADTO -> System.arraycopy(splitCoords, 2, segCoords, 0, 4);
+                        case SEG_CUBICTO -> System.arraycopy(splitCoords, 2, segCoords, 0, 6);
                         default -> throw new AssertionError("unexpected command=" + segType);
                     }
                     current++;
@@ -548,15 +510,9 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                     segType = m.commands[current];
                     final int offset = m.offsets[current];
                     switch (m.commands[current]) {
-                        case SEG_MOVETO, SEG_LINETO -> {
-                            tt.transform(m.coords, offset, segCoords, 0, 1);
-                        }
-                        case SEG_QUADTO -> {
-                            tt.transform(m.coords, offset, segCoords, 0, 2);
-                        }
-                        case SEG_CUBICTO -> {
-                            tt.transform(m.coords, offset, segCoords, 0, 3);
-                        }
+                        case SEG_MOVETO, SEG_LINETO -> tt.transform(m.coords, offset, segCoords, 0, 1);
+                        case SEG_QUADTO -> tt.transform(m.coords, offset, segCoords, 0, 2);
+                        case SEG_CUBICTO -> tt.transform(m.coords, offset, segCoords, 0, 3);
                         default -> {//SEG CLOSE
 
                         }
@@ -575,18 +531,12 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                     double arcLength = m.lengths[i1] - startLength;
                     segType = m.commands[i1];
                     switch (segType) {
-                        case SEG_LINETO -> {
-                            Lines.split(m.coords, offset - 2,
-                                    s / arcLength, splitCoords, 0, null, 0);
-                        }
-                        case SEG_QUADTO -> {
-                            QuadCurves.split(m.coords, offset - 2,
-                                    QuadCurves.invArcLength(m.coords, offset - 2, s, arcLength, epsilon), splitCoords, 0, null, 0);
-                        }
-                        case SEG_CUBICTO -> {
-                            CubicCurves.split(m.coords, offset - 2,
-                                    CubicCurves.invArcLength(m.coords, offset - 2, s, arcLength, epsilon), splitCoords, 0, null, 0);
-                        }
+                        case SEG_LINETO -> Lines.split(m.coords, offset - 2,
+                                s / arcLength, splitCoords, 0, null, 0);
+                        case SEG_QUADTO -> QuadCurves.split(m.coords, offset - 2,
+                                QuadCurves.invArcLength(m.coords, offset - 2, s, arcLength, epsilon), splitCoords, 0, null, 0);
+                        case SEG_CUBICTO -> CubicCurves.split(m.coords, offset - 2,
+                                CubicCurves.invArcLength(m.coords, offset - 2, s, arcLength, epsilon), splitCoords, 0, null, 0);
                         default -> throw new AssertionError("unexpected command=" + segType);
                     }
                     System.arraycopy(splitCoords, 2, segCoords, 0, 6);
@@ -597,9 +547,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
                     System.arraycopy(splitCoords, 2, segCoords, 0, 6);
                     state = State.FINAL_SEGMENT;
                 }
-                default -> {
-                    state = State.DONE;
-                }
+                default -> state = State.DONE;
             }
         }
 

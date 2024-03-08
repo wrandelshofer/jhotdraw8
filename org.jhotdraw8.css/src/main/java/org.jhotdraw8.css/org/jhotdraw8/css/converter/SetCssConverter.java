@@ -155,11 +155,11 @@ public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>
         for (; ; ) {
             int ttype = tt.nextNoSkip();
             if (delimiterChars.contains(ttype)) {
-                continue Loop;
+                continue;
             }
             switch (ttype) {
                 case CssTokenType.TT_S:
-                    continue Loop;
+                    continue;
                 case CssTokenType.TT_EOF:
                 case CssTokenType.TT_SEMICOLON:
                 case CssTokenType.TT_RIGHT_BRACKET:
@@ -226,7 +226,7 @@ public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     }
 
     @Override
-    public boolean isNullable() {
+    public boolean nullable() {
         return false;
     }
 

@@ -132,7 +132,7 @@ public class ArcToCubicCurve {
         // Get center parameters (cx, cy, theta1, delta_theta).
         ArcCenter cc = getArcCenter(x1, y1, x2, y2, largeArcFlag, sweepFlag, rx, ry, sin_phi, cos_phi);
 
-        ArrayList<double[]> result = new ArrayList<double[]>();
+        ArrayList<double[]> result = new ArrayList<>();
         double theta1 = cc.theta1;
         double delta_theta = cc.delta_theta;
 
@@ -267,15 +267,7 @@ public class ArcToCubicCurve {
         return sign * Math.acos(dot);
     }
 
-    private static class ArcCenter {
-        final double cx, cy, theta1, delta_theta;
-
-        private ArcCenter(double cx, double cy, double theta1, double delta_theta) {
-            this.cx = cx;
-            this.cy = cy;
-            this.theta1 = theta1;
-            this.delta_theta = delta_theta;
-        }
+    private record ArcCenter(double cx, double cy, double theta1, double delta_theta) {
     }
 
 }

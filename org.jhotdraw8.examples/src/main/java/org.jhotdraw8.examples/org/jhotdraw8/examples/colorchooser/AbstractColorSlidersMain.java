@@ -21,7 +21,6 @@ import org.jhotdraw8.color.RgbBitConverters;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -59,7 +58,7 @@ public abstract class AbstractColorSlidersMain extends Application {
         Map<ToIntFunction<Integer>, String> inverseMap = map.entrySet().stream().collect(Collectors.toMap(Map.Entry::getValue, Map.Entry::getKey));
         comboBox.setItems(FXCollections.observableArrayList(map.values()));
         comboBox.setValue(map.values().iterator().next());
-        comboBox.setConverter(new StringConverter<ToIntFunction<Integer>>() {
+        comboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(ToIntFunction<Integer> object) {
                 return inverseMap.get(object);
@@ -81,14 +80,13 @@ public abstract class AbstractColorSlidersMain extends Application {
      */
     protected @NonNull ComboBox<NamedColorSpace> createColorSpaceComboBox(NamedColorSpace... colorSpaces) {
         Map<String, NamedColorSpace> map =
-                Arrays.asList(colorSpaces)
-                        .stream()
+                Arrays.stream(colorSpaces)
                         .collect(Collectors.toMap(NamedColorSpace::getName, Function.identity(), (a, b) -> b, LinkedHashMap::new));
 
         ComboBox<NamedColorSpace> comboBox = new ComboBox<>(FXCollections.observableArrayList(
                 map.values())
         );
-        comboBox.setConverter(new StringConverter<NamedColorSpace>() {
+        comboBox.setConverter(new StringConverter<>() {
             @Override
             public String toString(NamedColorSpace object) {
                 return object.getName();

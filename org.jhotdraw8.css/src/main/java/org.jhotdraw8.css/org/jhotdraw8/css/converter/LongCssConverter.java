@@ -31,12 +31,10 @@ public class LongCssConverter extends AbstractCssConverter<Long> {
 
     @Override
     public @NonNull Long parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                return tt.currentNumberNonNull().longValue();
-            default:
-                throw tt.createParseException("⟨Long⟩: long expected.");
-        }
+        return switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().longValue();
+            default -> throw tt.createParseException("⟨Long⟩: long expected.");
+        };
     }
 
     @Override

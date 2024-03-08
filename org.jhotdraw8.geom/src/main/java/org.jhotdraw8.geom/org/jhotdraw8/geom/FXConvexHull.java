@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -48,16 +47,12 @@ public class FXConvexHull {
 
         // Sort points from left to right O(n log n)
         Point2D[] sorted = points.clone();
-        Arrays.sort(sorted, new Comparator<Point2D>() {
-
-            @Override
-            public int compare(@NonNull Point2D o1, @NonNull Point2D o2) {
-                double v = o1.getX() - o2.getX();
-                if (v == 0) {
-                    v = o1.getY() - o2.getY();
-                }
-                return (v > 0) ? 1 : ((v < 0) ? -1 : 0);
+        Arrays.sort(sorted, (o1, o2) -> {
+            double v = o1.getX() - o2.getX();
+            if (v == 0) {
+                v = o1.getY() - o2.getY();
             }
+            return (v > 0) ? 1 : ((v < 0) ? -1 : 0);
         });
 
         Point2D[] hull = new Point2D[sorted.length + 2];

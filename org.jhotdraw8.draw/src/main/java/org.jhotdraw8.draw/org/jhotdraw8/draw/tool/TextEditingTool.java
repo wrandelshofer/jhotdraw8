@@ -82,7 +82,7 @@ public class TextEditingTool extends AbstractTool {
             DrawingView drawingView = getDrawingView();
             if (drawingView != null) {
                 DrawingModel model = drawingView.getModel();
-                model.set(editorData.figure, editorData.textKey, textArea.getText());
+                model.set(editorData.figure(), editorData.textKey(), textArea.getText());
             }
             editorData = null;
         }
@@ -100,8 +100,7 @@ public class TextEditingTool extends AbstractTool {
         y1 = event.getY();
 
         Figure figure = view.findFigure(x1, y1, f -> f.isSelectable() && f instanceof TextEditableFigure);
-        if (figure instanceof TextEditableFigure) {
-            TextEditableFigure f = (TextEditableFigure) figure;
+        if (figure instanceof TextEditableFigure f) {
             TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.worldToLocal(new Point2D(x1, y1)), view.findFigureNode(f, x1, y1));
             if (data != null) {
                 startEditing(data, view);
@@ -113,21 +112,20 @@ public class TextEditingTool extends AbstractTool {
     private void startEditing(TextEditableFigure.@NonNull TextEditorData data, @NonNull DrawingView dv) {
         dv.getSelectedFigures().clear();
         dv.getEditor().setHandleType(HandleType.SELECT);
-        dv.getSelectedFigures().add(data.figure);
+        dv.getSelectedFigures().add(data.figure());
         editorData = data;
         textArea.setManaged(false);
         node.getChildren().add(textArea);
-        Bounds bounds = dv.worldToView(data.figure.localToWorld(data.boundsInLocal));
+        Bounds bounds = dv.worldToView(data.figure().localToWorld(data.boundsInLocal()));
         textArea.resizeRelocate(bounds.getMinX(), bounds.getMinY(), max(80, max(textArea.getMinWidth(), bounds.getWidth())),
                 max(40, max(textArea.getMinHeight(), bounds.getHeight())));
-        textArea.setText(data.figure.get(editorData.textKey));
+        textArea.setText(data.figure().get(editorData.textKey()));
         textArea.requestFocus();
     }
 
     @Override
     protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (editorData != null) {
-            return;
         }
     }
 
@@ -135,7 +133,6 @@ public class TextEditingTool extends AbstractTool {
     protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         event.consume();
         if (editorData != null) {
-            return;
         }
     }
 
@@ -145,8 +142,7 @@ public class TextEditingTool extends AbstractTool {
             return;
         }
         Figure figure = view.findFigure(event.getX(), event.getY());
-        if (figure instanceof TextEditableFigure) {
-            TextEditableFigure f = (TextEditableFigure) figure;
+        if (figure instanceof TextEditableFigure f) {
             TextEditableFigure.TextEditorData data = f.getTextEditorDataFor(f.getWorldToLocal().transform(event.getX(), event.getY()),
                     view.findFigureNode(f, event.getX(), event.getY()));
             if (data != null) {
@@ -173,10 +169,11 @@ public class TextEditingTool extends AbstractTool {
 
     @Override
     public @NonNull String getHelpText() {
-        return "CreationTool"
-                + "\n  Click on the drawing view. The tool will create a new figure with default size at the clicked location."
-                + "\nOr:"
-                + "\n  Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.";
+        return """
+               CreationTool
+                 Click on the drawing view. The tool will create a new figure with default size at the clicked location.
+               Or:
+                 Press and drag the mouse over the drawing view to define the diagonal of a rectangle. The tool will create a new figure that fits into the rectangle.""";
     }
 
 }

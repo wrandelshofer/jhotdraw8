@@ -92,19 +92,11 @@ public class EllipseFigure extends AbstractLeafFigure
         shape.setCenterY(getStyledNonNull(CENTER_Y).getConvertedValue());
 
         double strokeWidth = getStyledNonNull(STROKE_WIDTH).getConvertedValue();
-        double offset;
-        switch (getStyledNonNull(STROKE_TYPE)) {
-            case CENTERED:
-            default:
-                offset = 0;
-            break;
-        case INSIDE:
-            offset = -strokeWidth * 0.5;
-            break;
-        case OUTSIDE:
-            offset = strokeWidth * 0.5;
-            break;
-        }
+        double offset = switch (getStyledNonNull(STROKE_TYPE)) {
+            default -> 0;
+            case INSIDE -> -strokeWidth * 0.5;
+            case OUTSIDE -> strokeWidth * 0.5;
+        };
         shape.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue() + offset);
         shape.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue() + offset);
         return FXShapes.awtShapeFromFX(shape).getPathIterator(tx);

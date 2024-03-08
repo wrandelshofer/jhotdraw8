@@ -22,15 +22,10 @@ public class ImageNodeReaderProvider implements NodeReaderProvider {
     public boolean canDecodeInput(@NonNull String path) {
         int p = path.lastIndexOf('.');
         String extension = path.substring(p + 1);
-        switch (extension.toLowerCase()) {
-        case "png":
-        case "bmp":
-        case "gif":
-        case "jpg":
-            return true;
-        default:
-            return false;
-        }
+        return switch (extension.toLowerCase()) {
+            case "png", "bmp", "gif", "jpg" -> true;
+            default -> false;
+        };
     }
 
     @Override

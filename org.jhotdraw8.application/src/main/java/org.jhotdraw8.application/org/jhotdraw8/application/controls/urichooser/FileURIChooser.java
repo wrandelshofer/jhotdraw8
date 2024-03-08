@@ -74,15 +74,10 @@ public class FileURIChooser implements URIChooser {
     @Override
     public @Nullable URI showDialog(Window parent) {
         updateFilters();
-        File f = null;
-        switch (mode) {
-        case OPEN:
-            f = chooser.showOpenDialog(parent);
-            break;
-        case SAVE:
-            f = chooser.showSaveDialog(parent);
-            break;
-        }
+        File f = switch (mode) {
+            case OPEN -> chooser.showOpenDialog(parent);
+            case SAVE -> chooser.showSaveDialog(parent);
+        };
         return f == null ? null : f.toURI();
     }
 

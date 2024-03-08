@@ -107,7 +107,7 @@ public class FontFamilyChooserController {
         });
 
         collectionList.setCellFactory(lv -> {
-            final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<FontCollection>();
+            final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<>();
             return listCell;
         });
     }
@@ -190,9 +190,7 @@ public class FontFamilyChooserController {
         initPreferencesBehavior();
         initListCells();
 
-        collectionList.itemsProperty().addListener((o, oldv, newv) -> {
-            System.out.println("collectionList change=" + newv);
-        });
+        collectionList.itemsProperty().addListener((o, oldv, newv) -> System.out.println("collectionList change=" + newv));
 
     }
 

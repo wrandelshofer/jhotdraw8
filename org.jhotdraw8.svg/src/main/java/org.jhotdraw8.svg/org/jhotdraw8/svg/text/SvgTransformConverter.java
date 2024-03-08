@@ -62,16 +62,14 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
 
     @Override
     protected <TT extends Transform> void produceTokensNonNull(@NonNull TT tx, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        if (tx instanceof Translate) {
-            Translate tr = (Translate) tx;
+        if (tx instanceof Translate tr) {
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "translate"));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getTx()));
             out.accept(new CssToken(CssTokenType.TT_COMMA));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getTy()));
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-        } else if ((tx instanceof Scale) && ((Scale) tx).getPivotX() == 0.0 && ((Scale) tx).getPivotY() == 0.0) {
+        } else if ((tx instanceof Scale ts) && ((Scale) tx).getPivotX() == 0.0 && ((Scale) tx).getPivotY() == 0.0) {
             // Svg only supports scale with a pivot of at 0,0.
-            Scale ts = (Scale) tx;
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "scale"));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getX()));
             if (ts.getY() != ts.getX() || ts.getZ() != 1 || ts.getPivotX() != 0 || ts.getPivotY() != 0) {
@@ -79,8 +77,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
                 out.accept(new CssToken(CssTokenType.TT_NUMBER, ts.getY()));
             }
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
-        } else if (tx instanceof Rotate) {
-            Rotate tr = (Rotate) tx;
+        } else if (tx instanceof Rotate tr) {
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "rotate"));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getAngle()));
             if (tr.getPivotX() != 0.0 || tr.getPivotY() != 0.0) {
@@ -112,13 +109,14 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
 
     @Override
     public @NonNull String getHelpText() {
-        return "Format of ⟨Transform⟩: ⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨SkewX⟩｜⟨SkewY⟩｜⟨Matrix⟩"
-                + "\nFormat of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)"
-                + "\nFormat of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩)"
-                + "\nFormat of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)"
-                + "\nFormat of ⟨SkewX⟩: skewX(⟨skew-angle⟩)"
-                + "\nFormat of ⟨SkewY⟩: skewY(⟨skew-angle⟩)"
-                + "\nFormat of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩, ⟨xy⟩,⟨yy⟩, ⟨tx⟩,⟨ty⟩)"
+        return """
+               Format of ⟨Transform⟩: ⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨SkewX⟩｜⟨SkewY⟩｜⟨Matrix⟩
+               Format of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)
+               Format of ⟨Scale⟩: scale(⟨sx⟩,⟨sy⟩)
+               Format of ⟨Rotate⟩: rotate(⟨angle⟩［,⟨pivotx⟩,⟨pivoty⟩］)
+               Format of ⟨SkewX⟩: skewX(⟨skew-angle⟩)
+               Format of ⟨SkewY⟩: skewY(⟨skew-angle⟩)
+               Format of ⟨Matrix⟩: matrix(⟨xx⟩,⟨yx⟩, ⟨xy⟩,⟨yy⟩, ⟨tx⟩,⟨ty⟩)"""
                 ;
     }
 
@@ -142,105 +140,92 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
         }
         switch (func) {
             case "matrix": {
-                switch (m.size()) {
-                    case 0:
-                        return new Affine(//
-                                1, 0, 0,//
-                                0, 1, 0//
-                        );
-                    case 6:
-                        return new Affine(//
-                                m.get(0), m.get(2), m.get(4),//
-                                m.get(1), m.get(3), m.get(5)//
-                        );
-                    default:
-                        throw new ParseException("6 or 12 coefficients expected, but found " + m.size(), tt.getStartPosition());
-                }
+                return switch (m.size()) {
+                    case 0 -> new Affine(//
+                            1, 0, 0,//
+                            0, 1, 0//
+                    );
+                    case 6 -> new Affine(//
+                            m.get(0), m.get(2), m.get(4),//
+                            m.get(1), m.get(3), m.get(5)//
+                    );
+                    default ->
+                            throw new ParseException("6 or 12 coefficients expected, but found " + m.size(), tt.getStartPosition());
+                };
             }
             case "skewX": {
-                switch (m.size()) {
-                    case 0:
-                        return Transform.translate(//
-                                0, 0//
-                        );//
-                    case 1:
+                return switch (m.size()) {
+                    case 0 -> Transform.translate(//
+                            0, 0//
+                    );//
+                    case 1 -> {
                         double a = m.getFirst();
-                        return Transform.affine(1, 0, tan(a), 1, 0, 0);
-
-                    default:
-                        throw new ParseException("1 coefficient expected, but found " + m.size(), tt.getStartPosition());
-                }
+                        yield Transform.affine(1, 0, tan(a), 1, 0, 0);
+                    }
+                    default ->
+                            throw new ParseException("1 coefficient expected, but found " + m.size(), tt.getStartPosition());
+                };
             }
             case "skewY": {
-                switch (m.size()) {
-                    case 0:
-                        return Transform.translate(//
-                                0, 0//
-                        );//
-                    case 1:
+                return switch (m.size()) {
+                    case 0 -> Transform.translate(//
+                            0, 0//
+                    );//
+                    case 1 -> {
                         double a = m.getFirst();
-                        return Transform.affine(1, tan(a), 0, 1, 0, 0);
-
-                    default:
-                        throw new ParseException("1 coefficient expected, but found " + m.size(), tt.getStartPosition());
-                }
+                        yield Transform.affine(1, tan(a), 0, 1, 0, 0);
+                    }
+                    default ->
+                            throw new ParseException("1 coefficient expected, but found " + m.size(), tt.getStartPosition());
+                };
             }
             case "translate": {
-                switch (m.size()) {
-                    case 0:
-                        return Transform.translate(//
-                                0, 0//
-                        );//
-                    case 1:
-                        return Transform.translate(
-                                m.get(0), 0//
-                        );
-                    case 2:
-                        return Transform.translate(
-                                m.get(0), m.get(1)//
-                        );
-                    default:
-                        throw new ParseException("1, 2 or 3 coefficients expected, but found " + m.size(), tt.getStartPosition());
-                }
+                return switch (m.size()) {
+                    case 0 -> Transform.translate(//
+                            0, 0//
+                    );//
+                    case 1 -> Transform.translate(
+                            m.get(0), 0//
+                    );
+                    case 2 -> Transform.translate(
+                            m.get(0), m.get(1)//
+                    );
+                    default ->
+                            throw new ParseException("1, 2 or 3 coefficients expected, but found " + m.size(), tt.getStartPosition());
+                };
             }
             case "scale": {
-                switch (m.size()) {
-                    case 0:
-                        return Transform.scale(//
-                                1, 1//
-                        );
-                    case 1:
-                        return Transform.scale(//
-                                m.get(0), m.get(0)//
-                        );
-                    case 2:
-                        return Transform.scale(
-                                m.get(0), m.get(1)//
-                        );
-                    default:
-                        throw new ParseException("1, 2, or 3 coefficients expected, but found " + m.size(), tt.getStartPosition());
-                }
+                return switch (m.size()) {
+                    case 0 -> Transform.scale(//
+                            1, 1//
+                    );
+                    case 1 -> Transform.scale(//
+                            m.get(0), m.get(0)//
+                    );
+                    case 2 -> Transform.scale(
+                            m.get(0), m.get(1)//
+                    );
+                    default ->
+                            throw new ParseException("1, 2, or 3 coefficients expected, but found " + m.size(), tt.getStartPosition());
+                };
             }
             case "rotate": {
-                switch (m.size()) {
-                    case 0:
-                        return Transform.rotate(//
-                                0,//
-                                0, 0//
-                        );
-                    case 1:
-                        return Transform.rotate(//
-                                m.get(0),//
-                                0, 0//
-                        );
-                    case 3:
-                        return Transform.rotate(//
-                                m.get(0),//
-                                m.get(1), m.get(2)//
-                        );
-                    default:
-                        throw new ParseException("1 or 3 coefficients expected, but found " + m.size(), tt.getStartPosition());
-                }
+                return switch (m.size()) {
+                    case 0 -> Transform.rotate(//
+                            0,//
+                            0, 0//
+                    );
+                    case 1 -> Transform.rotate(//
+                            m.get(0),//
+                            0, 0//
+                    );
+                    case 3 -> Transform.rotate(//
+                            m.get(0),//
+                            m.get(1), m.get(2)//
+                    );
+                    default ->
+                            throw new ParseException("1 or 3 coefficients expected, but found " + m.size(), tt.getStartPosition());
+                };
             }
             default:
                 throw new ParseException("unsupported function: \"" + func + "\"", funcPos);

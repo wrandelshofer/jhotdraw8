@@ -212,8 +212,7 @@ public class ChampMap<K, V>
         if (other == this) {
             return true;
         }
-        if (other instanceof ChampMap) {
-            ChampMap<?, ?> that = (ChampMap<?, ?>) other;
+        if (other instanceof ChampMap<?, ?> that) {
             return size == that.size && root.equivalent(that.root);
         }
         return ReadOnlyMap.mapEquals(this, other);

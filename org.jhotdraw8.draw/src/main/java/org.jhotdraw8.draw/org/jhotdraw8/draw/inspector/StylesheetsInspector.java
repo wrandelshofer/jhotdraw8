@@ -10,7 +10,6 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -105,15 +104,9 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
             listView.setEditable(true);
             listView.setFixedCellSize(24.0);
 
-            listView.setOnEditCommit(new EventHandler<ListView.EditEvent<URI>>() {
-                @Override
-                public void handle(ListView.@NonNull EditEvent<URI> t) {
-                    listView.getItems().set(t.getIndex(), t.getNewValue());
-                }
+            listView.setOnEditCommit(t -> listView.getItems().set(t.getIndex(), t.getNewValue()));
 
-            });
-
-            ClipboardIO<URI> io = new ClipboardIO<URI>() {
+            ClipboardIO<URI> io = new ClipboardIO<>() {
 
                 @Override
                 public void write(@NonNull Clipboard clipboard, @NonNull List<URI> items) {

@@ -59,7 +59,7 @@ public class PaintableCssConverter extends AbstractCssConverter<Paintable> {
         Set<String> duplicateLines = new HashSet<>();
         for (String line : lines) {
             if (duplicateLines.add(line)) {
-                if (buf.length() != 0) {
+                if (!buf.isEmpty()) {
                     buf.append('\n');
                 }
                 buf.append(line);
@@ -88,17 +88,11 @@ public class PaintableCssConverter extends AbstractCssConverter<Paintable> {
 
     @Override
     protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
-        if (value instanceof CssColor) {
-            CssColor c = (CssColor) value;
-            colorConverter.produceTokens(c, idSupplier, out);
-        } else if (value instanceof CssLinearGradient) {
-            CssLinearGradient lg = (CssLinearGradient) value;
-            linearGradientConverter.produceTokens(lg, idSupplier, out);
-        } else if (value instanceof CssRadialGradient) {
-            CssRadialGradient lg = (CssRadialGradient) value;
-            radialGradientConverter.produceTokens(lg, idSupplier, out);
-        } else {
-            throw new UnsupportedOperationException("not yet implemented for " + value);
+        switch (value) {
+            case CssColor c -> colorConverter.produceTokens(c, idSupplier, out);
+            case CssLinearGradient lg -> linearGradientConverter.produceTokens(lg, idSupplier, out);
+            case CssRadialGradient lg -> radialGradientConverter.produceTokens(lg, idSupplier, out);
+            default -> throw new UnsupportedOperationException("not yet implemented for " + value);
         }
     }
 }

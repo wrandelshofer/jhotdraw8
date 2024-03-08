@@ -31,8 +31,8 @@ class Intersections {
         if (clampedRoots.length == 0 || clampedRoots[0] > 0) {
             roots[numRoots++] = 0.0;
         }
-        for (int i = 0; i < clampedRoots.length; i++) {
-            roots[numRoots++] = clampedRoots[i];
+        for (double clampedRoot : clampedRoots) {
+            roots[numRoots++] = clampedRoot;
         }
         if (clampedRoots.length == 0 || clampedRoots[clampedRoots.length - 1] < 1) {
             roots[numRoots++] = 1;

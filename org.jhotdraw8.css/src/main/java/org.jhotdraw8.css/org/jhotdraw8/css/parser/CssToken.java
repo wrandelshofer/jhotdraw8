@@ -117,57 +117,32 @@ public class CssToken {
         if (ttype >= 0) {
             return stringValue;
         }
-        switch (ttype) {
-        case CssTokenType.TT_IDENT:
-            return fromIDENT();
-        case CssTokenType.TT_AT_KEYWORD:
-            return fromHASHorAT('@', stringValue);
-        case CssTokenType.TT_STRING:
-            return fromSTRING();
-        case CssTokenType.TT_BAD_STRING:
-            return fromBAD_STRING(stringValue);
-        case CssTokenType.TT_BAD_URI:
-            return fromBAD_URI(stringValue);
-        //case CssTokenType.TT_BAD_COMMENT : return fromBAD_COMMENT(stringValue) ;
-        case CssTokenType.TT_HASH:
-            return fromHASHorAT('#', stringValue);
-        case CssTokenType.TT_NUMBER:
-            return fromNUMBER();
-        case CssTokenType.TT_PERCENTAGE:
-            return fromPERCENTAGE();
-        case CssTokenType.TT_DIMENSION:
-            return fromDIMENSION();
-        case CssTokenType.TT_URL:
-            return fromURL();
-        case CssTokenType.TT_UNICODE_RANGE:
-            return fromUNICODE_RANGE();
-        case CssTokenType.TT_CDO:
-            return fromCDO();
-        case CssTokenType.TT_CDC:
-            return fromCDC();
-        case CssTokenType.TT_S:
-            return fromS();
-        case CssTokenType.TT_COMMENT:
-            return fromCOMMENT();
-        case CssTokenType.TT_FUNCTION:
-            return fromIDENT() + "(";
-        case CssTokenType.TT_INCLUDE_MATCH:
-            return fromINCLUDE_MATCH();
-        case CssTokenType.TT_DASH_MATCH:
-            return fromDASH_MATCH();
-        case CssTokenType.TT_PREFIX_MATCH:
-            return fromPREFIX_MATCH();
-        case CssTokenType.TT_SUFFIX_MATCH:
-            return fromSUFFIX_MATCH();
-        case CssTokenType.TT_SUBSTRING_MATCH:
-            return fromSUBSTRING_MATCH();
-        case CssTokenType.TT_COLUMN:
-            return fromCOLUMN();
-        case CssTokenType.TT_EOF:
-            return "<EOF>";
-
-        }
-        throw new InternalError("Unsupported TTYPE:" + ttype);
+        return switch (ttype) {
+            case CssTokenType.TT_IDENT -> fromIDENT();
+            case CssTokenType.TT_AT_KEYWORD -> fromHASHorAT('@', stringValue);
+            case CssTokenType.TT_STRING -> fromSTRING();
+            case CssTokenType.TT_BAD_STRING -> fromBAD_STRING(stringValue);
+            case CssTokenType.TT_BAD_URI -> fromBAD_URI(stringValue);
+            case CssTokenType.TT_HASH -> fromHASHorAT('#', stringValue);
+            case CssTokenType.TT_NUMBER -> fromNUMBER();
+            case CssTokenType.TT_PERCENTAGE -> fromPERCENTAGE();
+            case CssTokenType.TT_DIMENSION -> fromDIMENSION();
+            case CssTokenType.TT_URL -> fromURL();
+            case CssTokenType.TT_UNICODE_RANGE -> fromUNICODE_RANGE();
+            case CssTokenType.TT_CDO -> fromCDO();
+            case CssTokenType.TT_CDC -> fromCDC();
+            case CssTokenType.TT_S -> fromS();
+            case CssTokenType.TT_COMMENT -> fromCOMMENT();
+            case CssTokenType.TT_FUNCTION -> fromIDENT() + "(";
+            case CssTokenType.TT_INCLUDE_MATCH -> fromINCLUDE_MATCH();
+            case CssTokenType.TT_DASH_MATCH -> fromDASH_MATCH();
+            case CssTokenType.TT_PREFIX_MATCH -> fromPREFIX_MATCH();
+            case CssTokenType.TT_SUFFIX_MATCH -> fromSUFFIX_MATCH();
+            case CssTokenType.TT_SUBSTRING_MATCH -> fromSUBSTRING_MATCH();
+            case CssTokenType.TT_COLUMN -> fromCOLUMN();
+            case CssTokenType.TT_EOF -> "<EOF>";
+            default -> throw new InternalError("Unsupported TTYPE:" + ttype);
+        };
     }
 
     private @NonNull String fromCDC() {
@@ -199,10 +174,7 @@ public class CssToken {
             }
 
             // escape nmstart if necessary
-            if (ch == '_'
-                    || 'a' <= ch && ch <= 'z'
-                    || 'A' <= ch && ch <= 'Z'
-                    || 0xA0 <= ch && ch <= 0x10FFFF) {
+            if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || 0xA0 <= ch) {
                 out.append((char) ch);
             } else {
                 switch (ch) {
@@ -220,9 +192,7 @@ public class CssToken {
                     String hex = Integer.toHexString(ch);
                     out.append('\\');
                     out.append(hex);
-                    if (hex.length() < 6) {
-                        out.append(' ');
-                    }
+                    out.append(' ');
                     break;
                 default:
                     out.append('\\');
@@ -233,12 +203,7 @@ public class CssToken {
 
             while (-1 != (ch = r.read())) {
                 // escape nmchar if necessary
-                if (ch == '_'
-                        || 'a' <= ch && ch <= 'z'
-                        || 'A' <= ch && ch <= 'Z'
-                        || '0' <= ch && ch <= '9'
-                        || ch == '-'
-                        || 0xA0 <= ch && ch <= 0x10FFFF) {
+                if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || '0' <= ch && ch <= '9' || ch == '-' || 0xA0 <= ch) {
                     out.append((char) ch);
                 } else {
                     out.append('\\');
@@ -258,12 +223,7 @@ public class CssToken {
         try {
             for (int ch = r.read(); ch != -1; ch = r.read()) {
                 // escape nmchar if necessary
-                if (ch == '_'
-                        || 'a' <= ch && ch <= 'z'
-                        || 'A' <= ch && ch <= 'Z'
-                        || '0' <= ch && ch <= '9'
-                        || ch == '-'
-                        || 0xA0 <= ch && ch <= 0x10FFFF) {
+                if (ch == '_' || 'a' <= ch && ch <= 'z' || 'A' <= ch && ch <= 'Z' || '0' <= ch && ch <= '9' || ch == '-' || 0xA0 <= ch) {
                     out.append((char) ch);
                 } else {
                     out.append('\\');
@@ -366,26 +326,15 @@ public class CssToken {
         Reader r = new StringReader(stringValue);
         try {
             for (int ch = r.read(); ch != -1; ch = r.read()) {
-                final boolean escape;
-                switch (ch) {
-                case '"':
-                case '\'':
-                case '(':
-                case ')':
-                case '\\':
-                    escape = true;
-                    break;
-                default:
-                    escape = Character.isWhitespace(ch) || Character.isISOControl(ch);
-                    break;
-                }
+                final boolean escape = switch (ch) {
+                    case '"', '\'', '(', ')', '\\' -> true;
+                    default -> Character.isWhitespace(ch) || Character.isISOControl(ch);
+                };
                 if (escape) {
                     String hex = Integer.toHexString(ch);
                     out.append('\\');
                     out.append(hex);
-                    if (hex.length() < 6) {
-                        out.append(' ');
-                    }
+                    out.append(' ');
                 } else {
                     out.append((char) ch);
                 }

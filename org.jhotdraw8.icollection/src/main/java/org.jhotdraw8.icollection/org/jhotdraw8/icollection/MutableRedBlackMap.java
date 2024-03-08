@@ -16,6 +16,7 @@ import org.jhotdraw8.icollection.serialization.SortedMapSerializationProxy;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
+import java.io.Serializable;
 import java.util.AbstractMap;
 import java.util.Collection;
 import java.util.Comparator;
@@ -29,9 +30,8 @@ import java.util.SortedMap;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadOnlyNavigableMap<K, V>, Cloneable {
-    @Serial
-    private static final long serialVersionUID = 0L;
+public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadOnlyNavigableMap<K, V>, Cloneable, Serializable {
+
     @NonNull RedBlackTree<K, V> root;
     final @NonNull Comparator<? super K> comparator;
     private int modCount;

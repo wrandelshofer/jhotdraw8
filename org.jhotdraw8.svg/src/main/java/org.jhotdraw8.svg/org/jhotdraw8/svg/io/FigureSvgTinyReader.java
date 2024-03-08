@@ -155,8 +155,7 @@ public class FigureSvgTinyReader {
             }
             mutableAccessorMap.put(elem, m);
             for (MapAccessor<?> acc : m.values()) {
-                if (acc instanceof ReadOnlyStyleableMapAccessor) {
-                    ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) acc;
+                if (acc instanceof ReadOnlyStyleableMapAccessor<?> rosma) {
                     mutableConverterMap.put(acc.getValueType(), rosma.getCssConverter());
                 }
             }
@@ -370,8 +369,7 @@ public class FigureSvgTinyReader {
                     if (m != null) {
                         ctx.secondPass.add(() -> {
                             @SuppressWarnings("unchecked") MapAccessor<Object> mapAccessor = (MapAccessor<Object>) m.get(localName);
-                            if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?>) {
-                                ReadOnlyStyleableMapAccessor<?> rosma = (ReadOnlyStyleableMapAccessor<?>) mapAccessor;
+                            if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?> rosma) {
                                 Converter<?> converter = converterMap.get(rosma.getValueType());
                                 if (converter == null) {
                                     Location location = r.getLocation();
@@ -435,7 +433,7 @@ public class FigureSvgTinyReader {
                     handleError(r, "Expected an element. Found: " + r.getEventType());
             }
         }
-        if (collectTextForTextFigure && ctx.stringBuilder.length() > 0) {
+        if (collectTextForTextFigure && !ctx.stringBuilder.isEmpty()) {
             parent.set(textKey, ctx.stringBuilder.toString());
         }
     }
@@ -669,9 +667,9 @@ public class FigureSvgTinyReader {
      * Holds the current reading context.
      */
     private static class Context {
-        SimpleIdFactory idFactory = new SimpleIdFactory();
-        List<CheckedRunnable> secondPass = new ArrayList<>();
-        List<String> stylesheets = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder();
+        final SimpleIdFactory idFactory = new SimpleIdFactory();
+        final List<CheckedRunnable> secondPass = new ArrayList<>();
+        final List<String> stylesheets = new ArrayList<>();
+        final StringBuilder stringBuilder = new StringBuilder();
     }
 }

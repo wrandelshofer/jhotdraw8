@@ -31,24 +31,11 @@ import java.util.Optional;
 public class CssColorDialog {
     private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
     private final @NonNull ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(NamedCssColor.TRANSPARENT);
-    @Nullable ButtonType chooseButtonType;
-    @Nullable ButtonType cancelButtonType;
+    final @Nullable ButtonType chooseButtonType;
+    final @Nullable ButtonType cancelButtonType;
     private CssColorChooserController controller;
     private Dialog<ButtonType> dialog;
-    /*
-        public CssColorDialog() {
-        }
 
-        public CssColorDialog(Window owner) {
-            if (owner != null) {
-                dialog.initOwner(owner);
-            }
-            dialog.initModality(Modality.WINDOW_MODAL);
-            dialog.initStyle(StageStyle.UTILITY);
-            dialog.setResizable(false);
-            dialog.addEventHandler(KeyEvent.ANY, keyEventListener);
-        }
-    */
     private final EventHandler<KeyEvent> keyEventListener = e -> {
         switch (e.getCode()) {
         case ESCAPE:

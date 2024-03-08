@@ -274,8 +274,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         // recursive case
         // --------------
         boolean foundAChildFigure = false;
-        if (node instanceof Parent) {
-            Parent parent = (Parent) node;
+        if (node instanceof Parent parent) {
             for (Node child : frontToBack(parent)) {
                 foundAChildFigure |= findFiguresInsideRecursive(
                         child,
@@ -328,8 +327,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         // recursive case
         // --------------
         boolean foundAChildFigure = false;
-        if (node instanceof Parent) {
-            Parent parent = (Parent) node;
+        if (node instanceof Parent parent) {
             for (Node child : frontToBack(parent)) {
                 foundAChildFigure |= findFiguresIntersectingRecursive(
                         child,
@@ -382,8 +380,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         // recursive case
         // --------------
         boolean foundAChildFigure = false;
-        if (node instanceof Parent) {
-            Parent parent = (Parent) node;
+        if (node instanceof Parent parent) {
             for (Node child : frontToBack(parent)) {
                 foundAChildFigure |= findFiguresRecursive(
                         child,

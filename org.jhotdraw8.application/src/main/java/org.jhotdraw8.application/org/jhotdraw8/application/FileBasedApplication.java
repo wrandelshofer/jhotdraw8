@@ -16,6 +16,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
  */
 public interface FileBasedApplication extends Application {
     @NonNull
-    NonNullKey<Boolean> ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI = new NonNullObjectKey<Boolean>("allowMultipleActivitiesWithSameURI", Boolean.class,
+    NonNullKey<Boolean> ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI = new NonNullObjectKey<>("allowMultipleActivitiesWithSameURI", Boolean.class,
             Boolean.FALSE);
 }

@@ -82,8 +82,7 @@ public class CssDimension2D {
 
     @Override
     public @NonNull String toString() {
-        return "CssPoint2D{" +
-                "" + width +
+        return "CssPoint2D{" + width +
                 ", " + height +
                 '}';
     }

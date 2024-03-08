@@ -64,7 +64,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
      * new keys.
      */
     public SimpleStyleableMap() {
-        this(new HashMap<K, Integer>() {
+        this(new HashMap<>() {
             @Serial
             private static final long serialVersionUID = 0L;
 
@@ -361,8 +361,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
         if (origin == StyleOrigin.USER) {
             // We have to fire change events, so we need the keys.
             int ordinal = origin.ordinal();
-            for (Iterator<Entry<K, Integer>> i = keyMap.entrySet().iterator(); i.hasNext(); ) {
-                Entry<K, Integer> e = i.next();
+            for (Entry<K, Integer> e : keyMap.entrySet()) {
                 Integer index = e.getValue();
                 if (index < values.length) {
                     removeValue(ordinal, index, e.getKey());
@@ -577,7 +576,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
         @Override
         public @NonNull Iterator<Entry<K, V>> iterator() {
-            return new Iterator<Entry<K, V>>() {
+            return new Iterator<>() {
                 private final @NonNull Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
@@ -669,7 +668,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
         @Override
         public @NonNull Iterator<K> iterator() {
-            return new Iterator<K>() {
+            return new Iterator<>() {
                 private final @NonNull Iterator<Entry<K, Integer>> entryIt = SimpleStyleableMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
@@ -765,10 +764,10 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
             Map.Entry<K, V> e = (Map.Entry<K, V>) o;
             Object k1 = getKey();
             Object k2 = e.getKey();
-            if (k1 == k2 || (k1 != null && k1.equals(k2))) {
+            if (Objects.equals(k1, k2)) {
                 Object v1 = getValue();
                 Object v2 = e.getValue();
-                return v1 == v2 || (v1 != null && v1.equals(v2));
+                return Objects.equals(v1, v2);
             }
             return false;
         }
@@ -808,7 +807,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
 
         @Override
         public @NonNull Iterator<V> iterator() {
-            return new Iterator<V>() {
+            return new Iterator<>() {
 
                 private final @NonNull Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
                 private boolean hasNext;

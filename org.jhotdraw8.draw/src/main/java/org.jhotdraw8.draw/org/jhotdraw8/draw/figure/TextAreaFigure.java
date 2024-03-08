@@ -78,22 +78,12 @@ public class TextAreaFigure extends AbstractLeafFigure
         double size = text.getFont().getSize();
         Bounds bounds = getLayoutBounds();
 
-        double y;
-        switch (text.getTextOrigin()) {
-        case TOP:
-        default:
-            y = bounds.getMinY() + padding.getTop();
-            break;
-        case CENTER:
-            y = bounds.getMinY() + bounds.getHeight() * 0.5;
-            break;
-        case BASELINE:
-            y = bounds.getMinY() + size + padding.getTop();
-            break;
-        case BOTTOM:
-            y = bounds.getMaxY() - padding.getBottom();
-            break;
-        }
+        double y = switch (text.getTextOrigin()) {
+            default -> bounds.getMinY() + padding.getTop();
+            case CENTER -> bounds.getMinY() + bounds.getHeight() * 0.5;
+            case BASELINE -> bounds.getMinY() + size + padding.getTop();
+            case BOTTOM -> bounds.getMaxY() - padding.getBottom();
+        };
 
         text.setX(bounds.getMinX() + padding.getLeft());
         text.setY(y);

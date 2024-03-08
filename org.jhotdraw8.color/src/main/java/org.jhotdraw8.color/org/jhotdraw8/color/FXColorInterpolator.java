@@ -19,8 +19,8 @@ public class FXColorInterpolator {
     private final float[] toColor;
     private final float diff1, diff2;
     private final float hueMax, hueMin;
-    private int hueComponent;
-    private boolean wrapAroundHue;
+    private final int hueComponent;
+    private final boolean wrapAroundHue;
 
     /**
      * Creates a new instance that interpolates between the specified colors

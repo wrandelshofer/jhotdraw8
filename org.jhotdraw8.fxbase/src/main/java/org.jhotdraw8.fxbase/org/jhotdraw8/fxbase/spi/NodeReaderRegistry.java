@@ -11,7 +11,6 @@ import org.jhotdraw8.annotation.Nullable;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -21,8 +20,7 @@ public class NodeReaderRegistry {
 
     public static @NonNull List<NodeReader> getNodeReaders(@NonNull URL url) {
         List<NodeReader> list = new ArrayList<>();
-        for (Iterator<NodeReaderProvider> i = ServiceLoader.load(NodeReaderProvider.class).iterator(); i.hasNext(); ) {
-            NodeReaderProvider spi = i.next();
+        for (NodeReaderProvider spi : ServiceLoader.load(NodeReaderProvider.class)) {
             if (spi.canDecodeInput(url)) {
                 list.add(spi.createReader());
             }
@@ -32,8 +30,7 @@ public class NodeReaderRegistry {
 
     public static @NonNull List<NodeReader> getNodeReaders(@NonNull String path) {
         List<NodeReader> list = new ArrayList<>();
-        for (Iterator<NodeReaderProvider> i = ServiceLoader.load(NodeReaderProvider.class).iterator(); i.hasNext(); ) {
-            NodeReaderProvider spi = i.next();
+        for (NodeReaderProvider spi : ServiceLoader.load(NodeReaderProvider.class)) {
             if (spi.canDecodeInput(path)) {
                 list.add(spi.createReader());
             }

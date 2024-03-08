@@ -216,16 +216,12 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (path.size() < 2) {
             path = path.add(new BezierNode(start)).add(new BezierNode(end));
         }
-            if (start != null) {
-                BezierNode first = path.getFirst();
-                path = path.set(0,
-                        first.transform(Transform.translate(start.getX() - first.pointX(), start.getY() - first.pointY())));
-            }
-            if (end != null) {
-                BezierNode last = path.getLast();
-                path = path.set(path.size() - 1,
-                        last.transform(Transform.translate(end.getX() - last.pointX(), end.getY() - last.pointY())));
-            }
+        BezierNode first = path.getFirst();
+        path = path.set(0,
+                first.transform(Transform.translate(start.getX() - first.pointX(), start.getY() - first.pointY())));
+        BezierNode last = path.getLast();
+        path = path.set(path.size() - 1,
+                last.transform(Transform.translate(end.getX() - last.pointX(), end.getY() - last.pointY())));
 
         // store the path and compute path metrics
         set(PATH, path);
@@ -330,10 +326,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     @Override
     public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
         PathMetrics pathMetrics = getPathMetrics();
-        if (pathMetrics == null) {
-            node.setVisible(false);
-            return;
-        }
 
 
         Group g = (Group) node;

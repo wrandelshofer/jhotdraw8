@@ -126,15 +126,6 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     @Override
     protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null && path != null) {
-            /*
-            dragStartIndex = -1;
-            double x2 = event.getX();
-            double y2 = event.getY();
-            Point2D c2 = dv.getConstrainer().constrainPoint(createdFigure, dv.viewToWorld(x2, y2));
-            DrawingModel dm = dv.getModel();
-            points.set(points.size() - 1, new BezierNode(c2));
-            dm.set(createdFigure, key, ImmutableList.ofCollection(points));
-             */
             if (!path.isEmpty()) {
                 BezierNode lastNode = path.get(path.size() - 1);
                 Point2D start = FXTransforms.transform(FXTransforms.concat(dv.getWorldToView(), createdFigure.getLocalToWorld()), lastNode.pointX(), lastNode.pointY());
@@ -230,14 +221,15 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
 
     @Override
     public @NonNull String getHelpText() {
-        return "BezierCreationTool"
-                + "\n  Click on the drawing view. The tool will create a new bezier curve with a point at that location."
-                + "\n  Continue clicking on the drawing view. The tool will add each clicked point to the created bezier curve."
-                + "\n  Press enter or escape, when you are done."
-                + "\nOr"
-                + "\n  Press and drag the mouse over the drawing view to draw a curve. The tool will create a new bezier curve with a curve fitted to your drawing."
-                + "\n  Continue pressing and dragging on the drawing view. The tool will add additional fitted curves to the bezier curve."
-                + "\n  Press enter or escape when you are done.";
+        return """
+               BezierCreationTool
+                 Click on the drawing view. The tool will create a new bezier curve with a point at that location.
+                 Continue clicking on the drawing view. The tool will add each clicked point to the created bezier curve.
+                 Press enter or escape, when you are done.
+               Or
+                 Press and drag the mouse over the drawing view to draw a curve. The tool will create a new bezier curve with a curve fitted to your drawing.
+                 Continue pressing and dragging on the drawing view. The tool will add additional fitted curves to the bezier curve.
+                 Press enter or escape when you are done.""";
     }
 
 }

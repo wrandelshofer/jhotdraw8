@@ -28,15 +28,4 @@ public class AbstractObservable implements ObservableMixin {
         return invalidationListeners;
     }
 
-    /**
-     * The method {@code invalidated()} can be overridden to receive
-     * invalidation notifications. This is the preferred option in
-     * {@code Objects} defining the property, because it requires less memory.
-     * <p>
-     * The default implementation is empty.
-     */
-    @Override
-    public void invalidated() {
-    }
-
 }

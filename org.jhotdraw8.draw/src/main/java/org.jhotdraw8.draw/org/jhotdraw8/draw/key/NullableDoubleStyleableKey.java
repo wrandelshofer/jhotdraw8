@@ -16,7 +16,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
  * @author Werner Randelshofer
  */
 public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> implements WritableStyleableMapAccessor<Double> {
-    static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     private final Converter<Double> converter;
 

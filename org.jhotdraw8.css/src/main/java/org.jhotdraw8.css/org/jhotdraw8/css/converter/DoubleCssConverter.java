@@ -37,29 +37,19 @@ public class DoubleCssConverter extends AbstractCssConverter<Double> {
 
     @Override
     public @NonNull Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return tt.currentNumberNonNull().doubleValue();
-        case CssTokenType.TT_IDENT: {
-            double value;
-            switch (tt.currentStringNonNull()) {
-            case "INF":
-                value = Double.POSITIVE_INFINITY;
-                break;
-            case "-INF":
-                value = Double.NEGATIVE_INFINITY;
-                break;
-            case "NaN":
-                value = Double.NaN;
-                break;
-            default:
-                throw tt.createParseException("⟨Double⟩: number expected.");
+        return switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().doubleValue();
+            case CssTokenType.TT_IDENT -> {
+                double value = switch (tt.currentStringNonNull()) {
+                    case "INF" -> Double.POSITIVE_INFINITY;
+                    case "-INF" -> Double.NEGATIVE_INFINITY;
+                    case "NaN" -> Double.NaN;
+                    default -> throw tt.createParseException("⟨Double⟩: number expected.");
+                };
+                yield value;
             }
-            return value;
-        }
-        default:
-            throw tt.createParseException("⟨Double⟩: number expected.");
-        }
+            default -> throw tt.createParseException("⟨Double⟩: number expected.");
+        };
     }
 
     @Override

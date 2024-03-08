@@ -31,31 +31,20 @@ public class PercentageCssConverter extends AbstractCssConverter<Double> {
 
     @Override
     public @NonNull Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        switch (tt.next()) {
-            case CssTokenType.TT_NUMBER:
-                return tt.currentNumberNonNull().doubleValue();
-            case CssTokenType.TT_PERCENTAGE:
-                return tt.currentNumberNonNull().doubleValue() / 100.0;
-            case CssTokenType.TT_IDENT: {
-                double value;
-                switch (tt.currentStringNonNull()) {
-                    case "INF":
-                        value = Double.POSITIVE_INFINITY;
-                        break;
-                    case "-INF":
-                        value = Double.NEGATIVE_INFINITY;
-                        break;
-                    case "NaN":
-                value = Double.NaN;
-                break;
-            default:
-                throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
+        return switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().doubleValue();
+            case CssTokenType.TT_PERCENTAGE -> tt.currentNumberNonNull().doubleValue() / 100.0;
+            case CssTokenType.TT_IDENT -> {
+                double value = switch (tt.currentStringNonNull()) {
+                    case "INF" -> Double.POSITIVE_INFINITY;
+                    case "-INF" -> Double.NEGATIVE_INFINITY;
+                    case "NaN" -> Double.NaN;
+                    default -> throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
+                };
+                yield value;
             }
-            return value;
-        }
-        default:
-            throw new ParseException("⟨Double⟩: number expected.", tt.getStartPosition());
-        }
+            default -> throw new ParseException("⟨Double⟩: number expected.", tt.getStartPosition());
+        };
     }
 
     @Override
@@ -72,7 +61,7 @@ public class PercentageCssConverter extends AbstractCssConverter<Double> {
 
     @Override
     public @NonNull String getHelpText() {
-        if (isNullable()) {
+        if (nullable()) {
             return "Format of ⟨NullablePercentage⟩: none｜⟨fraction⟩｜⟨percentage⟩%";
         } else {
             return "Format of ⟨Percentage⟩: ⟨fraction⟩｜⟨percentage⟩%";

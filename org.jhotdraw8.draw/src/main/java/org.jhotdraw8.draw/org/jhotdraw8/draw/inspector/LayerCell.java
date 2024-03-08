@@ -144,9 +144,7 @@ public class LayerCell extends ListCell<Figure> {
                 if (editField == null) {
                     editField = createTextField();
                 }
-                if (editField != null) {
-                    editField.setText(getItemText());
-                }
+                editField.setText(getItemText());
                 setText(null);// hide the text part of the label!!
 
                 if (editField.getParent() == null) {

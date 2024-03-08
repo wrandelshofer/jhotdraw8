@@ -23,7 +23,6 @@ import org.jhotdraw8.geom.Points;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * Handle for the start or end point of a connection figure.
@@ -146,14 +145,13 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
                 }
             } else {
                 List<Figure> list = view.findFigures(pointInView, true)
-                        .stream().map(Map.Entry::getKey).collect(Collectors.toList());//front to back
+                        .stream().map(Map.Entry::getKey).toList();//front to back
 
                 double closestDistanceSq = Double.POSITIVE_INFINITY;
                 for (int i = list.size() - 1; i >= 0; i--) {
                     Figure f1 = list.get(i);
                     for (Figure ff : f1.breadthFirstIterable()) {//back to front NOOO
-                        if (this.owner != ff && (ff instanceof ConnectableFigure)) {
-                            ConnectableFigure cff = (ConnectableFigure) ff;
+                        if (this.owner != ff && (ff instanceof ConnectableFigure cff)) {
                             Point2D pointInLocal = cff.worldToLocal(unconstrainedPointInWorld);
                             if (ff.getBoundsInLocal().contains(pointInLocal)) {
                                 final ConnectorAndConnectedFigure candidate = find(constrainedPointInWorld, o, cff, event, tolerance);

@@ -365,19 +365,8 @@ public class XmlUtil {
         }
     }
 
-    private static class MyLocator implements Locator {
+    private record MyLocator(int line, int column, String systemId, String publicId) implements Locator {
 
-        private final int line;
-        private final int column;
-        private final String systemId;
-        private final String publicId;
-
-        public MyLocator(int line, int column, String systemId, String publicId) {
-            this.line = line;
-            this.column = column;
-            this.systemId = systemId;
-            this.publicId = publicId;
-        }
 
         @Override
         public int getColumnNumber() {

@@ -66,14 +66,11 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
     }
 
     private @Nullable EditableComponent tryAsEditableComponent(Node n) {
-        if (n instanceof TextInputControl) {
-            TextInputControl tic = (TextInputControl) n;
+        if (n instanceof TextInputControl tic) {
             return new TextInputControlAdapter(tic);
-        } else if (n instanceof EditableComponent) {
-            EditableComponent tic = (EditableComponent) n;
+        } else if (n instanceof EditableComponent tic) {
             return tic;
-        } else if (n.getProperties().get(EditableComponent.EDITABLE_COMPONENT) instanceof EditableComponent) {
-            EditableComponent tic = (EditableComponent) n.getProperties().get(EditableComponent.EDITABLE_COMPONENT);
+        } else if (n.getProperties().get(EditableComponent.EDITABLE_COMPONENT) instanceof EditableComponent tic) {
             return tic;
         } else {
             return null;
@@ -90,13 +87,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
     protected abstract void onActionPerformed(ActionEvent event, EditableComponent ec);
 
-    private static class TextInputControlAdapter implements EditableComponent {
-
-        final TextInputControl control;
-
-        public TextInputControlAdapter(TextInputControl control) {
-            this.control = control;
-        }
+    private record TextInputControlAdapter(TextInputControl control) implements EditableComponent {
 
         @Override
         public void clearSelection() {

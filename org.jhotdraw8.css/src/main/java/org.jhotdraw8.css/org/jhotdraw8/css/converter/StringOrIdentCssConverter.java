@@ -48,7 +48,7 @@ public class StringOrIdentCssConverter implements Converter<String> {
             out.append("none");
             return;
         }
-        StringBuffer buf = new StringBuffer();
+        StringBuilder buf = new StringBuilder();
         boolean isIdent = true;
         buf.append('"');
         for (char ch : value.toCharArray()) {

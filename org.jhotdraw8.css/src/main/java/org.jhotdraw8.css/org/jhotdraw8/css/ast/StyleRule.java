@@ -30,7 +30,7 @@ public class StyleRule extends Rule {
     @Override
     public @NonNull String toString() {
         StringBuilder buf = new StringBuilder("StyleRule: ");
-        buf.append(selectorList.toString());
+        buf.append(selectorList);
         buf.append("{");
         for (Declaration r : declarations) {
             buf.append(r.toString());

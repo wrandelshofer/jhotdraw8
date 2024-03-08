@@ -17,7 +17,6 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 /**
@@ -64,7 +63,7 @@ public interface StylesheetsManager<E> {
     void addStylesheet(@NonNull StyleOrigin origin, @NonNull String stylesheet, @Nullable URI documentHome);
 
     default void applyStylesheetsTo(@NonNull Iterable<E> iterable) {
-        StreamSupport.stream(iterable.spliterator(), false).collect(Collectors.toList())
+        StreamSupport.stream(iterable.spliterator(), false).toList()
                 .stream()
                 .parallel()
                 .forEach(this::applyStylesheetsTo);

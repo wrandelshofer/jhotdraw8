@@ -106,19 +106,13 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         }
         StrokeLineJoin lineJoin;
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨StrokeStyle⟩: One of " + MITER + ", " + BEVEL + ", " + ROUND + " expected.");
-        switch (tt.currentStringNonNull()) {
-        case MITER:
-            lineJoin = StrokeLineJoin.MITER;
-            break;
-        case BEVEL:
-            lineJoin = StrokeLineJoin.BEVEL;
-            break;
-        case ROUND:
-            lineJoin = StrokeLineJoin.ROUND;
-            break;
-        default:
-            throw tt.createParseException("⟨StrokeStyle⟩: One of " + MITER + ", " + BEVEL + ", " + ROUND + " expected.");
-        }
+        lineJoin = switch (tt.currentStringNonNull()) {
+            case MITER -> StrokeLineJoin.MITER;
+            case BEVEL -> StrokeLineJoin.BEVEL;
+            case ROUND -> StrokeLineJoin.ROUND;
+            default ->
+                    throw tt.createParseException("⟨StrokeStyle⟩: One of " + MITER + ", " + BEVEL + ", " + ROUND + " expected.");
+        };
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩:: ⟨" + LINEJOIN + "⟩ right bracket expected.");
         return lineJoin;
     }
@@ -129,19 +123,13 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         }
         StrokeLineCap lineCap;
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨StrokeStyle⟩: One of " + SQUARE + ", " + BUTT + ", " + ROUND + " expected.");
-        switch (tt.currentStringNonNull()) {
-        case SQUARE:
-            lineCap = StrokeLineCap.SQUARE;
-            break;
-        case BUTT:
-            lineCap = StrokeLineCap.BUTT;
-            break;
-        case ROUND:
-            lineCap = StrokeLineCap.ROUND;
-            break;
-        default:
-            throw new ParseException("⟨StrokeStyle⟩: One of " + SQUARE + ", " + BUTT + ", " + ROUND + " expected.", tt.getStartPosition());
-        }
+        lineCap = switch (tt.currentStringNonNull()) {
+            case SQUARE -> StrokeLineCap.SQUARE;
+            case BUTT -> StrokeLineCap.BUTT;
+            case ROUND -> StrokeLineCap.ROUND;
+            default ->
+                    throw new ParseException("⟨StrokeStyle⟩: One of " + SQUARE + ", " + BUTT + ", " + ROUND + " expected.", tt.getStartPosition());
+        };
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩:: ⟨" + LINECAP + "⟩ right bracket expected.");
         return lineCap;
     }
@@ -152,19 +140,13 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         }
         StrokeType type;
         tt.requireNextToken(CssTokenType.TT_IDENT, "One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.");
-        switch (tt.currentStringNonNull()) {
-        case INSIDE:
-            type = StrokeType.INSIDE;
-            break;
-        case OUTSIDE:
-            type = StrokeType.OUTSIDE;
-            break;
-        case CENTERED:
-            type = StrokeType.CENTERED;
-            break;
-        default:
-            throw new ParseException("One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.", tt.getStartPosition());
-        }
+        type = switch (tt.currentStringNonNull()) {
+            case INSIDE -> StrokeType.INSIDE;
+            case OUTSIDE -> StrokeType.OUTSIDE;
+            case CENTERED -> StrokeType.CENTERED;
+            default ->
+                    throw new ParseException("One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.", tt.getStartPosition());
+        };
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, "⟨StrokeStyle⟩:: ⟨" + TYPE + "⟩ right bracket expected.");
         return type;
     }

@@ -123,6 +123,6 @@ public class SvgFloatPathBuilder implements PathBuilder<String> {
 
     @Override
     public boolean needsMoveTo() {
-        return buf.length() == 0;
+        return buf.isEmpty();
     }
 }

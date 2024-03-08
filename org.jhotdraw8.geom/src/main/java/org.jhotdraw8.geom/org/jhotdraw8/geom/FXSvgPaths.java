@@ -54,11 +54,10 @@ public class FXSvgPaths {
         double x = 0, y = 0;// current point
         double ix = 0, iy = 0;// initial point of a subpath
         for (PathElement pe : elements) {
-            if (buf.length() != 0) {
+            if (!buf.isEmpty()) {
                 buf.append(' ');
             }
-            if (pe instanceof MoveTo) {
-                MoveTo e = (MoveTo) pe;
+            if (pe instanceof MoveTo e) {
                 if (e.isAbsolute()) {
                     buf.append('M');
                     next = 'L'; // move implies line
@@ -74,8 +73,7 @@ public class FXSvgPaths {
                     ix = x += e.getX();
                     iy = y += e.getY();
                 }
-            } else if (pe instanceof LineTo) {
-                LineTo e = (LineTo) pe;
+            } else if (pe instanceof LineTo e) {
                 if (e.isAbsolute()) {
                     if (next != 'L') {
                         buf.append(next = 'L');
@@ -93,8 +91,7 @@ public class FXSvgPaths {
                     ix = x += e.getX();
                     iy = y += e.getY();
                 }
-            } else if (pe instanceof CubicCurveTo) {
-                CubicCurveTo e = (CubicCurveTo) pe;
+            } else if (pe instanceof CubicCurveTo e) {
                 if (e.isAbsolute()) {
                     if (next != 'C') {
                         buf.append(next = 'C');
@@ -128,8 +125,7 @@ public class FXSvgPaths {
                     x += e.getX();
                     y += e.getY();
                 }
-            } else if (pe instanceof QuadCurveTo) {
-                QuadCurveTo e = (QuadCurveTo) pe;
+            } else if (pe instanceof QuadCurveTo e) {
                 if (e.isAbsolute()) {
                     if (next != 'Q') {
                         buf.append(next = 'Q');
@@ -155,8 +151,7 @@ public class FXSvgPaths {
                     x += e.getX();
                     y += e.getY();
                 }
-            } else if (pe instanceof ArcTo) {
-                ArcTo e = (ArcTo) pe;
+            } else if (pe instanceof ArcTo e) {
                 if (e.isAbsolute()) {
                     if (next != 'A') {
                         buf.append(next = 'A');
@@ -194,8 +189,7 @@ public class FXSvgPaths {
                     x += e.getX();
                     y += e.getY();
                 }
-            } else if (pe instanceof HLineTo) {
-                HLineTo e = (HLineTo) pe;
+            } else if (pe instanceof HLineTo e) {
                 if (e.isAbsolute()) {
                     if (next != 'H') {
                         buf.append(next = 'H');
@@ -208,8 +202,7 @@ public class FXSvgPaths {
                     buf.append(nb.toString(e.getX()));
                     x += e.getX();
                 }
-            } else if (pe instanceof VLineTo) {
-                VLineTo e = (VLineTo) pe;
+            } else if (pe instanceof VLineTo e) {
                 if (e.isAbsolute()) {
                     if (next != 'V') {
                         buf.append(next = 'V');
@@ -222,8 +215,7 @@ public class FXSvgPaths {
                     buf.append(nb.toString(e.getY()));
                     y += e.getY();
                 }
-            } else if (pe instanceof ClosePath) {
-                ClosePath e = (ClosePath) pe;
+            } else if (pe instanceof ClosePath e) {
                 if (e.isAbsolute()) {
                     if (next != 'Z') {
                         buf.append(next = 'Z');
@@ -612,8 +604,7 @@ public class FXSvgPaths {
         double y = 0;
         double ix = 0, iy = 0;
         for (PathElement pe : pathElements) {
-            if (pe instanceof MoveTo) {
-                MoveTo e = (MoveTo) pe;
+            if (pe instanceof MoveTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -624,8 +615,7 @@ public class FXSvgPaths {
                 ix = x;
                 iy = y;
                 builder.moveTo(x, y);
-            } else if (pe instanceof LineTo) {
-                LineTo e = (LineTo) pe;
+            } else if (pe instanceof LineTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -634,8 +624,7 @@ public class FXSvgPaths {
                     y += e.getY();
                 }
                 builder.lineTo(x, y);
-            } else if (pe instanceof CubicCurveTo) {
-                CubicCurveTo e = (CubicCurveTo) pe;
+            } else if (pe instanceof CubicCurveTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -647,8 +636,7 @@ public class FXSvgPaths {
                             e.getControlX2() + x, e.getControlY2() + y,
                             x += e.getX(), y += e.getY());
                 }
-            } else if (pe instanceof QuadCurveTo) {
-                QuadCurveTo e = (QuadCurveTo) pe;
+            } else if (pe instanceof QuadCurveTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -656,8 +644,7 @@ public class FXSvgPaths {
                 } else {
                     builder.quadTo(e.getControlX() + x, e.getControlY() + y, x += e.getX(), y += e.getY());
                 }
-            } else if (pe instanceof ArcTo) {
-                ArcTo e = (ArcTo) pe;
+            } else if (pe instanceof ArcTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                     y = e.getY();
@@ -665,16 +652,14 @@ public class FXSvgPaths {
                 } else {
                     builder.arcTo(e.getRadiusX(), e.getRadiusY(), e.getXAxisRotation(), x += e.getX(), y += e.getY(), e.isLargeArcFlag(), e.isSweepFlag());
                 }
-            } else if (pe instanceof HLineTo) {
-                HLineTo e = (HLineTo) pe;
+            } else if (pe instanceof HLineTo e) {
                 if (e.isAbsolute()) {
                     x = e.getX();
                 } else {
                     x += e.getX();
                 }
                 builder.lineTo(x, y);
-            } else if (pe instanceof VLineTo) {
-                VLineTo e = (VLineTo) pe;
+            } else if (pe instanceof VLineTo e) {
                 if (e.isAbsolute()) {
                     y = e.getY();
                 } else {

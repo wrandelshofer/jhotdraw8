@@ -474,25 +474,15 @@ public class Polynomial implements ToDoubleFunction<Double> {
         double[] result;
         final int simplifiedDegree = simplifiedDegree();
 
-        switch (simplifiedDegree) {
-            case 0:
-                result = new double[0];
-                break;
-            case 1:
-                result = getLinearRoot();
-                break;
-            case 2:
-                result = getQuadraticRoots();
-                break;
-            case 3:
-                result = getCubicRoots();
-                break;
-            case 4:
-                result = getQuarticRoots();
-                break;
-            default:
-                throw new UnsupportedOperationException("Degree is too high. simplifiedDegree=" + simplifiedDegree);
-        }
+        result = switch (simplifiedDegree) {
+            case 0 -> new double[0];
+            case 1 -> getLinearRoot();
+            case 2 -> getQuadraticRoots();
+            case 3 -> getCubicRoots();
+            case 4 -> getQuarticRoots();
+            default ->
+                    throw new UnsupportedOperationException("Degree is too high. simplifiedDegree=" + simplifiedDegree);
+        };
 
         return result;
     }
@@ -517,8 +507,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
             case 3:
             case 4: {
                 double[] allroots = getRoots();
-                for (int i = 0; i < allroots.length; i++) {
-                    double root = allroots[i];
+                for (double root : allroots) {
                     if (min <= root && root <= max) {
                         roots.add(root);
                     }
@@ -554,7 +543,7 @@ public class Polynomial implements ToDoubleFunction<Double> {
         final DoubleArrayList roots = new DoubleArrayList(droots.size());
         int numRoots = 0;
 
-        if (droots.size() > 0) {
+        if (!droots.isEmpty()) {
             // find root on [min, droots[0]]
             Double root = bisection(func, min, droots.getFirst());
             if (root != null) {

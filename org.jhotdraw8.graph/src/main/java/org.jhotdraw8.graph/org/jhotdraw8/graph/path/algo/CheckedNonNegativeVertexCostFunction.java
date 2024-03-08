@@ -18,14 +18,10 @@ import java.util.function.BiFunction;
  * @param <V> the vertex data type
  * @param <C> the cost number type
  */
-class CheckedNonNegativeVertexCostFunction<V, C extends Number & Comparable<C>> implements BiFunction<V, V, C> {
-    final @NonNull C zero;
-    final @NonNull BiFunction<V, V, C> costFunction;
-
-    public CheckedNonNegativeVertexCostFunction(@NonNull C zero, @NonNull BiFunction<V, V, C> costFunction) {
+record CheckedNonNegativeVertexCostFunction<V, C extends Number & Comparable<C>>(@NonNull C zero,
+                                                                                 @NonNull BiFunction<V, V, C> costFunction) implements BiFunction<V, V, C> {
+    CheckedNonNegativeVertexCostFunction {
         AlgoArguments.checkZero(zero);
-        this.zero = zero;
-        this.costFunction = costFunction;
     }
 
     @Override

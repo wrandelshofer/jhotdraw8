@@ -20,8 +20,8 @@ import java.util.List;
  * </dl>
  */
 class PlineIntersectsResult {
-    List<PlineIntersect> intersects = new ArrayList<>();
-    List<PlineCoincidentIntersect> coincidentIntersects = new ArrayList<>();
+    final List<PlineIntersect> intersects = new ArrayList<>();
+    final List<PlineCoincidentIntersect> coincidentIntersects = new ArrayList<>();
 
     PlineIntersectsResult() {
     }

@@ -317,7 +317,7 @@ public class PlineVertex implements Cloneable {
                 return new SimpleOrderedPair<>(withinSweep, p);
             };
 
-            if (intrResult.intersections().size() == 0) {
+            if (intrResult.intersections().isEmpty()) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intrResult.intersections().size() == 1) {
                 OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.intersections().getFirst().getArgumentA());
@@ -351,7 +351,7 @@ public class PlineVertex implements Cloneable {
         if (vIsLine && uIsLine) {
             IntersectionResultEx intrResult = ContourIntersections.intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
             switch (intrResult.getStatus()) {
-                case NO_INTERSECTION_PARALLEL:
+                case NO_INTERSECTION_PARALLEL, NO_INTERSECTION_COINCIDENT:
                     result.intrType = PlineSegIntrType.NoIntersect;
                     break;
                 case INTERSECTION:
@@ -363,9 +363,6 @@ public class PlineVertex implements Cloneable {
                     // build points from parametric parameters (using second segment as defined by the function)
                     result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().getArgumentA());
                     result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().getArgumentB());
-                    break;
-                case NO_INTERSECTION_COINCIDENT:
-                    result.intrType = PlineSegIntrType.NoIntersect;
                     break;
             }
 
@@ -383,10 +380,8 @@ public class PlineVertex implements Cloneable {
                 return new SimpleOrderedPair<>(startAngle, sweepAngle);
             };
 
-            Predicate<Point2D.Double> bothArcsSweepPoint = (Point2D.Double pt) -> {
-                return pointWithinArcSweepAngle(arc1.center, v1.pos(), v2.pos(), v1.bulge(), pt) &&
-                        pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
-            };
+            Predicate<Point2D.Double> bothArcsSweepPoint = (Point2D.Double pt) -> pointWithinArcSweepAngle(arc1.center, v1.pos(), v2.pos(), v1.bulge(), pt) &&
+                    pointWithinArcSweepAngle(arc2.center, u1.pos(), u2.pos(), u1.bulge(), pt);
 
             IntersectionResult intrResult = ContourIntersections.intrCircle2Circle2(arc1.radius, arc1.center, arc2.radius, arc2.center);
 
@@ -495,7 +490,7 @@ public class PlineVertex implements Cloneable {
     }
 
     @Override
-    protected PlineVertex clone() {
+    public PlineVertex clone() {
         try {
             return (PlineVertex) super.clone();
         } catch (CloneNotSupportedException e) {

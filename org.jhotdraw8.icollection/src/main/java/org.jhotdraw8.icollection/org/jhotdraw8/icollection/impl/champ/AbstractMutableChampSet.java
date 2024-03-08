@@ -117,8 +117,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
         if (o == this) {
             return true;
         }
-        if (o instanceof AbstractMutableChampSet<?, ?>) {
-            AbstractMutableChampSet<?, ?> that = (AbstractMutableChampSet<?, ?>) o;
+        if (o instanceof AbstractMutableChampSet<?, ?> that) {
             return size == that.size && root.equivalent(that.root);
         }
         return super.equals(o);

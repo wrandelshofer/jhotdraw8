@@ -44,7 +44,7 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
     private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
     @SuppressWarnings("unchecked")
-    Node<K>[] nodes = new Node[MAX_DEPTH];
+    final Node<K>[] nodes = new Node[MAX_DEPTH];
     private K current;
 
     @SuppressWarnings("unchecked")

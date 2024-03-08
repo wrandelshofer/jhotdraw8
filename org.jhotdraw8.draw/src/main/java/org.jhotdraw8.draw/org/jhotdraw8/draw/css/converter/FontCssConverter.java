@@ -121,7 +121,7 @@ public class FontCssConverter extends AbstractCssConverter<CssFont> {
         FontPosture fontPosture = FontPosture.REGULAR;
         FontWeight fontWeight = FontWeight.NORMAL;
         CssSize fontSize = CssSize.of(12.0);
-        String fontFamily = "System";
+        StringBuilder fontFamily = new StringBuilder("System");
 
         // parse FontStyle
         if (tt.next() == CssTokenType.TT_IDENT) {
@@ -190,37 +190,19 @@ public class FontCssConverter extends AbstractCssConverter<CssFont> {
                 fontSize = CssSize.of(tt.currentNumberNonNull().doubleValue());
             }
             if (fontWeightOrFontSizeConsumed) {
-                switch ((int) fontWeightOrFontSize) {
-                case 100:
-                    fontWeight = FontWeight.THIN;
-                    break;
-                case 200:
-                    fontWeight = FontWeight.EXTRA_LIGHT;
-                    break;
-                case 300:
-                    fontWeight = FontWeight.LIGHT;
-                    break;
-                case 400:
-                    fontWeight = FontWeight.NORMAL;
-                    break;
-                case 500:
-                    fontWeight = FontWeight.MEDIUM;
-                    break;
-                case 600:
-                    fontWeight = FontWeight.SEMI_BOLD;
-                    break;
-                case 700:
-                    fontWeight = FontWeight.BOLD;
-                    break;
-                case 800:
-                    fontWeight = FontWeight.EXTRA_BOLD;
-                    break;
-                case 900:
-                    fontWeight = FontWeight.BLACK;
-                    break;
-                default:
-                    throw new ParseException("⟨Font⟩: illegal font weight " + fontWeightOrFontSize, tt.getStartPosition());
-                }
+                fontWeight = switch ((int) fontWeightOrFontSize) {
+                    case 100 -> FontWeight.THIN;
+                    case 200 -> FontWeight.EXTRA_LIGHT;
+                    case 300 -> FontWeight.LIGHT;
+                    case 400 -> FontWeight.NORMAL;
+                    case 500 -> FontWeight.MEDIUM;
+                    case 600 -> FontWeight.SEMI_BOLD;
+                    case 700 -> FontWeight.BOLD;
+                    case 800 -> FontWeight.EXTRA_BOLD;
+                    case 900 -> FontWeight.BLACK;
+                    default ->
+                            throw new ParseException("⟨Font⟩: illegal font weight " + fontWeightOrFontSize, tt.getStartPosition());
+                };
             }
 
         } else if (fontWeightOrFontSizeConsumed) {
@@ -231,16 +213,16 @@ public class FontCssConverter extends AbstractCssConverter<CssFont> {
         }
 
         if (tt.next() == CssTokenType.TT_IDENT) {
-            fontFamily = tt.currentString();
+            fontFamily = new StringBuilder(tt.currentString());
             while (tt.next() == CssTokenType.TT_IDENT) {
-                fontFamily += " " + tt.currentString();
+                fontFamily.append(" ").append(tt.currentString());
             }
         } else if (tt.current() == CssTokenType.TT_STRING) {
-            fontFamily = tt.currentString();
+            fontFamily = new StringBuilder(tt.currentString());
         } else {
             throw new ParseException("⟨Font⟩: ⟨FontFamily⟩ expected", tt.getStartPosition());
         }
-        CssFont font = CssFont.font(fontFamily, fontWeight, fontPosture, fontSize);
+        CssFont font = CssFont.font(fontFamily.toString(), fontWeight, fontPosture, fontSize);
         if (font == null) {
             font = CssFont.font(null, fontWeight, fontPosture, fontSize);
         }
@@ -250,11 +232,12 @@ public class FontCssConverter extends AbstractCssConverter<CssFont> {
 
     @Override
     public String getHelpText() {
-        return "Format of ⟨Font⟩: ［⟨FontStyle⟩］［⟨FontWeight⟩］ ⟨FontSize⟩ ⟨FontFamily⟩"
-                + "\n  with ⟨FontStyle⟩: normal｜italic｜oblique"
-                + "\n  with ⟨FontWeight⟩: normal｜bold｜bolder｜lighter｜100｜200｜300｜400｜500｜600｜700｜800｜900"
-                + "\n  with ⟨FontSize⟩: size"
-                + "\n  with ⟨FontFamily⟩: ⟨identifier⟩｜⟨string⟩"
+        return """
+               Format of ⟨Font⟩: ［⟨FontStyle⟩］［⟨FontWeight⟩］ ⟨FontSize⟩ ⟨FontFamily⟩
+                 with ⟨FontStyle⟩: normal｜italic｜oblique
+                 with ⟨FontWeight⟩: normal｜bold｜bolder｜lighter｜100｜200｜300｜400｜500｜600｜700｜800｜900
+                 with ⟨FontSize⟩: size
+                 with ⟨FontFamily⟩: ⟨identifier⟩｜⟨string⟩"""
                 ;
     }
 }

@@ -5,8 +5,6 @@
 package org.jhotdraw8.examples.mini;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -29,31 +27,23 @@ public class FontChooserMain extends Application {
     public void start(@NonNull Stage primaryStage) {
         Label fontChooserLabel = new Label("No font selected");
         Button fontChooserButton = new Button("Open FontChooser");
-        fontChooserButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                FontDialog fd = new FontDialog();
-                FontFamilySize fontName = fd.showAndWait().orElse(null);
-                if (fontName != null) {
-                    fontChooserLabel.setText(fontName.getFamily() + " " + fontName.getSize());
-                    fontChooserLabel.setFont(new Font(fontName.getFamily(), fontName.getSize()));
-                }
+        fontChooserButton.setOnAction(event -> {
+            FontDialog fd = new FontDialog();
+            FontFamilySize fontName = fd.showAndWait().orElse(null);
+            if (fontName != null) {
+                fontChooserLabel.setText(fontName.family() + " " + fontName.size());
+                fontChooserLabel.setFont(new Font(fontName.family(), fontName.size()));
             }
         });
 
         Label fontFamilyLabel = new Label("No font family selected");
         Button fontFamilyChooserButton = new Button("Open FontFamilyChooser");
-        fontFamilyChooserButton.setOnAction(new EventHandler<ActionEvent>() {
-
-            @Override
-            public void handle(ActionEvent event) {
-                FontFamilyDialog fd = new FontFamilyDialog();
-                String fontFamily = fd.showAndWait().orElse(null);
-                if (fontFamily != null) {
-                    fontFamilyLabel.setText(fontFamily);
-                    fontFamilyLabel.setFont(new Font(fontFamily, 13f));
-                }
+        fontFamilyChooserButton.setOnAction(event -> {
+            FontFamilyDialog fd = new FontFamilyDialog();
+            String fontFamily = fd.showAndWait().orElse(null);
+            if (fontFamily != null) {
+                fontFamilyLabel.setText(fontFamily);
+                fontFamilyLabel.setFont(new Font(fontFamily, 13f));
             }
         });
 

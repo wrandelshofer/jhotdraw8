@@ -68,8 +68,7 @@ public class TransformFlattener {
     private @NonNull Translate flattenTranslateTransforms(@NonNull Node node) {
         Translate translate = new Translate(node.getTranslateX(), node.getTranslateY());
         for (Transform t : node.getTransforms()) {
-            if ((t instanceof Translate)) {
-                Translate tt = (Translate) t;
+            if ((t instanceof Translate tt)) {
                 translate = (Translate) translate.createConcatenation(tt);
             } else {
                 throw new IllegalArgumentException("node has non-translate transforms.");
@@ -79,8 +78,7 @@ public class TransformFlattener {
         node.setTranslateY(0.0);
         node.getTransforms().clear();
 
-        if (node.getClip() instanceof Shape) {
-            Shape s = (Shape) node.getClip();
+        if (node.getClip() instanceof Shape s) {
             node.setClip(FXShapes.fxShapeFromAwt(FXShapes.awtShapeFromFX(s)
                     .getPathIterator(FXShapes.awtTransformFromFX(translate))));
         }
@@ -136,29 +134,20 @@ public class TransformFlattener {
         List<PathElement> list = new ArrayList<>(path.getElements().size());
         for (PathElement element : path.getElements()) {
             if (element.isAbsolute() || first) {
-                if (element instanceof ClosePath) {
-                    list.add(element);
-                } else if (element instanceof MoveTo) {
-                    MoveTo e = (MoveTo) element;
-                    list.add(new MoveTo(e.getX() + tx, e.getY() + ty));
-                } else if (element instanceof LineTo) {
-                    LineTo e = (LineTo) element;
-                    list.add(new LineTo(e.getX() + tx, e.getY() + ty));
-                } else if (element instanceof QuadCurveTo) {
-                    QuadCurveTo e = (QuadCurveTo) element;
-                    list.add(new QuadCurveTo(e.getControlX() + tx, e.getControlY() + ty, e.getX() + tx, e.getY() + ty));
-                } else if (element instanceof CubicCurveTo) {
-                    CubicCurveTo e = (CubicCurveTo) element;
-                    list.add(new CubicCurveTo(e.getControlX1() + tx, e.getControlY1() + ty, e.getControlX2() + tx, e.getControlY2() + ty, e.getX() + tx, e.getY() + ty));
-                } else if (element instanceof ArcTo) {
-                    ArcTo e = (ArcTo) element;
-                    list.add(new ArcTo(e.getRadiusX(), e.getRadiusY(),
+                switch (element) {
+                    case ClosePath closePath -> list.add(element);
+                    case MoveTo e -> list.add(new MoveTo(e.getX() + tx, e.getY() + ty));
+                    case LineTo e -> list.add(new LineTo(e.getX() + tx, e.getY() + ty));
+                    case QuadCurveTo e ->
+                            list.add(new QuadCurveTo(e.getControlX() + tx, e.getControlY() + ty, e.getX() + tx, e.getY() + ty));
+                    case CubicCurveTo e ->
+                            list.add(new CubicCurveTo(e.getControlX1() + tx, e.getControlY1() + ty, e.getControlX2() + tx, e.getControlY2() + ty, e.getX() + tx, e.getY() + ty));
+                    case ArcTo e -> list.add(new ArcTo(e.getRadiusX(), e.getRadiusY(),
                             e.getXAxisRotation(),
                             e.getX() + tx, e.getY() + ty,
                             e.isLargeArcFlag(),
                             e.isSweepFlag()));
-                } else {
-                    throw new UnsupportedOperationException("unknown element type: " + element);
+                    default -> throw new UnsupportedOperationException("unknown element type: " + element);
                 }
             } else {
                 list.add(element);

@@ -27,7 +27,6 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.lang.Double.max;
 
@@ -93,8 +92,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
     }
 
     private TabPaneTrack.@NonNull MyTab makeTab(DockChild c) {
-        if (c instanceof Dockable) {
-            Dockable k = (Dockable) c;
+        if (c instanceof Dockable k) {
             TabPaneTrack.MyTab tab = new TabPaneTrack.MyTab(c, k.getText(), k.getNode());
             tab.graphicProperty().bind(CustomBinding.compute(k::getGraphic, k.graphicProperty(), editableProperty()));
             return tab;
@@ -115,7 +113,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         List<Dockable> dockables = dockChildren.stream()
                 .filter(d -> d instanceof Dockable)
                 .map(d -> (Dockable) d)
-                .collect(Collectors.toList());
+                .toList();
         switch (dockables.size()) {
         case 0: {
             resizePane.setCenter(null);
@@ -155,7 +153,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
                 if (content instanceof Region) {
                     minHeight = max(minHeight, content.minHeight(-1));
                 }
-                if (b.length() > 0) {
+                if (!b.isEmpty()) {
                     b.append(", ");
                 }
                 b.append(i.getText());

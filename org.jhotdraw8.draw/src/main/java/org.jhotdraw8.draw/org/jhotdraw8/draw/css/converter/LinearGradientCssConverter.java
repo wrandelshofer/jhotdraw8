@@ -155,9 +155,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
                 needsComma = true;
             }
             {
-                if (needsSpace) {
-                    out.accept(new CssToken(CssTokenType.TT_S, " "));
-                }
+                out.accept(new CssToken(CssTokenType.TT_S, " "));
                 out.accept(new CssToken(CssTokenType.TT_IDENT, "to"));
                 out.accept(new CssToken(CssTokenType.TT_S, " "));
                 if (proportional) {
@@ -202,10 +200,10 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
                     out.accept(new CssToken(CssTokenType.TT_COMMA));
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                 }
-                colorConverter.produceTokens(stop.getColor(), idSupplier, out);
-                if (stop.getOffset() != null) {
+                colorConverter.produceTokens(stop.color(), idSupplier, out);
+                if (stop.offset() != null) {
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
-                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, stop.getOffset() * 100.0));
+                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, stop.offset() * 100.0));
                 }
                 needsComma = true;
             }
@@ -267,13 +265,13 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
             throw new ParseException("CSS LinearGradient: ')'  expected, found: " + tt.currentString(), tt.getStartPosition());
         }
 
-        return new CssLinearGradient(fromTo.startX, fromTo.startY, fromTo.endX, fromTo.endY, fromTo.isProportional, cycleMethod, stops.toArray(new CssStop[stops.size()]));
+        return new CssLinearGradient(fromTo.startX, fromTo.startY, fromTo.endX, fromTo.endY, fromTo.isProportional, cycleMethod, stops.toArray(new CssStop[0]));
     }
 
     private static class PointToPoint {
 
-        public double startX, startY, endX, endY;
-        public boolean isProportional;
+        final public double startX, startY, endX, endY;
+        final public boolean isProportional;
 
         public PointToPoint(double startX, double startY, double endX, double endY, boolean isProportional) {
             this.startX = startX;
@@ -392,36 +390,24 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
 
     private @NonNull PointToPoint parseSideOrCorner(@NonNull CssTokenizer tt) throws IOException, ParseException {
         double startX = 0.0, startY = 0.0, endX = 0.0, endY = 1.0;
-        Boolean isProportional = true;
+        boolean isProportional = true;
         String h = null;
         String v = null;
         while (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentString()) {
-            case "top":
+                case "top", "bottom":
                 if (v != null) {
                     throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentString() + " ttype:" + tt.current(), tt.getStartPosition());
                 }
                 v = tt.currentString();
                 break;
-            case "bottom":
-                if (v != null) {
-                    throw new ParseException("CSS LinearGradient: you already specified '" + v + "', found: " + tt.currentString() + " ttype:" + tt.current(), tt.getStartPosition());
-                }
-                v = tt.currentString();
-                break;
-            case "left":
+                case "left", "right":
                 if (h != null) {
                     throw new ParseException("CSS LinearGradient: you already specified '" + h + "', found: " + tt.currentString() + " ttype:" + tt.current(), tt.getStartPosition());
                 }
                 h = tt.currentString();
                 break;
-            case "right":
-                if (h != null) {
-                    throw new ParseException("CSS LinearGradient: you already specified '" + h + "', found: " + tt.currentString() + " ttype:" + tt.current(), tt.getStartPosition());
-                }
-                h = tt.currentString();
-                break;
-            default:
+                default:
                 throw new ParseException("CSS LinearGradient: 'top', 'bottom', 'left' or 'right' expected, found: " + tt.currentString() + " ttype:" + tt.current(), tt.getStartPosition());
             }
         }

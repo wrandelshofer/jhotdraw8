@@ -7,8 +7,6 @@ package org.jhotdraw8.application.prefs;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.prefs.Preferences;
 
@@ -24,7 +22,7 @@ public class PrefsURIListKey {
 
     public PrefsURIListKey(String key, @NonNull List<String> defaultValue) {
         this.key = key;
-        this.defaultValue = Collections.unmodifiableList(new ArrayList<>(defaultValue));
+        this.defaultValue = List.copyOf(defaultValue);
 
     }
 

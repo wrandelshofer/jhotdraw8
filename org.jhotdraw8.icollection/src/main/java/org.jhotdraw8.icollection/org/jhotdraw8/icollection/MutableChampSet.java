@@ -218,16 +218,16 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         }
         BulkChangeEvent bulkChange = new BulkChangeEvent();
         BitmapIndexedNode<E> newRootNode;
-        if (c instanceof ChampSet<?> that) {
-            newRootNode = root.retainAll(makeOwner(), (BitmapIndexedNode<E>) that.root, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
-        } else if (c instanceof Collection<?> that) {
-            newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
-        } else if (c instanceof ReadOnlyCollection<?> that) {
-            newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
-        } else {
-            HashSet<Object> that = new HashSet<>();
-            c.forEach(that::add);
-            newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
+        switch (c) {
+            case ChampSet<?> that ->
+                    newRootNode = root.retainAll(makeOwner(), (BitmapIndexedNode<E>) that.root, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
+            case Collection<?> that -> newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
+            case ReadOnlyCollection<?> that -> newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
+            default -> {
+                HashSet<Object> that = new HashSet<>();
+                c.forEach(that::add);
+                newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
+            }
         }
         if (bulkChange.removed == 0) {
             return false;
@@ -265,7 +265,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @Override
     public @NonNull Iterator<E> iterator() {
         return new FailFastIterator<>(
-                new ChampIterator<E, E>(root, null),
+                new ChampIterator<>(root, null),
                 this::iteratorRemove, this::getModCount
         );
     }

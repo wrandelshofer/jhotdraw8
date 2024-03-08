@@ -7,7 +7,6 @@ package org.jhotdraw8.examples.mini;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -15,7 +14,14 @@ import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
-import org.jhotdraw8.fxcontrols.dock.*;
+import org.jhotdraw8.fxcontrols.dock.DockChild;
+import org.jhotdraw8.fxcontrols.dock.DockNode;
+import org.jhotdraw8.fxcontrols.dock.DockParent;
+import org.jhotdraw8.fxcontrols.dock.DockRoot;
+import org.jhotdraw8.fxcontrols.dock.SimpleDockRoot;
+import org.jhotdraw8.fxcontrols.dock.SimpleDockable;
+import org.jhotdraw8.fxcontrols.dock.TabPaneTrack;
+import org.jhotdraw8.fxcontrols.dock.TabbedAccordionTrack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,13 +91,10 @@ public class DockingFrameworkExampleMain extends Application {
             }
 
         };
-        InvalidationListener invalidationListener = new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                if (willDumpRoots[0] == false) {
-                    willDumpRoots[0] = true;
-                    Platform.runLater(dumpRoots);
-                }
+        InvalidationListener invalidationListener = observable -> {
+            if (!willDumpRoots[0]) {
+                willDumpRoots[0] = true;
+                Platform.runLater(dumpRoots);
             }
         };
         for (DockRoot r : roots) {

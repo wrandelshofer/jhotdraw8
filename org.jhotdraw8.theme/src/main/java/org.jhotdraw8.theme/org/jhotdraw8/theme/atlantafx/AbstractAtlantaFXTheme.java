@@ -35,9 +35,9 @@ public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
     @Override
     public String createUserAgentStylesheet(@NonNull ThemeParameters params) {
         StringBuilder buf = new StringBuilder();
-        buf.append("@import \"" + uaStylesheetUrl + "\";\n");
+        buf.append("@import \"").append(uaStylesheetUrl).append("\";\n");
         buf.append(".root {\n");
-        buf.append("-fx-font-size:" + params.getFontSize() + "px;\n");
+        buf.append("-fx-font-size:").append(params.getFontSize()).append("px;\n");
         Color accentColor = params.getAccentColor() == null ? Color.BLACK : params.getAccentColor();
         OKLchColorSpace cs = new OKLchColorSpace();
         float[] lch = cs.fromRGB(new float[]{(float) accentColor.getRed(), (float) accentColor.getGreen(), (float) accentColor.getBlue()});
@@ -62,18 +62,17 @@ public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
         Color accentColorMuted = new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 0.4);
         Color accentColorSubtle = new Color(accentColor.getRed(), accentColor.getGreen(), accentColor.getBlue(), 0.2);
         String accentColorStr = toWebColor(accentColor);
-        buf.append("-fx-accent:" + accentColorStr + ";\n");
+        buf.append("-fx-accent:").append(accentColorStr).append(";\n");
         for (int idx = 0, count = 10; idx < count; idx++) {
             lch[0] = (float) (count + 1 - idx) / (count + 2);
             cs.toRGB(lch, rgb);
             Color cc = new Color(rgb[0], rgb[1], rgb[2], 1.0);
-            ;
-            buf.append("-color-accent-" + idx + ":" + toWebColor(cc) + ";\n");
+            buf.append("-color-accent-").append(idx).append(":").append(toWebColor(cc)).append(";\n");
         }
-        buf.append("-color-accent-fg:" + accentColorStr + ";\n");
-        buf.append("-color-accent-emphasis:" + accentColorStr + ";\n");
-        buf.append("-color-accent-muted:" + toWebColor(accentColorMuted) + ";\n");
-        buf.append("-color-accent-subtle:" + toWebColor(accentColorSubtle) + ";\n");
+        buf.append("-color-accent-fg:").append(accentColorStr).append(";\n");
+        buf.append("-color-accent-emphasis:").append(accentColorStr).append(";\n");
+        buf.append("-color-accent-muted:").append(toWebColor(accentColorMuted)).append(";\n");
+        buf.append("-color-accent-subtle:").append(toWebColor(accentColorSubtle)).append(";\n");
         buf.append("}\n");
 
         String customCss = params.getApplicationSpecificCss();

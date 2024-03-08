@@ -60,9 +60,8 @@ public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
         if (contextMenu == null) {
             init();
         }
-        if (converter instanceof CssConverter<?>) {
-            CssConverter<?> cssConverter = (CssConverter<?>) converter;
-            noneItem.setVisible(cssConverter.isNullable());
+        if (converter instanceof CssConverter<?> cssConverter) {
+            noneItem.setVisible(cssConverter.nullable());
         }
     }
 
