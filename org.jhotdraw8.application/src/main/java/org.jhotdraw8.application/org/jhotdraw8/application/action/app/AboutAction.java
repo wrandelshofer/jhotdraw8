@@ -89,7 +89,7 @@ public class AboutAction extends AbstractApplicationAction {
         alert.show();
     }
 
-    private String getDependencies() {
+    private @NonNull String getDependencies() {
         Pattern pattern = Pattern.compile("-(\\w+(?:[.\\-+]\\w+)*).jar$");
 
         return

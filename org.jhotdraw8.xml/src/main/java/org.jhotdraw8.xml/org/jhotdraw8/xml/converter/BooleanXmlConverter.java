@@ -54,7 +54,7 @@ public class BooleanXmlConverter implements Converter<Boolean> {
     }
 
     @Override
-    public @NonNull Boolean fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Boolean fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         in.position(in.length());
         switch (str) {

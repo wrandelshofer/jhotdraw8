@@ -50,7 +50,7 @@ public class ReadOnlyMapFacade<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public V get(Object key) {
+    public @Nullable V get(Object key) {
         @SuppressWarnings("unchecked") K unchecked = (K) key;
         return getFunction.apply(unchecked);
     }

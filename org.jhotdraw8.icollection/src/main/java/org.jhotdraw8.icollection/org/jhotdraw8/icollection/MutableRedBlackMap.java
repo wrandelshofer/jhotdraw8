@@ -302,7 +302,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
     @SuppressWarnings("unchecked")
     @Override
-    public V get(Object key) {
+    public @Nullable V get(Object key) {
         return root.find((K) key, comparator).valueOrNull();
     }
 

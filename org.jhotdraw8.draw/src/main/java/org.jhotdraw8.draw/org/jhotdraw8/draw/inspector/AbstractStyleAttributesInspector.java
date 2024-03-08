@@ -356,7 +356,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
         Class<T> type = acc.getRawValueType();
         boolean nullable = true;
         if (acc.getCssConverter() instanceof CssConverter<T> converter) {
-            nullable = converter.nullable();
+            nullable = converter.isNullable();
         }
         Picker<?> p = null;
         if (type == Boolean.class) {

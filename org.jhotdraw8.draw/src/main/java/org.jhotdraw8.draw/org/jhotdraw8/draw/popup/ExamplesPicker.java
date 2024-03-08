@@ -68,7 +68,7 @@ public class ExamplesPicker<T> extends AbstractPicker<T> {
             init();
         }
         if (converter instanceof CssConverter<?> cssConverter) {
-            noneItem.setVisible(cssConverter.nullable());
+            noneItem.setVisible(cssConverter.isNullable());
         }
     }
 

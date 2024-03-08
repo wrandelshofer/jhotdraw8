@@ -10,6 +10,7 @@ import java.util.ArrayDeque;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 /**
  * Iterates in preorder sequence over all expanded tree items.
@@ -33,6 +34,9 @@ public class ExpandedTreeItemIterator<T> implements Iterator<TreeItem<T>> {
     @Override
     public TreeItem<T> next() {
         Iterator<TreeItem<T>> iter = stack.peek();
+        if (iter == null) {
+            throw new NoSuchElementException();
+        }
         TreeItem<T> node = iter.next();
 
         if (!iter.hasNext()) {

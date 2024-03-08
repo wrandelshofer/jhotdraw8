@@ -138,11 +138,12 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     protected void reviewChanges(WorkState<Void> workState) {
-        if (unsavedView != null && !unsavedView.isDisabled()) {
+        FileBasedActivity unsavedViewLocalVariable = this.unsavedView;
+        if (unsavedViewLocalVariable != null && !unsavedViewLocalVariable.isDisabled()) {
             final Resources labels = ApplicationLabels.getResources();
-            oldFocusOwner = unsavedView.getNode().getScene().getFocusOwner();
-            unsavedView.removeDisabler(workState);
-            URI unsavedURI = unsavedView.getURI();
+            oldFocusOwner = unsavedViewLocalVariable.getNode().getScene().getFocusOwner();
+            unsavedViewLocalVariable.removeDisabler(workState);
+            URI unsavedURI = unsavedViewLocalVariable.getURI();
             ButtonType[] options = {
                     new ButtonType(labels.getString("application.exit.saveOption.text"), ButtonData.YES),//
                     new ButtonType(labels.getString("application.exit.cancelOption.text"), ButtonData.CANCEL_CLOSE),//
@@ -153,20 +154,20 @@ public class ExitAction extends AbstractApplicationAction {
                     options);
             alert.getDialogPane().setMaxWidth(640.0);
             alert.setHeaderText(labels.getFormatted("application.exit.doYouWantToSave.message", //
-                    unsavedView.getTitle(), unsavedView.getDisambiguation()));
-            unsavedView.getNode().getScene().getWindow().requestFocus();
-            alert.initOwner(unsavedView.getNode().getScene().getWindow());
+                    unsavedViewLocalVariable.getTitle(), unsavedViewLocalVariable.getDisambiguation()));
+            unsavedViewLocalVariable.getNode().getScene().getWindow().requestFocus();
+            alert.initOwner(unsavedViewLocalVariable.getNode().getScene().getWindow());
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent()) {
                 switch (result.get().getButtonData()) {
                 default:
                 case CANCEL_CLOSE:
-                    unsavedView.removeDisabler(workState);
+                    unsavedViewLocalVariable.removeDisabler(workState);
                     getApplication().removeDisabler(workState);
                     break;
                 case NO:
-                    getApplication().getActivities().remove(unsavedView);
-                    unsavedView.removeDisabler(workState);
+                    getApplication().getActivities().remove(unsavedViewLocalVariable);
+                    unsavedViewLocalVariable.removeDisabler(workState);
                     reviewNext(workState);
                     break;
                 case YES:
@@ -174,7 +175,7 @@ public class ExitAction extends AbstractApplicationAction {
                     break;
                 }
             } else {
-                unsavedView.removeDisabler(workState);
+                unsavedViewLocalVariable.removeDisabler(workState);
                 getApplication().removeDisabler(workState);
             }
         } else {

@@ -134,7 +134,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return false;
     }
 }

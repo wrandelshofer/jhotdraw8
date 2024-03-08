@@ -108,7 +108,7 @@ public class LiteralEnumCssConverter<E extends Enum<E>> implements CssConverter<
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return nullable;
     }
 

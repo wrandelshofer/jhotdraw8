@@ -220,7 +220,7 @@ public class ChampMap<K, V>
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(Object o) {
+    public @Nullable V get(Object o) {
         Object result = root.findByKey((K) o, keyHash(o), 0);
         return result == Node.NO_DATA ? null : (V) result;
     }

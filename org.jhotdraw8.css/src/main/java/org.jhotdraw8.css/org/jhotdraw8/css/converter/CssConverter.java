@@ -162,5 +162,5 @@ public interface CssConverter<T> extends Converter<T> {
         return VectorList.of();
     }
 
-    boolean nullable();
+    boolean isNullable();
 }

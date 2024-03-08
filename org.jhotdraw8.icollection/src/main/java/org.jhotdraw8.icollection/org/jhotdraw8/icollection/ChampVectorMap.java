@@ -265,7 +265,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
 
     @Override
     @SuppressWarnings("unchecked")
-    public V get(Object o) {
+    public @Nullable V get(Object o) {
         Object result = root.find(
                 new SequencedEntry<>((K) o),
                 SequencedEntry.keyHash(o), 0, SequencedEntry::keyEquals);

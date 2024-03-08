@@ -114,7 +114,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return nullable;
     }
 

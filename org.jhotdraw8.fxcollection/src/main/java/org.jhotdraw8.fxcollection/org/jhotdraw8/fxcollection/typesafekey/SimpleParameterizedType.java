@@ -8,6 +8,14 @@ import java.lang.reflect.Type;
 public record SimpleParameterizedType(@NonNull Type rawType,
                                       @NonNull Type... actualTypeArguments) implements ParameterizedType {
 
+    public Type getTypeArgument(int i) {
+        return actualTypeArguments[i];
+    }
+
+    public int getTypeArgumentCount() {
+        return actualTypeArguments.length;
+    }
+
     @Override
     public String getTypeName() {
         StringBuilder b = new StringBuilder();

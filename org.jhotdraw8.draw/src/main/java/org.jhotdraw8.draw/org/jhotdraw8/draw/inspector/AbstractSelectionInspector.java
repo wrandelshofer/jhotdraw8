@@ -34,18 +34,18 @@ public abstract class AbstractSelectionInspector extends AbstractInspector<Drawi
     public AbstractSelectionInspector() {
     }
 
-    protected Drawing getDrawing() {
+    protected @Nullable Drawing getDrawing() {
         DrawingView subject = getSubject();
         return subject == null ? null : subject.getDrawing();
     }
 
-    protected DrawingModel getModel() {
+    protected @Nullable DrawingModel getModel() {
         DrawingView subject = getSubject();
         return subject == null ? null : subject.getModel();
     }
 
 
-    private final SetChangeListener<Figure> selectionListener = change -> {
+    private final @NonNull SetChangeListener<Figure> selectionListener = change -> {
         DrawingView drawingView = getSubject();
         onSelectionChanged(drawingView == null ? FXCollections.emptyObservableSet() : drawingView.getSelectedFigures());
     };

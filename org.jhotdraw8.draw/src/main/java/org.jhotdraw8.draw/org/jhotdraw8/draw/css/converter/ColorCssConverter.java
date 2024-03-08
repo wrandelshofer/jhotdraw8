@@ -147,7 +147,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return nullable;
     }
 

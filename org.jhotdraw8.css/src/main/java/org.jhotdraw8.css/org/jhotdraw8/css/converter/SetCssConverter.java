@@ -226,7 +226,7 @@ public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return false;
     }
 

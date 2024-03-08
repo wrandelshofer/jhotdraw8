@@ -16,6 +16,7 @@ import org.jhotdraw8.css.value.UnitConverter;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**
@@ -32,7 +33,15 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public record SizeCssConverter(boolean nullable) implements CssConverter<CssSize> {
+public final class SizeCssConverter implements CssConverter<CssSize> {
+    private final boolean nullable;
+
+    /**
+     *
+     */
+    public SizeCssConverter(boolean nullable) {
+        this.nullable = nullable;
+    }
 
 
     @Override
@@ -107,5 +116,34 @@ public record SizeCssConverter(boolean nullable) implements CssConverter<CssSize
         return "Format of ⟨Size⟩: ⟨size⟩ | ⟨percentage⟩% | ⟨size⟩⟨Units⟩"
                 + "\nFormat of ⟨Units⟩: mm | cm | em | ex | in | pc | px | pt";
     }
+
+    @Override
+    public boolean isNullable() {
+        return nullable;
+    }
+
+    public boolean nullable() {
+        return nullable;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) return true;
+        if (obj == null || obj.getClass() != this.getClass()) return false;
+        var that = (SizeCssConverter) obj;
+        return this.nullable == that.nullable;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nullable);
+    }
+
+    @Override
+    public String toString() {
+        return "SizeCssConverter[" +
+                "nullable=" + nullable + ']';
+    }
+
 
 }

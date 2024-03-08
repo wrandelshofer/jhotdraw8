@@ -6,6 +6,7 @@
 package org.jhotdraw8.fxbase.concurrent;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyDoubleWrapper;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -28,6 +29,7 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     private final @NonNull ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
     private final @NonNull ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, TOTAL_WORK_PROPERTY, -1.0);
     private final @NonNull ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, PROGRESS_PROPERTY, -1.0);
+    private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
     private volatile boolean isCancelled;
 
     public BlackHoleWorkState() {
@@ -99,12 +101,16 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
 
     @Override
     public State getState() {
-        return null;
+        return state.get();
     }
 
+    private @NonNull
+    final ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(State.READY);
+    private @NonNull
+    final ReadOnlyObjectWrapper<Throwable> throwable = new ReadOnlyObjectWrapper<>(null);
     @Override
     public ReadOnlyObjectProperty<State> stateProperty() {
-        return null;
+        return state.getReadOnlyProperty();
     }
 
     @Nullable
@@ -119,13 +125,13 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public Throwable getException() {
-        return null;
+    public @Nullable Throwable getException() {
+        return throwable.get();
     }
 
     @Override
     public ReadOnlyObjectProperty<Throwable> exceptionProperty() {
-        return null;
+        return throwable.getReadOnlyProperty();
     }
 
     @Override
@@ -160,12 +166,12 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
 
     @Override
     public boolean isRunning() {
-        return false;
+        return running.get();
     }
 
     @Override
     public ReadOnlyBooleanProperty runningProperty() {
-        return null;
+        return running.getReadOnlyProperty();
     }
 
     @Override

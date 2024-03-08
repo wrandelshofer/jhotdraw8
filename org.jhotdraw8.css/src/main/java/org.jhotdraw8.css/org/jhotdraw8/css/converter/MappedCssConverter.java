@@ -117,7 +117,7 @@ public class MappedCssConverter<E> implements CssConverter<E> {
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return nullable;
     }
 

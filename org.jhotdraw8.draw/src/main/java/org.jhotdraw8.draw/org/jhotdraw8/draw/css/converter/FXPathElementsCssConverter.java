@@ -79,7 +79,7 @@ public class FXPathElementsCssConverter extends AbstractCssConverter<ImmutableLi
 
     @Override
     public @Nullable ImmutableList<PathElement> getDefaultValue() {
-        return nullable() ? null : VectorList.of();
+        return isNullable() ? null : VectorList.of();
     }
 
 

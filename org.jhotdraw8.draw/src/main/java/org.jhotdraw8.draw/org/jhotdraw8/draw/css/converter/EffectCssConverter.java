@@ -148,7 +148,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return true;
     }
 

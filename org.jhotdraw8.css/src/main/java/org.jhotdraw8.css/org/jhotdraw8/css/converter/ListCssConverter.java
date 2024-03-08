@@ -231,7 +231,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public boolean nullable() {
+    public boolean isNullable() {
         return false;
     }
 

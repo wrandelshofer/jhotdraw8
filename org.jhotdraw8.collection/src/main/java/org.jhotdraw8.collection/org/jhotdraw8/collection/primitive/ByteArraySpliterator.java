@@ -5,6 +5,8 @@
 
 package org.jhotdraw8.collection.primitive;
 
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Comparator;
 import java.util.Spliterator;
 
@@ -44,7 +46,7 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
     }
 
     @Override
-    public SpliteratorOfByte trySplit() {
+    public @Nullable SpliteratorOfByte trySplit() {
         int lo = index, mid = (lo + fence) >>> 1;
         return (lo >= mid)
                 ? null

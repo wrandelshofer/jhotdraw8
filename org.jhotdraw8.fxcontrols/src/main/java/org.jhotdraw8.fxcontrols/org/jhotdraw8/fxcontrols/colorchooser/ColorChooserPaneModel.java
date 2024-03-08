@@ -558,7 +558,6 @@ public class ColorChooserPaneModel {
                 case NamedColorSpace.TYPE_LCH ->
                         colorSyntax = cs instanceof OKLchColorSpace ? ColorSyntax.OKLCH_FUNCTION : ColorSyntax.LCH_FUNCTION;
                 case ColorSpace.TYPE_HLS -> colorSyntax = ColorSyntax.HSL_FUNCTION;
-                case ColorSpace.TYPE_RGB -> colorSyntax = ColorSyntax.COLOR_FUNCTION;
                 case ColorSpace.TYPE_Lab ->
                         colorSyntax = cs instanceof OKLabColorSpace ? ColorSyntax.OKLAB_FUNCTION : ColorSyntax.LAB_FUNCTION;
                 default -> colorSyntax = ColorSyntax.COLOR_FUNCTION;

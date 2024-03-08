@@ -5,13 +5,15 @@
 
 package org.jhotdraw8.collection.primitive;
 
+import org.jhotdraw8.annotation.Nullable;
+
 import java.util.Spliterator;
 import java.util.function.Consumer;
 
 public interface SpliteratorOfByte extends Spliterator.OfPrimitive<Byte, ByteConsumer, SpliteratorOfByte> {
 
     @Override
-    SpliteratorOfByte trySplit();
+    @Nullable SpliteratorOfByte trySplit();
 
     @Override
     boolean tryAdvance(ByteConsumer action);

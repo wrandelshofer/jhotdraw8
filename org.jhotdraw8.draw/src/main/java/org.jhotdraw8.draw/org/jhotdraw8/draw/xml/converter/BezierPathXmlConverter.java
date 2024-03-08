@@ -77,7 +77,7 @@ public class BezierPathXmlConverter implements Converter<BezierPath> {
     }
 
     @Override
-    public BezierPath getDefaultValue() {
+    public @Nullable BezierPath getDefaultValue() {
         return nullable ? null : BezierPath.of();
     }
 }

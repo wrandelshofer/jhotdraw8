@@ -248,7 +248,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
      */
     @Override
     @SuppressWarnings("unchecked")
-    public V get(Object o) {
+    public @Nullable V get(Object o) {
         Object result = root.find(
                 new SequencedEntry<>((K) o),
                 SequencedEntry.keyHash(o), 0, SequencedEntry::keyEquals);

@@ -232,7 +232,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
 
         // We must set the font before we set the text, so that JavaFx does not need to retrieve
         // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
-        tn.setText(getText(null));
+        tn.setText(getText(ctx));
 
         return FXShapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
