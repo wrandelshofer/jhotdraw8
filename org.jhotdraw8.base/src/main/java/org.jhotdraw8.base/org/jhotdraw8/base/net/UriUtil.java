@@ -13,7 +13,6 @@ import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 import java.util.SequencedMap;
 
@@ -197,6 +196,13 @@ public class UriUtil {
         return relativized;
     }
 
+    /**
+     * Absolutizes an URI.
+     *
+     * @param base the base URI
+     * @param uri  an URI that is relative to the base URI
+     * @return the absolutized URI
+     */
     public static @NonNull URI absolutize(@Nullable URI base, @NonNull URI uri) {
         if (base == null) {
             return uri;

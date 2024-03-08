@@ -19,15 +19,14 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import java.lang.reflect.ParameterizedType;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * An <em>name</em> which provides typesafe access to a map entry.
  * <p>
  * A Key has a name, a type and a default value.
  * <p>
- * A key is identified by its name. The hashcode and equals are based on
- * the name of the key.
+ * A key is identified by its identity. The hashcode and equals are based on
+ * the identity of the key.
  * <p>
  * The following code example shows how to set and get a value from a map.
  * <pre>
@@ -273,20 +272,5 @@ public interface Key<T> extends MapAccessor<T> {
 
     default @NonNull T cast(Object value) {
         return getRawValueType().cast(value);
-    }
-
-    /**
-     * Gets the unique ordinal number of this key in this JVM.
-     * <p>
-     * The number is {@literal >= 0}.
-     *
-     * @return ordinal
-     */
-    int ordinal();
-
-    ConcurrentHashMap<String, Integer> nextOrdinal = new ConcurrentHashMap<>();
-
-    static int createNextOrdinal(String name) {
-        return nextOrdinal.computeIfAbsent(name, k -> nextOrdinal.size());
     }
 }

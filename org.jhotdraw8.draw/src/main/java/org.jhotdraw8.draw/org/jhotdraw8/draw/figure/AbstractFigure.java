@@ -15,7 +15,6 @@ import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssDefaulting;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
-import org.jhotdraw8.fxcollection.sharedkeys.KeyMap;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -57,7 +56,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
             int index = 0;
 
             Set<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
-            Map<Key<?>, Integer> m = new KeyMap(accessors.size());
+            Map<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
             for (MapAccessor<?> accessor : accessors) {
                 if (accessor instanceof Key<?>) {
                     m.put((Key<?>) accessor, index++);
