@@ -12,6 +12,7 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.PrimitiveIterator;
 
 /**
  * A {@code int}-valued deque backed by a primitive array.
@@ -166,8 +167,8 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public @NonNull Iterator<Integer> descendingIterator() {
-        throw new UnsupportedOperationException();
+    public PrimitiveIterator.@NonNull OfInt descendingIterator() {
+        return new ReverseDeqIterator();
     }
 
 
@@ -283,11 +284,11 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
 
     @Override
     public @NonNull Deque<Integer> reversed() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
-    public @NonNull Iterator<Integer> iterator() {
+    public PrimitiveIterator.@NonNull OfInt iterator() {
         return new DeqIterator();
     }
 
@@ -424,7 +425,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
     }
 
-    private class DeqIterator implements Iterator<Integer> {
+    private class DeqIterator implements PrimitiveIterator.OfInt {
         /**
          * Tail recorded at construction, to stop
          * iterator and also to check for co-modification.
@@ -441,7 +442,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         }
 
         @Override
-        public Integer next() {
+        public int nextInt() {
             if (cursor == fence) {
                 throw new NoSuchElementException();
             }
@@ -452,6 +453,38 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
                 throw new ConcurrentModificationException();
             }
             cursor = (cursor + 1) & (elements.length - 1);
+            return result;
+        }
+    }
+
+    private class ReverseDeqIterator implements PrimitiveIterator.OfInt {
+        /**
+         * Tail recorded at construction, to stop
+         * iterator and also to check for co-modification.
+         */
+        private final int fence = head;
+        /**
+         * Index of element to be returned by subsequent call to next.
+         */
+        private int cursor = tail;
+
+        @Override
+        public boolean hasNext() {
+            return cursor != fence;
+        }
+
+        @Override
+        public int nextInt() {
+            if (cursor == fence) {
+                throw new NoSuchElementException();
+            }
+            int result = elements[cursor];
+            // This check doesn't catch all possible co-modifications,
+            // but does catch the ones that corrupt traversal
+            if (tail != fence) {
+                throw new ConcurrentModificationException();
+            }
+            cursor = (cursor - 1) & (elements.length - 1);
             return result;
         }
     }
