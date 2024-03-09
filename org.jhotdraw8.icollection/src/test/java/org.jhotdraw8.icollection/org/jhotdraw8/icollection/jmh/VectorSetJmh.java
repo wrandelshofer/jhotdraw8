@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.jmh;
 
-
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;

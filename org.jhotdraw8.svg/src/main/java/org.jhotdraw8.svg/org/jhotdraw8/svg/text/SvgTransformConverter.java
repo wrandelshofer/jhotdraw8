@@ -108,7 +108,7 @@ public class SvgTransformConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return """
                Format of ⟨Transform⟩: ⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨SkewX⟩｜⟨SkewY⟩｜⟨Matrix⟩
                Format of ⟨Translate⟩: translate(⟨tx⟩,⟨ty⟩)

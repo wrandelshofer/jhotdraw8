@@ -20,6 +20,8 @@ import org.jhotdraw8.icollection.ChampMap;
 import java.net.URI;
 import java.util.Optional;
 import java.util.function.BiFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Lets the user write unsaved changes of the active view, then presents an
@@ -70,7 +72,8 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(throwable));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
-                throwable.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", throwable);
+
             }
             view.clearModified();
             view.removeDisabler(workState);

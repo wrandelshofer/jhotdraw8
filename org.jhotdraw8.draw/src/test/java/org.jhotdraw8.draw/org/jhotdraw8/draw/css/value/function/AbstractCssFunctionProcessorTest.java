@@ -23,10 +23,11 @@ import java.io.StringReader;
 import java.text.ParseException;
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 import java.util.SequencedMap;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -78,7 +79,8 @@ abstract class AbstractCssFunctionProcessorTest {
             assertEquals(expected, buf.toString());
         } catch (ParseException e) {
             if (expected != null) {
-                e.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
                 fail("must not throw ParseException " + e);
             }
         }

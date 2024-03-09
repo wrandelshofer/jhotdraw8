@@ -6,3 +6,4 @@
  * Provides actions for views.
  */
 package org.jhotdraw8.application.action.view;
+

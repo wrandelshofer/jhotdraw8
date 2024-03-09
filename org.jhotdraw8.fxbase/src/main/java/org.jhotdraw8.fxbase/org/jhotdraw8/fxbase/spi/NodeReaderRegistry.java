@@ -8,7 +8,6 @@ package org.jhotdraw8.fxbase.spi;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +42,7 @@ public class NodeReaderRegistry {
         return list.isEmpty() ? null : list.getFirst();
     }
 
-    public static @Nullable NodeReader getNodeReader(@NonNull String path) throws MalformedURLException {
+    public static @Nullable NodeReader getNodeReader(@NonNull String path) {
         List<NodeReader> list = getNodeReaders(path);
         return list.isEmpty() ? null : list.getFirst();
     }

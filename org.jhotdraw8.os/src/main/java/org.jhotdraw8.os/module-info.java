@@ -13,6 +13,7 @@ module org.jhotdraw8.os {
     requires static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.icollection;
+    requires java.logging;
 
     exports org.jhotdraw8.os;
     exports org.jhotdraw8.os.macos;

@@ -7,3 +7,4 @@
  * Defines interfaces to immutable collections.
  */
 package org.jhotdraw8.icollection.immutable;
+

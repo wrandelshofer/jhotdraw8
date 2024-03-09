@@ -42,10 +42,10 @@ public abstract class FxmlApplication extends Application {
     }
 
 
-    public abstract void initApplication() throws Exception;
+    public abstract void initApplication();
 
     @Override
-    public final void start(Stage primaryStage) throws Exception {
+    public final void start(Stage primaryStage) {
         loaderFuture.thenAccept(loader -> {
             Object root = loader.getRoot();
             Object controller = loader.getController();

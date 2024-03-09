@@ -63,7 +63,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure, double tolerance) {
+    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure, double tolerance) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
@@ -91,12 +91,14 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                         for (int i = 0, n = dashArray.size(); i < n; i++) {
                             dash[i] = (float) dashArray.get(i).getConvertedValue();
                         }
+                        //noinspection MagicConstant
                         basicStroke = new BasicStroke((float) strokeWidth,
                                 FXShapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
                                 FXShapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue(), dash, (float) dashOffset);
 
                     } else {
+                        //noinspection MagicConstant
                         basicStroke = new BasicStroke((float) strokeWidth,
                                 FXShapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
                                 FXShapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),

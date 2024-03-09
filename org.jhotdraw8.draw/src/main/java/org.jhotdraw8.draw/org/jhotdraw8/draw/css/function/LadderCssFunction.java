@@ -5,6 +5,7 @@
 package org.jhotdraw8.draw.css.function;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.SelectorModel;
@@ -93,7 +94,7 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
      * @param ladder     the ladder
      * @return a color from the ladder
      */
-    private CssColor interpolate(double brightness, TreeMap<Double, List<CssColor>> ladder) {
+    private @Nullable CssColor interpolate(double brightness, TreeMap<Double, List<CssColor>> ladder) {
         Map.Entry<Double, List<CssColor>> entry = ladder.floorEntry(brightness);
         if (entry == null) {
             entry = ladder.firstEntry();

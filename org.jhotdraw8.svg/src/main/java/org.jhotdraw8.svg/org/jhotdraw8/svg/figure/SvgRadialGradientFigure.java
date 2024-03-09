@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.svg.figure;
 
-import javafx.scene.Node;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
@@ -14,7 +13,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -68,23 +66,4 @@ public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
     }
 
 
-    @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
-    }
-
-    @Override
-    public boolean isSuitableParent(@NonNull Figure newParent) {
-        return true;
-    }
-
-
-    @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
-        return true;
-    }
-
-    @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
-        // does nothing
-    }
 }

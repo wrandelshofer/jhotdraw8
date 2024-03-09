@@ -41,11 +41,6 @@ public class ReadOnlyKeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Obj
     }
 
     @Override
-    public @Nullable Object getBean() {
-        return map;
-    }
-
-    @Override
     public String getName() {
         return accessor.toString();
     }

@@ -56,6 +56,8 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 import java.util.function.ToIntFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Base class for color sliders that support color spaces with up to 4 color components.
@@ -209,7 +211,8 @@ public abstract class AbstractColorSlider extends Pane {
                         newPixelBuffer.updateBuffer(b -> null);
                         pixelBuffer = newPixelBuffer;
                     } else if (!(e instanceof CancellationException)) {
-                        e.printStackTrace();
+                        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
                     }
 
                     // If the image became invalid while we were drawing it,
@@ -420,7 +423,7 @@ public abstract class AbstractColorSlider extends Pane {
         this.displayColorSpace.set(displayColorSpace);
     }
 
-    record FillTaskRecord(@NonNull PixelBuffer<IntBuffer> pixelBuffer,
+    public record FillTaskRecord(@NonNull PixelBuffer<IntBuffer> pixelBuffer,
                           @NonNull NamedColorSpace sourceColorSpace, @NonNull NamedColorSpace targetColorSpace,
                           @NonNull NamedColorSpace displayColorSpace,
                           float c0, float c1, float c2, float c3,

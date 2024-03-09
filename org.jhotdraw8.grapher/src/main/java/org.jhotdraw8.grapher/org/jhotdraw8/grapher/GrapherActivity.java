@@ -154,6 +154,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
@@ -450,10 +452,13 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
                 this.dockRoot.getDockChildren().setAll(htrack);
                 this.dockRoot.setDockablePredicate(items::contains);
             } else {
-                e.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             }
         }).exceptionally((e) -> {
-            e.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
+            //noinspection ReturnOfNull
             return null;
         });
     }
@@ -519,7 +524,8 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             }
         }).handle((voidvalue, ex) -> {
             if (ex != null) {
-                ex.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
             }
             return null;
         });

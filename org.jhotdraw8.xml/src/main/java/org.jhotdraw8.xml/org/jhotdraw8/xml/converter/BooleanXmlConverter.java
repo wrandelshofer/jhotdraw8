@@ -26,7 +26,7 @@ import java.text.ParseException;
  */
 public class BooleanXmlConverter implements Converter<Boolean> {
 
-    private static final long serialVersionUID = 1L;
+
 
     private final String trueString = "true";
     private final String emptyString = "";
@@ -74,8 +74,8 @@ public class BooleanXmlConverter implements Converter<Boolean> {
     }
 
     @Override
-    public @NonNull Boolean getDefaultValue() {
-        return false;
+    public @Nullable Boolean getDefaultValue() {
+        return Boolean.FALSE;
     }
 
 }

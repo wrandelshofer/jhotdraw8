@@ -7,3 +7,4 @@
  * Provides reversed views to sequenced collections.
  */
 package org.jhotdraw8.icollection.sequenced;
+

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection;
 
-
 import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;

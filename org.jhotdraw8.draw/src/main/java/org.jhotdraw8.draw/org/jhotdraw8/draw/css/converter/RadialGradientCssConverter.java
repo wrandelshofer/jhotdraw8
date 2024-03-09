@@ -324,7 +324,7 @@ public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGr
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨RadialGradient⟩: radial-gradient(［⟨RadialGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
                 + "\nFormat of ⟨RadialGradientParameters⟩: ［⟨FocusAngle⟩］［, ⟨FocusDistance⟩］［, ⟨Center⟩］, ⟨Radius⟩"
                 + "\nFormat of ⟨FocusAngle⟩: focus-angle ⟨angle⟩deg"

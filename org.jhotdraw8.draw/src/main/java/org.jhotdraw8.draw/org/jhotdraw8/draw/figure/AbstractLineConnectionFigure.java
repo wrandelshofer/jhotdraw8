@@ -21,8 +21,6 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 import java.util.LinkedHashSet;
 import java.util.SequencedSet;
-import java.util.SequencedSet;
-import java.util.Set;
 
 /**
  * Base class for line connection figure.

@@ -212,7 +212,7 @@ public class CssToken {
             }
             return out.toString();
         } catch (IOException e) {
-            throw new RuntimeException("unexpected IO exception", e);
+            throw new RuntimeException("Unexpected IOException", e);
         }
     }
 
@@ -232,7 +232,7 @@ public class CssToken {
             }
             return out.toString();
         } catch (IOException e) {
-            throw new RuntimeException("unexpected IO exception", e);
+            throw new RuntimeException("Unexpected IOException", e);
         }
     }
 
@@ -340,7 +340,7 @@ public class CssToken {
                 }
             }
         } catch (IOException e) {
-            throw new RuntimeException("unexpected IO exception", e);
+            throw new RuntimeException("Unexpected IOException", e);
         }
 
 

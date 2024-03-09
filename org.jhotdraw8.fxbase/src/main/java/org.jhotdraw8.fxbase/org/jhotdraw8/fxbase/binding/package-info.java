@@ -6,3 +6,4 @@
  * Provides utility classes for JavaFX property bindings.
  */
 package org.jhotdraw8.fxbase.binding;
+

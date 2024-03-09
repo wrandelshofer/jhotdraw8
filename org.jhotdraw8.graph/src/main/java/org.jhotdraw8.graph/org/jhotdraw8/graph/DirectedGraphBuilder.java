@@ -7,7 +7,6 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;

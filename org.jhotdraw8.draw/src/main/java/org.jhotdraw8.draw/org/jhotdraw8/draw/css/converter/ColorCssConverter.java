@@ -142,7 +142,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Color⟩: " + "⟨name⟩｜#⟨hex⟩｜rgb(⟨r⟩,⟨g⟩,⟨b⟩)｜rgba(⟨r⟩,⟨g⟩,⟨b⟩,⟨a⟩)｜hsb(⟨h⟩,⟨s⟩,⟨b⟩)｜hsba(⟨h⟩,⟨s⟩,⟨b⟩,⟨a⟩)";
     }
 
@@ -173,15 +173,16 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                     case "hwb", "oklch", "oklab", "lab" -> null;
                     case "color" -> parseColorFunction(tt);
                     default ->
-                            throw tt.createParseException("CssColor: unsupported function: " + tt.currentStringNonNull() + "().");
+                            throw tt.createParseException("Could not convert a string to a CssColor because the function " + tt.currentStringNonNull() + "() is not supported.");
                 };
             }
-            default -> throw tt.createParseException("CssColor: named color, hex color or color function expected.");
+            default ->
+                    throw tt.createParseException("Could not convert a string to a CssColor because unexpected " + tt.getToken() + " was found.");
         };
     }
 
     private @Nullable CssColor parseColorFunction(CssTokenizer tt) throws ParseException, IOException {
-        tt.requireNextToken(CssTokenType.TT_FUNCTION, "CssColor: function expected.");
+        tt.requireNextToken(CssTokenType.TT_FUNCTION, "Could not convert a string to a CssColor because unexpected " + tt.getToken() + " was found.");
         String functionName = tt.currentStringNonNull();
 
         String colorSpaceParam = "srgb";
@@ -195,13 +196,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         }
         NamedColorSpace cs = CssColorSpaces.COLOR_SPACES.get(colorSpaceParam);
         if (cs == null) {
-            throw tt.createParseException("CssColor: unsupported color space: '" + colorSpaceParam + "'.");
+            throw tt.createParseException("Could not convert a string to a CssColor because the color space=\"" + colorSpaceParam + "\" is not supported.");
         }
 
 
         List<CssSize> params = parseParams(tt, cs);
         if (tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
-            throw tt.createParseException("CssColor: right bracket expected.");
+            throw tt.createParseException("Could not convert a string to a CssColor because the closing bracket ')' is missing.");
         }
         float[] rgb = clampColors(params);
         return new CssColor(
@@ -217,11 +218,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             switch (tt.current()) {
                 case CssTokenType.TT_DIMENSION, CssTokenType.TT_PERCENTAGE -> {
-                    if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
+                    if (params.size() > 3)
+                        throw tt.createParseException("Could not convert a string to a CssColor because the function has too many parameters.");
                     params.add(CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull()));
                 }
                 case CssTokenType.TT_NUMBER -> {
-                    if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
+                    if (params.size() > 3)
+                        throw tt.createParseException("Could not convert a string to a CssColor because the function has too many parameters.");
                     params.add(CssSize.of(tt.currentNumberNonNull().doubleValue()));
                 }
                 case ',', '/' -> {
@@ -229,16 +232,18 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 case CssTokenType.TT_IDENT -> {
                     switch (tt.currentStringNonNull()) {
                         case "none" -> {
-                            if (params.size() > 3) throw tt.createParseException("CssColor: too many parameters.");
+                            if (params.size() > 3)
+                                throw tt.createParseException("Could not convert a string to a CssColor because the function has too many parameters.");
                             params.add(CssSize.ZERO);
                         }
-                        default -> throw tt.createParseException("CssColor: 'none' expected.");
+                        default ->
+                                throw tt.createParseException("Could not convert a string to a CssColor because the identifier 'none' or a number is expected.");
                     }
                 }
             }
         }
         if (params.size() < 3) {
-            throw tt.createParseException("CssColor: not enough parameters.");
+            throw tt.createParseException("Could not convert a string to a CssColor because the function has not enough parameters.");
         }
         return params;
     }
@@ -250,7 +255,8 @@ public class ColorCssConverter implements CssConverter<CssColor> {
             case "grad" -> v * 360f / 400f;
             case "rad" -> v * (360f / 2f) / Math.PI;
             case "turn" -> v * 360f;
-            default -> throw tt.createParseException("CssColor: unsupported dimension: '" + size.getUnits() + "'.");
+            default ->
+                    throw tt.createParseException("Could not convert a string to a color because the value " + size + " has unexpected units=\"" + size.getUnits() + "\".");
         };
     }
 
@@ -389,10 +395,10 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                     a = (v & 0xff);
                     return new Uint8HexSrgbaCssColor(r, g, b, a);
                 default:
-                    throw new ParseException("<hex-digits>: expected 3, 6  or 8 digits. Found:" + hexdigits, startpos);
+                    throw new ParseException("Could not convert a string to a CssColor because a hex digits value must have 3, 6  or 8 digits. Found " + hexdigits + " digits.", startpos);
             }
         } catch (NumberFormatException e) {
-            ParseException pe = new ParseException("<hex-digits>: expected a hex-digit. Found:" + hexdigits, startpos);
+            ParseException pe = new ParseException("Could not convert a string to a CssColor because it does not contain hex digits. Found \"" + hexdigits + "\".", startpos);
             pe.initCause(e);
             throw pe;
         }
@@ -408,11 +414,12 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                         && tt.currentStringNonNull().startsWith("x")) {
                     yield parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
                 } else {
-                    throw tt.createParseException("CssColor: hex color expected.");
+                    throw tt.createParseException("Could not convert a string to CssColor because it does not contain the expected hex digits.");
                 }
             }
             case CssTokenType.TT_HASH -> parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
-            default -> throw tt.createParseException("CssColor: hex color expected.");
+            default ->
+                    throw tt.createParseException("Could not convert a string to CssColor because it does not contain the expected hex digits.");
         };
     }
 
@@ -451,7 +458,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                         && tt.currentStringNonNull().startsWith("x")) {
                     color = parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
                 } else {
-                    throw tt.createParseException("CssColor: hex color expected.");
+                    throw tt.createParseException("Could not convert a string to CssColor because it does not contain the expected hex digits.");
                 }
                 break;
             case CssTokenType.TT_HASH:
@@ -476,14 +483,14 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                         break;
                     }
                     default:
-                        throw tt.createParseException("CssColor: color expected.");
+                        throw tt.createParseException("Could not convert a string to a CssColor because it contains an unsupported function=\"" + tt.currentStringNonNull() + "()\"");
                 }
                 if (tt.next() != ')') {
-                    throw tt.createParseException("CssColor: ')' expected.");
+                    throw tt.createParseException("Could not convert a string to a CssColor because it does not end with a closing bracket ')' character.");
                 }
                 break;
             default:
-                throw tt.createParseException("CssColor: color expected.");
+                throw tt.createParseException("Could not convert a string to a CssColor because it does not contain an expected color value.");
         }
         return color;
     }
@@ -498,7 +505,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 || tt.current() == CssTokenType.TT_DIMENSION)) {
             if (tt.current() == CssTokenType.TT_DIMENSION &&
                     (i != 0 || !UnitConverter.DEGREES.equals(tt.currentStringNonNull()))) {
-                throw tt.createParseException("CssColor: hsb found unsupported dimension.");
+                throw tt.createParseException("Could not convert a string to a HSB color because of the unexpected value=" + tt.getToken() + ".");
             }
             if (tt.current() == CssTokenType.TT_PERCENTAGE) {
                 sizes[i++] = CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
@@ -519,7 +526,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         } else if (i == 4) {
             color = new ShsbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
         } else {
-            throw tt.createParseException("CssColor: hsb values expected.");
+            throw tt.createParseException("Could not convert a string to a HSB color because the function must have 0, 3 or 4 arguments. Found " + i + " arguments.");
         }
         return color;
     }
@@ -549,7 +556,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         } else if (i == 4) {
             color = new SrgbaCssColor(sizes[0], sizes[1], sizes[2], sizes[3]);
         } else {
-            throw tt.createParseException("CssColor: rgb values expected.");
+            throw tt.createParseException("Could not convert a string to a sRGB color because the function must have 0, 3 or 4 arguments. Found " + i + " arguments.");
         }
         return color;
     }
@@ -567,7 +574,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 out.accept(new CssToken(tt.current(), tt.currentNumber(), tt.currentString()));
             }
         } catch (IOException e) {
-            throw new AssertionError("unexpected io exception", e);
+            throw new AssertionError("Unexpected IOException", e);
         }
     }
 }

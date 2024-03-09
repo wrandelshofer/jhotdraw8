@@ -8,3 +8,4 @@
  * go away in the future.
  */
 package org.jhotdraw8.graph.precondition;
+

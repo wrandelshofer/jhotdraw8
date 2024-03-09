@@ -3,6 +3,7 @@ package org.jhotdraw8.icollection;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.CollectionFacade;
+import org.jhotdraw8.icollection.facade.NavigableSetFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SetFacade;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
@@ -10,6 +11,8 @@ import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedSpliterator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
+import org.jhotdraw8.icollection.navigable.DescendingNavigableMapView;
+import org.jhotdraw8.icollection.navigable.SubsetNavigableMapView;
 import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.icollection.serialization.SortedMapSerializationProxy;
@@ -24,6 +27,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NavigableMap;
 import java.util.NavigableSet;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedMap;
@@ -218,64 +222,69 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
     @Override
     public NavigableMap<K, V> descendingMap() {
-        return null;
+        return new DescendingNavigableMapView<>(this, this::getModCount);
     }
 
     @Override
     public NavigableSet<K> navigableKeySet() {
-        return null;
+        return NavigableSetFacade.createKeySet(this);
     }
 
     @Override
     public NavigableSet<K> descendingKeySet() {
-        return null;
+        return navigableKeySet().reversed();
     }
 
     @Override
     public NavigableMap<K, V> subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive) {
-        return null;
+        return new SubsetNavigableMapView<>(this, this::getModCount,
+                false, fromKey, fromInclusive, false, toKey, toInclusive, true);
     }
 
     @Override
     public NavigableMap<K, V> headMap(K toKey, boolean inclusive) {
-        return null;
+        return new SubsetNavigableMapView<>(this, this::getModCount,
+                true, null, true, false, toKey, inclusive, true);
     }
 
     @Override
     public NavigableMap<K, V> tailMap(K fromKey, boolean inclusive) {
-        return null;
+        return new SubsetNavigableMapView<>(this, this::getModCount,
+                false, fromKey, inclusive, true, null, true, true);
     }
 
     @Override
-    public Comparator<? super K> comparator() {
+    public @Nullable Comparator<? super K> comparator() {
         return comparator == NaturalComparator.instance() ? null : comparator;
     }
 
     @Override
     public @NonNull SortedMap<K, V> subMap(K fromKey, K toKey) {
-        return null;
+        return subMap(fromKey, true, toKey, false);
     }
 
     @Override
     public @NonNull SortedMap<K, V> headMap(K toKey) {
-        return null;
+        return headMap(toKey, true);
     }
 
     @Override
     public @NonNull SortedMap<K, V> tailMap(K fromKey) {
-        return null;
+        return tailMap(fromKey, true);
     }
 
     @Override
     public K firstKey() {
         Map.Entry<K, V> entry = firstEntry();
-        return entry == null ? null : entry.getKey();
+        if (entry == null) throw new NoSuchElementException();
+        return entry.getKey();
     }
 
     @Override
     public K lastKey() {
         Map.Entry<K, V> entry = lastEntry();
-        return entry == null ? null : entry.getKey();
+        if (entry == null) throw new NoSuchElementException();
+        return entry.getKey();
     }
 
     @Override
@@ -306,9 +315,9 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         return root.find((K) key, comparator).valueOrNull();
     }
 
-    @Nullable
+
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         var newRoot = root.insert(key, value, comparator);
         if (newRoot != root) {
             V oldValue = newRoot.size() == root.size() ? root.find(key, comparator).getValue() : null;
@@ -320,7 +329,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
     @Override
     @SuppressWarnings("unchecked")
-    public V remove(Object key) {
+    public @Nullable V remove(Object key) {
         var newRoot = root.delete((K) key, comparator);
         if (newRoot != root) {
             V oldValue = root.find((K) key, comparator).getValue();
@@ -350,7 +359,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
 
     public RedBlackMap<K, V> toImmutable() {
-        return null;
+        return new RedBlackMap<>(root, comparator);
     }
 
     public @NonNull Iterator<Entry<K, V>> iterator() {
@@ -370,6 +379,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     public @NonNull Spliterator<Entry<K, V>> spliterator() {
+        //noinspection MagicConstant
         Spliterator<Entry<K, V>> spliterator = Spliterators.spliterator(root.iterator(), size(),
                 Spliterator.NONNULL | characteristics());
         return new FailFastSpliterator<>(
@@ -427,7 +437,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
      * @return true if the element was contained in the map
      */
     @SuppressWarnings("unchecked")
-    protected boolean removeEntry(@Nullable Object o) {
+    private boolean removeEntry(@Nullable Object o) {
         if (containsEntry(o)) {
             assert o != null;
             remove(((Entry<K, V>) o).getKey());

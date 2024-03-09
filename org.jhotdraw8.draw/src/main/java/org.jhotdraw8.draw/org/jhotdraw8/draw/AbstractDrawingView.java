@@ -16,6 +16,7 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.handle.Handle;
@@ -36,6 +37,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.SequencedMap;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * AbstractDrawingView.
@@ -43,7 +46,6 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingView extends AbstractPropertyBean implements DrawingView {
-
     private final @NonNull ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
     private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, EDITOR_PROPERTY, null);
     private final @NonNull ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
@@ -105,9 +107,10 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     public void copy() {
         ClipboardOutputFormat out = getClipboardOutputFormat();
-        if (out == null) {
-            throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        } else {
+        Drawing drawing = getDrawing();
+        if (out == null || drawing == null) {
+            return;
+        } 
             SequencedMap<DataFormat, Object> content = new LinkedHashMap<>() {
                 @Serial
                 private static final long serialVersionUID = 0L;
@@ -122,13 +125,12 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
             try {
                 final ObservableSet<Figure> selectedFigures = getSelectedFigures();
 
-                out.write(content, getDrawing(), selectedFigures.isEmpty() ? FXCollections.singletonObservableList(getDrawing()) : selectedFigures);
+                out.write(content, drawing, selectedFigures.isEmpty() ? FXCollections.singletonObservableList(drawing) : selectedFigures);
                 Clipboard.getSystemClipboard().setContent(content);
-
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Could not copy to clipboard.", ex);
             }
-        }
+
     }
 
     public void paste() {
@@ -155,7 +157,8 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
                     getSelectedFigures().addAll(pastedFigures);
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
             }
         }
     }

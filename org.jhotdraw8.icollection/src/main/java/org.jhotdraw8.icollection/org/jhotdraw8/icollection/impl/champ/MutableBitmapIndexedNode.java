@@ -23,7 +23,7 @@ import org.jhotdraw8.icollection.impl.IdentityObject;
  * @param <K>
  */
 class MutableBitmapIndexedNode<K> extends BitmapIndexedNode<K> {
-    private static final long serialVersionUID = 0L;
+
     private final @NonNull IdentityObject ownedBy;
 
     MutableBitmapIndexedNode(@NonNull IdentityObject ownedBy, int nodeMap, int dataMap, @NonNull Object @NonNull [] nodes) {

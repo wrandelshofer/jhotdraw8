@@ -76,7 +76,7 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Insets⟩: ⟨top-right-bottom-left⟩ ｜ ⟨top-bottom⟩ ⟨left-right⟩ ｜ ⟨top⟩ ⟨right⟩ ⟨bottom⟩ ⟨left⟩";
     }
 

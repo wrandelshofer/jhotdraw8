@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.impl.champ;
 
-
 /**
  * An ordered pair.
  * <p>

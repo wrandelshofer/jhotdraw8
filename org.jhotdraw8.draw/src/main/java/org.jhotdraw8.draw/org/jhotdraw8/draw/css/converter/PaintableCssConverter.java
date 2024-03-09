@@ -50,7 +50,7 @@ public class PaintableCssConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
                 + "\n" + colorConverter.getHelpText()
                 + "\n" + linearGradientConverter.getHelpText()

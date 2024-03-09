@@ -5,10 +5,6 @@
 
 package org.jhotdraw8.fxcontrols.colorchooser;
 
-/**
- * Sample Skeleton for 'HueSaturationPane.fxml' Controller Class
- */
-
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;

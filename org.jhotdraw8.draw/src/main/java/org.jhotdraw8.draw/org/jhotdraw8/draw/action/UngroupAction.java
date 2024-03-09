@@ -20,7 +20,6 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashSet;
-import java.util.SequencedSet;
 import java.util.LinkedList;
 
 /**

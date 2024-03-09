@@ -54,8 +54,7 @@ public class Path2DDoubleXmlConverter implements Converter<Path2D.Double> {
     }
 
     @Override
-    public Path2D.@NonNull Double getDefaultValue() {
-        Path2D.Double p = new Path2D.Double();
-        return p;
+    public Path2D.@Nullable Double getDefaultValue() {
+        return new Path2D.Double();
     }
 }

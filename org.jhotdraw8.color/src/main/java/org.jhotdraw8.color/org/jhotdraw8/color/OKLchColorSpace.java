@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-
 public class OKLchColorSpace extends ParametricLchColorSpace {
 
     public OKLchColorSpace() {

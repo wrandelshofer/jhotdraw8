@@ -20,7 +20,7 @@ public interface FontCollectionsFactory {
         CompletableFuture<List<FontCollection>> future = new CompletableFuture<>();
         Task<List<FontCollection>> task = new Task<>() {
             @Override
-            protected List<FontCollection> call() throws Exception {
+            protected List<FontCollection> call() {
                 return create();
             }
 

@@ -48,7 +48,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
      */
     public LongArrayDeque(int capacity) {
         if (capacity < 0) {
-            throw new IllegalArgumentException("capacity=" + capacity);
+            throw new IllegalArgumentException("Capacity must be non-negative. capacity=" + capacity + ".");
         }
         int size = Integer.highestOneBit(capacity + capacity - 1);
         elements = new long[Math.max(size, 0)];

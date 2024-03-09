@@ -73,7 +73,7 @@ public interface CssFunctionProcessor<T> {
         try {
             process(element, tt, out::add, new ArrayDeque<>());
         } catch (IOException e) {
-            throw new RuntimeException("unexpected io exception.", e);
+            throw new RuntimeException("Unexpected IOException.", e);
         }
         return VectorList.copyOf(out);
     }

@@ -78,12 +78,12 @@ public class SymmetricPoint2DConverter extends AbstractCssConverter<Point2D> {
 
 
     @Override
-    public @NonNull Point2D getDefaultValue() {
+    public @Nullable Point2D getDefaultValue() {
         return new Point2D(0, 0);
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨SymmetricPoint2D⟩: ⟨xy⟩ ｜ ⟨x⟩ ⟨y⟩";
     }
 

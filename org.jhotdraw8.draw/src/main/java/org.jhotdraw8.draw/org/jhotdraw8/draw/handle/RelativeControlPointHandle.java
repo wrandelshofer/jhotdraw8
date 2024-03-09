@@ -111,14 +111,6 @@ public class RelativeControlPointHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
-    }
-
-    @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-    }
-
-    @Override
     public boolean isSelectable() {
         return true;
     }

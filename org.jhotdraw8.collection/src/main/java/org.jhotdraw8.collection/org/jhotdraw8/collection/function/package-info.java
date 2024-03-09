@@ -7,3 +7,4 @@
  * other modules.
  */
 package org.jhotdraw8.collection.function;
+

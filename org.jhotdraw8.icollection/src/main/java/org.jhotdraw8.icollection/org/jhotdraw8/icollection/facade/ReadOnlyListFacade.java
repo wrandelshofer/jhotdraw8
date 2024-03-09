@@ -35,6 +35,15 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
                 () -> this);
     }
 
+    public ReadOnlyListFacade(@NonNull IntSupplier sizeFunction, @NonNull IntFunction<E> getFunction) {
+        this.sizeFunction = sizeFunction;
+        this.getFunction = getFunction;
+        this.readOnlyReversedFunction = () -> new ReadOnlyListFacade<>(
+                sizeFunction,
+                index -> getFunction.apply(sizeFunction.getAsInt() - index),
+                () -> this);
+    }
+
     public ReadOnlyListFacade(@NonNull IntSupplier sizeFunction, @NonNull IntFunction<E> getFunction, @NonNull Supplier<ReadOnlySequencedCollection<E>> readOnlyReversedFunction) {
         this.sizeFunction = sizeFunction;
         this.getFunction = getFunction;
@@ -67,13 +76,4 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
     }
 
 
-    @Override
-    public boolean equals(Object o) {
-        return ReadOnlyList.listEquals(this, o);
-    }
-
-    @Override
-    public int hashCode() {
-        return ReadOnlyList.iteratorToHashCode(iterator());
-    }
 }

@@ -230,12 +230,12 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     }
 
     @Override
-    public V putFirst(K k, V v) {
+    public @Nullable V putFirst(K k, V v) {
         return putFirstFunction.apply(k, v);
     }
 
     @Override
-    public V putLast(K k, V v) {
+    public @Nullable V putLast(K k, V v) {
         return putLastFunction.apply(k, v);
     }
 

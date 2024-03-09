@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.styleable;
 
-
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.fxbase.styleable.SimpleStyleableMap;
 import org.junit.jupiter.api.Test;

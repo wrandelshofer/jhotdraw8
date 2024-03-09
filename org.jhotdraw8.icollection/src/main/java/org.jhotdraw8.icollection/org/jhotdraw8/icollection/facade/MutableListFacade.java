@@ -18,6 +18,7 @@ import java.util.AbstractList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.stream.Stream;
 
@@ -97,8 +98,13 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return null;
+        int length = size();
+        Objects.checkFromToIndex(fromIndex, toIndex, length);
+        return new ReadOnlyListFacade<>(
+                () -> toIndex - fromIndex,
+                i -> get(i - fromIndex));
     }
+
 
     @Override
     public Stream<E> stream() {

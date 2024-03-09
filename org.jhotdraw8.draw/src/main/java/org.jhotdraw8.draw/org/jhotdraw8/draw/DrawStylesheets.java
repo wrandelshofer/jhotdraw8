@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw;
 
-
 import java.net.URL;
 import java.util.MissingResourceException;
 
@@ -16,7 +15,7 @@ public class DrawStylesheets {
         String name = "/org/jhotdraw8/draw/inspector/inspector.css";
         URL resource = DrawStylesheets.class.getResource(name);
         if (resource == null) {
-            throw new MissingResourceException("resource not found, name=" + name,
+            throw new MissingResourceException("Could not find a resource with name=\"" + name + "\".",
                     DrawStylesheets.class.getName(),
                     name);
         }

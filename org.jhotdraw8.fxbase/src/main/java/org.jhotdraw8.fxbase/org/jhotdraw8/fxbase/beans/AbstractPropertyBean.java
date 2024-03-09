@@ -13,7 +13,6 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 
 /**
  * An abstrac implementation of the {@link PropertyBean} interface.

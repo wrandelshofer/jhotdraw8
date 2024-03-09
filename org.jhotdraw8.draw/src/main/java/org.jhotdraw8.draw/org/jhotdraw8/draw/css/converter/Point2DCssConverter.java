@@ -67,7 +67,7 @@ public class Point2DCssConverter extends AbstractCssConverter<CssPoint2D> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨CssPoint2D⟩: ⟨x⟩ ⟨y⟩";
     }
 }

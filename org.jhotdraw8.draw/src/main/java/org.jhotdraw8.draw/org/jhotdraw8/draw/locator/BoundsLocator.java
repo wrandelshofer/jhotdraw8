@@ -41,7 +41,6 @@ public class BoundsLocator extends AbstractLocator {
     public static final BoundsLocator SOUTH_WEST = new BoundsLocator(0.0, 1.0);
     public static final BoundsLocator WEST = new BoundsLocator(0.0, 0.5);
 
-    private static final long serialVersionUID = 1L;
     /**
      * Relative x-coordinate on the bounds of the figure. The value 0 is on the
      * left boundary of the figure, the value 1 on the right boundary.

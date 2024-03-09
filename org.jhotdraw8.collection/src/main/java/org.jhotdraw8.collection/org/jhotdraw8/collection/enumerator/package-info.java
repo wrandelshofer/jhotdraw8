@@ -8,3 +8,4 @@
  * {@link java.util.Iterator}s.
  */
 package org.jhotdraw8.collection.enumerator;
+

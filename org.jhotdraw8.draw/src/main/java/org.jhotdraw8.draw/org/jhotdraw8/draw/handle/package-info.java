@@ -7,3 +7,4 @@
  * figures on a drawing view.
  */
 package org.jhotdraw8.draw.handle;
+

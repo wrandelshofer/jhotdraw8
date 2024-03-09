@@ -153,10 +153,6 @@ public class TextEditingTool extends AbstractTool {
         node.setCursor(Cursor.CROSSHAIR);
     }
 
-    @Override
-    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-    }
-
 
     /**
      * This implementation is empty.

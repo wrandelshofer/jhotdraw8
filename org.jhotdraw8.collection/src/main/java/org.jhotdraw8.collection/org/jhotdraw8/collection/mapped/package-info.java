@@ -7,3 +7,4 @@
  * Provides mapped collections and mapped iterators.
  */
 package org.jhotdraw8.collection.mapped;
+

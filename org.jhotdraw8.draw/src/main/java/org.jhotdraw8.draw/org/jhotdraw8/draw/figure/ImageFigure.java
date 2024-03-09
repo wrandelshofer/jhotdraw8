@@ -25,6 +25,8 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 
 import java.net.URI;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * ImageFigure presents a bitmap image on a drawing.
@@ -109,7 +111,7 @@ public class ImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
@@ -141,7 +143,8 @@ public class ImageFigure extends AbstractLeafFigure
                 cachedImage = new Image(cachedImageUri.toString(), true);
             } catch (IllegalArgumentException e) {
                 System.err.println("could not load image from uri: " + absoluteUri);
-                e.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             }
         }
     }

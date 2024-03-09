@@ -32,7 +32,7 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
         in.position(in.length());
         E e = fromStringMap.get(str.toLowerCase());
         if (e == null) {
-            throw new ParseException("Illegal value=\"" + str + "\"", 0);
+            throw new ParseException("Could not find string=\"" + str + "\" in the set " + fromStringMap.keySet() + ".", 0);
         }
         return e;
     }
@@ -45,11 +45,11 @@ public class CaseInsensitiveMappedConverter<E> implements Converter<E> {
     @Override
     public <TT extends E> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
-            throw new IOException("Illegal value=null.");
+            throw new IOException("Could not generate a string for value=null.");
         }
         String s = toStringMap.get(value);
         if (s == null) {
-            throw new IOException("Illegal value=" + value);
+            throw new IOException("Could not find value=\"" + value + "\" in the set " + toStringMap.keySet() + ".");
         }
         out.append(s);
     }

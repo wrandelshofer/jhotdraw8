@@ -236,7 +236,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨List⟩: empty | ⟨Item⟩, ⟨Item⟩, ...\n"
                + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
     }

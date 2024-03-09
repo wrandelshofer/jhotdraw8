@@ -132,7 +132,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Effect⟩: none｜（⟨Blend⟩｜⟨Bloom⟩｜⟨BoxBlur⟩｜⟨ColorAdjust⟩｜⟨DropShadow⟩｜⟨GaussianBlur⟩｜ ⟨InnerShadow⟩）｛, ⟨Effect⟩｝"
                 + "\nFormat of ⟨Blend⟩: blend(⟨BlendMode⟩)"
                 + "\nFormat of ⟨Bloom⟩: bloom(⟨luminosity⟩%)"

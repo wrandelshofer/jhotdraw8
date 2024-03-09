@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection.spliterator;
 
+import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ListIterator;
 import java.util.Spliterator;
@@ -30,7 +31,7 @@ public abstract class AbstractListIteratorSpliterator<E> implements ListIterator
     }
 
     @Override
-    public void forEachRemaining(Consumer<? super E> action) {
+    public void forEachRemaining(@NonNull Consumer<? super E> action) {
         ListIterator.super.forEachRemaining(action);
     }
 

@@ -37,7 +37,7 @@ public class ConverterFormatAdapter implements Converter<Object> {
 
     @Override
     public void toString(Appendable out, @Nullable IdSupplier idSupplier, Object value) {
-        throw new UnsupportedOperationException("Not supported yet." + format); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Could not generate a string for value=\"" + value + "\"." + format);
     }
 
     @Override
@@ -48,7 +48,7 @@ public class ConverterFormatAdapter implements Converter<Object> {
         Object value = format.parseObject(str, pp);
         if (pp.getErrorIndex() != -1) {
             buf.position(pos + pp.getErrorIndex());
-            throw new ParseException("Parse error", buf.position());
+            throw new ParseException("Could not parse the string=\"" + str + "\".", buf.position());
         } else {
             buf.position(pos + pp.getIndex());
         }

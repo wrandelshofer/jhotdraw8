@@ -180,7 +180,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return value;
     }
 
-    private CssSize parseSize(String name, CssSize defaultValue, @NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
+    private CssSize parseSize(String name, CssSize defaultValue, @NonNull CssTokenizer tt, IdResolver idResolver) throws IOException {
         CssSize value;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
@@ -197,7 +197,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨StrokeStyle⟩: [⟨Type⟩］［⟨Linecap⟩］［⟨Linejoin⟩］［⟨Miterlimit⟩］［⟨Dashoffset⟩］［⟨Dasharray⟩］"
                 + "\n  with ⟨Type⟩: " + TYPE + "(inside｜outside｜centered)"
                 + "\n  with ⟨Linecap⟩: " + LINECAP + "(square｜butt｜round)"

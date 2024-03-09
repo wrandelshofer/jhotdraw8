@@ -903,7 +903,7 @@ public class StreamCssTokenizer implements CssTokenizer {
     private boolean stringMacro(int ch, @NonNull StringBuilder buf) throws IOException {
         int quote = ch;
         if (quote != '\'' && quote != '"') {
-            throw new IllegalArgumentException("illegal quote character:" + (char) ch);
+            throw new IllegalArgumentException("Illegal quote character=\"" + (char) ch + "\".");
         }
         while (true) {
             ch = in.nextChar();

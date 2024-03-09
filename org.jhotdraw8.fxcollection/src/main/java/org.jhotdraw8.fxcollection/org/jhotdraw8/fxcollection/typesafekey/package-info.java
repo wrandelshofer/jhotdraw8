@@ -7,3 +7,4 @@
  * Provides type-safe keys for maps.
  */
 package org.jhotdraw8.fxcollection.typesafekey;
+

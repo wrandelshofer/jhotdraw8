@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 
 public class LineMain extends Application {
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         StackPane pane = new StackPane();
         float v = 4f;
         for (int i = 0; i < 5; i++) {

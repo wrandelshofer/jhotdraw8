@@ -60,6 +60,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 /**
@@ -599,7 +601,8 @@ public class ZoomableScrollPane extends GridPane {
         try {
             return getContentToView().createInverse();
         } catch (NonInvertibleTransformException e) {
-            e.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             return FXTransforms.IDENTITY;
         }
     }

@@ -52,7 +52,6 @@ import java.util.stream.Collectors;
 public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     public static final String JAVA_CLASS_NAMESPACE = "http://java.net";
 
-    private static final Logger LOGGER = Logger.getLogger(FigureSelectorModel.class.getName());
     /**
      * Maps an attribute name to a key.
      */
@@ -91,7 +90,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public QualifiedName getType(@NonNull Figure element) {
+    public @Nullable QualifiedName getType(@NonNull Figure element) {
         return new QualifiedName(null, element.getTypeSelector());
     }
 
@@ -344,7 +343,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     }
                 }
             } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Could not produce tokens for key: " + key + " value: " + element.getStyled(origin, key), e);
+                Logger.getLogger(FigureSelectorModel.class.getName()).log(Level.WARNING, "Could not produce tokens for key: " + key + " value: " + element.getStyled(origin, key), e);
             }
         } else {
             buf.append(converter.toString(element.getStyled(origin, key)));// XXX THIS IS WRONG!!)
@@ -379,7 +378,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
             try {
                 return ((CssConverter<Object>) converter).toTokens(element.getStyled(origin, key), null);
             } catch (IOException e) {
-                LOGGER.log(Level.WARNING, "Could not produce tokens for key: " + key + " value: " + element.getStyled(origin, key), e);
+                Logger.getLogger(FigureSelectorModel.class.getName()).log(Level.WARNING, "Could not produce tokens for key: " + key + " value: " + element.getStyled(origin, key), e);
                 return null;
             }
         } else {
@@ -444,8 +443,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@NonNull Figure elem, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value)
-            throws ParseException {
+    public void setAttribute(@NonNull Figure elem, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value) {
         Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = getWritableMetaMap(elem);
 
         List<WritableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
@@ -469,7 +467,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                         }
                         elem.setStyled(origin, k, intern(convertedValue));
                     } catch (ParseException | IOException ex) {
-                        LOGGER.log(Level.WARNING, "error setting attribute " + name + " with tokens " + value, ex);
+                        Logger.getLogger(FigureSelectorModel.class.getName()).log(Level.WARNING, "error setting attribute " + name + " with tokens " + value, ex);
                     }
                 }
             }

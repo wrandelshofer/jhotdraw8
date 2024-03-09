@@ -6,3 +6,4 @@
  * Provides utility classes for JavaFX Beans.
  */
 package org.jhotdraw8.fxbase.beans;
+

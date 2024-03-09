@@ -40,7 +40,7 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value instanceof CssColor c) {
             colorConverter.produceTokens(c, idSupplier, out);
         } else {
@@ -66,7 +66,7 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         String[] lines = ("Format of ⟨Paint⟩: none｜（⟨Color⟩｜ ⟨LinearGradient⟩｜ ⟨RadialGradient⟩"
                 + "\n" + colorConverter.getHelpText()).split("\n");
         StringBuilder buf = new StringBuilder();

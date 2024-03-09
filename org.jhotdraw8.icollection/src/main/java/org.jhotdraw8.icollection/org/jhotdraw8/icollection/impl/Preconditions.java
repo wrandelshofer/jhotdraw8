@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.impl;
 
-
 import org.jhotdraw8.annotation.NonNull;
 
 /**

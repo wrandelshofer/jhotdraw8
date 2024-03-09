@@ -6,7 +6,6 @@
 
 package org.jhotdraw8.theme.atlantafx;
 
-
 /**
  * Provides the 'Primer Light' theme from AtlantaFX.
  * <p>

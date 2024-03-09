@@ -8,7 +8,12 @@ import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.Spliterators;
 
 /**
  * An optimized array-based binary heap with long keys.

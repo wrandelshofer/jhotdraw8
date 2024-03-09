@@ -107,10 +107,6 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-    }
-
-    @Override
     protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
         if (figure != null) {
             Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());

@@ -41,11 +41,6 @@ public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> 
     }
 
     @Override
-    public @Nullable Object getBean() {
-        return map;
-    }
-
-    @Override
     public String getName() {
         return accessor.toString();
     }

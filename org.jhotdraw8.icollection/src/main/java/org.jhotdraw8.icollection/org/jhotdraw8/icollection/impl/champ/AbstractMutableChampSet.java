@@ -192,4 +192,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
             throw new InternalError(e);
         }
     }
+
+    @Override
+    public abstract @NonNull Iterator<E> iterator();
 }

@@ -4,8 +4,8 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 
 import java.util.Collections;
@@ -79,7 +79,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
         }
 
         @Override
-        public Option<T> orElse(Option<? extends T> other) {
+        public @NonNull Option<T> orElse(@NonNull Option<? extends T> other) {
             return this;
         }
 
@@ -127,7 +127,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
 
         @SuppressWarnings("unchecked")
         @Override
-        public Option<T> orElse(Option<? extends T> other) {
+        public @NonNull Option<T> orElse(@NonNull Option<? extends T> other) {
             return (Option<T>) other;
         }
 
@@ -137,7 +137,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
         }
 
         @Override
-        public T orNull() {
+        public @Nullable T orNull() {
             return null;
         }
 
@@ -179,7 +179,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
      * @return this {@code Option} if it is nonempty, otherwise return the alternative.
      */
     @SuppressWarnings("unchecked")
-    Option<T> orElse(Option<? extends T> other);
+    @NonNull Option<T> orElse(@NonNull Option<? extends T> other);
 
     /**
      * Returns the value if this is a {@code Some} or the {@code other} value if this is a {@code None}.
@@ -197,7 +197,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
      * @param other An alternative value
      * @return This value, if this Option is defined or the {@code other} value, if this Option is empty.
      */
-    default T getOrElse(T other) {
+    default @Nullable T getOrElse(@Nullable T other) {
         return isEmpty() ? other : get();
     }
 
@@ -216,7 +216,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
      * @throws NoSuchElementException if this is a {@code None}.
      */
 
-    T get();
+    @Nullable T get();
     /**
      * Returns this {@code Option} if this is defined, or {@code null} if it is empty.
      *
@@ -230,7 +230,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
      *
      * @return this value if it is defined, or {@code null} if it is empty.
      */
-    T orNull();
+    @Nullable T orNull();
 
     /**
      * Returns this {@code Option} if this is defined, or throws a {@code NoSuchElementException} if it is empty.
@@ -245,6 +245,6 @@ public interface Option<T> extends ReadOnlyCollection<T> {
      *
      * @return this value if it is defined, or {@code null} if it is empty.
      */
-    T orThrow();
+    @Nullable T orThrow();
 
 }

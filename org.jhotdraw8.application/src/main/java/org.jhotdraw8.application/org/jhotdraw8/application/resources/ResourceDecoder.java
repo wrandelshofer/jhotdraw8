@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application.resources;
 
-
 import org.jhotdraw8.annotation.NonNull;
 
 /**

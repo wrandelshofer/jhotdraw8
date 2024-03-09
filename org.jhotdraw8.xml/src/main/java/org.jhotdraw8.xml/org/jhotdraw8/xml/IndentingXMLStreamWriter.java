@@ -8,6 +8,7 @@ package org.jhotdraw8.xml;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
+import javax.xml.XMLConstants;
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -499,7 +500,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     @Override
-    public void setDefaultNamespace(String uri) throws XMLStreamException {
+    public void setDefaultNamespace(String uri) {
         getOrCreateNamespaceContext().setNamespace(uri, DEFAULT_PREFIX);
     }
 
@@ -942,10 +943,10 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         }
 
         @Override
-        public String getPrefix(@NonNull String namespaceURI) {
+        public @NonNull String getPrefix(@NonNull String namespaceURI) {
             Objects.requireNonNull(namespaceURI, "namespaceURI");
             List<String> prefixes = nsToPrefix.get(namespaceURI);
-            return prefixes == null || prefixes.isEmpty() ? null : prefixes.getFirst();
+            return prefixes == null || prefixes.isEmpty() ? XMLConstants.DEFAULT_NS_PREFIX : prefixes.getFirst();
         }
 
         @Override

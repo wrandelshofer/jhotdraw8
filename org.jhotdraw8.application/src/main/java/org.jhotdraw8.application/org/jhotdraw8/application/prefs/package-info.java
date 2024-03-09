@@ -6,3 +6,4 @@
  * Contains preferences classes leveraging the java.util.prefs package.
  */
 package org.jhotdraw8.application.prefs;
+

@@ -9,8 +9,10 @@ import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.ConnectableFigure;
 import org.jhotdraw8.draw.figure.ConnectingFigure;
@@ -113,12 +115,15 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         isDragging = true;
         Point2D pointInView = new Point2D(event.getX(), event.getY());
         Point2D unconstrainedPointInWorld = view.viewToWorld(pointInView);
-        double tolerance = view.getViewToWorld().deltaTransform(view.getEditor().getTolerance(), 0).getX();
+        DrawingEditor editor = view.getEditor();
+        double tolerance1 = editor == null ? 0.1 : editor.getTolerance();
+        double tolerance = view.getViewToWorld().deltaTransform(tolerance1, 0).getX();
 
         CssPoint2D constrainedPointInWorld;
-        if (!event.isAltDown() && !event.isControlDown()) {
+        Constrainer constrainer = view.getConstrainer();
+        if (constrainer != null && !event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            constrainedPointInWorld = view.getConstrainer().constrainPoint(owner, new CssPoint2D(unconstrainedPointInWorld));
+            constrainedPointInWorld = constrainer.constrainPoint(owner, new CssPoint2D(unconstrainedPointInWorld));
         } else {
             constrainedPointInWorld = new CssPoint2D(unconstrainedPointInWorld);
         }

@@ -77,7 +77,7 @@ public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Rectangle2D⟩: ⟨x⟩ ⟨y⟩ ⟨width⟩ ⟨height⟩";
     }
 }

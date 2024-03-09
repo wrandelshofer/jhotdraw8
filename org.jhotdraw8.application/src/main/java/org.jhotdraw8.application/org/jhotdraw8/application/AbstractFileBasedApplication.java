@@ -82,6 +82,7 @@ import java.util.WeakHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.lang.Math.min;
@@ -537,7 +538,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         //startUserAgentStylesheet();
         try {
             isSystemMenuSupported = false; //Toolkit.getToolkit().getSystemMenu().isSupported();
@@ -575,7 +576,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         createActivity().whenComplete((pv, ex1) -> {
             FileBasedActivity v = (FileBasedActivity) pv;
             if (ex1 != null) {
-                ex1.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex1);
+
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getString("application.createView.error"));
                 alert.getDialogPane().setMaxWidth(640.0);
@@ -588,7 +590,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                     ChampMap.of(),
                     false, new SimpleWorkState<>()).whenComplete((result, ex) -> {
                 if (ex != null) {
-                    ex.printStackTrace();
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getFormatted("file.open.couldntOpen.message", uri)
                                     + "\n" + ex.getMessage());
@@ -602,7 +605,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 v.removeDisabler(this);
             });
         }).handle((v, ex) -> {
-                    ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));
                     alert.getDialogPane().setMaxWidth(640.0);
@@ -619,7 +623,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         createActivity().whenComplete((pv, ex1) -> {
             FileBasedActivity v = (FileBasedActivity) pv;
             if (ex1 != null) {
-                ex1.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex1);
+
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getString("application.createView.error"));
                 alert.getDialogPane().setMaxWidth(640.0);
@@ -630,7 +635,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             v.addDisabler(this);
             v.clear().whenComplete((result, ex) -> {
                 if (ex != null) {
-                    ex.printStackTrace();
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));
                     alert.getDialogPane().setMaxWidth(640.0);
@@ -641,7 +647,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 }
             });
         }).handle((v, ex) -> {
-                    ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));
                     alert.getDialogPane().setMaxWidth(640.0);
@@ -722,7 +729,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     }
 
     @Override
-    public final void init() throws Exception {
+    public final void init() {
         initResourceBundle();
         initProperties();
         initFactories();

@@ -169,9 +169,8 @@ public interface CssTokenizer {
      * Invokes {@link #current()} and checks if it is a "none" identifier.
      *
      * @return true if "none"
-     * @throws IOException on io error
      */
-    default boolean currentIsIdentNone() throws IOException {
+    default boolean currentIsIdentNone() {
         return current() == CssTokenType.TT_IDENT && currentStringNonNull().equals(CssTokenType.IDENT_NONE);
     }
 

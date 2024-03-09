@@ -53,7 +53,7 @@ public class FXSvgPathXmlConverter implements Converter<ImmutableList<PathElemen
     }
 
     @Override
-    public @NonNull ImmutableList<PathElement> getDefaultValue() {
+    public @Nullable ImmutableList<PathElement> getDefaultValue() {
         return VectorList.of();
     }
 }

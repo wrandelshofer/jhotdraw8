@@ -7,3 +7,4 @@
  * Provides maps that can share their keys to safe memory.
  */
 package org.jhotdraw8.fxcollection.sharedkeys;
+

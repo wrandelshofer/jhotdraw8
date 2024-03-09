@@ -95,6 +95,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -235,10 +237,12 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
             recreateHandles();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
             return;
         } catch (ParseException e) {
-            e.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
             textArea.positionCaret(e.getErrorOffset());
             textArea.requestFocus();
@@ -684,7 +688,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
             showSelection();
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
         }
 
     }
@@ -783,7 +788,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 }
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
         }
     }
 

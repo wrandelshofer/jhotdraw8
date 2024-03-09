@@ -36,7 +36,7 @@ public class ColorSpaceMain extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         stage.setTitle("ColorSpace Demo");
 
         ComboBox<NamedColorSpace> colorSpace1ComboBox = createColorSpaceBox();

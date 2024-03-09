@@ -96,6 +96,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
                 throw new InternalError(ex);
             }
 
+            //noinspection ReturnOfNull
             CustomBinding.bindBidirectionalAndConvert(//
                     myBackgroundProperty,//
                     backgroundColorPicker.valueProperty(),//

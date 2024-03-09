@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-
 import java.awt.geom.Point2D;
 
 /**

@@ -13,8 +13,6 @@ import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.util.LinkedHashMap;
 import java.util.SequencedMap;
-import java.util.Map;
-import java.util.SequencedMap;
 
 /**
  * Represents a named color in a cascading stylesheet.

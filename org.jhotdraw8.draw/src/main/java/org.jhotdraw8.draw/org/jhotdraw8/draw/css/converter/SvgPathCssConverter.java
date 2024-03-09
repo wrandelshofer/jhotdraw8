@@ -43,7 +43,7 @@ public class SvgPathCssConverter extends AbstractCssConverter<String> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         String buf = """
                      Format of ⟨SvgPath⟩: " ⟨moveTo ⟩｛ moveTo｜⟨lineTo⟩｜⟨quadTo⟩｜⟨cubicTo⟩｜⟨arcTo⟩｜⟨closePath⟩ ｝ "
                      Format of ⟨moveTo ⟩: M ⟨x⟩ ⟨y⟩ ｜m ⟨dx⟩ ⟨dy⟩\s
@@ -53,12 +53,6 @@ public class SvgPathCssConverter extends AbstractCssConverter<String> {
                      Format of ⟨arcTo ⟩: A ⟨x⟩ ⟨y⟩ ⟨r1⟩ ⟨r2⟩ ⟨angle⟩ ⟨larrgeArcFlag⟩ ⟨sweepFlag⟩ ｜a ⟨dx⟩ ⟨dy⟩ ⟨r1⟩ ⟨r2⟩ ⟨angle⟩ ⟨larrgeArcFlag⟩ ⟨sweepFlag⟩\s
                      Format of ⟨closePath ⟩: Z ｜z\s""";
         return buf;
-    }
-
-
-    @Override
-    public @Nullable String getDefaultValue() {
-        return null;
     }
 
 

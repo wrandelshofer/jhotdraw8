@@ -25,6 +25,8 @@ import org.jhotdraw8.fxcontrols.dock.TabbedAccordionTrack;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class DockingFrameworkExampleMain extends Application {
 
@@ -43,7 +45,7 @@ public class DockingFrameworkExampleMain extends Application {
     public void start(@NonNull Stage primaryStage) {
 
 
-        Thread.currentThread().setUncaughtExceptionHandler((t, e) -> e.printStackTrace());
+        Thread.currentThread().setUncaughtExceptionHandler((t, e) -> Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e));
 
         List<DockRoot> roots = new ArrayList<>();
         DockRoot root = initStage("DockRoot initially empty", primaryStage);

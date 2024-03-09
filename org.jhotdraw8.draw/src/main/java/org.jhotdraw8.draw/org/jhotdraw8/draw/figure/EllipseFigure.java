@@ -11,6 +11,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.EllipseConnector;
@@ -64,7 +65,7 @@ public class EllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
         return new EllipseConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 

@@ -7,3 +7,4 @@
  * Provides serialization proxies for collections.
  */
 package org.jhotdraw8.icollection.serialization;
+

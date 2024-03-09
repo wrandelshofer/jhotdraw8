@@ -4,13 +4,14 @@
  */
 package org.jhotdraw8.color;
 
-
 import java.awt.color.ColorSpace;
 import java.awt.color.ICC_ColorSpace;
 import java.awt.color.ICC_Profile;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * A utility class for {@code ColorSpace} objects.
@@ -52,10 +53,10 @@ public class ColorSpaceUtil {
                     int magic = in.readInt();
                     int reserved = in.readInt();
                     if (magic != 0x64657363) {
-                        throw new IOException("Illegal magic:" + Integer.toHexString(magic));
+                        throw new IOException("Illegal magic value=" + Integer.toHexString(magic));
                     }
                     if (reserved != 0x0) {
-                        throw new IOException("Illegal reserved:" + Integer.toHexString(reserved));
+                        throw new IOException("Illegal reserved value=" + Integer.toHexString(reserved));
                     }
                     long nameLength = in.readInt() & 0xffffffffL;
                     StringBuilder buf = new StringBuilder();
@@ -65,7 +66,8 @@ public class ColorSpaceUtil {
                     return buf.toString();
                 } catch (IOException e) {
                     // fall back
-                    e.printStackTrace();
+                    Logger.getLogger(ColorSpaceUtil.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
                 }
             }
         }

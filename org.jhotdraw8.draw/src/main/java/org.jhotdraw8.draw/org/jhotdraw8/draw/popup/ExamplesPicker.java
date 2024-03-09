@@ -17,6 +17,8 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.text.ParseException;
 import java.util.function.BiConsumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Picker for picking an example from a set of provided examples.
@@ -45,7 +47,8 @@ public class ExamplesPicker<T> extends AbstractPicker<T> {
                 try {
                     callback.accept(true, converter.fromString(s));
                 } catch (ParseException ex) {
-                    ex.printStackTrace();
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
                 }
             });
             contextMenu.getItems().add(valueItem);

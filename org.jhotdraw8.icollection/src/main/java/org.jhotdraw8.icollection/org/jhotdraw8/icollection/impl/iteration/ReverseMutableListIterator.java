@@ -2,7 +2,11 @@ package org.jhotdraw8.icollection.impl.iteration;
 
 import org.jhotdraw8.annotation.NonNull;
 
-import java.util.*;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.function.IntSupplier;
 
 public class ReverseMutableListIterator<E> implements ListIterator<E> {

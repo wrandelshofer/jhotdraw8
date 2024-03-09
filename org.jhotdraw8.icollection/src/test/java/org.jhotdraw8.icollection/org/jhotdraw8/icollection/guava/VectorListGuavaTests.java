@@ -13,8 +13,8 @@ import com.google.common.collect.testing.features.CollectionSize;
 import com.google.common.collect.testing.features.ListFeature;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.MutableVectorList;
+import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.facade.MutableListFacade;
 
 import java.lang.reflect.Method;

@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.jmh;
 
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;

@@ -107,6 +107,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         drawGridCheckBox.selectedProperty().addListener((o, oldValue, newValue)
                 -> prefs.putBoolean("drawGrid", newValue));
 
+        //noinspection ReturnOfNull
         CustomBinding.bindBidirectionalAndConvert(//
                 gridColorProperty,//
                 gridColorPicker.valueProperty(),//

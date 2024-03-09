@@ -55,7 +55,7 @@ public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨StrokeAlignment⟩: (inside｜outside｜centered)"
                 ;
     }

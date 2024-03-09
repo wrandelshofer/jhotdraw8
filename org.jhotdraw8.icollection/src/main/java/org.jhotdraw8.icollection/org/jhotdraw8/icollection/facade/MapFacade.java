@@ -128,7 +128,7 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         return putFunction.apply(key, value);
     }
 }

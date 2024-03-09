@@ -8,6 +8,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -69,7 +71,8 @@ public class RegexReplace {
         try {
             return replace == null ? m.replaceAll("$0") : m.replaceAll(replace);
         } catch (IndexOutOfBoundsException e) {
-            e.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             return str;
         }
     }

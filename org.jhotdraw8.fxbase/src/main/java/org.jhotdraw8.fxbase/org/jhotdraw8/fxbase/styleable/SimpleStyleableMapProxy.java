@@ -44,13 +44,13 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         return target.put(originOrdinal, key, value);
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public V remove(Object key) {
+    public @Nullable V remove(Object key) {
         if (origin == null) {
             return null;
         } else {

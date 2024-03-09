@@ -57,7 +57,7 @@ public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAr
      */
     public static final String STYLECLASS_TOOL_RUBBERBAND = "tool-rubberband";
 
-    private static final long serialVersionUID = 1L;
+
     /**
      * The rubberband.
      */

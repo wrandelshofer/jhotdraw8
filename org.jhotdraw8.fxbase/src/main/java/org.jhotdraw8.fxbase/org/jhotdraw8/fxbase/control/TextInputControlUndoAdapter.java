@@ -192,11 +192,6 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
         }
 
         @Override
-        public boolean replaceEdit(UndoableEdit anEdit) {
-            return false;
-        }
-
-        @Override
         public boolean isSignificant() {
             return isDeleted() || isAdded();
         }

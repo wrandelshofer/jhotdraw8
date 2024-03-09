@@ -9,6 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingView;
+import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 
@@ -57,6 +58,9 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
      * @return a suitable parent for the figure
      */
     protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
+        Drawing drawing = dv.getDrawing();
+        if (drawing == null) return null;
+
         // try to use the active layer
         Figure activeParent = dv.getActiveParent();
         if (activeParent != null && activeParent.isEditable() && activeParent.isAllowsChildren()
@@ -66,7 +70,7 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
         }
         // search for a suitable parent front to back
         Figure layer = null;
-        var layers = dv.getDrawing().getChildren();
+        var layers = drawing.getChildren();
         for (int i = layers.size() - 1; i >= 0; i--) {
             Figure candidate = layers.get(i);
             if (candidate.isEditable() && candidate.isAllowsChildren()
@@ -79,10 +83,10 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
         // create a new layer if necessary
         if (layer == null) {
             layer = layerFactory.get();
-            dv.getModel().addChildTo(layer, dv.getDrawing());
-            if (layer.getParent() != dv.getDrawing()) {
+            dv.getModel().addChildTo(layer, drawing);
+            if (layer.getParent() != drawing) {
                 // the drawing does not accept the layer!
-                return dv.getDrawing();
+                return drawing;
             }
         }
         return layer;

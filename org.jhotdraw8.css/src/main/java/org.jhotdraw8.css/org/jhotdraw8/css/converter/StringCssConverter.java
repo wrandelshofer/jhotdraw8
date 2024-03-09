@@ -43,14 +43,14 @@ public class StringCssConverter extends AbstractCssConverter<String> {
 
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return helpText;
     }
 
     @Override
     public @NonNull String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
-            throw tt.createParseException("Css String expected.");
+            throw tt.createParseException("Could not convert \"" + tt.getToken() + "\" to a string value.");
         }
         return tt.currentStringNonNull();
     }
@@ -61,7 +61,7 @@ public class StringCssConverter extends AbstractCssConverter<String> {
     }
 
     @Override
-    public @NonNull String getDefaultValue() {
+    public @Nullable String getDefaultValue() {
         return defaultValue;
     }
 

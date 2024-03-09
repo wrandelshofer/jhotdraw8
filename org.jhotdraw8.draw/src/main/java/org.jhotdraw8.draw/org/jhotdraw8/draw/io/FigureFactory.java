@@ -63,10 +63,8 @@ public interface FigureFactory {
      * @param f    the figure
      * @param name the name
      * @return the key
-     * @throws IOException if the factory does not support the name for
-     *                             the specified figure
      */
-    @Nullable MapAccessor<?> getKeyByAttributeName(Figure f, String name) throws IOException;
+    @Nullable MapAccessor<?> getKeyByAttributeName(Figure f, String name);
 
     /**
      * Maps a key to a XML element name. The name used for persistent storage
@@ -118,10 +116,8 @@ public interface FigureFactory {
      * @param key   the key
      * @param value the value
      * @param w     the writer for creating the node list.
-     * @throws IOException if the factory does not support a mapping for
-     *                             the specified key
      */
-    void valueToNodeList(MapAccessor<?> key, Object value, XMLStreamWriter w) throws IOException, XMLStreamException;
+    void valueToNodeList(MapAccessor<?> key, Object value, XMLStreamWriter w) throws XMLStreamException;
 
     /**
      * Maps a XML node list to a value.
@@ -133,10 +129,8 @@ public interface FigureFactory {
      * @param key      the key
      * @param nodeList the nodeList
      * @return the mapped attribute value.
-     * @throws IOException if the factory does not support a mapping for
-     *                             the specified key
      */
-    @Nullable <T> T nodeListToValue(MapAccessor<T> key, List<Node> nodeList) throws IOException;
+    @Nullable <T> T nodeListToValue(MapAccessor<T> key, List<Node> nodeList);
 
     /**
      * Maps an XML attribute value to a value.
@@ -204,9 +198,8 @@ public interface FigureFactory {
      *
      * @param internal an internal representation of the drawing
      * @return An external representation of the drawing.
-     * @throws IOException if no external representation can be created
      */
-    default Drawing toExternalDrawing(Drawing internal) throws IOException {
+    default Drawing toExternalDrawing(Drawing internal) {
         return internal;
     }
 
@@ -219,9 +212,8 @@ public interface FigureFactory {
      *
      * @param external an external representation of the drawing
      * @return An internal representation of the drawing.
-     * @throws IOException if no internal representation can be created
      */
-    default Drawing fromExternalDrawing(Drawing external) throws IOException {
+    default Drawing fromExternalDrawing(Drawing external) {
         return external;
     }
 

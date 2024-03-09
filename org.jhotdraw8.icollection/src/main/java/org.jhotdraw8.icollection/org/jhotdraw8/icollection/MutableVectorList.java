@@ -123,7 +123,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return null;
+        return new ReadOnlyListFacade<>(() -> toIndex - fromIndex, i -> get(i - fromIndex));
     }
 
     @Override

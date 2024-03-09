@@ -15,7 +15,6 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.Normalizer;
-import java.text.ParseException;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.TreeSet;
@@ -71,7 +70,7 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public ImmutableList<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public ImmutableList<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) {
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
@@ -79,7 +78,7 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public ImmutableList<String> getDefaultValue() {
+    public @Nullable ImmutableList<String> getDefaultValue() {
         return VectorList.of();
     }
 }

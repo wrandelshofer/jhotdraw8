@@ -25,10 +25,16 @@ import org.jhotdraw8.annotation.Nullable;
  *     exports org.foo;
  * }
  * package org.foo.impl;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
  * public class InternalHashtable {
  *    ...
  * }
  * package org.foo;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
  * public class ImmutableFoo {
  *     private final @NonNull InternalHashtable table;
  *     public ImmutableFoo() {
@@ -48,6 +54,9 @@ import org.jhotdraw8.annotation.Nullable;
  *     exports org.bar;
  * }
  * package org.bar;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
  * public class ImmutableBar extends ImmutableFoo {
  *     private final int bar;
  *     public ImmutableBar(int bar) {

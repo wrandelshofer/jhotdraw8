@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.biarc;
 
-
 import java.awt.geom.Point2D;
 
 /**

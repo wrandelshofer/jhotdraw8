@@ -59,11 +59,6 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public void clearModified() {
-        modified.set(false);
-    }
-
-    @Override
     public Node getNode() {
         return textArea;
     }

@@ -420,7 +420,7 @@ public interface Resources {
                 }
             }
             if (placeholderValue == null) {
-                throw new MissingResourceException("Placeholder value for fallback keys \"" + fallbackKeys + "\" in key \"" + key + "\" not found in " + getBaseName(), getBaseName(), key);
+                throw new MissingResourceException("Could not find the placeholder value for key=\"" + key + "\", value=\"" + value + "\", placeholderKey=\"" + placeholderKey + "\".", getBaseName(), key);
             }
 
             // Do post-processing depending on placeholder format

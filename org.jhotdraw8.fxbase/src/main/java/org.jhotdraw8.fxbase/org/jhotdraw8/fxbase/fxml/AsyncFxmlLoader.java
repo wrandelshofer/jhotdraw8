@@ -61,7 +61,8 @@ public class AsyncFxmlLoader {
      *              if (throwable != null) {
      *                  // Loading failed! Put a placeholder into the menu bar.
      *                  borderPane.setTop(new Label(throwable.getMessage()));
-     *                  throwable.printStackTrace();
+     *                                  Logger.getLogger(getClass().getName()).log(Level.WARNING,"Unexpected Exception.",throwable);
+
      *              } else {
      *                  // Loading succeeded.
      *                  borderPane.setTop(loader.getRoot());

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
 import org.jhotdraw8.collection.enumerator.AbstractLongEnumerator;

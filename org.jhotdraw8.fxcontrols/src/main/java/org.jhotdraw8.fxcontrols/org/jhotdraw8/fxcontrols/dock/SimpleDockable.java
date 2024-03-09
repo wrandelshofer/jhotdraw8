@@ -4,13 +4,9 @@
  */
 package org.jhotdraw8.fxcontrols.dock;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
 import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
 public class SimpleDockable extends AbstractDockable {
     private final Node node;
@@ -26,16 +22,6 @@ public class SimpleDockable extends AbstractDockable {
         setGraphic(textualIcon);
     }
 
-    @Override
-    public @NonNull ObjectProperty<DockParent> dockParentProperty() {
-        return dockParent;
-    }
-
-
-    @Override
-    public @NonNull ReadOnlyList<DockChild> getDockChildrenReadOnly() {
-        return VectorList.of();
-    }
 
     @Override
     public @NonNull Node getNode() {
@@ -43,8 +29,4 @@ public class SimpleDockable extends AbstractDockable {
     }
 
 
-    @Override
-    public @NonNull BooleanProperty showingProperty() {
-        return showing;
-    }
 }

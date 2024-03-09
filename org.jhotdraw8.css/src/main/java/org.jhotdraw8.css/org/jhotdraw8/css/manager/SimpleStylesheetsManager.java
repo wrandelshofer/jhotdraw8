@@ -46,6 +46,7 @@ import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;
 import java.util.function.Supplier;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -299,7 +300,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                                 }
                             } catch (IOException ex) {
                                 logger.accept(Level.WARNING, "invalid inline style attribute on element. style=" + styleValue, null);
-                                ex.printStackTrace();
+                                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
                             }
                         }
                         Map<String, ImmutableList<CssToken>> inlineStyleAttrCustomProperties = Collections.emptyMap();
@@ -595,7 +597,8 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // retry later
                 } catch (ExecutionException ex) {
                     logger.accept(Level.WARNING, "failed to get stylesheet", ex);
-                    ex.printStackTrace();
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
                     stylesheet = null;
                     future = null;
                 }

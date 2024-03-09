@@ -32,6 +32,8 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 
 import javax.swing.event.UndoableEditEvent;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * AbstractAction.
@@ -170,7 +172,8 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                     event.consume();
                 }
             } catch (Throwable t) {
-                t.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+
             }
         });
         eventPane.addEventHandler(KeyEvent.ANY, (KeyEvent event) -> {

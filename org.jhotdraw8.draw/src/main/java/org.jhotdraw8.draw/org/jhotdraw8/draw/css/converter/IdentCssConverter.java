@@ -62,7 +62,7 @@ public class IdentCssConverter extends AbstractCssConverter<String> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Ident⟩: ⟨identifier⟩";
     }
 }

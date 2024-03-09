@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.IllegalPathStateException;

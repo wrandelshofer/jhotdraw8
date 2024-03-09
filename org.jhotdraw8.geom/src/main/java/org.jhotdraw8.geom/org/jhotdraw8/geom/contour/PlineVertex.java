@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Consumer4;
 import org.jhotdraw8.base.function.Function3;

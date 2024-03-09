@@ -23,13 +23,14 @@ public class IntegerConverter implements Converter<Integer> {
 
     @Override
     public @Nullable Integer fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+        String str = in.toString();
         try {
             if (in.isEmpty() && nullable) return null;
-            var result = Integer.parseInt(in.toString());
+            var result = Integer.parseInt(str);
             in.position(in.length());
             return result;
         } catch (NumberFormatException e) {
-            throw new ParseException("Illegal double value.", 0);
+            throw new ParseException("Could not parse the int value=\"" + str + "\".", 0);
         }
     }
 

@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.jmh;
 
-
 import kotlinx.collections.immutable.ExtensionsKt;
 import kotlinx.collections.immutable.PersistentSet;
 import org.jhotdraw8.icollection.ChampSet;

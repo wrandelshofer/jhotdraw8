@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  */
 public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
 
-    private static final long serialVersionUID = 1L;
+
 
     private final String trueString = "true";
     private final String falseString = "false";
@@ -40,7 +40,7 @@ public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
             case trueString -> Boolean.TRUE;
             case falseString -> Boolean.FALSE;
             default ->
-                    throw new ParseException("⟨Boolean⟩ " + trueString + " or " + falseString + " expected.", tt.getStartPosition());
+                    throw new ParseException("Could not convert " + tt.getToken() + " to a boolean value.", tt.getStartPosition());
         };
     }
 
@@ -50,7 +50,7 @@ public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         if (isNullable()) {
             return "Format of ⟨NullableBoolean⟩: none｜true｜false";
         } else {

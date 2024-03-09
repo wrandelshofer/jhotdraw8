@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.biarc;
 
-
 import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;

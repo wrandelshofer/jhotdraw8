@@ -86,11 +86,6 @@ public class ReadOnlySetFacade<E> extends AbstractReadOnlySet<E> {
     }
 
     @Override
-    public boolean equals(Object o) {
-        return ReadOnlySet.setEquals(this, o);
-    }
-
-    @Override
     public int hashCode() {
         return ReadOnlySet.iteratorToHashCode(iteratorFunction.get());
     }

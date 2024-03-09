@@ -57,7 +57,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @return the mapped value or the specified default value
      */
     @SuppressWarnings("unchecked")
-    default @Nullable V getOrDefault(@NonNull Object key, @Nullable V defaultValue) {
+    default @Nullable V getOrDefault(Object key, @Nullable V defaultValue) {
         V v;
         return (((v = get(key)) != null) || containsKey(key))
                 ? v
@@ -287,6 +287,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
     @NonNull
     @Override
     default Spliterator<Map.Entry<K, V>> spliterator() {
+        //noinspection MagicConstant
         return Spliterators.spliterator(iterator(), size(), characteristics());
     }
 

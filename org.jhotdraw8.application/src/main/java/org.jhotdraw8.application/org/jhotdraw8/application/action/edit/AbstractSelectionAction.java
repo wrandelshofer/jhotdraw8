@@ -5,6 +5,7 @@
 package org.jhotdraw8.application.action.edit;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
+import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
@@ -126,7 +127,9 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
         @Override
         public @NonNull ReadOnlyBooleanProperty selectionEmptyProperty() {
-            throw new UnsupportedOperationException("unsupported");
+            ReadOnlyBooleanWrapper p = new ReadOnlyBooleanWrapper();
+            p.bind(control.selectedTextProperty().isNull());
+            return p.getReadOnlyProperty();
         }
 
     }

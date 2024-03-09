@@ -7,7 +7,6 @@ package org.jhotdraw8.application.prefs;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.prefs.BackingStoreException;
@@ -47,7 +46,7 @@ public class PreferencesStub
     }
 
     @Override
-    public void clear() throws BackingStoreException {
+    public void clear() {
         map.clear();
     }
 
@@ -112,12 +111,12 @@ public class PreferencesStub
     }
 
     @Override
-    public @NonNull String[] keys() throws BackingStoreException {
+    public @NonNull String[] keys() {
         return map.keySet().toArray(new String[0]);
     }
 
     @Override
-    public @NonNull String[] childrenNames() throws BackingStoreException {
+    public @NonNull String[] childrenNames() {
         return new String[0];
     }
 
@@ -132,12 +131,12 @@ public class PreferencesStub
     }
 
     @Override
-    public boolean nodeExists(String pathName) throws BackingStoreException {
+    public boolean nodeExists(String pathName) {
         return false;
     }
 
     @Override
-    public void removeNode() throws BackingStoreException {
+    public void removeNode() {
         // empty
     }
 
@@ -167,7 +166,7 @@ public class PreferencesStub
     }
 
     @Override
-    public void sync() throws BackingStoreException {
+    public void sync() {
         //
     }
 
@@ -192,12 +191,12 @@ public class PreferencesStub
     }
 
     @Override
-    public void exportNode(OutputStream os) throws IOException, BackingStoreException {
+    public void exportNode(OutputStream os) {
         //
     }
 
     @Override
-    public void exportSubtree(OutputStream os) throws IOException, BackingStoreException {
+    public void exportSubtree(OutputStream os) {
         //
     }
 

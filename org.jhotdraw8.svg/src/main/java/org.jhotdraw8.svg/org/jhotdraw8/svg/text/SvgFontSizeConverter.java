@@ -75,7 +75,7 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
     }
 
     @Override
-    protected <TT extends SvgFontSize> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    protected <TT extends SvgFontSize> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         if (value.keyword() != null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, mappedConverter.toString(value.keyword())));
         } else if (value.length() != null) {

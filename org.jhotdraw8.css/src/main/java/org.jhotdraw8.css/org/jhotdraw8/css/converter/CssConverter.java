@@ -57,7 +57,7 @@ public interface CssConverter<T> extends Converter<T> {
     default @NonNull T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         T value = parse(tt, idResolver);
         if (value == null) {
-            throw new ParseException("Value expected.", tt.getStartPosition());
+            throw new ParseException("Could not convert " + tt.getToken() + " to a non-null value.", tt.getStartPosition());
         }
         return value;
     }
@@ -132,7 +132,7 @@ public interface CssConverter<T> extends Converter<T> {
             StreamCssTokenizer tt = new StreamCssTokenizer(buf, null);
             return parse(tt, idResolver);
         } catch (IOException e) {
-            throw new RuntimeException("unexpected io exception", e);
+            throw (ParseException) new ParseException("Could not parse the value because of an IOException.", 0).initCause(e);
         }
     }
 
@@ -145,7 +145,7 @@ public interface CssConverter<T> extends Converter<T> {
             buf.position(startPos + tt.getNextPosition());
             return value;
         } catch (IOException e) {
-            throw new RuntimeException("unexpected io exception", e);
+            throw (ParseException) new ParseException("Could not parse the value because of an IOException.", 0).initCause(e);
         }
     }
 

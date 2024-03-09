@@ -334,7 +334,7 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         int index = ensureCapacity(key);
         return setValue(originOrdinal, index, key, value);
     }

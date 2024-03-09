@@ -16,6 +16,8 @@ import java.util.Comparator;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Collator for sorting numbers that are embedded in Strings as if they were
@@ -92,7 +94,8 @@ public class NaturalSortCollator extends Collator {
             try {
                 c = new RuleBasedCollator(rules);
             } catch (ParseException e) {
-                e.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             }
         }
         this.collator = c;

@@ -1,5 +1,6 @@
 package org.jhotdraw8.icollection.navigable;
 
+
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.IdentityObject;
@@ -50,10 +51,10 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
                 return nullFirst ? 1 : -1;
             } else {
                 //noinspection unchecked
-                return ((Comparable<? super E>) a).compareTo((E) b);
+                return ((Comparable<? super E>) a).compareTo(b);
             }
         }
-        return comparator.compare((E) a, (E) b);
+        return comparator.compare(a, b);
     }
 
     private boolean tooLow(@Nullable E key) {

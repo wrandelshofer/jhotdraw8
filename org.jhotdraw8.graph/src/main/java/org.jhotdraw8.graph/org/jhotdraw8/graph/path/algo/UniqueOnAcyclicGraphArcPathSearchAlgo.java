@@ -14,8 +14,8 @@ import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
-import java.util.SequencedMap;
 import java.util.Queue;
+import java.util.SequencedMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;

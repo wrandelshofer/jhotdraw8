@@ -13,7 +13,6 @@ import org.jhotdraw8.icollection.ChampMap;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 import java.beans.XMLEncoder;
-import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 
@@ -30,7 +29,7 @@ public class XmlEncoderOutputFormat implements OutputFormat {
     }
 
     @Override
-    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) {
         try (XMLEncoder o = new XMLEncoder(out)) {
             o.writeObject(drawing);
         }

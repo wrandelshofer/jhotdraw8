@@ -7,6 +7,7 @@ package org.jhotdraw8.fxbase.text;
 
 import org.jhotdraw8.annotation.NonNull;
 
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
 
@@ -15,7 +16,7 @@ import java.util.ResourceBundle;
  */
 public class ResourceBundleStub extends ResourceBundle {
     public @NonNull Enumeration<String> getKeys() {
-        return null;
+        return Collections.emptyEnumeration();
     }
 
     protected Object handleGetObject(@NonNull String key) {

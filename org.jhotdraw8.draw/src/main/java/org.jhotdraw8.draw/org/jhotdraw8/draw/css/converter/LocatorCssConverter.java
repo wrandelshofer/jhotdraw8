@@ -69,7 +69,7 @@ public class LocatorCssConverter extends AbstractCssConverter<Locator> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Locator⟩: relative(⟨x⟩%,⟨y⟩%)";
     }
 

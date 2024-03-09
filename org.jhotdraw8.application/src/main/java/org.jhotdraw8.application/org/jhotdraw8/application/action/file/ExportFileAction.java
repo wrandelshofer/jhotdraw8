@@ -16,7 +16,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 
 import java.net.URI;
-import java.util.Map;
 import java.util.SequencedMap;
 import java.util.function.Function;
 import java.util.function.Supplier;

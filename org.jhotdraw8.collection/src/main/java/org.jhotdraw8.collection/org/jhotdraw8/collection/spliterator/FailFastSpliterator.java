@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection.spliterator;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.ConcurrentModificationException;
 import java.util.Spliterator;
@@ -32,7 +33,7 @@ public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super E> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
         ensureUnmodified();
         return s.tryAdvance(action);
     }
@@ -45,7 +46,7 @@ public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
 
 
     @Override
-    public Spliterator<E> trySplit() {
+    public @Nullable Spliterator<E> trySplit() {
         Spliterator<? extends E> split = s.trySplit();
         return split == null ? null : new FailFastSpliterator<>(split, modCountSupplier);
     }

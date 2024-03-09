@@ -784,7 +784,10 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
      */
     protected abstract boolean mayBeAdded(@NonNull E e);
 
+
     public boolean equals(Object o) {
+        // Overrides equals in AbstractList, because we must compute equals
+        // as specified in the Set interface.
         if (o == this) {
             return true;
         }
@@ -803,8 +806,9 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
     }
 
-
     public int hashCode() {
+        // Overrides hashCode in AbstractList, because we must compute the hashCode
+        // as specified in the Set interface.
         int h = 0;
         for (E obj : this) {
             if (obj != null) {
@@ -812,6 +816,11 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             }
         }
         return h;
+    }
+
+    @Override
+    public @NonNull Iterator<E> iterator() {
+        return super.iterator();
     }
 
     @Override

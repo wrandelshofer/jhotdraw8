@@ -52,7 +52,7 @@ public class ObjectReferenceXmlConverter<T> implements Converter<T> {
     }
 
     @Override
-    public @Nullable T fromString(@Nullable CharSequence buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable T fromString(@Nullable CharSequence buf, @Nullable IdResolver idResolver) {
         if (idResolver == null) {
             throw new IllegalArgumentException("IdResolver is required for this converter");
         }

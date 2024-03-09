@@ -82,7 +82,7 @@ public class Point3DCssConverter extends AbstractCssConverter<CssPoint3D> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨CssPoint3D⟩: ⟨x⟩ ⟨y⟩ ｜ ⟨x⟩ ⟨y⟩ ⟨z⟩";
     }
 }

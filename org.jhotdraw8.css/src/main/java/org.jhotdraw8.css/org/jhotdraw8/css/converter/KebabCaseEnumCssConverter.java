@@ -62,7 +62,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
 
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨");
         buf.append(name).append("⟩: ");
         boolean first = true;
@@ -87,7 +87,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
     public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
-                throw new IllegalArgumentException("value is not nullable. enum type:" + enumClass + " value:" + null);
+                throw new IllegalArgumentException("Could not convert the enum value=null to a string.");
             }
             consumer.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {

@@ -52,7 +52,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         try {
             return new StreamCssTokenizer(str, null).toTokenList();
         } catch (IOException e) {
-            throw new RuntimeException("unexpected exception", e);
+            throw new RuntimeException("Unexpected Exception", e);
         }
     }
 
@@ -83,7 +83,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public QualifiedName getType(@NonNull Element elem) {
+    public @Nullable QualifiedName getType(@NonNull Element elem) {
         return new QualifiedName(elem.getNamespaceURI(), elem.getNodeName());
     }
 
@@ -241,7 +241,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public String getAttributeAsString(@NonNull Element element, @Nullable String namespacePattern, @NonNull String attributeName) {
+    public @Nullable String getAttributeAsString(@NonNull Element element, @Nullable String namespacePattern, @NonNull String attributeName) {
         if (TypeSelector.ANY_NAMESPACE.equals(namespacePattern)) {
             NamedNodeMap nnm = element.getAttributes();
             for (int i = 0, n = nnm.getLength(); i < n; i++) {
@@ -304,7 +304,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
             }
             break;
         default:
-            throw new UnsupportedOperationException("unsupported origin:" + origin);
+            throw new UnsupportedOperationException("Unsupported origin=" + origin);
         }
     }
 }

@@ -274,9 +274,6 @@ public class NumberConverter implements Converter<Number> {
         if ((str.isEmpty()) && getAllowsNullValue()) {
             return null;
         }
-        if (str == null) {
-            throw new ParseException("str", 0);
-        }
 
         // Parse the remaining characters from the CharBuffer
         final int remaining = str.remaining();
@@ -354,7 +351,7 @@ public class NumberConverter implements Converter<Number> {
             }
         }
         if (text.isEmpty()) {
-            throw new ParseException("invalid value", str.position());
+            throw new ParseException("Could not convert the string=\"" + str + "\" to a numeric value.", str.position());
         }
 
         Class<?> valueClass = getValueClass();
@@ -398,23 +395,23 @@ public class NumberConverter implements Converter<Number> {
                     }
                     value = v;
                 } else {
-                    throw new ParseException("parse error (1)", str.position());
+                    throw new ParseException("Could not convert the string=\"" + str + "\" to a numeric value.", str.position());
                 }
             } catch (NumberFormatException e) {
-                ParseException pe = new ParseException("illegal number format", str.position());
+                ParseException pe = new ParseException("Could not convert the string=\"" + str + "\" to a numeric value.", str.position());
                 pe.initCause(e);
                 throw pe;
             }
         } else {
-            throw new ParseException("illegal value class:" + valueClass, str.position());
+            throw new ParseException("Could not convert the string=\"" + str + "\" to a numeric value of class=\"" + valueClass + "\".", str.position());
         }
 
         try {
             if (!isValidValue(value, true)) {
-                throw new ParseException("invalid value", str.position());
+                throw new ParseException("Could not convert the string=\"" + str + "\" to a numeric value.", str.position());
             }
         } catch (ClassCastException cce) {
-            ParseException pe = new ParseException("invalid value", str.position());
+            ParseException pe = new ParseException("Could not convert the string=\"" + str + "\" to a numeric value.", str.position());
             pe.initCause(cce);
             throw pe;
         }
@@ -499,7 +496,7 @@ public class NumberConverter implements Converter<Number> {
 
 
     @Override
-    public @NonNull Number getDefaultValue() {
+    public @Nullable Number getDefaultValue() {
         return 0.0;
     }
 }

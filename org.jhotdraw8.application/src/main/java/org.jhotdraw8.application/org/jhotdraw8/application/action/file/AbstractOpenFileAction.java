@@ -31,6 +31,8 @@ import java.net.URI;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
@@ -126,7 +128,8 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
             } else if (exception != null) {
-                exception.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", exception);
+
                 Resources labels = ApplicationLabels.getResources();
 
                 TextArea textArea = new TextArea(createErrorMessage(exception));

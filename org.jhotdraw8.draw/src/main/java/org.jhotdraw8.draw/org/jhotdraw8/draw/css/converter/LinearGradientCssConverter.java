@@ -458,7 +458,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨LinearGradient⟩: linear-gradient(［⟨LinearGradientParameters⟩］［,⟨Cycle⟩］,⟨ColorStop⟩｛,⟨ColorStop⟩｝)"
                 + "\nFormat of ⟨LinearGradientParameters⟩: ⟨PointToPoint⟩｜⟨SideOrCorners⟩"
                 + "\nFormat of ⟨PointToPoint⟩: from ⟨x1⟩,⟨y1⟩ to ⟨x2⟩,⟨y2⟩｜from ⟨x1⟩%,⟨y1⟩% to ⟨x2⟩%,⟨y2⟩%"

@@ -157,9 +157,4 @@ public class LineFigure extends AbstractLeafFigure
         // empty
     }
 
-    @Override
-    public boolean isLayoutable() {
-        return false;
-    }
-
 }

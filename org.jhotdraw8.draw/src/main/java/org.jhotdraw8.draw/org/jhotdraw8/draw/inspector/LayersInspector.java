@@ -323,15 +323,10 @@ public class LayersInspector extends AbstractDrawingInspector {
     ) {
         SelectionLabelDnDSupport dndSupport = new SelectionLabelDnDSupport(listView, clipboardIO);
         Callback<ListView<Figure>, ListCell<Figure>> dndCellFactory = lv -> {
-            try {
                 LayerCell cell = cellFactory.call(lv);
                 cell.getSelectionLabel().addEventHandler(MouseEvent.DRAG_DETECTED, dndSupport.cellMouseHandler);
                 cell.addEventHandler(DragEvent.ANY, dndSupport.cellDragHandler);
                 return cell;
-            } catch (Throwable t) {
-                t.printStackTrace();
-                return null;
-            }
         };
         //listView.addEventHandler(DragEvent.ANY, dndSupport.listDragHandler);
         return dndCellFactory;

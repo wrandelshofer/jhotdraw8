@@ -7,3 +7,4 @@
  * Provides sets with indexed elements.
  */
 package org.jhotdraw8.fxcollection.indexedset;
+

@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.collection.primitive;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Spliterator;
@@ -16,16 +17,16 @@ public interface SpliteratorOfByte extends Spliterator.OfPrimitive<Byte, ByteCon
     @Nullable SpliteratorOfByte trySplit();
 
     @Override
-    boolean tryAdvance(ByteConsumer action);
+    boolean tryAdvance(@NonNull ByteConsumer action);
 
     @Override
-    default void forEachRemaining(ByteConsumer action) {
+    default void forEachRemaining(@NonNull ByteConsumer action) {
         do {
         } while (tryAdvance(action));
     }
 
     @Override
-    default boolean tryAdvance(Consumer<? super Byte> action) {
+    default boolean tryAdvance(@NonNull Consumer<? super Byte> action) {
         if (action instanceof ByteConsumer) {
             return tryAdvance((ByteConsumer) action);
         } else {
@@ -34,7 +35,7 @@ public interface SpliteratorOfByte extends Spliterator.OfPrimitive<Byte, ByteCon
     }
 
     @Override
-    default void forEachRemaining(Consumer<? super Byte> action) {
+    default void forEachRemaining(@NonNull Consumer<? super Byte> action) {
         if (action instanceof ByteConsumer) {
             forEachRemaining((ByteConsumer) action);
         } else {

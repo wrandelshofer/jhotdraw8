@@ -33,7 +33,7 @@ public class ZoomableScrollPaneSampleMain extends Application {
     }
 
     @Override
-    public void init() throws Exception {
+    public void init() {
 
     }
 

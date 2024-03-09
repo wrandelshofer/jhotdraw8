@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.theme.atlantafx;
 
-
 /**
  * Provides the 'Primer Dark' theme from AtlantaFX.
  * <p>

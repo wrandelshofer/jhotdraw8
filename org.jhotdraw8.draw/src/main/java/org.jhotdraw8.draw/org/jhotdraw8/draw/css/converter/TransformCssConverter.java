@@ -192,7 +192,7 @@ public class TransformCssConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return """
                Format of ⟨Transform⟩: ⟨Affine⟩｜⟨Translate⟩｜⟨Scale⟩｜⟨Rotate⟩｜⟨Shear⟩｜⟨Matrix⟩
                Format of ⟨Affine⟩: affine(⟨xx⟩,⟨xy⟩,⟨tx⟩, ⟨yx⟩,⟨yy⟩,⟨ty⟩)

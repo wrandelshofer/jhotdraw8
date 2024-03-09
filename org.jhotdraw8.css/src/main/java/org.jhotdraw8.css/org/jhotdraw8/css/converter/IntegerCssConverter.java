@@ -33,7 +33,7 @@ public class IntegerCssConverter extends AbstractCssConverter<Integer> {
     public @NonNull Integer parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         return switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().intValue();
-            default -> throw tt.createParseException("⟨Integer⟩: integer expected.");
+            default -> throw tt.createParseException("Could not convert " + tt.getToken() + " to an integer value.");
         };
     }
 
@@ -43,7 +43,7 @@ public class IntegerCssConverter extends AbstractCssConverter<Integer> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Integer⟩: ⟨integer⟩";
     }
 

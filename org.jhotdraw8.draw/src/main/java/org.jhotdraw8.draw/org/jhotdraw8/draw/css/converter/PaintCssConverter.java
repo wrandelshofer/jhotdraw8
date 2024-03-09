@@ -62,7 +62,7 @@ public class PaintCssConverter extends AbstractCssConverter<Paint> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return paintableConverter.getHelpText();
     }
 

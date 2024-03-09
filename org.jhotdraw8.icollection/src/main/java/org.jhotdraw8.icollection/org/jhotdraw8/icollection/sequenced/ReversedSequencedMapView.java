@@ -3,7 +3,12 @@ package org.jhotdraw8.icollection.sequenced;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.*;
+import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.SequencedCollection;
+import java.util.SequencedMap;
+import java.util.SequencedSet;
+import java.util.Set;
 
 /**
  * Provides a reversed view on a {@link SequencedMap}.
@@ -70,7 +75,7 @@ public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements
     }
 
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         if (src.containsKey(key)) {
             return src.put(key, value);
         } else {
@@ -135,22 +140,22 @@ public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements
     }
 
     @Override
-    public Entry<K, V> pollFirstEntry() {
+    public @Nullable Entry<K, V> pollFirstEntry() {
         return src.pollLastEntry();
     }
 
     @Override
-    public Entry<K, V> pollLastEntry() {
+    public @Nullable Entry<K, V> pollLastEntry() {
         return src.pollFirstEntry();
     }
 
     @Override
-    public V putFirst(K k, V v) {
+    public @Nullable V putFirst(K k, V v) {
         return src.putLast(k, v);
     }
 
     @Override
-    public V putLast(K k, V v) {
+    public @Nullable V putLast(K k, V v) {
         return src.putFirst(k, v);
     }
 }

@@ -145,6 +145,7 @@ public class XmlUtil {
             builderFactory.setNamespaceAware(namespaceAware);
             DocumentBuilder builder = builderFactory.newDocumentBuilder();
             // We do not want that the reader creates a socket connection!
+            //noinspection ReturnOfNull
             builder.setEntityResolver((publicId, systemId) -> null);
             return builder.parse(inputSource);
         } catch (SAXException | ParserConfigurationException ex) {
@@ -279,9 +280,8 @@ public class XmlUtil {
      *
      * @param file a file
      * @return an XMLStreamWriter
-     * @throws XMLStreamException when the XMLStreamWriter could not be created
      */
-    public static XMLStreamWriter streamWriter(final @NonNull Result file, @Nullable Properties outputProperties) throws XMLStreamException {
+    public static XMLStreamWriter streamWriter(final @NonNull Result file, @Nullable Properties outputProperties) {
         return ((StAXResult) replaceStreamResultByStAXResult(file, outputProperties)).getXMLStreamWriter();
     }
 
@@ -301,6 +301,7 @@ public class XmlUtil {
         dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
         dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
         dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+        //noinspection ReturnOfNull
         dbf.setXMLResolver((publicID,
                             systemID,
                             baseURI,

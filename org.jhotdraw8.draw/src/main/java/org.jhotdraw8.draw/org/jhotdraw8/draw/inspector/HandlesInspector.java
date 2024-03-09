@@ -30,6 +30,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class HandlesInspector extends AbstractDrawingViewInspector {
 
@@ -94,6 +96,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
         assert handleStrokeWidthSlider != null : "fx:id=\"handleStrokeWidthSlider\" was not injected: check your FXML file 'HandlesInspector.fxml'.";
 
         handleColorPicker.setValue(handleColorProperty.getValue().getColor());
+        //noinspection ReturnOfNull
         CustomBinding.bindBidirectionalAndConvert(//
                 handleColorPicker.valueProperty(),//
                 handleColorProperty,//
@@ -133,7 +136,8 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 handleStrokeWidthProperty.bindBidirectional(newValue.getEditor().handleStrokeWidthProperty());
             }
         } catch (Throwable t) {
-            t.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+
         }
     }
 }

@@ -46,19 +46,19 @@ public class UriCssConverter extends AbstractCssConverter<URI> {
 
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return helpText;
     }
 
     @Override
     public @NonNull URI parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_URL) {
-            throw new ParseException("Css URL expected. " + new CssToken(tt.current(), tt.currentString()), tt.getStartPosition());
+            throw new ParseException("Could not convert " + tt.getToken() + " to a URL value.", tt.getStartPosition());
         }
         try {
             return URI.create(tt.currentStringNonNull());
         } catch (IllegalArgumentException e) {
-            throw new ParseException("Bad URL. " + new CssToken(tt.current(), tt.currentString()), tt.getStartPosition());
+            throw new ParseException("Could not convert " + tt.getToken() + " to a URL value.", tt.getStartPosition());
         }
     }
 
@@ -66,11 +66,4 @@ public class UriCssConverter extends AbstractCssConverter<URI> {
     protected <TT extends URI> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_URL, value.toString()));
     }
-
-    @Override
-    public @NonNull URI getDefaultValue() {
-        return null;
-    }
-
-
 }

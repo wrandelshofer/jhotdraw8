@@ -6,3 +6,4 @@
  * Provides service provider interfaces for applications.
  */
 package org.jhotdraw8.application.spi;
+

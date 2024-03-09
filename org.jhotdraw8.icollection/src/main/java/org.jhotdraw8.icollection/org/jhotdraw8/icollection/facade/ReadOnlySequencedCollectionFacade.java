@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;

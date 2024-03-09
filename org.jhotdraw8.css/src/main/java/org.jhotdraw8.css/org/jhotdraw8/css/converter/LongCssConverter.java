@@ -33,7 +33,7 @@ public class LongCssConverter extends AbstractCssConverter<Long> {
     public @NonNull Long parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         return switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().longValue();
-            default -> throw tt.createParseException("⟨Long⟩: long expected.");
+            default -> throw tt.createParseException("Could not convert " + tt.getToken() + " to a long value.");
         };
     }
 
@@ -43,7 +43,7 @@ public class LongCssConverter extends AbstractCssConverter<Long> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Long⟩: ⟨integer⟩";
     }
 

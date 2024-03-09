@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.collection.pair;
 
-
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 

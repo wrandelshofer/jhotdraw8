@@ -63,7 +63,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
             throws MissingResourceException {
         ModulepathResources r;
         r = new ModulepathResources(ModuleLayer.boot().findModule(moduleName).orElseThrow(
-                () -> new MissingResourceException("Can't find module " + moduleName, baseName, locale.toString())
+                () -> new MissingResourceException("Could not find a module with moduleName=\"" + moduleName + "\".", baseName, locale.toString())
         ), baseName, locale);
         return r;
     }
@@ -140,18 +140,16 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
                 }
                 case 2 -> {
                     parentModule = ModuleLayer.boot().findModule(split[0]).orElseThrow(
-                            () -> new MissingResourceException("Can't find module " + split[0], baseName, locale.toString()));
+                            () -> new MissingResourceException("Could not find a module with moduleName=\"" + split[0] + "\".", baseName, locale.toString()));
                     yield split[1];
                 }
                 default ->
-                        throw new IllegalArgumentException("Illegal " + PARENT_RESOURCE_KEY + " resource " + moduleAndParentBaseName);
+                        throw new IllegalArgumentException("Could not parse the value of the property " + PARENT_RESOURCE_KEY + "=\"" + moduleAndParentBaseName + "\".");
             };
             try {
                 potentialParent = new ModulepathResources(parentModule, parentBaseName, locale);
             } catch (MissingResourceException e) {
-                MissingResourceException ex = new MissingResourceException(
-                        "Can't find parent bundle $parent=\"" + moduleAndParentBaseName +
-                                "\" specified in " + module + "," + baseName + "," + locale, baseName, "");
+                MissingResourceException ex = new MissingResourceException("Could not find the resource bundle in module=\"" + module + "\".", baseName, locale.toString());
                 ex.initCause(e);
                 throw ex;
             }
@@ -168,7 +166,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
                 }
             }
         }
-        throw new MissingResourceException("Can't find bundle " + module + "," + baseName + "," + locale, baseName, locale.toString());
+        throw new MissingResourceException("Could not find the resource bundle.", baseName, locale.toString());
     }
 
 
@@ -186,6 +184,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         if (parent != null) {
             return parent.containsKey(key);
         }
+        LOG.warning("Could not find a resource with key=\"" + key + "\" in resource bundle=\"" + baseName + "\".");
         return false;
     }
 
@@ -272,6 +271,11 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
     @Override
     public @Nullable Resources getParent() {
         return parent;
+    }
+
+    @Override
+    public @NonNull Locale getLocale() {
+        return super.getLocale();
     }
 
     @Override

@@ -21,6 +21,8 @@ import org.jhotdraw8.svg.io.FXSvgTinyWriter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static org.jhotdraw8.application.action.file.ExportFileAction.EXPORT_CHOOSER_FACTORY_KEY;
 import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
@@ -37,7 +39,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> e.printStackTrace());
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logger.getLogger(GrapherApplication.class.getName()).log(Level.WARNING, "Unexpected Exception.", e));
 
         // See
         // https://bugs.openjdk.java.net/browse/JDK-8091497

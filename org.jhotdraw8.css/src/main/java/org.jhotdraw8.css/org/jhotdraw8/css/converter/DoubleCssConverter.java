@@ -44,11 +44,12 @@ public class DoubleCssConverter extends AbstractCssConverter<Double> {
                     case "INF" -> Double.POSITIVE_INFINITY;
                     case "-INF" -> Double.NEGATIVE_INFINITY;
                     case "NaN" -> Double.NaN;
-                    default -> throw tt.createParseException("⟨Double⟩: number expected.");
+                    default ->
+                            throw tt.createParseException("Could not convert " + tt.getToken() + " to a double value.");
                 };
                 yield value;
             }
-            default -> throw tt.createParseException("⟨Double⟩: number expected.");
+            default -> throw tt.createParseException("Could not convert " + tt.getToken() + " to a double value.");
         };
     }
 
@@ -65,7 +66,7 @@ public class DoubleCssConverter extends AbstractCssConverter<Double> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Double⟩: ⟨double⟩";
     }
 

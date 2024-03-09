@@ -80,12 +80,12 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
                     yield split[1];
                 }
                 default ->
-                        throw new IllegalArgumentException("Illegal " + PARENT_RESOURCE_KEY + " resource " + moduleAndParentBaseName);
+                        throw new IllegalArgumentException("Could not parse the value of the property " + PARENT_RESOURCE_KEY + "=\"" + moduleAndParentBaseName + "\".");
             };
             try {
                 potentialParent = new ClasspathResources(parentBaseName, locale);
             } catch (MissingResourceException e) {
-                MissingResourceException ex = new MissingResourceException("Can't find parent bundle $parent=\"" + moduleAndParentBaseName + "\" specified in " + moduleName + "," + baseName + "," + locale, baseName, "");
+                MissingResourceException ex = new MissingResourceException("Could not find a resource bundle with baseName=\"" + baseName + " and locale=\"" + locale + "\".", baseName, locale.toString());
                 ex.initCause(e);
                 throw ex;
             }
@@ -102,7 +102,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
         if (parent != null) {
             return parent.containsKey(key);
         }
-        LOG.warning("Can't find resource for bundle " + baseName + " key not found: " + key);
+        LOG.warning("Could not find a resource with key=\"" + key + "\" in resource bundle \"" + baseName + "\".");
         return false;
     }
 
@@ -186,6 +186,11 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     @Override
     public @NonNull ResourceBundle asResourceBundle() {
         return this;
+    }
+
+    @Override
+    public @NonNull Locale getLocale() {
+        return super.getLocale();
     }
 
     @Override

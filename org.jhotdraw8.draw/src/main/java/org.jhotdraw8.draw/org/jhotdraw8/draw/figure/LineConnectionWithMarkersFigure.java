@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -79,7 +80,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    public String getMarkerEndShape() {
+    public @Nullable String getMarkerEndShape() {
         return getStyled(MarkerEndableFigure.MARKER_END_SHAPE);
     }
 
@@ -89,7 +90,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    public String getMarkerStartShape() {
+    public @Nullable String getMarkerStartShape() {
         return getStyled(MarkerStartableFigure.MARKER_START_SHAPE);
     }
 
@@ -104,7 +105,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    public String getMarkerCenterShape() {
+    public @Nullable String getMarkerCenterShape() {
         return null;
     }
 

@@ -23,7 +23,6 @@ import java.util.UUID;
  */
 public class UuidXmlConverter implements Converter<UUID> {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance.

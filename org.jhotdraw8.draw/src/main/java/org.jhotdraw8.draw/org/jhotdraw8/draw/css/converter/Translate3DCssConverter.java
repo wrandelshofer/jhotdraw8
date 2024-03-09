@@ -31,7 +31,7 @@ public class Translate3DCssConverter extends AbstractCssConverter<Point3D> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Translate3D⟩: ⟨x⟩ ⟨y⟩ ［⟨z⟩］";
     }
 

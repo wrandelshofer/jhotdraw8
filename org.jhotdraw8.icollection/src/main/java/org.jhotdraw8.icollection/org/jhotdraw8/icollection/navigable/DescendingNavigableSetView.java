@@ -1,5 +1,6 @@
 package org.jhotdraw8.icollection.navigable;
 
+
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
@@ -28,16 +29,9 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
         this.reverseComparator = Collections.reverseOrder(src.comparator());
     }
 
-    @Nullable
     @Override
-    public E lower(E e) {
-        return src.higher(e);
-    }
-
-    @Nullable
-    @Override
-    public E floor(E e) {
-        return src.ceiling(e);
+    public boolean add(E e) {
+        return src.add(e);
     }
 
     @Nullable
@@ -46,10 +40,84 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
         return src.floor(e);
     }
 
+    @Override
+    public void clear() {
+        src.clear();
+    }
+
+    @Nullable
+    @Override
+    public Comparator<? super E> comparator() {
+        return reverseComparator;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return src.contains(o);
+    }
+
+    @NonNull
+    @Override
+    public Iterator<E> descendingIterator() {
+        return src.iterator();
+    }
+
+    @NonNull
+    @Override
+    public NavigableSet<E> descendingSet() {
+        return src;
+    }
+
+    @Override
+    public E first() {
+        return src.last();
+    }
+
+    @Nullable
+    @Override
+    public E floor(E e) {
+        return src.ceiling(e);
+    }
+
+    @NonNull
+    @Override
+    public NavigableSet<E> headSet(E toElement, boolean inclusive) {
+        return new SubsetNavigableSetView<>(this, modCount,
+                true, null, true, false, toElement, inclusive, true);
+    }
+
+    @NonNull
+    @Override
+    public SortedSet<E> headSet(E toElement) {
+        return headSet(toElement, false);
+    }
+
     @Nullable
     @Override
     public E higher(E e) {
         return src.lower(e);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return src.isEmpty();
+    }
+
+    @NonNull
+    @Override
+    public Iterator<E> iterator() {
+        return src.descendingIterator();
+    }
+
+    @Override
+    public E last() {
+        return src.first();
+    }
+
+    @Nullable
+    @Override
+    public E lower(E e) {
+        return src.higher(e);
     }
 
     @Nullable
@@ -65,104 +133,38 @@ public class DescendingNavigableSetView<E> extends AbstractSet<E> implements Nav
     }
 
     @Override
-    public int size() {
-        return src.size();
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return src.isEmpty();
-    }
-
-    @Override
-    public boolean contains(Object o) {
-        return src.contains(o);
-    }
-
-    @NonNull
-    @Override
-    public Iterator<E> iterator() {
-        return src.descendingIterator();
-    }
-
-
-    @Override
-    public boolean add(E e) {
-        return src.add(e);
-    }
-
-    @Override
     public boolean remove(Object o) {
         return src.remove(o);
     }
 
-
     @Override
-    public void clear() {
-        src.clear();
-    }
-
-    @NonNull
-    @Override
-    public NavigableSet<E> descendingSet() {
-        return src;
-    }
-
-    @NonNull
-    @Override
-    public Iterator<E> descendingIterator() {
-        return src.iterator();
+    public int size() {
+        return src.size();
     }
 
     @NonNull
     @Override
     public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public NavigableSet<E> headSet(E toElement, boolean inclusive) {
-        return null;
-    }
-
-    @NonNull
-    @Override
-    public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Comparator<? super E> comparator() {
-        return reverseComparator;
+        return new SubsetNavigableSetView<>(this, modCount,
+                false, fromElement, fromInclusive, false, toElement, toInclusive, true);
     }
 
     @NonNull
     @Override
     public SortedSet<E> subSet(E fromElement, E toElement) {
-        return null;
+        return subSet(fromElement, true, toElement, false);
     }
 
     @NonNull
     @Override
-    public SortedSet<E> headSet(E toElement) {
-        return null;
+    public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
+        return new SubsetNavigableSetView<>(this, modCount,
+                false, fromElement, inclusive, true, null, true, true);
     }
 
     @NonNull
     @Override
     public SortedSet<E> tailSet(E fromElement) {
-        return null;
-    }
-
-    @Override
-    public E first() {
-        return src.last();
-    }
-
-    @Override
-    public E last() {
-        return src.first();
+        return tailSet(fromElement, true);
     }
 }

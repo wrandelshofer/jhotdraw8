@@ -15,7 +15,7 @@ import java.util.Map;
 
 public class MultipleMasterShapeMain extends Application {
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Map.Entry<Parent, MultipleMasterShapeController> entry = MultipleMasterShapeController.newInstance();
 
         MultipleMasterShapeController ctrl = entry.getValue();

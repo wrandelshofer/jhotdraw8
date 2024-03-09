@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.base.concurrent;
 
+
 /**
  * A function that may throw a checked exception.
  *
@@ -20,5 +21,5 @@ public interface CheckedFunction<T, R> {
      * @param t the function argument
      * @return the function result
      */
-    R apply(T t) throws Exception;
+    R apply(T t);
 }

@@ -16,7 +16,6 @@ import org.w3c.dom.Element;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -73,7 +72,7 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected void writeClipPathDefs(@NonNull XMLStreamWriter w, @NonNull Node node) throws IOException {
+    protected void writeClipPathDefs(@NonNull XMLStreamWriter w, @NonNull Node node) {
 
         // do not write clip node defs
     }

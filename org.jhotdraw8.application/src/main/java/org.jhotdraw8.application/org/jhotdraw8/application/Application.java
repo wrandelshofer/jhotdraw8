@@ -154,7 +154,7 @@ public interface Application extends Disableable, PropertyBean {
         return FXWorker.supply(() -> {
             Supplier<Activity> factory = getActivityFactory();
             if (factory == null) {
-                throw new IllegalStateException("No activityFactory has been set on the Application.");
+                throw new IllegalStateException("Could not create a new Activity, because no activityFactory has been set.");
             }
             return factory.get();
         });

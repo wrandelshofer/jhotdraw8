@@ -16,7 +16,6 @@ import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import java.io.IOException;
 import java.nio.CharBuffer;
 import java.text.Normalizer;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Locale;
@@ -83,7 +82,7 @@ public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) {
         String[] strings = buf.toString().split("\\s+");
 
         // If there is a comparator, we do not need to use a sequenced set,
@@ -97,7 +96,7 @@ public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> getDefaultValue() {
+    public @Nullable ImmutableSet<String> getDefaultValue() {
         return ChampVectorSet.of();
     }
 }

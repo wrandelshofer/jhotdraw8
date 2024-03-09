@@ -51,7 +51,7 @@ import static org.jhotdraw8.draw.handle.MoveHandle.translateFigure;
  */
 public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
-    private static final long serialVersionUID = 1L;
+
     private @Nullable Set<Figure> groupReshapeableFigures;
     private @Nullable Figure anchorFigure;
     private @Nullable CssPoint2D oldPoint;

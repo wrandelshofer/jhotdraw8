@@ -29,7 +29,7 @@ public class IteratorSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super E> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
         if (iterator.hasNext()) {
             action.accept(iterator.next());
             return true;

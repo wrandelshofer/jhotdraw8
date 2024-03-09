@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.examples.fxml;
 
-
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.Node;

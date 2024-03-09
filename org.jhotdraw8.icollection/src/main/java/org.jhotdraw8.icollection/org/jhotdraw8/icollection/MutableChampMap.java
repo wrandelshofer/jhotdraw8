@@ -199,7 +199,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
 
 
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         return putEntry(key, value).getOldValue();
     }
 

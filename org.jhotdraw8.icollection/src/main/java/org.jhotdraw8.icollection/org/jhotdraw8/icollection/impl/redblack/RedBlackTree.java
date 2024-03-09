@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.VectorList;

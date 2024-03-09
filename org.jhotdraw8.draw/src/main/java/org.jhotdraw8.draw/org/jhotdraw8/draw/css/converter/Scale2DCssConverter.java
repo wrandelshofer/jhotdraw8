@@ -75,7 +75,7 @@ public class Scale2DCssConverter extends AbstractCssConverter<Point2D> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Scale2D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩";
     }
 }

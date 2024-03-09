@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color.util;
 
-
 @FunctionalInterface
 public interface FloatFunction {
 

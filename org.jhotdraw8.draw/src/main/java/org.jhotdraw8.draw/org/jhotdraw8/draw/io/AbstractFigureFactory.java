@@ -420,7 +420,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
-    public @Nullable MapAccessor<?> getKeyByAttributeName(@NonNull Figure f, String attributeName) throws IOException {
+    public @Nullable MapAccessor<?> getKeyByAttributeName(@NonNull Figure f, String attributeName) {
         HashMap<String, MapAccessor<?>> strToKey = attrToKey.get(f.getClass());
         if (strToKey == null || !strToKey.containsKey(attributeName)) {
             Set<Class<? extends Figure>> set = (skipAttributes.get(attributeName));
@@ -434,7 +434,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
-    public @NonNull <T> T nodeListToValue(@NonNull MapAccessor<T> key, @NonNull List<Node> nodeList) throws IOException {
+    public @NonNull <T> T nodeListToValue(@NonNull MapAccessor<T> key, @NonNull List<Node> nodeList) {
         if (key.getValueType() == String.class) {
             StringBuilder buf = new StringBuilder();
             for (Node node : nodeList) {
@@ -518,7 +518,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     @Override
-    public void valueToNodeList(@NonNull MapAccessor<?> key, Object value, @NonNull XMLStreamWriter w) throws IOException, XMLStreamException {
+    public void valueToNodeList(@NonNull MapAccessor<?> key, Object value, @NonNull XMLStreamWriter w) throws XMLStreamException {
         if (key.getValueType() == String.class) {
             w.writeCharacters((String) value);
         } else {

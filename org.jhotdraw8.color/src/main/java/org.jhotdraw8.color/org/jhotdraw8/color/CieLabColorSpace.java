@@ -248,7 +248,7 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
         return switch (component) {
             case 0 -> 0f;
             case 1, 2 -> -128f;
-            default -> throw new IllegalArgumentException("Illegal component:" + component);
+            default -> throw new IllegalArgumentException("Illegal component=" + component);
         };
     }
 
@@ -257,7 +257,7 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
         return switch (component) {
             case 0 -> 100f;
             case 1, 2 -> 127f;
-            default -> throw new IllegalArgumentException("Illegal component:" + component);
+            default -> throw new IllegalArgumentException("Illegal component=" + component);
         };
     }
 }

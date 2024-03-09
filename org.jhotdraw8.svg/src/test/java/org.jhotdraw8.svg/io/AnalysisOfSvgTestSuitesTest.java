@@ -10,8 +10,18 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.effect.BlendMode;
-import javafx.scene.image.*;
-import javafx.scene.layout.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
+import javafx.scene.image.WritablePixelFormat;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.annotation.NonNull;
@@ -37,6 +47,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
@@ -199,7 +211,8 @@ public class AnalysisOfSvgTestSuitesTest {
                         (int) referenceImageX.getWidth(), (int) referenceImageX.getHeight());
                 future.complete(new SimpleOrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
-                t.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+
                 future.completeExceptionally(t);
             }
         });
@@ -228,7 +241,8 @@ public class AnalysisOfSvgTestSuitesTest {
                 WritableImage referenceImage = referenceNode.snapshot(new SnapshotParameters(), null);
                 future.complete(new SimpleOrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
-                t.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+
                 future.completeExceptionally(t);
             }
         });
@@ -275,7 +289,8 @@ public class AnalysisOfSvgTestSuitesTest {
                         waitUntilClosed.complete(Boolean.TRUE);
                     });
                 } catch (Throwable t) {
-                    t.printStackTrace();
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+
                     waitUntilClosed.completeExceptionally(t);
 
                 }

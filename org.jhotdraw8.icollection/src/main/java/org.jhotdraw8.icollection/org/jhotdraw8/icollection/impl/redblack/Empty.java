@@ -106,12 +106,12 @@ public final class Empty<K, V> implements RedBlackTree<K, V> {
     }
 
     @Override
-    public K keyOrNull() {
+    public @Nullable K keyOrNull() {
         return null;
     }
 
     @Override
-    public V valueOrNull() {
+    public @Nullable V valueOrNull() {
         return null;
     }
 

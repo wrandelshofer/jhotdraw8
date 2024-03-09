@@ -9,7 +9,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 
 final class MutableBitmapIndexedNode<K, V> extends BitmapIndexedNode<K, V> {
-    private final static long serialVersionUID = 0L;
+
     private final @NonNull IdentityObject mutator;
 
     MutableBitmapIndexedNode(@NonNull IdentityObject mutator, int nodeMap, int dataMap, @NonNull Object @NonNull [] nodes) {

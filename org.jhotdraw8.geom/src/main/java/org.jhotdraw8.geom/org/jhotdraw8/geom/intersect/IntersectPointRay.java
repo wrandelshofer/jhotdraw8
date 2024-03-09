@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.geom.intersect;
 
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.Points;
 
 public class IntersectPointRay {
@@ -34,7 +35,7 @@ public class IntersectPointRay {
         }
     }
 
-    public static Double argumentOnRay(double ox, double oy,
+    public static @Nullable Double argumentOnRay(double ox, double oy,
                                        double dx, double dy,
                                        double amax,
                                        double px, double py, double tolerance) {

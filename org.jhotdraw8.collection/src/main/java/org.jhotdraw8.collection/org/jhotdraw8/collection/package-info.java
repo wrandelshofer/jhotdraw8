@@ -6,3 +6,4 @@
  * Provides mutable and immutable collections.
  */
 package org.jhotdraw8.collection;
+

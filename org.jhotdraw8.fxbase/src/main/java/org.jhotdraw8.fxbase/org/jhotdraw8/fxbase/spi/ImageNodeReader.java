@@ -10,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import org.jhotdraw8.annotation.NonNull;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
@@ -19,12 +18,12 @@ public class ImageNodeReader implements NodeReader {
     }
 
     @Override
-    public Node read(@NonNull URL url) throws IOException {
+    public Node read(@NonNull URL url) {
         return new ImageView(url.toString());
     }
 
     @Override
-    public Node read(@NonNull InputStream in) throws IOException {
+    public Node read(@NonNull InputStream in) {
         return new ImageView(new Image(in));
     }
 }

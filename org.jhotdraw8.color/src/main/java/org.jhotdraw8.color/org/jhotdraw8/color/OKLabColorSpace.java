@@ -162,7 +162,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
         return switch (component) {
             case 0 -> 1f;
             case 1, 2 -> 0.4f;
-            default -> throw new IllegalArgumentException("Illegal component:" + component);
+            default -> throw new IllegalArgumentException("component=" + component);
         };
     }
 
@@ -171,7 +171,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
         return switch (component) {
             case 0 -> 0f;
             case 1, 2 -> -0.4f;
-            default -> throw new IllegalArgumentException("Illegal component:" + component);
+            default -> throw new IllegalArgumentException("component=" + component);
         };
     }
 

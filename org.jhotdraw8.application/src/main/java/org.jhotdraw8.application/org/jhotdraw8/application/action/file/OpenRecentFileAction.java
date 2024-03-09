@@ -26,6 +26,8 @@ import java.util.MissingResourceException;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CancellationException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Loads the specified URI into an empty view. If no empty view is available, a
@@ -119,7 +121,8 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
     private void onException(final @NonNull FileBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
         Throwable value = exception;
-        exception.printStackTrace();
+        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", exception);
+
         Resources labels = ApplicationLabels.getResources();
         Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
         alert.getDialogPane().setMaxWidth(640.0);

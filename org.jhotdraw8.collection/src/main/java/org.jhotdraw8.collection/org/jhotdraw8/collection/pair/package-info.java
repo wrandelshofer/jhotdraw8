@@ -7,3 +7,4 @@
  * Provides interfaces and classes modeling ordered and unordered pairs of objects.
  */
 package org.jhotdraw8.collection.pair;
+

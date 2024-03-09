@@ -351,7 +351,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     protected abstract String getSvgVersion();
 
 
-    private void initIdFactoryRecursively(@NonNull Node node) throws IOException {
+    private void initIdFactoryRecursively(@NonNull Node node) {
         String id = node.getId();
         if (id != null && idFactory.getObject(id) == null) {
             idFactory.putIdAndObject(id, node);
@@ -1079,7 +1079,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeRegionStartElement(@NonNull XMLStreamWriter w, @NonNull Region region) throws IOException, XMLStreamException {
+    private void writeRegionStartElement(@NonNull XMLStreamWriter w, @NonNull Region region) throws XMLStreamException {
         w.writeStartElement("g");
     }
 
@@ -1181,7 +1181,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeShapeChildElements(@NonNull XMLStreamWriter w, Shape node) throws IOException, XMLStreamException {
+    private void writeShapeChildElements(@NonNull XMLStreamWriter w, Shape node) throws XMLStreamException {
         if (node instanceof Text) {
             if (!isConvertTextToPath()) {
                 writeTextChildElements(w, (Text) node);
@@ -1207,7 +1207,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException, IOException {
+    private void writeStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException {
         Paint stroke = shape.getStroke();
         if (stroke == null) {
             return;
@@ -1267,7 +1267,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }*/
     }
 
-    private void writeStrokedShapeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException, IOException {
+    private void writeStrokedShapeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException {
         Paint stroke = shape.getStroke();
         if (stroke == null) {
             return;
@@ -1287,7 +1287,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeBorderStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull BorderStroke shape) throws XMLStreamException, IOException {
+    private void writeBorderStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull BorderStroke shape) throws XMLStreamException {
         if (shape.getTopStroke() != null) {
             w.writeAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
         }

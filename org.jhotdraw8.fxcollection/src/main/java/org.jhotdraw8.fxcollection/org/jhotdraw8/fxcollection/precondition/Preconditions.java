@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcollection.precondition;
 
-
 import org.jhotdraw8.annotation.NonNull;
 
 /**

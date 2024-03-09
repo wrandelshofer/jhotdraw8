@@ -32,7 +32,7 @@ public class StringOrIdentCssConverter implements Converter<String> {
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf), null);
         try {
             if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
-                throw new ParseException("Css String or Ident expected. " + tt.current(), buf.position());
+                throw new ParseException("Could not convert \"" + tt.getToken() + "\" to a string value.", buf.position());
             }
         } catch (IOException e) {
             ParseException parseException = new ParseException(e.getMessage(), 0);
@@ -90,7 +90,7 @@ public class StringOrIdentCssConverter implements Converter<String> {
     }
 
     @Override
-    public @NonNull String getDefaultValue() {
+    public @Nullable String getDefaultValue() {
         return "";
     }
 }

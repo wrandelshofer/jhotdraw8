@@ -95,7 +95,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public <TT extends ImmutableList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    public <TT extends ImmutableList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         boolean first = true;
         for (String s : value) {
             if (first) {

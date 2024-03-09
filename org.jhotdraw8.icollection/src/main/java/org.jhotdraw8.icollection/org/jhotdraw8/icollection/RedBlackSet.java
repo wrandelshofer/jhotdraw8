@@ -237,7 +237,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
             private final Iterator<E> iterator = iterator();
 
             @Override
-            public boolean tryAdvance(Consumer<? super E> action) {
+            public boolean tryAdvance(@NonNull Consumer<? super E> action) {
                 if (iterator.hasNext()) {
                     action.accept(iterator.next());
                 }

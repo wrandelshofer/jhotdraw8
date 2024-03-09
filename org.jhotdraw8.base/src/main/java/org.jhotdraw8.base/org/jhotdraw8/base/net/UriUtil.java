@@ -15,6 +15,8 @@ import java.nio.file.Paths;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.SequencedMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * UriUtil.
@@ -85,11 +87,11 @@ public class UriUtil {
         if (key == null || value == null) {
             return uri;
         }
-        if (key.indexOf('=') != -1) {
-            throw new IllegalArgumentException("key:" + key);
+        if (key.indexOf('=') != -1 || key.indexOf('&') != -1) {
+            throw new IllegalArgumentException("Can not add a key that contains the characters '&' or '='. key=\"" + key + "\".");
         }
-        if (value.indexOf('=') != -1) {
-            throw new IllegalArgumentException("value:" + value);
+        if (value.indexOf('=') != -1 || value.indexOf('&') != -1) {
+            throw new IllegalArgumentException("Can not add a value that contains the characters '&' or '='. value=\"" + value + "\".");
         }
 
         return addQuery(uri, key + '=' + value);
@@ -97,7 +99,7 @@ public class UriUtil {
 
     /**
      * Adds a query. If a query is already present, adds it after a {@literal '&'}
-     * character. The query may not include the character {@literal '&'}.
+     * character. The query may not include the characters {@literal '&'} or {@literal '='}.
      *
      * @param uri   an uri
      * @param query the query
@@ -107,8 +109,8 @@ public class UriUtil {
         if (query == null) {
             return uri;
         }
-        if (query.indexOf('&') != -1) {
-            throw new IllegalArgumentException("query:" + query);
+        if (query.indexOf('&') != -1 || query.indexOf('=') != -1) {
+            throw new IllegalArgumentException("Can not add a query that contains the characters '&' or '='. query=\"" + query + "\".");
         }
 
         String oldQuery = uri.getQuery();
@@ -133,7 +135,8 @@ public class UriUtil {
                     u.getPath(), query,
                     u.getFragment());
         } catch (URISyntaxException ex) {
-            ex.printStackTrace();
+            Logger.getLogger(UriUtil.class.getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
         }
         return u;
     }

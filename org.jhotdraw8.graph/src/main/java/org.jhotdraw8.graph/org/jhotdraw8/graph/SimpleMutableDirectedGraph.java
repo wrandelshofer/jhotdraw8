@@ -40,7 +40,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     /**
      * Maps a vertex index to a vertex object.
      */
-    private @NonNull List<V> vertices;
+    private final @NonNull List<V> vertices;
     /**
      * Maps an arrow index to an arrow object. May contain {@link #TOMBSTONE_OBJECT}s.
      */
@@ -79,6 +79,11 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         this.vertexMap = identityMap ? new IdentityHashMap<>(vertexCapacity) : new HashMap<>(vertexCapacity);
         this.vertices = new ArrayList<>(vertexCapacity);
         this.arrows = new ArrayList<>(arrowCapacity);
+        this.addVertexIfAbsent = k -> {
+            vertices.add(k);
+            buildAddVertex();
+            return vertices.size() - 1;
+        };
     }
 
     /**
@@ -109,6 +114,11 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         this.vertexMap = new HashMap<>(vcount);
         this.vertices = new ArrayList<>(vcount);
         this.arrows = new ArrayList<>(graph.getArrowCount());
+        this.addVertexIfAbsent = k -> {
+            vertices.add(k);
+            buildAddVertex();
+            return vertices.size() - 1;
+        };
 
         for (VV vv : graph.getVertices()) {
             addVertex(vertexMapper.apply(vv));
@@ -260,11 +270,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * Performance: We need this lambda very often if a large graph is created
      * with this builder.
      */
-    private final Function<V, Integer> addVertexIfAbsent = k -> {
-        vertices.add(k);
-        buildAddVertex();
-        return vertices.size() - 1;
-    };
+    private final @NonNull Function<V, Integer> addVertexIfAbsent;
 
 
     @Override

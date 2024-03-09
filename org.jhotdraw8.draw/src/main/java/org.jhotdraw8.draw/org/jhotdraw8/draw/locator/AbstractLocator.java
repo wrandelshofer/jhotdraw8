@@ -14,7 +14,6 @@ import org.jhotdraw8.draw.figure.Figure;
  */
 public abstract class AbstractLocator implements Locator {
 
-    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance.

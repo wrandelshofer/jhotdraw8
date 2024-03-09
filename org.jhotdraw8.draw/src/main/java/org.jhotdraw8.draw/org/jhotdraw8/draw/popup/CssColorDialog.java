@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.popup;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ButtonBar;
@@ -14,7 +13,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
@@ -27,6 +25,8 @@ import org.jhotdraw8.draw.css.value.NamedCssColor;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CssColorDialog {
     private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
@@ -36,15 +36,7 @@ public class CssColorDialog {
     private CssColorChooserController controller;
     private Dialog<ButtonType> dialog;
 
-    private final EventHandler<KeyEvent> keyEventListener = e -> {
-        switch (e.getCode()) {
-        case ESCAPE:
-            dialog.close();
-            break;
-        default:
-            break;
-        }
-    };
+
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
@@ -66,7 +58,8 @@ public class CssColorDialog {
             currentColor.bindBidirectional(controller.colorProperty());
         } catch (IOException ex) {
             dialogPane.setContent(new Label(ex.getMessage()));
-            ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
         }
 
         dialog.setResizable(false);

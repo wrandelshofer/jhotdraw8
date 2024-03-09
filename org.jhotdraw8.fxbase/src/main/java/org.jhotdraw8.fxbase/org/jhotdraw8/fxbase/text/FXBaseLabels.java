@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxbase.text;
 
-
 import java.util.ResourceBundle;
 
 public class FXBaseLabels {

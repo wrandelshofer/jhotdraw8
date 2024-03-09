@@ -52,8 +52,4 @@ public class ReaderCssScanner extends AbstractCssScanner {
         }
     }
 
-    @Override
-    public long getPosition() {
-        return position;
-    }
 }

@@ -47,13 +47,13 @@ public class WordCssConverter implements Converter<String> {
         }
         if (out.isEmpty()) {
             in.position(pos);
-            throw new ParseException("word expected", pos);
+            throw new ParseException("Could not convert the string=\"" + in.toString() + "\" to a word that contains no whitespace.", pos);
         }
         return out.toString();
     }
 
     @Override
-    public @NonNull String getDefaultValue() {
+    public @Nullable String getDefaultValue() {
         return "";
     }
 }

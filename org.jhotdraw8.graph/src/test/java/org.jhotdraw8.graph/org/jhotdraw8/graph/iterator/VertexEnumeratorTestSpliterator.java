@@ -10,7 +10,12 @@ import org.jhotdraw8.graph.io.GraphvizReader;
 import org.jhotdraw8.graph.io.GraphvizWriter;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Spliterators;
 import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

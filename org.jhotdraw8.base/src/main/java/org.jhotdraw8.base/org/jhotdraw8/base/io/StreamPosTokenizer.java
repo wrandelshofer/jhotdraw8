@@ -968,7 +968,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      */
     public int nextChar() throws IOException {
         if (pushedBack) {
-            throw new IllegalStateException("can't read char when a token has been pushed back");
+            throw new IllegalStateException("Can't read next char when a token has been pushed back.");
         }
         if (peekc == NEED_CHAR) {
             return read();
@@ -983,11 +983,10 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Unreads a character back into the input stream of the tokenizer.
      *
      * @param ch The character
-     * @throws IOException in case of an IO error
      */
-    public void pushCharBack(int ch) throws IOException {
+    public void pushCharBack(int ch) {
         if (pushedBack) {
-            throw new IllegalStateException("can't push back char when a token has been pushed back");
+            throw new IllegalStateException("Can't push back a char when a token has been pushed back.");
         }
         if (peekc == NEED_CHAR) {
             unread(ch);

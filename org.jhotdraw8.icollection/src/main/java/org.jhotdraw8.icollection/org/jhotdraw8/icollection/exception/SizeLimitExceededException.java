@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.exception;
 
-
 /**
  * This exception is thrown when a method exceeds a size limit.
  */

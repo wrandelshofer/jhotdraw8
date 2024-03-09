@@ -39,11 +39,13 @@ public class PercentageCssConverter extends AbstractCssConverter<Double> {
                     case "INF" -> Double.POSITIVE_INFINITY;
                     case "-INF" -> Double.NEGATIVE_INFINITY;
                     case "NaN" -> Double.NaN;
-                    default -> throw new ParseException("number expected:" + tt.currentString(), tt.getStartPosition());
+                    default ->
+                            throw new ParseException("Could not convert " + tt.getToken() + " to a percentage value.", tt.getStartPosition());
                 };
                 yield value;
             }
-            default -> throw new ParseException("⟨Double⟩: number expected.", tt.getStartPosition());
+            default ->
+                    throw new ParseException("Could not convert " + tt.getToken() + " to a percentage value.", tt.getStartPosition());
         };
     }
 
@@ -60,7 +62,7 @@ public class PercentageCssConverter extends AbstractCssConverter<Double> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         if (isNullable()) {
             return "Format of ⟨NullablePercentage⟩: none｜⟨fraction⟩｜⟨percentage⟩%";
         } else {

@@ -31,7 +31,7 @@ public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.Abstra
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super E> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
         if (index < 0) {
             return false;
         }

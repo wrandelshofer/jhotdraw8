@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.text.ParseException;
 
 /**
  * Converts an {@code Object} to a {@code String} but can not a {@code String}
@@ -35,7 +34,7 @@ public class DefaultConverter implements Converter<Object> {
     }
 
     @Override
-    public @Nullable Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) {
         String str = buf.toString();
         buf.position(buf.limit());
         return "null".equals(str) ? null : str;
@@ -47,7 +46,7 @@ public class DefaultConverter implements Converter<Object> {
     }
 
     @Override
-    public @NonNull String getDefaultValue() {
+    public @Nullable String getDefaultValue() {
         return "null";
     }
 }

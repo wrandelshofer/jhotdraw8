@@ -52,6 +52,7 @@ public class InputDialog<R> extends Dialog<R> {
 
         setResultConverter((dialogButton) -> {
             ButtonBar.ButtonData data = dialogButton == null ? null : dialogButton.getButtonData();
+            //noinspection ReturnOfNull
             return data == ButtonBar.ButtonData.OK_DONE ? resultSupplier.get() : null;
         });
     }

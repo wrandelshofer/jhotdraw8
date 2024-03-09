@@ -57,7 +57,7 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      */
     @SuppressWarnings("unchecked")
     protected RedBlackMap(@NonNull PrivateData privateData) {
-        this(((Map.Entry<Comparator<? super K>, ?>) privateData.get()).getKey(), ((Map.Entry<?, RedBlackTree<K, V>>) privateData.get()).getValue());
+        this(((Map.Entry<?, RedBlackTree<K, V>>) privateData.get()).getValue(), ((Map.Entry<Comparator<? super K>, ?>) privateData.get()).getKey());
     }
 
     /**
@@ -75,7 +75,8 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     private @NonNull RedBlackMap<K, V> newInstance(@NonNull Comparator<? super K> comparator, @NonNull RedBlackTree<K, V> root) {
         return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
     }
-    RedBlackMap(@NonNull Comparator<? super K> comparator, @NonNull RedBlackTree<K, V> root) {
+
+    RedBlackMap(@NonNull RedBlackTree<K, V> root, @NonNull Comparator<? super K> comparator) {
         this.root = root;
         this.comparator = comparator;
     }
@@ -166,7 +167,7 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      */
     public static <K, V> @NonNull RedBlackMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator) {
         comparator = comparator == null ? NaturalComparator.instance() : comparator;
-        return new RedBlackMap<>(comparator, RedBlackTree.of(comparator));
+        return new RedBlackMap<>(RedBlackTree.of(comparator), comparator);
     }
 
     /**
@@ -194,8 +195,8 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
      * @return an empty immutable map
      */
     public static <K, V> @NonNull RedBlackMap<K, V> of() {
-        return new RedBlackMap<>(NaturalComparator.instance(),
-                RedBlackTree.of(NaturalComparator.instance()));
+        return new RedBlackMap<>(RedBlackTree.of(NaturalComparator.instance()), NaturalComparator.instance()
+        );
     }
 
     /**

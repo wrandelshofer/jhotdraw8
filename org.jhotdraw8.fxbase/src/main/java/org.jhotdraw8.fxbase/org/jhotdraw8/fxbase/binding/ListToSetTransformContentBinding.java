@@ -42,6 +42,7 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
                                      @Nullable Consumer<D> disposeDest) {
         this.dest = dest;
         this.source = source;
+        //noinspection ReturnOfNull
         this.toDest = toDest == null ? s -> null : toDest;
         this.disposeDest = disposeDest;
         if (toDest != null) {

@@ -175,10 +175,6 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         event.consume();
     }
 
-    @Override
-    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-    }
-
 
     /**
      * This implementation is empty.

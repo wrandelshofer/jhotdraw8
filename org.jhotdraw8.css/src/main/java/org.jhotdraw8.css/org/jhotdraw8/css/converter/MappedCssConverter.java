@@ -58,7 +58,7 @@ public class MappedCssConverter<E> implements CssConverter<E> {
     @Override
     public @Nullable E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
-            throw new ParseException("identifier expected", tt.getStartPosition());
+            throw new ParseException("Could not convert " + tt.getToken() + " to a value.", tt.getStartPosition());
         }
 
         String identifier = tt.currentString();
@@ -67,14 +67,14 @@ public class MappedCssConverter<E> implements CssConverter<E> {
         }
         E e = fromStringMap.get(identifier);
         if (e == null) {
-            throw new ParseException("Illegal value=\"" + identifier + "\"", 0);
+            throw new ParseException("Could not convert the string=\"" + identifier + "\" to a value.", 0);
         }
         return e;
     }
 
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         StringBuilder buf = new StringBuilder("Format of ⟨");
         buf.append(name).append("⟩: ");
         boolean first = true;
@@ -98,13 +98,13 @@ public class MappedCssConverter<E> implements CssConverter<E> {
     public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
-                throw new IllegalArgumentException("Value is not nullable.");
+                throw new IllegalArgumentException("Could not convert the value=null to a string.");
             }
             consumer.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
             String s = toStringMap.get(value);
             if (s == null) {
-                throw new IllegalArgumentException("Unsupported value: " + value);
+                throw new IllegalArgumentException("Could not convert the value=\"" + value + "\" to a string.");
             }
             consumer.accept(new CssToken(CssTokenType.TT_IDENT, s));
         }

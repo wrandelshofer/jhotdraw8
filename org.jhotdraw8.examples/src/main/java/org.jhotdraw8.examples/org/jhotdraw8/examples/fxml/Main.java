@@ -7,7 +7,7 @@ package org.jhotdraw8.examples.fxml;
 
 public class Main extends FxmlApplication {
     @Override
-    public void initApplication() throws Exception {
+    public void initApplication() {
         setFxml(Main.class.getResource("SimpleActivity.fxml"));
     }
 }

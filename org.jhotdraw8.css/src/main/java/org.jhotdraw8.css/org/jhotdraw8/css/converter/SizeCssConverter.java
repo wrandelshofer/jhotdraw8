@@ -65,9 +65,10 @@ public final class SizeCssConverter implements CssConverter<CssSize> {
                 case "INF" -> CssSize.of(Double.POSITIVE_INFINITY);
                 case "-INF" -> CssSize.of(Double.NEGATIVE_INFINITY);
                 default ->
-                        throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+                        throw new ParseException("Could not convert " + tt.getToken() + " to a double value.", tt.getStartPosition());
             };
-            default -> throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+            default ->
+                    throw new ParseException("Could not convert " + tt.getToken() + " to a double value.", tt.getStartPosition());
         };
     }
 
@@ -81,9 +82,10 @@ public final class SizeCssConverter implements CssConverter<CssSize> {
                 case "INF" -> CssSize.of(Double.POSITIVE_INFINITY);
                 case "-INF" -> CssSize.of(Double.NEGATIVE_INFINITY);
                 default ->
-                        throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+                        throw new ParseException("Could not convert the " + tt.getToken() + " to a double value.", tt.getStartPosition());
             };
-            default -> throw new ParseException(" ⟨CssPoint2D⟩: ⟨" + variable + "⟩ expected.", tt.getStartPosition());
+            default ->
+                    throw new ParseException("Could not convert " + tt.getToken() + " to a double value.", tt.getStartPosition());
         };
     }
 
@@ -112,7 +114,7 @@ public final class SizeCssConverter implements CssConverter<CssSize> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Size⟩: ⟨size⟩ | ⟨percentage⟩% | ⟨size⟩⟨Units⟩"
                 + "\nFormat of ⟨Units⟩: mm | cm | em | ex | in | pc | px | pt";
     }

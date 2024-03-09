@@ -231,7 +231,7 @@ public class FontCssConverter extends AbstractCssConverter<CssFont> {
 
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return """
                Format of ⟨Font⟩: ［⟨FontStyle⟩］［⟨FontWeight⟩］ ⟨FontSize⟩ ⟨FontFamily⟩
                  with ⟨FontStyle⟩: normal｜italic｜oblique

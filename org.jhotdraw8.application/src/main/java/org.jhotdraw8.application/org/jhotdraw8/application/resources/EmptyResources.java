@@ -24,7 +24,7 @@ public class EmptyResources implements Resources {
         try {
             emptyResourceBundle = new PropertyResourceBundle(new StringReader(""));
         } catch (IOException e) {
-            throw new RuntimeException("Could not create empty PropertyResourceBundle", e);
+            throw new RuntimeException("Could not create an empty PropertyResourceBundle", e);
         }
     }
 
@@ -32,7 +32,7 @@ public class EmptyResources implements Resources {
     }
 
     @Override
-    public ResourceBundle asResourceBundle() {
+    public @NonNull ResourceBundle asResourceBundle() {
         return emptyResourceBundle;
     }
 
@@ -42,12 +42,12 @@ public class EmptyResources implements Resources {
     }
 
     @Override
-    public Class<?> getBaseClass() {
+    public @NonNull Class<?> getBaseClass() {
         return getClass();
     }
 
     @Override
-    public Object getModule() {
+    public @Nullable Object getModule() {
         return null;
     }
 
@@ -64,9 +64,7 @@ public class EmptyResources implements Resources {
 
     @Override
     public @NonNull String getString(String key) {
-        throw new MissingResourceException("Can't find resource for bundle "
-                + this.getClass().getName()
-                + ", key " + key,
+        throw new MissingResourceException("Could not find a resource with key=\"" + key + "\".",
                 this.getClass().getName(),
                 key);
     }

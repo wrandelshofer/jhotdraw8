@@ -95,11 +95,6 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-
-    }
-
-    @Override
     protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
         if (createdFigure != null) {
             onMouseDragged(event, dv);

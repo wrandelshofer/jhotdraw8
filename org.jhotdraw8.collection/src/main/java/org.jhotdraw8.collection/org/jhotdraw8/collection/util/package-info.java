@@ -7,3 +7,4 @@
  * Provides utilities for implementing collections.
  */
 package org.jhotdraw8.collection.util;
+

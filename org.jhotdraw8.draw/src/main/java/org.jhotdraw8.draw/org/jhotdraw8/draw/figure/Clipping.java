@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-
 import org.jhotdraw8.annotation.NonNull;
 
 /**

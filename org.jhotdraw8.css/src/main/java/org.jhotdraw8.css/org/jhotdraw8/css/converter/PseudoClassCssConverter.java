@@ -56,7 +56,7 @@ public class PseudoClassCssConverter extends AbstractCssConverter<PseudoClass> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨PseudoClass⟩: ⟨identifier⟩";
     }
 }

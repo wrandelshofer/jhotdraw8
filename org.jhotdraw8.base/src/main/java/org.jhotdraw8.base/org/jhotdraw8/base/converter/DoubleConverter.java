@@ -39,13 +39,14 @@ public class DoubleConverter implements Converter<Double> {
 
     @Override
     public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+        String str = in.toString();
         try {
             if (in.isEmpty() && nullable) return null;
-            var result = Double.parseDouble(in.toString());
+            var result = Double.parseDouble(str);
             in.position(in.length());
             return result;
         } catch (NumberFormatException e) {
-            throw new ParseException("Illegal double value.", 0);
+            throw new ParseException("Could not parse a double value from string=\"" + str + "\".", 0);
         }
     }
 

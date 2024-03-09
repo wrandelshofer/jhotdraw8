@@ -40,7 +40,7 @@ public class Point2DConverter extends AbstractCssConverter<Point2D> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Point2D⟩: ⟨x⟩, ⟨y⟩";
     }
 

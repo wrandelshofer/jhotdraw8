@@ -236,7 +236,7 @@ public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Set⟩: empty | ⟨Item⟩, ⟨Item⟩, ...\n"
                 + "With ⟨Item⟩:\n  " + elementConverter.getHelpText();
     }

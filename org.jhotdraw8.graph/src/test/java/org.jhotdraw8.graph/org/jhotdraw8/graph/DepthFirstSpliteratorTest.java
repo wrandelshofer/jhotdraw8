@@ -15,7 +15,11 @@ import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Spliterators;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

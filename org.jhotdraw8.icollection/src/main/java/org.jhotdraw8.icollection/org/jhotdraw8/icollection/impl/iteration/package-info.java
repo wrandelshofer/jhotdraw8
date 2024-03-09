@@ -7,3 +7,4 @@
  * Provides classes for iterating collections.
  */
 package org.jhotdraw8.icollection.impl.iteration;
+

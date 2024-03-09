@@ -31,13 +31,14 @@ public class FloatConverter implements Converter<Float> {
 
     @Override
     public @Nullable Float fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+        String str = in.toString();
         try {
             if (in.isEmpty() && nullable) return null;
-            var result = Float.parseFloat(in.toString());
+            var result = Float.parseFloat(str);
             in.position(in.length());
             return result;
         } catch (NumberFormatException e) {
-            throw new ParseException("Illegal float value.", 0);
+            throw new ParseException("Could not parse a float value from string=\"" + str + "\".", 0);
         }
     }
 

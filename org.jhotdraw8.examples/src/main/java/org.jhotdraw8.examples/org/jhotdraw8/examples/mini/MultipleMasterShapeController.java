@@ -1,6 +1,5 @@
 package org.jhotdraw8.examples.mini;
 
-
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.StringProperty;
@@ -29,6 +28,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class MultipleMasterShapeController {
 
@@ -98,7 +99,8 @@ public class MultipleMasterShapeController {
             tx.scale(scaleFactor, scaleFactor);
             region.setShape(FXShapes.fxShapeFromAwt(mmShape, tx));
         } catch (ParseException e) {
-            e.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
         }
     }
 

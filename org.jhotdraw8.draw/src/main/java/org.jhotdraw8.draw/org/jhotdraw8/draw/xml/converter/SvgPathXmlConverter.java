@@ -13,7 +13,6 @@ import org.jhotdraw8.base.converter.IdSupplier;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.text.ParseException;
 
 /**
  * Converts an {@code SVGPath} from/to an XML attribute text.
@@ -26,10 +25,10 @@ public class SvgPathXmlConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public @Nullable SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) {
         final String string = buf.toString();
         buf.position(buf.length());
-        if ("none".equals(string)) {
+        if (string.isEmpty()) {
             return null;
         }
         SVGPath p = new SVGPath();
@@ -40,12 +39,11 @@ public class SvgPathXmlConverter implements Converter<SVGPath> {
     @Override
     public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable SVGPath value) throws IOException {
         final String content = value == null ? null : value.getContent();
-        out.append(content == null ? "none" : content);
+        out.append(content == null ? "" : content);
     }
 
     @Override
-    public @NonNull SVGPath getDefaultValue() {
-        SVGPath p = new SVGPath();
-        return p;
+    public @Nullable SVGPath getDefaultValue() {
+        return new SVGPath();
     }
 }

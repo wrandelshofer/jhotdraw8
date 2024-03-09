@@ -280,7 +280,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public Entry<K, V> pollFirstEntry() {
+    public @Nullable Entry<K, V> pollFirstEntry() {
         var e = firstEntry();
         if (e == null) return null;
         remove(e.getKey());
@@ -288,7 +288,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public Entry<K, V> pollLastEntry() {
+    public @Nullable Entry<K, V> pollLastEntry() {
         var e = lastEntry();
         if (e == null) return null;
         remove(e.getKey());
@@ -296,18 +296,14 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public V put(K key, V value) {
+    public @Nullable V put(K key, V value) {
         var oldData = putLast(key, value, false).getOldData();
         return oldData == null ? null : oldData.getValue();
     }
 
-    V putFirstFalse(K key, V value) {
-        var oldData = putFirst(key, value, false).getOldData();
-        return oldData == null ? null : oldData.getValue();
-    }
 
     @Override
-    public V putFirst(K key, V value) {
+    public @Nullable V putFirst(K key, V value) {
         var oldData = putFirst(key, value, true).getOldData();
         return oldData == null ? null : oldData.getValue();
     }
@@ -362,7 +358,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public V putLast(K key, V value) {
+    public @Nullable V putLast(K key, V value) {
         var oldData = putLast(key, value, true).getOldData();
         return oldData == null ? null : oldData.getValue();
     }
@@ -409,7 +405,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public V remove(Object o) {
+    public @Nullable V remove(Object o) {
         @SuppressWarnings("unchecked") final K key = (K) o;
         ChangeEvent<SequencedEntry<K, V>> details = removeAndGiveDetails(key);
         if (details.isModified()) {

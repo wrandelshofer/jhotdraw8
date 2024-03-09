@@ -49,7 +49,7 @@ public class PathMetricsCssConverter extends AbstractCssConverter<PathMetrics> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨BezierPath⟩: \"⟨SvgPath⟩\"";
     }
 }

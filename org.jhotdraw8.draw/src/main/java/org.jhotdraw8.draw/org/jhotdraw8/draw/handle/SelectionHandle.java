@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.handle;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.Border;
@@ -96,21 +95,6 @@ public class SelectionHandle extends LocatorHandle {
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
     }
 
-    @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
-
-    }
-
-    @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
-
-    }
-
-
-    @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
-
-    }
 
     @Override
     public boolean isSelectable() {

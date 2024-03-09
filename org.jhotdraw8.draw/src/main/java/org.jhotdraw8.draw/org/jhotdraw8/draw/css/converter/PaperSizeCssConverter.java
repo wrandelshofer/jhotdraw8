@@ -120,7 +120,7 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
     }
 
     @Override
-    protected <TT extends CssDimension2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    protected <TT extends CssDimension2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
         String paper = sizePapers.get(value);
         if (paper != null) {
             boolean first = true;
@@ -143,7 +143,7 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         StringBuilder buf = new StringBuilder();
         for (String s : paperSizes.keySet()) {
             if (!buf.isEmpty()) {

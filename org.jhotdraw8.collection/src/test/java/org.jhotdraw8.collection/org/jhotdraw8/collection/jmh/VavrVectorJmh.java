@@ -1,6 +1,5 @@
 package org.jhotdraw8.collection.jmh;
 
-
 import io.vavr.collection.Vector;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;

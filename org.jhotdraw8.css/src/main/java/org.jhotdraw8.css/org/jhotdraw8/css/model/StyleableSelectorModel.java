@@ -72,7 +72,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
     }
 
     @Override
-    public QualifiedName getType(@NonNull Styleable element) {
+    public @Nullable QualifiedName getType(@NonNull Styleable element) {
         return new QualifiedName(null, element.getTypeSelector());
     }
 
@@ -132,7 +132,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
                 try {
                     return value == null ? null : new StreamCssTokenizer(value.toString(), null).toTokenList();
                 } catch (IOException e) {
-                    throw new RuntimeException("unexpected io exception", e);
+                    throw new RuntimeException("Unexpected IOException", e);
                 }
             }
         }
@@ -171,28 +171,10 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
     }
 
     @Override
-    public boolean attributeValueEquals(@NonNull Styleable element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String attributeValue) {
-        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
-        return actualValue != null && actualValue.equals(attributeValue);
-    }
-
-    @Override
-    public boolean attributeValueStartsWith(@NonNull Styleable element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
-        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
-        return actualValue != null && actualValue.startsWith(substring);
-    }
-
-    @Override
     public boolean attributeValueContainsWord(@NonNull Styleable element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String word) {
         Set<String> value = getWordListAttribute(element, namespacePattern, attributeName);
 
         return value != null && value.contains(word);
-    }
-
-    @Override
-    public boolean attributeValueEndsWith(@NonNull Styleable element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
-        String actualValue = getAttributeAsString(element, namespacePattern, attributeName);
-        return actualValue != null && actualValue.endsWith(substring);
     }
 
     @Override

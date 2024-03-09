@@ -53,7 +53,7 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Fields
     // ---
-    private static final long serialVersionUID = 1L;
+
     /**
      * The tracker encapsulates the current state of the SelectionTool.
      */
@@ -407,10 +407,6 @@ public class SelectionTool extends AbstractTool {
     @Override
     protected void onZoomStarted(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
         zoomFactor = dv.getZoomFactor();
-    }
-
-    @Override
-    protected void onZoomFinished(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
     }
 
     @Override

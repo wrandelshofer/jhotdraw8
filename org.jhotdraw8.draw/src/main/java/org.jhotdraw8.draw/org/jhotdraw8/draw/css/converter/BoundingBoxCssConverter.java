@@ -83,7 +83,7 @@ public class BoundingBoxCssConverter extends AbstractCssConverter<BoundingBox> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨BoundingBox⟩: ⟨min-x⟩ ⟨min-y⟩ ⟨width⟩ ⟨height⟩";
     }
 }

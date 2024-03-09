@@ -7,3 +7,4 @@
  * Defines interfaces for primitive collections and provides implementations.
  */
 package org.jhotdraw8.collection.primitive;
+

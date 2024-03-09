@@ -33,7 +33,7 @@ public class NodeFinder {
     }
 
     /**
-     * Returns true if the node contains the specified point within a
+     * Returns the distance to the node, if the node contains the specified point within a
      * tolerance.
      *
      * @param node          The node
@@ -42,7 +42,7 @@ public class NodeFinder {
      *                      from the node, in local coordinates
      * @return a distance if the node contains the point, null otherwise
      */
-    public Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double radiusInLocal) {
+    public @Nullable Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double radiusInLocal) {
         double toleranceInLocal = radiusInLocal / FXTransforms.deltaTransform(node.getLocalToSceneTransform(), LINE45DEG, LINE45DEG).magnitude();
 
         if (!node.isVisible()) {

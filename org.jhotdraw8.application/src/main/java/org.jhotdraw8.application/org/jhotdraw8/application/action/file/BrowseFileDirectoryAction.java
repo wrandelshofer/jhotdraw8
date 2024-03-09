@@ -17,6 +17,7 @@ import java.net.URI;
 import java.nio.file.FileSystemNotFoundException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedActivity> {
@@ -57,10 +58,12 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
                 try {
                     Desktop.class.getMethod("browseFileDirectory", File.class).invoke(Desktop.getDesktop(), path.toFile());
                 } catch (IllegalAccessException | InvocationTargetException e) {
-                    e.printStackTrace();
+                    Logger.getLogger(BrowseFileDirectoryAction.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
                 }
             } catch (NoSuchMethodException e) {
-                e.printStackTrace();
+                Logger.getLogger(BrowseFileDirectoryAction.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             }
         } catch (FileSystemNotFoundException e) {
             Logger.getLogger(BrowseFileDirectoryAction.class.getName()).warning(e.getMessage());

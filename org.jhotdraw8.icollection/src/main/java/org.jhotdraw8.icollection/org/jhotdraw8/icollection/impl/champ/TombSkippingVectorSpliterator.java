@@ -33,7 +33,7 @@ public class TombSkippingVectorSpliterator<K> extends Spliterators.AbstractSplit
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super K> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super K> action) {
         boolean success = vector.tryAdvance(this);
         if (!success) return false;
         if (current instanceof Tombstone t) {

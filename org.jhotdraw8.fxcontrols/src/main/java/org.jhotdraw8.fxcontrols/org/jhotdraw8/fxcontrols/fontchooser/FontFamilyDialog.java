@@ -18,6 +18,8 @@ import org.jhotdraw8.application.resources.Resources;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * FontDialog for selecting a font family.
@@ -44,7 +46,8 @@ public class FontFamilyDialog extends Dialog<String> {
             controller = loader.<FontChooserController>getController();
         } catch (IOException ex) {
             dialogPane.setContent(new Label(ex.getMessage()));
-            ex.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
         }
 
         setResizable(true);

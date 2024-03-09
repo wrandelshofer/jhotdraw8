@@ -24,6 +24,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Takes a list of tokens and evaluates Css functions on them.
@@ -89,7 +91,8 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         try {
             process(element, tt, out::add, new ArrayDeque<>());
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             out.clear();
             for (CssToken t : in) {
                 out.add(t);
@@ -125,7 +128,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
 
     protected void doProcessToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         if (recursionStack.size() >= maxRecursionDepth) {
-            throw tt.createParseException("Too many recursions. Depth=" + recursionStack.size());
+            throw tt.createParseException("Too many recursions. recursionDepth=" + recursionStack.size());
         }
         if (tt.nextNoSkip() == CssTokenType.TT_FUNCTION) {
 

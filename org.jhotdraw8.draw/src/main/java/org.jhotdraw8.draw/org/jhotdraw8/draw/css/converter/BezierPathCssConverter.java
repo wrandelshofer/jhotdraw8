@@ -36,7 +36,7 @@ public class BezierPathCssConverter extends AbstractCssConverter<BezierPath> {
     @Override
     public @NonNull BezierPath parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
-            throw new ParseException("⟨BezierPath⟩ String expected.", tt.getStartPosition());
+            throw new ParseException("Could not convert " + tt.getToken() + " to a BezierPath.", tt.getStartPosition());
         }
         BezierPathBuilder builder = new BezierPathBuilder();
         SvgPaths.svgStringToBuilder(tt.currentStringNonNull(), builder);
@@ -54,7 +54,7 @@ public class BezierPathCssConverter extends AbstractCssConverter<BezierPath> {
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨BezierPath⟩: \"⟨SvgPath⟩\"";
     }
 }

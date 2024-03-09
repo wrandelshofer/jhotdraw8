@@ -254,6 +254,7 @@ public class ExitAction extends AbstractApplicationAction {
                 v.clearModified();
                 app.getRecentUris().put(uri, format);
             }
+            //noinspection ReturnOfNull
             return null;
         });
     }
@@ -287,6 +288,7 @@ public class ExitAction extends AbstractApplicationAction {
                 v.clearModified();
                 reviewNext(workState);
             }
+            //noinspection ReturnOfNull
             return null;
         });
     }

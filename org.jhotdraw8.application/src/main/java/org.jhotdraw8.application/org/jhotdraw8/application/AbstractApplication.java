@@ -38,6 +38,8 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ForkJoinPool;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.prefs.Preferences;
 
 /**
@@ -139,7 +141,8 @@ public abstract class AbstractApplication extends javafx.application.Application
                 }
                 recentUris.put(uri, format);
             } catch (URISyntaxException ex) {
-                ex.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+
             }
         }
         recentUris.get().addListener((MapChangeListener.Change<? extends URI, ? extends DataFormat> change) -> {

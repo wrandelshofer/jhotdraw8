@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Provides read methods for some well known macOS preferences files.
@@ -178,8 +180,8 @@ public class MacOSPreferencesUtil {
                 Document plist = PListParsers.readPList(file);
                 cache.putAll(PListParsers.toMap(plist));
             } catch (Throwable e) {
-                System.err.println("Warning: ch.randelshofer.quaqua.util.OSXPreferences failed to load " + file);
-                e.printStackTrace();
+                Logger.getLogger(MacOSPreferencesUtil.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+
             }
         }
     }

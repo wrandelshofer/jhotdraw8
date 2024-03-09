@@ -7,7 +7,16 @@ package org.jhotdraw8.base.io;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+import java.util.Objects;
+import java.util.PrimitiveIterator;
+import java.util.Spliterator;
+import java.util.Spliterators;
 import java.util.function.IntPredicate;
 import java.util.stream.IntStream;
 
@@ -302,7 +311,7 @@ class IntArrayList extends AbstractList<Integer> {
      */
     public int removeLastAsInt() {
         if (isEmpty()) {
-            throw new NoSuchElementException("List is empty.");
+            throw new NoSuchElementException();
         }
         return removeAtAsInt(size - 1);
     }

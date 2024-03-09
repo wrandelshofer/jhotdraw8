@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.tool.Tool;
 public class ConnectingFiguresExampleMain extends Application {
 
     @Override
-    public void start(@NonNull Stage primaryStage) throws Exception {
+    public void start(@NonNull Stage primaryStage) {
 
         // Create a drawing view.
         DrawingView drawingView = new SimpleDrawingView();

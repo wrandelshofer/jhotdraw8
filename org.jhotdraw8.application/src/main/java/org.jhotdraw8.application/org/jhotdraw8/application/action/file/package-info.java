@@ -6,3 +6,4 @@
  * Provides actions for files.
  */
 package org.jhotdraw8.application.action.file;
+

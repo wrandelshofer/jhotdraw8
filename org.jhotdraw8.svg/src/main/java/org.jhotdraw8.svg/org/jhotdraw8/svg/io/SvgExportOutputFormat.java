@@ -209,7 +209,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         return RELATIVIZE_PATHS.getNonNull(getOptions());
     }
 
-    private void writeDrawingElementAttributes(@NonNull Element docElement, @NonNull Drawing drawing) throws IOException {
+    private void writeDrawingElementAttributes(@NonNull Element docElement, @NonNull Drawing drawing) {
         docElement.setAttribute("width", sc.toString(drawing.get(Drawing.WIDTH)));
         docElement.setAttribute("height", sc.toString(drawing.get(Drawing.HEIGHT)));
     }
@@ -227,7 +227,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         XmlUtil.write(file, doc);
     }
 
-    private void writePageElementAttributes(@NonNull Element docElement, @NonNull Page page, int internalPageNumber) throws IOException {
+    private void writePageElementAttributes(@NonNull Element docElement, @NonNull Page page, int internalPageNumber) {
         Bounds pb = page.getPageBounds(internalPageNumber);
         docElement.setAttribute("width", sznb.toString(page.get(PageFigure.PAPER_WIDTH)));
         docElement.setAttribute("height", sznb.toString(page.get(PageFigure.PAPER_HEIGHT)));
@@ -256,7 +256,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         return true;
     }
 
-    private void writeSliceElementAttributes(@NonNull Element docElement, @NonNull Slice slice) throws IOException {
+    private void writeSliceElementAttributes(@NonNull Element docElement, @NonNull Slice slice) {
         Bounds b = slice.getLayoutBounds();
         Point2D sliceOrigin = slice.getSliceOrigin();
         Transform tx = slice.getWorldToLocal();

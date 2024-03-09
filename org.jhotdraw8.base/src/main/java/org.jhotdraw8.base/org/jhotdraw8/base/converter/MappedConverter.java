@@ -51,7 +51,7 @@ public class MappedConverter<E> implements Converter<E> {
         }
         E e = fromStringMap.get(identifier);
         if (e == null) {
-            throw new ParseException("Illegal value=\"" + identifier + "\"", 0);
+            throw new ParseException("Could not convert the string=\"" + identifier + "\" to a value.", 0);
         }
         return e;
     }
@@ -65,13 +65,13 @@ public class MappedConverter<E> implements Converter<E> {
     public <TT extends E> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             if (nullValue != null) {
-                throw new IOException("Illegal value=null.");
+                throw new IOException("Could not convert the value=null to a non-null string.");
             }
             out.append(null);
         }
         String s = toStringMap.get(value);
         if (s == null) {
-            throw new IOException("Illegal value=" + value);
+            throw new IOException("Could not convert the value=\"" + value + "\" to a string.");
         }
         out.append(s);
     }

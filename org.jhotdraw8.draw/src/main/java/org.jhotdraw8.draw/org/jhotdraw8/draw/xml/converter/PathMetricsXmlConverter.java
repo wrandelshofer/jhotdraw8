@@ -79,7 +79,7 @@ public class PathMetricsXmlConverter implements Converter<PathMetrics> {
     }
 
     @Override
-    public PathMetrics getDefaultValue() {
+    public @Nullable PathMetrics getDefaultValue() {
         return nullable ? null : new PathMetricsBuilder().build();
     }
 }

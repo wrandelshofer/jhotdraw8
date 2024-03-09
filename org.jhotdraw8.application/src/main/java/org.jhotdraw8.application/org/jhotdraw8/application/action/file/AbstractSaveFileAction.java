@@ -33,6 +33,8 @@ import java.util.Optional;
 import java.util.SequencedMap;
 import java.util.concurrent.CancellationException;
 import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Saves the changes in the active view. If the active view has not an URI, an
@@ -150,7 +152,8 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
                 }
             } else if (exception != null) {
                 Throwable value = exception;
-                value.printStackTrace();
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", value);
+
                 Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));
                 alert.getDialogPane().setMaxWidth(640.0);

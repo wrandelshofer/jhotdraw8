@@ -12,7 +12,6 @@ import org.jhotdraw8.base.converter.IdSupplier;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
-import java.text.ParseException;
 
 /**
  * Converts a {@code String} into the XML String representation.
@@ -26,7 +25,6 @@ import java.text.ParseException;
  */
 public class StringXmlConverter implements Converter<String> {
 
-    private static final long serialVersionUID = 1L;
     private final boolean nullable;
 
     /**
@@ -51,7 +49,7 @@ public class StringXmlConverter implements Converter<String> {
     }
 
     @Override
-    public @Nullable String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) {
         if (in != null) {
             if (in.isEmpty() && nullable) {
                 return null;

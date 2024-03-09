@@ -6,3 +6,4 @@
  * Provides facades of collection interfaces.
  */
 package org.jhotdraw8.icollection.facade;
+

@@ -94,12 +94,12 @@ public class Scale3DCssConverter extends AbstractCssConverter<Point3D> {
 
 
     @Override
-    public @NonNull Point3D getDefaultValue() {
+    public @Nullable Point3D getDefaultValue() {
         return new Point3D(1, 1, 1);
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨Scale3D⟩: ⟨s⟩ ｜ ⟨xs⟩ ⟨ys⟩ ｜ ⟨xs⟩ ⟨ys⟩ ⟨zs⟩";
     }
 

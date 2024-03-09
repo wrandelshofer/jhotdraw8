@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.base.converter;
 
-
 import org.junit.jupiter.api.Test;
 
 import java.net.URI;

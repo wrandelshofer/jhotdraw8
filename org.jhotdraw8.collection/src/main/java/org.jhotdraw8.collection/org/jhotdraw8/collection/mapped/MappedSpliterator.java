@@ -6,6 +6,7 @@
 package org.jhotdraw8.collection.mapped;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -36,12 +37,12 @@ public class MappedSpliterator<E, F> implements Spliterator<E> {
     }
 
     @Override
-    public boolean tryAdvance(Consumer<? super E> action) {
+    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
         return s.tryAdvance(k -> action.accept(mappingFunction.apply(k)));
     }
 
     @Override
-    public Spliterator<E> trySplit() {
+    public @Nullable Spliterator<E> trySplit() {
         Spliterator<? extends F> split = s.trySplit();
         return split == null ? null : new MappedSpliterator<>(split, mappingFunction, characteristics);
     }

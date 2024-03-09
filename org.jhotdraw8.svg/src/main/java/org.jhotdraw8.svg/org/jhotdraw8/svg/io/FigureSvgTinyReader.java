@@ -291,6 +291,7 @@ public class FigureSvgTinyReader {
             dbf.setProperty(XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES, false);
             dbf.setProperty(XMLInputFactory.IS_REPLACING_ENTITY_REFERENCES, false);
             dbf.setProperty(XMLInputFactory.SUPPORT_DTD, false);
+            //noinspection ReturnOfNull
             dbf.setXMLResolver((publicID, systemID, baseURI, namespace) -> null);
 
             XMLStreamReader r = dbf.createXMLStreamReader(in);
@@ -442,7 +443,7 @@ public class FigureSvgTinyReader {
         parent.set(SvgElementFigure.DESC_KEY, readTextContent(r, parent, ctx));
     }
 
-    private Figure readElement(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
+    private @Nullable Figure readElement(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String localName = r.getLocalName();
 
         if (SVG_NAMESPACE.equals(r.getNamespaceURI())) {

@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.css.parser;
 
-import java.io.IOException;
-
 public class CharSequenceCssScanner extends AbstractCssScanner {
     private final CharSequence seq;
 
@@ -15,7 +13,7 @@ public class CharSequenceCssScanner extends AbstractCssScanner {
     }
 
     @Override
-    protected int read() throws IOException {
+    protected int read() {
         return (position < seq.length()) ? seq.charAt((int) position++) : -1;
     }
 

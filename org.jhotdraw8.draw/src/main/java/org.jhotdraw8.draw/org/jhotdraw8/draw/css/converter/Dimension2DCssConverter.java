@@ -66,7 +66,7 @@ public class Dimension2DCssConverter extends AbstractCssConverter<CssDimension2D
     }
 
     @Override
-    public String getHelpText() {
+    public @Nullable String getHelpText() {
         return "Format of ⟨CssDimension2D⟩: ⟨x⟩ ⟨y⟩";
     }
 }

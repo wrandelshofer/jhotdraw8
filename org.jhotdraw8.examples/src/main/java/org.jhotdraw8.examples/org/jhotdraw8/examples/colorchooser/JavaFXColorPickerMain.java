@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 
 public class JavaFXColorPickerMain extends Application {
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         ColorPicker colorPicker = new ColorPicker();
         Pane pane = new Pane();
         pane.getChildren().add(colorPicker);
