@@ -11,6 +11,8 @@ import org.jhotdraw8.css.ast.SourceLocator;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static org.jhotdraw8.css.parser.CssTokenType.TT_AT_KEYWORD;
 import static org.jhotdraw8.css.parser.CssTokenType.TT_BAD_COMMENT;
@@ -131,8 +133,12 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_URL;
  * <p>
  * References:
  * <dl>
- * <dt>CSS Syntax Module Level 3, Chapter 4. Tokenization</dt>
+ * <dt>CSS Syntax Module Level 3, Paragraph 4. Tokenization</dt>
  * <dd><a href="https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#tokenization">w3.org</a></dd>
+ * </dl>
+ * <dl>
+ * <dt>CSS Values and Units Module Level 4, Paragraph 4.5 Resource Locators: the &lt;url&gt; type</dt>
+ * <dd><a href="https://drafts.csswg.org/css-values/#urls">drafts.csswg.org</a></dd>
  * </dl>
  *
  * @author Werner Randelshofer
@@ -220,196 +226,135 @@ public class StreamCssTokenizer implements CssTokenizer {
         stringValue = null;
         numericValue = null;
         switch (ch) {
-        case -1:  // EOF
-            currentToken = TT_EOF;
-            stringValue = "<EOF>";
-            break;
-        case ' ':
-        case '\n':
-        case '\t': {
-            stringBuilder.setLength(0);
-            while (ch == ' ' || ch == '\n' || ch == '\t') {
-                stringBuilder.append((char) ch);
-                ch = in.nextChar();
-            }
-            in.pushBack(ch);
-            currentToken = TT_S;
-            stringValue = stringBuilder.toString();
-            break;
-        }
-        case '~': {
-            int next = in.nextChar();
-            if (next == '=') {
-                currentToken = TT_INCLUDE_MATCH;
-                stringValue = "~=";
-            } else {
-                in.pushBack(next);
-                currentToken = '~';
-                stringValue = String.valueOf((char) ch);
-            }
-            break;
-        }
-        case '|': {
-            int next = in.nextChar();
-            if (next == '=') {
-                currentToken = TT_DASH_MATCH;
-                stringValue = "|=";
-            } else if (next == '|') {
-                currentToken = TT_COLUMN;
-                stringValue = "||";
-            } else {
-                in.pushBack(next);
-                currentToken = '|';
-                stringValue = String.valueOf((char) currentToken);
-            }
-            break;
-        }
-        case '^': {
-            int next = in.nextChar();
-            if (next == '=') {
-                currentToken = TT_PREFIX_MATCH;
-                stringValue = "^=";
-            } else {
-                in.pushBack(next);
-                currentToken = '^';
-                stringValue = String.valueOf((char) currentToken);
-            }
-            break;
-        }
-        case '$': {
-            int next = in.nextChar();
-            if (next == '=') {
-                currentToken = TT_SUFFIX_MATCH;
-                stringValue = "$=";
-            } else {
-                in.pushBack(next);
-                currentToken = '$';
-                stringValue = String.valueOf((char) currentToken);
-            }
-            break;
-        }
-        case '*': {
-            int next = in.nextChar();
-            if (next == '=') {
-                currentToken = TT_SUBSTRING_MATCH;
-                stringValue = "*=";
-            } else {
-                in.pushBack(next);
-                currentToken = '*';
-                stringValue = String.valueOf((char) ch);
-            }
-            break;
-        }
-        case '@': {
-            stringBuilder.setLength(0);
-            if (identMacro(ch = in.nextChar(), stringBuilder)) {
-                currentToken = TT_AT_KEYWORD;
-                stringValue = stringBuilder.toString();
-            } else {
+            case -1:  // EOF
+                currentToken = TT_EOF;
+                stringValue = "<EOF>";
+                break;
+            case ' ':
+            case '\n':
+            case '\t': {
+                stringBuilder.setLength(0);
+                while (ch == ' ' || ch == '\n' || ch == '\t') {
+                    stringBuilder.append((char) ch);
+                    ch = in.nextChar();
+                }
                 in.pushBack(ch);
-                currentToken = '@';
-                stringValue = String.valueOf((char) currentToken);
-            }
-            break;
-        }
-        case '#': {
-            stringBuilder.setLength(0);
-            if (nameMacro(ch = in.nextChar(), stringBuilder)) {
-                currentToken = TT_HASH;
+                currentToken = TT_S;
                 stringValue = stringBuilder.toString();
-            } else {
-                in.pushBack(ch);
-                currentToken = '#';
-                stringValue = String.valueOf((char) currentToken);
+                break;
             }
-            break;
-        }
-        case '\'':
-        case '"': {
-            stringBuilder.setLength(0);
-            if (stringMacro(ch, stringBuilder)) {
-                currentToken = TT_STRING;
-                stringValue = stringBuilder.toString();
-            } else {
-                currentToken = TT_BAD_STRING;
-                stringValue = stringBuilder.toString();
+            case '~': {
+                int next = in.nextChar();
+                if (next == '=') {
+                    currentToken = TT_INCLUDE_MATCH;
+                    stringValue = "~=";
+                } else {
+                    in.pushBack(next);
+                    currentToken = '~';
+                    stringValue = String.valueOf((char) ch);
+                }
+                break;
             }
-            break;
-
-        }
-        case '+':
-        case '.':
-        case '0':
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9': {
-            stringBuilder.setLength(0);
-            unitBuf.setLength(0);
-            if (numMacro(ch, stringBuilder)) {
-                ch = in.nextChar();
-                if (ch == '%') {
-                    currentToken = TT_PERCENTAGE;
-                    stringValue = "%";
-                } else if (identMacro(ch, unitBuf)) {
-                    currentToken = TT_DIMENSION;
-                    stringValue = unitBuf.toString();
+            case '|': {
+                int next = in.nextChar();
+                if (next == '=') {
+                    currentToken = TT_DASH_MATCH;
+                    stringValue = "|=";
+                } else if (next == '|') {
+                    currentToken = TT_COLUMN;
+                    stringValue = "||";
+                } else {
+                    in.pushBack(next);
+                    currentToken = '|';
+                    stringValue = String.valueOf((char) currentToken);
+                }
+                break;
+            }
+            case '^': {
+                int next = in.nextChar();
+                if (next == '=') {
+                    currentToken = TT_PREFIX_MATCH;
+                    stringValue = "^=";
+                } else {
+                    in.pushBack(next);
+                    currentToken = '^';
+                    stringValue = String.valueOf((char) currentToken);
+                }
+                break;
+            }
+            case '$': {
+                int next = in.nextChar();
+                if (next == '=') {
+                    currentToken = TT_SUFFIX_MATCH;
+                    stringValue = "$=";
+                } else {
+                    in.pushBack(next);
+                    currentToken = '$';
+                    stringValue = String.valueOf((char) currentToken);
+                }
+                break;
+            }
+            case '*': {
+                int next = in.nextChar();
+                if (next == '=') {
+                    currentToken = TT_SUBSTRING_MATCH;
+                    stringValue = "*=";
+                } else {
+                    in.pushBack(next);
+                    currentToken = '*';
+                    stringValue = String.valueOf((char) ch);
+                }
+                break;
+            }
+            case '@': {
+                stringBuilder.setLength(0);
+                if (identMacro(ch = in.nextChar(), stringBuilder)) {
+                    currentToken = TT_AT_KEYWORD;
+                    stringValue = stringBuilder.toString();
                 } else {
                     in.pushBack(ch);
-                    currentToken = TT_NUMBER;
+                    currentToken = '@';
+                    stringValue = String.valueOf((char) currentToken);
                 }
-            } else {
-                currentToken = ch;
-                stringValue = String.valueOf((char) currentToken);
+                break;
             }
-            break;
-
-        }
-        case '/': {
-            int next = in.nextChar();
-            if (next == '*') {
+            case '#': {
                 stringBuilder.setLength(0);
-                if (commentAfterSlashStarMacro(stringBuilder)) {
-                    currentToken = TT_COMMENT;
+                if (nameMacro(ch = in.nextChar(), stringBuilder)) {
+                    currentToken = TT_HASH;
+                    stringValue = stringBuilder.toString();
                 } else {
-                    currentToken = TT_BAD_COMMENT;
+                    in.pushBack(ch);
+                    currentToken = '#';
+                    stringValue = String.valueOf((char) currentToken);
                 }
-                stringValue = stringBuilder.toString();
-            } else {
-                in.pushBack(next);
-                currentToken = ch;
-                stringValue = String.valueOf((char) currentToken);
+                break;
             }
-            break;
-
-        }
-        case '-': {
-            int next1 = in.nextChar();
-            if (next1 == '-') {
-                int next2 = in.nextChar();
-                if (next2 == '>') {
-                    stringValue = "-->";
-                    currentToken = TT_CDC;
+            case '\'':
+            case '"': {
+                stringBuilder.setLength(0);
+                if (stringMacro(ch, stringBuilder)) {
+                    currentToken = TT_STRING;
+                    stringValue = stringBuilder.toString();
                 } else {
-                    stringBuilder.setLength(0);
-                    stringBuilder.append("--");
-                    if (next2 == TT_EOF || nameMacro(next2, stringBuilder)) {
-                        currentToken = TT_IDENT;
-                        stringValue = stringBuilder.toString();
-                    } else {
-                        in.pushBack(next2);
-                        in.pushBack(next1);
-                        currentToken = ch;
-                        stringValue = String.valueOf((char) currentToken);
-                    }
+                    currentToken = TT_BAD_STRING;
+                    stringValue = stringBuilder.toString();
                 }
-            } else {
-                in.pushBack(next1);
+                break;
+
+            }
+            case '+':
+            case '.':
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9': {
                 stringBuilder.setLength(0);
                 unitBuf.setLength(0);
                 if (numMacro(ch, stringBuilder)) {
@@ -425,101 +370,162 @@ public class StreamCssTokenizer implements CssTokenizer {
                         currentToken = TT_NUMBER;
                     }
                 } else {
-                    if (identMacro(ch, stringBuilder)) {
-                        next1 = in.nextChar();
-                        if (next1 == '(') {
-                            currentToken = TT_FUNCTION;
-                        } else {
-                            in.pushBack(next1);
-                            currentToken = TT_IDENT;
-                        }
-                        stringValue = stringBuilder.toString();
+                    currentToken = ch;
+                    stringValue = String.valueOf((char) currentToken);
+                }
+                break;
+
+            }
+            case '/': {
+                int next = in.nextChar();
+                if (next == '*') {
+                    stringBuilder.setLength(0);
+                    if (commentAfterSlashStarMacro(stringBuilder)) {
+                        currentToken = TT_COMMENT;
                     } else {
-                        currentToken = ch;
-                        stringValue = String.valueOf((char) currentToken);
+                        currentToken = TT_BAD_COMMENT;
+                    }
+                    stringValue = stringBuilder.toString();
+                } else {
+                    in.pushBack(next);
+                    currentToken = ch;
+                    stringValue = String.valueOf((char) currentToken);
+                }
+                break;
+
+            }
+            case '-': {
+                int next1 = in.nextChar();
+                if (next1 == '-') {
+                    int next2 = in.nextChar();
+                    if (next2 == '>') {
+                        stringValue = "-->";
+                        currentToken = TT_CDC;
+                    } else {
+                        stringBuilder.setLength(0);
+                        stringBuilder.append("--");
+                        if (next2 == TT_EOF || nameMacro(next2, stringBuilder)) {
+                            currentToken = TT_IDENT;
+                            stringValue = stringBuilder.toString();
+                        } else {
+                            in.pushBack(next2);
+                            in.pushBack(next1);
+                            currentToken = ch;
+                            stringValue = String.valueOf((char) currentToken);
+                        }
+                    }
+                } else {
+                    in.pushBack(next1);
+                    stringBuilder.setLength(0);
+                    unitBuf.setLength(0);
+                    if (numMacro(ch, stringBuilder)) {
+                        ch = in.nextChar();
+                        if (ch == '%') {
+                            currentToken = TT_PERCENTAGE;
+                            stringValue = "%";
+                        } else if (identMacro(ch, unitBuf)) {
+                            currentToken = TT_DIMENSION;
+                            stringValue = unitBuf.toString();
+                        } else {
+                            in.pushBack(ch);
+                            currentToken = TT_NUMBER;
+                        }
+                    } else {
+                        if (identMacro(ch, stringBuilder)) {
+                            next1 = in.nextChar();
+                            if (next1 == '(') {
+                                currentToken = TT_FUNCTION;
+                            } else {
+                                in.pushBack(next1);
+                                currentToken = TT_IDENT;
+                            }
+                            stringValue = stringBuilder.toString();
+                        } else {
+                            currentToken = ch;
+                            stringValue = String.valueOf((char) currentToken);
+                        }
                     }
                 }
+                break;
             }
-            break;
-        }
-        case '<': {
-            int next1 = in.nextChar();
-            if (next1 == '!') {
-                int next2 = in.nextChar();
-                if (next2 == '-') {
-                    int next3 = in.nextChar();
-                    if (next3 == '-') {
-                        stringValue = "<!--";
-                        currentToken = TT_CDO;
+            case '<': {
+                int next1 = in.nextChar();
+                if (next1 == '!') {
+                    int next2 = in.nextChar();
+                    if (next2 == '-') {
+                        int next3 = in.nextChar();
+                        if (next3 == '-') {
+                            stringValue = "<!--";
+                            currentToken = TT_CDO;
+                        } else {
+                            in.pushBack(next3);
+                            in.pushBack(next2);
+                            in.pushBack(next1);
+                            currentToken = ch;
+                            stringValue = String.valueOf((char) currentToken);
+                        }
                     } else {
-                        in.pushBack(next3);
                         in.pushBack(next2);
                         in.pushBack(next1);
                         currentToken = ch;
                         stringValue = String.valueOf((char) currentToken);
                     }
                 } else {
-                    in.pushBack(next2);
                     in.pushBack(next1);
                     currentToken = ch;
                     stringValue = String.valueOf((char) currentToken);
                 }
-            } else {
-                in.pushBack(next1);
-                currentToken = ch;
-                stringValue = String.valueOf((char) currentToken);
+                break;
             }
-            break;
-        }
-        case 'u':
-        case 'U': {
-            // FIXME implement UNICODE_RANGE token
-            stringBuilder.setLength(0);
-            if (identMacro(ch, stringBuilder)) {
-                int next1 = in.nextChar();
-                if (next1 == '(') {
-                    stringValue = stringBuilder.toString();
-                    if (stringValue.equalsIgnoreCase("url")) {
-                        stringBuilder.setLength(0);
-                        if (uriMacro(stringBuilder)) {
-                            currentToken = TT_URL;
-                        } else {
-                            currentToken = TT_BAD_URI;
-                        }
+            case 'u':
+            case 'U': {
+                // FIXME implement UNICODE_RANGE token
+                stringBuilder.setLength(0);
+                if (identMacro(ch, stringBuilder)) {
+                    int next1 = in.nextChar();
+                    if (next1 == '(') {
                         stringValue = stringBuilder.toString();
+                        if (stringValue.equalsIgnoreCase("url")) {
+                            stringBuilder.setLength(0);
+                            if (uriMacro(stringBuilder)) {
+                                currentToken = TT_URL;
+                            } else {
+                                currentToken = TT_BAD_URI;
+                            }
+                            stringValue = stringBuilder.toString();
+                        } else {
+                            currentToken = TT_FUNCTION;
+                        }
                     } else {
-                        currentToken = TT_FUNCTION;
+                        in.pushBack(next1);
+                        currentToken = TT_IDENT;
+                        stringValue = stringBuilder.toString();
                     }
                 } else {
-                    in.pushBack(next1);
-                    currentToken = TT_IDENT;
-                    stringValue = stringBuilder.toString();
+                    currentToken = ch;
+                    stringValue = String.valueOf((char) currentToken);
                 }
-            } else {
-                currentToken = ch;
-                stringValue = String.valueOf((char) currentToken);
+                break;
             }
-            break;
-        }
 
-        default: {
-            stringBuilder.setLength(0);
-            if (identMacro(ch, stringBuilder)) {
-                int next1 = in.nextChar();
-                if (next1 == '(') {
-                    stringValue = stringBuilder.toString();
-                    currentToken = TT_FUNCTION;
+            default: {
+                stringBuilder.setLength(0);
+                if (identMacro(ch, stringBuilder)) {
+                    int next1 = in.nextChar();
+                    if (next1 == '(') {
+                        stringValue = stringBuilder.toString();
+                        currentToken = TT_FUNCTION;
+                    } else {
+                        in.pushBack(next1);
+                        currentToken = TT_IDENT;
+                        stringValue = stringBuilder.toString();
+                    }
                 } else {
-                    in.pushBack(next1);
-                    currentToken = TT_IDENT;
-                    stringValue = stringBuilder.toString();
+                    currentToken = ch;
+                    stringValue = String.valueOf((char) currentToken);
                 }
-            } else {
-                currentToken = ch;
-                stringValue = String.valueOf((char) currentToken);
+                break;
             }
-            break;
-        }
         }
         endPosition = (int) in.getPosition();
         return currentToken;
@@ -765,13 +771,13 @@ public class StreamCssTokenizer implements CssTokenizer {
 
         if (count < 6) { // => could be followed by whitespace
             switch (ch) {
-            case ' ':
-            case '\t':
-            case '\n': // linebreaks are preprocssed by scanner
-                // consume char
-                break;
-            default:
-                in.pushBack(ch);
+                case ' ':
+                case '\t':
+                case '\n': // linebreaks are preprocssed by scanner
+                    // consume char
+                    break;
+                default:
+                    in.pushBack(ch);
             }
         } else {
             in.pushBack(ch);
@@ -861,7 +867,7 @@ public class StreamCssTokenizer implements CssTokenizer {
         }
         if (ch == '\'' || ch == '"') {
             // consume string
-            if (!stringMacro(ch, buf)) {
+            if (!uriStringMacro(ch, buf)) {
                 return false;
             }
             ch = in.nextChar();
@@ -929,6 +935,101 @@ public class StreamCssTokenizer implements CssTokenizer {
                 buf.append((char) ch);
             }
         }
+    }
+
+    /**
+     * 'string' macro for URI.
+     * <p>
+     * According to "CSS Values and Units Module Level 4" the String in the URI function
+     * does not need to be fully URL-encoded.
+     * <p>
+     * We encode all not yet encoded characters on the fly:
+     * <ul>
+     *     <li>The alphanumeric characters "a" through "z", "A" through "Z" and "0" through "9" remain the same.</li>
+     *     <li>The special characters ".", "-", "+", "*", "%", "'", '"', '/', ':', ',' , and "_" remain the same.</li>
+     *     <li>The space character " " is converted into a plus sign "+".</li>
+     *     <li>All other characters are unsafe and are first converted into one or more bytes using some encoding scheme.
+     *     Then each byte is represented by the 3-character string "%xy", where xy is the two-digit hexadecimal
+     *     representation of the byte. The recommended encoding scheme to use is UTF-8.
+     *     However, for compatibility reasons, if an encoding is not specified, then the default charset is used.</li>
+     * </ul>
+     * <p>
+     * References:
+     * <dl>
+     * <dt>CSS Values and Units Module Level 4, Paragraph 4.5 Resource Locators: the &lt;url&gt; type</dt>
+     * <dd><a href="https://drafts.csswg.org/css-values/#urls">drafts.csswg.org</a></dd>
+     * </dl>
+     *
+     * @param ch  current character, must be a quote character
+     * @param buf the token that we are currently building
+     * @return true on success
+     */
+    private boolean uriStringMacro(int ch, @NonNull StringBuilder buf) throws IOException {
+        int quote = ch;
+        if (quote != '\'' && quote != '"') {
+            throw new IllegalArgumentException("Illegal quote character=\"" + (char) ch + "\".");
+        }
+        while (true) {
+            ch = in.nextChar();
+            if (ch < 0) {
+                return false;
+            } else if (ch == '\\') {
+                if (!escapeMacro(ch, buf)) {
+                    int nextch = in.nextChar();
+                    if (nextch == '\n') {
+                        buf.append("%0a");
+                    } else {
+                        in.pushBack(nextch);
+                        in.pushBack(ch);
+                        return false;
+                    }
+                }
+            } else if (ch == '\n') {
+                in.pushBack(ch);
+                return false;
+            } else if (ch == quote) {
+                return true;
+            } else if (ch < safeUriChars.length && safeUriChars[ch]) {
+                buf.append((char) ch);
+            } else if (ch == ' ') {
+                buf.append('+');
+            } else {
+                byte[] bytes = Character.toString(ch).getBytes(StandardCharsets.UTF_8);
+                for (byte b : bytes) {
+                    buf.append("%");
+                    buf.append(hexChars[b >>> 4]);
+                    buf.append(hexChars[b & 0xf]);
+                }
+            }
+        }
+    }
+
+
+    private final static boolean[] safeUriChars;
+
+    static {
+        safeUriChars = new boolean[128];
+        Arrays.fill(safeUriChars, 'a', 'z' + 1, true);
+        Arrays.fill(safeUriChars, 'A', 'Z' + 1, true);
+        Arrays.fill(safeUriChars, '0', '9' + 1, true);
+        Arrays.fill(safeUriChars, '.', '.' + 1, true);
+        Arrays.fill(safeUriChars, '-', '-' + 1, true);
+        Arrays.fill(safeUriChars, '*', '*' + 1, true);
+        Arrays.fill(safeUriChars, '%', '%' + 1, true);
+        Arrays.fill(safeUriChars, '+', '+' + 1, true);
+        Arrays.fill(safeUriChars, '"', '"' + 1, true);
+        Arrays.fill(safeUriChars, '\'', '\'' + 1, true);
+        Arrays.fill(safeUriChars, '/', '/' + 1, true);
+        Arrays.fill(safeUriChars, '_', '_' + 1, true);
+        Arrays.fill(safeUriChars, ':', ':' + 1, true);
+        Arrays.fill(safeUriChars, ',', ',' + 1, true);
+    }
+
+    private final static char[] hexChars;
+
+    static {
+        hexChars = new char[16];
+        for (int i = 0; i < 16; i++) hexChars[i] = (char) (i < 10 ? '0' + i : 'A' + i - 10);
     }
 
     @Override

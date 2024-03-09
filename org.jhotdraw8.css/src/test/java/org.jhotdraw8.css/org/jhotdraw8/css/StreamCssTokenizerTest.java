@@ -125,7 +125,9 @@ public class StreamCssTokenizerTest {
                 dynamicTest("58", () -> testTokenizer("url(   http://www. w3.html)", "-6:http://www. -2:w3 .:. -2:html ):)")),
                 dynamicTest("59", () -> testTokenizer("--main-color", "-2:--main-color")),
                 dynamicTest("60", () -> testTokenizer("--", "-2:--")),
-                dynamicTest("61", () -> testTokenizer("--1", "-2:--1"))
+                dynamicTest("61", () -> testTokenizer("--1", "-2:--1")),
+                dynamicTest("70", () -> testTokenizer("url(\"data:image/svg+xml,<svg width='100%25' height='100%25' viewBox='0 0 1600+800'></svg>\")", "-12:data:image/svg+xml,%3Csvg+width%3D'100%25'+height%3D'100%25'+viewBox%3D'0+0+1600+800'%3E%3C/svg%3E")),
+                dynamicTest("71", () -> testTokenizer("url(\"data:image/svg+xml,<svg title='😀'></svg>\")", "-12:data:image/svg+xml,%3Csvg+title%3D'%3F%3F'%3E%3C/svg%3E"))
                 //
         );
     }
