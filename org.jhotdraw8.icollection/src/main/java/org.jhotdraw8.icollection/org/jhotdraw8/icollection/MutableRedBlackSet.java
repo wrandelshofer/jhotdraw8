@@ -8,6 +8,7 @@ import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 import org.jhotdraw8.icollection.navigable.DescendingNavigableSetView;
+import org.jhotdraw8.icollection.navigable.SubsetNavigableSetView;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
@@ -201,13 +202,14 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @NonNull
     @Override
     public NavigableSet<E> headSet(E toElement, boolean inclusive) {
-        return null;
+        return new SubsetNavigableSetView<>(this, this::getModCount,
+                true, null, true, false, toElement, inclusive, true);
     }
 
     @NonNull
     @Override
     public SortedSet<E> headSet(E toElement) {
-        return null;
+        return headSet(toElement, false);
     }
 
     @Nullable
@@ -314,7 +316,8 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @NonNull
     @Override
     public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
-        return null;
+        return new SubsetNavigableSetView<>(this, this::getModCount,
+                false, fromElement, fromInclusive, false, toElement, toInclusive, true);
     }
 
     @NonNull
@@ -326,7 +329,8 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @NonNull
     @Override
     public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
-        return null;
+        return new SubsetNavigableSetView<>(this, this::getModCount,
+                false, fromElement, inclusive, true, null, true, true);
     }
 
     @NonNull
