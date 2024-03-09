@@ -608,7 +608,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                     alert.getDialogPane().setMaxWidth(640.0);
                     alert.showAndWait();
                     exit();
-                    return null;
+            //noinspection ReturnOfNull
+            return null;
                 }
         );
     }
@@ -646,7 +647,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                     alert.getDialogPane().setMaxWidth(640.0);
                     alert.showAndWait();
                     exit();
-                    return null;
+            //noinspection ReturnOfNull
+            return null;
                 }
         );
     }

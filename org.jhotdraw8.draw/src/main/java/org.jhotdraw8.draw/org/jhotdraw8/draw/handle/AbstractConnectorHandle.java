@@ -180,7 +180,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         model.set(o, targetKey, newConnectedFigure);
     }
 
-    protected ConnectorAndConnectedFigure find(CssPoint2D pointInWorld, ConnectingFigure o, ConnectableFigure cff, MouseEvent mouseEvent,
+    protected @Nullable ConnectorAndConnectedFigure find(@NonNull CssPoint2D pointInWorld, @NonNull ConnectingFigure o, @NonNull ConnectableFigure cff, @NonNull MouseEvent mouseEvent,
                                                double tolerance) {
         final Connector connector = cff.findConnector(cff.worldToLocal(pointInWorld.getConvertedValue()), o, tolerance);
         return connector == null ? null : new ConnectorAndConnectedFigure(connector, cff);

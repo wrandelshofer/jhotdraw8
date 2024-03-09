@@ -205,6 +205,7 @@ public abstract class AbstractColorSlider extends Pane {
                             colorRect.setFitWidth(-1);
                             colorRect.setFitHeight(-1);
                         }
+                        //noinspection ReturnOfNull
                         newPixelBuffer.updateBuffer(b -> null);
                         pixelBuffer = newPixelBuffer;
                     } else if (!(e instanceof CancellationException)) {
@@ -220,6 +221,7 @@ public abstract class AbstractColorSlider extends Pane {
                     // Fill future is done
                     fillFuture = null;
                 });
+                //noinspection ReturnOfNull
                 return null;
             });
         }

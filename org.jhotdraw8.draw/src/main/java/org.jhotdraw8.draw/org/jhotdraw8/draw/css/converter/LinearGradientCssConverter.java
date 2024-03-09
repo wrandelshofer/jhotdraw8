@@ -268,18 +268,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
         return new CssLinearGradient(fromTo.startX, fromTo.startY, fromTo.endX, fromTo.endY, fromTo.isProportional, cycleMethod, stops.toArray(new CssStop[0]));
     }
 
-    private static class PointToPoint {
-
-        final public double startX, startY, endX, endY;
-        final public boolean isProportional;
-
-        public PointToPoint(double startX, double startY, double endX, double endY, boolean isProportional) {
-            this.startX = startX;
-            this.startY = startY;
-            this.endX = endX;
-            this.endY = endY;
-            this.isProportional = isProportional;
-        }
+    private record PointToPoint(double startX, double startY, double endX, double endY, boolean isProportional) {
 
     }
 

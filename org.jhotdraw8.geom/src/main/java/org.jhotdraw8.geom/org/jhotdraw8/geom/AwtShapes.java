@@ -189,6 +189,6 @@ public class AwtShapes {
     /**
      * Don't let anyone instantiate this class.
      */
-    private void AwtShapes() {
+    private AwtShapes() {
     }
 }

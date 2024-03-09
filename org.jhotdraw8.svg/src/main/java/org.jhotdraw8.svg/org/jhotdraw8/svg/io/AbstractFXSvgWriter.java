@@ -150,11 +150,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                                                               paragraph, @NonNull AttributedCharacterIterator styledText,
                                                       float verticalPos, float maxVerticalPos, float leftMargin,
                                                       float rightMargin, float @NonNull [] tabStops, int tabCount,
-                                                      @NonNull TextAlignment textAlignment, double lineSpacing) throws XMLStreamException {
+                                                      @NonNull TextAlignment textAlignment, float lineSpacing) throws XMLStreamException {
         // This method is based on the code sample given
         // in the class comment of java.awt.font.LineBreakMeasurer,
         // assume styledText is an AttributedCharacterIterator, and the number
         // of tabs in styledText is tabCount
+
 
         Rectangle2D.Double paragraphBounds = new Rectangle2D.Double(leftMargin, verticalPos, 0, 0);
         int[] tabLocations = new int[tabCount + 1];
@@ -333,7 +334,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                     int tabCount = paragraphs[i].split("\t").length - 1;
                     Rectangle2D.Double paragraphBounds = drawParagraph(w, frc,
                             paragraphs[i], as.getIterator(), verticalPos, maxVerticalPos, leftMargin, rightMargin, tabStops, tabCount, textAlignment,
-                            lineSpacing);
+                            (float) lineSpacing);
                     verticalPos = (float) (paragraphBounds.y + paragraphBounds.height + lineSpacing);
                     if (verticalPos > maxVerticalPos) {
                         break;

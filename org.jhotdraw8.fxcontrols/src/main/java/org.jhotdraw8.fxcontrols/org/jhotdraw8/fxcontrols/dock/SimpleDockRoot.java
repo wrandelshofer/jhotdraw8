@@ -364,7 +364,8 @@ public class SimpleDockRoot
         }
     }
 
-    private record DragData(DockParent pickedDock, DropZone zone, Bounds bounds, Insets insets, boolean isRootPicked) {
+    private record DragData(@NonNull DockParent pickedDock, @NonNull DropZone zone, @NonNull Bounds bounds,
+                            @NonNull Insets insets, boolean isRootPicked) {
     }
 
     public Supplier<Track> getZSupplier() {

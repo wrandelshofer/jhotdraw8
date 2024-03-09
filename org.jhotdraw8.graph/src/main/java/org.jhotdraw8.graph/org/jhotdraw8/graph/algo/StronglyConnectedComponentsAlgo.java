@@ -92,7 +92,6 @@ public class StronglyConnectedComponentsAlgo {
         Deque<Enumerator<V>> enumeratorStack = new ArrayDeque<>();
         Enumerator<V> enumerator = new IteratorEnumeratorFacade<>(vertices.iterator());
 
-        STRONGCONNECT:
         while (true) {
             if (enumerator.moveNext()) {
                 V v = enumerator.current();

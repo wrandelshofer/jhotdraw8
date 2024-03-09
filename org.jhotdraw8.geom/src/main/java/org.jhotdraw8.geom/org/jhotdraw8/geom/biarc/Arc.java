@@ -5,6 +5,8 @@
 package org.jhotdraw8.geom.biarc;
 
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.awt.geom.Point2D;
 
 /**
@@ -17,8 +19,8 @@ import java.awt.geom.Point2D;
  * @param p1         Start point of the arc.
  * @param p2         End point of the arc.
  */
-public record Arc(Point2D.Double c, double r, double startAngle, double sweepAngle, Point2D.Double p1,
-                  Point2D.Double p2) {
+public record Arc(Point2D.@NonNull Double c, double r, double startAngle, double sweepAngle, Point2D.@NonNull Double p1,
+                  Point2D.@NonNull Double p2) {
 
     /**
      * Orientation of the arc.

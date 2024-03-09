@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
@@ -15,7 +16,8 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
  * locations on the figure.
  */
 public interface TextEditableFigure extends Figure {
-    record TextEditorData(TextEditableFigure figure, Bounds boundsInLocal, MapAccessor<String> textKey) {
+    record TextEditorData(@NonNull TextEditableFigure figure, @NonNull Bounds boundsInLocal,
+                          @NonNull MapAccessor<String> textKey) {
     }
 
     /**

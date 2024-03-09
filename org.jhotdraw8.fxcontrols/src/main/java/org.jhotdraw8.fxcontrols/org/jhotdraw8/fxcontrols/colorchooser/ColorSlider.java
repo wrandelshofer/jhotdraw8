@@ -22,6 +22,7 @@ import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.color.NamedColorSpace;
 
@@ -140,7 +141,7 @@ public class ColorSlider extends AbstractColorSlider {
     }
 
     @Override
-    protected AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+    protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
         if (getDisplayColorSpace() == null || getSourceColorSpace() == null || getTargetColorSpace() == null) {
             return null;
         }

@@ -1,6 +1,7 @@
 package org.jhotdraw8.fxcollection.typesafekey;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -10,7 +11,7 @@ import java.util.Objects;
 public record SimpleParameterizedType(@NonNull Type rawType,
                                       @NonNull Type... actualTypeArguments) implements ParameterizedType {
 
-    public Type getTypeArgument(int i) {
+    public @NonNull Type getTypeArgument(int i) {
         return actualTypeArguments[i];
     }
 
@@ -19,7 +20,7 @@ public record SimpleParameterizedType(@NonNull Type rawType,
     }
 
     @Override
-    public String getTypeName() {
+    public @NonNull String getTypeName() {
         StringBuilder b = new StringBuilder();
         b.append(rawType.getTypeName());
         b.append('<');
@@ -33,7 +34,7 @@ public record SimpleParameterizedType(@NonNull Type rawType,
     }
 
     @Override
-    public Type[] getActualTypeArguments() {
+    public Type @NonNull [] getActualTypeArguments() {
         return actualTypeArguments.clone();
     }
 
@@ -43,12 +44,12 @@ public record SimpleParameterizedType(@NonNull Type rawType,
     }
 
     @Override
-    public Type getOwnerType() {
+    public @Nullable Type getOwnerType() {
         return null;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         SimpleParameterizedType that = (SimpleParameterizedType) o;

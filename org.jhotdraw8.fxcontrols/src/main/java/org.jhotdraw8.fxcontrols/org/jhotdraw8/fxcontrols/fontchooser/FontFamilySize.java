@@ -4,5 +4,7 @@
  */
 package org.jhotdraw8.fxcontrols.fontchooser;
 
-public record FontFamilySize(String family, double size) {
+import org.jhotdraw8.annotation.NonNull;
+
+public record FontFamilySize(@NonNull String family, double size) {
 }

@@ -63,7 +63,6 @@ public class SvgPaths {
             double x = 0, y = 0; // current point
             double cx1 = 0, cy1 = 0, cx2 = 0, cy2 = 0;// control points
             double ix = 0, iy = 0; // initial point of subpath
-            Commands:
             while (tt.nextToken() != StreamPosTokenizer.TT_EOF) {
                 if (tt.ttype > 0) {
                     command = (char) tt.ttype;

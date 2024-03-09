@@ -936,8 +936,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         }
     }
 
-    private record LookupEntry(int position, StyleRule styleRule,
-                               Declaration declaration) implements Comparable<LookupEntry> {
+    private record LookupEntry(int position, @NonNull StyleRule styleRule,
+                               @NonNull Declaration declaration) implements Comparable<LookupEntry> {
 
         @Override
             public int compareTo(@NonNull LookupEntry o) {

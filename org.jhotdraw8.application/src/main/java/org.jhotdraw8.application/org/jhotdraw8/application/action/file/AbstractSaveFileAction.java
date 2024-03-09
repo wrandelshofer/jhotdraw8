@@ -167,6 +167,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
                     oldFocusOwner.requestFocus();
                 }
             }
+            //noinspection ReturnOfNull
             return null;
         });
     }

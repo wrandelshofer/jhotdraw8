@@ -135,7 +135,7 @@ public class CubicCurveCharacteristics {
      * @return returns the coordinates of x3,y3 or null if the mapping
      * failed
      */
-    public static Point2D.Double canonicalForm(double x0, double y0,
+    public static Point2D.@Nullable Double canonicalForm(double x0, double y0,
                                                double x1, double y1,
                                                double x2, double y2,
                                                double x3, double y3

@@ -68,7 +68,6 @@ public class IndexedStronglyConnectedComponentsAlgo {
         Deque<Enumerator.OfInt> enumeratorStack = new ArrayDeque<>();
         Enumerator.OfInt enumerator = new IntRangeEnumerator(vertexCount);
 
-        STRONGCONNECT:
         while (true) {
             if (enumerator.moveNext()) {
                 int v = enumerator.currentAsInt();

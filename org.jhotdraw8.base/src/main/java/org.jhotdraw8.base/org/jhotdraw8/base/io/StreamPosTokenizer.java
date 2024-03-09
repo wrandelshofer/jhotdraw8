@@ -590,7 +590,6 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
 
         startpos = readpos - 1;
 
-        hex:
         if (((ctype & CT_DIGIT) != 0)
                 && c == '0' && isParseHexNumbers) {
             c = read();

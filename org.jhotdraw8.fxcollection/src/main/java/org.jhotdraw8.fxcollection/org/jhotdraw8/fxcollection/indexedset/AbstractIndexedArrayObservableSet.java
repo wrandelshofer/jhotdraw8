@@ -636,6 +636,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
         @Override
         public boolean containsAll(@NonNull Collection<?> c) {
+            //noinspection SlowListContainsAll
             return sublist.containsAll(c);
         }
 

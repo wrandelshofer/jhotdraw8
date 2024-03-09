@@ -200,7 +200,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
 
     @Override
     public State getState() {
-        return null;
+        return state.get();
     }
 
     @Override

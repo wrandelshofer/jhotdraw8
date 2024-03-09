@@ -531,7 +531,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
         return getConverter(key).toString(idFactory, value);
     }
 
-    private record FigureAccessorKey<T>(Class<? extends Figure> figure, MapAccessor<T> acc) {
+    private record FigureAccessorKey<T>(@NonNull Class<? extends Figure> figure, @NonNull MapAccessor<T> acc) {
 
         @Override
         public String toString() {

@@ -225,6 +225,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
                 app.getRecentUris().put(uri, dataFormat);
                 doIt(v);
             }
+            //noinspection ReturnOfNull
             return null;
         });
     }

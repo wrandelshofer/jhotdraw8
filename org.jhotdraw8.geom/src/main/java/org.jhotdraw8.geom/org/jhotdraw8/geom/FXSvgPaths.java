@@ -255,7 +255,6 @@ public class FXSvgPaths {
             double cx1 = 0, cy1 = 0, cx2 = 0, cy2 = 0;// control points
             double ix = 0, iy = 0; // initial point of subpath
             boolean first = true;
-            Commands:
             while (tt.nextToken() != StreamPosTokenizer.TT_EOF) {
                 double px = x, py = y; // previous points
                 if (tt.ttype > 0) {
@@ -266,316 +265,304 @@ public class FXSvgPaths {
                 }
 
                 switch (command) {
-                case 'M':
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'M'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'M'");
-                    y = tt.nval;
-                    builder.add(new MoveTo(x, y));
-                    next = 'L';
-                    ix = cx2 = cx1 = x;
-                    iy = cy2 = cy1 = y;
-                    break;
-                case 'm':
-                    // relative-moveto dx dy
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'm'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'm'");
-                    y = tt.nval;
-                    MoveTo moveTo = new MoveTo(x, y);
-                    if (!first) {
-                        // The first element of a path can not be relative.
-                        moveTo.setAbsolute(false);
+                    case 'M' -> {
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'M'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'M'");
+                        y = tt.nval;
+                        builder.add(new MoveTo(x, y));
+                        next = 'L';
+                        ix = cx2 = cx1 = x;
+                        iy = cy2 = cy1 = y;
                     }
-                    builder.add(moveTo);
-                    next = 'l';
-                    ix = cx2 = cx1 = x += px;
-                    iy = cy2 = cy1 = y += px;
+                    case 'm' -> {
+                        // relative-moveto dx dy
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'm'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'm'");
+                        y = tt.nval;
+                        MoveTo moveTo = new MoveTo(x, y);
+                        if (!first) {
+                            // The first element of a path can not be relative.
+                            moveTo.setAbsolute(false);
+                        }
+                        builder.add(moveTo);
+                        next = 'l';
+                        ix = cx2 = cx1 = x += px;
+                        iy = cy2 = cy1 = y += px;
+                    }
+                    case 'Z' -> {
+                        // close path
+                        builder.add(new ClosePath());
+                        next = 'Z';
+                        cx2 = cx1 = x = ix;
+                        cy2 = cy1 = y = iy;
+                    }
+                    case 'z' -> {
+                        // close path
+                        ClosePath closePath = new ClosePath();
+                        closePath.setAbsolute(false);
+                        builder.add(closePath);
+                        next = 'z';
+                        cx2 = cx1 = x = ix;
+                        cy2 = cy1 = y = iy;
+                    }
+                    case 'L' -> {
+                        // absolute-lineto x y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'L'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'L'");
+                        y = tt.nval;
+                        builder.add(new LineTo(x, y));
+                        next = 'L';
+                        cx2 = cx1 = x;
+                        cy2 = cy1 = y;
+                    }
+                    case 'l' -> {
+                        // relative-lineto dx dy
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'l'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'l'");
+                        y = tt.nval;
+                        LineTo lineTo = new LineTo(x, y);
+                        lineTo.setAbsolute(false);
+                        builder.add(lineTo);
+                        next = 'l';
+                        cx2 = cx1 = x += px;
+                        cy2 = cy1 = y += px;
+                    }
+                    case 'H' -> {
+                        // absolute-horizontal-lineto x
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'H'");
+                        x = tt.nval;
+                        builder.add(new HLineTo(x));
+                        next = 'H';
+                        cx2 = cx1 = x;
+                        cy2 = cy1 = y;
+                    }
+                    case 'h' -> {
+                        // relative-horizontal-lineto dx
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'h'");
+                        x = tt.nval;
+                        HLineTo hLineTo = new HLineTo(x);
+                        hLineTo.setAbsolute(false);
+                        builder.add(hLineTo);
+                        next = 'h';
+                        cx2 = cy1 = x += px;
+                        cy2 = cy1 = y;
+                    }
+                    case 'V' -> {
+                        // absolute-vertical-lineto y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'V'");
+                        y = tt.nval;
+                        builder.add(new VLineTo(y));
+                        next = 'V';
+                        cx2 = cx1 = x;
+                        cy2 = cy1 = y;
+                    }
+                    case 'v' -> {
+                        // relative-vertical-lineto dy
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'v'");
+                        y = tt.nval;
+                        VLineTo vLineTo = new VLineTo(y);
+                        vLineTo.setAbsolute(false);
+                        builder.add(vLineTo);
+                        next = 'v';
+                        cx2 = cy1 = x;
+                        cy2 += cy1 = y += py;
+                    }
+                    case 'C' -> {
+                        // absolute-curveto x1 y1 x2 y2 x y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'C'");
+                        cx1 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y1 coordinate missing for 'C'");
+                        cy1 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x2 coordinate missing for 'C'");
+                        cx2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y2 coordinate missing for 'C'");
+                        cy2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'C'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'C'");
+                        y = tt.nval;
+                        builder.add(new CubicCurveTo(cx1, cy1, cx2, cy2, x, y));
+                        next = 'C';
+                    }
+                    case 'c' -> {
+                        // relative-curveto dx1 dy1 dx2 dy2 dx dy
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx1 coordinate missing for 'c'");
+                        cx1 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy1 coordinate missing for 'c'");
+                        cy1 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx2 coordinate missing for 'c'");
+                        cx2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy2 coordinate missing for 'c'");
+                        cy2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'c'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'c'");
+                        y = tt.nval;
+                        CubicCurveTo cubi = new CubicCurveTo(cx1, cy1, cx2, cy2, x, y);
+                        cubi.setAbsolute(false);
+                        builder.add(cubi);
+                        next = 'c';
+                        cx1 += px;
+                        cy1 += py;
+                        cx2 += px;
+                        cy2 += py;
+                        x += py;
+                        y += py;
+                    }
+                    case 'S' -> {
+                        // absolute-shorthand-curveto x2 y2 x y
+                        cx1 = x - cx2 + x;
+                        cy1 = x - cy2 + y;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x2 coordinate missing for 'S'");
+                        cx2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y2 coordinate missing for 'S'");
+                        cy2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'S'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'S'");
+                        y = tt.nval;
+                        builder.add(new CubicCurveTo(cx1, cy1, cx2, cy2, x, y));
+                        next = 'S';
+                    }
+                    case 's' -> {
+                        // relative-shorthand-curveto dx2 dy2 dx dy
+                        cx1 = x - cx2;
+                        cy1 = x - cy2;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx2 coordinate missing for 's'");
+                        cx2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy2 coordinate missing for 's'");
+                        cy2 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 's'");
+                        x += tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 's'");
+                        y += tt.nval;
+                        CubicCurveTo smoothCurveTo = new CubicCurveTo(cx1, cy1, cx2, cy2, x, y);
+                        smoothCurveTo.setAbsolute(false);
+                        builder.add(smoothCurveTo);
+                        next = 's';
+                        cx1 += px;
+                        cy1 += px;
+                        cx2 += px;
+                        cy2 += px;
+                        x += px;
+                        y += py;
+                    }
+                    case 'Q' -> {
+                        // absolute-quadto x1 y1 x y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'Q'");
+                        cx1 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y1 coordinate missing for 'Q'");
+                        cy1 = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'Q'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'Q'");
+                        y = tt.nval;
+                        builder.add(new QuadCurveTo(cx1, cy1, x, y));
+                        next = 'Q';
+                        cx2 = x;
+                        cy2 = y;
+                    }
+                    case 'q' -> {
+                        // relative-quadto dx1 dy1 dx dy
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx1 coordinate missing for 'q'");
+                        cx1 = x + tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy1 coordinate missing for 'q'");
+                        cy1 = y + tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'q'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'q'");
+                        y = tt.nval;
+                        QuadCurveTo quadCurveTo = new QuadCurveTo(cx1, cy1, x, y);
+                        quadCurveTo.setAbsolute(false);
+                        builder.add(quadCurveTo);
+                        next = 'q';
+                        cx2 = x;
+                        cy2 = y;
+                    }
+                    case 'T' -> {
+                        // absolute-shorthand-quadto x y
+                        cx1 = x - cx1 + x;
+                        cy1 = x - cy1 + y;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'T'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'T'");
+                        y = tt.nval;
+                        builder.add(new QuadCurveTo(cx1, cy1, x, y));
+                        next = 'T';
+                        cx2 = x;
+                        cy2 = y;
+                    }
+                    case 't' -> {
+                        // relative-shorthand-quadto dx dy
+                        cx1 = x - cx1;
+                        cy1 = x - cy1;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 't'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 't'");
+                        y = tt.nval;
+                        QuadCurveTo smoothQuadCurveTo = new QuadCurveTo(cx1, cy1, x, y);
+                        smoothQuadCurveTo.setAbsolute(false);
+                        builder.add(smoothQuadCurveTo);
+                        next = 's';
+                        cx1 += px;
+                        cy1 += px;
+                        cx2 = x += px;
+                        cy2 = y += px;
+                    }
+                    case 'A' -> {
+                        // absolute-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
+                        // If rX or rY have negative signs, these are dropped;
+                        // the absolute value is used instead.
+                        double rx = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "ry coordinate missing for 'A'");
+                        double ry = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x-axis-rotation missing for 'A'");
+                        double xAxisRotation = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "large-arc-flag missing for 'A'");
+                        boolean largeArcFlag = tt.nval != 0;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "sweep-flag missing for 'A'");
+                        boolean sweepFlag = tt.nval != 0;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'A'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'A'");
+                        y = tt.nval;
 
-                    break;
-                case 'Z':
-                    // close path
-                    builder.add(new ClosePath());
-                    next = 'Z';
-                    cx2 = cx1 = x = ix;
-                    cy2 = cy1 = y = iy;
-                    break;
-                case 'z':
-                    // close path
-                    ClosePath closePath = new ClosePath();
-                    closePath.setAbsolute(false);
-                    builder.add(closePath);
-                    next = 'z';
-                    cx2 = cx1 = x = ix;
-                    cy2 = cy1 = y = iy;
-                    break;
-                case 'L':
-                    // absolute-lineto x y
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'L'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'L'");
-                    y = tt.nval;
-                    builder.add(new LineTo(x, y));
-                    next = 'L';
-                    cx2 = cx1 = x;
-                    cy2 = cy1 = y;
-                    break;
-                case 'l':
-                    // relative-lineto dx dy
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'l'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'l'");
-                    y = tt.nval;
-                    LineTo lineTo = new LineTo(x, y);
-                    lineTo.setAbsolute(false);
-                    builder.add(lineTo);
-                    next = 'l';
-                    cx2 = cx1 = x += px;
-                    cy2 = cy1 = y += px;
-
-                    break;
-                case 'H':
-                    // absolute-horizontal-lineto x
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'H'");
-                    x = tt.nval;
-                    builder.add(new HLineTo(x));
-                    next = 'H';
-                    cx2 = cx1 = x;
-                    cy2 = cy1 = y;
-                    break;
-                case 'h':
-                    // relative-horizontal-lineto dx
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'h'");
-                    x = tt.nval;
-                    HLineTo hLineTo = new HLineTo(x);
-                    hLineTo.setAbsolute(false);
-                    builder.add(hLineTo);
-                    next = 'h';
-                    cx2 = cy1 = x += px;
-                    cy2 = cy1 = y;
-                    break;
-                case 'V':
-                    // absolute-vertical-lineto y
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'V'");
-                    y = tt.nval;
-                    builder.add(new VLineTo(y));
-                    next = 'V';
-                    cx2 = cx1 = x;
-                    cy2 = cy1 = y;
-                    break;
-                case 'v':
-                    // relative-vertical-lineto dy
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'v'");
-                    y = tt.nval;
-                    VLineTo vLineTo = new VLineTo(y);
-                    vLineTo.setAbsolute(false);
-                    builder.add(vLineTo);
-                    next = 'v';
-                    cx2 = cy1 = x;
-                    cy2 += cy1 = y += py;
-                    break;
-                case 'C':
-                    // absolute-curveto x1 y1 x2 y2 x y
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'C'");
-                    cx1 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y1 coordinate missing for 'C'");
-                    cy1 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x2 coordinate missing for 'C'");
-                    cx2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y2 coordinate missing for 'C'");
-                    cy2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'C'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'C'");
-                    y = tt.nval;
-                    builder.add(new CubicCurveTo(cx1, cy1, cx2, cy2, x, y));
-                    next = 'C';
-                    break;
-
-                case 'c':
-                    // relative-curveto dx1 dy1 dx2 dy2 dx dy
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx1 coordinate missing for 'c'");
-                    cx1 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy1 coordinate missing for 'c'");
-                    cy1 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx2 coordinate missing for 'c'");
-                    cx2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy2 coordinate missing for 'c'");
-                    cy2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'c'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'c'");
-                    y = tt.nval;
-                    CubicCurveTo cubi = new CubicCurveTo(cx1, cy1, cx2, cy2, x, y);
-                    cubi.setAbsolute(false);
-                    builder.add(cubi);
-                    next = 'c';
-                    cx1 += px;
-                    cy1 += py;
-                    cx2 += px;
-                    cy2 += py;
-                    x += py;
-                    y += py;
-                    break;
-
-                case 'S':
-                    // absolute-shorthand-curveto x2 y2 x y
-                    cx1 = x - cx2 + x;
-                    cy1 = x - cy2 + y;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x2 coordinate missing for 'S'");
-                    cx2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y2 coordinate missing for 'S'");
-                    cy2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'S'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'S'");
-                    y = tt.nval;
-                    builder.add(new CubicCurveTo(cx1, cy1, cx2, cy2, x, y));
-                    next = 'S';
-                    break;
-
-                case 's':
-                    // relative-shorthand-curveto dx2 dy2 dx dy
-                    cx1 = x - cx2;
-                    cy1 = x - cy2;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx2 coordinate missing for 's'");
-                    cx2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy2 coordinate missing for 's'");
-                    cy2 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 's'");
-                    x += tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 's'");
-                    y += tt.nval;
-                    CubicCurveTo smoothCurveTo = new CubicCurveTo(cx1, cy1, cx2, cy2, x, y);
-                    smoothCurveTo.setAbsolute(false);
-                    builder.add(smoothCurveTo);
-                    next = 's';
-                    cx1 += px;
-                    cy1 += px;
-                    cx2 += px;
-                    cy2 += px;
-                    x += px;
-                    y += py;
-                    break;
-
-                case 'Q':
-                    // absolute-quadto x1 y1 x y
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'Q'");
-                    cx1 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y1 coordinate missing for 'Q'");
-                    cy1 = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'Q'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'Q'");
-                    y = tt.nval;
-                    builder.add(new QuadCurveTo(cx1, cy1, x, y));
-                    next = 'Q';
-                    cx2 = x;
-                    cy2 = y;
-                    break;
-
-                case 'q':
-                    // relative-quadto dx1 dy1 dx dy
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx1 coordinate missing for 'q'");
-                    cx1 = x + tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy1 coordinate missing for 'q'");
-                    cy1 = y + tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'q'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'q'");
-                    y = tt.nval;
-                    QuadCurveTo quadCurveTo = new QuadCurveTo(cx1, cy1, x, y);
-                    quadCurveTo.setAbsolute(false);
-                    builder.add(quadCurveTo);
-                    next = 'q';
-                    cx2 = x;
-                    cy2 = y;
-                    break;
-                case 'T':
-                    // absolute-shorthand-quadto x y
-                    cx1 = x - cx1 + x;
-                    cy1 = x - cy1 + y;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'T'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'T'");
-                    y = tt.nval;
-                    builder.add(new QuadCurveTo(cx1, cy1, x, y));
-                    next = 'T';
-                    cx2 = x;
-                    cy2 = y;
-                    break;
-
-                case 't':
-                    // relative-shorthand-quadto dx dy
-                    cx1 = x - cx1;
-                    cy1 = x - cy1;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 't'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 't'");
-                    y = tt.nval;
-                    QuadCurveTo smoothQuadCurveTo = new QuadCurveTo(cx1, cy1, x, y);
-                    smoothQuadCurveTo.setAbsolute(false);
-                    builder.add(smoothQuadCurveTo);
-                    next = 's';
-                    cx1 += px;
-                    cy1 += px;
-                    cx2 = x += px;
-                    cy2 = y += px;
-                    break;
-
-                case 'A': {
-                    // absolute-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
-                    // If rX or rY have negative signs, these are dropped;
-                    // the absolute value is used instead.
-                    double rx = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "ry coordinate missing for 'A'");
-                    double ry = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x-axis-rotation missing for 'A'");
-                    double xAxisRotation = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "large-arc-flag missing for 'A'");
-                    boolean largeArcFlag = tt.nval != 0;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "sweep-flag missing for 'A'");
-                    boolean sweepFlag = tt.nval != 0;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'A'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'A'");
-                    y = tt.nval;
-
-                    builder.add(new ArcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag));
-                    next = 'A';
-                    cx2 = cx1 = x;
-                    cy2 = cy1 = y;
-                    break;
-                }
-                case 'a': {
-                    // relative-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
-                    // If rX or rY have negative signs, these are dropped;
-                    // the absolute value is used instead.
-                    double rx = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "ry coordinate missing for 'A'");
-                    double ry = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x-axis-rotation missing for 'A'");
-                    double xAxisRotation = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "large-arc-flag missing for 'A'");
-                    boolean largeArcFlag = tt.nval != 0;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "sweep-flag missing for 'A'");
-                    boolean sweepFlag = tt.nval != 0;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'A'");
-                    x = tt.nval;
-                    tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'A'");
-                    y = tt.nval;
-                    ArcTo arcTo = new ArcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
-                    arcTo.setAbsolute(false);
-                    builder.add(arcTo);
-                    cx2 = cx1 = x += px;
-                    cy2 = cy1 = y += py;
-                    next = 'a';
-                    break;
-                }
-                default:
-                    throw tt.createException("Illegal command: " + command);
+                        builder.add(new ArcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag));
+                        next = 'A';
+                        cx2 = cx1 = x;
+                        cy2 = cy1 = y;
+                    }
+                    case 'a' -> {
+                        // relative-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
+                        // If rX or rY have negative signs, these are dropped;
+                        // the absolute value is used instead.
+                        double rx = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "ry coordinate missing for 'A'");
+                        double ry = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x-axis-rotation missing for 'A'");
+                        double xAxisRotation = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "large-arc-flag missing for 'A'");
+                        boolean largeArcFlag = tt.nval != 0;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "sweep-flag missing for 'A'");
+                        boolean sweepFlag = tt.nval != 0;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'A'");
+                        x = tt.nval;
+                        tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'A'");
+                        y = tt.nval;
+                        ArcTo arcTo = new ArcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
+                        arcTo.setAbsolute(false);
+                        builder.add(arcTo);
+                        cx2 = cx1 = x += px;
+                        cy2 = cy1 = y += py;
+                        next = 'a';
+                    }
+                    default -> throw tt.createException("Illegal command: " + command);
                 }
                 first = false;
             }

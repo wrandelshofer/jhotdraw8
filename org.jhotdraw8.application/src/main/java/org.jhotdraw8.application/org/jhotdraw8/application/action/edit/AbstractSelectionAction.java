@@ -87,7 +87,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
     protected abstract void onActionPerformed(ActionEvent event, EditableComponent ec);
 
-    private record TextInputControlAdapter(TextInputControl control) implements EditableComponent {
+    private record TextInputControlAdapter(@NonNull TextInputControl control) implements EditableComponent {
 
         @Override
         public void clearSelection() {

@@ -53,6 +53,10 @@
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.collection</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.css</artifactId>
       </dependency>
       <dependency>
@@ -74,6 +78,10 @@
       <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.graph</artifactId>
+      </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.icollection</artifactId>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>

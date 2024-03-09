@@ -89,7 +89,7 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
     }
 
     @Override
-    public Comparator<? super Byte> getComparator() {
+    public @Nullable Comparator<? super Byte> getComparator() {
         if (hasCharacteristics(Spliterator.SORTED))
             return null;
         throw new IllegalStateException();

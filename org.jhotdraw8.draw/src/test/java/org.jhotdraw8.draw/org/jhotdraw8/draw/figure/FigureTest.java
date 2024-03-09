@@ -30,7 +30,6 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -50,8 +49,7 @@ public class FigureTest {
         ImmutableSet<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
         ImmutableSet<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
         //System.out.println("rr:" + rectangleFigureKeys.asSet());
-        Set<MapAccessor<?>> intersection = new HashSet<>(figureKeys.asSet());
-        intersection.retainAll(rectangleFigureKeys.asSet());
+        ImmutableSet<MapAccessor<?>> intersection = figureKeys.retainAll(rectangleFigureKeys.asSet());
         //System.out.println("ri:" + intersection);
         assertEquals(figureKeys, intersection);
     }

@@ -157,7 +157,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     public static <T> VectorList<T> ofStream(Stream<T> stream) {
-        return VectorList.<T>of().addAll(() -> stream.iterator());
+        return VectorList.<T>of().addAll(stream::iterator);
     }
 
     @SuppressWarnings("unchecked")

@@ -365,7 +365,8 @@ public class XmlUtil {
         }
     }
 
-    private record MyLocator(int line, int column, String systemId, String publicId) implements Locator {
+    private record MyLocator(int line, int column, @Nullable String systemId,
+                             @Nullable String publicId) implements Locator {
 
 
         @Override
@@ -379,25 +380,25 @@ public class XmlUtil {
         }
 
         @Override
-        public String getPublicId() {
+        public @Nullable String getPublicId() {
             return publicId;
         }
 
         @Override
-        public String getSystemId() {
+        public @Nullable String getSystemId() {
             return systemId;
         }
 
     }
 
-    public static String readNamespaceUri(URI file) throws IOException {
+    public static @Nullable String readNamespaceUri(@NonNull URI file) throws IOException {
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(Paths.get(file)))) {
             return readNamespaceUri(new StreamSource(in));
         }
 
     }
 
-    public static String readNamespaceUri(Source source) throws IOException {
+    public static @Nullable String readNamespaceUri(@NonNull Source source) throws IOException {
         try {
             for (XMLStreamReader r = streamReader(source); r.hasNext(); ) {
                 int next = r.next();

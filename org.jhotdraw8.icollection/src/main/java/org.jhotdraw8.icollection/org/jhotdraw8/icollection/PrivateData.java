@@ -1,5 +1,7 @@
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.annotation.Nullable;
+
 /**
  * This record holds an object that contains private data.
  * <p>
@@ -61,9 +63,9 @@ package org.jhotdraw8.icollection;
  * }
  * }</pre>
  */
-public record PrivateData(Object object) {
+public record PrivateData(@Nullable Object object) {
     @SuppressWarnings("unchecked")
-    <O> O get() {
+    <O> @Nullable O get() {
         return (O) object;
     }
 }

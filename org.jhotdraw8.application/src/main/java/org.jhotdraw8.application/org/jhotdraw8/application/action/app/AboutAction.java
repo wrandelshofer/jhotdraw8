@@ -106,6 +106,7 @@ public class AboutAction extends AbstractApplicationAction {
                                     .map(ModuleReference::location).flatMap(Function.identity())
                                     .map(uri -> {
                                         Matcher matcher = pattern.matcher(uri.getPath());
+                                        //noinspection ReturnOfNull
                                         return matcher.find() ? matcher.group(1) : null;
                                     }).orElse(null);
 

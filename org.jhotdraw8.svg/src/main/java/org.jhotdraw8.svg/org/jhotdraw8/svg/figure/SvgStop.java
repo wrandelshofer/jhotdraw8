@@ -18,7 +18,7 @@ import java.util.Objects;
  *
  * @author Werner Randelshofer
  */
-public record SvgStop(Double offset, SvgDefaultablePaint<CssColor> color, CssDefaultableValue<CssSize> opacity) {
+public record SvgStop(double offset, SvgDefaultablePaint<CssColor> color, CssDefaultableValue<CssSize> opacity) {
 
     @Override
     public int hashCode() {

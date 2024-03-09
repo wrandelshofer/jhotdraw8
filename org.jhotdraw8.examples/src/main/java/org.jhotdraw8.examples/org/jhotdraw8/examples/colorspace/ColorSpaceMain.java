@@ -167,12 +167,12 @@ public class ColorSpaceMain extends Application {
         colorSpaceBox.setValue(new NamedColorSpaceAdapter("linear RGB", ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB)));
         colorSpaceBox.setConverter(new StringConverter<>() {
             @Override
-            public String toString(NamedColorSpace object) {
-                return object.getName();
+            public @Nullable String toString(@Nullable NamedColorSpace object) {
+                return object == null ? null : object.getName();
             }
 
             @Override
-            public NamedColorSpace fromString(String string) {
+            public @Nullable NamedColorSpace fromString(String string) {
                 return null;
             }
         });

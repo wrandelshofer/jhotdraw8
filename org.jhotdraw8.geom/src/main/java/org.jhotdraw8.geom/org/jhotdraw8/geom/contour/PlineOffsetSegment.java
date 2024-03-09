@@ -5,6 +5,8 @@
 package org.jhotdraw8.geom.contour;
 
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.awt.geom.Point2D;
 
 /**
@@ -19,7 +21,8 @@ import java.awt.geom.Point2D;
  *     <dd><a href="https://github.com/jbuckmccready/CavalierContours">github.com</a></dd>
  * </dl>
  */
-record PlineOffsetSegment(PlineVertex v1, PlineVertex v2, Point2D.Double origV2Pos, boolean collapsedArc) {
+record PlineOffsetSegment(@NonNull PlineVertex v1, @NonNull PlineVertex v2, Point2D.@NonNull Double origV2Pos,
+                          boolean collapsedArc) {
 
 
 }
