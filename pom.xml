@@ -127,37 +127,10 @@
           <artifactId>maven-enforcer-plugin</artifactId>
           <version>3.4.1</version>
         </plugin>
-
-
         <plugin>
-          <!-- Disable the maven-deploy-plugin, because we want to use the sonatype deploy plugin -->
-          <!-- see https://blog.sonatype.com/maven-deploy-to-sonatype-nexus-repository -->
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
           <version>3.1.1</version>
-          <configuration>
-            <skip>true</skip>
-          </configuration>
-        </plugin>
-        <plugin>
-          <!-- see https://blog.sonatype.com/maven-deploy-to-sonatype-nexus-repository -->
-          <groupId>org.sonatype.plugins</groupId>
-          <artifactId>nexus-staging-maven-plugin</artifactId>
-          <version>1.6.13</version>
-          <executions>
-            <execution>
-              <id>default-deploy</id>
-              <phase>deploy</phase>
-              <goals>
-                <goal>deploy</goal>
-              </goals>
-            </execution>
-          </executions>
-          <configuration>
-            <serverId>nexus</serverId>
-            <nexusUrl>http://localhost:8081/nexus/</nexusUrl>
-            <skipStaging>true</skipStaging>
-          </configuration>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -546,17 +519,10 @@
   </dependencyManagement>
 
   <distributionManagement>
-    <!--
     <repository>
-      <id>internal.repo</id>
+      <id>my-internal-repo</id>
       <name>My Internal Repository</name>
       <url>file:///Users/Shared/Developer/Maven</url>
     </repository>
-    -->
-    <snapshotRepository>
-      <!-- see https://blog.sonatype.com/maven-deploy-to-sonatype-nexus-repository -->
-      <id>nexus-snapshots</id>
-      <url>http://localhost:8081/nexus/content/repositories/snapshots</url>
-    </snapshotRepository>
   </distributionManagement>
 </project>
