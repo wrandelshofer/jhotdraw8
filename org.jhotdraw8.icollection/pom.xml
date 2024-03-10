@@ -16,17 +16,26 @@
   <artifactId>org.jhotdraw8.icollection</artifactId>
   <packaging>jar</packaging>
 
-    <name>JHotDraw8 Immutable Collections</name>
+  <name>JHotDraw8 Immutable Collections</name>
+  <description>JHotDraw8 Immutable Collections</description>
+  <developers>
+    <developer>
+      <name>Werner Randelshofer</name>
+      <email>werner.randelshofer@bluewin.ch</email>
+      <organization>ch.randelshofer</organization>
+      <organizationUrl>http://www.randelshofer.ch</organizationUrl>
+    </developer>
+  </developers>
 
   <build>
     <sourceDirectory>src/main/java/org.jhotdraw8.icollection
-      </sourceDirectory>
+    </sourceDirectory>
     <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.icollection
-      </testSourceDirectory>
+    </testSourceDirectory>
     <resources>
       <resource>
         <directory>src/main/java/org.jhotdraw8.icollection
-          </directory>
+        </directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>
@@ -36,7 +45,7 @@
     <testResources>
       <testResource>
         <directory>${basedir}/src/test/java/org.jhotdraw8.icollection
-          </directory>
+        </directory>
         <excludes>
           <exclude>**/*.java</exclude>
         </excludes>

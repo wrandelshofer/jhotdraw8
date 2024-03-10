@@ -8,53 +8,62 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
                              http://maven.apache.org/maven-v4_0_0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8</artifactId>
-      <version>${revision}</version>
-    </parent>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>ch.randelshofer</groupId>
+    <artifactId>org.jhotdraw8</artifactId>
+    <version>${revision}</version>
+  </parent>
 
-    <artifactId>org.jhotdraw8.teddy</artifactId>
-    <packaging>jar</packaging>
-    <name>JHotDraw8 Teddy Demo: Text Editor Application</name>
+  <artifactId>org.jhotdraw8.teddy</artifactId>
+  <packaging>jar</packaging>
+  <name>JHotDraw8 Teddy Demo: Text Editor Application</name>
+  <description>JHotDraw8 Teddy Demo: Text Editor Application</description>
+  <developers>
+    <developer>
+      <name>Werner Randelshofer</name>
+      <email>werner.randelshofer@bluewin.ch</email>
+      <organization>ch.randelshofer</organization>
+      <organizationUrl>http://www.randelshofer.ch</organizationUrl>
+    </developer>
+  </developers>
 
-    <build>
-      <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.teddy</sourceDirectory>
-      <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.teddy</testSourceDirectory>
-      <resources>
-        <resource>
-          <directory>${basedir}/src/main/java/org.jhotdraw8.teddy</directory>
-          <excludes>
-            <exclude>**/*.java</exclude>
-          </excludes>
-        </resource>
+  <build>
+    <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.teddy</sourceDirectory>
+    <testSourceDirectory>${basedir}/src/test/java/org.jhotdraw8.teddy</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${basedir}/src/main/java/org.jhotdraw8.teddy</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </resource>
 
-      </resources>
-      <testResources>
-        <testResource>
-          <directory>${basedir}/src/test/java/org.jhotdraw8.teddy</directory>
-          <excludes>
-            <exclude>**/*.java</exclude>
-          </excludes>
-        </testResource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>${basedir}/src/test/java/org.jhotdraw8.teddy</directory>
+        <excludes>
+          <exclude>**/*.java</exclude>
+        </excludes>
+      </testResource>
 
-      </testResources>
-    </build>
+    </testResources>
+  </build>
 
-    <dependencies>
-      <dependency>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.annotation</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.application</artifactId>
-      </dependency>
-      <dependency>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.fxcontrols</artifactId>
-      </dependency>
-    </dependencies>
+  <dependencies>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.annotation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.application</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.fxcontrols</artifactId>
+    </dependency>
+  </dependencies>
 
 </project>

@@ -15,6 +15,15 @@
   <packaging>jar</packaging>
 
   <name>JHotDraw8 Base Classes</name>
+  <description>JHotDraw8 Base Classes</description>
+  <developers>
+    <developer>
+      <name>Werner Randelshofer</name>
+      <email>werner.randelshofer@bluewin.ch</email>
+      <organization>ch.randelshofer</organization>
+      <organizationUrl>http://www.randelshofer.ch</organizationUrl>
+    </developer>
+  </developers>
 
   <build>
     <sourceDirectory>${basedir}/src/main/java/org.jhotdraw8.base</sourceDirectory>

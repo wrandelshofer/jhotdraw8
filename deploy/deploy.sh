@@ -9,7 +9,7 @@
 #
 cd "$(dirname "$0")"/..
 export revision=0.1
-#mvn clean package -Dmaven.test.skip=true -Drevision=$revision
+mvn clean package -Dmaven.test.skip=true -Drevision=$revision
 rm -r target/deploy
 for module in org.jhotdraw8.*; do
   echo $module
