@@ -67,21 +67,6 @@ public interface Converter<T> {
     T fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException;
 
     /**
-     * Converts a value to a string and appends it to the provided
-     * {@code Appendable}.
-     * <p>
-     * This method does not change the state of the converter.
-     *
-     * @param <TT>       the value type
-     * @param out        The appendable
-     * @param idSupplier The factory for creating object ids. Nullable for non-resolving
-     *                   converters.
-     * @param value      The value. Nullable.
-     * @throws IOException thrown by Appendable
-     */
-    <TT extends T> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException;
-
-    /**
      * Constructs a value from a string.
      * <p>
      * The converter should try to create the value greedily, by consuming as
@@ -101,7 +86,6 @@ public interface Converter<T> {
     default @Nullable T fromString(@NonNull CharBuffer in) throws ParseException {
         return fromString(in, null);
     }
-
 
     /**
      * Constructs a value from a CharSequence.
@@ -124,6 +108,60 @@ public interface Converter<T> {
             throw new ParseException(buf.remaining() + " remaining character(s) not consumed." + " remaining: \"" + buf + "\".", buf.position());
         }
         return value;
+    }
+
+    /**
+     * Convenience method that throws a ParseException if the value is null.
+     *
+     * @param in         the String
+     * @param idResolver the id resolver
+     * @return the value
+     * @throws ParseException if the value is null
+     */
+    default @NonNull T fromStringNonNull(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+        T m = fromString(in, idResolver);
+        if (m == null) throw new ParseException("Value must not be null.", 0);
+        return m;
+    }
+
+    /**
+     * Convenience method that throws a ParseException if the value is null.
+     *
+     * @param in the String
+     * @return the value
+     * @throws ParseException if the value is null
+     */
+    default @NonNull T fromStringNonNull(@NonNull CharBuffer in) throws ParseException {
+        T m = fromString(in);
+        if (m == null) throw new ParseException("Value must not be null.", 0);
+        return m;
+    }
+
+    /**
+     * Convenience method that throws a ParseException if the value is null.
+     *
+     * @param in         the String
+     * @param idResolver the id resolver
+     * @return the value
+     * @throws ParseException if the value is null
+     */
+    default @NonNull T fromStringNonNull(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
+        T m = fromString(in, idResolver);
+        if (m == null) throw new ParseException("Value must not be null.", 0);
+        return m;
+    }
+
+    /**
+     * Convenience method that throws a ParseException if the value is null.
+     *
+     * @param in the String
+     * @return the value
+     * @throws ParseException if the value is null
+     */
+    default @NonNull T fromStringNonNull(@NonNull CharSequence in) throws ParseException {
+        T m = fromString(in);
+        if (m == null) throw new ParseException("Value must not be null.", 0);
+        return m;
     }
 
     /**
@@ -167,9 +205,28 @@ public interface Converter<T> {
         return null;
     }
 
+    default boolean needsIdResolver() {
+        return false;
+    }
+
     // ----
     // convenience methods
     // ----
+
+    /**
+     * Converts a value to a string and appends it to the provided
+     * {@code Appendable}.
+     * <p>
+     * This method does not change the state of the converter.
+     *
+     * @param <TT>       the value type
+     * @param out        The appendable
+     * @param idSupplier The factory for creating object ids. Nullable for non-resolving
+     *                   converters.
+     * @param value      The value. Nullable.
+     * @throws IOException thrown by Appendable
+     */
+    <TT extends T> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException;
 
     /**
      * Converts a value to a string and appends it to the provided
@@ -228,9 +285,5 @@ public interface Converter<T> {
             throw new RuntimeException(ex);
         }
         return out.toString();
-    }
-
-    default boolean needsIdResolver() {
-        return false;
     }
 }
