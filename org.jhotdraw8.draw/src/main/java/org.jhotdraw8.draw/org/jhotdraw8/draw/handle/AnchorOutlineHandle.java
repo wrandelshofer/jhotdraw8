@@ -13,6 +13,7 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -54,9 +55,11 @@ public class AnchorOutlineHandle extends AbstractHandle {
 
     @Override
     public Node getNode(@NonNull DrawingView view) {
-        CssColor color = view.getEditor().getHandleColor();
+        DrawingEditor editor = view.getEditor();
+        if (editor == null) return node;
+        CssColor color = editor.getHandleColor();
         node.setStroke(Paintable.getPaint(color));
-        node.setStrokeWidth(view.getEditor().getHandleStrokeWidth());
+        node.setStrokeWidth(editor.getHandleStrokeWidth());
         return node;
     }
 

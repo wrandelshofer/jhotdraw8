@@ -99,7 +99,7 @@ public class MultipleMasterShapeController {
             tx.scale(scaleFactor, scaleFactor);
             region.setShape(FXShapes.fxShapeFromAwt(mmShape, tx));
         } catch (ParseException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
         }
     }

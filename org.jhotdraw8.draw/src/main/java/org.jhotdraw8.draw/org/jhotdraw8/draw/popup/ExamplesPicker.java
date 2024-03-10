@@ -47,7 +47,7 @@ public class ExamplesPicker<T> extends AbstractPicker<T> {
                 try {
                     callback.accept(true, converter.fromString(s));
                 } catch (ParseException ex) {
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                 }
             });

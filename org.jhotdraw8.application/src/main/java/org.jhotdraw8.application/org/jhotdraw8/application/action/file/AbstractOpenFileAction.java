@@ -128,7 +128,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);
             } else if (exception != null) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", exception);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + exception.getMessage(), exception);
 
                 Resources labels = ApplicationLabels.getResources();
 

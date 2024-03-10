@@ -601,7 +601,7 @@ public class ZoomableScrollPane extends GridPane {
         try {
             return getContentToView().createInverse();
         } catch (NonInvertibleTransformException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             return FXTransforms.IDENTITY;
         }

@@ -39,7 +39,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logger.getLogger(GrapherApplication.class.getName()).log(Level.WARNING, "Unexpected Exception.", e));
+        Thread.setDefaultUncaughtExceptionHandler((t, e) -> Logger.getLogger(GrapherApplication.class.getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e));
 
         // See
         // https://bugs.openjdk.java.net/browse/JDK-8091497

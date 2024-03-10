@@ -300,7 +300,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                                 }
                             } catch (IOException ex) {
                                 logger.accept(Level.WARNING, "invalid inline style attribute on element. style=" + styleValue, null);
-                                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                             }
                         }
@@ -597,7 +597,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
                     // retry later
                 } catch (ExecutionException ex) {
                     logger.accept(Level.WARNING, "failed to get stylesheet", ex);
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                     stylesheet = null;
                     future = null;

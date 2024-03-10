@@ -175,7 +175,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         }
     }
 
-    public void updateBackground(RenderContext ctx, Pane g) {
+    public void updateBackground(@NonNull RenderContext ctx, @NonNull Pane g) {
         Paint paint = Paintable.getPaint(getStyled(BACKGROUND));
         if ((paint instanceof Color) && ((Color) paint).getOpacity() == 0) {
             paint = null;

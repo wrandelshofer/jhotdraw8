@@ -576,7 +576,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         createActivity().whenComplete((pv, ex1) -> {
             FileBasedActivity v = (FileBasedActivity) pv;
             if (ex1 != null) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex1);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex1.getMessage(), ex1);
 
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getString("application.createView.error"));
@@ -590,7 +590,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                     ChampMap.of(),
                     false, new SimpleWorkState<>()).whenComplete((result, ex) -> {
                 if (ex != null) {
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getFormatted("file.open.couldntOpen.message", uri)
@@ -605,7 +605,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 v.removeDisabler(this);
             });
         }).handle((v, ex) -> {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));
@@ -623,7 +623,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         createActivity().whenComplete((pv, ex1) -> {
             FileBasedActivity v = (FileBasedActivity) pv;
             if (ex1 != null) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex1);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex1.getMessage(), ex1);
 
                 final Alert alert = new Alert(Alert.AlertType.ERROR,
                         labels.getString("application.createView.error"));
@@ -635,7 +635,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             v.addDisabler(this);
             v.clear().whenComplete((result, ex) -> {
                 if (ex != null) {
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));
@@ -647,7 +647,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 }
             });
         }).handle((v, ex) -> {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));

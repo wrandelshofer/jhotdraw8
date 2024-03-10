@@ -44,7 +44,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull FileBasedActivity activity) {
+    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull FileBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
@@ -72,7 +72,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(throwable));
                 alert.getDialogPane().setMaxWidth(640.0);
                 alert.showAndWait();
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", throwable);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + throwable.getMessage(), throwable);
 
             }
             view.clearModified();

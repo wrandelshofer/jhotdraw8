@@ -135,7 +135,7 @@ public class UriUtil {
                     u.getPath(), query,
                     u.getFragment());
         } catch (URISyntaxException ex) {
-            Logger.getLogger(UriUtil.class.getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(UriUtil.class.getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
         }
         return u;

@@ -120,7 +120,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateLineNode(RenderContext ctx, Polyline node) {
+    protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Polyline node) {
 
     }
 
@@ -131,7 +131,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
+    protected void updateStartMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
         // empty
     }
 
@@ -142,7 +142,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
+    protected void updateEndMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
         // empty
     }
 
@@ -195,7 +195,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    protected void updateMarkerNode(RenderContext ctx, Group group,
+    protected void updateMarkerNode(@NonNull RenderContext ctx, @NonNull Group group,
                                     @NonNull Path markerNode,
                                     @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {

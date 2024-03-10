@@ -52,7 +52,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
         try {
             return new StreamCssTokenizer(str, null).toTokenList();
         } catch (IOException e) {
-            throw new RuntimeException("Unexpected Exception", e);
+            throw new RuntimeException("Unexpected Exception: " + e.getMessage(), e);
         }
     }
 

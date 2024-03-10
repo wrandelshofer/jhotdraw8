@@ -533,11 +533,11 @@ public interface DrawingView extends WritableRenderContext {
         return editorProperty().get();
     }
 
-    default void setConstrainer(@Nullable Constrainer newValue) {
+    default void setConstrainer(@NonNull Constrainer newValue) {
         constrainerProperty().set(newValue);
     }
 
-    default @Nullable Constrainer getConstrainer() {
+    default @NonNull Constrainer getConstrainer() {
         return constrainerProperty().get();
     }
 

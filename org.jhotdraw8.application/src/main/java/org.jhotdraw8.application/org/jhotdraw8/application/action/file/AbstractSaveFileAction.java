@@ -87,10 +87,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
 
 
     @Override
-    protected void onActionPerformed(ActionEvent evt, @Nullable FileBasedActivity activity) {
-        if (activity == null) {
-            return;
-        }
+    protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull FileBasedActivity activity) {
         oldFocusOwner = activity.getNode().getScene().getFocusOwner();
         WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         activity.addDisabler(workState);
@@ -152,7 +149,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
                 }
             } else if (exception != null) {
                 Throwable value = exception;
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", value);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + value.getMessage(), value);
 
                 Resources labels = ApplicationLabels.getResources();
                 Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));

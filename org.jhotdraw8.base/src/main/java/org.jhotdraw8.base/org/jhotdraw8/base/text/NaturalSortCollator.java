@@ -94,7 +94,7 @@ public class NaturalSortCollator extends Collator {
             try {
                 c = new RuleBasedCollator(rules);
             } catch (ParseException e) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             }
         }

@@ -290,7 +290,7 @@ public class LayersInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void onDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void onDrawingChanged(@Nullable ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (oldValue != null) {
             listView.setItems(FXCollections.observableArrayList());
             if (layers != null) {

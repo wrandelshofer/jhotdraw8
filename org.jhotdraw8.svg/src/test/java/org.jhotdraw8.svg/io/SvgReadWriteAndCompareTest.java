@@ -151,7 +151,7 @@ public class SvgReadWriteAndCompareTest {
                 WritableImage drawing1Image = drawing1Node.snapshot(new SnapshotParameters(), null);
                 future.complete(new SimpleOrderedPair<>(drawing1Image, drawing2Image));
             } catch (Throwable t) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + t.getMessage(), t);
 
                 future.completeExceptionally(t);
             }
@@ -200,7 +200,7 @@ public class SvgReadWriteAndCompareTest {
                         waitUntilClosed.complete(Boolean.TRUE);
                     });
                 } catch (Throwable t) {
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + t.getMessage(), t);
 
                     waitUntilClosed.completeExceptionally(t);
 

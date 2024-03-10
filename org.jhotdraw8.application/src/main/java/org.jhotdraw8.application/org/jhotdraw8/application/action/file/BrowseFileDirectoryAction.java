@@ -35,7 +35,7 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull FileBasedActivity activity) {
+    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull FileBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
@@ -58,11 +58,11 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
                 try {
                     Desktop.class.getMethod("browseFileDirectory", File.class).invoke(Desktop.getDesktop(), path.toFile());
                 } catch (IllegalAccessException | InvocationTargetException e) {
-                    Logger.getLogger(BrowseFileDirectoryAction.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                    Logger.getLogger(BrowseFileDirectoryAction.class.getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
                 }
             } catch (NoSuchMethodException e) {
-                Logger.getLogger(BrowseFileDirectoryAction.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                Logger.getLogger(BrowseFileDirectoryAction.class.getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             }
         } catch (FileSystemNotFoundException e) {

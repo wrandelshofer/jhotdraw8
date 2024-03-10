@@ -29,6 +29,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawLabels;
+import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -135,11 +136,13 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
     @Override
     public @NonNull Region getNode(@NonNull DrawingView view) {
-        double size = view.getEditor().getHandleSize() * 0.8;
+        DrawingEditor editor = view.getEditor();
+        if (editor == null) return node;
+        double size = editor.getHandleSize() * 0.8;
         if (node.getWidth() != size) {
             node.resize(size, size);
         }
-        CssColor color = view.getEditor().getHandleColor();
+        CssColor color = editor.getHandleColor();
         BorderStroke borderStroke = node.getBorder().getStrokes().getFirst();
         if (!borderStroke.getTopStroke().equals(color.getColor())) {
             node.setBorder(new Border(new BorderStroke(color.getColor(), BorderStrokeStyle.SOLID, null, null)));
@@ -155,6 +158,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
                 BezierNode bn = getBezierNode();
                 if (bn == null) return;
                 BezierPath path = owner.get(pathKey);
+                if (path == null) return;
                 BezierNode newbn;
                 if (bn.isCollinear()) {
                     if (bn.isEquidistant()) {

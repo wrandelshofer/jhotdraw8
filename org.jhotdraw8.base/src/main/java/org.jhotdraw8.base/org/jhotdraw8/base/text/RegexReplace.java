@@ -71,7 +71,7 @@ public class RegexReplace {
         try {
             return replace == null ? m.replaceAll("$0") : m.replaceAll(replace);
         } catch (IndexOutOfBoundsException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             return str;
         }

@@ -157,7 +157,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
                     getSelectedFigures().addAll(pastedFigures);
                 }
             } catch (IOException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
             }
         }

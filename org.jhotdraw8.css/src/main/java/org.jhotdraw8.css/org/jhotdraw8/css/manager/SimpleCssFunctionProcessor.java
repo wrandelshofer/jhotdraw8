@@ -91,7 +91,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         try {
             process(element, tt, out::add, new ArrayDeque<>());
         } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             out.clear();
             for (CssToken t : in) {

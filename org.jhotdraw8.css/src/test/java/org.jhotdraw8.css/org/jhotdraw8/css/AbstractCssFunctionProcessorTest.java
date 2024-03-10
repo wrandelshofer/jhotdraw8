@@ -79,7 +79,7 @@ abstract class AbstractCssFunctionProcessorTest {
             assertEquals(expected, buf.toString());
         } catch (ParseException e) {
             if (expected != null) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
                 fail("must not throw ParseException " + e);
             }

@@ -58,7 +58,7 @@ public class CssColorDialog {
             currentColor.bindBidirectional(controller.colorProperty());
         } catch (IOException ex) {
             dialogPane.setContent(new Label(ex.getMessage()));
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
         }
 

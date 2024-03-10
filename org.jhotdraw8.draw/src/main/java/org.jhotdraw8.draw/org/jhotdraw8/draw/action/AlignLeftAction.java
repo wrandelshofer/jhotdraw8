@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -41,8 +42,8 @@ public class AlignLeftAction extends AbstractDrawingViewAction {
         alignLeft(drawingView, figures, lead);
     }
 
-    private void alignLeft(@NonNull DrawingView view, @NonNull Set<Figure> figures, @NonNull Figure lead) {
-        if (figures.size() < 2) {
+    private void alignLeft(@NonNull DrawingView view, @NonNull Set<Figure> figures, @Nullable Figure lead) {
+        if (figures.size() < 2 || lead == null) {
             return;
         }
         DrawingModel model = view.getModel();

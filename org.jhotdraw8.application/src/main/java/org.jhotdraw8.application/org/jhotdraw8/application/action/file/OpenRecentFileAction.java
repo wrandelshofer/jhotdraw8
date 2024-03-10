@@ -121,7 +121,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
 
     private void onException(final @NonNull FileBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
         Throwable value = exception;
-        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", exception);
+        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + exception.getMessage(), exception);
 
         Resources labels = ApplicationLabels.getResources();
         Alert alert = new Alert(Alert.AlertType.ERROR, createErrorMessage(exception));

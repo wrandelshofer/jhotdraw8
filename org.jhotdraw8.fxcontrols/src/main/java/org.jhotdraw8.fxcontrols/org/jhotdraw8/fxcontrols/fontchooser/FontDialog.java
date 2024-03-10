@@ -46,7 +46,7 @@ public class FontDialog extends Dialog<FontFamilySize> {
             controller = loader.getController();
         } catch (IOException ex) {
             dialogPane.setContent(new Label(ex.getMessage()));
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
         }
 

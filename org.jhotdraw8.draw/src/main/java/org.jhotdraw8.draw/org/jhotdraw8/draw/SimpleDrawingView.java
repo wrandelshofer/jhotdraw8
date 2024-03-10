@@ -88,55 +88,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     public static final String DRAWING_VIEW_STYLE_CLASS = "jhotdraw8-drawing-view";
     private final @NonNull ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
     private final @NonNull SimpleDrawingViewNode node = new SimpleDrawingViewNode();
-    private boolean constrainerNodeValid;
-
-    private class SimpleDrawingViewNode extends BorderPane implements EditableComponent {
-
-        public SimpleDrawingViewNode() {
-            setFocusTraversable(true);
-        }
-
-        @Override
-        public void selectAll() {
-            SimpleDrawingView.this.selectAll();
-        }
-
-        @Override
-        public void clearSelection() {
-            SimpleDrawingView.this.clearSelection();
-        }
-
-        @Override
-        public ReadOnlyBooleanProperty selectionEmptyProperty() {
-            return SimpleDrawingView.this.selectedFiguresProperty().emptyProperty();
-        }
-
-        @Override
-        public void deleteSelection() {
-            SimpleDrawingView.this.deleteSelection();
-        }
-
-        @Override
-        public void duplicateSelection() {
-            SimpleDrawingView.this.duplicateSelection();
-        }
-
-        @Override
-        public void cut() {
-            SimpleDrawingView.this.cut();
-        }
-
-        @Override
-        public void copy() {
-            SimpleDrawingView.this.copy();
-        }
-
-        @Override
-        public void paste() {
-            SimpleDrawingView.this.paste();
-        }
-    }
-
     private final @NonNull NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
     private final @NonNull ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
@@ -147,7 +98,9 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private final @NonNull StackPane foreground = new StackPane();
     private final @NonNull InteractiveDrawingRenderer drawingRenderer = new InteractiveDrawingRenderer();
     private final @NonNull InteractiveHandleRenderer handleRenderer = new InteractiveHandleRenderer();
+    private boolean constrainerNodeValid;
     private boolean isLayoutValid = true;
+    private @Nullable Runnable repainter = null;
     private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
 
 
@@ -158,18 +111,13 @@ public class SimpleDrawingView extends AbstractDrawingView {
         initBehavior();
     }
 
-    protected void initStyle() {
-        background.getStyleClass().add(CANVAS_REGION_STYLE_CLASS);
-        node.getStyleClass().add(DRAWING_VIEW_STYLE_CLASS);
-    }
-
-    protected void initBehavior() {
-        drawingRenderer.setRenderContext(this);
-    }
-
     @Override
     public @NonNull ObjectProperty<Figure> activeParentProperty() {
         return activeParent;
+    }
+
+    public void clearSelection() {
+        getSelectedFigures().clear();
     }
 
     @Override
@@ -177,10 +125,40 @@ public class SimpleDrawingView extends AbstractDrawingView {
         return constrainer;
     }
 
+    public void deleteSelection() {
+        ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
+        DrawingModel model = getModel();
+
+        // Also delete dependent figures.
+        Deque<Figure> cascade = new ArrayDeque<>(figures);
+        for (Figure f : figures) {
+            for (Figure ff : f.preorderIterable()) {
+                StreamSupport.stream(new TreeBreadthFirstSpliterator<>(
+                                        figure -> () ->
+                                                figure.getReadOnlyLayoutObservers().stream()
+                                                        .filter(x -> x.getLayoutSubjects().size() == 1).iterator(), ff
+                                ),
+                                false)
+                        .forEach(cascade::addFirst);
+            }
+        }
+        for (Figure f : cascade) {
+            if (f.isDeletable()) {
+                for (Figure d : f.preorderIterable()) {
+                    model.disconnect(d);
+                }
+                model.removeFromParent(f);
+            }
+        }
+    }
 
     @Override
     public @NonNull ReadOnlyObjectProperty<Drawing> drawingProperty() {
         return drawing.getReadOnlyProperty();
+    }
+
+    public void duplicateSelection() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -243,6 +221,15 @@ public class SimpleDrawingView extends AbstractDrawingView {
         return zoomableScrollPane.getContentToView();
     }
 
+    @Override
+    public @NonNull ReadOnlySetProperty<Handle> handlesProperty() {
+        return handleRenderer.handlesProperty();
+    }
+
+    protected void initBehavior() {
+        drawingRenderer.setRenderContext(this);
+    }
+
     private void initBindings() {
         CustomBinding.bind(drawing, model, DrawingModel::drawingProperty);
         model.addListener(this::onDrawingModelChanged);
@@ -264,8 +251,39 @@ public class SimpleDrawingView extends AbstractDrawingView {
         CustomBinding.bind(focused, toolProperty(), Tool::focusedProperty);
     }
 
-    private void onContentToViewChanged(@NonNull Observable observable) {
-        updateBackgroundNode();
+    private void initLayout() {
+        node.setCenter(zoomableScrollPane.getNode());
+        background.setManaged(false);
+        zoomableScrollPane.getContentChildren().add(drawingRenderer.getNode());
+        zoomableScrollPane.getBackgroundChildren().add(background);
+        zoomableScrollPane.getForegroundChildren().addAll(
+                handleRenderer.getNode(),
+                foreground);
+        foreground.setManaged(false);
+    }
+
+    protected void initStyle() {
+        background.getStyleClass().add(CANVAS_REGION_STYLE_CLASS);
+        node.getStyleClass().add(DRAWING_VIEW_STYLE_CLASS);
+    }
+
+    private void invalidateConstrainer() {
+        constrainerNodeValid = false;
+    }
+
+    @Override
+    protected void invalidateHandles() {
+
+    }
+
+    @Override
+    public void jiggleHandles() {
+        handleRenderer.jiggleHandles();
+    }
+
+    @Override
+    public @NonNull NonNullObjectProperty<DrawingModel> modelProperty() {
+        return model;
     }
 
     private void onConstrainerChanged(@NonNull Observable o, @Nullable Constrainer oldValue, @Nullable Constrainer newValue) {
@@ -285,47 +303,13 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void invalidateConstrainer() {
-        constrainerNodeValid = false;
-    }
-
     private void onConstrainerInvalidated(@NonNull Observable o) {
         invalidateConstrainer();
         repaint();
     }
 
-    private void onZoomFactorChanged(@NonNull Observable observable) {
-        revalidateLayout();
-    }
-
-    private void onViewRectChanged(@NonNull Observable observable, @Nullable Bounds oldValue, @Nullable Bounds newValue) {
-        revalidateLayout();
-    }
-
-    private void initLayout() {
-        node.setCenter(zoomableScrollPane.getNode());
-        background.setManaged(false);
-        zoomableScrollPane.getContentChildren().add(drawingRenderer.getNode());
-        zoomableScrollPane.getBackgroundChildren().add(background);
-        zoomableScrollPane.getForegroundChildren().addAll(
-                handleRenderer.getNode(),
-                foreground);
-        foreground.setManaged(false);
-    }
-
-    @Override
-    protected void invalidateHandles() {
-
-    }
-
-    @Override
-    public void jiggleHandles() {
-        handleRenderer.jiggleHandles();
-    }
-
-    @Override
-    public @NonNull NonNullObjectProperty<DrawingModel> modelProperty() {
-        return model;
+    private void onContentToViewChanged(@NonNull Observable observable) {
+        updateBackgroundNode();
     }
 
     private void onDrawingChanged() {
@@ -341,11 +325,18 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-
     private void onNodeChanged(@NonNull Figure f) {
         if (f == getDrawing()) {
             revalidateLayout();
         }
+    }
+
+    private void onNodeRemoved(@NonNull Figure f) {
+        ObservableSet<Figure> selectedFigures = getSelectedFigures();
+        for (Figure d : f.preorderIterable()) {
+            selectedFigures.remove(d);
+        }
+        repaint();
     }
 
     private void onRootChanged() {
@@ -398,27 +389,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void onNodeRemoved(@NonNull Figure f) {
-        ObservableSet<Figure> selectedFigures = getSelectedFigures();
-        for (Figure d : f.preorderIterable()) {
-            selectedFigures.remove(d);
-        }
-        repaint();
+    private void onViewRectChanged(@NonNull Observable observable, @Nullable Bounds oldValue, @Nullable Bounds newValue) {
+        revalidateLayout();
     }
 
-    @Override
-    public void recreateHandles() {
-        handleRenderer.recreateHandles();
-    }
-
-    private @Nullable Runnable repainter = null;
-
-    @Override
-    protected void repaint() {
-        if (repainter == null) {
-            repainter = this::paint;
-            Platform.runLater(repainter);
-        }
+    private void onZoomFactorChanged(@NonNull Observable observable) {
+        revalidateLayout();
     }
 
     private void paint() {
@@ -435,6 +411,54 @@ public class SimpleDrawingView extends AbstractDrawingView {
     public void paintImmediately() {
         drawingRenderer.paintImmediately();
         paint();
+    }
+
+    @Override
+    public void recreateHandles() {
+        handleRenderer.recreateHandles();
+    }
+
+    @Override
+    protected void repaint() {
+        if (repainter == null) {
+            repainter = this::paint;
+            Platform.runLater(repainter);
+        }
+    }
+
+    private void revalidateLayout() {
+        if (isLayoutValid) {
+            isLayoutValid = false;
+            validateLayout();
+            //Platform.runLater(this::validateLayout);
+        }
+    }
+
+    @Override
+    public void scrollRectToVisible(@NonNull Bounds boundsInView) {
+        zoomableScrollPane.scrollViewRectToVisible(boundsInView);
+    }
+
+    /**
+     * Selects all enabled and selectable figures in all enabled layers.
+     */
+
+    public void selectAll() {
+        ArrayList<Figure> figures = new ArrayList<>();
+        Drawing d = getDrawing();
+        if (d != null) {
+            for (Figure layer : d.getChildren()) {
+                if (layer.isEditable() && layer.isVisible()) {
+                    for (Figure f : layer.getChildren()) {
+                        if (f.isSelectable()) {
+                            figures.add(f);
+                        }
+                    }
+                }
+            }
+        }
+        getSelectedFigures().clear();
+        getSelectedFigures().addAll(figures);
     }
 
     private void updateBackgroundNode() {
@@ -455,19 +479,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
         if (c != null) {
             c.updateNode(this);
         }
-    }
-
-    private void revalidateLayout() {
-        if (isLayoutValid) {
-            isLayoutValid = false;
-            validateLayout();
-            //Platform.runLater(this::validateLayout);
-        }
-    }
-
-    @Override
-    public void scrollRectToVisible(@NonNull Bounds boundsInView) {
-        zoomableScrollPane.scrollViewRectToVisible(boundsInView);
     }
 
     private void updateLayout() {
@@ -498,65 +509,50 @@ public class SimpleDrawingView extends AbstractDrawingView {
         return zoomableScrollPane.zoomFactorProperty();
     }
 
-    /**
-     * Selects all enabled and selectable figures in all enabled layers.
-     */
+    private class SimpleDrawingViewNode extends BorderPane implements EditableComponent {
 
-    public void selectAll() {
-        ArrayList<Figure> figures = new ArrayList<>();
-        Drawing d = getDrawing();
-        if (d != null) {
-            for (Figure layer : d.getChildren()) {
-                if (layer.isEditable() && layer.isVisible()) {
-                    for (Figure f : layer.getChildren()) {
-                        if (f.isSelectable()) {
-                            figures.add(f);
-                        }
-                    }
-                }
-            }
+        public SimpleDrawingViewNode() {
+            setFocusTraversable(true);
         }
-        getSelectedFigures().clear();
-        getSelectedFigures().addAll(figures);
-    }
 
-    public void clearSelection() {
-        getSelectedFigures().clear();
-    }
-
-    public void deleteSelection() {
-        ArrayList<Figure> figures = new ArrayList<>(getSelectedFigures());
-        DrawingModel model = getModel();
-
-        // Also delete dependent figures.
-        Deque<Figure> cascade = new ArrayDeque<>(figures);
-        for (Figure f : figures) {
-            for (Figure ff : f.preorderIterable()) {
-                StreamSupport.stream(new TreeBreadthFirstSpliterator<>(
-                                        figure -> () ->
-                                                figure.getReadOnlyLayoutObservers().stream()
-                                                        .filter(x -> x.getLayoutSubjects().size() == 1).iterator(), ff
-                                ),
-                                false)
-                        .forEach(cascade::addFirst);
-            }
+        @Override
+        public void clearSelection() {
+            SimpleDrawingView.this.clearSelection();
         }
-        for (Figure f : cascade) {
-            if (f.isDeletable()) {
-                for (Figure d : f.preorderIterable()) {
-                    model.disconnect(d);
-                }
-                model.removeFromParent(f);
-            }
+
+        @Override
+        public void copy() {
+            SimpleDrawingView.this.copy();
         }
-    }
 
-    public void duplicateSelection() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+        @Override
+        public void cut() {
+            SimpleDrawingView.this.cut();
+        }
 
-    @Override
-    public @NonNull ReadOnlySetProperty<Handle> handlesProperty() {
-        return handleRenderer.handlesProperty();
+        @Override
+        public void deleteSelection() {
+            SimpleDrawingView.this.deleteSelection();
+        }
+
+        @Override
+        public void duplicateSelection() {
+            SimpleDrawingView.this.duplicateSelection();
+        }
+
+        @Override
+        public void paste() {
+            SimpleDrawingView.this.paste();
+        }
+
+        @Override
+        public void selectAll() {
+            SimpleDrawingView.this.selectAll();
+        }
+
+        @Override
+        public ReadOnlyBooleanProperty selectionEmptyProperty() {
+            return SimpleDrawingView.this.selectedFiguresProperty().emptyProperty();
+        }
     }
 }

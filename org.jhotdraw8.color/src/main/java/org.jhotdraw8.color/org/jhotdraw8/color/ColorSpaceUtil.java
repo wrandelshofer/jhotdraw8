@@ -66,7 +66,7 @@ public class ColorSpaceUtil {
                     return buf.toString();
                 } catch (IOException e) {
                     // fall back
-                    Logger.getLogger(ColorSpaceUtil.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                    Logger.getLogger(ColorSpaceUtil.class.getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
                 }
             }

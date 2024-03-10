@@ -70,7 +70,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
     }
 
     @Override
-    protected final void onActionPerformed(ActionEvent evt, FileBasedActivity activity) {
+    protected final void onActionPerformed(@NonNull ActionEvent evt, @NonNull FileBasedActivity activity) {
         onActionOnViewPerformed(activity);
     }
 

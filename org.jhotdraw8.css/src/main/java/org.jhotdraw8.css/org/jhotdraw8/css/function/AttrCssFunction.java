@@ -397,7 +397,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     private @NonNull QualifiedName parseAttrName(@NonNull CssTokenizer tt) throws IOException, ParseException {
         String name;
         if (tt.next() == CssTokenType.TT_IDENT) {
-            name = tt.currentString();
+            name = tt.currentStringNonNull();
         } else {
             throw new ParseException(getName() + "(): attr-name expected.", tt.getStartPosition());
         }

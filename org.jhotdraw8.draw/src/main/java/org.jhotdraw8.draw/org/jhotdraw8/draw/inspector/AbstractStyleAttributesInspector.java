@@ -237,11 +237,11 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
             recreateHandles();
         } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
             return;
         } catch (ParseException e) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             new Alert(Alert.AlertType.ERROR, e.getMessage()).showAndWait();
             textArea.positionCaret(e.getErrorOffset());
@@ -688,7 +688,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
             showSelection();
         } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
         }
 
@@ -788,7 +788,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 }
             }
         } catch (IOException ex) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
         }
     }

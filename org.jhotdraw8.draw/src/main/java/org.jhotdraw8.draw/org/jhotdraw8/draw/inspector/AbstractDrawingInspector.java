@@ -73,7 +73,7 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
      * @param oldValue   the old drawing
      * @param newValue   the new drawing
      */
-    protected abstract void onDrawingChanged(ObservableValue<? extends Drawing> observable, Drawing oldValue, Drawing newValue);
+    protected abstract void onDrawingChanged(@Nullable ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue);
 
     /**
      * Can be overriden by subclasses.
@@ -83,7 +83,7 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
      * @param oldValue   the old drawing model
      * @param newValue   the new drawing model
      */
-    protected void onDrawingModelChanged(ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) {
+    protected void onDrawingModelChanged(@Nullable ObservableValue<? extends DrawingModel> observable, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
 
     }
 

@@ -136,7 +136,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
                 handleStrokeWidthProperty.bindBidirectional(newValue.getEditor().handleStrokeWidthProperty());
             }
         } catch (Throwable t) {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + t.getMessage(), t);
 
         }
     }

@@ -143,7 +143,7 @@ public class ImageFigure extends AbstractLeafFigure
                 cachedImage = new Image(cachedImageUri.toString(), true);
             } catch (IllegalArgumentException e) {
                 System.err.println("could not load image from uri: " + absoluteUri);
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             }
         }

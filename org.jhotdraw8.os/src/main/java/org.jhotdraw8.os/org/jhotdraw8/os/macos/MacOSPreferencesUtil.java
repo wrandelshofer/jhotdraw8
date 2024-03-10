@@ -180,7 +180,7 @@ public class MacOSPreferencesUtil {
                 Document plist = PListParsers.readPList(file);
                 cache.putAll(PListParsers.toMap(plist));
             } catch (Throwable e) {
-                Logger.getLogger(MacOSPreferencesUtil.class.getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                Logger.getLogger(MacOSPreferencesUtil.class.getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             }
         }

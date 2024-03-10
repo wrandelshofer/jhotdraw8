@@ -172,7 +172,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
                     event.consume();
                 }
             } catch (Throwable t) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + t.getMessage(), t);
 
             }
         });

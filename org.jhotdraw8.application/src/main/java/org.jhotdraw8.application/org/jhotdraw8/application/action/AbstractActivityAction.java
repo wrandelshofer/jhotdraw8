@@ -52,7 +52,7 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
      * @param event    the action event
      * @param activity the activity
      */
-    protected abstract void onActionPerformed(ActionEvent event, A activity);
+    protected abstract void onActionPerformed(@NonNull ActionEvent event, @NonNull A activity);
 
 
 }

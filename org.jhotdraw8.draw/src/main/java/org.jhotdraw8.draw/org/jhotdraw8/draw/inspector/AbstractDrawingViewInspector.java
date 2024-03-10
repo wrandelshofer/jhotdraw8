@@ -50,7 +50,7 @@ public abstract class AbstractDrawingViewInspector extends AbstractInspector<Dra
      * @param oldValue   the old drawing view
      * @param newValue   the new drawing view
      */
-    protected void onDrawingViewChanged(ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
+    protected void onDrawingViewChanged(@Nullable ObservableValue<? extends DrawingView> observable, @Nullable DrawingView oldValue, @Nullable DrawingView newValue) {
 
     }
 }

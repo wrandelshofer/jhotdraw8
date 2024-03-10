@@ -452,11 +452,11 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
                 this.dockRoot.getDockChildren().setAll(htrack);
                 this.dockRoot.setDockablePredicate(items::contains);
             } else {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             }
         }).exceptionally((e) -> {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
             //noinspection ReturnOfNull
             return null;
@@ -524,7 +524,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             }
         }).handle((voidvalue, ex) -> {
             if (ex != null) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
             }
             return null;

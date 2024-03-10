@@ -211,7 +211,7 @@ public class AnalysisOfSvgTestSuitesTest {
                         (int) referenceImageX.getWidth(), (int) referenceImageX.getHeight());
                 future.complete(new SimpleOrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + t.getMessage(), t);
 
                 future.completeExceptionally(t);
             }
@@ -241,7 +241,7 @@ public class AnalysisOfSvgTestSuitesTest {
                 WritableImage referenceImage = referenceNode.snapshot(new SnapshotParameters(), null);
                 future.complete(new SimpleOrderedPair<>(testImage, referenceImage));
             } catch (Throwable t) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + t.getMessage(), t);
 
                 future.completeExceptionally(t);
             }
@@ -289,7 +289,7 @@ public class AnalysisOfSvgTestSuitesTest {
                         waitUntilClosed.complete(Boolean.TRUE);
                     });
                 } catch (Throwable t) {
-                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", t);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + t.getMessage(), t);
 
                     waitUntilClosed.completeExceptionally(t);
 

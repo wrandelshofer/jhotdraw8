@@ -141,7 +141,7 @@ public abstract class AbstractApplication extends javafx.application.Application
                 }
                 recentUris.put(uri, format);
             } catch (URISyntaxException ex) {
-                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", ex);
+                Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
             }
         }

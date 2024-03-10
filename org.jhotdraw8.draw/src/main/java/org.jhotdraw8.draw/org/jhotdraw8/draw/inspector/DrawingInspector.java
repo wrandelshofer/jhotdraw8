@@ -112,7 +112,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
     }
 
     @Override
-    protected void onDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void onDrawingChanged(@Nullable ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         if (widthProperty != null) {
             widthField.textProperty().unbindBidirectional(widthProperty);
             widthProperty.removeListener(sizeCommitHandler);

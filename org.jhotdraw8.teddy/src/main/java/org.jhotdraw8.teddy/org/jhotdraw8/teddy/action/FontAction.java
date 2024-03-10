@@ -36,7 +36,7 @@ public class FontAction extends AbstractActivityAction<FontableActivity> {
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, FontableActivity activity) {
+    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull FontableActivity activity) {
         if (fontDialog == null) {
             fontDialog = new FontDialog();
             fontDialog.initOwner(activity.getNode().getScene().getWindow());

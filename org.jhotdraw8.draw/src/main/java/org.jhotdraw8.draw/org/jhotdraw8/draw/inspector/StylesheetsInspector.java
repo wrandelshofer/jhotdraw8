@@ -196,7 +196,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
     private int isReplacingDrawing;
 
     @Override
-    protected void onDrawingChanged(ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
+    protected void onDrawingChanged(@Nullable ObservableValue<? extends Drawing> observable, @Nullable Drawing oldValue, @Nullable Drawing newValue) {
         isReplacingDrawing++;
         if (oldValue != null) {
             listView.getItems().clear();

@@ -211,7 +211,7 @@ public abstract class AbstractColorSlider extends Pane {
                         newPixelBuffer.updateBuffer(b -> null);
                         pixelBuffer = newPixelBuffer;
                     } else if (!(e instanceof CancellationException)) {
-                        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception.", e);
+                        Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 
                     }
 
