@@ -157,7 +157,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
         Text tn = new Text();
         tn.setX(getStyledNonNull(X).getConvertedValue());
         tn.setY(getStyledNonNull(Y).getConvertedValue());

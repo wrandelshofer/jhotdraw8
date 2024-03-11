@@ -153,7 +153,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     public abstract @Nullable String getMarkerStartShape();
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
         BezierPath path = get(PATH);
         if (path == null || path.isEmpty()) {
             Point2D start = getNonNull(START).getConvertedValue();

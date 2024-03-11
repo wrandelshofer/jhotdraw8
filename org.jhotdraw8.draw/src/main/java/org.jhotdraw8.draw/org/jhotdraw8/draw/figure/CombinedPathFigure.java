@@ -113,7 +113,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
         if (op != null) {
             return getPathIteratorCAG(ctx, tx, op);

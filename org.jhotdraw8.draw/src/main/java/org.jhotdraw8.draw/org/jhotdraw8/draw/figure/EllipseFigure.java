@@ -87,7 +87,7 @@ public class EllipseFigure extends AbstractLeafFigure
 
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
         Ellipse shape = new Ellipse();
         shape.setCenterX(getStyledNonNull(CENTER_X).getConvertedValue());
         shape.setCenterY(getStyledNonNull(CENTER_Y).getConvertedValue());

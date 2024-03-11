@@ -117,7 +117,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     public abstract @Nullable String getMarkerStartShape();
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, AffineTransform tx) {
+    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
         // FIXME include markers in path
         return FXShapes.awtShapeFromFX(new Line(
                 getNonNull(START_X).getConvertedValue(),
@@ -172,7 +172,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateEndMarkerNode(@NonNull RenderContext ctx, Path node) {
+    protected void updateEndMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
         // empty
     }
 
@@ -187,7 +187,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Line node) {
     }
 
-    protected void updateMarkerNode(@NonNull RenderContext ctx, Group group,
+    protected void updateMarkerNode(@NonNull RenderContext ctx,
+                                    @NonNull Group group,
                                     @NonNull Path markerNode,
                                     @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
@@ -260,7 +261,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateStartMarkerNode(@NonNull RenderContext ctx, Path node) {
+    protected void updateStartMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
         // empty
     }
 }
