@@ -95,6 +95,7 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.function.BiConsumer;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.prefs.Preferences;
@@ -134,7 +135,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
      */
     public static final @NonNull String MULTIPLE_VALUES_PLACEHOLDER = "/* multiple values */";
     protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
+    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
     private final @NonNull ObjectProperty<Predicate<QualifiedName>> attributeFilter = new SimpleObjectProperty<>(k -> true);
+    private final @NonNull ObjectProperty<Supplier<CssParser>> cssParserFactory = new SimpleObjectProperty<>(CssParser::new);
     private final @NonNull ReadOnlyMapProperty<WritableStyleableMapAccessor<?>, Picker<?>> accessorPickerMap = new SimpleMapProperty<>(FXCollections.observableMap(new LinkedHashMap<>()));
     private final @NonNull SetProperty<E> selection = new SimpleSetProperty<>();
     private final @NonNull Map<QualifiedName, String> helpTexts = new HashMap<>();
@@ -167,10 +170,6 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private boolean textAreaValid = true;
     private boolean isApplying;
 
-    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
-
-    protected abstract void forwardUndoableEdit(@NonNull UndoableEditEvent event);
-
     {
         showing.addListener((o, oldv, newv) -> {
             if (newv) {
@@ -200,6 +199,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
         init(fxmlUrl);
     }
 
+    protected abstract void forwardUndoableEdit(@NonNull UndoableEditEvent event);
+
     public @NonNull ReadOnlyMapProperty<WritableStyleableMapAccessor<?>, Picker<?>> accessorPickerMapProperty() {
         return accessorPickerMap;
     }
@@ -207,7 +208,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     private void apply(ActionEvent event) {
         undoHelper.startCompositeEdit(null);
         isApplying = true;
-        CssParser parser = new CssParser();
+        CssParser parser = getCssParserFactoryOrDefault().get();
         TextArea textArea = getTextArea();
         try {
             Stylesheet stylesheet = parser.parseStylesheet(textArea.getText(), null, null);
@@ -640,7 +641,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     }
 
     private SelectorGroup parseSelector() {
-        CssParser parser = new CssParser();
+        CssParser parser = getCssParserFactoryOrDefault().get();
         try {
             Stylesheet s = parser.parseStylesheet(textArea.getText(), null, null);
             if (!parser.getParseExceptions().isEmpty()) {
@@ -656,6 +657,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             return new SelectorGroup(null, Collections.emptyList());
         }
     }
+
 
     protected abstract void recreateHandles();
 
@@ -940,6 +942,23 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
             textAreaValid = true;
         }
+    }
+
+    public @Nullable Supplier<CssParser> getCssParserFactory() {
+        return cssParserFactory.get();
+    }
+
+    public @NonNull Supplier<CssParser> getCssParserFactoryOrDefault() {
+        var s = cssParserFactory.get();
+        return s == null ? CssParser::new : s;
+    }
+
+    public void setCssParserFactory(@Nullable Supplier<CssParser> cssParserFactory) {
+        this.cssParserFactory.set(cssParserFactory);
+    }
+
+    public @NonNull ObjectProperty<Supplier<CssParser>> cssParserFactoryProperty() {
+        return cssParserFactory;
     }
 
     private record LookupEntry(int position, @NonNull StyleRule styleRule,
