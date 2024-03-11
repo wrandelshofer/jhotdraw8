@@ -72,7 +72,7 @@ public class SystemCssColor extends CssColor {
 
     /*
     @Override
-    public @Nullable Paint getPaint(RenderContext ctx) {
+    public @Nullable Paint getPaint(@NonNull RenderContext ctx) {
         return ctx == null ? getPaint()
                 : ctx.getNonNull(RenderContext.SYSTEM_COLOR_CONVERTER_KEY)
                 .convert(this);

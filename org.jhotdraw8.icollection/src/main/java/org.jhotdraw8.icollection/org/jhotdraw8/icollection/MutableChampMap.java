@@ -84,6 +84,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
      *
      * @param m a map
      */
+    @SuppressWarnings("this-escape")
     public MutableChampMap(@NonNull Map<? extends K, ? extends V> m) {
         if (m instanceof MutableChampMap) {
             @SuppressWarnings("unchecked")
@@ -103,6 +104,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
      *
      * @param m an iterable
      */
+    @SuppressWarnings("this-escape")
     public MutableChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         if (m instanceof ChampMap) {
             @SuppressWarnings("unchecked")

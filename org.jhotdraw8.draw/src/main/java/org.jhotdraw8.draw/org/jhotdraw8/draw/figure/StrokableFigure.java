@@ -135,7 +135,7 @@ public interface StrokableFigure extends Figure {
     @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style",
             STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
 
-    default void applyStrokeCapAndJoinProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeCapAndJoinProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -151,7 +151,7 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    default void applyStrokeDashProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeDashProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         double d = getStyledNonNull(STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -168,7 +168,7 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    default void applyStrokeTypeProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeTypeProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         StrokeType st = getStyled(STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);

@@ -227,7 +227,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
 
 
     @Override
-    public void updateCss(RenderContext ctx) {
+    public void updateCss(@NonNull RenderContext ctx) {
         Drawing d = getDrawing();
         if (d != null) {
             StylesheetsManager<Figure> styleManager = d.getStyleManager();

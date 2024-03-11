@@ -163,9 +163,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         return path.getPathIterator(tx);
     }
 
-    public abstract double getStrokeCutEnd(RenderContext ctx);
+    public abstract double getStrokeCutEnd(@NonNull RenderContext ctx);
 
-    public abstract double getStrokeCutStart(RenderContext ctx);
+    public abstract double getStrokeCutStart(@NonNull RenderContext ctx);
 
     @Override
     public void layout(@NonNull RenderContext ctx) {
@@ -293,7 +293,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     }
 
-    protected void updateMarkerNode(RenderContext ctx, Group group,
+    protected void updateMarkerNode(@NonNull RenderContext ctx, Group group,
                                     @NonNull Path markerNode,
                                     @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {

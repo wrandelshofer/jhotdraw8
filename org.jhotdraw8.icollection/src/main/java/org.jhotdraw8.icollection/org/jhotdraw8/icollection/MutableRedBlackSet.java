@@ -43,12 +43,13 @@ import java.util.stream.Stream;
 public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSet<E>, Serializable, Cloneable, ReadOnlyNavigableSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
+    @SuppressWarnings({"serial", "RedundantSuppression"})// Conditionally serializable
     final @NonNull Comparator<E> comparator;
     /**
      * The number of times this set has been structurally modified.
      */
     protected transient int modCount;
-    @NonNull RedBlackTree<E, Void> root;
+    transient @NonNull RedBlackTree<E, Void> root;
     /**
      * Constructs a new, empty set, sorted according to the
      * specified comparator.
@@ -66,6 +67,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
      * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param c          the collection
      */
+    @SuppressWarnings("this-escape")
     public MutableRedBlackSet(@Nullable Comparator<E> comparator, Collection<? extends E> c) {
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = RedBlackTree.empty();
@@ -76,6 +78,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
      * Constructs a new, empty set, sorted according to the
      * <i>natural ordering</i> of its elements.
      */
+    @SuppressWarnings("this-escape")
     public MutableRedBlackSet() {
         this.comparator = NaturalComparator.instance();
         this.root = RedBlackTree.empty();
@@ -88,6 +91,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
      *
      * @param c the collection
      */
+    @SuppressWarnings("this-escape")
     public MutableRedBlackSet(Iterable<? extends E> c) {
         this.comparator = NaturalComparator.instance();
         this.root = RedBlackTree.empty();

@@ -347,7 +347,7 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      *
      * @param ctx the render context (optional)
      */
-    void validate(RenderContext ctx);
+    void validate(@NonNull RenderContext ctx);
 
     // ---
     // convenience methods

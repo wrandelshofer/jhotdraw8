@@ -37,7 +37,7 @@ public class EllipseConnector extends LocatorConnector {
     }
 
     @Override
-    public @Nullable IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    public @Nullable IntersectionPointEx intersect(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds bounds = target.getLayoutBounds();

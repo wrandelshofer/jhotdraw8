@@ -61,7 +61,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Serial
     private static final long serialVersionUID = 0L;
 
-    private @NonNull BitMappedTrie<E> root;
+    private transient @NonNull BitMappedTrie<E> root;
 
     /**
      * Constructs a new empty list.
@@ -181,7 +181,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
      *
      * @param c an iterable
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "this-escape"})
     public MutableVectorList(@NonNull Iterable<? extends E> c) {
         if (c instanceof MutableVectorList<?>) {
             c = ((MutableVectorList<? extends E>) c).toImmutable();

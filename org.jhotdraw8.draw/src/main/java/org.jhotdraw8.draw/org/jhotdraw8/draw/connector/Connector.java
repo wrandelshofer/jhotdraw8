@@ -70,7 +70,7 @@ public interface Connector {
      * @param ey         y-coordinate at the end of the line
      * @return the new start point in world coordinates
      */
-    default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double sx, double sy, double ex, double ey) {
+    default IntersectionPointEx chopStart(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, double sx, double sy, double ex, double ey) {
         return chopStart(ctx, connection, target, new Point2D(sx, sy), new Point2D(ex, ey));
     }
 
@@ -86,7 +86,7 @@ public interface Connector {
      * @param end        the end of the line, should be outside the target figure
      * @return the new start point in world coordinates
      */
-    default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    default IntersectionPointEx chopStart(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         IntersectionPointEx ip = intersect(ctx, connection, target, start, end);
         Point2D derivative = end.subtract(start);
         return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, derivative.getX(), derivative.getY(), 0, derivative.getX(), derivative.getY()) :
@@ -107,7 +107,7 @@ public interface Connector {
      * @return the intersection in the interval [0,1], null if no intersection.
      * In case of multiple intersections returns the largest value.
      */
-    default @Nullable IntersectionPointEx intersect(RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    default @Nullable IntersectionPointEx intersect(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getLayoutBounds();

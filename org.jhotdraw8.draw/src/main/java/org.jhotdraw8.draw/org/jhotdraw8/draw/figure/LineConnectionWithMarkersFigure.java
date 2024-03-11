@@ -48,7 +48,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    protected void updateEndMarkerNode(RenderContext ctx, @NonNull Path node) {
+    protected void updateEndMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
         super.updateEndMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }
@@ -69,7 +69,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    protected void updateStartMarkerNode(RenderContext ctx, @NonNull Path node) {
+    protected void updateStartMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
         super.updateStartMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }
@@ -95,12 +95,12 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    public double getStrokeCutEnd(RenderContext ctx) {
+    public double getStrokeCutEnd(@NonNull RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutEnd();
     }
 
     @Override
-    public double getStrokeCutStart(RenderContext ctx) {
+    public double getStrokeCutStart(@NonNull RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutStart();
     }
 

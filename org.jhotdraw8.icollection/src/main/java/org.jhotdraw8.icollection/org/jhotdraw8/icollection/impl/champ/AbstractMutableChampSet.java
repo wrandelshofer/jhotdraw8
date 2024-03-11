@@ -39,12 +39,12 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
      * <p>
      * If this owner id is null, then this set does not own any nodes.
      */
-    protected @Nullable IdentityObject owner;
+    protected transient @Nullable IdentityObject owner;
 
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<D> root;
+    protected transient BitmapIndexedNode<D> root;
 
     /**
      * The number of elements in this set.

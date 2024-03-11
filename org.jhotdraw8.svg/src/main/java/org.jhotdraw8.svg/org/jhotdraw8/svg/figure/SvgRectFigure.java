@@ -71,7 +71,7 @@ public class SvgRectFigure extends AbstractLeafFigure
         return g;
     }
 
-    private Point2D getRxRy(RenderContext ctx) {
+    private Point2D getRxRy(@NonNull RenderContext ctx) {
         CssSize rxNullable = get(RX);
         CssSize ryNullable = get(RY);
         final double rx, ry;

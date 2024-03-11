@@ -100,11 +100,10 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
      *
      * @param m a map
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "this-escape"})
     public MutableRedBlackMap(@NonNull SortedMap<? extends K, ? extends V> m) {
         this.comparator = m.comparator() == null ? NaturalComparator.instance() : (Comparator<? super K>) m.comparator();
         if (m instanceof MutableRedBlackMap<?, ?> r && r.comparator() == null) {
-            @SuppressWarnings("unchecked")
             MutableRedBlackMap<K, V> that = (MutableRedBlackMap<K, V>) m;
             this.root = that.root;
         } else {
@@ -120,10 +119,10 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
      *
      * @param m an iterable
      */
+    @SuppressWarnings({"unchecked", "this-escape"})
     public MutableRedBlackMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.comparator = NaturalComparator.instance();
         if (m instanceof RedBlackMap) {
-            @SuppressWarnings("unchecked")
             RedBlackMap<K, V> that = (RedBlackMap<K, V>) m;
             this.root = that.root;
         } else {

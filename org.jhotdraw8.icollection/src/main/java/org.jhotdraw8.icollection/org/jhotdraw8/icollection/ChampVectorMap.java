@@ -125,7 +125,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    final @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root;
+    final transient @NonNull BitmapIndexedNode<SequencedEntry<K, V>> root;
     /**
      * Offset of sequence numbers to vector indices.
      *

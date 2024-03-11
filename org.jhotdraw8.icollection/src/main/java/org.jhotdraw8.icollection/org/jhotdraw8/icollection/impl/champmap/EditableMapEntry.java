@@ -7,6 +7,7 @@ package org.jhotdraw8.icollection.impl.champmap;
 
 import org.jhotdraw8.annotation.Nullable;
 
+import java.io.Serial;
 import java.util.AbstractMap;
 import java.util.function.BiConsumer;
 
@@ -17,8 +18,11 @@ import java.util.function.BiConsumer;
  * @param <V> the value type
  */
 public class EditableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
+    @Serial
+    private static final long serialVersionUID = 0L;
     private final int sequenceNumber;
-    private @Nullable BiConsumer<K, V> putIfPresentFunction;
+    @SuppressWarnings({"serial", "RedundantSuppression"})
+    private @Nullable BiConsumer<K, V> putIfPresentFunction;// This map entry is actually not serializable
 
     public EditableMapEntry(K key, V value, int sequenceNumber) {
         super(key, value);

@@ -67,7 +67,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    private PathIterator getStyledPathIteratorInParent(RenderContext ctx, @NonNull PathIterableFigure f, @Nullable AffineTransform tx) {
+    private PathIterator getStyledPathIteratorInParent(@NonNull RenderContext ctx, @NonNull PathIterableFigure f, @Nullable AffineTransform tx) {
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
         AffineTransform ltpTx = FXTransforms.toAwt(localToParent);
@@ -129,7 +129,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
     }
 
-    private @NonNull PathIterator getPathIteratorCAG(RenderContext ctx, AffineTransform tx, @NonNull CagOperation op) {
+    private @NonNull PathIterator getPathIteratorCAG(@NonNull RenderContext ctx, AffineTransform tx, @NonNull CagOperation op) {
         Area area = null;
         boolean first = true;
         for (Figure child : getChildren()) {

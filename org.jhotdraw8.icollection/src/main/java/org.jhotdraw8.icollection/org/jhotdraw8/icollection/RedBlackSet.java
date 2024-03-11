@@ -43,7 +43,8 @@ import java.util.function.Consumer;
 public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
-    final @NonNull RedBlackTree<E, Void> root;
+    final transient @NonNull RedBlackTree<E, Void> root;
+    @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
     final @NonNull Comparator<E> comparator;
 
     /**

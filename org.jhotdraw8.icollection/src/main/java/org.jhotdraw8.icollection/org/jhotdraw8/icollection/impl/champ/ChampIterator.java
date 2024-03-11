@@ -33,7 +33,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
     private int currentStackLevel = -1;
     private final int[] indexAndArity = new int[MAX_DEPTH * 2];
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "rawtypes", "RedundantSuppression"})
     final Node<K>[] nodes = new Node[MAX_DEPTH];
 
     @SuppressWarnings("unchecked")

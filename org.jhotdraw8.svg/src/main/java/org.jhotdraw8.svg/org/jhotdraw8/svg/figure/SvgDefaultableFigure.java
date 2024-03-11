@@ -322,7 +322,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applySvgDefaultableCompositingProperties(RenderContext ctx, @NonNull Node node) {
+    default void applySvgDefaultableCompositingProperties(@NonNull RenderContext ctx, @NonNull Node node) {
         node.setOpacity(getDefaultableStyledNonNull(OPACITY_KEY));
         BlendMode bmValue = getDefaultableStyledNonNull(MIX_BLEND_MODE_KEY);
         if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to null
@@ -398,7 +398,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
 
     }
 
-    default void applySvgShapeProperties(RenderContext ctx, Shape fillShape, Shape strokeShape) {
+    default void applySvgShapeProperties(@NonNull RenderContext ctx, Shape fillShape, Shape strokeShape) {
         double strokeOpacity = getDefaultableStyledNonNull(STROKE_OPACITY_KEY);
         double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
         if (strokeOpacity == fillOpacity) {

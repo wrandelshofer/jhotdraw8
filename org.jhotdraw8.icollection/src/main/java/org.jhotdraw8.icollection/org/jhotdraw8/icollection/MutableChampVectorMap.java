@@ -123,7 +123,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
      *
      * @param c an iterable
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampVectorMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c instanceof ChampVectorMap<?, ?>) {
             ChampVectorMap<K, V> that = (ChampVectorMap<K, V>) c;

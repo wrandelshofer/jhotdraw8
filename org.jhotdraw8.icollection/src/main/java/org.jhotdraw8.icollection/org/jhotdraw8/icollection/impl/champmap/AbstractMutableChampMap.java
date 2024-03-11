@@ -45,7 +45,7 @@ public abstract class AbstractMutableChampMap<K, V> extends AbstractMap<K, V> im
     /**
      * The root of this CHAMP trie.
      */
-    protected BitmapIndexedNode<K, V> root;
+    protected transient @NonNull BitmapIndexedNode<K, V> root;
 
     /**
      * The number of entries in this map.

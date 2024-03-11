@@ -130,7 +130,7 @@ public class SvgTextFigure extends AbstractLeafFigure
         return computeLayoutBounds(new SimpleRenderContext(), new Text());
     }
 
-    protected @NonNull Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
+    protected @NonNull Bounds computeLayoutBounds(@NonNull RenderContext ctx, Text textNode) {
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = new Insets(0, 0, 0, 0);
@@ -172,7 +172,7 @@ public class SvgTextFigure extends AbstractLeafFigure
         return FXShapes.awtShapeFromFX(tn).getPathIterator(tx);
     }
 
-    protected @Nullable String getText(RenderContext ctx) {
+    protected @Nullable String getText(@NonNull RenderContext ctx) {
         return get(TEXT);
     }
 
@@ -199,7 +199,7 @@ public class SvgTextFigure extends AbstractLeafFigure
         set(Y, y.add(delta.getY()));
     }
 
-    protected void updateGroupNode(RenderContext ctx, Group node) {
+    protected void updateGroupNode(@NonNull RenderContext ctx, Group node) {
         applySvgDefaultableCompositingProperties(ctx, node);
 
     }

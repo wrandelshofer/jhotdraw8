@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * Usage:
  * <pre>
  * class MyFigureClass implements CompositableFigure {
- *     public void updateNode(RenderContext ctx, Node n) {
+ *     public void updateNode(@NonNull RenderContext ctx, Node n) {
  *         applyCompositableFigureProperties(ctx, n);
  *     }
  * }
@@ -66,7 +66,7 @@ public interface CompositableFigure extends Figure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyCompositableFigureProperties(RenderContext ctx, @NonNull Node node) {
+    default void applyCompositableFigureProperties(@NonNull RenderContext ctx, @NonNull Node node) {
         // Performance: JavaFX performs compositing on a Group node,
         // when blend mode != null, although this should be equivalent to SRC_OVER.
         final BlendMode blendMode = getStyled(BLEND_MODE);

@@ -86,6 +86,8 @@ public abstract class ListSerializationProxy<E> implements Serializable {
         }
     }
 
+    @SuppressWarnings({"serial", "RedundantSuppression"})
+// We define this abstract method here, because require that subclasses have this method.
     @Serial
     protected abstract @NonNull Object readResolve();
 }

@@ -95,7 +95,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
 
-    protected void updatePathNode(RenderContext ctx, @NonNull Path path) {
+    protected void updatePathNode(@NonNull RenderContext ctx, @NonNull Path path) {
         path.getElements().setAll(FXShapes.fxPathElementsFromAwt(this.path.getPathIterator(null)));
     }
 

@@ -78,7 +78,7 @@ public class CssColor implements Paintable {
     }
 
     @Override
-    public @Nullable Paint getPaint(RenderContext ctx) {
+    public @Nullable Paint getPaint(@NonNull RenderContext ctx) {
         return color;
     }
 

@@ -145,7 +145,7 @@ public interface SecondStrokableFigure extends Figure {
             SECOND_STROKE_TYPE, SECOND_STROKE_LINE_CAP, SECOND_STROKE_LINE_JOIN, SECOND_STROKE_MITER_LIMIT,
             SECOND_STROKE_DASH_OFFSET, SECOND_STROKE_DASH_ARRAY);
 
-    default void applySecondStrokeCapAndJoinProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeCapAndJoinProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(SECOND_STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -161,7 +161,7 @@ public interface SecondStrokableFigure extends Figure {
         }
     }
 
-    default void applySecondStrokeDashProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeDashProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         double d = getStyledNonNull(SECOND_STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -178,7 +178,7 @@ public interface SecondStrokableFigure extends Figure {
         }
     }
 
-    default void applySecondStrokeTypeProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeTypeProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         StrokeType st = getStyled(SECOND_STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -191,7 +191,7 @@ public interface SecondStrokableFigure extends Figure {
      * @param ctx
      * @param shape a shape node
      */
-    default void applySecondStrokeableFigureProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeableFigureProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         applySecondStrokeColorProperties(ctx, shape);
         applySecondStrokeWidthProperties(ctx, shape);
         applySecondStrokeCapAndJoinProperties(ctx, shape);
@@ -200,14 +200,14 @@ public interface SecondStrokableFigure extends Figure {
         applySecondStrokeDashProperties(ctx, shape);
     }
 
-    default void applySecondStrokeColorProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeColorProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         Paint p = Paintable.getPaint(getStyled(SECOND_STROKE), ctx);
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
 
-    default void applySecondStrokeWidthProperties(RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeWidthProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
         double d = getStyledNonNull(SECOND_STROKE_WIDTH).getConvertedValue();
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);

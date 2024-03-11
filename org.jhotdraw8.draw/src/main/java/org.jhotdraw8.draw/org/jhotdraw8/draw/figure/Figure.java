@@ -366,7 +366,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * <p>
      * A typical implementation should look like this:
      * <pre>{@code
-     * public Node createNode(RenderContext v) {
+     * public Node createNode(@NonNull RenderContext v) {
      * return new ...desired subclass of Node...();
      * }
      * }</pre>
@@ -1246,7 +1246,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @param ctx the render context
      */
-    void updateCss(RenderContext ctx);
+    void updateCss(@NonNull RenderContext ctx);
 
     /**
      * This method is invoked by a {@code RenderContext}, when it needs to
@@ -1258,7 +1258,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * getChildren.
      * </p>
      * <pre>
-     * public void updateNode(RenderContext rc, Node n) {
+     * public void updateNode(@NonNull RenderContext rc, Node n) {
      *     ObservableList&lt;Node&gt; group = ((Group) n).getChildren();
      * group.clear();
      * for (Figure child : children()) {

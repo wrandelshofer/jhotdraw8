@@ -44,8 +44,8 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
 
     @Serial
     private static final long serialVersionUID = 0L;
-    final @NonNull RedBlackTree<K, V> root;
-    final @NonNull Comparator<? super K> comparator;
+    final transient @NonNull RedBlackTree<K, V> root;
+    final transient @NonNull Comparator<? super K> comparator;
 
     /**
      * Creates a new instance with the provided privateData data object.
@@ -157,6 +157,7 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     public static <K, V> @NonNull RedBlackMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
         return RedBlackMap.<K, V>of().putAll(map);
     }
+
     /**
      * Returns an empty immutable map, sorted according to the
      * specified comparator.

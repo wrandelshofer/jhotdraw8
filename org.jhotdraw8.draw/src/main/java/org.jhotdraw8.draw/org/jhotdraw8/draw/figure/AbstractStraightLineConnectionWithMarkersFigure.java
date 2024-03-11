@@ -126,9 +126,9 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
                 getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
-    public abstract double getStrokeCutEnd(RenderContext ctx);
+    public abstract double getStrokeCutEnd(@NonNull RenderContext ctx);
 
-    public abstract double getStrokeCutStart(RenderContext ctx);
+    public abstract double getStrokeCutStart(@NonNull RenderContext ctx);
 
     @Override
     public void layout(@NonNull RenderContext ctx) {
@@ -172,7 +172,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
+    protected void updateEndMarkerNode(@NonNull RenderContext ctx, Path node) {
         // empty
     }
 
@@ -187,7 +187,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Line node) {
     }
 
-    protected void updateMarkerNode(RenderContext ctx, Group group,
+    protected void updateMarkerNode(@NonNull RenderContext ctx, Group group,
                                     @NonNull Path markerNode,
                                     @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
@@ -260,7 +260,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
+    protected void updateStartMarkerNode(@NonNull RenderContext ctx, Path node) {
         // empty
     }
 }

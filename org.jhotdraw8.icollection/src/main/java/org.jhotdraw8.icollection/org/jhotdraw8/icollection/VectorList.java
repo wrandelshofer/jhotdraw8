@@ -69,8 +69,10 @@ import java.util.stream.Stream;
  * @param <E> the element type
  */
 public class VectorList<E> implements ImmutableList<E>, Serializable {
+    @Serial
+    private static final long serialVersionUID = 0L;
     private static final VectorList<?> EMPTY = new VectorList<>();
-    final @NonNull BitMappedTrie<E> trie;
+    final transient @NonNull BitMappedTrie<E> trie;
 
     /**
      * Constructs a new empty list.
@@ -145,17 +147,16 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @SafeVarargs
+    @SuppressWarnings("varargs")
     public static <T> VectorList<T> of(T... t) {
         return new VectorList<>(BitMappedTrie.ofAll(t));
 
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> VectorList<T> ofIterator(Iterator<T> iterator) {
         return VectorList.<T>of().addAll(() -> iterator);
     }
 
-    @SuppressWarnings("unchecked")
     public static <T> VectorList<T> ofStream(Stream<T> stream) {
         return VectorList.<T>of().addAll(stream::iterator);
     }

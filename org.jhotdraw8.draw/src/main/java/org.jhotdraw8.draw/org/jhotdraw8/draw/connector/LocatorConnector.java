@@ -44,7 +44,7 @@ public class LocatorConnector extends AbstractConnector {
 
     /*
     @Override
-    public IntersectionPointEx chopStart(RenderContext ctx, Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
+    public IntersectionPointEx chopStart(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
         final Bounds b = target.getLayoutBounds();
         Point2D center = new Point2D(b.getMinX() + b.getWidth() * 0.5, b.getMinY() + b.getHeight() * 0.5);
         Point2D location = locator.locate(target);

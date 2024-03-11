@@ -132,7 +132,7 @@ public class FigureTest {
         }
 
         @Override
-        public void updateCss(RenderContext ctx) {
+        public void updateCss(@NonNull RenderContext ctx) {
         }
 
         @Override
