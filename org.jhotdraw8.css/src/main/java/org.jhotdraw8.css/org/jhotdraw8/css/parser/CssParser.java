@@ -146,11 +146,20 @@ import java.util.function.Function;
  * function     = ROUND_BLOCK , { S } , expr , ')' , { S } ;
  * expr         = term , { [ operator ] , term } ;
  * </pre>
+ * The parser interprets the following at rules:
+ * <pre>
+ * namespace_rule = "@namespace" , [ namespace_prefix ] , ( STRING | URI ) ;
+ * namespace_prefix = IDENT ;
+ * </pre>
  * <p>
  * References:
  * <dl>
- * <dt>CSS Syntax Module Level 3, Chapter 5. Parsing</dt>
- * <dd><a href="https://www.w3.org/TR/2021/CRD-css-syntax-3-20211224/#parsing">w3.org</a></dd>
+ * <dt>CSS Syntax Module Level 3, Paragraph 5. Parsing</dt>
+ * <dd><a href="https://drafts.csswg.org/css-namespaces/#declaration">w3.org</a></dd>
+ *
+ * <dt>CSS Namespaces Module Level 3, Paragraph 2 Declaring namespaces: the @namespace rulex</dt>
+ * <dd><a href="https://drafts.csswg.org/css-namespaces/#declaration">w3.org</a></dd>
+ *
  * <dt>W3C CSS2.2, Appendix G.1 Grammar of CSS 2.2</dt>
  * <dd><a href="https://www.w3.org/TR/2016/WD-CSS22-20160412/">w3.org</a></dd>
  * </dl>
