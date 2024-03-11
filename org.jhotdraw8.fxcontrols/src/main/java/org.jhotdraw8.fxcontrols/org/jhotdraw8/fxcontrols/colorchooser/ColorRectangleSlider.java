@@ -35,27 +35,33 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     /**
      * The index of the color space component that is displayed along the x-axis of the rectangle.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
     /**
      * The index of the color space component that is displayed along the y-axis of the rectangle.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
 
     /**
      * The minor unit distance between tick marks on the x-axis.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull DoubleProperty xMinorTickUnit = new SimpleDoubleProperty(this, "xMinorTickUnit", 1f / 255);
     /**
      * The minor unit distance between tick marks on the y-axis.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull DoubleProperty yMinorTickUnit = new SimpleDoubleProperty(this, "yMinorTickUnit", 1f / 255);
     /**
      * The major unit distance between tick marks on the x-axis.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull DoubleProperty xMajorTickUnit = new SimpleDoubleProperty(this, "xMajorTickUnit", 1f / 255);
     /**
      * The major unit distance between tick marks on the y-axis.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull DoubleProperty yMajorTickUnit = new SimpleDoubleProperty(this, "yMajorTickUnit", 1f / 255);
 
     public ColorRectangleSlider() {

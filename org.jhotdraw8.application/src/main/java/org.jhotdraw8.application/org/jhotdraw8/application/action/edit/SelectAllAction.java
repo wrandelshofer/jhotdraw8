@@ -36,6 +36,7 @@ public class SelectAllAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      *               focused component.
      */
+    @SuppressWarnings("this-escape")
     public SelectAllAction(@NonNull Application app, Node target) {
         super(app, target);
         ApplicationLabels.getResources().configureAction(this, ID);

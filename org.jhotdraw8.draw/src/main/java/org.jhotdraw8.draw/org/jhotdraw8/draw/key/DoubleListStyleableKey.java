@@ -12,8 +12,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
-import java.io.Serial;
-
 /**
  * DoubleListStyleableKey.
  *
@@ -21,8 +19,6 @@ import java.io.Serial;
  */
 public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WritableStyleableMapAccessor<ImmutableList<Double>> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final Converter<ImmutableList<Double>> converter;
 

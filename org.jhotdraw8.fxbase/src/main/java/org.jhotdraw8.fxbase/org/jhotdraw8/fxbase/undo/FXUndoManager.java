@@ -17,9 +17,13 @@ import javax.swing.undo.UndoManager;
 
 public class FXUndoManager implements UndoableEditListener {
     private final @NonNull UndoManager manager;
+    @SuppressWarnings("this-escape")
     private final @NonNull BooleanProperty canUndo = new SimpleBooleanProperty(this, "canUndo", false);
+    @SuppressWarnings("this-escape")
     private final @NonNull BooleanProperty canRedo = new SimpleBooleanProperty(this, "canRedo", false);
+    @SuppressWarnings("this-escape")
     private final @NonNull StringProperty undoName = new SimpleStringProperty(this, "undoName", "Undo");
+    @SuppressWarnings("this-escape")
     private final @NonNull StringProperty redoName = new SimpleStringProperty(this, "redoName", "Redo");
 
     private boolean isBusy;

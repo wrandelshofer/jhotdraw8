@@ -11,7 +11,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
-import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -23,9 +22,6 @@ import java.lang.reflect.Type;
 public class NonNullSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSequencedSet<T>>
         implements WritableStyleableMapAccessor<ImmutableSequencedSet<T>>,
         NonNullKey<ImmutableSequencedSet<T>> {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
 
     /**

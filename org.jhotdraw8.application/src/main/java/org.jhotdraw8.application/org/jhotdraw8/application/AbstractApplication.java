@@ -60,13 +60,20 @@ public abstract class AbstractApplication extends javafx.application.Application
      */
     private final @NonNull ObservableSet<Object> disablers = FXCollections.observableSet();
 
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(this, ACTIONS_PROPERTY, FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlySetProperty<Activity> activities = new ReadOnlySetWrapper<Activity>(this, ACTIVITIES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>())).getReadOnlyProperty();
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyListProperty<String> stylesheets = new ReadOnlyListWrapper<String>(this, STYLESHEETS_PROPERTY, FXCollections.observableArrayList()).getReadOnlyProperty();
 
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<Supplier<Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
+    @SuppressWarnings("this-escape")
     private final @NonNull NonNullObjectProperty<Resources> resources = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
+    @SuppressWarnings("this-escape")
     private final @NonNull NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
 
     /**

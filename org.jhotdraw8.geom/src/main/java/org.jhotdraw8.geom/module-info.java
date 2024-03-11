@@ -14,7 +14,7 @@ module org.jhotdraw8.geom {
     exports org.jhotdraw8.geom.biarc;
     exports org.jhotdraw8.geom.shape;
     requires transitive javafx.graphics;
-    requires static org.jhotdraw8.annotation;
+    requires transitive static org.jhotdraw8.annotation;
     requires transitive java.desktop;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.base;

@@ -28,6 +28,7 @@ public class OpenFileAction extends AbstractOpenFileAction {
      *
      * @param app the application
      */
+    @SuppressWarnings("this-escape")
     public OpenFileAction(FileBasedApplication app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

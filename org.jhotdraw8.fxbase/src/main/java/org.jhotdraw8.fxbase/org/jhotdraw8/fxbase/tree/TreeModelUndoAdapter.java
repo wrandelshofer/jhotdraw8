@@ -51,11 +51,13 @@ public class TreeModelUndoAdapter<E> {
             fireUndoableEdit(event.getSource(), edit);
         }
     };
+    @SuppressWarnings("this-escape")
     final private NonNullObjectProperty<ResourceBundle> resourceBundle = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new ResourceBundleStub());
 
     public TreeModelUndoAdapter() {
     }
 
+    @SuppressWarnings("this-escape")
     public TreeModelUndoAdapter(@NonNull TreeModel<E> model) {
         bind(model);
     }
@@ -94,6 +96,7 @@ public class TreeModelUndoAdapter<E> {
         model.removeTreeModelListener(treeModelListener);
     }
 
+    @SuppressWarnings({"serial", "RedundantSuppression"})
     class RootChangedEdit<EE> extends AbstractUndoableEdit {
         private final @NonNull TreeModel<EE> model;
         private final @Nullable EE oldRoot;
@@ -123,6 +126,7 @@ public class TreeModelUndoAdapter<E> {
         }
     }
 
+    @SuppressWarnings({"serial", "RedundantSuppression"})
     class NodeAddedEdit<EE> extends AbstractUndoableEdit {
         private final @NonNull TreeModel<EE> model;
         private final @NonNull EE parent;
@@ -154,6 +158,7 @@ public class TreeModelUndoAdapter<E> {
         }
     }
 
+    @SuppressWarnings({"serial", "RedundantSuppression"})
     class NodeRemovedEdit<EE> extends AbstractUndoableEdit {
         private final @NonNull TreeModel<EE> model;
         private final @NonNull EE parent;

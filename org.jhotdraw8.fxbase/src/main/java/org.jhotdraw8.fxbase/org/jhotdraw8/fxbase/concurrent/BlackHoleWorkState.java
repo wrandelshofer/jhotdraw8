@@ -23,12 +23,19 @@ import org.jhotdraw8.annotation.Nullable;
  * @param <V> the result type of the work
  */
 public class BlackHoleWorkState<V> implements WorkState<V> {
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, MESSAGE_PROPERTY, null);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, VALUE_PROPERTY, null);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, TOTAL_WORK_PROPERTY, -1.0);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, PROGRESS_PROPERTY, -1.0);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
     private volatile boolean isCancelled;
 

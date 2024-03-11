@@ -13,7 +13,6 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
-import java.io.Serial;
 import java.util.Map;
 
 import static java.lang.Double.max;
@@ -26,8 +25,6 @@ import static java.lang.Double.max;
 public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull Rectangle2D>
         implements NonNullMapAccessor<@NonNull Rectangle2D> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final @NonNull NonNullMapAccessor<Double> xKey;
     private final @NonNull NonNullMapAccessor<Double> yKey;

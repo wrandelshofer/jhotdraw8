@@ -10,8 +10,6 @@ import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
-import java.io.Serial;
-
 /**
  * NonNullBooleanStyleableKey (not nullable).
  *
@@ -21,8 +19,6 @@ public class NonNullBooleanStyleableKey extends NonNullObjectStyleableKey<Boolea
         implements WritableStyleableMapAccessor<Boolean>,
         NonNullKey<Boolean> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     public NonNullBooleanStyleableKey(@NonNull String key) {
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key), false);

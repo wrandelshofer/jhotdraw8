@@ -30,6 +30,7 @@ public class RedoAction extends AbstractActivityAction<Activity> {
      *
      * @param view the view
      */
+    @SuppressWarnings("this-escape")
     public RedoAction(@NonNull Activity view, @NonNull FXUndoManager manager) {
         super(view);
         this.manager = manager;

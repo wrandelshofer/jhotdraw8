@@ -52,6 +52,7 @@ public class ExitAction extends AbstractApplicationAction {
      *
      * @param app the application
      */
+    @SuppressWarnings("this-escape")
     public ExitAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

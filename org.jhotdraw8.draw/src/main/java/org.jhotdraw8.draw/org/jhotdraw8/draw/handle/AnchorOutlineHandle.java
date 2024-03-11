@@ -35,6 +35,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
     private final Polygon node;
     private final double[] points;
 
+    @SuppressWarnings("this-escape")
     public AnchorOutlineHandle(Figure figure) {
         super(figure);
 

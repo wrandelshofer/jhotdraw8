@@ -10,8 +10,6 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.Rectangle2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
-import java.io.Serial;
-
 /**
  * Rectangle2DStyleableKey.
  *
@@ -19,8 +17,7 @@ import java.io.Serial;
  */
 public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> implements WritableStyleableMapAccessor<Rectangle2D> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+
     private final Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
 
     /**

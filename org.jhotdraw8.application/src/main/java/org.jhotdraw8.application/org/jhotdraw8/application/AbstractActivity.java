@@ -39,13 +39,16 @@ import java.util.List;
  */
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
+    @SuppressWarnings("this-escape")
     protected final @NonNull ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
     protected final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
     /**
      * The title of {@link Stage} that contains the activity will be bound to the title of the activity.
      */
+    @SuppressWarnings("this-escape")
     protected final @NonNull StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
             ApplicationLabels.getResources().getString("unnamedFile"));
+    @SuppressWarnings("this-escape")
     private final @NonNull IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
     private final @NonNull ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
 

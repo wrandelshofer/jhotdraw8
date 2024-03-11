@@ -37,6 +37,7 @@ public class DuplicateAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      *               focused component.
      */
+    @SuppressWarnings("this-escape")
     public DuplicateAction(@NonNull Application app, @Nullable Node target) {
         super(app, target);
         ApplicationLabels.getResources().configureAction(this, ID);

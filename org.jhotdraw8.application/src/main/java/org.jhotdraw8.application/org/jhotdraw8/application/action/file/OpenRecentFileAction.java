@@ -71,6 +71,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
      * @param uri    the uri
      * @param format the data format that should be used to access the URI
      */
+    @SuppressWarnings("this-escape")
     public OpenRecentFileAction(Application app, @NonNull URI uri, DataFormat format) {
         super(app);
         this.uri = uri;

@@ -40,6 +40,7 @@ import java.util.logging.Logger;
  *
  * @author Werner Randelshofer
  */
+@SuppressWarnings("this-escape")
 public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     /**

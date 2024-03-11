@@ -55,10 +55,12 @@ public class ImageFigure extends AbstractLeafFigure
         this(0, 0, 1, 1);
     }
 
+    @SuppressWarnings("this-escape")
     public ImageFigure(double x, double y, double width, double height) {
         set(BOUNDS, new CssRectangle2D(x, y, width, height));
     }
 
+    @SuppressWarnings("this-escape")
     public ImageFigure(CssRectangle2D rect) {
         set(BOUNDS, rect);
     }

@@ -45,6 +45,7 @@ public class TextEditingTool extends AbstractTool {
      */
     private final double minSize = 2;
 
+    @SuppressWarnings("this-escape")
     public TextEditingTool(String id, Resources labels) {
         super(id, labels);
         node.setCursor(Cursor.CROSSHAIR);

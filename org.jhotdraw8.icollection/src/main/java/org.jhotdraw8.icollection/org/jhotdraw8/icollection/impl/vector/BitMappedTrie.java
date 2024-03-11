@@ -11,8 +11,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
@@ -55,7 +53,7 @@ import static org.jhotdraw8.icollection.impl.vector.ArrayType.obj;
  *     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/BitMappedTrie.java">github.com</a></dd>
  * </dl>
  */
-public class BitMappedTrie<T> implements Serializable {
+public class BitMappedTrie<T> {
 
     static final int BRANCHING_BASE = 5;
     static final int BRANCHING_FACTOR = 1 << BRANCHING_BASE;
@@ -72,9 +70,6 @@ public class BitMappedTrie<T> implements Serializable {
     static int lastDigit(int num) {
         return num & BRANCHING_MASK;
     }
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private static final @NonNull BitMappedTrie<?> EMPTY = new BitMappedTrie<>(obj(), obj().empty(), 0, 0, 0);
 

@@ -28,6 +28,7 @@ public abstract class AbstractStyleablePropertyBean
         implements StyleablePropertyBean {
     protected static final Map<Class<?>, Map<Key<?>, Integer>> keyMaps = new ConcurrentHashMap<>();
 
+    @SuppressWarnings("this-escape")
     protected final StyleableMap<Key<?>, Object> properties =
             createStyleableMap();
 

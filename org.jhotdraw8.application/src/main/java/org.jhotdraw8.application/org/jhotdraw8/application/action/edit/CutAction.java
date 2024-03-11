@@ -36,6 +36,7 @@ public class CutAction extends AbstractSelectionAction {
      * @param target The target of the action. Specify null for the currently
      *               focused component.
      */
+    @SuppressWarnings("this-escape")
     public CutAction(@NonNull Application app, Node target) {
         super(app, target);
         ApplicationLabels.getResources().configureAction(this, ID);

@@ -17,6 +17,7 @@ public abstract class AbstractBezierNodeHandleAction extends AbstractAction {
 
     protected final @NonNull DrawingView view;
 
+    @SuppressWarnings("this-escape")
     public AbstractBezierNodeHandleAction(final @NonNull String id, @NonNull Figure owner, @NonNull MapAccessor<BezierPath> pathKey, int nodeIndex, @NonNull DrawingView view) {
         super(id);
         this.owner = owner;

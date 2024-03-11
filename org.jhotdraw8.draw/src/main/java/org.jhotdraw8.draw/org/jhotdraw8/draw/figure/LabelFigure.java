@@ -34,6 +34,7 @@ public class LabelFigure extends AbstractLabelFigure
         this(position.getX(), position.getY(), text);
     }
 
+    @SuppressWarnings("this-escape")
     public LabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new CssPoint2D(x, y));

@@ -12,8 +12,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.geom.shape.PathMetrics;
 
-import java.io.Serial;
-
 /**
  * PathMetricsStyleableKey.
  *
@@ -23,9 +21,6 @@ public class NullablePathMetricsStyleableKey
         extends AbstractStyleableKey<PathMetrics>
         implements WritableStyleableMapAccessor<PathMetrics>,
         NullableKey<PathMetrics> {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
 
     /**

@@ -14,7 +14,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
 
-import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -26,8 +25,6 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
         implements WritableStyleableMapAccessor<@NonNull SvgDefaultablePaint<T>>,
         SvgDefaultablePaintStyleableMapAccessor<T> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final @NonNull Converter<@NonNull SvgDefaultablePaint<T>> converter;
     private final T initialValue;

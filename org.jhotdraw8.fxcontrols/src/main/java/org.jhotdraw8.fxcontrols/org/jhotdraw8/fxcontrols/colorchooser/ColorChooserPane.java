@@ -81,7 +81,9 @@ public class ColorChooserPane extends VBox {
     /**
      * The current value of this color chooser pane.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<NamedColor> value = new SimpleObjectProperty<>(this, "value");
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model", new ColorChooserPaneModel());
 
 

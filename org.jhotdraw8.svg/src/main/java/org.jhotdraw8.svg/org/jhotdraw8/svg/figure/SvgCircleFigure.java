@@ -35,6 +35,7 @@ public class SvgCircleFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,
         PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,
         SvgElementFigure {
+
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
@@ -42,6 +43,9 @@ public class SvgCircleFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey R = new CssSizeStyleableKey("r", CssSize.ONE);
+
+    public SvgCircleFigure() {
+    }
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext ctx) {

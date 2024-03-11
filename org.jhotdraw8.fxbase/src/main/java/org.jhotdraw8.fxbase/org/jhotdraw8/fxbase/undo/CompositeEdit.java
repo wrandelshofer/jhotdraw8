@@ -24,6 +24,7 @@ import java.text.MessageFormat;
  *     fire(compositeEdit);
  * </pre>
  */
+@SuppressWarnings({"serial", "RedundantSuppression"})
 public class CompositeEdit extends CompoundEdit {
     private @Nullable String localizedName;
 

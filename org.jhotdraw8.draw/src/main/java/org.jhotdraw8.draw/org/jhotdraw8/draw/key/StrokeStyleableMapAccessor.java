@@ -18,7 +18,6 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
-import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -27,9 +26,6 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStrokeStyle> {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
 
     private final @NonNull MapAccessor<CssSize> dashOffsetKey;

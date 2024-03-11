@@ -10,8 +10,6 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.KebabCaseEnumCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
-import java.io.Serial;
-
 /**
  * NullableEnumStyleableKey.
  *
@@ -19,9 +17,6 @@ import java.io.Serial;
  * @author Werner Randelshofer
  */
 public class NullableEnumStyleableKey<T extends Enum<T>> extends NullableObjectStyleableKey<T> implements WritableStyleableMapAccessor<T> {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
 
     /**

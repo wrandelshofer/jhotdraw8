@@ -13,8 +13,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
-import java.io.Serial;
-
 /**
  * NullableFXSvgPathStyleableKey.
  *
@@ -22,8 +20,7 @@ import java.io.Serial;
  */
 public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<ImmutableList<PathElement>> implements WritableStyleableMapAccessor<ImmutableList<PathElement>> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+
 
     private final @NonNull Converter<ImmutableList<PathElement>> converter;
 
@@ -46,6 +43,7 @@ public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<Imm
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
+    @SuppressWarnings("this-escape")
     public NullableFXPathElementsStyleableKey(@NonNull String key, @Nullable ImmutableList<PathElement> defaultValue) {
         super(null, key, new SimpleParameterizedType(ImmutableList.class, PathElement.class), true, defaultValue);
 

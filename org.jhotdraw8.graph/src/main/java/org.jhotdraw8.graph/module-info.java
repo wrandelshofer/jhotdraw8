@@ -8,7 +8,7 @@
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.graph {
-    requires static org.jhotdraw8.annotation;
+    requires transitive static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;
     requires org.jhotdraw8.icollection;

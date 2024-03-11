@@ -63,6 +63,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         }
     };
 
+    @SuppressWarnings("this-escape")
     public TabbedAccordionTrack() {
         accordion.getPanes().add(titlePane);
         accordion.setExpandedPane(titlePane);

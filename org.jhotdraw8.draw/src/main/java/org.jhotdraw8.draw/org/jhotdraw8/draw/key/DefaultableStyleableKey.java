@@ -13,7 +13,6 @@ import org.jhotdraw8.draw.css.converter.DefaultableValueCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
-import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -26,8 +25,6 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
         implements WritableStyleableMapAccessor<@NonNull CssDefaultableValue<T>>,
         DefaultableStyleableMapAccessor<T>, NonNullKey<CssDefaultableValue<T>> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final @NonNull Converter<@NonNull CssDefaultableValue<T>> converter;
     private final T initialValue;

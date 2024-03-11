@@ -68,6 +68,7 @@ public class LayerCell extends ListCell<Figure> {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);
     }
 
+    @SuppressWarnings("this-escape")
     public LayerCell(@NonNull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
         this.drawingModel = new WeakReference<>(drawingModel);
         this.inspector = inspector;

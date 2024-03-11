@@ -18,6 +18,7 @@ import static org.jhotdraw8.geom.shape.BezierNode.IN_OUT_MASK;
 public class BezierNodeHandleNoTangentsAction extends AbstractBezierNodeHandleAction {
     public final static String ID = "handle.bezierNode.noTangents";
 
+    @SuppressWarnings("this-escape")
     public BezierNodeHandleNoTangentsAction(@NonNull Figure owner, @NonNull MapAccessor<BezierPath> pathKey, int nodeIndex, @NonNull DrawingView view) {
         super(ID, owner, pathKey, nodeIndex, view);
 

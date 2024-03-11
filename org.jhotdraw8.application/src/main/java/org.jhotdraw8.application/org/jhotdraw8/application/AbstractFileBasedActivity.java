@@ -36,7 +36,9 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
         }
 
     };
+    @SuppressWarnings("this-escape")
     protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>(this, URI_PROPERTY);
+    @SuppressWarnings("this-escape")
     protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>(this, DATA_FORMAT_PROPERTY);
 
     public AbstractFileBasedActivity() {

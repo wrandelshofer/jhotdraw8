@@ -101,6 +101,7 @@ import static java.lang.Math.min;
  *
  * @author Werner Randelshofer
  */
+@SuppressWarnings("this-escape")
 public abstract class AbstractFileBasedApplication extends AbstractApplication implements FileBasedApplication {
 
     private static final @NonNull Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new NullableObjectKey<>("focusListener",

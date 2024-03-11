@@ -17,7 +17,6 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
-import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -28,8 +27,6 @@ import java.util.Map;
 public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull CssFont>
         implements NonNullMapAccessor<@NonNull CssFont> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final @NonNull MapAccessor<String> familyKey;
     private final @NonNull MapAccessor<FontWeight> weightKey;

@@ -30,6 +30,7 @@ public class ClippingFigure extends AbstractCompositeFigure
     public ClippingFigure() {
     }
 
+    @SuppressWarnings("this-escape")
     public ClippingFigure(@NonNull Collection<Figure> children) {
         getChildren().addAll(children);
     }

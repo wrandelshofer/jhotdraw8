@@ -45,6 +45,7 @@ public class AboutAction extends AbstractApplicationAction {
      *
      * @param app the application
      */
+    @SuppressWarnings("this-escape")
     public AboutAction(@NonNull Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

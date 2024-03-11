@@ -29,6 +29,7 @@ public class AlignVerticalAction extends AbstractDrawingViewAction {
      *
      * @param editor the drawing editor
      */
+    @SuppressWarnings("this-escape")
     public AlignVerticalAction(@NonNull DrawingEditor editor) {
         super(editor);
         Resources labels

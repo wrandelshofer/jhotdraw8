@@ -140,6 +140,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         this(position.getX(), position.getY());
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractLabelFigure(double x, double y) {
         // Performance: Only set properties if they differ from the default value.
         if (x != 0) {

@@ -34,6 +34,7 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
         this(mapp.getBean(), mapp, key, name, metaData);
     }
 
+    @SuppressWarnings("this-escape")
     public KeyMapEntryStyleableProperty(Object bean, @NonNull ObservableMap<Key<?>, Object> mapp, @NonNull WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp;

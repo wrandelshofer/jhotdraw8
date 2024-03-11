@@ -49,6 +49,7 @@ public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implem
      * @param nullable     whether the value is nullable
      * @param defaultValue The default value.
      */
+    @SuppressWarnings("this-escape")
     public RegexStyleableKey(String name, boolean nullable, RegexReplace defaultValue) {
         super(null, name, RegexReplace.class, nullable, defaultValue);
         converter = new RegexCssConverter(isNullable());

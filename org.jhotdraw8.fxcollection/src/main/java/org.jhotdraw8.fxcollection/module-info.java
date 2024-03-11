@@ -8,7 +8,7 @@
  */
 @SuppressWarnings("module")
 module org.jhotdraw8.fxcollection {
-    requires static org.jhotdraw8.annotation;
+    requires transitive static org.jhotdraw8.annotation;
     requires transitive javafx.base;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.icollection;

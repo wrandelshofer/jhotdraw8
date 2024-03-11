@@ -14,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
-import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -26,8 +25,7 @@ public class CssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<@NonNull CssPoint2D>
         implements NonNullMapAccessor<@NonNull CssPoint2D> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+
     private final Converter<@NonNull CssPoint2D> converter;
     private final @NonNull NonNullMapAccessor<CssSize> xKey;
     private final @NonNull NonNullMapAccessor<CssSize> yKey;

@@ -9,7 +9,7 @@ import org.jhotdraw8.teddy.spi.TeddyResourceBundleProvider;
 module org.jhotdraw8.teddy {
     requires transitive java.desktop;
     requires transitive org.jhotdraw8.application;
-    requires static org.jhotdraw8.annotation;
+    requires transitive static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.fxcontrols;
     requires transitive org.jhotdraw8.fxbase;

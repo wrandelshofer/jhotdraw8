@@ -9,8 +9,6 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.SvgPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
-import java.io.Serial;
-
 /**
  * NullableSvgPathStyleableKey.
  *
@@ -18,8 +16,7 @@ import java.io.Serial;
  */
 public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> implements WritableStyleableMapAccessor<String> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+
 
     private final @NonNull Converter<String> converter;
 
@@ -42,6 +39,7 @@ public class NullableSvgPathStyleableKey extends AbstractStyleableKey<String> im
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
+    @SuppressWarnings("this-escape")
     public NullableSvgPathStyleableKey(@NonNull String key, String defaultValue) {
         super(null, key, String.class, true, defaultValue);
 

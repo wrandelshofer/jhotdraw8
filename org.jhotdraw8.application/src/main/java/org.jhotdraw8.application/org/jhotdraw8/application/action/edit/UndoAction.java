@@ -29,6 +29,7 @@ public class UndoAction extends AbstractActivityAction<Activity> {
      * @param view    the view
      * @param manager
      */
+    @SuppressWarnings("this-escape")
     public UndoAction(@NonNull Activity view, @NonNull FXUndoManager manager) {
         super(view);
         this.manager = manager;

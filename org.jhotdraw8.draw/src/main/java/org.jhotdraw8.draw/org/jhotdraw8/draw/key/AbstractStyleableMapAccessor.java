@@ -14,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
-import java.io.Serial;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Objects;
@@ -29,8 +28,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         implements WritableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
 
     private final @NonNull String cssName;
-    @Serial
-    private static final long serialVersionUID = 1L;
+
 
     /**
      * Holds a String representation of the name.

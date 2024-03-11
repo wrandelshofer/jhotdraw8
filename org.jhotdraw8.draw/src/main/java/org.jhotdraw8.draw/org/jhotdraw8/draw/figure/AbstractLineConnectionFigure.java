@@ -40,6 +40,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
+    @SuppressWarnings("this-escape")
     public AbstractLineConnectionFigure(double startX, double startY, double endX, double endY) {
         // Performance: Only set properties if they differ from the default value.
         if (startX != 0) {

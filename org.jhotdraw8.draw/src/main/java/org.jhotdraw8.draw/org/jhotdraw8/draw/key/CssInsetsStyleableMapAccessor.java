@@ -14,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
-import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -26,8 +25,6 @@ public class CssInsetsStyleableMapAccessor
         extends AbstractStyleableMapAccessor<@NonNull CssInsets>
         implements NonNullMapAccessor<@NonNull CssInsets> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final @NonNull NonNullMapAccessor<CssSize> topKey;
     private final @NonNull NonNullMapAccessor<CssSize> rightKey;

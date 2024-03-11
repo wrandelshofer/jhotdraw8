@@ -27,6 +27,7 @@ public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
      *
      * @param activity the view
      */
+    @SuppressWarnings("this-escape")
     public CloseFileAction(@NonNull FileBasedActivity activity) {
         super(activity);
         ApplicationLabels.getResources().configureAction(this, ID);

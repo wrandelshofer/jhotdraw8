@@ -28,7 +28,9 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
 import java.util.HashSet;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<>(this, HELP_TEXT_PROPERTY);
+    @SuppressWarnings("this-escape")
     private final @NonNull NonNullObjectProperty<FXUndoManager> undoManager = new NonNullObjectProperty<>(this, UNDO_MANAGER_PROPERTY, new FXUndoManager());
     private final @NonNull DoubleProperty handleSize = new SimpleDoubleProperty(
             this, HANDLE_SIZE_PROPERTY, 5.0) {
@@ -62,12 +64,17 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
+    @SuppressWarnings("this-escape")
     private final NonNullObjectProperty<HandleType> handleType = new NonNullObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    @SuppressWarnings("this-escape")
     private final ObjectProperty<HandleType> leadHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
+    @SuppressWarnings("this-escape")
     private final ObjectProperty<HandleType> anchorHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
+    @SuppressWarnings("this-escape")
     private final NonNullObjectProperty<HandleType> multiHandleType = new NonNullObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+    @SuppressWarnings("this-escape")
     private final SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
     private final ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
         if (newValue) {

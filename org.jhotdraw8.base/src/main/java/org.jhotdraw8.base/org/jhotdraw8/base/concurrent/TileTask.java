@@ -15,6 +15,7 @@ import java.util.function.Consumer;
  * A fork-join task that processes a range of integers from {@code lo} to {@code hi} (exclusive)
  * in chunks of up to {@code chunkSize}.
  */
+@SuppressWarnings({"serial", "RedundantSuppression"})
 public class TileTask extends CountedCompleter<Void> {
     private final @NonNull Tile tile;
     private final int chunkSize;

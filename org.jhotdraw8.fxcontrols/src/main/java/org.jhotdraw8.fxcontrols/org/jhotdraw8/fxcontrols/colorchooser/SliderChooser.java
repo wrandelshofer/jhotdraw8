@@ -39,6 +39,7 @@ import java.util.ResourceBundle;
  * </pre>
  */
 public class SliderChooser extends VBox {
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
 
     public ColorChooserPaneModel getModel() {

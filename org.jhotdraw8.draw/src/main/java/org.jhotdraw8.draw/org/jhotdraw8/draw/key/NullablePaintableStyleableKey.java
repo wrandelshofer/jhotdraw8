@@ -10,8 +10,6 @@ import org.jhotdraw8.draw.css.converter.PaintableCssConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
-import java.io.Serial;
-
 /**
  * PaintStyleableFigureKey.
  *
@@ -19,8 +17,6 @@ import java.io.Serial;
  */
 public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WritableStyleableMapAccessor<Paintable> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final Converter<Paintable> converter;
 

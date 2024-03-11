@@ -23,6 +23,7 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
 
     private final CheckBox checkBox = new CheckBox();
 
+    @SuppressWarnings("this-escape")
     public BooleanPropertyCheckBoxTreeTableCell(@Nullable String styleClass) {
         checkBox.selectedProperty().addListener(this::commitSelectionChange);
         if (styleClass != null) {

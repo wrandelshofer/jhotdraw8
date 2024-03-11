@@ -9,7 +9,6 @@ import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 
-import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -22,9 +21,7 @@ import java.util.Map;
  * @param <T> The value type.
  * @author Werner Randelshofer
  */
-public interface MapAccessor<T> extends Serializable {
-
-    long serialVersionUID = 1L;
+public interface MapAccessor<T> {
 
     /**
      * Whether the map contains all keys required by this map accessor.

@@ -9,8 +9,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.converter.SymmetricPoint2DConverter;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
-import java.io.Serial;
-
 /**
  * SymmetricPoint2DStyleableMapAccessor.
  *
@@ -19,8 +17,6 @@ import java.io.Serial;
 public class SymmetricPoint2DStyleableMapAccessor extends Point2DStyleableMapAccessor
         implements NonNullMapAccessor<@NonNull Point2D> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     public SymmetricPoint2DStyleableMapAccessor(@NonNull String name,
                                                 @NonNull NonNullMapAccessor<@NonNull Double> xKey,

@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 import static org.jhotdraw8.fxcontrols.colorchooser.CheckerboardFactory.createCheckerboardPattern;
 
 public class AlphaChooser extends VBox {
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
 
     public ColorChooserPaneModel getModel() {

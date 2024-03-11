@@ -28,6 +28,7 @@ public abstract class AbstractFindAction<A extends Activity> extends AbstractAct
      * @param view      the view
      * @param viewClass the class of the view
      */
+    @SuppressWarnings("this-escape")
     public AbstractFindAction(@NonNull Application app, A view, Class<A> viewClass) {
         super(view);
         ApplicationLabels.getResources().configureAction(this, ID);

@@ -11,8 +11,6 @@ import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.geom.shape.BezierPath;
 
-import java.io.Serial;
-
 /**
  * BezierPathStyleableKey.
  *
@@ -21,9 +19,6 @@ import java.io.Serial;
 public class NullableBezierPathStyleableKey
         extends AbstractStyleableKey<BezierPath>
         implements WritableStyleableMapAccessor<BezierPath> {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
 
     /**

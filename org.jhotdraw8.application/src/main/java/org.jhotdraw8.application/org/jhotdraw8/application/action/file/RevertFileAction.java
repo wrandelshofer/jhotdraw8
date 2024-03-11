@@ -38,6 +38,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
      *
      * @param view the view
      */
+    @SuppressWarnings("this-escape")
     public RevertFileAction(@NonNull FileBasedActivity view) {
         super(view);
         ApplicationLabels.getResources().configureAction(this, ID);

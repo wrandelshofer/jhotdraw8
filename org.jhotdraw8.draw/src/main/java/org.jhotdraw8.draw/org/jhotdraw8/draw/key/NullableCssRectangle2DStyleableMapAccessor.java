@@ -14,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
-import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -25,8 +24,6 @@ import java.util.Map;
 public class NullableCssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<@Nullable CssRectangle2D>
         implements MapAccessor<@NonNull CssRectangle2D> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final @NonNull MapAccessor<CssSize> xKey;
     private final @NonNull MapAccessor<CssSize> yKey;

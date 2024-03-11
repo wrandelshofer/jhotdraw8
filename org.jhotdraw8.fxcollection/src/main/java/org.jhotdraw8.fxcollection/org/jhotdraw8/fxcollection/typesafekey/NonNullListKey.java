@@ -8,7 +8,6 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
-import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -19,8 +18,6 @@ import java.lang.reflect.Type;
  */
 public class NonNullListKey<E> extends NonNullObjectKey<ImmutableList<E>> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     public NonNullListKey(@NonNull String key, @NonNull Type elementType) {
         super(key, new SimpleParameterizedType(ImmutableList.class, elementType), VectorList.of());

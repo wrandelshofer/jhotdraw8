@@ -26,6 +26,7 @@ public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
     private final @Nullable BooleanProperty property;
     private final @Nullable Function<Activity, Node> nodeGetter;
 
+    @SuppressWarnings("this-escape")
     public ToggleViewPropertyAction(@NonNull Application app, Activity view, @NonNull BooleanProperty property, String id, @NonNull Resources labels) {
         super(view);
         labels.configureAction(this, id);
@@ -34,6 +35,7 @@ public class ToggleViewPropertyAction extends AbstractActivityAction<Activity> {
         selectedProperty().bindBidirectional(property);
     }
 
+    @SuppressWarnings("this-escape")
     public ToggleViewPropertyAction(@NonNull Application app, Activity view, @Nullable Function<Activity, Node> nodeGetter, String id, @NonNull Resources labels) {
         super(view);
         labels.configureAction(this, id);

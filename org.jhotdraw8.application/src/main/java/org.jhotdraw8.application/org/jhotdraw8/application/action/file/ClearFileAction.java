@@ -28,6 +28,7 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
      * @param app  the application
      * @param view the view
      */
+    @SuppressWarnings("this-escape")
     public ClearFileAction(@NonNull Application app, FileBasedActivity view) {
         super(view);
         Resources labels = ApplicationLabels.getResources();

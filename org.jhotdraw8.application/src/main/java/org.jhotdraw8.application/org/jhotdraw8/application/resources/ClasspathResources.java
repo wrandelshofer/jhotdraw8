@@ -20,6 +20,7 @@ import java.util.SequencedSet;
 import java.util.logging.Logger;
 
 
+@SuppressWarnings({"serial", "RedundantSuppression"})
 public class ClasspathResources extends ResourceBundle implements Serializable, Resources {
     private static final Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
     @Serial

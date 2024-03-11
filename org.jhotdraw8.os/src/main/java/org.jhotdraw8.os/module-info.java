@@ -10,7 +10,7 @@
 module org.jhotdraw8.os {
     requires transitive java.xml;
     requires transitive javafx.graphics;
-    requires static org.jhotdraw8.annotation;
+    requires transitive static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.icollection;
     requires java.logging;

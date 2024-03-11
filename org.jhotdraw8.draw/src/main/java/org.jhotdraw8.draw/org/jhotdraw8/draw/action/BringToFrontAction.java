@@ -31,6 +31,7 @@ public class BringToFrontAction extends AbstractDrawingViewAction {
      *
      * @param editor the drawing editor
      */
+    @SuppressWarnings("this-escape")
     public BringToFrontAction(@NonNull DrawingEditor editor) {
         super(editor);
         Resources labels

@@ -13,7 +13,6 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
-import java.io.Serial;
 import java.lang.reflect.Type;
 
 /**
@@ -24,9 +23,6 @@ import java.lang.reflect.Type;
  */
 public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableList<T>>
         implements WritableStyleableMapAccessor<ImmutableList<T>>, NullableKey<ImmutableList<T>> {
-
-    @Serial
-    private static final long serialVersionUID = 1L;
 
 
     /**

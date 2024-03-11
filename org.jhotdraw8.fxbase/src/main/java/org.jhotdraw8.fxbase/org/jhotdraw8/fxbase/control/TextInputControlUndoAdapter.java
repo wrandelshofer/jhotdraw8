@@ -35,6 +35,7 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
     public TextInputControlUndoAdapter() {
     }
 
+    @SuppressWarnings("this-escape")
     public TextInputControlUndoAdapter(@NonNull TextInputControl control) {
         bind(control);
     }
@@ -76,6 +77,7 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
     }
 
 
+    @SuppressWarnings({"serial", "RedundantSuppression"})
     static class UndoableTextEdit extends AbstractUndoableEdit {
         private @Nullable TextInputControl control;
         private @NonNull String addedText;

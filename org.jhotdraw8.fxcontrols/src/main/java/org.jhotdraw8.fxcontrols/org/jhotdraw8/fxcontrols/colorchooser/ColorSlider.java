@@ -40,14 +40,17 @@ public class ColorSlider extends AbstractColorSlider {
      * <p>
      * Alpha has index 4.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull IntegerProperty componentIndex = new SimpleIntegerProperty(this, "componentIndex", 0);
 
     /**
      * The slider value.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull FloatProperty value = new SimpleFloatProperty(this, "value", 0);
 
 
+    @SuppressWarnings("this-escape")
     private final @NonNull ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
 
     /**
@@ -55,7 +58,9 @@ public class ColorSlider extends AbstractColorSlider {
      * <p>
      * This must be a double property (and not float) so that we do not run into rounding issues.
      */
+    @SuppressWarnings("this-escape")
     private final @NonNull DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 1d / 255);
+    @SuppressWarnings("this-escape")
     private final @NonNull DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 1d / 255);
 
     public ColorSlider() {

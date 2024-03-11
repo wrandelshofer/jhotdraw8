@@ -15,8 +15,6 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
-import java.io.Serial;
-
 /**
  * TransformListStyleableKey.
  *
@@ -25,8 +23,6 @@ import java.io.Serial;
 public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableList<Transform>>
         implements WritableStyleableMapAccessor<ImmutableList<Transform>>, NonNullKey<ImmutableList<Transform>> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     private final Converter<ImmutableList<Transform>> converter;
 

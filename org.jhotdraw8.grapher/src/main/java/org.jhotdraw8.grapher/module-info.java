@@ -13,7 +13,7 @@ module org.jhotdraw8.grapher {
     requires transitive java.prefs;
     requires transitive javafx.fxml;
     requires transitive org.jhotdraw8.draw;
-    requires static org.jhotdraw8.annotation;
+    requires transitive static org.jhotdraw8.annotation;
     requires transitive org.jhotdraw8.os;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.fxcontrols;

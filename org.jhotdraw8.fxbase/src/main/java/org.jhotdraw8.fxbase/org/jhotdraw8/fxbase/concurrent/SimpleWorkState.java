@@ -28,22 +28,31 @@ import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
  * @param <V> the type of the result value
  */
 public class SimpleWorkState<V> implements WorkState<V> {
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
     private final @NonNull AtomicReference<Object> titleUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, MESSAGE_PROPERTY, null);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
     private final @NonNull AtomicReference<Object> messageUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, VALUE_PROPERTY, null);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(this, STATE_PROPERTY, State.READY);
     private final @NonNull AtomicReference<Object> stateUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private final @NonNull AtomicReference<Object> runningUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private final @NonNull AtomicReference<Object> exceptionUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyObjectWrapper<Throwable> exception = new ReadOnlyObjectWrapper<>(this, EXCEPTION_PROPERTY, null);
     private final @NonNull AtomicReference<Object> valueUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
     private final @NonNull AtomicReference<Object> workDoneUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, TOTAL_WORK_PROPERTY, -1.0);
     private final @NonNull AtomicReference<Object> totalWorkUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, PROGRESS_PROPERTY, -1.0);
     private final @NonNull AtomicReference<Object> progressUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private volatile boolean isCancelled;
@@ -59,6 +68,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
      *
      * @param title a title
      */
+    @SuppressWarnings("this-escape")
     public SimpleWorkState(@Nullable String title) {
         updateTitle(title);
     }

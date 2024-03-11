@@ -20,6 +20,7 @@ import java.util.function.BiConsumer;
  * RangeTask.forEach(0,1000,10,(lo,hi)->{for(int i=lo;i&lt;hi;i++) {....};});
  * </pre>
  */
+@SuppressWarnings({"serial", "RedundantSuppression"})
 public class RangeTask extends CountedCompleter<Void> {
     private final int lo, hi;
     private final int chunkSize;

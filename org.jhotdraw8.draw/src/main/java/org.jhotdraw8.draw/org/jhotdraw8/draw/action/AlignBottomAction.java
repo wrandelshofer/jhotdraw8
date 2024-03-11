@@ -28,6 +28,7 @@ public class AlignBottomAction extends AbstractDrawingViewAction {
      *
      * @param editor the drawing editor
      */
+    @SuppressWarnings("this-escape")
     public AlignBottomAction(@NonNull DrawingEditor editor) {
         super(editor);
         Resources labels

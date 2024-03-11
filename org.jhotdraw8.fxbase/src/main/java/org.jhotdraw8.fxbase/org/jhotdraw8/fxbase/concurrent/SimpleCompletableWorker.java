@@ -29,10 +29,13 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
     private static final @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();
     private final WorkState<V> workState;
     private final CompletableFuture<V> completableFuture = new CompletableFuture<>();
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyObjectWrapper<Worker.State> state = new ReadOnlyObjectWrapper<>(this, "state", Worker.State.READY);
     private final @NonNull AtomicReference<Object> stateUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyObjectWrapper<Throwable> exception = new ReadOnlyObjectWrapper<>(this, "exception", null);
     private final @NonNull AtomicReference<Object> exceptionUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    @SuppressWarnings("this-escape")
     private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, "running", true);
     private final @NonNull AtomicReference<Object> runningUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
 

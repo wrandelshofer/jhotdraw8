@@ -12,8 +12,6 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
-import java.io.Serial;
-
 /**
  * WordSetStyleableKey.
  *
@@ -21,8 +19,6 @@ import java.io.Serial;
  */
 public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
 
     /**
      * Creates a new instance with the specified name and with null as the

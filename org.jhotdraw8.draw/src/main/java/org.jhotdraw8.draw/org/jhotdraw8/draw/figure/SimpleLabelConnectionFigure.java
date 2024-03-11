@@ -28,6 +28,7 @@ public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
         this(position.getX(), position.getY(), text);
     }
 
+    @SuppressWarnings("this-escape")
     public SimpleLabelConnectionFigure(double x, double y, String text, @NonNull Object... keyValues) {
         set(TEXT, text);
         set(ORIGIN, new CssPoint2D(x, y));

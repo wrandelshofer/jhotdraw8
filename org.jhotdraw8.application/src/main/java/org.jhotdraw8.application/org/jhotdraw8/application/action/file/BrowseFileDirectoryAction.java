@@ -29,6 +29,7 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
      *
      * @param activity the view
      */
+    @SuppressWarnings("this-escape")
     public BrowseFileDirectoryAction(@NonNull FileBasedActivity activity) {
         super(activity);
         activity.getApplication().getResources().configureAction(this, ID);

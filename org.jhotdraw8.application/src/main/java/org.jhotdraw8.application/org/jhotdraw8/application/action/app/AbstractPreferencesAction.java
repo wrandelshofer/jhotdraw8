@@ -22,6 +22,7 @@ public abstract class AbstractPreferencesAction extends AbstractApplicationActio
      *
      * @param app the application
      */
+    @SuppressWarnings("this-escape")
     public AbstractPreferencesAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);

@@ -9,7 +9,6 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.UriCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
-import java.io.Serial;
 import java.net.URI;
 
 /**
@@ -19,8 +18,7 @@ import java.net.URI;
  */
 public class NullableUriStyleableKey extends AbstractStyleableKey<URI> implements WritableStyleableMapAccessor<URI> {
 
-    @Serial
-    private static final long serialVersionUID = 1L;
+
     private final Converter<URI> converter = new UriCssConverter(true);
 
     /**

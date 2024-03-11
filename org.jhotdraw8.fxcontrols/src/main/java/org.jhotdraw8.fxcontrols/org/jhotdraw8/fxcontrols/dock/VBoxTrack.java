@@ -15,6 +15,7 @@ public class VBoxTrack extends AbstractDockParent implements Track {
     private final ScrollPane scrollPane = new ScrollPane();
     private final VBox vbox = new VBox();
 
+    @SuppressWarnings("this-escape")
     public VBoxTrack() {
         getChildren().add(scrollPane);
         scrollPane.setContent(vbox);

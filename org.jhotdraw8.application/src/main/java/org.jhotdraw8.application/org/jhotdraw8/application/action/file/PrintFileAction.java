@@ -34,6 +34,7 @@ public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
      *
      * @param activity the activity
      */
+    @SuppressWarnings("this-escape")
     public PrintFileAction(@NonNull FileBasedActivity activity) {
         super(activity);
         ApplicationLabels.getResources().configureAction(this, ID);

@@ -22,6 +22,7 @@ import java.util.ServiceLoader;
 import java.util.logging.Logger;
 import java.util.spi.ResourceBundleProvider;
 
+@SuppressWarnings({"serial", "RedundantSuppression"})
 public class ModulepathResources extends ResourceBundle implements Serializable, Resources {
     @Serial
     private static final long serialVersionUID = 1L;

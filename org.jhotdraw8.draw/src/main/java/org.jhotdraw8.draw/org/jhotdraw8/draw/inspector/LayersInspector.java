@@ -135,6 +135,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         this(fxmlUrl, LayerFigure::new);
     }
 
+    @SuppressWarnings("this-escape")
     public LayersInspector(@NonNull URL fxmlUrl, Supplier<Layer> layerFactory) {
         this.layerFactory = layerFactory;
         init(fxmlUrl);

@@ -56,6 +56,7 @@ public class PageLabelFigure extends AbstractLabelFigure
      * @param text      text of the label
      * @param keyValues properties to set
      */
+    @SuppressWarnings("this-escape")
     public PageLabelFigure(double x, double y, @NonNull String text, Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);
         set(ORIGIN, new CssPoint2D(x, y));

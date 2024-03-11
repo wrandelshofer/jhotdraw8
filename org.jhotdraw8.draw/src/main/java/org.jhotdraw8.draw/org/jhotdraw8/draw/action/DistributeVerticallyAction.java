@@ -31,6 +31,7 @@ public class DistributeVerticallyAction extends AbstractDrawingViewAction {
      *
      * @param editor the drawing editor
      */
+    @SuppressWarnings("this-escape")
     public DistributeVerticallyAction(@NonNull DrawingEditor editor) {
         super(editor);
         Resources labels

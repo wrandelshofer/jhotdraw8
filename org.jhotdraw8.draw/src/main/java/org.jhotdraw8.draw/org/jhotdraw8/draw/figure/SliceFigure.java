@@ -58,6 +58,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
         this(0, 0, 1, 1);
     }
 
+    @SuppressWarnings("this-escape")
     public SliceFigure(double x, double y, double width, double height) {
         reshapeInLocal(x, y, width, height);
     }

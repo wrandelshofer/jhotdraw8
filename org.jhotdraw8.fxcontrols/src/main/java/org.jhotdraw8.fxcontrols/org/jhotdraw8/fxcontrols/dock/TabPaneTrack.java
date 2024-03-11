@@ -57,6 +57,7 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
         }
     }
 
+    @SuppressWarnings("this-escape")
     public TabPaneTrack() {
         getChildren().add(resizePane);
         resizePane.setCenter(tabPane);

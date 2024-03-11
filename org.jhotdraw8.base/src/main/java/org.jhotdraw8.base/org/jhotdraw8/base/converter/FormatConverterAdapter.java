@@ -19,6 +19,7 @@ import java.text.ParsePosition;
  *
  * @author Werner Randelshofer
  */
+@SuppressWarnings({"serial", "RedundantSuppression"})
 public class FormatConverterAdapter extends Format {
 
     @Serial

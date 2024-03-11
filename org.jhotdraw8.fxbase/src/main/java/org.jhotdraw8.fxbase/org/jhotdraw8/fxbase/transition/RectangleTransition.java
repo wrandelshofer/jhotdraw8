@@ -20,6 +20,7 @@ public class RectangleTransition extends Transition {
     private final Bounds toBounds;
 
 
+    @SuppressWarnings("this-escape")
     public RectangleTransition(Duration duration, Rectangle rectangle, Bounds fromBounds, Bounds toBounds) {
         this.rectangle = rectangle;
         this.fromBounds = fromBounds;
