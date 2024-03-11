@@ -29,7 +29,9 @@ public interface IdResolver {
      */
     default <T> @Nullable T getObject(@NonNull Class<T> clazz, @Nullable String id) {
         Object object = getObject(id);
-        if (clazz.isInstance(object)) return clazz.cast(object);
+        if (clazz.isInstance(object)) {
+            return clazz.cast(object);
+        }
         return null;
     }
 

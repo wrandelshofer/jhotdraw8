@@ -282,7 +282,9 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     @Override
     public @Nullable Entry<K, V> pollFirstEntry() {
         var e = firstEntry();
-        if (e == null) return null;
+        if (e == null) {
+            return null;
+        }
         remove(e.getKey());
         return e;
     }
@@ -290,7 +292,9 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     @Override
     public @Nullable Entry<K, V> pollLastEntry() {
         var e = lastEntry();
-        if (e == null) return null;
+        if (e == null) {
+            return null;
+        }
         remove(e.getKey());
         return e;
     }

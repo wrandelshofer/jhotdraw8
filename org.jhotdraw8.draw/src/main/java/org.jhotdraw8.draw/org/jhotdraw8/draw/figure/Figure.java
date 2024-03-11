@@ -447,7 +447,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param wasRemoved true if the old property value was removed
      */
     default <T> void firePropertyChangeEvent(Figure source, Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
-        if (!wasRemoved && !wasAdded && Objects.equals(oldValue, newValue)) return;
+        if (!wasRemoved && !wasAdded && Objects.equals(oldValue, newValue)) {
+            return;
+        }
         if (hasPropertyChangeListeners()) {
             firePropertyChangeEvent(new FigurePropertyChangeEvent(source, key, oldValue, newValue, wasAdded, wasRemoved));
         }

@@ -105,7 +105,9 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     private double computeContentAreaFactor() {
-        if (true) return 1;
+        if (true) {
+            return 1;
+        }
         String units = getNonNull(WIDTH).getUnits();
         DefaultUnitConverter uc = DefaultUnitConverter.getInstance();
 

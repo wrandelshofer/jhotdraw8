@@ -32,7 +32,9 @@ public class BezierNodeHandleIncomingTangentAction extends AbstractBezierNodeHan
     protected void onActionPerformed(@NonNull ActionEvent event) {
         BezierPath path = owner.get(pathKey);
         BezierNode bnode = getBezierNode();
-        if (path == null || bnode == null) return;
+        if (path == null || bnode == null) {
+            return;
+        }
         BezierNode changedNode = bnode.withMaskBitsClears(IN_OUT_MASK).withMaskBitsSet(IN_MASK);
         path = path.set(nodeIndex, changedNode);
         view.getModel().set(owner, pathKey, path);

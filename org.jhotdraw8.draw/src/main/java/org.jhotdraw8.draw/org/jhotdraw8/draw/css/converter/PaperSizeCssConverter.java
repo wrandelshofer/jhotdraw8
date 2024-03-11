@@ -125,8 +125,11 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
         if (paper != null) {
             boolean first = true;
             for (String ident : paper.split("\\s+")) {
-                if (first) first = false;
-                else out.accept(new CssToken(CssTokenType.TT_S, " "));
+                if (first) {
+                    first = false;
+                } else {
+                    out.accept(new CssToken(CssTokenType.TT_S, " "));
+                }
                 out.accept(new CssToken(CssTokenType.TT_IDENT, ident));
             }
         } else {

@@ -41,7 +41,9 @@ public class DoubleConverter implements Converter<Double> {
     public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
-            if (in.isEmpty() && nullable) return null;
+            if (in.isEmpty() && nullable) {
+                return null;
+            }
             var result = Double.parseDouble(str);
             in.position(in.length());
             return result;
@@ -52,7 +54,9 @@ public class DoubleConverter implements Converter<Double> {
 
     @Override
     public <TT extends Double> void toString(Appendable buf, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
-        if (value == null) return;
+        if (value == null) {
+            return;
+        }
 
         double v = value.doubleValue();
         if (Double.isInfinite(v)) {

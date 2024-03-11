@@ -55,7 +55,9 @@ public class IteratorFacade<E> implements Iterator<E>, Consumer<E> {
 
     @Override
     public void remove() {
-        if (!canRemove) throw new IllegalStateException();
+        if (!canRemove) {
+            throw new IllegalStateException();
+        }
         if (removeFunction != null) {
             removeFunction.accept(current);
             canRemove = false;

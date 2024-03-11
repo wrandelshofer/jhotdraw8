@@ -32,7 +32,9 @@ public class MultipleMasterShape extends AbstractShape {
     }
 
     public MultipleMasterShape(List<PathIterator> shapes) {
-        if (shapes.isEmpty()) throw new IllegalArgumentException("at least one shape must be given");
+        if (shapes.isEmpty()) {
+            throw new IllegalArgumentException("at least one shape must be given");
+        }
         for (var s : shapes) {
             PathData data = AwtShapes.buildFromPathIterator(new PathDataBuilder(), s).build();
             if (defaultShape == null) {
@@ -105,7 +107,9 @@ public class MultipleMasterShape extends AbstractShape {
 
             @Override
             public void next() {
-                if (!isDone()) current++;
+                if (!isDone()) {
+                    current++;
+                }
             }
 
             @Override

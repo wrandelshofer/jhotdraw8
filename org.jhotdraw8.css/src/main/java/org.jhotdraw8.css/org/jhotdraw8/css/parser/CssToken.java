@@ -410,8 +410,12 @@ public class CssToken {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CssToken cssToken = (CssToken) o;
         return ttype == cssToken.ttype && Objects.equals(stringValue, cssToken.stringValue) && Objects.equals(numericValue, cssToken.numericValue);
     }

@@ -86,7 +86,9 @@ public class MultipleMasterShapeController {
 
         List<PathIterator> paths = new ArrayList<>();
         try {
-            if (defaultSvgPathProperty().get().isEmpty()) return;
+            if (defaultSvgPathProperty().get().isEmpty()) {
+                return;
+            }
             paths.add(SvgPaths.svgStringToBuilder(defaultSvgPathProperty().get(), new AwtPathBuilder()).build().getPathIterator(null));
             paths.add(SvgPaths.svgStringToBuilder(dim1SvgPathProperty().get().isEmpty() ? defaultSvgPathProperty().get() : dim1SvgPathProperty().get(), new AwtPathBuilder()).build().getPathIterator(null));
             paths.add(SvgPaths.svgStringToBuilder(dim2SvgPathProperty().get().isEmpty() ? defaultSvgPathProperty().get() : dim2SvgPathProperty().get(), new AwtPathBuilder()).build().getPathIterator(null));

@@ -397,7 +397,9 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
                     x0, y0,
                     first.outX() - x0, first.outY() - y0);
         }
-        if (size() < 2) return new PointAndDerivative(first.pointX(), y0, 1, 0);
+        if (size() < 2) {
+            return new PointAndDerivative(first.pointX(), y0, 1, 0);
+        }
         BezierNode second = get(1);
         if (second.hasIn()) {
             return new PointAndDerivative(x0, y0, second.inX() - x0, second.inY() - y0);
@@ -433,7 +435,9 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
             return new PointAndDerivative(x0, y0,
                     last.inX() - x0, last.inY() - y0);
         }
-        if (secondLast == null) return new PointAndDerivative(x0, y0, -1, 0);
+        if (secondLast == null) {
+            return new PointAndDerivative(x0, y0, -1, 0);
+        }
         if (secondLast.hasOut()) {
             return new PointAndDerivative(x0, y0,
                     secondLast.outX() - x0, secondLast.outY() - y0);

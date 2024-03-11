@@ -91,7 +91,9 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      */
     @SuppressWarnings("unchecked")
     public static <E> @NonNull RedBlackSet<E> copyOf(@Nullable Comparator<E> comparator, @NonNull Iterable<? extends E> c) {
-        if (comparator == null) comparator = NaturalComparator.instance();
+        if (comparator == null) {
+            comparator = NaturalComparator.instance();
+        }
         if (c instanceof RedBlackSet<? extends E> r && r.comparator.equals(comparator)) {
             return (RedBlackSet<E>) r;
         }
@@ -122,7 +124,9 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @return an empty immutable set
      */
     public static <E> @NonNull RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator) {
-        if (comparator == null) comparator = NaturalComparator.instance();
+        if (comparator == null) {
+            comparator = NaturalComparator.instance();
+        }
         return new RedBlackSet<>(comparator, RedBlackTree.of(comparator));
     }
 
@@ -139,7 +143,9 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     @SafeVarargs
     public static <E> @NonNull RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator, @NonNull E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
-        if (comparator == null) comparator = NaturalComparator.instance();
+        if (comparator == null) {
+            comparator = NaturalComparator.instance();
+        }
         return RedBlackSet.sortedOf(comparator).addAll(Arrays.asList(elements));
     }
 

@@ -125,10 +125,11 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         StringBuilder buf = new StringBuilder(16);
         for (int i = 0; i < params.size(); i++) {
             if (i > 0) {
-                if (i == 3)
+                if (i == 3) {
                     buf.append(" / ");
-                else
+                } else {
                     buf.append(' ');
+                }
             }
             buf.append(number.toString((float) params.get(i).getValue()));
             buf.append(params.get(i).getUnits());
@@ -218,13 +219,15 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             switch (tt.current()) {
                 case CssTokenType.TT_DIMENSION, CssTokenType.TT_PERCENTAGE -> {
-                    if (params.size() > 3)
+                    if (params.size() > 3) {
                         throw tt.createParseException("Could not convert a string to a CssColor because the function has too many parameters.");
+                    }
                     params.add(CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull()));
                 }
                 case CssTokenType.TT_NUMBER -> {
-                    if (params.size() > 3)
+                    if (params.size() > 3) {
                         throw tt.createParseException("Could not convert a string to a CssColor because the function has too many parameters.");
+                    }
                     params.add(CssSize.of(tt.currentNumberNonNull().doubleValue()));
                 }
                 case ',', '/' -> {
@@ -232,8 +235,9 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 case CssTokenType.TT_IDENT -> {
                     switch (tt.currentStringNonNull()) {
                         case "none" -> {
-                            if (params.size() > 3)
+                            if (params.size() > 3) {
                                 throw tt.createParseException("Could not convert a string to a CssColor because the function has too many parameters.");
+                            }
                             params.add(CssSize.ZERO);
                         }
                         default ->

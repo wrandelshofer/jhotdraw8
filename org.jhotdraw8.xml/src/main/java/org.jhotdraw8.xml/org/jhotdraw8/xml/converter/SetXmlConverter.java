@@ -65,11 +65,15 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
     public @Nullable ImmutableSequencedSet<T> fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (prefix != null) {
-            if (!str.startsWith(prefix)) throw new ParseException("Must start with \"" + prefix + "\"", 0);
+            if (!str.startsWith(prefix)) {
+                throw new ParseException("Must start with \"" + prefix + "\"", 0);
+            }
             str = str.substring(prefix.length());
         }
         if (suffix != null) {
-            if (!str.endsWith(suffix)) throw new ParseException("Must end with \"" + suffix + "\"", 0);
+            if (!str.endsWith(suffix)) {
+                throw new ParseException("Must end with \"" + suffix + "\"", 0);
+            }
             str = str.substring(0, str.length() - suffix.length());
         }
 
@@ -91,7 +95,9 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
 
     @Override
     public <TT extends ImmutableSequencedSet<T>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
-        if (prefix != null) out.append(prefix);
+        if (prefix != null) {
+            out.append(prefix);
+        }
         if (value != null) {
             boolean first = true;
             for (var elem : value) {
@@ -103,7 +109,9 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
                 elementConverter.toString(out, idSupplier, elem);
             }
         }
-        if (suffix != null) out.append(suffix);
+        if (suffix != null) {
+            out.append(suffix);
+        }
     }
 
     @Override

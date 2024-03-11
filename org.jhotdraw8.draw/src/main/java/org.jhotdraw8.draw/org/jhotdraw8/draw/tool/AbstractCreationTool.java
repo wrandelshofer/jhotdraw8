@@ -59,7 +59,9 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
      */
     protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
         Drawing drawing = dv.getDrawing();
-        if (drawing == null) return null;
+        if (drawing == null) {
+            return null;
+        }
 
         // try to use the active layer
         Figure activeParent = dv.getActiveParent();

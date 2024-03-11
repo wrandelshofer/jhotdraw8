@@ -42,13 +42,17 @@ public interface ReadOnlySortedMap<K, V> extends ReadOnlySequencedMap<K, V> {
     @SuppressWarnings("unchecked")
     static <K, V> boolean sortedMapEquals(@NonNull ReadOnlySortedMap<K, V> map, Object o) {
         if (o instanceof ReadOnlySortedMap<?, ?> r && Objects.equals(map.comparator(), r.comparator())) {
-            if (map.size() != r.size()) return false;
+            if (map.size() != r.size()) {
+                return false;
+            }
             Iterator<Map.Entry<K, V>> a = map.iterator();
             Iterator<Map.Entry<K, V>> b = (Iterator<Map.Entry<K, V>>) (Iterator<?>) r.iterator();
             for (int i = 0, n = map.size(); i < n; i++) {
                 Map.Entry<K, V> ae = a.next();
                 Map.Entry<K, V> be = b.next();
-                if (!ae.equals(be)) return false;
+                if (!ae.equals(be)) {
+                    return false;
+                }
             }
             return true;
         }

@@ -33,7 +33,9 @@ public class FloatConverter implements Converter<Float> {
     public @Nullable Float fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
-            if (in.isEmpty() && nullable) return null;
+            if (in.isEmpty() && nullable) {
+                return null;
+            }
             var result = Float.parseFloat(str);
             in.position(in.length());
             return result;
@@ -44,7 +46,9 @@ public class FloatConverter implements Converter<Float> {
 
     @Override
     public <TT extends Float> void toString(Appendable buf, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
-        if (value == null) return;
+        if (value == null) {
+            return;
+        }
 
         float v = value;
         if (Float.isInfinite(v)) {

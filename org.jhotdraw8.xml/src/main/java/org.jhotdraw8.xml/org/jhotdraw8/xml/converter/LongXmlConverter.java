@@ -35,7 +35,9 @@ public class LongXmlConverter implements Converter<Long> {
     @Override
     public @Nullable Long fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         try {
-            if (in.isEmpty() && nullable) return null;
+            if (in.isEmpty() && nullable) {
+                return null;
+            }
             var result = Long.parseLong(in.toString());
             in.position(in.length());
             return result;

@@ -112,7 +112,9 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * @return a reversed copy of this set.
      */
     default @NonNull ImmutableSequencedMap<K, V> reverse() {
-        if (size() < 2) return this;
+        if (size() < 2) {
+            return this;
+        }
         return clear().putAll(readOnlyReversed());
     }
 }

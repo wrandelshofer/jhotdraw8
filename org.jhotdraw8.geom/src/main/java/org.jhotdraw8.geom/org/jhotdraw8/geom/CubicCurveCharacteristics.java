@@ -358,10 +358,18 @@ public class CubicCurveCharacteristics {
 
 
         var list = new DoubleArrayList();
-        if (0 <= t0 && t0 <= 1) list.add(t0);
-        if (0 <= t1 && t1 <= 1) list.add(t1);
-        if (0 <= t2 && t2 <= 1) list.add(t2);
-        if (0 <= t3 && t3 <= 1) list.add(t3);
+        if (0 <= t0 && t0 <= 1) {
+            list.add(t0);
+        }
+        if (0 <= t1 && t1 <= 1) {
+            list.add(t1);
+        }
+        if (0 <= t2 && t2 <= 1) {
+            list.add(t2);
+        }
+        if (0 <= t3 && t3 <= 1) {
+            list.add(t3);
+        }
         return list;
     }
 

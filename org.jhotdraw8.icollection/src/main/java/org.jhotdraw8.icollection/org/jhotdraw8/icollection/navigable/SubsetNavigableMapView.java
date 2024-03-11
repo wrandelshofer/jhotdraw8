@@ -54,8 +54,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
 
     @Override
     public Map.@Nullable Entry<K, V> ceilingEntry(K k) {
-        if (tooLow(k))
+        if (tooLow(k)) {
             return lowestEntry();
+        }
         var e = src.ceilingEntry(k);
         return (e == null || tooHigh(e.getKey())) ? null : e;
     }
@@ -144,14 +145,17 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     @Override
     public @Nullable K firstKey() {
         Entry<K, V> entry = lowestEntry();
-        if (entry == null) throw new NoSuchElementException();
+        if (entry == null) {
+            throw new NoSuchElementException();
+        }
         return entry.getKey();
     }
 
     @Override
     public Map.@Nullable Entry<K, V> floorEntry(K k) {
-        if (tooHigh(k))
+        if (tooHigh(k)) {
             return highestEntry();
+        }
         Map.@Nullable Entry<K, V> e = src.floorEntry(k);
         return (e == null || tooLow(e.getKey())) ? null : e;
     }
@@ -170,8 +174,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     @NonNull
     @Override
     public NavigableMap<K, V> headMap(K toKey, boolean inclusive) {
-        if (!inRange(toKey, toInclusive))
+        if (!inRange(toKey, toInclusive)) {
             throw new IllegalArgumentException("toKey out of range");
+        }
         return new SubsetNavigableMapView<>(src, modCount,
                 fromStart, fromKey, fromInclusive,
                 false, toKey, toInclusive,
@@ -186,8 +191,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
 
     @Override
     public Map.@Nullable Entry<K, V> higherEntry(K k) {
-        if (tooLow(k))
+        if (tooLow(k)) {
             return lowestEntry();
+        }
         var e = src.higherEntry(k);
         return (e == null || tooHigh(e.getKey())) ? null : e;
     }
@@ -257,14 +263,17 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     @Override
     public @Nullable K lastKey() {
         Entry<K, V> entry = highestEntry();
-        if (entry == null) throw new NoSuchElementException();
+        if (entry == null) {
+            throw new NoSuchElementException();
+        }
         return entry.getKey();
     }
 
     @Override
     public Map.@Nullable Entry<K, V> lowerEntry(K k) {
-        if (tooHigh(k))
+        if (tooHigh(k)) {
             return highestEntry();
+        }
         Map.@Nullable Entry<K, V> e = src.lowerEntry(k);
         return (e == null || tooLow(e.getKey())) ? null : e;
     }
@@ -304,8 +313,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
 
     @Override
     public V put(K e, V v) {
-        if (!inRange(e))
+        if (!inRange(e)) {
             throw new IllegalArgumentException("element out of range");
+        }
         return src.put(e, v);
     }
 
@@ -338,10 +348,12 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     @NonNull
     @Override
     public NavigableMap<K, V> subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive) {
-        if (!inRange(fromKey, fromInclusive))
+        if (!inRange(fromKey, fromInclusive)) {
             throw new IllegalArgumentException("fromKey out of range");
-        if (!inRange(toKey, toInclusive))
+        }
+        if (!inRange(toKey, toInclusive)) {
             throw new IllegalArgumentException("toKey out of range");
+        }
         return new SubsetNavigableMapView<>(src, modCount,
                 false, fromKey, fromInclusive,
                 false, toKey, toInclusive,
@@ -357,8 +369,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     @NonNull
     @Override
     public NavigableMap<K, V> tailMap(K fromKey, boolean inclusive) {
-        if (!inRange(fromKey, fromInclusive))
+        if (!inRange(fromKey, fromInclusive)) {
             throw new IllegalArgumentException("fromKey out of range");
+        }
         return new SubsetNavigableMapView<>(src, modCount,
                 false, fromKey, fromInclusive,
                 toEnd, toKey, toInclusive,
@@ -374,8 +387,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     private boolean tooHigh(@Nullable K key) {
         if (!toEnd) {
             int c = compare(key, toKey);
-            if (c > 0 || (c == 0 && !toInclusive))
+            if (c > 0 || (c == 0 && !toInclusive)) {
                 return true;
+            }
         }
         return false;
     }
@@ -383,8 +397,9 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
     private boolean tooLow(@Nullable K key) {
         if (!fromStart) {
             int c = compare(key, fromKey);
-            if (c < 0 || (c == 0 && !fromInclusive))
+            if (c < 0 || (c == 0 && !fromInclusive)) {
                 return true;
+            }
         }
         return false;
     }
@@ -427,9 +442,12 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         }
 
         public final Map.Entry<K, V> next() {
-            if (!hasNext) throw new NoSuchElementException();
-            if (modCount.getAsInt() != expectedModCount)
+            if (!hasNext) {
+                throw new NoSuchElementException();
+            }
+            if (modCount.getAsInt() != expectedModCount) {
                 throw new ConcurrentModificationException();
+            }
 
             Map.Entry<K, V> e = next;
 
@@ -446,10 +464,12 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         }
 
         public void remove() {
-            if (lastReturned == null)
+            if (lastReturned == null) {
                 throw new IllegalStateException();
-            if (modCount.getAsInt() != expectedModCount)
+            }
+            if (modCount.getAsInt() != expectedModCount) {
                 throw new ConcurrentModificationException();
+            }
             // FIXME A call to src.remove() breaks the srcIterator
             src.remove(lastReturned.getKey());
             lastReturned = null;

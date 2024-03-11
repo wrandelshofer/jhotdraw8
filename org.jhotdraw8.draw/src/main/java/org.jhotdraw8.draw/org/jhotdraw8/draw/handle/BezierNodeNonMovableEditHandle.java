@@ -159,7 +159,9 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         RadioMenuItem lineToRadio = new RadioMenuItem(DrawLabels.getResources().getString("handle.bezierNode.lineTo.text"));
 
         BezierPath path = owner.get(pathKey);
-        if (path == null || nodeIndex >= path.size()) return;
+        if (path == null || nodeIndex >= path.size()) {
+            return;
+        }
         BezierPath[] finalPath = {path};
         BezierNode bnode = finalPath[0].get(nodeIndex);
 
@@ -211,12 +213,15 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
             bothRadio = null;
         }
         tangentsMenu.getItems().add(noneRadio);
-        if (inRadio != null)
+        if (inRadio != null) {
             tangentsMenu.getItems().add(inRadio);
-        if (outRadio != null)
+        }
+        if (outRadio != null) {
             tangentsMenu.getItems().add(outRadio);
-        if (bothRadio != null)
+        }
+        if (bothRadio != null) {
             tangentsMenu.getItems().add(bothRadio);
+        }
 
 
         // assemble all menus ----

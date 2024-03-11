@@ -276,14 +276,18 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     @Override
     public K firstKey() {
         Map.Entry<K, V> entry = firstEntry();
-        if (entry == null) throw new NoSuchElementException();
+        if (entry == null) {
+            throw new NoSuchElementException();
+        }
         return entry.getKey();
     }
 
     @Override
     public K lastKey() {
         Map.Entry<K, V> entry = lastEntry();
-        if (entry == null) throw new NoSuchElementException();
+        if (entry == null) {
+            throw new NoSuchElementException();
+        }
         return entry.getKey();
     }
 
@@ -460,8 +464,9 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     public void putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> m) {
-        for (Map.Entry<? extends K, ? extends V> e : m)
+        for (Map.Entry<? extends K, ? extends V> e : m) {
             put(e.getKey(), e.getValue());
+        }
     }
 
     @Serial

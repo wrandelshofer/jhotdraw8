@@ -177,7 +177,9 @@ public class ChromaticityDiagram extends Pane {
     }
 
     private void updateImage() {
-        if (pixelBuffer == null) return;
+        if (pixelBuffer == null) {
+            return;
+        }
         int h = (int) getHeight();
 
         NamedColorSpace cs = getColorSpace();
@@ -185,8 +187,11 @@ public class ChromaticityDiagram extends Pane {
         Path2D.Float shape = new Path2D.Float();
         for (int i = 0; i < point2DS.size(); i++) {
             Point2D p = point2DS.get(i);
-            if (i == 0) shape.moveTo(p.getX(), p.getY());
-            else shape.lineTo(p.getX(), p.getY());
+            if (i == 0) {
+                shape.moveTo(p.getX(), p.getY());
+            } else {
+                shape.lineTo(p.getX(), p.getY());
+            }
         }
         shape.closePath();
 

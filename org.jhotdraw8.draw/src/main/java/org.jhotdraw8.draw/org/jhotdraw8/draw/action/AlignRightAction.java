@@ -46,7 +46,9 @@ public class AlignRightAction extends AbstractDrawingViewAction {
     }
 
     private void alignRight(@NonNull DrawingView view, @NonNull Set<Figure> figures, @Nullable Figure lead) {
-        if (figures.size() < 2 || lead == null) return;
+        if (figures.size() < 2 || lead == null) {
+            return;
+        }
         DrawingModel model = view.getModel();
         double xInWorld = lead.getLayoutBoundsInWorld().getMaxX();
         Point2D xPointInWorld = new Point2D(xInWorld, 0);

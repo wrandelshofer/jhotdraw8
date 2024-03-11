@@ -137,7 +137,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     @Override
     public @NonNull Region getNode(@NonNull DrawingView view) {
         DrawingEditor editor = view.getEditor();
-        if (editor == null) return node;
+        if (editor == null) {
+            return node;
+        }
         double size = editor.getHandleSize() * 0.8;
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -156,9 +158,13 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         if (event.getClickCount() == 1) {
             if (event.isControlDown() || event.isAltDown()) {
                 BezierNode bn = getBezierNode();
-                if (bn == null) return;
+                if (bn == null) {
+                    return;
+                }
                 BezierPath path = owner.get(pathKey);
-                if (path == null) return;
+                if (path == null) {
+                    return;
+                }
                 BezierNode newbn;
                 if (bn.isCollinear()) {
                     if (bn.isEquidistant()) {
@@ -187,7 +193,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
         BezierPath list = owner.get(pathKey);
         BezierNode bn = getBezierNode();
-        if (bn == null) return;
+        if (bn == null) {
+            return;
+        }
         Point2D p = f.worldToLocal(newPoint);
 
         if (!bn.isCollinear()) {
@@ -280,7 +288,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
 
     private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
         BezierPath nullablePath = owner.get(pathKey);
-        if (nullablePath == null) return;
+        if (nullablePath == null) {
+            return;
+        }
 
         ContextMenu contextMenu = new ContextMenu();
 
@@ -370,7 +380,9 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         node.setRotationAxis(f.getStyled(ROTATION_AXIS));
 
         BezierNode bn = getBezierNode();
-        if (bn == null) return;
+        if (bn == null) {
+            return;
+        }
         if (bn.isCollinear()) {
             if (bn.isEquidistant()) {
                 node.setShape(REGION_SHAPE_SMOOTH);

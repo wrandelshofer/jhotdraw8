@@ -18,8 +18,9 @@ public interface PrimitiveIteratorOfByte extends PrimitiveIterator<Byte, ByteCon
     @Override
     default void forEachRemaining(@NonNull ByteConsumer action) {
         Objects.requireNonNull(action);
-        while (hasNext())
+        while (hasNext()) {
             action.accept(nextByte());
+        }
     }
 
     @Override

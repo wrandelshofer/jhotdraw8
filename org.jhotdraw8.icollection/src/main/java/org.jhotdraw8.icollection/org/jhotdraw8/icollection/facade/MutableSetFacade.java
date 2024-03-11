@@ -47,7 +47,9 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
     public void clear() {
         ImmutableSet<E> oldSet = backingSet;
         backingSet = backingSet.empty();
-        if (oldSet != backingSet) modCount++;
+        if (oldSet != backingSet) {
+            modCount++;
+        }
     }
 
     @Override

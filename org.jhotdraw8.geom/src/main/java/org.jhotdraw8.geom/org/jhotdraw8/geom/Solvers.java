@@ -227,8 +227,9 @@ public class Solvers {
         for (int i = 0; i < maxIterations; ++i) {
             double dy = f.applyAsDouble(x) - y;
 
-            if (Math.abs(dy) < epsilon)
+            if (Math.abs(dy) < epsilon) {
                 break;
+            }
 
             double derivative = df.applyAsDouble(x);
             double candidateX = x - dy / derivative;

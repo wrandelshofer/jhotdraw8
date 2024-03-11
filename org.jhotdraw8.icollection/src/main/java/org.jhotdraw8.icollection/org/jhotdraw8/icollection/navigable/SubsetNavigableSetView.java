@@ -60,8 +60,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     private boolean tooLow(@Nullable E key) {
         if (!fromStart) {
             int c = compare(key, fromElement);
-            if (c < 0 || (c == 0 && !fromInclusive))
+            if (c < 0 || (c == 0 && !fromInclusive)) {
                 return true;
+            }
         }
         return false;
     }
@@ -69,8 +70,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     private boolean tooHigh(@Nullable E key) {
         if (!toEnd) {
             int c = compare(key, toElement);
-            if (c > 0 || (c == 0 && !toInclusive))
+            if (c > 0 || (c == 0 && !toInclusive)) {
                 return true;
+            }
         }
         return false;
     }
@@ -92,8 +94,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     @Nullable
     @Override
     public E lower(E e) {
-        if (tooHigh(e))
+        if (tooHigh(e)) {
             return highest();
+        }
         e = src.lower(e);
         return (e == null || tooLow(e)) ? null : e;
     }
@@ -101,8 +104,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     @Nullable
     @Override
     public E floor(E e) {
-        if (tooHigh(e))
+        if (tooHigh(e)) {
             return highest();
+        }
         e = src.floor(e);
         return (e == null || tooLow(e)) ? null : e;
     }
@@ -110,8 +114,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     @Nullable
     @Override
     public E ceiling(E e) {
-        if (tooLow(e))
+        if (tooLow(e)) {
             return lowest();
+        }
         e = src.ceiling(e);
         return (e == null || tooHigh(e)) ? null : e;
     }
@@ -119,8 +124,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     @Nullable
     @Override
     public E higher(E e) {
-        if (tooLow(e))
+        if (tooLow(e)) {
             return lowest();
+        }
         e = src.higher(e);
         return (e == null || tooHigh(e)) ? null : e;
     }
@@ -180,8 +186,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
 
     @Override
     public boolean add(E e) {
-        if (!inRange(e))
+        if (!inRange(e)) {
             throw new IllegalArgumentException("element out of range");
+        }
         return src.add(e);
     }
 
@@ -224,10 +231,12 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     @NonNull
     @Override
     public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
-        if (!inRange(fromElement, fromInclusive))
+        if (!inRange(fromElement, fromInclusive)) {
             throw new IllegalArgumentException("fromElement out of range");
-        if (!inRange(toElement, toInclusive))
+        }
+        if (!inRange(toElement, toInclusive)) {
             throw new IllegalArgumentException("toElement out of range");
+        }
         return new SubsetNavigableSetView<>(src, modCount,
                 false, fromElement, fromInclusive,
                 false, toElement, toInclusive,
@@ -237,8 +246,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     @NonNull
     @Override
     public NavigableSet<E> headSet(E toElement, boolean inclusive) {
-        if (!inRange(toElement, toInclusive))
+        if (!inRange(toElement, toInclusive)) {
             throw new IllegalArgumentException("toElement out of range");
+        }
         return new SubsetNavigableSetView<>(src, modCount,
                 fromStart, fromElement, fromInclusive,
                 false, toElement, toInclusive,
@@ -248,8 +258,9 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     @NonNull
     @Override
     public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
-        if (!inRange(fromElement, fromInclusive))
+        if (!inRange(fromElement, fromInclusive)) {
             throw new IllegalArgumentException("fromElement out of range");
+        }
         return new SubsetNavigableSetView<>(src, modCount,
                 false, fromElement, fromInclusive,
                 toEnd, toElement, toInclusive,
@@ -329,9 +340,12 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         }
 
         public final E next() {
-            if (!hasNext) throw new NoSuchElementException();
-            if (modCount.getAsInt() != expectedModCount)
+            if (!hasNext) {
+                throw new NoSuchElementException();
+            }
+            if (modCount.getAsInt() != expectedModCount) {
                 throw new ConcurrentModificationException();
+            }
 
             E e = next;
 
@@ -349,10 +363,12 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         }
 
         public void remove() {
-            if (!hasLastReturned)
+            if (!hasLastReturned) {
                 throw new IllegalStateException();
-            if (modCount.getAsInt() != expectedModCount)
+            }
+            if (modCount.getAsInt() != expectedModCount) {
                 throw new ConcurrentModificationException();
+            }
             // FIXME A call to src.remove() breaks the srcIterator
             src.remove(lastReturned);
             lastReturned = null;

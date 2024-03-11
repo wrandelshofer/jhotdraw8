@@ -64,7 +64,9 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
     default ImmutableCollection<E> filter(@NonNull Predicate<E> p) {
         ImmutableCollection<E> result = this.empty();
         for(E e:this){
-            if (p.test(e))result=result.add(e);
+            if (p.test(e)) {
+                result = result.add(e);
+            }
         }
         return result;
     }

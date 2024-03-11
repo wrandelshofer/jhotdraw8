@@ -140,15 +140,20 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
         float b = rgb[2];
         float hue, saturation, value;
         float cmax = Math.max(r, g);
-        if (b > cmax) cmax = b;
+        if (b > cmax) {
+            cmax = b;
+        }
         float cmin = Math.min(r, g);
-        if (b < cmin) cmin = b;
+        if (b < cmin) {
+            cmin = b;
+        }
 
         value = cmax;
-        if (cmax != 0)
+        if (cmax != 0) {
             saturation = (cmax - cmin) / cmax;
-        else
+        } else {
             saturation = 0;
+        }
 
         if (saturation == 0) {
             hue = 0;
@@ -156,15 +161,17 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
             float redc = (cmax - r) / (cmax - cmin);
             float greenc = (cmax - g) / (cmax - cmin);
             float bluec = (cmax - b) / (cmax - cmin);
-            if (r == cmax)
+            if (r == cmax) {
                 hue = bluec - greenc;
-            else if (g == cmax)
+            } else if (g == cmax) {
                 hue = 2f + redc - bluec;
-            else
+            } else {
                 hue = 4f + greenc - redc;
+            }
             hue = hue / 6f;
-            if (hue < 0)
+            if (hue < 0) {
                 hue = hue + 1f;
+            }
         }
         hsv[0] = hue * 360f;
         hsv[1] = saturation;

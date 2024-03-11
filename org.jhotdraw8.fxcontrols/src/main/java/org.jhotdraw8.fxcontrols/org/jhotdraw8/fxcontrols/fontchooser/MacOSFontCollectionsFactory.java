@@ -85,7 +85,9 @@ public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
             SequencedSet<FontFamily> fontFamilies = new LinkedHashSet<>();
 
             @SuppressWarnings("unchecked") List<LinkedHashMap<String, Object>> plist = (List<LinkedHashMap<String, Object>>) map.getOrDefault("plist", List.of());
-            if (plist.isEmpty()) throw new IOException("Could not find a plist. path=" + path);
+            if (plist.isEmpty()) {
+                throw new IOException("Could not find a plist. path=" + path);
+            }
             LinkedHashMap<String, Object> plistMap = plist.getFirst();
             @SuppressWarnings("unchecked") List<Object> objectsList = (List<Object>) plistMap.getOrDefault("$objects", List.of());
 

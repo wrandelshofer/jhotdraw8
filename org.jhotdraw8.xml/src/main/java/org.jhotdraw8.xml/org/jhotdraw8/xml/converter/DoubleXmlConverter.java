@@ -48,13 +48,17 @@ public class DoubleXmlConverter implements Converter<Double> {
     public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
-            if (str.strip().length() != str.length()) throw new NumberFormatException();
+            if (str.strip().length() != str.length()) {
+                throw new NumberFormatException();
+            }
             Double result = switch (str) {
                 case "-INF" -> Double.NEGATIVE_INFINITY;
                 case "INF" -> Double.POSITIVE_INFINITY;
                 case "NaN" -> Double.NaN;
                 case "" -> {
-                    if (!nullable) throw new NumberFormatException();
+                    if (!nullable) {
+                        throw new NumberFormatException();
+                    }
                     yield null;
                 }
                 default -> {
@@ -75,7 +79,9 @@ public class DoubleXmlConverter implements Converter<Double> {
 
     @Override
     public <TT extends Double> void toString(Appendable buf, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
-        if (value == null) return;
+        if (value == null) {
+            return;
+        }
 
         double v = value.doubleValue();
         if (Double.isInfinite(v)) {

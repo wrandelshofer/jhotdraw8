@@ -79,7 +79,9 @@ public class RoundCssFunction<T> extends CalcCssFunction<T> {
             dimB = CssSize.ONE;
             tt.pushBack();
         }
-        if (dimB.getUnits().isEmpty()) dimB = CssSize.of(dimB.getValue(), dimA.getUnits());
+        if (dimB.getUnits().isEmpty()) {
+            dimB = CssSize.of(dimB.getValue(), dimA.getUnits());
+        }
 
         tt.requireNextToken(CssTokenType.TT_RIGHT_BRACKET, getName() + "():  right bracket \")\" expected.");
         int end = tt.getEndPosition();

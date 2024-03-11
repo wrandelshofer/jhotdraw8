@@ -202,8 +202,12 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      * @return true if equal
      */
     default boolean equals(@NonNull RedBlackTree<K, V> tree) {
-        if (this == tree) return true;
-        if (!(this.size() == tree.size())) return false;
+        if (this == tree) {
+            return true;
+        }
+        if (!(this.size() == tree.size())) {
+            return false;
+        }
         Iterator<Node<K, V>> ia = this.iterator();
         Iterator<Node<K, V>> ib = tree.iterator();
         for (int i = 0, n = this.size(); i < n; i++) {
@@ -272,7 +276,9 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
                         throw new NoSuchElementException();
                     }
                     Node<K, V> node = stack.pop();
-                    if (!node.right.isEmpty()) pushLeftChildren(stack, (Node<K, V>) node.right);
+                    if (!node.right.isEmpty()) {
+                        pushLeftChildren(stack, (Node<K, V>) node.right);
+                    }
                     return node;
                 }
 
@@ -328,7 +334,9 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
                         throw new NoSuchElementException();
                     }
                     Node<K, V> node = stack.pop();
-                    if (!node.left.isEmpty()) pushRightChildren(stack, (Node<K, V>) node.left);
+                    if (!node.left.isEmpty()) {
+                        pushRightChildren(stack, (Node<K, V>) node.left);
+                    }
                     return node;
                 }
 

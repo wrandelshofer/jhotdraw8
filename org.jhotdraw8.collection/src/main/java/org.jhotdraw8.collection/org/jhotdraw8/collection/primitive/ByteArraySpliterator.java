@@ -58,8 +58,9 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
     public void forEachRemaining(@NonNull ByteConsumer action) {
         byte[] a;
         int i, hi; // hoist accesses and checks from loop
-        if (action == null)
+        if (action == null) {
             throw new NullPointerException();
+        }
         if ((a = array).length >= (hi = fence) &&
                 (i = index) >= 0 && i < (index = hi)) {
             do {
@@ -70,8 +71,9 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
 
     @Override
     public boolean tryAdvance(@NonNull ByteConsumer action) {
-        if (action == null)
+        if (action == null) {
             throw new NullPointerException();
+        }
         if (index >= 0 && index < fence) {
             action.accept(array[index++]);
             return true;
@@ -91,8 +93,9 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
 
     @Override
     public @Nullable Comparator<? super Byte> getComparator() {
-        if (hasCharacteristics(Spliterator.SORTED))
+        if (hasCharacteristics(Spliterator.SORTED)) {
             return null;
+        }
         throw new IllegalStateException();
     }
 }

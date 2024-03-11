@@ -65,7 +65,9 @@ public class BooleanXmlConverter implements Converter<Boolean> {
                 return false;
             }
             case emptyString -> {
-                if (nullable) return null;
+                if (nullable) {
+                    return null;
+                }
             }
         }
         throw new ParseException("\"" + trueString + "\", \"" + falseString + "\"" +

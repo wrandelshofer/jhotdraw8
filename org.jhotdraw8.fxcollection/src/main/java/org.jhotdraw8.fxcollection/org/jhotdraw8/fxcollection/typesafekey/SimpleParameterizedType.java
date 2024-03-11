@@ -26,7 +26,9 @@ public record SimpleParameterizedType(@NonNull Type rawType,
         b.append('<');
         int first = b.length();
         for (Type t : actualTypeArguments) {
-            if (b.length() != first) b.append(',');
+            if (b.length() != first) {
+                b.append(',');
+            }
             b.append(t.getTypeName());
         }
         b.append('>');
@@ -50,8 +52,12 @@ public record SimpleParameterizedType(@NonNull Type rawType,
 
     @Override
     public boolean equals(@Nullable Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         SimpleParameterizedType that = (SimpleParameterizedType) o;
         return Objects.equals(rawType, that.rawType) && Arrays.equals(actualTypeArguments, that.actualTypeArguments);
     }

@@ -292,7 +292,9 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
             set = new HashSet<>();
             c.forEach(e -> set.add((E) e));
         }
-        if (set.isEmpty()) return of();
+        if (set.isEmpty()) {
+            return of();
+        }
         var t = this.toMutable();
         boolean modified = false;
         for (E key : this) {
@@ -324,7 +326,9 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public @NonNull VectorList<E> removeAll(@NonNull Iterable<?> c) {
-        if (isEmpty()) return this;
+        if (isEmpty()) {
+            return this;
+        }
         VectorList<E> result = this;
         Outer:
         for (Object e : c) {
@@ -385,7 +389,9 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Override
     public boolean contains(Object o) {
         for (E e : this) {
-            if (Objects.equals(e, o)) return true;
+            if (Objects.equals(e, o)) {
+                return true;
+            }
         }
         return false;
     }

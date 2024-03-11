@@ -36,7 +36,9 @@ public class IntegerXmlConverter implements Converter<Integer> {
     public @Nullable Integer fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
-            if (in.isEmpty() && nullable) return null;
+            if (in.isEmpty() && nullable) {
+                return null;
+            }
             var result = Integer.parseInt(str);
             in.position(in.length());
             return result;

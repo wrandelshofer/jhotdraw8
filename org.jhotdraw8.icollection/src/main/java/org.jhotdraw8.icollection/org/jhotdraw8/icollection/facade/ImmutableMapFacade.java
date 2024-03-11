@@ -107,7 +107,9 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull ImmutableMapFacade<K, V> retainAll(@NonNull Iterable<? extends K> c) {
-        if (isEmpty()) return this;
+        if (isEmpty()) {
+            return this;
+        }
         Map<K, V> clone = cloneFunction.apply(target);
         Collection<K> collection;
         if (c instanceof ReadOnlyCollection<?> rc) {

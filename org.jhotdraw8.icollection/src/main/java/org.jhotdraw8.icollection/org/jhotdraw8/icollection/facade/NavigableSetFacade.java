@@ -66,12 +66,16 @@ public class NavigableSetFacade<E> extends SequencedSetFacade<E> implements Navi
                 },
                 () -> {
                     Map.Entry<K, V> e = m.firstEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 () -> {
                     Map.Entry<K, V> e = m.lastEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 null, null, null, null,

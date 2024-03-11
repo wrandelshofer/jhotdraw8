@@ -89,7 +89,9 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         super.layoutChildren();
 
         NamedColorSpace cs = getSourceColorSpace();
-        if (cs == null) return;
+        if (cs == null) {
+            return;
+        }
         double width = getWidth();
         double height = getHeight();
         float xmax = cs.getMaxValue(xComponentIndex.get());
@@ -104,8 +106,9 @@ public class ColorRectangleSlider extends AbstractColorSlider {
 
     @Override
     protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
-        if (getDisplayColorSpace() == null || getSourceColorSpace() == null || getTargetColorSpace() == null)
+        if (getDisplayColorSpace() == null || getSourceColorSpace() == null || getTargetColorSpace() == null) {
             return null;
+        }
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
                 getSourceColorSpace(), getTargetColorSpace(), getDisplayColorSpace(),
                 getC0(), getC1(), getC2(), getC3(), getXComponentIndex(), getYComponentIndex(),
@@ -120,7 +123,9 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         float x = MathUtil.clamp((float) mouseEvent.getX(), 0, width);
         float y = MathUtil.clamp((float) mouseEvent.getY(), 0, height);
         NamedColorSpace cs = getSourceColorSpace();
-        if (cs == null) return;
+        if (cs == null) {
+            return;
+        }
         float xmax = cs.getMaxValue(xComponentIndex.get());
         float xmin = cs.getMinValue(xComponentIndex.get());
         float ymax = cs.getMaxValue(yComponentIndex.get());
@@ -222,7 +227,9 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     @Override
     protected void onKeyPressed(KeyEvent keyEvent) {
         NamedColorSpace cs = getSourceColorSpace();
-        if (cs == null) return;
+        if (cs == null) {
+            return;
+        }
         final double xTickUnit = (keyEvent.isAltDown()) ? getXMinorTickUnit() : getXMajorTickUnit();
         final double yTickUnit = (keyEvent.isAltDown()) ? getYMinorTickUnit() : getYMajorTickUnit();
         float xValue = getXValue();

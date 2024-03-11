@@ -45,7 +45,9 @@ public class MutableListIterator<E> implements ListIterator<E> {
     @Override
     public E next() {
         ensureUnmodified();
-        if (!hasNext()) throw new NoSuchElementException();
+        if (!hasNext()) {
+            throw new NoSuchElementException();
+        }
         return get(index++);
     }
 
@@ -58,7 +60,9 @@ public class MutableListIterator<E> implements ListIterator<E> {
     @Override
     public E previous() {
         ensureUnmodified();
-        if (!hasPrevious()) throw new NoSuchElementException();
+        if (!hasPrevious()) {
+            throw new NoSuchElementException();
+        }
         return get(--index);
     }
 
@@ -83,7 +87,9 @@ public class MutableListIterator<E> implements ListIterator<E> {
         try {
             src.remove(lastReturned);
             lastReturned = -1;
-            if (index > 0) index--;
+            if (index > 0) {
+                index--;
+            }
             updateModified();
         } catch (IndexOutOfBoundsException ex) {
             throw new ConcurrentModificationException();

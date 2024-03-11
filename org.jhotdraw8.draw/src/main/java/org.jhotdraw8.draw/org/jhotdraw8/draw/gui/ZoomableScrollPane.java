@@ -366,10 +366,12 @@ public class ZoomableScrollPane extends GridPane {
     private void onlyShowHorizontalScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull RowConstraints rowConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
         BooleanBinding visibilityBinding;
         visibilityBinding = Bindings.createBooleanBinding(() -> {
-                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.NEVER)
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.NEVER) {
                         return false;
-                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.ALWAYS)
+                    }
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.ALWAYS) {
                         return true;
+                    }
                     return contentWidthProperty().get() > getWidth()
                             || contentHeightProperty().get() > getHeight()
                             && contentWidthProperty().get() > getWidth() - verticalScrollBar.getWidth();
@@ -389,10 +391,12 @@ public class ZoomableScrollPane extends GridPane {
     private void onlyShowVerticalScrollBarIfNeeded(@NonNull ScrollBar scrollBar, @NonNull ColumnConstraints colConstraints, @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> scrollBarPolicy) {
         BooleanBinding visibilityBinding;
         visibilityBinding = Bindings.createBooleanBinding(() -> {
-                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.NEVER)
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.NEVER) {
                         return false;
-                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.ALWAYS)
+                    }
+                    if (scrollBarPolicy.get() == ScrollPane.ScrollBarPolicy.ALWAYS) {
                         return true;
+                    }
                     return contentHeightProperty().get() > getHeight()
                             || contentWidthProperty().get() > getWidth()
                             && contentHeightProperty().get() > getHeight() - horizontalScrollBar.getHeight();

@@ -64,7 +64,9 @@ public interface ImmutableNavigableSet<E> extends ReadOnlyNavigableSet<E>, Immut
     @NonNull NavigableSet<E> toMutable();
 
     default @NonNull ImmutableNavigableSet<E> reversed() {
-        if (size() < 2) return this;
+        if (size() < 2) {
+            return this;
+        }
         return this.<E>empty().addAll(readOnlyReversed());
     }
     

@@ -159,7 +159,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
      */
     private void addPoint(@NonNull DrawingView view) {
         BezierPath path = owner.get(pathKey);
-        if (path == null) path = BezierPath.of();
+        if (path == null) {
+            path = BezierPath.of();
+        }
 
         BezierNode node = path.get(nodeIndex);
 
@@ -200,7 +202,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
         BezierPath path = owner.get(pathKey);
-        if (path == null) return;
+        if (path == null) {
+            return;
+        }
         ContextMenu contextMenu = new ContextMenu();
 
         // add point / remove point menu ----

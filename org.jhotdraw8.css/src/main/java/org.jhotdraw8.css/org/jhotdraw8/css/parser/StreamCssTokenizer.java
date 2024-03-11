@@ -1029,7 +1029,9 @@ public class StreamCssTokenizer implements CssTokenizer {
 
     static {
         hexChars = new char[16];
-        for (int i = 0; i < 16; i++) hexChars[i] = (char) (i < 10 ? '0' + i : 'A' + i - 10);
+        for (int i = 0; i < 16; i++) {
+            hexChars[i] = (char) (i < 10 ? '0' + i : 'A' + i - 10);
+        }
     }
 
     @Override

@@ -120,7 +120,9 @@ public interface Converter<T> {
      */
     default @NonNull T fromStringNonNull(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         T m = fromString(in, idResolver);
-        if (m == null) throw new ParseException("Value must not be null.", 0);
+        if (m == null) {
+            throw new ParseException("Value must not be null.", 0);
+        }
         return m;
     }
 
@@ -133,7 +135,9 @@ public interface Converter<T> {
      */
     default @NonNull T fromStringNonNull(@NonNull CharBuffer in) throws ParseException {
         T m = fromString(in);
-        if (m == null) throw new ParseException("Value must not be null.", 0);
+        if (m == null) {
+            throw new ParseException("Value must not be null.", 0);
+        }
         return m;
     }
 
@@ -147,7 +151,9 @@ public interface Converter<T> {
      */
     default @NonNull T fromStringNonNull(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
         T m = fromString(in, idResolver);
-        if (m == null) throw new ParseException("Value must not be null.", 0);
+        if (m == null) {
+            throw new ParseException("Value must not be null.", 0);
+        }
         return m;
     }
 
@@ -160,7 +166,9 @@ public interface Converter<T> {
      */
     default @NonNull T fromStringNonNull(@NonNull CharSequence in) throws ParseException {
         T m = fromString(in);
-        if (m == null) throw new ParseException("Value must not be null.", 0);
+        if (m == null) {
+            throw new ParseException("Value must not be null.", 0);
+        }
         return m;
     }
 

@@ -101,12 +101,16 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
                 this::containsKey,
                 () -> {
                     Map.Entry<K, V> e = firstEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 () -> {
                     Map.Entry<K, V> e = lastEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 characteristics());
@@ -127,12 +131,16 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
                 this::containsValue,
                 () -> {
                     Map.Entry<K, V> e = firstEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getValue();
                 },
                 () -> {
                     Map.Entry<K, V> e = lastEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getValue();
                 },
                 characteristics() & ~(Spliterator.DISTINCT | Spliterator.SORTED));

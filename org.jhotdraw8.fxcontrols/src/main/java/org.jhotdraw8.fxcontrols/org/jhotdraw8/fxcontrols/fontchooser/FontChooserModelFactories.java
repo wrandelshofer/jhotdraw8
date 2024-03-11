@@ -10,8 +10,11 @@ public class FontChooserModelFactories {
     private static Supplier<FontCollectionsFactory> singleton;
 
     static {
-        if (MacOSPreferencesUtil.isMacOs()) singleton = MacOSFontCollectionsFactory::new;
-        else singleton = DefaultFontCollectionsFactory::new;
+        if (MacOSPreferencesUtil.isMacOs()) {
+            singleton = MacOSFontCollectionsFactory::new;
+        } else {
+            singleton = DefaultFontCollectionsFactory::new;
+        }
     }
 
     private FontChooserModelFactories() {

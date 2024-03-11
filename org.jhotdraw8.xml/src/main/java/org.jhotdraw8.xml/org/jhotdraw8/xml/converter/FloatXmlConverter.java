@@ -48,13 +48,17 @@ public class FloatXmlConverter implements Converter<Float> {
     public @Nullable Float fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
-            if (str.strip().length() != str.length()) throw new NumberFormatException();
+            if (str.strip().length() != str.length()) {
+                throw new NumberFormatException();
+            }
             Float result = switch (str) {
                 case "-INF" -> Float.NEGATIVE_INFINITY;
                 case "INF" -> Float.POSITIVE_INFINITY;
                 case "NaN" -> Float.NaN;
                 case "" -> {
-                    if (!nullable) throw new NumberFormatException();
+                    if (!nullable) {
+                        throw new NumberFormatException();
+                    }
                     yield null;
                 }
                 default -> {
@@ -75,7 +79,9 @@ public class FloatXmlConverter implements Converter<Float> {
 
     @Override
     public <TT extends Float> void toString(Appendable buf, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
-        if (value == null) return;
+        if (value == null) {
+            return;
+        }
 
         float v = value;
         if (Float.isInfinite(v)) {

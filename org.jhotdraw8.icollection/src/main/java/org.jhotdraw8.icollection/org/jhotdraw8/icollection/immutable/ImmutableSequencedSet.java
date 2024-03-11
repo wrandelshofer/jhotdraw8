@@ -90,7 +90,9 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      * @return a reversed copy of this set.
      */
     default @NonNull ImmutableSequencedSet<E> reverse() {
-        if (size() < 2) return this;
+        if (size() < 2) {
+            return this;
+        }
         return this.<E>empty().addAll(readOnlyReversed());
     }
 }

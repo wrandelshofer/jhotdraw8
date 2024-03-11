@@ -97,7 +97,9 @@ public class AlphaSlider extends AbstractColorSlider {
 
     @Override
     protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
-        if (getDisplayColorSpace() == null || getTargetColorSpace() == null) return null;
+        if (getDisplayColorSpace() == null || getTargetColorSpace() == null) {
+            return null;
+        }
         return new FillTask(new FillTaskRecord(Objects.requireNonNull(pixelBuffer),
                 getSourceColorSpace(), getTargetColorSpace(), getDisplayColorSpace(),
                 getC0(), getC1(), getC2(), getC3(), 4, -1,
@@ -290,7 +292,9 @@ public class AlphaSlider extends AbstractColorSlider {
     @Override
     protected void onKeyPressed(KeyEvent keyEvent) {
         NamedColorSpace cs = getSourceColorSpace();
-        if (cs == null) return;
+        if (cs == null) {
+            return;
+        }
         final double tickUnit = (keyEvent.isAltDown()) ? getMinorTickUnit() : getMajorTickUnit();
         float v = getAlpha();
         double vSnappedToTick = Math.round(v / tickUnit) * tickUnit;

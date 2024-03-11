@@ -318,12 +318,14 @@ public class XmlUtil {
      * @return the StaxResult if replacement was successful, the provided result otherwise
      */
     private static Result replaceStreamResultByStAXResult(@NonNull Result result, @Nullable Properties outputProperties) {
-        if (outputProperties == null) outputProperties = new Properties();
+        if (outputProperties == null) {
+            outputProperties = new Properties();
+        }
         if (result instanceof StreamResult sr) {
             IndentingXMLStreamWriter w;
-            if (sr.getOutputStream() != null)
+            if (sr.getOutputStream() != null) {
                 w = new IndentingXMLStreamWriter(sr.getOutputStream(), Charset.forName((String) outputProperties.getOrDefault(OutputKeys.ENCODING, "UTF-8")));
-            else if (sr.getWriter() != null) {
+            } else if (sr.getWriter() != null) {
                 w = new IndentingXMLStreamWriter(sr.getWriter());
             } else {
                 return result;

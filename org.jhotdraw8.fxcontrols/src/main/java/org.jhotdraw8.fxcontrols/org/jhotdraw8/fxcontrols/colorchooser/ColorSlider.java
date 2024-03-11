@@ -75,7 +75,9 @@ public class ColorSlider extends AbstractColorSlider {
     @Override
     protected void onKeyPressed(KeyEvent keyEvent) {
         NamedColorSpace cs = getSourceColorSpace();
-        if (cs == null) return;
+        if (cs == null) {
+            return;
+        }
         final double tickUnit = (keyEvent.isAltDown()) ? getMinorTickUnit() : getMajorTickUnit();
         float v = getValue();
         double vSnappedToTick = Math.round(v / tickUnit) * tickUnit;
@@ -114,7 +116,9 @@ public class ColorSlider extends AbstractColorSlider {
         super.layoutChildren();
 
         NamedColorSpace cs = getSourceColorSpace();
-        if (cs == null) return;
+        if (cs == null) {
+            return;
+        }
         double width = getWidth();
         double height = getHeight();
         float vMax = cs.getMaxValue(componentIndex.get());
@@ -156,7 +160,9 @@ public class ColorSlider extends AbstractColorSlider {
         float x = clamp((float) mouseEvent.getX(), 0, width);
         float y = clamp((float) mouseEvent.getY(), 0, height);
         NamedColorSpace cs = getSourceColorSpace();
-        if (cs == null) return;
+        if (cs == null) {
+            return;
+        }
 
         float vmax = cs.getMaxValue(componentIndex.get());
         float vmin = cs.getMinValue(componentIndex.get());

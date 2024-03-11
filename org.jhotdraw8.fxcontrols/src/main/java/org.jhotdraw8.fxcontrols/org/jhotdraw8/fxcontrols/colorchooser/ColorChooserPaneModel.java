@@ -741,7 +741,9 @@ public class ColorChooserPaneModel {
 
     private void updateSourceColorSpaceProperties(Observable o, Object oldv, Object newv) {
         NamedColorSpace ncs = sourceColorSpace.get();
-        if (ncs == null) return;
+        if (ncs == null) {
+            return;
+        }
 
         hue.unbindBidirectional(c0);
         hue.unbindBidirectional(c1);
@@ -787,7 +789,9 @@ public class ColorChooserPaneModel {
         NamedColorSpace displayCs = displayColorSpace.get();
         NamedColorSpace sourceCs = sourceColorSpace.get();
         NamedColorSpace targetCs = targetColorSpace.get();
-        if (displayCs == null || targetCs == null) return;
+        if (displayCs == null || targetCs == null) {
+            return;
+        }
         Map.Entry<String, ToIntFunction<Integer>> entry = displayBitDepth.get();
 
         // compute display color

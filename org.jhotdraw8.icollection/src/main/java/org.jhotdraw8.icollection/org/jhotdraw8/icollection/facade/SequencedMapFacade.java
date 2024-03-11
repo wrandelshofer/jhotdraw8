@@ -137,12 +137,16 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                 },
                 () -> {
                     Entry<K, V> e = m.firstEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 () -> {
                     Entry<K, V> e = m.lastEntry();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 null, null, null, null);
@@ -213,12 +217,16 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
                 this::removeEntry,
                 () -> {
                     Entry<K, V> e = lastEntryFunction.get();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 () -> {
                     Entry<K, V> e = firstEntryFunction.get();
-                    if (e == null) throw new NoSuchElementException();
+                    if (e == null) {
+                        throw new NoSuchElementException();
+                    }
                     return e.getKey();
                 },
                 null, null, null, null);

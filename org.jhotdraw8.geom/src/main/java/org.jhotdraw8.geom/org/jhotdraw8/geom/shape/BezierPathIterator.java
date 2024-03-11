@@ -75,7 +75,9 @@ public class BezierPathIterator implements PathIterator {
 
     @Override
     public void next() {
-        if (isDone()) return;
+        if (isDone()) {
+            return;
+        }
         switch (state) {
             case FINAL_SEGMENT -> state = State.DONE;
             case PRODUCE_SEGMENT -> {

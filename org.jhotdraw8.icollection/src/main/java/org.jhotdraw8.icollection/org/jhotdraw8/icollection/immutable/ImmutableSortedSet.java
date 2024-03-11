@@ -75,7 +75,9 @@ public interface ImmutableSortedSet<E> extends ReadOnlySortedSet<E>, ImmutableSe
     @NonNull NavigableSet<E> toMutable();
 
     default @NonNull ImmutableSortedSet<E> reversed() {
-        if (size() < 2) return this;
+        if (size() < 2) {
+            return this;
+        }
         return this.<E>empty().addAll(readOnlyReversed());
     }    
 }

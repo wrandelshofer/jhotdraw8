@@ -75,7 +75,9 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     @SuppressWarnings("unchecked")
     @Override
     public @NonNull ImmutableSet<E> retainAll(@NonNull Iterable<?> c) {
-        if (isEmpty()) return this;
+        if (isEmpty()) {
+            return this;
+        }
         Set<E> clone = cloneFunction.apply(target);
         Collection<E> collection;
         if (c instanceof ReadOnlyCollection<?> rc) {
