@@ -15,6 +15,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.SvgPaths;
 
+import java.awt.*;
 import java.awt.geom.Path2D;
 import java.io.IOException;
 import java.text.ParseException;
@@ -58,7 +59,7 @@ public class AwtSvgPathCssConverter extends AbstractCssConverter<Path2D.Double> 
 
     @Override
     protected <TT extends Path2D.Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.awtPathIteratorToDoubleSvgString(value)));
+        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.awtPathIteratorToDoubleSvgString(((Shape) value).getPathIterator(null))));
     }
 
     @Override

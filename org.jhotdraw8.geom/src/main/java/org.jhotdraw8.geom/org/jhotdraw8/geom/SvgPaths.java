@@ -14,7 +14,6 @@ import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
 
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.IllegalPathStateException;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
@@ -325,26 +324,6 @@ public class SvgPaths {
         return builder;
     }
 
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @return SVG Path
-     */
-    public static @NonNull String awtPathIteratorToDoubleSvgString(@NonNull Shape shape) {
-        return awtPathIteratorToDoubleSvgString(shape.getPathIterator(null));
-    }
-
-    /**
-     * Converts a Java AWT Shape iterator to a JavaFX Shape.
-     *
-     * @param shape AWT Shape
-     * @param at    Optional transformation which is applied to the shape
-     * @return SVG Path
-     */
-    public static @NonNull String awtPathIteratorToDoubleSvgString(@NonNull Shape shape, AffineTransform at) {
-        return awtPathIteratorToDoubleSvgString(shape.getPathIterator(at));
-    }
 
     private final static DoubleConverter nb = new DoubleConverter();
     /**
@@ -453,7 +432,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String awtShapeToDoubleRelativeSvgString(@NonNull PathIterator iter) {
+    public static @NonNull String awtPathIteratorToDoubleRelativeSvgString(@NonNull PathIterator iter) {
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
         double x = 0, y = 0;// current point

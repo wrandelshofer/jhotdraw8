@@ -10,6 +10,7 @@ import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
+import java.awt.*;
 import java.awt.geom.Path2D;
 import java.text.ParseException;
 import java.util.Arrays;
@@ -26,7 +27,7 @@ public class ShapesTest {
 
     void testDoubleSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
-        String actual = SvgPaths.awtPathIteratorToDoubleSvgString(path);
+        String actual = SvgPaths.awtPathIteratorToDoubleSvgString(((Shape) path).getPathIterator(null));
         assertEquals(expected, actual);
     }
 
@@ -50,7 +51,7 @@ public class ShapesTest {
 
     void testDoubleRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
-        String actual = SvgPaths.awtShapeToDoubleRelativeSvgString(path.getPathIterator(null));
+        String actual = SvgPaths.awtPathIteratorToDoubleRelativeSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
