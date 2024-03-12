@@ -664,7 +664,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
     protected abstract void remove(E f, WritableStyleableMapAccessor<Object> finalSelectedAccessor);
 
     private void select(ActionEvent event) {
-        CssParser parser = new CssParser();
+        CssParser parser = getCssParserFactory().get();
+        ;
         try {
             Stylesheet s = parser.parseStylesheet(textArea.getText(), null, null);
             if (!parser.getParseExceptions().isEmpty()) {
@@ -781,7 +782,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     protected void updateLookupTable(Observable o) {
         lookupTable.clear();
-        CssParser parser = new CssParser();
+        CssParser parser = getCssParserFactory().get();
+        ;
         try {
             Stylesheet s = parser.parseStylesheet(getTextArea().getText(), null, null);
             for (StyleRule r : s.getStyleRules()) {
