@@ -139,7 +139,13 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         return false;
     }
 
-
+    /**
+     * Adds all elements in the specified collection at the specified position.
+     *
+     * @param index the insertion position
+     * @param c     the collection to be added to ths list
+     * @return {@code true} if this list changed as a result of the call
+     */
     public boolean addAll(int index, @NonNull Iterable<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
@@ -150,6 +156,16 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
             return true;
         }
         return false;
+    }
+
+    /**
+     * Adds all elements in the specified collection at the end of this list.
+     *
+     * @param c the collection to be added to ths list
+     * @return {@code true} if this list changed as a result of the call
+     */
+    public boolean addAll(@NonNull Iterable<? extends E> c) {
+        return addAll(size(), c);
     }
 
     @Override
