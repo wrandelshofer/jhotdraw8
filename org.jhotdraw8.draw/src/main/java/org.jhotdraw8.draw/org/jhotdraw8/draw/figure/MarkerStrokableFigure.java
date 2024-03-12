@@ -19,7 +19,6 @@ import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.key.NonNullListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -134,7 +133,7 @@ public interface MarkerStrokableFigure extends Figure {
      * </dl>
      */
     NonNullListStyleableKey<CssSize> MARKER_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("marker-stroke-dasharray",
-            new SimpleParameterizedType(ImmutableList.class, CssSize.class),
+            CssSize.class,
             new SizeCssConverter(false), VectorList.of());
 
     /**

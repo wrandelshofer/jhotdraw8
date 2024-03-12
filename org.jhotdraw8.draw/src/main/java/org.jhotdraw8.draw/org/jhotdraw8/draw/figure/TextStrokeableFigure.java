@@ -22,7 +22,6 @@ import org.jhotdraw8.draw.key.NonNullListStyleableKey;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -120,7 +119,7 @@ public interface TextStrokeableFigure extends Figure {
      * </dl>
      */
     NonNullListStyleableKey<CssSize> TEXT_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("text-stroke-dasharray",
-            new SimpleParameterizedType(ImmutableList.class, CssSize.class),
+            CssSize.class,
             new SizeCssConverter(false), VectorList.of());
 
     /**
