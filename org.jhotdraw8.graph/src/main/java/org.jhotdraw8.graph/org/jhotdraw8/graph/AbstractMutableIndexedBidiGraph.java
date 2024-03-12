@@ -8,9 +8,9 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.IntArrayList;
-import org.jhotdraw8.graph.precondition.Preconditions;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * AbstractDirectedGraphBuilder.
@@ -94,7 +94,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     }
 
     protected void buildRemoveVertex(int vidx) {
-        Preconditions.checkIndex(vidx, vertexCount);
+        Objects.checkIndex(vidx, vertexCount);
         Node vnode = nodes[vidx];
         arrowCount -= vnode.next.size();
         if (vidx < vertexCount - 1) {

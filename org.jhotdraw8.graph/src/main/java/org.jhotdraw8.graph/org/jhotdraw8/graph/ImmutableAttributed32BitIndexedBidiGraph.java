@@ -7,11 +7,11 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntArrayEnumerator;
-import org.jhotdraw8.graph.precondition.Preconditions;
 
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -244,7 +244,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
 
     @Override
     public @NonNull A getNextArrow(int v, int i) {
-        Preconditions.checkIndex(i, getNextCount(v));
+        int length = getNextCount(v);
+        Objects.checkIndex(i, length);
         return nextArrows[nextOffset[v] + i];
     }
 
@@ -255,7 +256,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
 
     @Override
     public int getNextAsInt(int v, int i) {
-        Preconditions.checkIndex(i, getNextCount(v));
+        int length = getNextCount(v);
+        Objects.checkIndex(i, length);
         return next[nextOffset[v] + i];
     }
 
@@ -283,7 +285,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
 
     @Override
     public A getPrevArrow(int vi, int i) {
-        Preconditions.checkIndex(i, getPrevCount(vi));
+        int length = getPrevCount(vi);
+        Objects.checkIndex(i, length);
         return prevArrows[prevOffset[vi] + i];
     }
 
@@ -294,7 +297,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
 
     @Override
     public int getPrevAsInt(int v, int i) {
-        Preconditions.checkIndex(i, getPrevCount(v));
+        int length = getPrevCount(v);
+        Objects.checkIndex(i, length);
         return prev[prevOffset[v] + i];
     }
 

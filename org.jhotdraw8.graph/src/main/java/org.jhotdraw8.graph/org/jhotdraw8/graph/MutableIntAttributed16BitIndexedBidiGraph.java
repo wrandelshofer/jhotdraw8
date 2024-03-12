@@ -13,10 +13,10 @@ import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.util.ListHelper;
 import org.jhotdraw8.graph.algo.AddToIntSet;
-import org.jhotdraw8.graph.precondition.Preconditions;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 import static java.lang.Math.max;
 
@@ -118,8 +118,10 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
 
     @Override
     public void addArrowAsInt(final int v, final int u, final int arrowData) {
-        Preconditions.checkIndex(v, getVertexCount());
-        Preconditions.checkIndex(u, getVertexCount());
+        int length1 = getVertexCount();
+        Objects.checkIndex(v, length1);
+        int length = getVertexCount();
+        Objects.checkIndex(u, length);
         final int vOffset = v * stride + VERTEX_DATA_SIZE;
         final int vNewNextCount = next[vOffset] + 1;
         final int uOffset = u * stride + VERTEX_DATA_SIZE;
@@ -227,7 +229,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
     @Override
     public int getNextAsInt(final int v, final int i) {
         final int vOffset = v * stride + VERTEX_DATA_SIZE;
-        Preconditions.checkIndex(i, next[vOffset]);
+        Objects.checkIndex(i, next[vOffset]);
         return next[vOffset + i + 1];
     }
 
@@ -239,7 +241,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
     @Override
     public int getPrevAsInt(final int v, final int i) {
         final int vOffset = v * stride + VERTEX_DATA_SIZE;
-        Preconditions.checkIndex(i, prev[vOffset]);
+        Objects.checkIndex(i, prev[vOffset]);
         return prev[vOffset + i + 1];
     }
 
@@ -280,7 +282,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
 
     @Override
     public void removeAllPrevAsInt(final int v) {
-        Preconditions.checkIndex(v, vertexCount);
+        Objects.checkIndex(v, vertexCount);
         final int vOffset = v * stride + VERTEX_DATA_SIZE;
         final int vPrevCount = prev[vOffset];
         for (int i = vPrevCount; i >= 0; i--) {
@@ -291,7 +293,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
 
     @Override
     public void removeAllNextAsInt(final int v) {
-        Preconditions.checkIndex(v, vertexCount);
+        Objects.checkIndex(v, vertexCount);
         final int vOffset = v * stride + VERTEX_DATA_SIZE;
         final int vNextCount = next[vOffset];
         for (int i = vNextCount; i >= 0; i--) {
@@ -361,7 +363,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
 
     @Override
     public void removeVertexAsInt(final int v) {
-        Preconditions.checkIndex(v, vertexCount);
+        Objects.checkIndex(v, vertexCount);
         removeAllNextAsInt(v);
         removeAllPrevAsInt(v);
         if (v < vertexCount - 1) {

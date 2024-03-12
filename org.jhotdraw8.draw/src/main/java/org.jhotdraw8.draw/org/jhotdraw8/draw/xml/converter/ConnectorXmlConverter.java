@@ -104,7 +104,7 @@ public class ConnectorXmlConverter implements Converter<Connector> {
      * @throws IOException    if IO fails
      */
     public @Nullable Connector parseConnector(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
-        Locator locator = null;
+        Locator locator;
         Function<Locator, Connector> supplier;
 
         switch (tt.next()) {

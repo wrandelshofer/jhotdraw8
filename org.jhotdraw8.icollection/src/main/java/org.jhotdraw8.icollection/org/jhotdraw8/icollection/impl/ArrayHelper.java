@@ -57,8 +57,8 @@ public class ArrayHelper {
     public static <T> boolean equals(T @NonNull [] a, int aFrom, int aTo,
                                      T @NonNull [] b, int bFrom, int bTo,
                                      @NonNull BiPredicate<T, T> cmp) {
-        Preconditions.checkFromToIndex(aFrom, aTo, a.length);
-        Preconditions.checkFromToIndex(bFrom, bTo, b.length);
+        Objects.checkFromToIndex(aFrom, aTo, a.length);
+        Objects.checkFromToIndex(bFrom, bTo, b.length);
         int aLength = aTo - aFrom;
         int bLength = bTo - bFrom;
         if (aLength != bLength) {

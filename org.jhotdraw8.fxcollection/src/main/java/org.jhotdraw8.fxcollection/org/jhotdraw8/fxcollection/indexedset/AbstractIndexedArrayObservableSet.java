@@ -8,7 +8,6 @@ import javafx.collections.ObservableListBase;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.spliterator.ReverseListSpliterator;
-import org.jhotdraw8.fxcollection.precondition.Preconditions;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
@@ -21,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Set;
 import java.util.Spliterator;
 import java.util.Spliterators;
@@ -172,7 +172,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     private @NonNull E doSet(int index, E newValue) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         E oldValue = elementData(index);
         data[index] = newValue;
         return oldValue;
@@ -212,7 +212,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     private void arrayDoAdd(int index, E element) {
-        Preconditions.checkIndex(index, size + 1);
+        Objects.checkIndex(index, size + 1);
         ensureCapacity(size + 1);
         System.arraycopy(data, index,
                 data, index + 1,
@@ -263,7 +263,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     private @NonNull E arrayDoRemove(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         E oldValue = elementData(index);
         System.arraycopy(data, index + 1, data, index, size - index - 1);
         data[--size] = null;
@@ -272,7 +272,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
     @SuppressWarnings("unchecked")
     private @NonNull List<E> dataDoRemoveRange(int fromIndex, int toIndex) {
-        Preconditions.checkFromToIndex(fromIndex, toIndex, size);
+        Objects.checkFromToIndex(fromIndex, toIndex, size);
         int removedCount = toIndex - fromIndex;
         ArrayList<E> removed = new ArrayList<>(removedCount);
         if (removedCount > 0) {
@@ -340,7 +340,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     private @NonNull E doGet(int index) {
-        Preconditions.checkIndex(index, size);
+        Objects.checkIndex(index, size);
         return elementData(index);
     }
 

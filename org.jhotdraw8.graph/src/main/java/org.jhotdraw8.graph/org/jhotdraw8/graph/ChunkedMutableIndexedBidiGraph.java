@@ -10,9 +10,9 @@ import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.util.ListHelper;
 import org.jhotdraw8.graph.algo.AddToIntSet;
-import org.jhotdraw8.graph.precondition.Preconditions;
 
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.BiFunction;
@@ -309,7 +309,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     @Override
     public void removeAllNextAsInt(final int v) {
-        Preconditions.checkIndex(v, vertexCount);
+        Objects.checkIndex(v, vertexCount);
         final GraphChunk chunk = getNextChunk(v);
         final int from = chunk.getSiblingsFromOffset(v);
         int siblingCount = chunk.getSiblingCount(v);
@@ -328,7 +328,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     @Override
     public void removeAllPrevAsInt(final int v) {
-        Preconditions.checkIndex(v, vertexCount);
+        Objects.checkIndex(v, vertexCount);
         final GraphChunk chunk = getPrevChunk(v);
         final int from = chunk.getSiblingsFromOffset(v);
         int[] a = chunk.getSiblingsArray();
@@ -347,7 +347,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     @Override
     public void removeNextAsInt(final int v, final int index) {
-        Preconditions.checkIndex(index, getNextCount(v));
+        int length = getNextCount(v);
+        Objects.checkIndex(index, length);
         final int u = getNextChunk(v).removeArrowAt(v, index);
         getPrevChunk(u).tryRemoveArrow(u, v);
         arrowCount--;
@@ -355,7 +356,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
 
     @Override
     public void removePrevAsInt(final int v, final int index) {
-        Preconditions.checkIndex(index, getPrevCount(v));
+        int length = getPrevCount(v);
+        Objects.checkIndex(index, length);
         final int u = getPrevChunk(v).removeArrowAt(v, index);
         getNextChunk(u).tryRemoveArrow(u, v);
         arrowCount--;
@@ -367,7 +369,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     }
 
     public void setVertexDataAsInt(final int v, final int data) {
-        Preconditions.checkIndex(v, vertexCount);
+        Objects.checkIndex(v, vertexCount);
         getNextChunk(v).setVertexData(v, data);
         getPrevChunk(v).setVertexData(v, data);
     }
