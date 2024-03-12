@@ -55,6 +55,8 @@ import java.util.List;
 import java.util.SequencedMap;
 import java.util.function.Function;
 
+import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
+
 /**
  * The {@code CssParser} processes a stream of characters into a
  * {@code Stylesheet} object.
@@ -175,13 +177,6 @@ public class CssParser {
     public static final String NAMESPACE_AT_RULE = "namespace";
     private final SequencedMap<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
 
-    {
-        //If no default namespace is declared, then names without a namespace
-        //prefix match all namespaces.
-        //See https://drafts.csswg.org/selectors/#type-nmsp
-        prefixToNamespaceMap.put(DEFAULT_NAMESPACE, ANY_NAMESPACE_PREFIX);
-        prefixToNamespaceMap.put(ANY_NAMESPACE_PREFIX, ANY_NAMESPACE_PREFIX);
-    }
 
     private @NonNull List<ParseException> exceptions = new ArrayList<>();
     private @Nullable URI stylesheetHome;
@@ -297,7 +292,7 @@ public class CssParser {
             tt.pushBack();
         }
         if (tt.nextNoSkip() == CssTokenType.TT_VERTICAL_LINE) {
-            namespacePattern = prefixOrName == null ? TypeSelector.WITHOUT_NAMESPACE : resolveNamespacePrefix(prefixOrName, tt);
+            namespacePattern = prefixOrName == null ? WITHOUT_NAMESPACE : resolveNamespacePrefix(prefixOrName, tt);
             tt.requireNextNoSkip(CssTokenType.TT_IDENT, "Could not parse an AttributeSelector because it does not contain an attribute name after the square bracket '[' character.");
             attributeName = tt.currentStringNonNull();
         } else {
@@ -665,7 +660,7 @@ public class CssParser {
                     }
                 case '|':
                     tt.requireNextNoSkip(CssTokenType.TT_IDENT, "element name expected after |");
-                    return new TypeSelector(sourceLocator, TypeSelector.WITHOUT_NAMESPACE, tt.currentStringNonNull());
+                    return new TypeSelector(sourceLocator, WITHOUT_NAMESPACE, tt.currentStringNonNull());
                 case CssTokenType.TT_IDENT:
                     String typeOrPrefix = tt.currentStringNonNull();
                     if (tt.nextNoSkip() == '|') {
@@ -905,6 +900,11 @@ public class CssParser {
 
     /**
      * Resolves the namespace prefix.
+     * <p>
+     * If no default namespace is declared, then names without a namespace
+     * prefix match all namespaces.
+     * <p>
+     * See <a href="https://drafts.csswg.org/selectors/#type-nmsp">drafts.csswg.org</a>
      *
      * @param namespacePrefix a namespace prefix
      * @param tt              the tokenizer
@@ -913,15 +913,15 @@ public class CssParser {
      */
     private @Nullable String resolveNamespacePrefix(@Nullable String namespacePrefix, CssTokenizer tt) throws ParseException {
         return switch (namespacePrefix) {
-            case null -> null;// null means no namespace
-            case ANY_NAMESPACE_PREFIX -> ANY_NAMESPACE_PREFIX;// '*' means any namespace
+            case null -> TypeSelector.ANY_NAMESPACE;// null means without a namespace, but we match it to any namespace
+            case ANY_NAMESPACE_PREFIX -> TypeSelector.ANY_NAMESPACE;// '*' means any namespace
             default -> {
                 String s = prefixToNamespaceMap.get(namespacePrefix);
                 if (s == null) {
                     if (strict) {
                         throw tt.createParseException("Could not find a namespace with namespacePrefix=\"" + namespacePrefix + "\".");
                     }
-                    s = ANY_NAMESPACE_PREFIX;
+                    s = TypeSelector.ANY_NAMESPACE;
                 }
                 yield s;
             }

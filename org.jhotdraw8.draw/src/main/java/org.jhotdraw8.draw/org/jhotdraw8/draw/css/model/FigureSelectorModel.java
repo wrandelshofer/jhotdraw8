@@ -134,7 +134,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     String cssNamespace = sk.getCssNamespace();
                     m.put(new QualifiedName(cssNamespace, element.getClass() + "$" + sk.getCssName()), sk);
                     if (cssNamespace != null) {
-                        m.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
+                        m.put(new QualifiedName(TypeSelector.WITHOUT_NAMESPACE, element.getClass() + "$" + sk.getCssName()), sk);
                     }
                     m.put(new QualifiedName(TypeSelector.ANY_NAMESPACE, element.getClass() + "$" + sk.getCssName()), sk);
                 }
