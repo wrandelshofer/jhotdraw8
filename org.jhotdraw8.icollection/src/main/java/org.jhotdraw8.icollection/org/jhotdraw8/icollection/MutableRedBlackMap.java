@@ -35,10 +35,12 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 
 public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadOnlyNavigableMap<K, V>, Cloneable, Serializable {
-
-    @NonNull RedBlackTree<K, V> root;
+    @Serial
+    private final static long serialVersionUID = 0L;
+    transient @NonNull RedBlackTree<K, V> root;
+    @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
     final @NonNull Comparator<? super K> comparator;
-    private int modCount;
+    transient private int modCount;
 
     @SuppressWarnings("unchecked")
     @Override
@@ -82,6 +84,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
      *
      * @param m a map
      */
+    @SuppressWarnings("this-escape")
     public MutableRedBlackMap(@NonNull Map<? extends K, ? extends V> m) {
         this.comparator = NaturalComparator.instance();
         if (m instanceof MutableRedBlackMap<?, ?> r && r.comparator() == null) {
@@ -323,6 +326,9 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     public @Nullable V put(K key, V value) {
         var newRoot = root.insert(key, value, comparator);
         if (newRoot != root) {
+            if (newRoot.size() != root.size()) {
+                modCount++;
+            }
             V oldValue = newRoot.size() == root.size() ? root.find(key, comparator).getValue() : null;
             root = newRoot;
             return oldValue;
@@ -335,6 +341,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     public @Nullable V remove(Object key) {
         var newRoot = root.delete((K) key, comparator);
         if (newRoot != root) {
+            modCount++;
             V oldValue = root.find((K) key, comparator).getValue();
             root = newRoot;
             return oldValue;
