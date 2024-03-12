@@ -39,10 +39,11 @@ public class TypeSelector extends SimpleSelector {
     private final @NonNull String type;
 
     /**
-     * @param sourceLocator
-     * @param namespacePattern null means no namespace,
-     *                         {@link TypeSelector#ANY_NAMESPACE} means any namespace
-     * @param type
+     * Creates a new instance
+     * @param sourceLocator source locator for debugging
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param type the type name
      */
     public TypeSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, @NonNull String type) {
         super(sourceLocator);

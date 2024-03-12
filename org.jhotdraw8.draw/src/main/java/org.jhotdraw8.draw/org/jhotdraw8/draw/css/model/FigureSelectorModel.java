@@ -126,13 +126,14 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return mm.get(new QualifiedName(namespace, element.getClass() + "$" + attributeName));
     }
 
-    private ReadOnlyStyleableMapAccessor<?> findReadableKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+    private ReadOnlyStyleableMapAccessor<?> findReadableKey(@NonNull Figure element, @Nullable String namespacePattern, String attributeName) {
         Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>> mm = nameToReadableKeyMap.computeIfAbsent(element.getClass(), k -> {
             SequencedMap<QualifiedName, ReadOnlyStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
                 if (kk instanceof ReadOnlyStyleableMapAccessor<?> sk) {
-                    m.put(new QualifiedName(sk.getCssNamespace(), element.getClass() + "$" + sk.getCssName()), sk);
-                    if (sk.getCssNamespace() != null) {
+                    String cssNamespace = sk.getCssNamespace();
+                    m.put(new QualifiedName(cssNamespace, element.getClass() + "$" + sk.getCssName()), sk);
+                    if (cssNamespace != null) {
                         m.put(new QualifiedName(null, element.getClass() + "$" + sk.getCssName()), sk);
                     }
                     m.put(new QualifiedName(TypeSelector.ANY_NAMESPACE, element.getClass() + "$" + sk.getCssName()), sk);
@@ -140,7 +141,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
             }
             return m;
         });
-        return mm.get(new QualifiedName(namespace, element.getClass() + "$" + attributeName));
+        return mm.get(new QualifiedName(namespacePattern, element.getClass() + "$" + attributeName));
     }
 
     @Override

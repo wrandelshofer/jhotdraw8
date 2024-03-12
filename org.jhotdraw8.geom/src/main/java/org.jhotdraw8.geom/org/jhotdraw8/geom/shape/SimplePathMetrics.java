@@ -402,7 +402,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
 
         private final double epsilon = 0.125;
         private @NonNull State state;
-        final private boolean startsAtSegment, endsAtSegment;
+        final private boolean endsAtSegment;
 
         public SubPathIterator(double s0, double s1, @NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
             double totalArcLength = m.arcLength();
@@ -412,21 +412,34 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
             this.tt = tt == null ? AffineTransform.getTranslateInstance(0, 0) : tt;
 
             // Find the segment on which the sub-path starts
-            int search0 = s0 == 0 ? 0 : Arrays.binarySearch(m.lengths, s0);
-            startsAtSegment = search0 >= 0;
-            i0 = search0 < 0 ? ~search0 : search0;
+            boolean startsAtSegment;
+            if (s0 == totalArcLength) {
+                // Handle degenerate case
+                startsAtSegment = false;
+                i0 = 1;
+            } else {
+                int search0 = s0 == 0 ? 0 : Arrays.binarySearch(m.lengths, s0);
+                startsAtSegment = search0 >= 0;
+                i0 = search0 < 0 ? ~search0 : search0;
+            }
             // Make sure that the start segment contains s0+epsilon
             while (i0 < m.commands.length - 1 && m.lengths[i0] <= s0) {
                 i0++;
             }
 
             // Find the segment on which the sub-path ends
-            int search1 = s1 == totalArcLength ? m.commands.length - 1 : Arrays.binarySearch(m.lengths, s1);
-            endsAtSegment = search1 >= 0;
-            i1 = search1 < 0 ? ~search1 : search1;
-            // Make sure that the end segment contains s1
-            while (i1 > 0 && m.lengths[i1 - 1] >= s1) {
-                i1--;
+            if (s1 == 0) {
+                // Handle degenerate case
+                endsAtSegment = false;
+                i1 = 1;
+            } else {
+                int search1 = s1 == totalArcLength ? m.commands.length - 1 : Arrays.binarySearch(m.lengths, s1);
+                endsAtSegment = search1 >= 0;
+                i1 = Math.max(1, search1 < 0 ? ~search1 : search1);
+                // Make sure that the end segment contains s1
+                while (i1 > 1 && m.lengths[i1 - 1] >= s1) {
+                    i1--;
+                }
             }
 
             // Set the initial state

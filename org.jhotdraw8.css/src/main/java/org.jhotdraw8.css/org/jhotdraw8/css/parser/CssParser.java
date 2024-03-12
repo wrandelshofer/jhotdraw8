@@ -163,7 +163,7 @@ import java.util.function.Function;
  * <dt>W3C CSS2.2, Appendix G.1 Grammar of CSS 2.2</dt>
  * <dd><a href="https://www.w3.org/TR/2016/WD-CSS22-20160412/">w3.org</a></dd>
  * </dl>
- *
+ * <p>
  * FIXME The parser does not support the !important declaration.
  *
  * @author Werner Randelshofer
@@ -187,6 +187,9 @@ public class CssParser {
     private @Nullable URI stylesheetHome;
     private @Nullable URI stylesheetUri;
     private @NonNull UriResolver uriResolver = new SimpleUriResolver();
+
+    private boolean strict = false;
+
     /**
      * To reduce memory pressure, we deduplicate selectors.
      */
@@ -282,7 +285,7 @@ public class CssParser {
     private @NonNull AbstractAttributeSelector parseAttributeSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextNoSkip('[', "Could not parse an AttributeSelector because it does not start with an opening square bracket '[' character.");
         String prefixOrName = null;
-        String namespace = null;
+        String namespacePattern = null;
         String attributeName = null;
         if (tt.nextNoSkip() == CssTokenType.TT_IDENT) {
             prefixOrName = tt.currentStringNonNull();
@@ -294,11 +297,11 @@ public class CssParser {
             tt.pushBack();
         }
         if (tt.nextNoSkip() == CssTokenType.TT_VERTICAL_LINE) {
-            namespace = prefixOrName == null ? TypeSelector.WITHOUT_NAMESPACE : resolveNamespacePrefix(prefixOrName, tt);
+            namespacePattern = prefixOrName == null ? TypeSelector.WITHOUT_NAMESPACE : resolveNamespacePrefix(prefixOrName, tt);
             tt.requireNextNoSkip(CssTokenType.TT_IDENT, "Could not parse an AttributeSelector because it does not contain an attribute name after the square bracket '[' character.");
             attributeName = tt.currentStringNonNull();
         } else {
-            namespace = ANY_NAMESPACE_PREFIX;
+            namespacePattern = ANY_NAMESPACE_PREFIX;
             attributeName = prefixOrName;
             tt.pushBack();
         }
@@ -310,7 +313,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_STRING) {
                     throw tt.createParseException("Could not parse an EqualityMatch because it does not contain an attribute value after the '=' character.");
                 }
-                selector = new EqualsMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
+                selector = new EqualsMatchSelector(sourceLocator, namespacePattern, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_INCLUDE_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -318,7 +321,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("Could not parse an IncludeMatch because it does not contain an attribute value after the '~=' characters.");
                 }
-                selector = new IncludeMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
+                selector = new IncludeMatchSelector(sourceLocator, namespacePattern, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_DASH_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -326,7 +329,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("Could not parse a DashMatch because it does not contain an attribute value after the '-=' characters.");
                 }
-                selector = new DashMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
+                selector = new DashMatchSelector(sourceLocator, namespacePattern, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_PREFIX_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -334,7 +337,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("Could not parse a PrefixMatch because it does not contain an attribute value after the '^=' characters.");
                 }
-                selector = new PrefixMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
+                selector = new PrefixMatchSelector(sourceLocator, namespacePattern, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_SUFFIX_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -342,7 +345,7 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("Could not parse a SuffixMatch because it does not contain an attribute after the '$=' characters.");
                 }
-                selector = new SuffixMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
+                selector = new SuffixMatchSelector(sourceLocator, namespacePattern, attributeName, tt.currentStringNonNull());
                 break;
             case CssTokenType.TT_SUBSTRING_MATCH:
                 if (tt.nextNoSkip() != CssTokenType.TT_IDENT
@@ -350,10 +353,10 @@ public class CssParser {
                         && tt.current() != CssTokenType.TT_NUMBER) {
                     throw tt.createParseException("Could not parse a SubstringMatch because it does not contain an attribute after the '*=' characters.");
                 }
-                selector = new SubstringMatchSelector(sourceLocator, namespace, attributeName, tt.currentStringNonNull());
+                selector = new SubstringMatchSelector(sourceLocator, namespacePattern, attributeName, tt.currentStringNonNull());
                 break;
             case ']':
-                selector = new ExistsMatchSelector(sourceLocator, namespace, attributeName);
+                selector = new ExistsMatchSelector(sourceLocator, namespacePattern, attributeName);
                 tt.pushBack();
                 break;
             default:
@@ -909,14 +912,20 @@ public class CssParser {
      * @throws ParseException if the namespace prefix is not declared.
      */
     private @Nullable String resolveNamespacePrefix(@Nullable String namespacePrefix, CssTokenizer tt) throws ParseException {
-        if (namespacePrefix == null) {
-            return prefixToNamespaceMap.get(DEFAULT_NAMESPACE);
-        }
-        String s = prefixToNamespaceMap.get(namespacePrefix);
-        if (s == null) {
-            throw tt.createParseException("Could not find a namespace with namespacePrefix=\"" + namespacePrefix + "\".");
-        }
-        return s;
+        return switch (namespacePrefix) {
+            case null -> null;// null means no namespace
+            case ANY_NAMESPACE_PREFIX -> ANY_NAMESPACE_PREFIX;// '*' means any namespace
+            default -> {
+                String s = prefixToNamespaceMap.get(namespacePrefix);
+                if (s == null) {
+                    if (strict) {
+                        throw tt.createParseException("Could not find a namespace with namespacePrefix=\"" + namespacePrefix + "\".");
+                    }
+                    s = ANY_NAMESPACE_PREFIX;
+                }
+                yield s;
+            }
+        };
     }
 
     private void skipWhitespaceAndComments(@NonNull CssTokenizer tt) throws IOException {
@@ -951,5 +960,23 @@ public class CssParser {
 
     public void setUriResolver(@NonNull UriResolver uriResolver) {
         this.uriResolver = uriResolver;
+    }
+
+    /**
+     * Return strict parsing mode.
+     *
+     * @return true if the parser is in strict mode.
+     */
+    public boolean isStrict() {
+        return strict;
+    }
+
+    /**
+     * Sets strict parsing mode.
+     *
+     * @param strict true to parse in strict mode, the default value is false.
+     */
+    public void setStrict(boolean strict) {
+        this.strict = strict;
     }
 }

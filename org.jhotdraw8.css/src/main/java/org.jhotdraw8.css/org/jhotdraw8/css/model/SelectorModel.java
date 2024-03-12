@@ -115,7 +115,8 @@ public interface SelectorModel<T> {
      * the attribute value starts with the specified substring.
      *
      * @param element          An element of the document
-     * @param namespacePattern The attribute namespace
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
      * @param attributeName    an attribute name
      * @param substring        the substring
      * @return true if the element has an attribute with the specified name and
@@ -140,6 +141,17 @@ public interface SelectorModel<T> {
         return getAttributeAsString(element, StyleOrigin.USER, namespacePattern, name);
     }
 
+    /**
+     * Returns the attribute value with the given name from the specified style origin.
+     *
+     * @param element          The element
+     * @param origin           The style origin
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param name             The attribute name
+     * @return The attribute value. Returns "initial" if the element does not have an
+     * attribute with this name.
+     */
     default @Nullable String getAttributeAsString(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String name) {
         List<CssToken> list = getAttribute(element, origin, namespacePattern, name);
         if (list == null) {
@@ -151,6 +163,17 @@ public interface SelectorModel<T> {
         }
         return buf.toString();
     }
+
+    /**
+     * Returns the attribute value with the given name from the specified style origin.
+     *
+     * @param element          The element
+     * @param origin The style origin
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param name             The attribute name
+     * @return The attribute value as a list of {@link CssToken}s.
+     */
 
     @Nullable
     List<CssToken> getAttribute(@NonNull T element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String name);

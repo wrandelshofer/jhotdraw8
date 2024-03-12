@@ -21,20 +21,29 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class IncludeMatchSelector extends AbstractAttributeSelector {
-    private final @Nullable String namespace;
+    private final @Nullable String namespacePattern;
     private final @NonNull String attributeName;
     private final @NonNull String word;
 
-    public IncludeMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName, @NonNull String word) {
+    /**
+     * Creates a new instance.
+     *
+     * @param sourceLocator source locator for debugging
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param attributeName the attribute name
+     * @param word the word in the attribute value
+     */
+    public IncludeMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String word) {
         super(sourceLocator);
-        this.namespace = namespace;
+        this.namespacePattern = namespacePattern;
         this.attributeName = attributeName;
         this.word = word;
     }
 
     @Override
     protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
-        return model.attributeValueContainsWord(element, namespace, attributeName, word) ? element : null;
+        return model.attributeValueContainsWord(element, namespacePattern, attributeName, word) ? element : null;
     }
 
     @Override
@@ -45,9 +54,9 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
-        if (!TypeSelector.ANY_NAMESPACE.equals(namespace)) {
-            if (namespace != null) {
-                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
+        if (!TypeSelector.ANY_NAMESPACE.equals(namespacePattern)) {
+            if (namespacePattern != null) {
+                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespacePattern));
             }
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
@@ -66,11 +75,11 @@ public class IncludeMatchSelector extends AbstractAttributeSelector {
             return false;
         }
         IncludeMatchSelector that = (IncludeMatchSelector) o;
-        return Objects.equals(namespace, that.namespace) && attributeName.equals(that.attributeName) && word.equals(that.word);
+        return Objects.equals(namespacePattern, that.namespacePattern) && attributeName.equals(that.attributeName) && word.equals(that.word);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(namespace, attributeName, word);
+        return Objects.hash(namespacePattern, attributeName, word);
     }
 }

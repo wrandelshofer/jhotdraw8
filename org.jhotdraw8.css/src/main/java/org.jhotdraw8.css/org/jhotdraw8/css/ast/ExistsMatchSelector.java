@@ -20,31 +20,39 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
-    private final @Nullable String namespace;
+    private final @Nullable String namespacePattern;
     private final @NonNull String attributeName;
 
-    public ExistsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String attributeName) {
+    /**
+     * Creates a new instance.
+     *
+     * @param sourceLocator source locator for debugging
+     * @param namespacePattern an optional namespace ("*" means any namespace,
+     *                         null means no namespace)
+     * @param attributeName the attribute name
+     */
+    public ExistsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, @NonNull String attributeName) {
         super(sourceLocator);
-        this.namespace = namespace;
+        this.namespacePattern = namespacePattern;
         this.attributeName = attributeName;
     }
 
     @Override
     protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
-        return model.hasAttribute(element, namespace, attributeName) ? element : null;
+        return model.hasAttribute(element, namespacePattern, attributeName) ? element : null;
     }
 
     @Override
     public @NonNull String toString() {
-        return "[" + namespace + ":" + attributeName + ']';
+        return "[" + namespacePattern + ":" + attributeName + ']';
     }
 
     @Override
     public void produceTokens(@NonNull Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
-        if (!TypeSelector.ANY_NAMESPACE.equals(namespace)) {
-            if (namespace != null) {
-                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespace));
+        if (!TypeSelector.ANY_NAMESPACE.equals(namespacePattern)) {
+            if (namespacePattern != null) {
+                consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespacePattern));
             }
             consumer.accept(new CssToken(CssTokenType.TT_VERTICAL_LINE));
         }
@@ -61,11 +69,11 @@ public class ExistsMatchSelector extends AbstractAttributeSelector {
             return false;
         }
         ExistsMatchSelector that = (ExistsMatchSelector) o;
-        return Objects.equals(namespace, that.namespace) && attributeName.equals(that.attributeName);
+        return Objects.equals(namespacePattern, that.namespacePattern) && attributeName.equals(that.attributeName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(namespace, attributeName);
+        return Objects.hash(namespacePattern, attributeName);
     }
 }
