@@ -47,22 +47,21 @@ public class NumberCssConverter extends AbstractCssConverter<Number> {
 
     @Override
     public @NonNull Number parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
-        switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            return tt.currentNumberNonNull();
-        case CssTokenType.TT_IDENT: {
-            double value = switch (tt.currentStringNonNull()) {
-                case "INF" -> Double.POSITIVE_INFINITY;
-                case "-INF" -> Double.NEGATIVE_INFINITY;
-                case "NaN" -> Double.NaN;
-                default ->
-                        throw new ParseException("Could not convert " + tt.getToken() + " to a double value.", tt.getStartPosition());
-            };
-            return value;
-        }
-        default:
-            throw new ParseException("Could not convert " + tt.getToken() + " to a double value.", tt.getStartPosition());
-        }
+        return switch (tt.next()) {
+            case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull();
+            case CssTokenType.TT_IDENT -> {
+                double value = switch (tt.currentStringNonNull()) {
+                    case "INF" -> Double.POSITIVE_INFINITY;
+                    case "-INF" -> Double.NEGATIVE_INFINITY;
+                    case "NaN" -> Double.NaN;
+                    default ->
+                            throw new ParseException("Could not convert " + tt.getToken() + " to a double value.", tt.getStartPosition());
+                };
+                yield value;
+            }
+            default ->
+                    throw new ParseException("Could not convert " + tt.getToken() + " to a double value.", tt.getStartPosition());
+        };
     }
 
     @Override

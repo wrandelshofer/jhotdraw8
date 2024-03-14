@@ -53,11 +53,10 @@ public class IntersectLinePathIterator {
     public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, @NonNull PathIterator pit, double maxT) {
         List<IntersectionPointEx> lineIntersections = new ArrayList<>();
         List<IntersectionPointEx> insideIntersections = new ArrayList<>();
-        final double[] seg = new double[6];
-        double firstx = 0, firsty = 0;
-        double lastx = 0, lasty = 0;
+        final double[] coords = new double[6];
+        double firstX = 0, firstY = 0;
+        double lastX = 0, lastY = 0;
         double x, y;
-        int intersectionCount = 0;
         int clockwiseCrossingsSum = 0;
         int counterClockwiseCrossingsSum = 0;
         int clockwiseCrossings = 0;
@@ -66,51 +65,50 @@ public class IntersectLinePathIterator {
         int windingRule = pit.getWindingRule();
 
 
-        boolean hasTangent = false;
         for (; !pit.isDone(); pit.next()) {
             IntersectionResultEx boundaryCheck;
             IntersectionResultEx rayCheck;
-            int type = pit.currentSegment(seg);
+            int type = pit.currentSegment(coords);
             switch (type) {
-            case PathIterator.SEG_CLOSE:
-                boundaryCheck = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastx, lasty, firstx, firsty);
-                rayCheck = IntersectLineRay.intersectRayLineEx(a0x, a0y, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Rectangles.REAL_THRESHOLD);
-                break;
-            case PathIterator.SEG_CUBICTO:
-                x = seg[4];
-                y = seg[5];
-                boundaryCheck = IntersectCubicCurveLine.intersectLineCubicCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y);
-                rayCheck = IntersectCubicCurveRay.intersectRayCubicCurveEx(a0x, a0y, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Rectangles.REAL_THRESHOLD);
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_LINETO:
-                x = seg[0];
-                y = seg[1];
-                boundaryCheck = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastx, lasty, x, y);
-                rayCheck = IntersectLineRay.intersectRayLineEx(a0x, a0y, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Rectangles.REAL_THRESHOLD);
-                lastx = x;
-                lasty = y;
-                break;
-            case PathIterator.SEG_MOVETO:
-                lastx = firstx = seg[0];
-                lasty = firsty = seg[1];
-                boundaryCheck = null;
-                rayCheck = null;
-                break;
-            case PathIterator.SEG_QUADTO:
-                x = seg[2];
-                y = seg[3];
-                boundaryCheck = IntersectLineQuadCurve.intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, lastx, lasty, seg[0], seg[1], x, y);
-                rayCheck = IntersectQuadCurveRay.intersectRayQuadCurveEx(a0x, a0y, 1, 0, Double.MAX_VALUE,
-                        lastx, lasty, seg[0], seg[1], x, y, Rectangles.REAL_THRESHOLD);
-                lastx = x;
-                lasty = y;
-                break;
-            default:
-                boundaryCheck = null;
-                rayCheck = null;
-                break;
+                case PathIterator.SEG_CLOSE -> {
+                    boundaryCheck = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastX, lastY, firstX, firstY);
+                    rayCheck = IntersectRayLine.intersectRayLineEx(a0x, a0y, 1, 0, Double.MAX_VALUE, lastX, lastY, firstX, firstY, Rectangles.REAL_THRESHOLD);
+                }
+                case PathIterator.SEG_CUBICTO -> {
+                    x = coords[4];
+                    y = coords[5];
+                    boundaryCheck = IntersectLineCubicCurve.intersectLineCubicCurveEx(a0x, a0y, a1x, a1y, lastX, lastY, coords[0], coords[1], coords[2], coords[3], x, y);
+                    rayCheck = IntersectRayCubicCurve.intersectRayCubicCurveEx(a0x, a0y, 1, 0, Double.MAX_VALUE, lastX, lastY, coords[0], coords[1], coords[2], coords[3], x, y, Rectangles.REAL_THRESHOLD);
+                    lastX = x;
+                    lastY = y;
+                }
+                case PathIterator.SEG_LINETO -> {
+                    x = coords[0];
+                    y = coords[1];
+                    boundaryCheck = IntersectLineLine.intersectLineLineEx(a0x, a0y, a1x, a1y, lastX, lastY, x, y);
+                    rayCheck = IntersectRayLine.intersectRayLineEx(a0x, a0y, 1, 0, Double.MAX_VALUE, lastX, lastY, x, y, Rectangles.REAL_THRESHOLD);
+                    lastX = x;
+                    lastY = y;
+                }
+                case PathIterator.SEG_MOVETO -> {
+                    lastX = firstX = coords[0];
+                    lastY = firstY = coords[1];
+                    boundaryCheck = null;
+                    rayCheck = null;
+                }
+                case PathIterator.SEG_QUADTO -> {
+                    x = coords[2];
+                    y = coords[3];
+                    boundaryCheck = IntersectLineQuadCurve.intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, lastX, lastY, coords[0], coords[1], x, y);
+                    rayCheck = IntersectRayQuadCurve.intersectRayQuadCurveEx(a0x, a0y, 1, 0, Double.MAX_VALUE,
+                            lastX, lastY, coords[0], coords[1], x, y, Rectangles.REAL_THRESHOLD);
+                    lastX = x;
+                    lastY = y;
+                }
+                default -> {
+                    boundaryCheck = null;
+                    rayCheck = null;
+                }
             }
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
@@ -131,7 +129,7 @@ public class IntersectLinePathIterator {
                 }
             }
             switch (type) {
-                case PathIterator.SEG_CLOSE:
+                case PathIterator.SEG_CLOSE -> {
                     clockwiseCrossingsSum += clockwiseCrossings;
                     counterClockwiseCrossingsSum += counterClockwiseCrossings;
                     clockwiseCrossings = counterClockwiseCrossings = 0;
@@ -144,10 +142,8 @@ public class IntersectLinePathIterator {
                             insideIntersections.add(new IntersectionPointEx(a0x, a0y, 0, 0, 0, 0, 0, 0, 0, segment));
                         }
                     }
-                    break;
-                case PathIterator.SEG_MOVETO:
-                    clockwiseCrossings = counterClockwiseCrossings = 0;
-                    break;
+                }
+                case PathIterator.SEG_MOVETO -> clockwiseCrossings = counterClockwiseCrossings = 0;
             }
         }
 

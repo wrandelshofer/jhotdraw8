@@ -38,7 +38,7 @@ public class IntersectPolygonQuadCurve {
             final Point2D.Double a0, a1;
             a0 = points.get(i);
             a1 = points.get((i + 1) % length);
-            IntersectionResult inter = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, a0, a1);
+            IntersectionResult inter = IntersectQuadCurveLine.intersectQuadCurveLine(p0, p1, p2, a0, a1);
 
             result.addAll(inter.intersections().asList());
         }

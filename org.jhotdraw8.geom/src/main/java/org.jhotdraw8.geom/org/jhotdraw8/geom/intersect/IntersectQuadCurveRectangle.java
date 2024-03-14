@@ -36,10 +36,10 @@ public class IntersectQuadCurveRectangle {
         bottomLeft = new Point2D.Double(topLeft.getX(), bottomRight.getY());
 
         final IntersectionResult inter1, inter2, inter3, inter4;
-        inter1 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, topLeft, topRight);
-        inter2 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, topRight, bottomRight);
-        inter3 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, bottomRight, bottomLeft);
-        inter4 = IntersectLineQuadCurve.intersectQuadCurveLine(p0, p1, p2, bottomLeft, topLeft);
+        inter1 = IntersectQuadCurveLine.intersectQuadCurveLine(p0, p1, p2, topLeft, topRight);
+        inter2 = IntersectQuadCurveLine.intersectQuadCurveLine(p0, p1, p2, topRight, bottomRight);
+        inter3 = IntersectQuadCurveLine.intersectQuadCurveLine(p0, p1, p2, bottomRight, bottomLeft);
+        inter4 = IntersectQuadCurveLine.intersectQuadCurveLine(p0, p1, p2, bottomLeft, topLeft);
 
         final List<IntersectionPoint> result = new ArrayList<>();
         result.addAll(inter1.intersections().asList());

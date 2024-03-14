@@ -1,5 +1,5 @@
 /*
- * @(#)IntersectQuadCurveRay.java
+ * @(#)IntersectLineQuadCurve.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.geom.intersect;
@@ -16,10 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.jhotdraw8.geom.Lines.lerp;
-import static org.jhotdraw8.geom.intersect.IntersectLinePoint.argumentOnLine;
 
-public class IntersectQuadCurveRay {
-    private IntersectQuadCurveRay() {
+public class IntersectQuadCurveLine {
+    private IntersectQuadCurveLine() {
     }
 
 
@@ -33,26 +32,34 @@ public class IntersectQuadCurveRay {
      * @param p0 control point P0 of 'p'
      * @param p1 control point P1 of 'p'
      * @param p2 control point P2 of 'p'
-     * @param ao point 0 of 'a'
-     * @param ad point 1 of 'a'
+     * @param a0 point 0 of 'a'
+     * @param a1 point 1 of 'a'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectQuadCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D ao, @NonNull Point2D ad, double maxT) {
-        return intersectQuadCurveRay(p0, p1, p2, ao, ad, maxT, Rectangles.REAL_THRESHOLD);
+    public static @NonNull IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1) {
+        return intersectQuadCurveLine(p0, p1, p2, a0, a1, Rectangles.REAL_THRESHOLD);
     }
 
     /**
-     * @param p0
-     * @param p1
-     * @param p2
-     * @param ao
-     * @param ad
-     * @param maxT
-     * @param epsilon
-     * @return
+     * The code of this method has been derived from intersection.js.
+     * <p>
+     * References:
+     * <dl>
+     *     <dt>intersection.js</dt>
+     *     <dd>intersection.js, Copyright (c) 2002 Kevin Lindsey, BSD 3-clause license.
+     *     <a href="http://www.kevlindev.com/gui/math/intersection/Intersection.js">kevlindev.com</a></dd>
+     * </dl>
+     *
+     * @param p0      control point of the quad curve
+     * @param p1      control point of the quad curve
+     * @param p2      control point of the quad curve
+     * @param a0      start point of the line
+     * @param a1      end point of the line
+     * @param epsilon the desired precision
+     * @return the intersection result
      */
-    public static IntersectionResult intersectQuadCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D ao, @NonNull Point2D ad, double maxT,
-                                                           double epsilon) {
+    public static IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1,
+                                                            double epsilon) {
 
         // Bezier curve:
         //   (1 - t)²·p0 + 2·(1 - t)·t·p1 + t²·p2 , 0 ≤ t ≤ 1
@@ -64,10 +71,10 @@ public class IntersectQuadCurveRay {
         c0 = p0;
 
         final double a0x, a0y, a1x, a1y;
-        a0x = ao.getX();
-        a0y = ao.getY();
-        a1x = a0x + ad.getX();
-        a1y = a0y + ad.getY();
+        a0x = a0.getX();
+        a1x = a1.getX();
+        a0y = a0.getY();
+        a1y = a1.getY();
 
         // Convert line to normal form: a·x + b·y + c = 0
         // Find normal to line: negative inverse of original line's slope
@@ -91,6 +98,9 @@ public class IntersectQuadCurveRay {
         // Find intersections and calculate point coordinates
         List<IntersectionPoint> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
+        final Point2D.Double topLeft, bottomRight;
+        topLeft = Intersections.topLeft(a0, a1); // used to determine if point is on line segment
+        bottomRight = Intersections.bottomRight(a0, a1); // used to determine if point is on line segment
         for (double t : roots) {
             if (-epsilon <= t && t <= 1 + epsilon) {
                 // We're within the Bezier curve
@@ -100,9 +110,20 @@ public class IntersectQuadCurveRay {
                 p5 = lerp(p1, p2, t);
                 p6 = lerp(p4, p5, t);
 
-                // See if point is on ray
-                double t1 = argumentOnLine(a0x, a0y, a1x, a1y, p6.getX(), p6.getY());
-                if (-epsilon <= t1 && t1 <= maxT) {
+                // See if point is on line segment
+                // Had to make special cases for vertical and horizontal lines due
+                // to slight errors in calculation of p6
+                if (a0x == a1x) {
+                    if (topLeft.getY() <= p6.getY() && p6.getY() <= bottomRight.getY()) {
+                        status = IntersectionStatus.INTERSECTION;
+                        result.add(new IntersectionPoint(p6, t));
+                    }
+                } else if (a0y == a1y) {
+                    if (topLeft.getX() <= p6.getX() && p6.getX() <= bottomRight.getX()) {
+                        status = IntersectionStatus.INTERSECTION;
+                        result.add(new IntersectionPoint(p6, t));
+                    }
+                } else if (Intersections.gte(p6, topLeft) && Intersections.lte(p6, bottomRight)) {
                     status = IntersectionStatus.INTERSECTION;
                     result.add(new IntersectionPoint(p6, t));
                 }
@@ -112,32 +133,27 @@ public class IntersectQuadCurveRay {
         return new IntersectionResult(status, result);
     }
 
-    public static @NonNull IntersectionResult intersectQuadCurveRay(
-            double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
-            double box, double boy, double bdx, double bdy, double maxT) {
-        return intersectQuadCurveRay(ax0, ay0, ax1, ay1, ax2, ay2, box, boy, bdx, bdy, maxT, Rectangles.REAL_THRESHOLD);
-    }
 
-    public static @NonNull IntersectionResult intersectQuadCurveRay(
+    public static @NonNull IntersectionResult intersectQuadCurveLine(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
-            double box, double boy, double bdx, double bdy, double maxT, double epsilon) {
-        return intersectQuadCurveRay(new Point2D.Double(ax0, ay0), new Point2D.Double(ax1, ay1), new Point2D.Double(ax2, ay2),
-                new Point2D.Double(box, boy), new Point2D.Double(bdx, bdy), maxT, epsilon);
+            double bx0, double by0, double bx1, double by1, double epsilon) {
+        return intersectQuadCurveLine(new Point2D.Double(ax0, ay0), new Point2D.Double(ax1, ay1), new Point2D.Double(ax2, ay2),
+                new Point2D.Double(bx0, by0), new Point2D.Double(bx1, by1), epsilon);
     }
 
 
     public static IntersectionResultEx intersectQuadCurveLineEx(
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
-            double aox, double aoy, double adx, double ady
+            double a0x, double a0y, double a1x, double a1y
     ) {
-        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, aox, aoy, adx, ady, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, Rectangles.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectQuadCurveLineEx(
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
-            double aox, double aoy, double adx, double ady,
+            double a0x, double a0y, double a1x, double a1y,
             double epsilon) {
-        IntersectionResult result = intersectQuadCurveRay(p0x, p0y, p1x, p1y, p2x, p2y, aox, aoy, adx, ady, epsilon);
+        IntersectionResult result = intersectQuadCurveLine(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result.intersections()) {
             double px = ip.getX();
@@ -146,7 +162,7 @@ public class IntersectQuadCurveRay {
             list.add(new IntersectionPointEx(
                     px, py,
                     ip.getArgumentA(), pdA.dx(), pdA.dy(),
-                    IntersectPointRay.projectedPointOnRay(aox, aoy, adx, ady, px, py), adx - aox, ady - aoy
+                    IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, px, py), a1x - a0x, a1y - a0y
             ));
         }
         return new IntersectionResultEx(result.getStatus(), list);

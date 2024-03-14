@@ -6,8 +6,8 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.annotation.NonNull;
 
-public class IntersectLineRay {
-    private IntersectLineRay() {
+public class IntersectRayLine {
+    private IntersectRayLine() {
     }
 
     public static @NonNull IntersectionResultEx intersectRayLineEx(
