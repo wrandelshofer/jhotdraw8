@@ -442,11 +442,11 @@ public class IntersectionExampleMain extends Application {
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
 
                 if (isect.intersections().size() == 1) {
-                    System.out.println("  t:" + isect.intersections().getFirst().getArgumentA() + " ctrlPoint:" + isect.intersections().getLast());
+                    System.out.println("  t:" + isect.intersections().getFirst().argumentA() + " ctrlPoint:" + isect.intersections().getLast());
                     double[] left = new double[6];
                     double[] right = new double[6];
                     CubicCurves.split(l0.getStartX(), l0.getStartY(), l0.getControlX1(), l0.getControlY1(),
-                            l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(), isect.intersections().getFirst().getArgumentA(),
+                            l0.getControlX2(), l0.getControlY2(), l0.getEndX(), l0.getEndY(), isect.intersections().getFirst().argumentA(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));
@@ -538,10 +538,10 @@ public class IntersectionExampleMain extends Application {
                         l1.getCenterX(), l1.getCenterY(), l1.getRadius());
 
                 if (isect.intersections().size() == 1) {
-                    System.out.println("  t:" + isect.intersections().getFirst().getArgumentA() + " ctrlPoint:" + isect.intersections().getLast());
+                    System.out.println("  t:" + isect.intersections().getFirst().argumentA() + " ctrlPoint:" + isect.intersections().getLast());
                     double[] left = new double[4];
                     double[] right = new double[4];
-                    QuadCurves.split(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.intersections().getFirst().getArgumentA(),
+                    QuadCurves.split(l0.getStartX(), l0.getStartY(), l0.getControlX(), l0.getControlY(), l0.getEndX(), l0.getEndY(), isect.intersections().getFirst().argumentA(),
                             left, right);
                     System.out.println("  left:" + Arrays.toString(left));
                     System.out.println("  right:" + Arrays.toString(right));

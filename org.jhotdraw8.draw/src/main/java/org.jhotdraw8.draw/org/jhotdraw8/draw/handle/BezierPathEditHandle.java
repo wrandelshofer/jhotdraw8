@@ -60,7 +60,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
         IntersectionResult intersectionResultEx = path.pathIntersection(pointInLocal.getX(), pointInLocal.getY(), view.getEditor().getTolerance());// / view.getZoomFactor());// FIXME tolerance not
         if (!intersectionResultEx.intersections().isEmpty()) {
             IntersectionPoint intersectionPointEx = intersectionResultEx.intersections().get(0);
-            int segment = intersectionPointEx.getSegmentA();
+            int segment = intersectionPointEx.segmentA();
             BezierNode newNode = new BezierNode(intersectionPointEx.getX(), intersectionPointEx.getY());
             if (segment > 0 && path.get(segment - 1).isClosePath()) {
                 path = path.set(segment - 1, path.get(segment - 1).withMaskBitsClears(BezierNode.CLOSE_MASK));
@@ -75,7 +75,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 double[] split = new double[8 + 6];
                 CubicCurves.split(new double[]{inNode.pointX(), inNode.pointY(), inNode.outX(), inNode.outY(), outNode.inX(), outNode.inY(), outNode.pointX(), outNode.pointY()},
                         0,
-                        intersectionPointEx.getArgumentA(), split, 0, split, 6);
+                        intersectionPointEx.argumentA(), split, 0, split, 6);
                 inNode = inNode.withOut(split[2], split[3]);
                 newNode = newNode.withIn(split[4], split[5]).withOut(split[8], split[9]).withMaskBitsSet(BezierNode.IN_OUT_MASK);
                 outNode = outNode.withIn(split[10], split[11]);
@@ -85,7 +85,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 double[] split = new double[6 + 4];
                 QuadCurves.split(new double[]{inNode.pointX(), inNode.pointY(), inNode.outX(), inNode.outY(), outNode.pointX(), outNode.pointY()},
                         0,
-                        intersectionPointEx.getArgumentA(), split, 0, split, 4);
+                        intersectionPointEx.argumentA(), split, 0, split, 4);
                 inNode = inNode.withOut(split[2], split[3]);
                 newNode = newNode.withOut(split[6], split[7]).withMaskBitsSet(BezierNode.OUT_MASK);
             } else if (outNode.hasIn()) {
@@ -93,7 +93,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
                 double[] split = new double[6 + 4];
                 QuadCurves.split(new double[]{inNode.pointX(), inNode.pointY(), outNode.inX(), outNode.inY(), outNode.pointX(), outNode.pointY()},
                         0,
-                        intersectionPointEx.getArgumentA(), split, 0, split, 4);
+                        intersectionPointEx.argumentA(), split, 0, split, 4);
                 newNode = newNode.withIn(split[2], split[3]).withMaskBitsSet(BezierNode.IN_MASK);
                 outNode = outNode.withIn(split[6], split[7]);
             }

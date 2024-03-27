@@ -144,7 +144,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
 
             IntersectionResultEx result = IntersectCircleLine.intersectLineCircleEx(p1.getX(), p1.getY(), p2.getX(), p2.getY(), px, py, tolerance);
             if (result.getAllArgumentsA().size() == 2) {
-                insertLocation = FXGeom.lerp(p1, p2, (result.intersections().getFirst().getArgumentA() + result.intersections().getLast().getArgumentA()) / 2);
+                insertLocation = FXGeom.lerp(p1, p2, (result.intersections().getFirst().argumentA() + result.intersections().getLast().argumentA()) / 2);
                 insertAt = i;
                 break;
             }

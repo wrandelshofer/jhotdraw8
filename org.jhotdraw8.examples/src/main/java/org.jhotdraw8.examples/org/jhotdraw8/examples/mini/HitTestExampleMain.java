@@ -203,6 +203,7 @@ public class HitTestExampleMain extends Application {
             case NO_INTERSECTION -> Color.YELLOW;
             case NO_INTERSECTION_INSIDE -> Color.GREEN;
             case NO_INTERSECTION_OUTSIDE -> Color.BLUE;
+            case NO_INTERSECTION_INSIDE_AND_OUTSIDE -> Color.LIGHTBLUE;
             case NO_INTERSECTION_TANGENT -> Color.PURPLE;
             case NO_INTERSECTION_COINCIDENT -> Color.CYAN;
             case NO_INTERSECTION_PARALLEL -> Color.ORANGE;

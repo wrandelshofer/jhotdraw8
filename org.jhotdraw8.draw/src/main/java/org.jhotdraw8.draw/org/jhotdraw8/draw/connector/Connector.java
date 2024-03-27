@@ -90,7 +90,7 @@ public interface Connector {
         IntersectionPointEx ip = intersect(ctx, connection, target, start, end);
         Point2D derivative = end.subtract(start);
         return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, derivative.getX(), derivative.getY(), 0, derivative.getX(), derivative.getY()) :
-                new IntersectionPointEx(Lines.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.getArgumentA()), ip.getArgumentA(), ip.getDerivativeA(), ip.getArgumentB(), ip.getDerivativeB());
+                new IntersectionPointEx(Lines.lerp(start.getX(), start.getY(), end.getX(), end.getY(), ip.argumentA()), ip.argumentA(), ip.getDerivativeA(), ip.getArgumentB(), ip.getDerivativeB());
     }
 
     /**
