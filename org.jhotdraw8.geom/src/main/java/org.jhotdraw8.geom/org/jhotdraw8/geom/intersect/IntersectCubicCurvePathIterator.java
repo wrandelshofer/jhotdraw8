@@ -108,7 +108,7 @@ public class IntersectCubicCurvePathIterator {
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 for (var isect : boundaryCheck.intersections()) {
-                    lineIntersections.add(isect.withSegment2(segment));
+                    lineIntersections.add(isect.withSegmentB(segment));
                 }
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {

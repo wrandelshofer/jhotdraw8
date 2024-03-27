@@ -418,11 +418,11 @@ public class IntersectCubicCurveCubicCurve {
                 }
             }
             assert !Double.isNaN(argumentB) : "argumentB must exist";
-            PointAndDerivative pdA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.getArgumentA());
+            PointAndDerivative pdA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ipA.argumentA());
             PointAndDerivative pdB = CubicCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, argumentB);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ipA.getArgumentA(), pdA.dx(), pdA.dy(),
+                    ipA.argumentA(), pdA.dx(), pdA.dy(),
                     argumentB, pdB.dx(), pdB.dy()
             ));
         }

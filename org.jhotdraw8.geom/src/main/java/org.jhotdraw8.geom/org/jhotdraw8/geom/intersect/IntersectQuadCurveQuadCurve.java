@@ -54,11 +54,11 @@ public class IntersectQuadCurveQuadCurve {
             }
             // argumentB should always exist, but if it does not we rather have no intersection instead of a crash.
             if (!Double.isNaN(argumentB)) {
-                PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ipA.getArgumentA());
+                PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ipA.argumentA());
                 PointAndDerivative pdB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, argumentB);
                 list.add(new IntersectionPointEx(
                         x, y,
-                        ipA.getArgumentA(), pdA.dx(), pdA.dy(),
+                        ipA.argumentA(), pdA.dx(), pdA.dy(),
                         argumentB, pdB.dx(), pdB.dy()
                 ));
             }

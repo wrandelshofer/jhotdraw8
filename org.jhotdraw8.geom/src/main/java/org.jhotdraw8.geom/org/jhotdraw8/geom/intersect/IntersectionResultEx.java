@@ -42,7 +42,7 @@ public class IntersectionResultEx {
 
     public DoubleArrayList getAllArgumentsA() {
         return intersections.stream()
-                .mapToDouble(IntersectionPointEx::getArgumentA)
+                .mapToDouble(IntersectionPointEx::argumentA)
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
     }
 

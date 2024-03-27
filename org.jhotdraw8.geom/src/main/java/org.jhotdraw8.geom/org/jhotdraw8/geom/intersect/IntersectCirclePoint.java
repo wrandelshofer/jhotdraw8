@@ -87,7 +87,7 @@ public class IntersectCirclePoint {
             double x = ip.getX();
             double y = ip.getY();
             list.add(new IntersectionPointEx(x, y,
-                    ip.getArgumentA(), y - cy, cx - x,
+                    ip.argumentA(), y - cy, cx - x,
                     0, 1, 0
             ));
         }

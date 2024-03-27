@@ -148,10 +148,10 @@ public class IntersectCubicCurveRay {
         for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative pdA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.getArgumentA());
+            PointAndDerivative pdA = CubicCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, ip.argumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
+                    ip.argumentA(), pdA.dx(), pdA.dy(),
                     IntersectLinePoint.argumentOnLine(b0x, b0y, b1x, b1y, x, y), b1x - b0x, b1y - b0y
             ));
         }

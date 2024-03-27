@@ -71,7 +71,7 @@ public class IntersectEllipseLine {
             double y = ip.getY();
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), y - acy, acx - x,
+                    ip.argumentA(), y - acy, acx - x,
                     IntersectLinePoint.argumentOnLine(b0x, b0y, b1x, b1y, x, y), b1x - b0x, b1y - b0y
             ));
         }
@@ -203,7 +203,7 @@ public class IntersectEllipseLine {
         for (IntersectionPoint ip : result.intersections()) {
             double barg = Angles.atan2Ellipse(cx, cy, rx, ry, ip.getX(), ip.getY());
             list.add(new IntersectionPointEx(ip.getX(), ip.getY(),
-                    ip.getArgumentA(), atx, aty,
+                    ip.argumentA(), atx, aty,
                     barg, ip.getY() - cy, cx - ip.getX()
             ));
         }

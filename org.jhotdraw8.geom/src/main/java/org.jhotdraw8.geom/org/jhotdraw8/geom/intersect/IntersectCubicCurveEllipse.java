@@ -59,10 +59,10 @@ public class IntersectCubicCurveEllipse {
         for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative pat = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
+            PointAndDerivative pat = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.argumentA());
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), pat.dx(), pat.dy(),
+                    ip.argumentA(), pat.dx(), pat.dy(),
                     Angles.atan2Ellipse(cx, cy, rx, ry, x, y), y - cy, cx - x
             ));
         }

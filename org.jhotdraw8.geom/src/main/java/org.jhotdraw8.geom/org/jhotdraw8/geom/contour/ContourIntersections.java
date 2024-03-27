@@ -509,7 +509,7 @@ public class ContourIntersections {
             if (intersections.isEmpty()) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intersections.size() == 1) {
-                NonNullOrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intersections.getFirst().getArgumentA());
+                NonNullOrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intersections.getFirst().argumentA());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -518,8 +518,8 @@ public class ContourIntersections {
                 }
             } else {
                 assert intersections.size() == 2 : "shouldn't get here without 2 intersects";
-                NonNullOrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intersections.getFirst().getArgumentA());
-                NonNullOrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intersections.getLast().getArgumentA());
+                NonNullOrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intersections.getFirst().argumentA());
+                NonNullOrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intersections.getLast().argumentA());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;

@@ -135,11 +135,11 @@ public class IntersectRayQuadCurve {
         for (IntersectionPoint ip : result.intersections()) {
             double px = ip.getX();
             double py = ip.getY();
-            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.argumentA());
             list.add(new IntersectionPointEx(
                     px, py,
                     IntersectPointRay.projectedPointOnRay(aox, aoy, adx, ady, px, py), adx - aox, ady - aoy,
-                    ip.getArgumentA(), pdA.dx(), pdA.dy()
+                    ip.argumentA(), pdA.dx(), pdA.dy()
             ));
         }
         return new IntersectionResultEx(result.getStatus(), list);

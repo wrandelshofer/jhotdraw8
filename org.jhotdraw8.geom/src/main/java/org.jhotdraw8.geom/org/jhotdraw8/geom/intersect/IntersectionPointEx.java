@@ -52,12 +52,12 @@ public class IntersectionPointEx extends IntersectionPoint {
         this.segmentB = segmentB;
     }
 
-    public IntersectionPointEx(double px, double py, double argumentA, double tx1, double ty1, int segmentA, double t2, double tx2, double ty2, int segment2) {
+    public IntersectionPointEx(double px, double py, double argumentA, double tx1, double ty1, int segmentA, double t2, double tx2, double ty2, int segmentB) {
         super(px, py, argumentA, segmentA);
         this.derivativeA = new Point2D.Double(tx1, ty1);
         this.argumentB = t2;
         this.derivativeB = new Point2D.Double(tx2, ty2);
-        this.segmentB = segment2;
+        this.segmentB = segmentB;
     }
 
 
@@ -96,7 +96,11 @@ public class IntersectionPointEx extends IntersectionPoint {
         return derivativeB;
     }
 
-    public IntersectionPointEx withSegment2(int segmentIndex) {
+    public IntersectionPointEx withSegmentA(int segmentIndex) {
+        return new IntersectionPointEx(this, this.argumentA, this.derivativeA, segmentIndex, this.argumentB, this.derivativeB, this.segmentB);
+    }
+
+    public IntersectionPointEx withSegmentB(int segmentIndex) {
         return new IntersectionPointEx(this, this.argumentA, this.derivativeA, this.segmentA, this.argumentB, this.derivativeB, segmentIndex);
     }
 

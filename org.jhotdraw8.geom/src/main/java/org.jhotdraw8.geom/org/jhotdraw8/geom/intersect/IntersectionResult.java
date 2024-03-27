@@ -37,7 +37,7 @@ public class IntersectionResult {
 
     public @NonNull DoubleArrayList getAllArgumentsA() {
         return intersections.stream()
-                .mapToDouble(IntersectionPoint::getArgumentA)
+                .mapToDouble(IntersectionPoint::argumentA)
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
     }
 

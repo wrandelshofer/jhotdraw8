@@ -40,7 +40,7 @@ public class IntersectionPoint extends Point2D.Double {
         this(p.getX(), p.getY(), argumentA, segmentA);
     }
 
-    public double getArgumentA() {
+    public double argumentA() {
         return argumentA;
     }
 
@@ -51,7 +51,7 @@ public class IntersectionPoint extends Point2D.Double {
      * <p>
      * The index of the segment.
      */
-    public int getSegmentA() {
+    public int segmentA() {
         return segmentA;
     }
 

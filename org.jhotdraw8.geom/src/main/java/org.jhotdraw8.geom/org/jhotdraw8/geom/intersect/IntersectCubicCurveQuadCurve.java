@@ -40,7 +40,7 @@ public class IntersectCubicCurveQuadCurve {
             double x = ip.getX();
             double y = ip.getY();
             IntersectionResult resultA = IntersectCubicCurvePoint.intersectCubicCurvePoint(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, x, y, epsilon);
-            list.add(new IntersectionPoint(x, y, resultA.intersections().getFirst().getArgumentA()));
+            list.add(new IntersectionPoint(x, y, resultA.intersections().getFirst().argumentA()));
         }
 
         return new IntersectionResult(resultB.getStatus(), list);
@@ -67,9 +67,9 @@ public class IntersectCubicCurveQuadCurve {
             // resultA should never by empty, but if this happen we rather have no intersection than a crash.
             if (!resultA.intersections().isEmpty()) {
                 IntersectionPointEx firstA = resultA.intersections().getFirst();
-                list.add(new IntersectionPointEx(ip, firstA.getArgumentA(), firstA.getDerivativeA(),
-                        ip.getArgumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y,
-                        ip.getArgumentA()).getDerivative(Point2D.Double::new)));
+                list.add(new IntersectionPointEx(ip, firstA.argumentA(), firstA.getDerivativeA(),
+                        ip.argumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y,
+                        ip.argumentA()).getDerivative(Point2D.Double::new)));
             }
         }
 
@@ -90,8 +90,8 @@ public class IntersectCubicCurveQuadCurve {
             IntersectionResultEx resultB = IntersectCubicCurvePoint.intersectCubicCurvePointEx(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, x, y, epsilon);
             IntersectionPointEx firstB = resultB.intersections().getFirst();
             list.add(new IntersectionPointEx(ip,
-                    ip.getArgumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA()).getDerivative(Point2D.Double::new),
-                    firstB.getArgumentA(), firstB.getDerivativeA()
+                    ip.argumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.argumentA()).getDerivative(Point2D.Double::new),
+                    firstB.argumentA(), firstB.getDerivativeA()
             ));
         }
 

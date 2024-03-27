@@ -319,7 +319,7 @@ public class PlineVertex implements Cloneable {
             if (intrResult.intersections().isEmpty()) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intrResult.intersections().size() == 1) {
-                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.intersections().getFirst().getArgumentA());
+                OrderedPair<Boolean, Point2D.Double> p = pointInSweep.apply(intrResult.intersections().getFirst().argumentA());
                 if (p.first()) {
                     result.intrType = PlineSegIntrType.OneIntersect;
                     result.point1 = p.second();
@@ -328,8 +328,8 @@ public class PlineVertex implements Cloneable {
                 }
             } else {
                 assert intrResult.intersections().size() == 2 : "shouldn't get here without 2 intersects";
-                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.intersections().getFirst().getArgumentA());
-                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.intersections().getFirst().getArgumentA());
+                OrderedPair<Boolean, Point2D.Double> p1_ = pointInSweep.apply(intrResult.intersections().getFirst().argumentA());
+                OrderedPair<Boolean, Point2D.Double> p2_ = pointInSweep.apply(intrResult.intersections().getFirst().argumentA());
 
                 if (p1_.first() && p2_.first()) {
                     result.intrType = PlineSegIntrType.TwoIntersects;
@@ -360,7 +360,7 @@ public class PlineVertex implements Cloneable {
                 case NO_INTERSECTION:
                     result.intrType = PlineSegIntrType.SegmentOverlap;
                     // build points from parametric parameters (using second segment as defined by the function)
-                    result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().getArgumentA());
+                    result.point1 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().argumentA());
                     result.point2 = pointFromParametric(u1.pos(), u2.pos(), intrResult.intersections().getFirst().getArgumentB());
                     break;
             }

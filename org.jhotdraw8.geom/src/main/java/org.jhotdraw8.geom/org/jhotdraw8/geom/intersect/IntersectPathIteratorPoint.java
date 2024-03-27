@@ -108,7 +108,7 @@ public class IntersectPathIteratorPoint {
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 final IntersectionPoint first = boundaryCheck.intersections().getFirst();
-                lineIntersections.add(new IntersectionPoint(first.getX(), first.getY(), first.getArgumentA(), segment));
+                lineIntersections.add(new IntersectionPoint(first.getX(), first.getY(), first.argumentA(), segment));
                 break;
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {

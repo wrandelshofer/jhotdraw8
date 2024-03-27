@@ -102,7 +102,7 @@ public class IntersectLinePoint {
             double y = ip.getY();
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), x1 - x0, y1 - y0,
+                    ip.argumentA(), x1 - x0, y1 - y0,
                     0, 1, 0
             ));
         }

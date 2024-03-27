@@ -113,7 +113,7 @@ public class IntersectLinePathIterator {
 
             if (boundaryCheck != null && boundaryCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 for (var isect : boundaryCheck.intersections()) {
-                    lineIntersections.add(isect.withSegment2(segment));
+                    lineIntersections.add(isect.withSegmentB(segment));
                 }
             }
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
@@ -159,7 +159,7 @@ public class IntersectLinePathIterator {
 
     public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull PathIterator pit) {
         IntersectionResultEx i = intersectLinePathIteratorEx(a0, a1, pit, 1.0);
-        if (i.getStatus() == IntersectionStatus.INTERSECTION && i.intersections().getFirst().getArgumentA() > 1) {
+        if (i.getStatus() == IntersectionStatus.INTERSECTION && i.intersections().getFirst().argumentA() > 1) {
             return new IntersectionResultEx(IntersectionStatus.NO_INTERSECTION, new ArrayList<>());
         } else {// FIXME remove intersections with t>1
             return i;

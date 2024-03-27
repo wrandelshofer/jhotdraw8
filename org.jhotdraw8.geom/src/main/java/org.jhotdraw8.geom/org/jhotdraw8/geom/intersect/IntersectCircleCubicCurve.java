@@ -60,9 +60,9 @@ public class IntersectCircleCubicCurve {
         for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative pdA = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.getArgumentA());
+            PointAndDerivative pdA = CubicCurves.eval(x0, y0, x1, y1, x2, y2, x3, y3, ip.argumentA());
             list.add(new IntersectionPointEx(x, y,
-                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
+                    ip.argumentA(), pdA.dx(), pdA.dy(),
                     Angles.atan2(y - cy, x - cx), y - cy, cx - x));
         }
 

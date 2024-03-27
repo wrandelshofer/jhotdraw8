@@ -199,8 +199,8 @@ public class IntersectQuadCurveCubicCurve {
             IntersectionResultEx resultB = IntersectCubicCurvePoint.intersectCubicCurvePointEx(b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, x, y, epsilon);
             IntersectionPointEx firstB = resultB.intersections().getFirst();
             list.add(new IntersectionPointEx(ip,
-                    ip.getArgumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA()).getDerivative(Point2D.Double::new),
-                    firstB.getArgumentA(), firstB.getDerivativeA()
+                    ip.argumentA(), QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.argumentA()).getDerivative(Point2D.Double::new),
+                    firstB.argumentA(), firstB.getDerivativeA()
             ));
         }
 

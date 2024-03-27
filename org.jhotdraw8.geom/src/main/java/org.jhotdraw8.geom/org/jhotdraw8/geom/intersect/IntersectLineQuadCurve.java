@@ -147,11 +147,11 @@ public class IntersectLineQuadCurve {
         for (IntersectionPoint ip : result.intersections()) {
             double px = ip.getX();
             double py = ip.getY();
-            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.argumentA());
             list.add(new IntersectionPointEx(
                     px, py,
                     IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, px, py), a1x - a0x, a1y - a0y,
-                    ip.getArgumentA(), pdA.dx(), pdA.dy()
+                    ip.argumentA(), pdA.dx(), pdA.dy()
             ));
         }
         return new IntersectionResultEx(result.getStatus(), list);
@@ -174,10 +174,10 @@ public class IntersectLineQuadCurve {
         for (IntersectionPoint ip : result.intersections()) {
             double px = ip.getX();
             double py = ip.getY();
-            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, ip.argumentA());
             list.add(new IntersectionPointEx(
                     px, py,
-                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
+                    ip.argumentA(), pdA.dx(), pdA.dy(),
                     IntersectLinePoint.argumentOnLine(a0x, a0y, a1x, a1y, px, py), a1x - a0x, a1y - a0y
             ));
         }

@@ -152,11 +152,11 @@ public class IntersectRayCubicCurve {
         for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative pdA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.getArgumentA());
+            PointAndDerivative pdA = CubicCurves.eval(p0x, p0y, p1x, p1y, p2x, p2y, p3x, p3y, ip.argumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     IntersectLinePoint.argumentOnLine(aox, aoy, adx, ady, x, y), adx, ady,
-                    ip.getArgumentA(), pdA.dx(), pdA.dy()
+                    ip.argumentA(), pdA.dx(), pdA.dy()
             ));
         }
 

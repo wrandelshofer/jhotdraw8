@@ -266,20 +266,20 @@ public class ContourBuilder {
         if (intersections.isEmpty()) {
             connectUsingArc.run();
         } else if (intersections.size() == 1) {
-            processIntersect.accept(intersections.getFirst().getArgumentA(),
-                    pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().getArgumentA()));
+            processIntersect.accept(intersections.getFirst().argumentA(),
+                    pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().argumentA()));
         } else {
             assert intersections.size() == 2 : "should have 2 intersects here";
             final Point2D.Double origPoint = s2.collapsedArc() ? u1.pos() : s1.origV2Pos();
-            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().getArgumentA());
+            Point2D.Double i1 = pointFromParametric(u1.pos(), u2.pos(), intersections.getFirst().argumentA());
             double dist1 = i1.distanceSq(origPoint);
-            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intersections.getLast().getArgumentA());
+            Point2D.Double i2 = pointFromParametric(u1.pos(), u2.pos(), intersections.getLast().argumentA());
             double dist2 = i2.distanceSq(origPoint);
 
             if (dist1 < dist2) {
-                processIntersect.accept(intersections.getFirst().getArgumentA(), i1);
+                processIntersect.accept(intersections.getFirst().argumentA(), i1);
             } else {
-                processIntersect.accept(intersections.getLast().getArgumentA(), i2);
+                processIntersect.accept(intersections.getLast().argumentA(), i2);
             }
         }
     }
@@ -843,7 +843,7 @@ public class ContourBuilder {
         if (intersections.isEmpty()) {
             connectUsingArc.run();
         } else if (intersections.size() == 1) {
-            processIntersect.accept(intersections.getFirst().getArgumentA(),
+            processIntersect.accept(intersections.getFirst().argumentA(),
                     intersections.getFirst());
         } else {
             assert intersections.size() == 2 : "should have 2 intersects here";
@@ -854,9 +854,9 @@ public class ContourBuilder {
             double dist2 = i2.distanceSq(s1.origV2Pos());
 
             if (dist1 < dist2) {
-                processIntersect.accept(intersections.getFirst().getArgumentA(), i1);
+                processIntersect.accept(intersections.getFirst().argumentA(), i1);
             } else {
-                processIntersect.accept(intersections.getLast().getArgumentA(), i2);
+                processIntersect.accept(intersections.getLast().argumentA(), i2);
             }
         }
     }
@@ -958,17 +958,17 @@ public class ContourBuilder {
                 ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
                 if (intersections.isEmpty()) {
                 } else if (intersections.size() == 1) {
-                    if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
+                    if (validLineSegIntersect.test(intersections.getFirst().argumentA())) {
                         output.add(new SimpleOrderedPair<>(sIndex,
                                 Collections.singletonList(intersections.getFirst())));
                     }
                 } else {
                     assert intersections.size() == 2 : "should be two intersects here";
-                    if (validLineSegIntersect.test(intersections.getFirst().getArgumentA())) {
+                    if (validLineSegIntersect.test(intersections.getFirst().argumentA())) {
                         output.add(new SimpleOrderedPair<>(sIndex,
                                 Collections.singletonList(intersections.getFirst())));
                     }
-                    if (validLineSegIntersect.test(intersections.getLast().getArgumentA())) {
+                    if (validLineSegIntersect.test(intersections.getLast().argumentA())) {
                         output.add(new SimpleOrderedPair<>(sIndex,
                                 Collections.singletonList(intersections.getLast())));
                     }

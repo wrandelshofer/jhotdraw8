@@ -121,7 +121,7 @@ public class IntersectEllipseEllipse {
             double px = ip.getX();
             double py = ip.getY();
             list.add(new IntersectionPointEx(px, py,
-                    ip.getArgumentA(), py - cy1, cx1 - px,
+                    ip.argumentA(), py - cy1, cx1 - px,
                     Double.NaN, py - cy2, cx2 - px// FIXME compute angle in radians
             ));
         }

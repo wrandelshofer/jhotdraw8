@@ -46,11 +46,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : result.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.getArgumentA());
+            PointAndDerivative pdA = QuadCurves.eval(a0x, a0y, a1x, a1y, a2x, a2y, ip.argumentA());
             double argumentB = Angles.atan2Ellipse(bcx, bcy, brx, bry, x, y);
             list.add(new IntersectionPointEx(
                     x, y,
-                    ip.getArgumentA(), pdA.dx(), pdA.dy(),
+                    ip.argumentA(), pdA.dx(), pdA.dy(),
                     argumentB, x - bcx, bcy - y
             ));
         }
@@ -166,11 +166,11 @@ public class IntersectEllipseQuadCurve {
         for (IntersectionPoint ip : resultB.intersections()) {
             double x = ip.getX();
             double y = ip.getY();
-            PointAndDerivative pdB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.getArgumentA());
+            PointAndDerivative pdB = QuadCurves.eval(b0x, b0y, b1x, b1y, b2x, b2y, ip.argumentA());
             list.add(new IntersectionPointEx(
                     x, y,
                     Angles.atan2Ellipse(acx, acy, arx, ary, x, y), x - acx, acy - y,
-                    ip.getArgumentA(), pdB.dx(), pdB.dy()
+                    ip.argumentA(), pdB.dx(), pdB.dy()
             ));
         }
 

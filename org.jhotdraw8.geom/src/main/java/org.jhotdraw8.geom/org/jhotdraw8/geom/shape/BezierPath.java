@@ -144,13 +144,13 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         ImmutableList<IntersectionPoint> intersections = isect.intersections();
         @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
         if (intersections.size() == 1) {
-            int segment = (int) intersections.getFirst().getArgumentA();
+            int segment = (int) intersections.getFirst().argumentA();
             final BezierNode middle;
             Point2D.Double p = intersections.get(0);
             final int prevSegment = (segment - 1 + size()) % size();
             BezierNode prev = get(prevSegment);
             BezierNode next = get(segment);
-            double t = intersections.getFirst().getArgumentA() - segment;
+            double t = intersections.getFirst().argumentA() - segment;
             boolean pc2 = prev.hasOut();
             boolean nc1 = next.hasIn();
             if (pc2) {
