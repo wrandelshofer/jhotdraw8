@@ -43,7 +43,7 @@ public class BoundsCalculator {
     }
 
     /**
-     * Adds a another value to the bounds.
+     * Adds another value to the bounds.
      *
      * @param value the input value
      */
