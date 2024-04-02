@@ -467,7 +467,7 @@ public class FXShapes {
 
     private static Shape fxSvgPathToAwtShape(@NonNull SVGPath node) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
-        SvgPaths.buildSvgString(node.getContent(), b);
+        SvgPaths.buildSvgString(b, node.getContent());
         return b.build();
     }
 

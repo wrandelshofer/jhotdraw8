@@ -39,7 +39,7 @@ public class BezierPathCssConverter extends AbstractCssConverter<BezierPath> {
             throw new ParseException("Could not convert " + tt.getToken() + " to a BezierPath.", tt.getStartPosition());
         }
         BezierPathBuilder builder = new BezierPathBuilder();
-        SvgPaths.buildSvgString(tt.currentStringNonNull(), builder);
+        SvgPaths.buildSvgString(builder, tt.currentStringNonNull());
         return builder.build();
     }
 

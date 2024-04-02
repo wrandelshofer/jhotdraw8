@@ -39,7 +39,7 @@ public class PathMetricsCssConverter extends AbstractCssConverter<PathMetrics> {
             throw new ParseException("⟨BezierPath⟩ String expected.", tt.getStartPosition());
         }
         PathMetricsBuilder builder = new PathMetricsBuilder();
-        SvgPaths.buildSvgString(tt.currentStringNonNull(), builder);
+        SvgPaths.buildSvgString(builder, tt.currentStringNonNull());
         return builder.build();
     }
 

@@ -32,7 +32,7 @@ public class BezierPathTest {
 
     private void shouldIterate(@NonNull String input, @Nullable String expected) throws ParseException {
         if (expected == null) expected = input;
-        var path = SvgPaths.buildSvgString(input, new BezierPathBuilder()).build();
+        var path = SvgPaths.buildSvgString(new BezierPathBuilder(), input).build();
         String actual = SvgPaths.awtPathIteratorToDoubleSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
@@ -48,7 +48,7 @@ public class BezierPathTest {
     }
 
     private void shouldEvalFirstAndLast(@NonNull String input, @NonNull PointAndDerivative expectedFirst, @NonNull PointAndDerivative expectedLastInReverse) throws ParseException {
-        var path = SvgPaths.buildSvgString(input, new BezierPathBuilder()).build();
+        var path = SvgPaths.buildSvgString(new BezierPathBuilder(), input).build();
         var actualFirst = path.evalFirst();
         var actualLastInReverse = path.evalLastInReverse();
         var actualReverseFirst = path.reverse().evalFirst();

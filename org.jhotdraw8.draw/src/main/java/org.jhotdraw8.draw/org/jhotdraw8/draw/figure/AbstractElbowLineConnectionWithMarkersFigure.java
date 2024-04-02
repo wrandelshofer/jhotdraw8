@@ -204,7 +204,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
                 // of the markerNode, because this fires too many change events.
                 List<PathElement> nodes = new ArrayList<>();
                 FXPathElementsBuilder builder = new FXPathElementsBuilder(nodes);
-                SvgPaths.buildSvgString(svgString, builder);
+                SvgPaths.buildSvgString(builder, svgString);
                 builder.build();
                 markerNode.getElements().setAll(nodes);
             } catch (ParseException e) {

@@ -41,12 +41,12 @@ public class SvgPaths {
      * Also supports elliptical arc commands 'a' and 'A' as specified in
      * <a href="http://www.w3.org/TR/SVG/paths.html#PathDataEllipticalArcCommands">w3.org</a>
      *
-     * @param str     the SVG path
      * @param builder the builder
+     * @param str     the SVG path
      * @return the path builder
      * @throws ParseException if the String is not a valid path
      */
-    public static <T> @NonNull PathBuilder<T> buildSvgString(@NonNull String str, @NonNull PathBuilder<T> builder) throws ParseException {
+    public static <T> @NonNull PathBuilder<T> buildSvgString(@NonNull PathBuilder<T> builder, @NonNull String str) throws ParseException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));
         try {
 
@@ -632,7 +632,7 @@ public class SvgPaths {
      */
     public static Path2D.@NonNull Double svgStringToAwtShape(@NonNull String str) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
-        buildSvgString(str, b);
+        buildSvgString(b, str);
         return b.build();
     }
 

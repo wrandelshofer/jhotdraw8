@@ -69,7 +69,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                SvgPaths.buildSvgString(d, b);
+                SvgPaths.buildSvgString(b, d);
             } catch (ParseException e) {
                 // bail
             }
@@ -84,7 +84,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                SvgPaths.buildSvgString(d, b);
+                SvgPaths.buildSvgString(b, d);
             } catch (ParseException e) {
                 // bail
             }
@@ -108,7 +108,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                SvgPaths.buildSvgString(d, b);
+                SvgPaths.buildSvgString(b, d);
             } catch (ParseException e) {
                 // bail
             }
@@ -144,7 +144,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         String d = get(D);
         if (d != null) {
             try {
-                SvgPaths.buildSvgString(d, bb);
+                SvgPaths.buildSvgString(bb, d);
             } catch (ParseException e) {
                 // bail
             }

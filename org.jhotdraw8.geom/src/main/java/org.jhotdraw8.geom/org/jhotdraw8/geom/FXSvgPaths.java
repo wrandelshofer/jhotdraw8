@@ -233,7 +233,7 @@ public class FXSvgPaths {
     }
 
     /**
-     * This parser preserves more of the semantics than {@link SvgPaths#buildSvgString(String, PathBuilder)},
+     * This parser preserves more of the semantics than {@link SvgPaths#buildSvgString(PathBuilder, String)},
      * because {@link PathBuilder} does not understand relative path commands
      * and horizontal and vertical lineto commands.
      */
