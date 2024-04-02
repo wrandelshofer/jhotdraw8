@@ -47,7 +47,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
     public static final @NonNull NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape",
-            VectorList.of(new MoveTo(0, 0), new HLineTo(1), new VLineTo(-1), new HLineTo(-1), new ClosePath()));
+            VectorList.of(new MoveTo(0, 0), new HLineTo(1), new VLineTo(1), new HLineTo(0), new ClosePath()));
     public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
     public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
