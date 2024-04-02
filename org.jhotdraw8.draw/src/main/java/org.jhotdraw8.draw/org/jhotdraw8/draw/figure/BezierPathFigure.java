@@ -163,7 +163,7 @@ public class BezierPathFigure extends AbstractLeafFigure
         applyCompositableFigureProperties(ctx, pathNode);
         pathNode.setFillRule(getStyled(FILL_RULE));
         final List<PathElement> elements =
-                FXShapes.fxPathElementsFromAwt(
+                FXShapes.awtPathIteratorToFXPathElements(
                         new BezierPath(getStyledNonNull(PATH),
                                 getStyledNonNull(FILL_RULE)).getPathIterator(null));
 

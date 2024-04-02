@@ -327,7 +327,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         double strokeCutEnd = getStrokeCutEnd(ctx);
         lineNode.setFillRule(getStyledNonNull(FILL_RULE));
         final List<PathElement> elements =
-                FXShapes.fxPathElementsFromAwt(
+                FXShapes.awtPathIteratorToFXPathElements(
                         pathMetrics.getSubPathIteratorAtArcLength(strokeCutStart, pathMetrics.arcLength() - strokeCutEnd, null));
         if (!lineNode.getElements().equals(elements)) {
             lineNode.getElements().setAll(elements);

@@ -494,7 +494,7 @@ public class FXShapes {
      * @param iter AWT Path Iterator
      * @return JavaFX Shape
      */
-    public static @NonNull List<PathElement> fxPathElementsFromAwt(@NonNull PathIterator iter) {
+    public static @NonNull List<PathElement> awtPathIteratorToFXPathElements(@NonNull PathIterator iter) {
         List<PathElement> fxelem = new ArrayList<>();
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
@@ -526,8 +526,8 @@ public class FXShapes {
      * @param fxT   Optional transformation which is applied to the shape
      * @return JavaFX Shape
      */
-    public static @NonNull Path fxShapeFromAwt(@NonNull Shape shape, Transform fxT) {
-        return fxShapeFromAwt(shape.getPathIterator(fxTransformToAwtTransform(fxT)));
+    public static @NonNull Path awtShapeToFXShape(@NonNull Shape shape, Transform fxT) {
+        return awtShapeToFXShape(shape.getPathIterator(fxTransformToAwtTransform(fxT)));
     }
 
     /**
@@ -537,8 +537,8 @@ public class FXShapes {
      * @param at    Optional transformation which is applied to the shape
      * @return JavaFX Shape
      */
-    public static @NonNull Path fxShapeFromAwt(@NonNull Shape shape, AffineTransform at) {
-        return fxShapeFromAwt(shape.getPathIterator(at));
+    public static @NonNull Path awtShapeToFXShape(@NonNull Shape shape, AffineTransform at) {
+        return awtShapeToFXShape(shape.getPathIterator(at));
     }
 
     /**
@@ -547,8 +547,8 @@ public class FXShapes {
      * @param shape AWT Shape
      * @return JavaFX Shape
      */
-    public static @NonNull Path fxShapeFromAwt(@NonNull Shape shape) {
-        return fxShapeFromAwt(shape.getPathIterator(null));
+    public static @NonNull Path awtShapeToFXShape(@NonNull Shape shape) {
+        return awtShapeToFXShape(shape.getPathIterator(null));
     }
 
     /**
@@ -557,7 +557,7 @@ public class FXShapes {
      * @param iter AWT Path Iterator
      * @return JavaFX Shape
      */
-    public static @NonNull Path fxShapeFromAwt(@NonNull PathIterator iter) {
+    public static @NonNull Path awtShapeToFXShape(@NonNull PathIterator iter) {
         Path fxpath = new Path();
 
         switch (iter.getWindingRule()) {
@@ -571,7 +571,7 @@ public class FXShapes {
                 throw new IllegalArgumentException("illegal winding rule " + iter.getWindingRule());
         }
 
-        fxpath.getElements().addAll(fxPathElementsFromAwt(iter));
+        fxpath.getElements().addAll(awtPathIteratorToFXPathElements(iter));
 
         return fxpath;
     }

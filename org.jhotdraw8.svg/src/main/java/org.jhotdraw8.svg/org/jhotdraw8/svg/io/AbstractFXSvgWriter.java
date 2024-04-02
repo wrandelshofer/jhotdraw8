@@ -1112,7 +1112,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                             tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                             tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                            bgs = FXShapes.fxShapeFromAwt(awtShape, tx);
+                            bgs = FXShapes.awtShapeToFXShape(awtShape, tx);
                         } else {
                             bgs = s;
                         }
@@ -1145,7 +1145,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                                 tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                                 tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
-                                bgs = FXShapes.fxShapeFromAwt(awtShape, tx);
+                                bgs = FXShapes.awtShapeToFXShape(awtShape, tx);
                             } else {
                                 bgs = s;
                             }

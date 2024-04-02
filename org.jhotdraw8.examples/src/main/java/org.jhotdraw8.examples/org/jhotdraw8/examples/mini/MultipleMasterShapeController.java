@@ -99,7 +99,7 @@ public class MultipleMasterShapeController {
             double scaleFactor = Math.pow(2.0, scaleFactorSlider.getValue());
             AffineTransform tx = new AffineTransform();
             tx.scale(scaleFactor, scaleFactor);
-            region.setShape(FXShapes.fxShapeFromAwt(mmShape, tx));
+            region.setShape(FXShapes.awtShapeToFXShape(mmShape, tx));
         } catch (ParseException e) {
             Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
 

@@ -192,7 +192,7 @@ public class ContourPathExampleMain extends Application {
         elements.clear();
         for (var offPap : offsetPlines) {
             elements.addAll(
-                    FXShapes.fxPathElementsFromAwt(offPap.getPathIterator(null)));
+                    FXShapes.awtPathIteratorToFXPathElements(offPap.getPathIterator(null)));
         }
     }
 

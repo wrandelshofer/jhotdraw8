@@ -209,7 +209,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         applyTransformableFigureProperties(ctx, n);
         applyCompositableFigureProperties(ctx, n);
 
-        n.getElements().setAll(FXShapes.fxPathElementsFromAwt(getPathIterator(ctx, null)));
+        n.getElements().setAll(FXShapes.awtPathIteratorToFXPathElements(getPathIterator(ctx, null)));
     }
 
     /**
