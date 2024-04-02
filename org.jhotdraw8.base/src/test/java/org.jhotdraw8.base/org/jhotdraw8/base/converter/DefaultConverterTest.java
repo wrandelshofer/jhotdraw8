@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  * @author Werner Randelshofer
  */
 public class DefaultConverterTest {
-
+    public DefaultConverterTest() {
+    }
 
     public static void testFromString(String expectedOutput, @NonNull String input) throws Exception {
         DefaultConverter c = new DefaultConverter();

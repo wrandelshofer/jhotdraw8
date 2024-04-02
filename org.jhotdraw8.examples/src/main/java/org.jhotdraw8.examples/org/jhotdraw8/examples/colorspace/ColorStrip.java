@@ -26,6 +26,7 @@ public class ColorStrip extends HBox {
     private final IntegerProperty component = new SimpleIntegerProperty(0);
     private final Canvas canvas = new Canvas();
 
+    @SuppressWarnings("this-escape")
     public ColorStrip() {
         InvalidationListener invalidationListener = c -> update();
         widthProperty().addListener(invalidationListener);

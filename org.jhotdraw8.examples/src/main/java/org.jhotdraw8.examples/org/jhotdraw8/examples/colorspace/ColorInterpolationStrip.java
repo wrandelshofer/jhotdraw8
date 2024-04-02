@@ -26,6 +26,7 @@ public class ColorInterpolationStrip extends HBox {
     private final ObjectProperty<Color> toColor = new SimpleObjectProperty<>(Color.WHITE);
     private final Canvas canvas = new Canvas();
 
+    @SuppressWarnings("this-escape")
     public ColorInterpolationStrip() {
         InvalidationListener invalidationListener = c -> update();
         widthProperty().addListener(invalidationListener);

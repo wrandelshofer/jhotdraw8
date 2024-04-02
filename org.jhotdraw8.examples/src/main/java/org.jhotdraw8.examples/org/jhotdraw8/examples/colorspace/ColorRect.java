@@ -29,6 +29,7 @@ public class ColorRect extends HBox {
     private final IntegerProperty yComponent = new SimpleIntegerProperty(1);
     private final Canvas canvas = new Canvas();
 
+    @SuppressWarnings("this-escape")
     public ColorRect() {
         InvalidationListener invalidationListener = c -> update();
         widthProperty().addListener(invalidationListener);

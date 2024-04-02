@@ -70,6 +70,7 @@ public class ChromaticityDiagram extends Pane {
     @Nullable
     protected PixelBuffer<IntBuffer> pixelBuffer;
 
+    @SuppressWarnings("this-escape")
     public ChromaticityDiagram() {
         getChildren().addAll(
                 imageView,

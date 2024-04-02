@@ -100,7 +100,7 @@ public class ChampMap<K, V>
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
     static final int SALT = new Random().nextInt();
-    final @NonNull BitmapIndexedNode<K, V> root;
+    final transient @NonNull BitmapIndexedNode<K, V> root;
     final int size;
 
     /**

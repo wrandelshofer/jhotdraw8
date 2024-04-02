@@ -42,6 +42,7 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         this.nullFirst = nullFirst;
     }
 
+    @SuppressWarnings("unchecked")
     private int compare(@Nullable E a, @Nullable E b) {
         Comparator<? super E> comparator = src.comparator();
         if (comparator == null) {
@@ -50,7 +51,6 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
             } else if (b == null) {
                 return nullFirst ? 1 : -1;
             } else {
-                //noinspection unchecked
                 return ((Comparable<? super E>) a).compareTo(b);
             }
         }
@@ -156,8 +156,8 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return size;
     }
 
+    @SuppressWarnings("unchecked")
     private boolean inRange(Object key) {
-        //noinspection unchecked
         return !tooLow((E) key) && !tooHigh((E) key);
     }
 

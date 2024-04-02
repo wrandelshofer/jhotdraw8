@@ -1,9 +1,13 @@
 package org.jhotdraw8.icollection.exception;
 
+import java.io.Serial;
+
 /**
  * This exception is thrown when a method exceeds a size limit.
  */
 public class SizeLimitExceededException extends RuntimeException {
+    @Serial
+    private static final long serialVersionUID = 0L;
     /**
      * Constructs an instance without a message.
      */

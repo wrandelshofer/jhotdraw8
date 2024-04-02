@@ -13,6 +13,9 @@ import java.net.URISyntaxException;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class SimpleUriResolverTest {
+    public SimpleUriResolverTest() {
+    }
+
     @Test
     public void testAbsolutizeJarUriToFileBaseUri() throws URISyntaxException {
         URI uri = new URI("jar:file:///pathToJar/Some.jar!/pathToAssets/user-agent.css");

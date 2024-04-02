@@ -20,6 +20,7 @@ import java.util.function.BiConsumer;
 public class MutableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
+    @SuppressWarnings({"serial", "RedundantSuppression"})//This field is conditionally serializable
     private final @NonNull BiConsumer<K, V> putFunction;
 
     public MutableMapEntry(@NonNull BiConsumer<K, V> putFunction, K key, V value) {

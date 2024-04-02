@@ -107,7 +107,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
      *
      * @param c an iterable
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampVectorSet(Iterable<? extends E> c) {
         if (c instanceof MutableChampVectorSet<?>) {
             c = ((MutableChampVectorSet<? extends E>) c).toImmutable();

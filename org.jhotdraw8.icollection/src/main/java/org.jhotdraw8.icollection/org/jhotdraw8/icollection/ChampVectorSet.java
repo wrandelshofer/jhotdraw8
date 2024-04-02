@@ -129,7 +129,7 @@ public class ChampVectorSet<E>
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    final @NonNull BitmapIndexedNode<SequencedElement<E>> root;
+    final transient @NonNull BitmapIndexedNode<SequencedElement<E>> root;
     /**
      * Offset of sequence numbers to vector indices.
      *

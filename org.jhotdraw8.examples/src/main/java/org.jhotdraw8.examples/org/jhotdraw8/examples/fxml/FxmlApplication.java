@@ -28,6 +28,7 @@ import java.util.concurrent.Executors;
 public abstract class FxmlApplication extends Application {
     private static final String FXML_PROPERTY_NAME = "fxml";
 
+    @SuppressWarnings("this-escape")
     private final ObjectProperty<URL> fxml = new SimpleObjectProperty<>(this, FXML_PROPERTY_NAME);
     private CompletableFuture<FXMLLoader> loaderFuture;
 

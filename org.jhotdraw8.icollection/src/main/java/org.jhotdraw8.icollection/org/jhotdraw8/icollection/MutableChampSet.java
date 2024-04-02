@@ -87,7 +87,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      *
      * @param c an iterable
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampSet(@NonNull Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?>) {
             c = ((MutableChampSet<? extends E>) c).toImmutable();

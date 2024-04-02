@@ -93,7 +93,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    final @NonNull BitmapIndexedNode<E> root;
+    final transient @NonNull BitmapIndexedNode<E> root;
     final int size;
 
     /**

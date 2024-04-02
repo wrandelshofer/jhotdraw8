@@ -84,6 +84,7 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         return src.comparator();
     }
 
+    @SuppressWarnings("unchecked")
     private int compare(@Nullable K a, @Nullable K b) {
         Comparator<? super K> comparator = src.comparator();
         if (comparator == null) {
@@ -92,11 +93,10 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
             } else if (b == null) {
                 return nullFirst ? 1 : -1;
             } else {
-                //noinspection unchecked
-                return ((Comparable<? super K>) a).compareTo((K) b);
+                return ((Comparable<? super K>) a).compareTo(b);
             }
         }
-        return comparator.compare((K) a, (K) b);
+        return comparator.compare(a, b);
     }
 
     @Override
@@ -216,8 +216,8 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
                 && (toEnd || compare(toKey, e) >= 0);
     }
 
+    @SuppressWarnings("unchecked")
     private boolean inRange(Object key) {
-        //noinspection unchecked
         return !tooLow((K) key) && !tooHigh((K) key);
     }
 
