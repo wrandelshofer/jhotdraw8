@@ -68,7 +68,7 @@ public class LineMain extends Application {
                 Line2D.Double line = new Line2D.Double(100, 100 + 20 * i, 200, 100 + 20 * i);
                 BasicStroke stroke = new BasicStroke(v, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
                 FXPathElementsBuilder builder = new FXPathElementsBuilder();
-                AwtShapes.buildFromPathIterator(builder, stroke.createStrokedShape(line).getPathIterator(null));
+                AwtShapes.buildPathIterator(builder, stroke.createStrokedShape(line).getPathIterator(null));
                 Path path = new Path();
                 path.getElements().setAll(builder.build());
                 System.out.println(path.getElements().stream().map(Object::toString).collect(Collectors.joining("\n")));

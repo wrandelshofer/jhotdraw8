@@ -105,7 +105,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     @Override
     public @NonNull Rectangle2D getBounds2D() {
         if (bounds == null) {
-            bounds = AwtShapes.buildFromPathIterator(new BoundingBoxBuilder(), getPathIterator(null)).buildRectangle2D();
+            bounds = AwtShapes.buildPathIterator(new BoundingBoxBuilder(), getPathIterator(null)).buildRectangle2D();
         }
         return new Rectangle2D.Double(bounds.x, bounds.y, bounds.width, bounds.height);
     }
@@ -268,7 +268,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
      */
     @Override
     public @NonNull BezierPath reverse() {
-        return AwtShapes.buildFromPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
+        return AwtShapes.buildPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
     }
 
     private static final BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);

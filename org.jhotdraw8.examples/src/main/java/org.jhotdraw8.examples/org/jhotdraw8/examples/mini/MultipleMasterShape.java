@@ -36,7 +36,7 @@ public class MultipleMasterShape extends AbstractShape {
             throw new IllegalArgumentException("at least one shape must be given");
         }
         for (var s : shapes) {
-            PathData data = AwtShapes.buildFromPathIterator(new PathDataBuilder(), s).build();
+            PathData data = AwtShapes.buildPathIterator(new PathDataBuilder(), s).build();
             if (defaultShape == null) {
                 defaultShape = data;
             } else {

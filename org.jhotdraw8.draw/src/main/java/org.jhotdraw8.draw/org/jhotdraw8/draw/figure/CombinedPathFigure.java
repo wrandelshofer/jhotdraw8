@@ -105,7 +105,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue());
 
                     }
-                    iter = basicStroke.createStrokedShape(AwtShapes.buildFromPathIterator(new AwtPathBuilder(), iter).build()).getPathIterator(null);
+                    iter = basicStroke.createStrokedShape(AwtShapes.buildPathIterator(new AwtPathBuilder(), iter).build()).getPathIterator(null);
                 }
             }
         }
@@ -137,9 +137,9 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                 final PathIterator childPathIterator = getStyledPathIteratorInParent(ctx, (PathIterableFigure) child, tx);
                 if (first) {
                     first = false;
-                    area = new Area(AwtShapes.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
+                    area = new Area(AwtShapes.buildPathIterator(new AwtPathBuilder(), childPathIterator).build());
                 } else {
-                    Area area1 = new Area(AwtShapes.buildFromPathIterator(new AwtPathBuilder(), childPathIterator).build());
+                    Area area1 = new Area(AwtShapes.buildPathIterator(new AwtPathBuilder(), childPathIterator).build());
                     switch (op) {
                     case ADD:
                     default:

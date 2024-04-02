@@ -43,7 +43,7 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
         ContourBuilder contourBuilder = new ContourBuilder();
         for (PlinePath path : papb.build()) {
             for (PlinePath contourPath : contourBuilder.parallelOffset(path, -offset)) {
-                AwtShapes.buildFromPathIterator(consumer, contourPath.getPathIterator(null), false);
+                AwtShapes.buildPathIterator(consumer, contourPath.getPathIterator(null), false);
             }
         }
         consumer.pathDone();

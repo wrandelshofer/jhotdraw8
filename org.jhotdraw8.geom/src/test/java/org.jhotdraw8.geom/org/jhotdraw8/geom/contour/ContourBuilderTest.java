@@ -182,14 +182,14 @@ public class ContourBuilderTest {
                         Graphics2D g = (Graphics2D) gr;
                         g.setColor(Color.BLACK);// original line
                         AwtPathBuilder b = new AwtPathBuilder();
-                        AwtShapes.buildFromPathIterator(b, input.getPathIterator(null));
+                        AwtShapes.buildPathIterator(b, input.getPathIterator(null));
                         g.draw(b.build());
 
                         g.setColor(Color.CYAN);// expected offset line
                         g.setStroke(new BasicStroke(3.0f));
                         for (PlinePath p : expected) {
                             b = new AwtPathBuilder();
-                            AwtShapes.buildFromPathIterator(b, p.getPathIterator(null));
+                            AwtShapes.buildPathIterator(b, p.getPathIterator(null));
                             g.draw(b.build());
                         }
                         g.setStroke(new BasicStroke());
@@ -197,7 +197,7 @@ public class ContourBuilderTest {
 
                         b = new AwtPathBuilder();
                         final PlinePath rawOffsetPline = pap.createRawOffsetPline(input, offset);
-                        AwtShapes.buildFromPathIterator(b, rawOffsetPline.getPathIterator(null));
+                        AwtShapes.buildPathIterator(b, rawOffsetPline.getPathIterator(null));
                         g.setColor(Color.PINK);// raw offset line
                         g.draw(b.build());
 
@@ -206,7 +206,7 @@ public class ContourBuilderTest {
                                 pap.createRawOffsetPline(input, -offset), offset);
                         for (OpenPolylineSlice s : slices) {
                             b = new AwtPathBuilder();
-                            AwtShapes.buildFromPathIterator(b, s.pline.getPathIterator(null));
+                            AwtShapes.buildPathIterator(b, s.pline.getPathIterator(null));
                             g.draw(b.build());
                         }
 
@@ -234,7 +234,7 @@ public class ContourBuilderTest {
                 public void paint(Graphics gr) {
                     Graphics2D g = (Graphics2D) gr;
                     AwtPathBuilder b = new AwtPathBuilder();
-                    AwtShapes.buildFromPathIterator(b, input.getPathIterator(null));
+                    AwtShapes.buildPathIterator(b, input.getPathIterator(null));
                     g.draw(b.build());
                 }
             };
