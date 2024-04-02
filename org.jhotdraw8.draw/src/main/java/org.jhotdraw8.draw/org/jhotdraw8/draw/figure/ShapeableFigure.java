@@ -75,11 +75,11 @@ public interface ShapeableFigure extends Figure {
             content = SVG_SQUARE;
         }
         Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
-        final Bounds srcBounds = shapeBounds == null || FXRectangles.isEmpty(shapeBounds) ? FXShapes.buildFromPathElements(new BoundingBoxBuilder(), content).build() : FXRectangles.getBounds(shapeBounds);
+        final Bounds srcBounds = shapeBounds == null || FXRectangles.isEmpty(shapeBounds) ? FXShapes.buildPathElements(new BoundingBoxBuilder(), content).build() : FXRectangles.getBounds(shapeBounds);
         Insets shapeSlice = getStyledNonNull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
         FXPathElementsBuilder builder2 = new FXPathElementsBuilder();
         final NineRegionsScalingBuilder<List<PathElement>> nineRegionsScalingBuilder = new NineRegionsScalingBuilder<>(builder2, srcBounds, shapeSlice, b);
-        FXShapes.buildFromPathElements(nineRegionsScalingBuilder, content);
+        FXShapes.buildPathElements(nineRegionsScalingBuilder, content);
         List<PathElement> elements = nineRegionsScalingBuilder.build();
         node.getElements().setAll(elements);
         node.setVisible(true);

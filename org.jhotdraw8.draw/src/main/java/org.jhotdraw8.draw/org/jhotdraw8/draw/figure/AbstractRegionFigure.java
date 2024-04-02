@@ -163,7 +163,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
             this.pathElements = shape;
         } else {
             final var builder = new FXTransformPathBuilder<>(new FXPathElementsBuilder(), tx);
-            FXShapes.buildFromPathElements(builder, shape);
+            FXShapes.buildPathElements(builder, shape);
             this.pathElements = VectorList.copyOf(builder.build());
         }
     }

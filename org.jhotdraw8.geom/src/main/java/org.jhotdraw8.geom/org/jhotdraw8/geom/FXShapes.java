@@ -315,12 +315,12 @@ public class FXShapes {
     }
 
     public static @NonNull Shape fxPathELementsToAwtShape(@NonNull Iterable<PathElement> pathElements, FillRule fillRule) {
-        Path2D.Double p = buildFromPathElements(new AwtPathBuilder(), pathElements).build();
+        Path2D.Double p = buildPathElements(new AwtPathBuilder(), pathElements).build();
         p.setWindingRule(fillRule == FillRule.NON_ZERO ? PathIterator.WIND_NON_ZERO : PathIterator.WIND_EVEN_ODD);
         return p;
     }
 
-    public static @NonNull <T extends PathBuilder<?>> T buildFromPathElements(@NonNull T p, @NonNull Iterable<PathElement> pathElements) {
+    public static @NonNull <T extends PathBuilder<?>> T buildPathElements(@NonNull T p, @NonNull Iterable<PathElement> pathElements) {
         double x = 0;
         double y = 0;
         for (PathElement pe : pathElements) {
