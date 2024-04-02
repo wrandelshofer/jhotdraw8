@@ -38,17 +38,17 @@ public class FXSvgPaths {
 
     }
 
-    public static @NonNull String pathElementsToDoubleSvgString(@NonNull List<PathElement> elements) {
+    public static @NonNull String pathElementsToDoubleSvgString(@NonNull Iterable<PathElement> elements) {
         NumberConverter nb = new NumberConverter();
         return pathElementsToSvgString(elements, nb);
     }
 
-    public static @NonNull String pathElementsToFloatSvgString(@NonNull List<PathElement> elements) {
+    public static @NonNull String pathElementsToFloatSvgString(@NonNull Iterable<PathElement> elements) {
         NumberConverter nb = new NumberConverter(Float.class);
         return pathElementsToSvgString(elements, nb);
     }
 
-    public static @NonNull String pathElementsToSvgString(@NonNull List<PathElement> elements, NumberConverter nb) {
+    public static @NonNull String pathElementsToSvgString(@NonNull Iterable<PathElement> elements, NumberConverter nb) {
         StringBuilder buf = new StringBuilder();
         char next = 'Z'; // next instruction
         double x = 0, y = 0;// current point
