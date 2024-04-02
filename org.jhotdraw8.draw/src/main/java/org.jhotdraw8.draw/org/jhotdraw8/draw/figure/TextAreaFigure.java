@@ -115,6 +115,6 @@ public class TextAreaFigure extends AbstractLeafFigure
         if (path == null) {
             layout(new SimpleRenderContext());
         }
-        return path == null ? AwtShapes.emptyPathIterator() : FXShapes.awtShapeFromFX(path).getPathIterator(tx);
+        return path == null ? AwtShapes.emptyPathIterator() : FXShapes.fxShapeToAwtShape(path).getPathIterator(tx);
     }
 }

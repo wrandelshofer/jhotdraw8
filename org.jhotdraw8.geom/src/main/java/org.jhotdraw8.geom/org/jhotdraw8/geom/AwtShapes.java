@@ -117,7 +117,7 @@ public class AwtShapes {
         };
     }
 
-    public static @NonNull PathIterator pathIteratorFromPointCoords(@NonNull List<Double> coordsList, boolean closed, int windingRule, @Nullable AffineTransform tx) {
+    public static @NonNull PathIterator pointCoordsToPathIterator(@NonNull List<Double> coordsList, boolean closed, int windingRule, @Nullable AffineTransform tx) {
         return new PathIterator() {
             private final int size = coordsList.size();
             int index = 0;

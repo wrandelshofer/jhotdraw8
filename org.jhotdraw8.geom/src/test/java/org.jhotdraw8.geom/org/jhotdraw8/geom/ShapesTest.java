@@ -120,8 +120,8 @@ public class ShapesTest {
     }
 
     void testSvgStringFromElements(@NonNull String input, String expected) throws ParseException {
-        List<PathElement> elements = FXSvgPaths.pathElementsFromSvgString(input);
-        String actual = FXSvgPaths.doubleSvgStringFromPathElements(elements);
+        List<PathElement> elements = FXSvgPaths.svgStringToPathElements(input);
+        String actual = FXSvgPaths.pathElementsToDoubleSvgString(elements);
         assertEquals(expected, actual);
     }
 

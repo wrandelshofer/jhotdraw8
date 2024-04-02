@@ -158,6 +158,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     /**
      * Initializes everything except the streams.
      */
+    @SuppressWarnings("this-escape")
     public StreamPosTokenizer() {
         wordChars('a', 'z');
         wordChars('A', 'Z');

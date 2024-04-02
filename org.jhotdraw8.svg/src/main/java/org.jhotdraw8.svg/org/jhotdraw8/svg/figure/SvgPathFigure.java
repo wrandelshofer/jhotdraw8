@@ -115,7 +115,7 @@ public class SvgPathFigure extends AbstractLeafFigure
         }
 
         List<PathElement> build = b.build();
-        set(D, build == null ? null : FXSvgPaths.svgStringFromPathElements(build, new NumberConverter()));
+        set(D, build == null ? null : FXSvgPaths.pathElementsToSvgString(build, new NumberConverter()));
     }
 
     @Override

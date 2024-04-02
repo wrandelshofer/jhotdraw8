@@ -1,5 +1,5 @@
 /*
- * @(#)CssSvgPathConverter.java
+ * @(#)CssAwtSvgPathConverter.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.css.converter;
@@ -12,34 +12,53 @@ import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.geom.AwtPathBuilder;
+import org.jhotdraw8.geom.SvgPaths;
 
+import java.awt.*;
+import java.awt.geom.Path2D;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.function.Consumer;
 
 /**
- * Converts an SVG path to a CSS String.
+ * Converts an SVG path to a AWT path.
  * <p>
  * The null value will be converted to the CSS identifier "none".
  *
  * @author Werner Randelshofer
  */
-public class SvgPathCssConverter extends AbstractCssConverter<String> {
+public class AwtPathCssConverter extends AbstractCssConverter<Path2D.Double> {
 
 
-    public SvgPathCssConverter(boolean nullable) {
+    public AwtPathCssConverter(boolean nullable) {
         super(nullable);
     }
 
     @Override
-    public @NonNull String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Path2D.@NonNull Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_STRING, "⟨SvgPath⟩: String expected.");
-        return tt.currentStringNonNull();
+        final String svgPathString = tt.currentStringNonNull();
+
+        try {
+            final AwtPathBuilder builder = new AwtPathBuilder();
+            SvgPaths.svgStringToBuilder(svgPathString, builder);
+            return builder.build();
+        } catch (final ParseException ex) {
+            final Path2D.Double p = new Path2D.Double();
+            p.moveTo(0, 0);
+            p.lineTo(10, 0);
+            p.lineTo(10, 10);
+            p.lineTo(0, 10);
+            p.closePath();
+            p.trimToSize();
+            return p;
+        }
     }
 
     @Override
-    protected <TT extends String> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, value));
+    protected <TT extends Path2D.Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+        out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.awtPathIteratorToDoubleSvgString(((Shape) value).getPathIterator(null))));
     }
 
     @Override
@@ -53,6 +72,12 @@ public class SvgPathCssConverter extends AbstractCssConverter<String> {
                      Format of ⟨arcTo ⟩: A ⟨x⟩ ⟨y⟩ ⟨r1⟩ ⟨r2⟩ ⟨angle⟩ ⟨larrgeArcFlag⟩ ⟨sweepFlag⟩ ｜a ⟨dx⟩ ⟨dy⟩ ⟨r1⟩ ⟨r2⟩ ⟨angle⟩ ⟨larrgeArcFlag⟩ ⟨sweepFlag⟩\s
                      Format of ⟨closePath ⟩: Z ｜z\s""";
         return buf;
+    }
+
+
+    @Override
+    public Path2D.@Nullable Double getDefaultValue() {
+        return null;
     }
 
 

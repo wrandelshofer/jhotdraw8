@@ -24,18 +24,14 @@ import org.jhotdraw8.draw.handle.MoveHandle;
 import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 /**
  * AbstractStraightLineConnectionWithMarkersFigure draws a straight line from start to end.
@@ -106,20 +102,20 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
     public abstract double getMarkerCenterScaleFactor();
 
-    public abstract @Nullable String getMarkerCenterShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerCenterShape();
 
     public abstract double getMarkerEndScaleFactor();
 
-    public abstract @Nullable String getMarkerEndShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerEndShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    public abstract @Nullable String getMarkerStartShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
         // FIXME include markers in path
-        return FXShapes.awtShapeFromFX(new Line(
+        return FXShapes.fxShapeToAwtShape(new Line(
                 getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue(),
                 getNonNull(END_X).getConvertedValue(),
@@ -190,21 +186,12 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     protected void updateMarkerNode(@NonNull RenderContext ctx,
                                     @NonNull Group group,
                                     @NonNull Path markerNode,
-                                    @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
-        if (svgString != null) {
-            try {
+                                    @NonNull PointAndDerivative pd,
+                                    @Nullable ImmutableList<PathElement> markerPath, double markerScaleFactor) {
+        if (markerPath != null) {
                 // Note: we must not add individual elements to the ObservableList
                 // of the markerNode, because this fires too many change events.
-                List<PathElement> nodes = new ArrayList<>();
-                FXPathElementsBuilder builder = new FXPathElementsBuilder(nodes);
-                SvgPaths.svgStringToBuilder(svgString, builder);
-                builder.build();
-                if (!nodes.equals(markerNode.getElements())) {
-                    markerNode.getElements().setAll(nodes);
-                }
-            } catch (ParseException e) {
-                Logger.getLogger(AbstractStraightLineConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
-            }
+            markerNode.getElements().setAll(markerPath.asCollection());
             double angle = Math.PI + pd.getAngle();
             double pdx = pd.x();
             double pdy = pd.y();
@@ -230,8 +217,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
         final double startInset = getStrokeCutStart(ctx);
         final double endInset = getStrokeCutEnd(ctx);
-        final String startMarkerStr = getMarkerStartShape();
-        final String endMarkerStr = getMarkerEndShape();
+        final ImmutableList<PathElement> startMarkerStr = getMarkerStartShape();
+        final ImmutableList<PathElement> endMarkerStr = getMarkerEndShape();
 
         Point2D endMinusStart = end.subtract(start);
         Point2D startMinusEnd = start.subtract(end);

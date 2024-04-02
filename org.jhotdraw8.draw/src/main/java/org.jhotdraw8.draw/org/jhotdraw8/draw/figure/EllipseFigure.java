@@ -100,7 +100,7 @@ public class EllipseFigure extends AbstractLeafFigure
         };
         shape.setRadiusX(getStyledNonNull(RADIUS_X).getConvertedValue() + offset);
         shape.setRadiusY(getStyledNonNull(RADIUS_Y).getConvertedValue() + offset);
-        return FXShapes.awtShapeFromFX(shape).getPathIterator(tx);
+        return FXShapes.fxShapeToAwtShape(shape).getPathIterator(tx);
     }
 
     @Override

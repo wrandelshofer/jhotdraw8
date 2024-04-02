@@ -186,7 +186,7 @@ public class BezierArcLengthExampleMain extends Application {
 
         CubicCurveCharacteristics.Characteristics characteristics = CubicCurveCharacteristics.characteristics(b, 0);
         PathArcLengthParameterization param = new PathArcLengthParameterization(
-                FXShapes.awtShapeFromFX(new CubicCurve(curve.getStartX(),
+                FXShapes.fxShapeToAwtShape(new CubicCurve(curve.getStartX(),
                         curve.getStartY(),
                         curve.getControlX1(),
                         curve.getControlY1(),
@@ -211,7 +211,7 @@ public class BezierArcLengthExampleMain extends Application {
 
     private void updateDistancePoints(Group distancePoints) {
         PathArcLengthParameterization param = new PathArcLengthParameterization(
-                FXShapes.awtShapeFromFX(new CubicCurve(curve.getStartX(),
+                FXShapes.fxShapeToAwtShape(new CubicCurve(curve.getStartX(),
                         curve.getStartY(),
                         curve.getControlX1(),
                         curve.getControlY1(),

@@ -71,15 +71,15 @@ public class SvgPaths {
                 }
 
                 switch (command) {
-                    case 'M':
+                    case 'M' -> {
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'M'");
                         ix = x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'M'");
                         iy = y = tt.nval;
                         builder.moveTo(x, y);
                         next = 'L';
-                        break;
-                    case 'm':
+                    }
+                    case 'm' -> {
                         // relative-moveto dx dy
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'm'");
                         ix = x += tt.nval;
@@ -87,16 +87,14 @@ public class SvgPaths {
                         iy = y += tt.nval;
                         builder.moveTo(x, y);
                         next = 'l';
-
-                        break;
-                    case 'Z':
-                    case 'z':
+                    }
+                    case 'Z', 'z' -> {
                         // close path
                         builder.closePath();
                         x = ix;
                         y = iy;
-                        break;
-                    case 'L':
+                    }
+                    case 'L' -> {
                         // absolute-lineto x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'L'");
                         x = tt.nval;
@@ -104,9 +102,8 @@ public class SvgPaths {
                         y = tt.nval;
                         builder.lineTo(x, y);
                         next = 'L';
-
-                        break;
-                    case 'l':
+                    }
+                    case 'l' -> {
                         // relative-lineto dx dy
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'l'");
                         x += tt.nval;
@@ -114,41 +111,36 @@ public class SvgPaths {
                         y += tt.nval;
                         builder.lineTo(x, y);
                         next = 'l';
-
-                        break;
-                    case 'H':
+                    }
+                    case 'H' -> {
                         // absolute-horizontal-lineto x
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'H'");
                         x = tt.nval;
                         builder.lineTo(x, y);
                         next = 'H';
-
-                        break;
-                    case 'h':
+                    }
+                    case 'h' -> {
                         // relative-horizontal-lineto dx
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 'h'");
                         x += tt.nval;
                         builder.lineTo(x, y);
                         next = 'h';
-
-                        break;
-                    case 'V':
+                    }
+                    case 'V' -> {
                         // absolute-vertical-lineto y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'V'");
                         y = tt.nval;
                         builder.lineTo(x, y);
                         next = 'V';
-
-                        break;
-                    case 'v':
+                    }
+                    case 'v' -> {
                         // relative-vertical-lineto dy
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 'v'");
                         y += tt.nval;
                         builder.lineTo(x, y);
                         next = 'v';
-
-                        break;
-                    case 'C':
+                    }
+                    case 'C' -> {
                         // absolute-curveto x1 y1 x2 y2 x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'C'");
                         cx1 = tt.nval;
@@ -164,9 +156,8 @@ public class SvgPaths {
                         y = tt.nval;
                         builder.curveTo(cx1, cy1, cx2, cy2, x, y);
                         next = 'C';
-                        break;
-
-                    case 'c':
+                    }
+                    case 'c' -> {
                         // relative-curveto dx1 dy1 dx2 dy2 dx dy
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx1 coordinate missing for 'c'");
                         cx1 = x + tt.nval;
@@ -182,9 +173,8 @@ public class SvgPaths {
                         y += tt.nval;
                         builder.curveTo(cx1, cy1, cx2, cy2, x, y);
                         next = 'c';
-                        break;
-
-                    case 'S':
+                    }
+                    case 'S' -> {
                         // absolute-shorthand-curveto x2 y2 x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x2 coordinate missing for 'S'");
                         cx2 = tt.nval;
@@ -196,9 +186,8 @@ public class SvgPaths {
                         y = tt.nval;
                         builder.smoothCurveTo(cx2, cy2, x, y);
                         next = 'S';
-                        break;
-
-                    case 's':
+                    }
+                    case 's' -> {
                         // relative-shorthand-curveto dx2 dy2 dx dy
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx2 coordinate missing for 's'");
                         cx2 = x + tt.nval;
@@ -210,9 +199,8 @@ public class SvgPaths {
                         y += tt.nval;
                         builder.smoothCurveTo(cx2, cy2, x, y);
                         next = 's';
-                        break;
-
-                    case 'Q':
+                    }
+                    case 'Q' -> {
                         // absolute-quadto x1 y1 x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x1 coordinate missing for 'Q'");
                         cx1 = tt.nval;
@@ -224,10 +212,8 @@ public class SvgPaths {
                         y = tt.nval;
                         builder.quadTo(cx1, cy1, x, y);
                         next = 'Q';
-
-                        break;
-
-                    case 'q':
+                    }
+                    case 'q' -> {
                         // relative-quadto dx1 dy1 dx dy
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx1 coordinate missing for 'q'");
                         cx1 = x + tt.nval;
@@ -239,9 +225,8 @@ public class SvgPaths {
                         y += tt.nval;
                         builder.quadTo(cx1, cy1, x, y);
                         next = 'q';
-
-                        break;
-                    case 'T':
+                    }
+                    case 'T' -> {
                         // absolute-shorthand-quadto x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'T'");
                         x = tt.nval;
@@ -249,10 +234,8 @@ public class SvgPaths {
                         y = tt.nval;
                         builder.smoothQuadTo(x, y);
                         next = 'T';
-
-                        break;
-
-                    case 't':
+                    }
+                    case 't' -> {
                         // relative-shorthand-quadto dx dy
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 't'");
                         x += tt.nval;
@@ -260,10 +243,8 @@ public class SvgPaths {
                         y += tt.nval;
                         builder.smoothQuadTo(x, y);
                         next = 's';
-
-                        break;
-
-                    case 'A': {
+                    }
+                    case 'A' -> {
                         // absolute-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
                         // If rX or rY have negative signs, these are dropped;
@@ -284,9 +265,8 @@ public class SvgPaths {
 
                         builder.arcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
                         next = 'A';
-                        break;
                     }
-                    case 'a': {
+                    case 'a' -> {
                         // relative-elliptical-arc rx ry x-axis-rotation large-arc-flag sweep-flag x y
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "rx coordinate missing for 'A'");
                         // If rX or rY have negative signs, these are dropped;
@@ -307,10 +287,8 @@ public class SvgPaths {
                         builder.arcTo(rx, ry, xAxisRotation, x, y, largeArcFlag, sweepFlag);
 
                         next = 'a';
-                        break;
                     }
-                    default:
-                        throw new ParseException("Illegal command: " + command + ".", tt.getStartPosition());
+                    default -> throw new ParseException("Illegal command: " + command + ".", tt.getStartPosition());
                 }
             }
         } catch (ParseException e) {
@@ -664,11 +642,11 @@ public class SvgPaths {
      * If parsing the SVG Path fails, logs a warning message and fits a rectangle
      * into the bounds.
      *
+     * @param builder the builder into which the path is output
      * @param pathstr an SVGPath String
      * @param b       the desired bounds
-     * @param builder the builder into which the path is output
      */
-    public static void svgStringReshapeToBuilder(@Nullable String pathstr, @NonNull Bounds b, @NonNull PathBuilder<?> builder) {
+    public static void buildFromReshapedSvgString(@NonNull PathBuilder<?> builder, @Nullable String pathstr, @NonNull Bounds b) {
         if (pathstr != null) {
             Shape shape = null;
             try {

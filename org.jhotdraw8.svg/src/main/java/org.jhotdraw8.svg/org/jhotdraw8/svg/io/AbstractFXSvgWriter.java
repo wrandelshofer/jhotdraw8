@@ -895,9 +895,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
-            d = SvgPaths.awtPathIteratorToDoubleRelativeSvgString(FXShapes.awtShapeFromFXPathElements(node.getElements(), node.getFillRule()).getPathIterator(null));
+            d = SvgPaths.awtPathIteratorToDoubleRelativeSvgString(FXShapes.fxPathELementsToAwtShape(node.getElements(), node.getFillRule()).getPathIterator(null));
         } else {
-            d = FXSvgPaths.doubleSvgStringFromPathElements(node.getElements());
+            d = FXSvgPaths.pathElementsToDoubleSvgString(node.getElements());
         }
         w.writeAttribute("d", d);
     }
@@ -905,7 +905,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     protected void writeStrokedShapeElement(@NonNull XMLStreamWriter w, @NonNull Shape fxShape) throws XMLStreamException, IOException {
         w.writeStartElement("path");
 
-        java.awt.Shape shape = FXShapes.awtShapeFromFX(fxShape);
+        java.awt.Shape shape = FXShapes.fxShapeToAwtShape(fxShape);
         int cap = switch (fxShape.getStrokeLineCap()) {
             case SQUARE -> BasicStroke.CAP_SQUARE;
             default -> BasicStroke.CAP_BUTT;
@@ -1108,7 +1108,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                     if (s != null) {
                         if (region.isScaleShape()) {
 
-                            java.awt.Shape awtShape = FXShapes.awtShapeFromFX(s);
+                            java.awt.Shape awtShape = FXShapes.fxShapeToAwtShape(s);
                             Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                             tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
                             tx = FXTransforms.concat(tx, Transform.scale((width - insets.getLeft() - insets.getRight()) / sb.getWidth(), (height - insets.getTop() - insets.getBottom()) / sb.getHeight()));
@@ -1140,7 +1140,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
                         Shape bgs;
                         if (s != null) {
                             if (region.isScaleShape()) {
-                                java.awt.Shape awtShape = FXShapes.awtShapeFromFX(s);
+                                java.awt.Shape awtShape = FXShapes.fxShapeToAwtShape(s);
 
                                 Transform tx = Transform.translate(-sb.getMinX(), -sb.getMinY());
                                 tx = FXTransforms.concat(tx, Transform.translate(x + insets.getLeft(), y + insets.getTop()));
@@ -1400,7 +1400,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         if (isConvertTextToPath()) {
             w.writeStartElement("path");
             w.writeAttribute("d",
-                    SvgPaths.awtPathIteratorToDoubleRelativeSvgString(FXShapes.awtShapeFromFX(node).getPathIterator(null)));
+                    SvgPaths.awtPathIteratorToDoubleRelativeSvgString(FXShapes.fxShapeToAwtShape(node).getPathIterator(null)));
         } else {
             w.writeStartElement("text");
             writeTextAttributes(w, node);

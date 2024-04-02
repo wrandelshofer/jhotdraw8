@@ -96,7 +96,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();
         FXPathElementsBuilder builder = new FXPathElementsBuilder(elements);
-        AwtShapes.buildFromPathIterator(builder, path.getPathIterator(FXShapes.awtTransformFromFX(t)));
+        AwtShapes.buildFromPathIterator(builder, path.getPathIterator(FXShapes.fxTransformToAwtTransform(t)));
 
         // draw a small arrow at the center of each segment, to visualize the direction of the path
         double arrowLength = 4 * Math.max(2, strokeWidth);

@@ -145,7 +145,7 @@ public class TextFigure extends AbstractLeafFigure
         if (textNode == null) {
             layout(new SimpleRenderContext());
         }
-        return FXShapes.awtShapeFromFX(textNode).getPathIterator(tx);
+        return FXShapes.fxShapeToAwtShape(textNode).getPathIterator(tx);
     }
 
 

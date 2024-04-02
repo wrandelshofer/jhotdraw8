@@ -8,7 +8,13 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.HLineTo;
+import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.PathElement;
+import javafx.scene.shape.VLineTo;
+import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
@@ -16,16 +22,19 @@ import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NonNullBooleanStyleableKey;
-import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
+import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AwtPathBuilder;
+import org.jhotdraw8.geom.BoundingBoxBuilder;
+import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.FXSvgPaths;
+import org.jhotdraw8.geom.FXTransformPathBuilder;
+import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
-import java.text.ParseException;
 import java.util.logging.Logger;
 
 /**
@@ -37,7 +46,8 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
     public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
     public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    public static final @NonNull NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", "M 0,0 h 1 v -1 h -1 Z");
+    public static final @NonNull NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape",
+            VectorList.of(new MoveTo(0, 0), new HLineTo(1), new VLineTo(-1), new HLineTo(-1), new ClosePath()));
     public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
     public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
     public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
@@ -45,7 +55,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public static final NonNullBooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new NonNullBooleanStyleableKey("ShapePreserveRatio", false);
     private static final Logger LOGGER = Logger.getLogger(AbstractRegionFigure.class.getName());
 
-    private transient Path2D.Double path;
+    private transient ImmutableList<PathElement> pathElements;
 
     public AbstractRegionFigure() {
         this(0, 0, 1, 1);
@@ -76,10 +86,10 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
-        if (path == null) {
-            path = new Path2D.Double();
+        if (pathElements == null) {
+            pathElements = VectorList.of();
         }
-        return path.getPathIterator(tx);
+        return FXShapes.fxPathElementsToAwtPathIterator(pathElements, PathIterator.WIND_EVEN_ODD, tx);
     }
 
     @Override
@@ -97,7 +107,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
 
     protected void updatePathNode(@NonNull RenderContext ctx, @NonNull Path path) {
-        path.getElements().setAll(FXShapes.fxPathElementsFromAwt(this.path.getPathIterator(null)));
+        path.getElements().setAll(this.pathElements.asCollection());
     }
 
     @Override
@@ -107,13 +117,12 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     protected void layoutPath() {
-        if (path == null) {
-            path = new Path2D.Double();
+        if (pathElements == null) {
+            pathElements = VectorList.of();
         }
-        path.reset();
 
-        String pathstr = getStyled(SHAPE);
-        if (pathstr == null || pathstr.isEmpty()) {
+        ImmutableList<PathElement> shape = getStyled(SHAPE);
+        if (shape == null || shape.isEmpty()) {
             return;
         }
 
@@ -121,31 +130,23 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         double height = getStyledNonNull(HEIGHT).getConvertedValue();
         double x = getStyledNonNull(X).getConvertedValue();
         double y = getStyledNonNull(Y).getConvertedValue();
+        Bounds shapeBounds = FXSvgPaths.buildFromPathElements(new BoundingBoxBuilder(), shape).build();
         final Bounds b;
         if (getStyledNonNull(SHAPE_PRESERVE_RATIO_KEY)) {
-            AwtPathBuilder awtPathBuilder = new AwtPathBuilder(path);
-            try {
-                SvgPaths.svgStringToBuilder(pathstr, awtPathBuilder);
-                java.awt.geom.Rectangle2D bounds2D = awtPathBuilder.build().getBounds2D();
-                double pathRatio = bounds2D.getHeight() / bounds2D.getWidth();
-                double regionRatio = height / width;
-                if (pathRatio < regionRatio) {
-                    b = new BoundingBox(
-                            x,
-                            y,
-                            width,
-                            pathRatio * width);
-                } else {
-                    b = new BoundingBox(
-                            x,
-                            y,
-                            height / pathRatio,
-                            height);
-                }
-                path.reset();
-            } catch (ParseException e) {
-                LOGGER.warning("Illegal SVG path: " + pathstr);
-                return;
+            double pathRatio = shapeBounds.getHeight() / shapeBounds.getWidth();
+            double regionRatio = height / width;
+            if (pathRatio < regionRatio) {
+                b = new BoundingBox(
+                        x,
+                        y,
+                        width,
+                        pathRatio * width);
+            } else {
+                b = new BoundingBox(
+                        x,
+                        y,
+                        height / pathRatio,
+                        height);
             }
         } else {
             b = new BoundingBox(
@@ -154,8 +155,16 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
                     width,
                     height);
         }
-        //XXX this method is only available since Java SE 11
-        //path.trimToSize();
-        SvgPaths.svgStringReshapeToBuilder(pathstr, b, new AwtPathBuilder(path));
+        Transform tx = FXTransforms.createReshapeTransform(
+                shapeBounds.getMinX(), shapeBounds.getMinY(), shapeBounds.getWidth(), shapeBounds.getHeight(),
+                b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight()
+        );
+        if (tx.isIdentity()) {
+            this.pathElements = shape;
+        } else {
+            final var builder = new FXTransformPathBuilder<>(new FXPathElementsBuilder(), tx);
+            FXShapes.buildFromPathElements(builder, shape);
+            this.pathElements = VectorList.copyOf(builder.build());
+        }
     }
 }

@@ -93,15 +93,15 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                         }
                         //noinspection MagicConstant
                         basicStroke = new BasicStroke((float) strokeWidth,
-                                FXShapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
-                                FXShapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
+                                FXShapes.fxLineCapToAwtLineCap(f.getStyledNonNull(STROKE_LINE_CAP)),
+                                FXShapes.fxLineJoinToAwtLineJoin(f.getStyledNonNull(STROKE_LINE_JOIN)),
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue(), dash, (float) dashOffset);
 
                     } else {
                         //noinspection MagicConstant
                         basicStroke = new BasicStroke((float) strokeWidth,
-                                FXShapes.awtCapFromFX(f.getStyledNonNull(STROKE_LINE_CAP)),
-                                FXShapes.awtJoinFromFX(f.getStyledNonNull(STROKE_LINE_JOIN)),
+                                FXShapes.fxLineCapToAwtLineCap(f.getStyledNonNull(STROKE_LINE_CAP)),
+                                FXShapes.fxLineJoinToAwtLineJoin(f.getStyledNonNull(STROKE_LINE_JOIN)),
                                 (float) f.getStyledNonNull(STROKE_MITER_LIMIT).getConvertedValue());
 
                     }

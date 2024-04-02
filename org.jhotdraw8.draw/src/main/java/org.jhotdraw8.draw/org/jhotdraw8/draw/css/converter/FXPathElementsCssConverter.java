@@ -46,7 +46,7 @@ public class FXPathElementsCssConverter extends AbstractCssConverter<ImmutableLi
         final String svgPathString = tt.currentStringNonNull();
 
         try {
-            final List<PathElement> pathElements = FXSvgPaths.pathElementsFromSvgString(svgPathString);
+            final List<PathElement> pathElements = FXSvgPaths.svgStringToPathElements(svgPathString);
             return VectorList.copyOf(pathElements);
         } catch (final ParseException ex) {
             List<PathElement> p = new ArrayList<>();
@@ -61,7 +61,7 @@ public class FXPathElementsCssConverter extends AbstractCssConverter<ImmutableLi
 
     @Override
     protected <TT extends ImmutableList<PathElement>> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
-        out.accept(new CssToken(CssTokenType.TT_STRING, FXSvgPaths.doubleSvgStringFromPathElements(value.asList())));
+        out.accept(new CssToken(CssTokenType.TT_STRING, FXSvgPaths.pathElementsToDoubleSvgString(value.asList())));
     }
 
     @Override

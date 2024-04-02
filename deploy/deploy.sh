@@ -8,8 +8,8 @@
 # can upload to the nexus repository manager.
 #
 cd "$(dirname "$0")"/..
-export revision=0.1
-mvn clean package -Dmaven.test.skip=true -Drevision=$revision
+export revision=0.1.2
+mvn clean deploy -Dmaven.test.skip=true -Drevision=$revision
 rm -r target/deploy
 for module in org.jhotdraw8.*; do
   echo $module

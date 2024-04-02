@@ -4,9 +4,11 @@
  */
 package org.jhotdraw8.draw.figure;
 
+import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
+import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 /**
  * A figure which supports markers at the nodes of a path.
@@ -17,10 +19,10 @@ public interface MarkerMidableFigure extends Figure {
     /**
      * "Marker Mid" is an SVG path that points to the right, with coordinate 0,0 at a node of the path.
      */
-    @Nullable NullableSvgPathStyleableKey MARKER_MID_SHAPE = new NullableSvgPathStyleableKey("marker-mid-shape", null);
+    @Nullable NullableFXPathElementsStyleableKey MARKER_MID_SHAPE = new NullableFXPathElementsStyleableKey("marker-mid-shape", null);
     DoubleStyleableKey MARKER_MID_SCALE_FACTOR = new DoubleStyleableKey("marker-mid-scale-factor", 1.0);
 
-    default @Nullable String getMarkerMidShape() {
+    default @Nullable ImmutableList<PathElement> getMarkerMidShape() {
         return getStyled(MARKER_MID_SHAPE);
     }
 

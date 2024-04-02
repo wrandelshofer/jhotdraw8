@@ -89,7 +89,7 @@ import org.jhotdraw8.draw.figure.TextStrokeableFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.xml.converter.BezierPathXmlConverter;
 import org.jhotdraw8.draw.xml.converter.ConnectorXmlConverter;
-import org.jhotdraw8.draw.xml.converter.FXSvgPathXmlConverter;
+import org.jhotdraw8.draw.xml.converter.FXPathElementsXmlConverter;
 import org.jhotdraw8.draw.xml.converter.PathConnectionBezierPathXmlConverter;
 import org.jhotdraw8.draw.xml.converter.Point2DXmlConverter;
 import org.jhotdraw8.draw.xml.converter.Point3DXmlConverter;
@@ -193,7 +193,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(URI.class, new UriXmlConverter());
         addConverterForType(URL.class, new UrlXmlConverter());
         addConverterForType(VPos.class, new KebabCaseEnumCssConverter<>(VPos.class));
-        addConverterForType(new SimpleParameterizedType(ImmutableList.class, PathElement.class), new FXSvgPathXmlConverter());
+        addConverterForType(new SimpleParameterizedType(ImmutableList.class, PathElement.class), new FXPathElementsXmlConverter());
 
         addConverter(org.jhotdraw8.draw.figure.AbstractPathConnectionWithMarkersFigure.PATH, new PathConnectionBezierPathXmlConverter());
         addConverter(PageFigure.PAPER_SIZE, new PaperSizeCssConverter());

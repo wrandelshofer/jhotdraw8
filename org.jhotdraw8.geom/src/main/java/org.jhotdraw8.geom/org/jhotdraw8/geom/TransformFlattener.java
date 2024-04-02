@@ -79,8 +79,8 @@ public class TransformFlattener {
         node.getTransforms().clear();
 
         if (node.getClip() instanceof Shape s) {
-            node.setClip(FXShapes.fxShapeFromAwt(FXShapes.awtShapeFromFX(s)
-                    .getPathIterator(FXShapes.awtTransformFromFX(translate))));
+            node.setClip(FXShapes.fxShapeFromAwt(FXShapes.fxShapeToAwtShape(s)
+                    .getPathIterator(FXShapes.fxTransformToAwtTransform(translate))));
         }
 
         return translate;

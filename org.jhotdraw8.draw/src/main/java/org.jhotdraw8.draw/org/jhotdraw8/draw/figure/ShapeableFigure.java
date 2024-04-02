@@ -7,6 +7,9 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.shape.ClosePath;
+import javafx.scene.shape.LineTo;
+import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.annotation.NonNull;
@@ -14,18 +17,17 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.key.CssInsetsStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.NullableSvgPathStyleableKey;
+import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
 import org.jhotdraw8.draw.key.Rectangle2DStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.AwtPathBuilder;
-import org.jhotdraw8.geom.AwtShapes;
+import org.jhotdraw8.geom.BoundingBoxBuilder;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXRectangles;
+import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
-import java.awt.geom.Path2D;
-import java.text.ParseException;
 import java.util.List;
 
 public interface ShapeableFigure extends Figure {
@@ -59,39 +61,27 @@ public interface ShapeableFigure extends Figure {
      * <p>
      * Performance: it would be nice if Shape was an already parsed representation. For example a JavaFX Path object.
      */
-    @NonNull NullableSvgPathStyleableKey SHAPE = new NullableSvgPathStyleableKey("shape", null);
-    @NonNull String SVG_SQUARE = "M 0,0 1,0 1,1 0,1 Z";
+    @NonNull NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape", null);
+    @NonNull ImmutableList<PathElement> SVG_SQUARE = VectorList.of(new MoveTo(0, 0), new LineTo(1, 0), new LineTo(1, 1), new LineTo(0, 1), new ClosePath());
+
 
     default void applyShapeableProperties(@NonNull RenderContext ctx, @NonNull Path node) {
         applyShapeableProperties(ctx, node, getLayoutBounds());
     }
 
     default void applyShapeableProperties(@NonNull RenderContext ctx, @NonNull Path node, @NonNull Bounds b) {
-        String content = getStyled(SHAPE);
-        if (content == null || content.trim().isEmpty()) {
+        ImmutableList<PathElement> content = getStyled(SHAPE);
+        if (content == null || content.isEmpty()) {
             content = SVG_SQUARE;
         }
-
-        try {
-            AwtPathBuilder builder = new AwtPathBuilder(new Path2D.Double());
-            SvgPaths.svgStringToBuilder(content, builder);
-            Path2D path = builder.build();
-
-
-            Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
-
-            final Bounds srcBounds = shapeBounds == null || FXRectangles.isEmpty(shapeBounds) ? FXRectangles.getBounds(path) : FXRectangles.getBounds(shapeBounds);
-            Insets shapeSlice = getStyledNonNull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
-
-            FXPathElementsBuilder builder2 = new FXPathElementsBuilder();
-            final NineRegionsScalingBuilder<List<PathElement>> nineRegionsScalingBuilder = new NineRegionsScalingBuilder<>(builder2, srcBounds, shapeSlice, b);
-
-            AwtShapes.buildFromPathIterator(nineRegionsScalingBuilder, path.getPathIterator(null));
-            List<PathElement> elements = nineRegionsScalingBuilder.build();
-            node.getElements().setAll(elements);
-            node.setVisible(true);
-        } catch (ParseException ex) {
-            node.setVisible(false);
-        }
+        Rectangle2D shapeBounds = getStyled(SHAPE_BOUNDS);
+        final Bounds srcBounds = shapeBounds == null || FXRectangles.isEmpty(shapeBounds) ? FXShapes.buildFromPathElements(new BoundingBoxBuilder(), content).build() : FXRectangles.getBounds(shapeBounds);
+        Insets shapeSlice = getStyledNonNull(SHAPE_SLICE).getConvertedValue(srcBounds.getWidth(), srcBounds.getHeight());
+        FXPathElementsBuilder builder2 = new FXPathElementsBuilder();
+        final NineRegionsScalingBuilder<List<PathElement>> nineRegionsScalingBuilder = new NineRegionsScalingBuilder<>(builder2, srcBounds, shapeSlice, b);
+        FXShapes.buildFromPathElements(nineRegionsScalingBuilder, content);
+        List<PathElement> elements = nineRegionsScalingBuilder.build();
+        node.getElements().setAll(elements);
+        node.setVisible(true);
     }
 }

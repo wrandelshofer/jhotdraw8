@@ -74,7 +74,7 @@ public class PolygonOutlineHandle extends AbstractHandle {
     public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         if (FXRectangles.contains(poly2.getBoundsInParent(), x, y, tolerance)) {
             IntersectionResult i = IntersectPathIteratorPoint.intersectPathIteratorPoint(
-                    AwtShapes.pathIteratorFromPointCoords(poly2.getPoints(), true, PathIterator.WIND_EVEN_ODD, null),
+                    AwtShapes.pointCoordsToPathIterator(poly2.getPoints(), true, PathIterator.WIND_EVEN_ODD, null),
                     x, y, tolerance);
             return i.getStatus() == IntersectionStatus.INTERSECTION;
         }

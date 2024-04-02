@@ -38,17 +38,17 @@ public class FXSvgPaths {
 
     }
 
-    public static @NonNull String doubleSvgStringFromPathElements(@NonNull List<PathElement> elements) {
+    public static @NonNull String pathElementsToDoubleSvgString(@NonNull List<PathElement> elements) {
         NumberConverter nb = new NumberConverter();
-        return svgStringFromPathElements(elements, nb);
+        return pathElementsToSvgString(elements, nb);
     }
 
-    public static @NonNull String floatSvgStringFromPathElements(@NonNull List<PathElement> elements) {
+    public static @NonNull String pathElementsToFloatSvgString(@NonNull List<PathElement> elements) {
         NumberConverter nb = new NumberConverter(Float.class);
-        return svgStringFromPathElements(elements, nb);
+        return pathElementsToSvgString(elements, nb);
     }
 
-    public static @NonNull String svgStringFromPathElements(@NonNull List<PathElement> elements, NumberConverter nb) {
+    public static @NonNull String pathElementsToSvgString(@NonNull List<PathElement> elements, NumberConverter nb) {
         StringBuilder buf = new StringBuilder();
         char next = 'Z'; // next instruction
         double x = 0, y = 0;// current point
@@ -237,7 +237,7 @@ public class FXSvgPaths {
      * because {@link PathBuilder} does not understand relative path commands
      * and horizontal and vertical lineto commands.
      */
-    public static @NonNull List<PathElement> pathElementsFromSvgString(@NonNull String str) throws ParseException {
+    public static @NonNull List<PathElement> svgStringToPathElements(@NonNull String str) throws ParseException {
         List<PathElement> builder = new ArrayList<>();
         try {
 
@@ -416,7 +416,7 @@ public class FXSvgPaths {
                     case 'S' -> {
                         // absolute-shorthand-curveto x2 y2 x y
                         cx1 = x - cx2 + x;
-                        cy1 = x - cy2 + y;
+                        cy1 = y - cy2 + y;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x2 coordinate missing for 'S'");
                         cx2 = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y2 coordinate missing for 'S'");
@@ -431,7 +431,7 @@ public class FXSvgPaths {
                     case 's' -> {
                         // relative-shorthand-curveto dx2 dy2 dx dy
                         cx1 = x - cx2;
-                        cy1 = x - cy2;
+                        cy1 = y - cy2;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx2 coordinate missing for 's'");
                         cx2 = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy2 coordinate missing for 's'");
@@ -486,7 +486,7 @@ public class FXSvgPaths {
                     case 'T' -> {
                         // absolute-shorthand-quadto x y
                         cx1 = x - cx1 + x;
-                        cy1 = x - cy1 + y;
+                        cy1 = y - cy1 + y;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "x coordinate missing for 'T'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "y coordinate missing for 'T'");
@@ -499,7 +499,7 @@ public class FXSvgPaths {
                     case 't' -> {
                         // relative-shorthand-quadto dx dy
                         cx1 = x - cx1;
-                        cy1 = x - cy1;
+                        cy1 = y - cy1;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dx coordinate missing for 't'");
                         x = tt.nval;
                         tt.requireNextToken(StreamPosTokenizer.TT_NUMBER, "dy coordinate missing for 't'");
@@ -582,7 +582,7 @@ public class FXSvgPaths {
      */
     public static void reshapePathElements(String pathstr, @NonNull Bounds b, List<PathElement> elems) {
         FXPathElementsBuilder builder = new FXPathElementsBuilder(elems);
-        SvgPaths.svgStringReshapeToBuilder(pathstr, b, builder);
+        SvgPaths.buildFromReshapedSvgString(builder, pathstr, b);
         builder.pathDone();
     }
 
@@ -665,7 +665,7 @@ public class FXSvgPaths {
 
     public static @NonNull List<PathElement> transformPathElements(@NonNull List<PathElement> elements, FillRule fillRule, Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
-        FXShapes.awtShapeFromFXPathElements(elements, fillRule);
+        FXShapes.fxPathELementsToAwtShape(elements, fillRule);
         return result;
     }
 }

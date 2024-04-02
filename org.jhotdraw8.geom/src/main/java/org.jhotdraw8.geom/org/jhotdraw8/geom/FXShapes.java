@@ -65,7 +65,7 @@ public class FXShapes {
     private FXShapes() {
     }
 
-    public static int awtCapFromFX(@Nullable StrokeLineCap cap) {
+    public static int fxLineCapToAwtLineCap(@Nullable StrokeLineCap cap) {
         if (cap == null) {
             return BasicStroke.CAP_BUTT;
         }
@@ -76,7 +76,7 @@ public class FXShapes {
         };
     }
 
-    public static int awtJoinFromFX(@Nullable StrokeLineJoin join) {
+    public static int fxLineJoinToAwtLineJoin(@Nullable StrokeLineJoin join) {
         if (join == null) {
             return BasicStroke.JOIN_BEVEL;
         }
@@ -87,13 +87,22 @@ public class FXShapes {
         };
     }
 
-    public static PathIterator awtPathIteratorFromFXPathElements(List<PathElement> pathElements, int windingRule, AffineTransform tx) {
+    public static PathIterator fxPathToAwtPathIterator(@NonNull Path path, @Nullable AffineTransform tx) {
+        PathBuilder<PathIterator> b = new PathIteratorPathBuilder(path.getFillRule() == FillRule.NON_ZERO ? PathIterator.WIND_NON_ZERO : PathIterator.WIND_EVEN_ODD);
+        if (tx != null && !tx.isIdentity()) {
+            b = new AffineTransformPathBuilder<>(b, tx);
+        }
+        FXSvgPaths.buildFromPathElements(b, path.getElements());
+        return b.build();
+    }
+
+    public static PathIterator fxPathElementsToAwtPathIterator(@NonNull Iterable<PathElement> pathElements, int windingRule, @Nullable AffineTransform tx) {
         final PathIteratorPathBuilder b = new PathIteratorPathBuilder(windingRule);
         FXSvgPaths.buildFromPathElements(b, pathElements);
         return b.build();
     }
 
-    public static @NonNull PathIterator awtPathIteratorFromFxPoint2Ds(@NonNull List<Point2D> points, boolean closed, int windingRule, @Nullable AffineTransform tx) {
+    public static @NonNull PathIterator fxPointsToAwtPathIterator(@NonNull List<Point2D> points, boolean closed, int windingRule, @Nullable AffineTransform tx) {
         return new PathIterator() {
             final float @NonNull [] srcf = new float[2];
             final double @NonNull [] srcd = new double[2];
@@ -169,41 +178,41 @@ public class FXShapes {
      * @param fx A JavaFX shape
      * @return AWT Shape or Rectangle
      */
-    public static Shape awtShapeFromFX(javafx.scene.shape.Shape fx) {
+    public static Shape fxShapeToAwtShape(javafx.scene.shape.Shape fx) {
         switch (fx) {
             case Arc arc -> {
-                return awtShapeFromFXArc(arc);
+                return fxArcToAwtShape(arc);
             }
             case Circle circle -> {
-                return awtShapeFromFXCircle(circle);
+                return fxCircleToAwtShape(circle);
             }
             case CubicCurve cubicCurve -> {
-                return awtShapeFromFXCubicCurve(cubicCurve);
+                return fxCubicCurveToAwtShape(cubicCurve);
             }
             case Ellipse ellipse -> {
-                return awtShapeFromFXEllipse(ellipse);
+                return fxEllipseToAwtShape(ellipse);
             }
             case Line line -> {
-                return awtShapeFromFXLine(line);
+                return fxLineToAwtShape(line);
             }
             case Path path -> {
-                return awtShapeFromFXPath(path);
+                return fxPathToAwtShape(path);
             }
             case Polygon polygon -> {
-                return awtShapeFromFXPolygon(polygon);
+                return fxPolygonToAwtShape(polygon);
             }
             case Polyline polyline -> {
-                return awtShapeFromFXPolyline(polyline);
+                return fxPolylineToAwtShape(polyline);
             }
             case QuadCurve quadCurve -> {
-                return awtShapeFromFXQuadCurve(quadCurve);
+                return fxQuadCurveToAwtShape(quadCurve);
             }
             case Rectangle rectangle -> {
-                return awtShapeFromFXRectangle(rectangle);
+                return fxRectangleToAwtShape(rectangle);
             }
             case SVGPath svgPath -> {
                 try {
-                    return awtShapeFromFXSvgPath((SVGPath) fx);
+                    return fxSvgPathToAwtShape(svgPath);
                 } catch (ParseException e) {
                     LOGGER.warning("Illegal path: " + e.getMessage());
                     Bounds b = fx.getLayoutBounds();
@@ -211,17 +220,21 @@ public class FXShapes {
                 }
             }
             case Text text -> {
-                return awtShapeFromFXText(text);
+                return fxTextToAwtShape(text);
             }
-            case null, default -> {
-                LOGGER.warning("Unsupported shape: " + fx);
+            case null -> {
+                LOGGER.warning("shape is null");
+                return new Rectangle2D.Double(0, 0, 0, 0);
+            }
+            default -> {
+                LOGGER.warning("Unsupported shape type: " + fx);
                 Bounds b = fx.getLayoutBounds();
                 return new Rectangle2D.Double(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
             }
         }
     }
 
-    private static @NonNull Shape awtShapeFromFXArc(@NonNull Arc node) {
+    private static @NonNull Shape fxArcToAwtShape(@NonNull Arc node) {
         double centerX = node.getCenterX();
         double centerY = node.getCenterY();
         double radiusX = node.getRadiusX();
@@ -256,7 +269,7 @@ public class FXShapes {
         return p;
     }
 
-    public static @NonNull Shape awtShapeFromFXBounds(@NonNull Bounds node) {
+    public static @NonNull Shape fxBoundsToAwtShape(@NonNull Bounds node) {
         return new Rectangle2D.Double(
                 node.getMinX(),
                 node.getMinY(),
@@ -265,14 +278,14 @@ public class FXShapes {
         );
     }
 
-    private static @NonNull Shape awtShapeFromFXCircle(@NonNull Circle node) {
+    private static @NonNull Shape fxCircleToAwtShape(@NonNull Circle node) {
         double x = node.getCenterX();
         double y = node.getCenterY();
         double r = node.getRadius();
         return new Ellipse2D.Double(x - r, y - r, r * 2, r * 2);
     }
 
-    private static @NonNull Shape awtShapeFromFXCubicCurve(@NonNull CubicCurve e) {
+    private static @NonNull Shape fxCubicCurveToAwtShape(@NonNull CubicCurve e) {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(e.getStartX(), e.getStartY());
         p.curveTo(e.getControlX1(), e.getControlY1(), e.getControlX2(), e.getControlY2(), e.getEndX(), e.getEndY());
@@ -281,7 +294,7 @@ public class FXShapes {
         return p;
     }
 
-    private static @NonNull Shape awtShapeFromFXEllipse(@NonNull Ellipse node) {
+    private static @NonNull Shape fxEllipseToAwtShape(@NonNull Ellipse node) {
         double x = node.getCenterX();
         double y = node.getCenterY();
         double rx = node.getRadiusX();
@@ -289,16 +302,16 @@ public class FXShapes {
         return new Ellipse2D.Double(x - rx, y - ry, rx * 2, ry * 2);
     }
 
-    private static @NonNull Shape awtShapeFromFXLine(@NonNull Line node) {
+    private static @NonNull Shape fxLineToAwtShape(@NonNull Line node) {
         Line2D.Double p = new Line2D.Double(node.getStartX(), node.getStartY(), node.getEndX(), node.getEndY());
         return p;
     }
 
-    private static @NonNull Shape awtShapeFromFXPath(@NonNull Path node) {
-        return awtShapeFromFXPathElements(node.getElements(), node.getFillRule());
+    private static @NonNull Shape fxPathToAwtShape(@NonNull Path node) {
+        return fxPathELementsToAwtShape(node.getElements(), node.getFillRule());
     }
 
-    public static @NonNull Shape awtShapeFromFXPathElements(@NonNull Iterable<PathElement> pathElements, FillRule fillRule) {
+    public static @NonNull Shape fxPathELementsToAwtShape(@NonNull Iterable<PathElement> pathElements, FillRule fillRule) {
         Path2D.Double p = buildFromPathElements(new AwtPathBuilder(), pathElements).build();
         p.setWindingRule(fillRule == FillRule.NON_ZERO ? PathIterator.WIND_NON_ZERO : PathIterator.WIND_EVEN_ODD);
         return p;
@@ -388,7 +401,7 @@ public class FXShapes {
         return p;
     }
 
-    private static @NonNull Shape awtShapeFromFXPolygon(@NonNull Polygon node) {
+    private static @NonNull Shape fxPolygonToAwtShape(@NonNull Polygon node) {
         Path2D.Double p = new Path2D.Double();
         List<Double> ps = node.getPoints();
         for (int i = 0, n = ps.size(); i < n; i += 2) {
@@ -404,7 +417,7 @@ public class FXShapes {
         return p;
     }
 
-    private static @NonNull Shape awtShapeFromFXPolyline(@NonNull Polyline node) {
+    private static @NonNull Shape fxPolylineToAwtShape(@NonNull Polyline node) {
         Path2D.Double p = new Path2D.Double();
         List<Double> ps = node.getPoints();
         for (int i = 0, n = ps.size(); i < n; i += 2) {
@@ -419,7 +432,7 @@ public class FXShapes {
         return p;
     }
 
-    private static @NonNull Shape awtShapeFromFXQuadCurve(@NonNull QuadCurve node) {
+    private static @NonNull Shape fxQuadCurveToAwtShape(@NonNull QuadCurve node) {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(node.getStartX(), node.getStartY());
         p.quadTo(node.getControlX(), node.getControlY(), node.getEndX(), node.getEndY());
@@ -428,7 +441,7 @@ public class FXShapes {
         return p;
     }
 
-    public static @NonNull Shape awtShapeFromFXRectangle(@NonNull Rectangle node) {
+    public static @NonNull Shape fxRectangleToAwtShape(@NonNull Rectangle node) {
         if (node.getArcHeight() == 0 && node.getArcWidth() == 0) {
             return new Rectangle2D.Double(
                     node.getX(),
@@ -449,15 +462,15 @@ public class FXShapes {
         }
     }
 
-    private static Shape awtShapeFromFXSvgPath(@NonNull SVGPath node) throws ParseException {
+    private static Shape fxSvgPathToAwtShape(@NonNull SVGPath node) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
         SvgPaths.svgStringToBuilder(node.getContent(), b);
         return b.build();
     }
 
-    private static @NonNull Shape awtShapeFromFXText(@NonNull Text node) {
+    private static @NonNull Shape fxTextToAwtShape(@NonNull Text node) {
         Path path = (Path) javafx.scene.shape.Shape.subtract(node, new Rectangle());
-        return awtShapeFromFXPath(path);
+        return fxPathToAwtShape(path);
     }
 
     /**
@@ -466,7 +479,7 @@ public class FXShapes {
      * @param fxT A JavaFX Transform.
      * @return An AWT Transform.
      */
-    public static @Nullable AffineTransform awtTransformFromFX(@Nullable Transform fxT) {
+    public static @Nullable AffineTransform fxTransformToAwtTransform(@Nullable Transform fxT) {
         if (fxT == null) {
             return null;
         }
@@ -514,7 +527,7 @@ public class FXShapes {
      * @return JavaFX Shape
      */
     public static @NonNull Path fxShapeFromAwt(@NonNull Shape shape, Transform fxT) {
-        return fxShapeFromAwt(shape.getPathIterator(awtTransformFromFX(fxT)));
+        return fxShapeFromAwt(shape.getPathIterator(fxTransformToAwtTransform(fxT)));
     }
 
     /**

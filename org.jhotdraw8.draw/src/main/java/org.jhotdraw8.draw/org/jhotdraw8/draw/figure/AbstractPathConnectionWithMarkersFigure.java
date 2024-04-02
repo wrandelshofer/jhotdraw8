@@ -32,24 +32,20 @@ import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
 import org.jhotdraw8.geom.shape.PathMetrics;
 import org.jhotdraw8.geom.shape.SimplePathMetrics;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
 import java.awt.geom.PathIterator;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 
@@ -66,7 +62,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         implements PathIterableFigure {
 
     public static final @NonNull NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(true), BezierPath.of());
-
 
 
     public AbstractPathConnectionWithMarkersFigure() {
@@ -142,15 +137,15 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     public abstract double getMarkerCenterScaleFactor();
 
-    public abstract @Nullable String getMarkerCenterShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerCenterShape();
 
     public abstract double getMarkerEndScaleFactor();
 
-    public abstract @Nullable String getMarkerEndShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerEndShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    public abstract @Nullable String getMarkerStartShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
@@ -240,6 +235,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             set(PATH, path);
         }
     }
+
     @Override
     public void translateInLocal(@NonNull CssPoint2D t) {
         set(START, getNonNull(START).add(t));
@@ -268,6 +264,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             set(PATH, path);
         }
     }
+
     /**
      * This method can be overridden by a subclass to apply styles to the marker
      * node.
@@ -295,21 +292,9 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     protected void updateMarkerNode(@NonNull RenderContext ctx, Group group,
                                     @NonNull Path markerNode,
-                                    @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
-        if (svgString != null) {
-            try {
-                // Note: we must not add individual elements to the ObservableList
-                // of the markerNode, because this fires too many change events.
-                List<PathElement> nodes = new ArrayList<>();
-                FXPathElementsBuilder builder = new FXPathElementsBuilder(nodes);
-                SvgPaths.svgStringToBuilder(svgString, builder);
-                builder.build();
-                if (!nodes.equals(markerNode.getElements())) {
-                    markerNode.getElements().setAll(nodes);
-                }
-            } catch (ParseException e) {
-                Logger.getLogger(AbstractPathConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
-            }
+                                    @NonNull PointAndDerivative pd, @Nullable ImmutableList<PathElement> markerShape, double markerScaleFactor) {
+        if (markerShape != null) {
+            markerNode.getElements().setAll(markerShape.asCollection());
             double angle = Math.PI + pd.getAngle();
             double pdx = pd.x();
             double pdy = pd.y();
@@ -333,8 +318,8 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         final Path startMarkerNode = (Path) g.getChildren().get(1);
         final Path endMarkerNode = (Path) g.getChildren().get(2);
 
-        final String startMarkerStr = getMarkerStartShape();
-        final String endMarkerStr = getMarkerEndShape();
+        final var startMarkerShape = getMarkerStartShape();
+        final var endMarkerShape = getMarkerEndShape();
 
 
         // Cut stroke at start and at end
@@ -351,10 +336,10 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         updateLineNode(ctx, lineNode);
         updateMarkerNode(ctx, g, startMarkerNode,
                 pathMetrics.eval(0),
-                startMarkerStr, getMarkerStartScaleFactor());
+                startMarkerShape, getMarkerStartScaleFactor());
         updateMarkerNode(ctx, g, endMarkerNode,
                 pathMetrics.eval(1).reverse(),
-                endMarkerStr, getMarkerEndScaleFactor());
+                endMarkerShape, getMarkerEndScaleFactor());
         updateStartMarkerNode(ctx, startMarkerNode);
         updateEndMarkerNode(ctx, endMarkerNode);
     }

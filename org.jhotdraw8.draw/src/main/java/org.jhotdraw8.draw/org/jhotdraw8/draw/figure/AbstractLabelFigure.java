@@ -235,7 +235,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
         tn.setText(getText(ctx));
 
-        return FXShapes.awtShapeFromFX(tn).getPathIterator(tx);
+        return FXShapes.fxShapeToAwtShape(tn).getPathIterator(tx);
     }
 
     protected abstract @Nullable String getText(@NonNull RenderContext ctx);

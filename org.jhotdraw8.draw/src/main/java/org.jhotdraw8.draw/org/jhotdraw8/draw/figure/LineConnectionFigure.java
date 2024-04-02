@@ -113,7 +113,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
-        return FXShapes.awtShapeFromFX(new Line(
+        return FXShapes.fxShapeToAwtShape(new Line(
                 getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue(),
                 getNonNull(END_X).getConvertedValue(),

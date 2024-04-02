@@ -176,7 +176,7 @@ public class HitTestExampleMain extends Application {
             }
         }
 
-        java.awt.Shape awtPath = FXShapes.awtShapeFromFX(path);
+        java.awt.Shape awtPath = FXShapes.fxShapeToAwtShape(path);
         double tolerance = epsilon.get() + width.get() * 0.5;
 
         IntStream.range(0, 100_000).parallel().forEach(i -> {

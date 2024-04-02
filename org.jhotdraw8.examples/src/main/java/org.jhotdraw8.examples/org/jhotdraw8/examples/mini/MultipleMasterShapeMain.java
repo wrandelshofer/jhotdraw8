@@ -41,6 +41,6 @@ public class MultipleMasterShapeMain extends Application {
         Text tx = new Text("a");
         tx.setFont(Font.font("Helvetica Neue Bold", 144f));
         Path path = (Path) Shape.subtract(tx, new Rectangle());
-        System.out.println(FXSvgPaths.doubleSvgStringFromPathElements(path.getElements()));
+        System.out.println(FXSvgPaths.pathElementsToDoubleSvgString(path.getElements()));
     }
 }

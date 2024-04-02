@@ -65,7 +65,7 @@ public class RectangleFigure extends AbstractLeafFigure
         applyFillableFigureProperties(ctx, shape);
         applyStrokableFigureProperties(ctx, shape);
 
-        return FXShapes.awtShapeFromFX(shape).getPathIterator(tx);
+        return FXShapes.fxShapeToAwtShape(shape).getPathIterator(tx);
     }
 
 

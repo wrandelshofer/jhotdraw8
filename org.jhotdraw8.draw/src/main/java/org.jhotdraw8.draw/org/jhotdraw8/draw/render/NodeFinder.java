@@ -53,7 +53,7 @@ public class NodeFinder {
         // the clip with tolerance.
         final Node nodeClip = node.getClip();
         if (nodeClip instanceof Shape) {
-            final java.awt.Shape shape = FXShapes.awtShapeFromFX((Shape) nodeClip);
+            final java.awt.Shape shape = FXShapes.fxShapeToAwtShape((Shape) nodeClip);
             if (!shape.intersects(pointInLocal.getX() - toleranceInLocal,
                     pointInLocal.getY() - toleranceInLocal, toleranceInLocal * 2, toleranceInLocal * 2)) {
                 return null;
@@ -84,7 +84,7 @@ public class NodeFinder {
                         case BEVEL -> BasicStroke.JOIN_BEVEL;
                         case ROUND -> BasicStroke.JOIN_ROUND;
                     };
-                    final java.awt.Shape awtShape = FXShapes.awtShapeFromFX(shape);
+                    final java.awt.Shape awtShape = FXShapes.fxShapeToAwtShape(shape);
                     return new BasicStroke(2f * (float) (shape.getStrokeWidth() * widthFactor + toleranceInLocal),
                             cap, join, (float) shape.getStrokeMiterLimit()
                     ).createStrokedShape(awtShape)

@@ -225,7 +225,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @Override
     public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
-        return path == null ? AwtShapes.emptyPathIterator() : AwtShapes.pathIteratorFromPointCoords(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
+        return path == null ? AwtShapes.emptyPathIterator() : AwtShapes.pointCoordsToPathIterator(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
     public abstract double getStrokeCutStart(@NonNull RenderContext ctx);

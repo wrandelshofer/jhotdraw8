@@ -79,7 +79,7 @@ public class FXTransforms {
     }
 
 
-    static @NonNull Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
+    public static @NonNull Transform createReshapeTransform(double sx, double sy, double sw, double sh, double dx, double dy, double dw, double dh) {
         double scaleX = dw / sw;
         double scaleY = dh / sh;
 
