@@ -142,7 +142,8 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     public BezierPath split(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
         ImmutableList<IntersectionPoint> intersections = isect.intersections();
-        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
+        //noinspection RedundantSuppression
+        @SuppressWarnings({"unchecked", "rawtypes"}) VectorList<BezierNode>[] result = new VectorList[]{this};
         if (intersections.size() == 1) {
             int segment = (int) intersections.getFirst().argumentA();
             final BezierNode middle;
@@ -202,7 +203,8 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     public BezierPath join(int segment, double tolerance) {
-        @SuppressWarnings("unchecked") VectorList<BezierNode>[] result = new VectorList[]{this};
+        //noinspection RedundantSuppression
+        @SuppressWarnings({"unchecked", "rawtypes"}) VectorList<BezierNode>[] result = new VectorList[]{this};
 
         final int prevSegment = (segment - 1 + size()) % size();
         final int nextSegment = (segment + 1) % size();
@@ -278,8 +280,8 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return EMPTY;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings("unchecked")
     public @NonNull BezierPath empty() {
         return isEmpty() ? this : new BezierPath(windingRule);
     }
