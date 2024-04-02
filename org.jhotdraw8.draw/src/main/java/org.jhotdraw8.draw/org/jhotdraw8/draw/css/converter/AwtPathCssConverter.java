@@ -42,7 +42,7 @@ public class AwtPathCssConverter extends AbstractCssConverter<Path2D.Double> {
 
         try {
             final AwtPathBuilder builder = new AwtPathBuilder();
-            SvgPaths.svgStringToBuilder(svgPathString, builder);
+            SvgPaths.buildSvgString(svgPathString, builder);
             return builder.build();
         } catch (final ParseException ex) {
             final Path2D.Double p = new Path2D.Double();

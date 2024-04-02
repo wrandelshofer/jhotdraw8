@@ -92,13 +92,16 @@ public class FXShapes {
         if (tx != null && !tx.isIdentity()) {
             b = new AffineTransformPathBuilder<>(b, tx);
         }
-        FXSvgPaths.buildFromPathElements(b, path.getElements());
+        FXSvgPaths.buildPathElements(b, path.getElements());
         return b.build();
     }
 
     public static PathIterator fxPathElementsToAwtPathIterator(@NonNull Iterable<PathElement> pathElements, int windingRule, @Nullable AffineTransform tx) {
-        final PathIteratorPathBuilder b = new PathIteratorPathBuilder(windingRule);
-        FXSvgPaths.buildFromPathElements(b, pathElements);
+        PathBuilder<PathIterator> b = new PathIteratorPathBuilder(windingRule);
+        if (tx != null && !tx.isIdentity()) {
+            b = new AffineTransformPathBuilder<>(b, tx);
+        }
+        FXSvgPaths.buildPathElements(b, pathElements);
         return b.build();
     }
 
@@ -464,7 +467,7 @@ public class FXShapes {
 
     private static Shape fxSvgPathToAwtShape(@NonNull SVGPath node) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
-        SvgPaths.svgStringToBuilder(node.getContent(), b);
+        SvgPaths.buildSvgString(node.getContent(), b);
         return b.build();
     }
 

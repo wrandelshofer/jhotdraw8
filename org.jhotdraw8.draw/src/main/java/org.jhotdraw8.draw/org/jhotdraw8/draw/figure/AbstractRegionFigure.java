@@ -130,7 +130,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         double height = getStyledNonNull(HEIGHT).getConvertedValue();
         double x = getStyledNonNull(X).getConvertedValue();
         double y = getStyledNonNull(Y).getConvertedValue();
-        Bounds shapeBounds = FXSvgPaths.buildFromPathElements(new BoundingBoxBuilder(), shape).build();
+        Bounds shapeBounds = FXSvgPaths.buildPathElements(new BoundingBoxBuilder(), shape).build();
         final Bounds b;
         if (getStyledNonNull(SHAPE_PRESERVE_RATIO_KEY)) {
             double pathRatio = shapeBounds.getHeight() / shapeBounds.getWidth();

@@ -56,7 +56,7 @@ public class PathMetricsXmlConverter implements Converter<PathMetrics> {
             throw new ParseException(e.getMessage(), 0);
         }
         PathMetricsBuilder builder = new PathMetricsBuilder();
-        SvgPaths.svgStringToBuilder(input, builder);
+        SvgPaths.buildSvgString(input, builder);
         p = builder.build();
 
 

@@ -46,7 +46,7 @@ public class SvgPaths {
      * @return the path builder
      * @throws ParseException if the String is not a valid path
      */
-    public static <T> @NonNull PathBuilder<T> svgStringToBuilder(@NonNull String str, @NonNull PathBuilder<T> builder) throws ParseException {
+    public static <T> @NonNull PathBuilder<T> buildSvgString(@NonNull String str, @NonNull PathBuilder<T> builder) throws ParseException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));
         try {
 
@@ -632,7 +632,7 @@ public class SvgPaths {
      */
     public static Path2D.@NonNull Double svgStringToAwtShape(@NonNull String str) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
-        svgStringToBuilder(str, b);
+        buildSvgString(str, b);
         return b.build();
     }
 
@@ -646,7 +646,7 @@ public class SvgPaths {
      * @param pathstr an SVGPath String
      * @param b       the desired bounds
      */
-    public static void buildFromReshapedSvgString(@NonNull PathBuilder<?> builder, @Nullable String pathstr, @NonNull Bounds b) {
+    public static void buildReshapedSvgString(@NonNull PathBuilder<?> builder, @Nullable String pathstr, @NonNull Bounds b) {
         if (pathstr != null) {
             Shape shape = null;
             try {

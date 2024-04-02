@@ -56,7 +56,7 @@ public class BezierPathXmlConverter implements Converter<BezierPath> {
             throw new ParseException(e.getMessage(), 0);
         }
         BezierPathBuilder builder = new BezierPathBuilder();
-        SvgPaths.svgStringToBuilder(input, builder);
+        SvgPaths.buildSvgString(input, builder);
         BezierPath path = builder.build();
         return path;
     }
