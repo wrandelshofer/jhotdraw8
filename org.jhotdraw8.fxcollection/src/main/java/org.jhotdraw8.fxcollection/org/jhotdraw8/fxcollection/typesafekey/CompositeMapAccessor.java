@@ -7,6 +7,7 @@ package org.jhotdraw8.fxcollection.typesafekey;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
+import java.io.Serial;
 import java.util.Map;
 
 /**
@@ -17,6 +18,10 @@ import java.util.Map;
  */
 public interface CompositeMapAccessor<T> extends MapAccessor<T> {
 
+    /**
+     * Serial version UID:
+     */
+    @Serial
     long serialVersionUID = 1L;
 
     @Override
@@ -29,7 +34,10 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
         return true;
     }
 
-
+    /**
+     * Gets all {@link MapAccessor}s that this accessor is composing.
+     * @return the sub-accessors
+     */
     @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors();
 
 }
