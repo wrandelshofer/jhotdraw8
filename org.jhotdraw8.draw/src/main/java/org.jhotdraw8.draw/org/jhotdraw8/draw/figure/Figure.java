@@ -182,7 +182,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (Modifier.isStatic(f.getModifiers())
-                        && MapAccessor.class.isAssignableFrom(f.getType())) {
+                    && MapAccessor.class.isAssignableFrom(f.getType())) {
                     MapAccessor<?> k = (MapAccessor<?>) f.get(null);
                     if (k == null) {
                         throw new RuntimeException(clazz + " has null value for key: " + f);
@@ -266,14 +266,14 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
                     double grow = 0.0;
                     if (ff.get(StrokableFigure.STROKE) != null) {
                         switch (ff.getNonNull(StrokableFigure.STROKE_TYPE)) {
-                        case CENTERED:
-                            grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue() * 0.5;
-                            break;
-                        case INSIDE:
-                            break;
-                        case OUTSIDE:
-                            grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue();
-                            break;
+                            case CENTERED:
+                                grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue() * 0.5;
+                                break;
+                            case INSIDE:
+                                break;
+                            case OUTSIDE:
+                                grow += ff.getNonNull(StrokableFigure.STROKE_WIDTH).getConvertedValue();
+                                break;
                         }
                     }
                     if (ff.get(CompositableFigure.EFFECT) != null) {
@@ -385,7 +385,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param ctx the renderer which will use the node
      * @return the newly created node
      */
-    @NonNull Node createNode(@NonNull RenderContext ctx);
+    @NonNull
+    Node createNode(@NonNull RenderContext ctx);
 
     /**
      * This method is invoked on a figure by
@@ -642,9 +643,11 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of dependent figures
      */
-    @NonNull Set<Figure> getLayoutObservers();
+    @NonNull
+    Set<Figure> getLayoutObservers();
 
-    @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers();
+    @NonNull
+    ReadOnlySet<Figure> getReadOnlyLayoutObservers();
 
     /**
      * Returns the ancestor Drawing.
@@ -1060,7 +1063,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @return the parent property, with {@code getBean()} returning this
      * figure, and {@code getName()} returning {@code PARENT_PROPERTY}.
      */
-    @NonNull ObjectProperty<Figure> parentProperty();
+    @NonNull
+    ObjectProperty<Figure> parentProperty();
 
     /**
      * Removes a child from the figure.
@@ -1069,6 +1073,16 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     default void removeChild(Figure child) {
         getChildren().remove(child);
+    }
+
+    /**
+     * Removes this figure from its parent if it has a parent.
+     */
+    default void removeFromParent() {
+        Figure parent = getParent();
+        if (parent != null) {
+            parent.getChildren().remove(this);
+        }
     }
 
     /**

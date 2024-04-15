@@ -28,8 +28,8 @@ import java.util.Objects;
  */
 public class CssSize {
 
-    public static final @Nullable CssSize ZERO = new CssSize(0);
-    public static final CssSize ONE = new CssSize(1);
+    public static final @NonNull CssSize ZERO = new CssSize(0);
+    public static final @NonNull CssSize ONE = new CssSize(1);
     private final double value;
 
     CssSize(double value) {

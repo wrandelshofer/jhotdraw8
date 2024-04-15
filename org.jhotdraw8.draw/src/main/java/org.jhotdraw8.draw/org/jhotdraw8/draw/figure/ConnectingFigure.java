@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.draw.figure;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.connector.Connector;
 
 /**
@@ -21,7 +22,7 @@ public interface ConnectingFigure extends Figure {
      * @param connector The connector that we want to use
      * @return true if the connection is supported
      */
-    default boolean canConnect(Figure figure, Connector connector) {
+    default boolean canConnect(@NonNull Figure figure, @NonNull Connector connector) {
         return true;
     }
 
