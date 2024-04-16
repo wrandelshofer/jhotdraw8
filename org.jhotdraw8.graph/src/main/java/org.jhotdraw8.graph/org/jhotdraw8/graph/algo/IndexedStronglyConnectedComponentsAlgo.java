@@ -57,7 +57,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
         // algorithm has been taken from
         // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm
 
-        final List<IntList> sccs = new ArrayList<>(vertexCount);
+        final @NonNull List<IntList> sccs = new ArrayList<>(vertexCount);
         final int[] lows = new int[vertexCount];
         Arrays.fill(lows, -1);
 

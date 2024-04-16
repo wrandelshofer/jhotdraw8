@@ -49,13 +49,13 @@ public class CalcCssFunction<T> extends AbstractMathCssFunction<T> {
     /**
      * Function name.
      */
-    public static final String NAME = "calc";
+    public static final @NonNull String NAME = "calc";
 
     public CalcCssFunction() {
         this(NAME);
     }
 
-    public CalcCssFunction(String name) {
+    public CalcCssFunction(@NonNull String name) {
         super(name);
     }
 

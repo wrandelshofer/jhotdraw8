@@ -45,7 +45,7 @@ import java.util.function.Consumer;
  */
 public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGradient> {
     private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
-    public static final String LINEAR_GRADIENT_FUNCTION = "linear-gradient";
+    public static final @NonNull String LINEAR_GRADIENT_FUNCTION = "linear-gradient";
 
     public LinearGradientCssConverter(boolean nullable) {
         super(nullable);

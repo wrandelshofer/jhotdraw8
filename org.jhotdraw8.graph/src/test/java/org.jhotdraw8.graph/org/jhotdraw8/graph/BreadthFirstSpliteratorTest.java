@@ -164,7 +164,7 @@ public class BreadthFirstSpliteratorTest {
 
 
         Queue<Spliterator<Integer>> splits = new ArrayDeque<>();
-        final BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
+        final @NonNull BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
         List<Integer> result = new ArrayList<>();
         instance.tryAdvance(result::add);// we can never split at start vertex, because it is the only vertex in the que
         result.addAll(StreamSupport.stream(instance, true).collect(Collectors.toList()));

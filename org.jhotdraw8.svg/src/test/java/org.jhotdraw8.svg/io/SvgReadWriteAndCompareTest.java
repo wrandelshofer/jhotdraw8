@@ -74,7 +74,7 @@ public class SvgReadWriteAndCompareTest {
      * <p>
      * <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
      */
-    private static final String W3C_SVG_12_TINY_TEST_SUITE = "data/W3C_SVG_12_TinyTestSuite";
+    private static final @NonNull String W3C_SVG_12_TINY_TEST_SUITE = "data/W3C_SVG_12_TinyTestSuite";
     private static final boolean INTERACTIVE = true;
     private static final long INTERACTIVE_TIMEOUT_SECONDS = 60;
 

@@ -25,7 +25,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     private final @NonNull MapAccessor<Double> xKey;
     private final @NonNull MapAccessor<Double> yKey;
-    private final Converter<Point2D> converter = new Scale2DCssConverter();
+    private final @NonNull Converter<Point2D> converter = new Scale2DCssConverter();
 
     /**
      * Creates a new instance with the specified name.

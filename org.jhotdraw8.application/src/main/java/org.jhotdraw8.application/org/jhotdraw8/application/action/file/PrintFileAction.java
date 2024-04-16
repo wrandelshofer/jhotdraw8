@@ -26,7 +26,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
  */
 public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    public static final String ID = "file.print";
+    public static final @NonNull String ID = "file.print";
 
 
     /**

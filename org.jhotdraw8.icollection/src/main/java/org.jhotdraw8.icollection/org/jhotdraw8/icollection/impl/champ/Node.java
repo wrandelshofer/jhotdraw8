@@ -61,7 +61,7 @@ public abstract class Node<D> {
      * We can not use {@code null}, because we allow storing null-data in the
      * trie.
      */
-    public static final Object NO_DATA = new Object();
+    public static final @NonNull Object NO_DATA = new Object();
     static final int HASH_CODE_LENGTH = 32;
     /**
      * Bit partition size in the range [1,5].

@@ -52,7 +52,7 @@ import java.util.function.Consumer;
  * @param <T> the element type of the DOM
  */
 public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
-    public static final String NAME = "ladder";
+    public static final @NonNull String NAME = "ladder";
 
     public LadderCssFunction() {
         this(NAME);

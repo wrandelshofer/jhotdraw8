@@ -65,18 +65,18 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         }
     };
     @SuppressWarnings("this-escape")
-    private final NonNullObjectProperty<HandleType> handleType = new NonNullObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final @NonNull NonNullObjectProperty<HandleType> handleType = new NonNullObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
     @SuppressWarnings("this-escape")
-    private final ObjectProperty<HandleType> leadHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final @NonNull ObjectProperty<HandleType> leadHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
     @SuppressWarnings("this-escape")
-    private final ObjectProperty<HandleType> anchorHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final @NonNull ObjectProperty<HandleType> anchorHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
     @SuppressWarnings("this-escape")
-    private final NonNullObjectProperty<HandleType> multiHandleType = new NonNullObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+    private final @NonNull NonNullObjectProperty<HandleType> multiHandleType = new NonNullObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
     @SuppressWarnings("this-escape")
-    private final SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
-    private final ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+    private final @NonNull SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
+    private final @NonNull ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
         if (newValue) {
             setActiveDrawingView((DrawingView) ((ReadOnlyProperty<?>) observable).getBean());
         }
@@ -92,9 +92,9 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             break;
         }
     };
-    private final ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
-    private final ObjectProperty<Tool> activeTool = new SimpleObjectProperty<>(this, ACTIVE_TOOL_PROPERTY);
-    private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
+    private final @NonNull ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
+    private final @NonNull ObjectProperty<Tool> activeTool = new SimpleObjectProperty<>(this, ACTIVE_TOOL_PROPERTY);
+    private final @NonNull ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
 
     {
         ChangeListener<Object> recreateHandles = (observable, oldValue, newValue) -> recreateHandles();

@@ -21,7 +21,7 @@ public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
 
     private static final long serialVersionUID = 1L;
 
-    private final Converter<CssSize> converter = new SizeCssConverter(true);
+    private final @NonNull Converter<CssSize> converter = new SizeCssConverter(true);
 
 
     /**

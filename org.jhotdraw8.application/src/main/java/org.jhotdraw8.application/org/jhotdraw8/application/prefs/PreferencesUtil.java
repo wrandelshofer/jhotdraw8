@@ -28,8 +28,8 @@ import java.util.prefs.Preferences;
  * @author Werner Randelshofer
  */
 public class PreferencesUtil {
-    private static final ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();
-    private static final ConcurrentHashMap<Package, Preferences> userNodes = new ConcurrentHashMap<>();
+    private static final @NonNull ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();
+    private static final @NonNull ConcurrentHashMap<Package, Preferences> userNodes = new ConcurrentHashMap<>();
 
     /**
      * Gets the system node for the package of the class if permitted, gets a

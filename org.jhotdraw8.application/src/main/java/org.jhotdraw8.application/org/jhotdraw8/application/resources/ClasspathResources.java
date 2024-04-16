@@ -22,14 +22,14 @@ import java.util.logging.Logger;
 
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class ClasspathResources extends ResourceBundle implements Serializable, Resources {
-    private static final Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
+    private static final @NonNull Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * The base class
      */
-    private final Class<?> baseClass = getClass();
+    private final @NonNull Class<?> baseClass = getClass();
     /**
      * The base name of the resource bundle.
      */

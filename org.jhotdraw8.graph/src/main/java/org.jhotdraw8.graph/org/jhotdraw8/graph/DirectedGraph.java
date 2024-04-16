@@ -178,7 +178,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return breadth first search
      */
     default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final boolean dfs) {
-        final Set<V> visited = new HashSet<>();
+        final @NonNull Set<V> visited = new HashSet<>();
         return searchNextVertices(start, visited::add, dfs);
     }
 

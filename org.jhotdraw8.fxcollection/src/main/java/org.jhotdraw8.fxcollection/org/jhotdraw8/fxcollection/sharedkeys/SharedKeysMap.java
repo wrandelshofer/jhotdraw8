@@ -31,7 +31,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
-    private static final Object NULL_VALUE = new Object();
+    private static final @NonNull Object NULL_VALUE = new Object();
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
     private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
     private final @NonNull Map<K, Integer> keyMap;

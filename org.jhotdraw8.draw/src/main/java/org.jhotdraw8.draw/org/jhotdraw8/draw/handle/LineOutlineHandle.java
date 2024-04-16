@@ -28,9 +28,9 @@ import org.jhotdraw8.geom.FXTransforms;
  * @author Werner Randelshofer
  */
 public class LineOutlineHandle extends AbstractHandle {
-    private final Group node;
-    private final Polyline polyline2;
-    private final Polyline polyline1;
+    private final @NonNull Group node;
+    private final @NonNull Polyline polyline2;
+    private final @NonNull Polyline polyline1;
     private final double[] points;
 
     public LineOutlineHandle(Figure figure) {

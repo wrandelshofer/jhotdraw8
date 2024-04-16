@@ -36,7 +36,7 @@ public class SvgGFigure extends AbstractCompositeFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "g";
+    public static final @NonNull String TYPE_SELECTOR = "g";
 
     @Override
     public @NonNull Node createNode(@NonNull RenderContext drawingView) {

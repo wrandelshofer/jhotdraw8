@@ -19,7 +19,7 @@ import org.jhotdraw8.application.action.AbstractActivityAction;
  */
 public abstract class AbstractFindAction<A extends Activity> extends AbstractActivityAction<A> {
 
-    public static final String ID = "edit.find";
+    public static final @NonNull String ID = "edit.find";
 
     /**
      * Creates a new instance.

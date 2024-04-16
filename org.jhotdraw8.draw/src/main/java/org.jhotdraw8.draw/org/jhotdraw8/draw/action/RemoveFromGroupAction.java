@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class RemoveFromGroupAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.removeFromGroup";
+    public static final @NonNull String ID = "edit.removeFromGroup";
 
     /**
      * Creates a new instance.
@@ -43,7 +43,7 @@ public class RemoveFromGroupAction extends AbstractDrawingViewAction {
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
-        final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
+        final @NonNull List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
         removeFromGroup(drawingView, figures);
 
     }

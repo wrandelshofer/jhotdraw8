@@ -24,7 +24,7 @@ import java.util.Set;
 
 public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.distributeHorizontally";
+    public static final @NonNull String ID = "edit.distributeHorizontally";
 
     /**
      * Creates a new instance.

@@ -416,7 +416,7 @@ public class BezierArcLengthExampleMain extends Application {
             }
         }
 
-        private final List<Segment> segments = new ArrayList<>();
+        private final @NonNull List<Segment> segments = new ArrayList<>();
         private final double length;
 
         public PathArcLengthParameterization(PathIterator it) {

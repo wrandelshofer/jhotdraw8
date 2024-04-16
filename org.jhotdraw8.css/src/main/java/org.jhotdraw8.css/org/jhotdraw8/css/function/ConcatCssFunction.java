@@ -30,13 +30,13 @@ public class ConcatCssFunction<T> extends AbstractStringCssFunction<T> {
     /**
      * Function name.
      */
-    public static final String NAME = "concat";
+    public static final @NonNull String NAME = "concat";
 
     public ConcatCssFunction() {
         super(NAME);
     }
 
-    public ConcatCssFunction(String name) {
+    public ConcatCssFunction(@NonNull String name) {
         super(name);
     }
 

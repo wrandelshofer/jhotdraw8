@@ -42,20 +42,20 @@ import java.util.function.Consumer;
  */
 public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle> {
 
-    public static final String INSIDE = "inside";
-    public static final String OUTSIDE = "outside";
-    public static final String CENTERED = "centered";
-    public static final String BUTT = "butt";
-    public static final String MITER = "miter";
-    public static final String ROUND = "round";
-    public static final String BEVEL = "bevel";
-    public static final String SQUARE = "square";
-    public static final String TYPE = "type";
-    public static final String LINEJOIN = "linejoin";
-    public static final String LINECAP = "linecap";
-    public static final String DASHOFFSET = "dashoffset";
-    public static final String DASHARRAY = "dasharray";
-    public static final String MITERLIMIT = "miterlimit";
+    public static final @NonNull String INSIDE = "inside";
+    public static final @NonNull String OUTSIDE = "outside";
+    public static final @NonNull String CENTERED = "centered";
+    public static final @NonNull String BUTT = "butt";
+    public static final @NonNull String MITER = "miter";
+    public static final @NonNull String ROUND = "round";
+    public static final @NonNull String BEVEL = "bevel";
+    public static final @NonNull String SQUARE = "square";
+    public static final @NonNull String TYPE = "type";
+    public static final @NonNull String LINEJOIN = "linejoin";
+    public static final @NonNull String LINECAP = "linecap";
+    public static final @NonNull String DASHOFFSET = "dashoffset";
+    public static final @NonNull String DASHARRAY = "dasharray";
+    public static final @NonNull String MITERLIMIT = "miterlimit";
     private final boolean printAllValues = true;
 
     public StrokeStyleCssConverter(boolean nullable) {

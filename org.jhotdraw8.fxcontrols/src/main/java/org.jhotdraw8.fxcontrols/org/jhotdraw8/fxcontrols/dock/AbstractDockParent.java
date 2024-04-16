@@ -29,12 +29,12 @@ public abstract class AbstractDockParent
         extends Region
         implements DockParent {
     @SuppressWarnings("this-escape")
-    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
+    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
     @SuppressWarnings("this-escape")
-    protected final BooleanProperty editable = new SimpleBooleanProperty(this, EDITABLE_PROPERTY, true);
+    protected final @NonNull BooleanProperty editable = new SimpleBooleanProperty(this, EDITABLE_PROPERTY, true);
     @SuppressWarnings("this-escape")
-    protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
-    protected final ObservableList<DockChild> dockChildren = FXCollections.observableArrayList();
+    protected final @NonNull ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
+    protected final @NonNull ObservableList<DockChild> dockChildren = FXCollections.observableArrayList();
 
     public AbstractDockParent() {
         dockChildren.addListener((ListChangeListener.Change<? extends DockChild> change) -> {

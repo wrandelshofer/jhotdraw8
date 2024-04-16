@@ -52,7 +52,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
         this.heightKey = heightKey;
     }
 
-    private final Converter<CssRectangle2D> converter = new Rectangle2DCssConverter(false);
+    private final @NonNull Converter<CssRectangle2D> converter = new Rectangle2DCssConverter(false);
 
     @Override
     public @NonNull Converter<CssRectangle2D> getCssConverter() {

@@ -23,16 +23,16 @@ public class CssPrettyPrinter implements Appendable {
     private final @NonNull Deque<Syntax> stack = new ArrayDeque<>();
     int indentation = 0;
     private String indenter = "\t";
-    private final Appendable w;
+    private final @NonNull Appendable w;
     private boolean mustIndent = false;
 
-    public CssPrettyPrinter(Appendable w) {
+    public CssPrettyPrinter(@NonNull Appendable w) {
         this.w = w;
         stack.push(Syntax.STYLESHEET);
     }
 
     @Override
-    public @NonNull CssPrettyPrinter append(CharSequence str) {
+    public @NonNull CssPrettyPrinter append(@NonNull CharSequence str) {
         try {
             print(str);
         } catch (IOException e) {

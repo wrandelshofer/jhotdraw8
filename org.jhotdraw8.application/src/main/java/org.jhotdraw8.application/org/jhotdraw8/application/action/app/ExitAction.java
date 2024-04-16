@@ -43,7 +43,7 @@ import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_
  */
 public class ExitAction extends AbstractApplicationAction {
 
-    public static final String ID = "application.exit";
+    public static final @NonNull String ID = "application.exit";
     private Node oldFocusOwner;
     private @Nullable FileBasedActivity unsavedView;
 

@@ -54,10 +54,10 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(
             new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    private static final Path REGION_SHAPE_COLINEAR = new Path();
-    private static final Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
-    private static final Path REGION_SHAPE_EQUIDISTANT = new Path();
-    private static final Circle REGION_SHAPE_SMOOTH = new Circle(0, 0, 3);
+    private static final @NonNull Path REGION_SHAPE_COLINEAR = new Path();
+    private static final @NonNull Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
+    private static final @NonNull Path REGION_SHAPE_EQUIDISTANT = new Path();
+    private static final @NonNull Circle REGION_SHAPE_SMOOTH = new Circle(0, 0, 3);
 
     static {
         final ObservableList<PathElement> elements = REGION_SHAPE_COLINEAR.getElements();

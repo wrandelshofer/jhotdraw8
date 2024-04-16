@@ -55,9 +55,9 @@ public class BezierNodeEditHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
-    private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
-    private static final Path REGION_SHAPE_QUADRATIC = new Path();
+    private static final @NonNull Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
+    private static final @NonNull Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
+    private static final @NonNull Path REGION_SHAPE_QUADRATIC = new Path();
 
 
     static {

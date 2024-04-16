@@ -12,8 +12,8 @@ import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 public class VBoxTrack extends AbstractDockParent implements Track {
-    private final ScrollPane scrollPane = new ScrollPane();
-    private final VBox vbox = new VBox();
+    private final @NonNull ScrollPane scrollPane = new ScrollPane();
+    private final @NonNull VBox vbox = new VBox();
 
     @SuppressWarnings("this-escape")
     public VBoxTrack() {

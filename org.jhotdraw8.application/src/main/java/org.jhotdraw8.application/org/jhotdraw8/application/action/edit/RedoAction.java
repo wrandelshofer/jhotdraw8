@@ -21,9 +21,9 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
  */
 public class RedoAction extends AbstractActivityAction<Activity> {
 
-    public static final String ID = "edit.redo";
-    private final Resources labels = ApplicationLabels.getResources();
-    private final FXUndoManager manager;
+    public static final @NonNull String ID = "edit.redo";
+    private final @NonNull Resources labels = ApplicationLabels.getResources();
+    private final @NonNull FXUndoManager manager;
 
     /**
      * Creates a new instance.

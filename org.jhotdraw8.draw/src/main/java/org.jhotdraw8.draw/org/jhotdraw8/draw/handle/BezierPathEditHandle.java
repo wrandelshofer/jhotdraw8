@@ -27,9 +27,9 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.CompoundEdit;
 
 public class BezierPathEditHandle extends BezierPathOutlineHandle {
-    private final MapAccessor<BezierPath> pointKey;
+    private final @NonNull MapAccessor<BezierPath> pointKey;
 
-    public BezierPathEditHandle(Figure figure, MapAccessor<BezierPath> pointKey) {
+    public BezierPathEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pointKey) {
         super(figure, pointKey, true);
         this.pointKey = pointKey;
     }

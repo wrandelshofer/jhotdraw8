@@ -46,7 +46,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     protected final @NonNull MapAccessor<Connector> connectorKey;
-    protected final NonNullMapAccessor<CssPoint2D> pointKey;
+    protected final @NonNull NonNullMapAccessor<CssPoint2D> pointKey;
     protected final @NonNull MapAccessor<Figure> targetKey;
     protected @Nullable Point2D connectorLocation;
     protected Point2D pickLocation;

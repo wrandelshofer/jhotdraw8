@@ -17,8 +17,8 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
-    private final List<PointAndDerivative> startPoints = new ArrayList<>();
-    private final List<PointAndDerivative> endPoints = new ArrayList<>();
+    private final @NonNull List<PointAndDerivative> startPoints = new ArrayList<>();
+    private final @NonNull List<PointAndDerivative> endPoints = new ArrayList<>();
 
     private double startX;
     private double startY;

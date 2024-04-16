@@ -1,5 +1,6 @@
 package org.jhotdraw8.icollection;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.ReadOnlyMapFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 
@@ -14,7 +15,7 @@ import java.util.Set;
  * The test data.
  */
 public final class MapData {
-    private final String name;
+    private final @NonNull String name;
     public final ReadOnlyMap<Key, Value> a;
     public final ReadOnlyMap<Key, Value> aWithDifferentValues;
     public final ReadOnlyMap<Key, Value> c;

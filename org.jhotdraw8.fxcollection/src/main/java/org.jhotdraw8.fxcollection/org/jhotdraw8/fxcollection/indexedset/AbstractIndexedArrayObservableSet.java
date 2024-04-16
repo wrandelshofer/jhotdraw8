@@ -592,7 +592,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             this.sublist = sublist;
         }
 
-        private final List<E> sublist;
+        private final @NonNull List<E> sublist;
 
         @Override
         public int size() {

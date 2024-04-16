@@ -43,13 +43,13 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         TRANSFORM_CHANGED,
     }
 
-    private final Figure figure;
+    private final @NonNull Figure figure;
     private final Key<?> key;
-    private final Object oldValue;
-    private final Object newValue;
+    private final @NonNull Object oldValue;
+    private final @NonNull Object newValue;
 
-    private final Figure parent;
-    private final Drawing drawing;
+    private final @NonNull Figure parent;
+    private final @NonNull Drawing drawing;
     private final int index;
     private final DrawingModelEvent.EventType eventType;
 

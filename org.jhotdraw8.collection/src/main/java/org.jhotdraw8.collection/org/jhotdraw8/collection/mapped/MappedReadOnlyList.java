@@ -52,7 +52,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
     @Override
     public @NonNull Iterator<E> iterator() {
         return new Iterator<>() {
-            private final Iterator<F> i = backingList.iterator();
+            private final @NonNull Iterator<F> i = backingList.iterator();
 
             @Override
             public boolean hasNext() {

@@ -49,7 +49,7 @@ public class CssInsetsStyleableMapAccessor
         this.leftKey = leftKey;
     }
 
-    private final Converter<CssInsets> converter = new InsetsCssConverter(false);
+    private final @NonNull Converter<CssInsets> converter = new InsetsCssConverter(false);
 
     @Override
     public @NonNull Converter<CssInsets> getCssConverter() {

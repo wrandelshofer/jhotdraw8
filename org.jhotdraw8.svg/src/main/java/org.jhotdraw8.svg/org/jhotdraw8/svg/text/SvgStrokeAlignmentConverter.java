@@ -32,9 +32,9 @@ import java.util.function.Consumer;
  */
 public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType> {
 
-    public static final String INSIDE = "inner";
-    public static final String OUTSIDE = "outer";
-    public static final String CENTERED = "center";
+    public static final @NonNull String INSIDE = "inner";
+    public static final @NonNull String OUTSIDE = "outer";
+    public static final @NonNull String CENTERED = "center";
 
     public SvgStrokeAlignmentConverter(boolean nullable) {
         super(nullable);

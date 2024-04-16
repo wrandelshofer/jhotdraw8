@@ -29,18 +29,18 @@ public class MappedCssConverter<E> implements CssConverter<E> {
     private final @NonNull Map<String, E> fromStringMap;
     private final @NonNull Map<E, String> toStringMap;
     private final boolean nullable;
-    private final String name;
+    private final @NonNull String name;
 
 
-    public MappedCssConverter(String name, @NonNull Map<String, E> fromStringMap) {
+    public MappedCssConverter(@NonNull String name, @NonNull Map<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
 
-    public MappedCssConverter(String name, @NonNull ReadOnlyMap<String, E> fromStringMap) {
+    public MappedCssConverter(@NonNull String name, @NonNull ReadOnlyMap<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
 
-    public MappedCssConverter(String name, @NonNull Map<String, E> fromStringMap, boolean nullable) {
+    public MappedCssConverter(@NonNull String name, @NonNull Map<String, E> fromStringMap, boolean nullable) {
         this.fromStringMap = new LinkedHashMap<>();
         this.toStringMap = new LinkedHashMap<>();
         for (Map.Entry<String, E> entry : fromStringMap.entrySet()) {
@@ -51,7 +51,7 @@ public class MappedCssConverter<E> implements CssConverter<E> {
         this.nullable = nullable;
     }
 
-    public MappedCssConverter(String name, @NonNull ReadOnlyMap<String, E> fromStringMap, boolean nullable) {
+    public MappedCssConverter(@NonNull String name, @NonNull ReadOnlyMap<String, E> fromStringMap, boolean nullable) {
         this(name, fromStringMap.asMap(), nullable);
     }
 

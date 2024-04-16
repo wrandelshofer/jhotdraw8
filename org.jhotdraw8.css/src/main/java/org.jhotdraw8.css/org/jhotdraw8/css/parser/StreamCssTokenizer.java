@@ -145,7 +145,7 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_URL;
  */
 public class StreamCssTokenizer implements CssTokenizer {
 
-    private final CssScanner in;
+    private final @NonNull CssScanner in;
 
     private boolean pushBack;
 
@@ -161,23 +161,23 @@ public class StreamCssTokenizer implements CssTokenizer {
     private int endPosition;
     private final @Nullable URI uri;
 
-    public StreamCssTokenizer(CharSequence charSequence, @Nullable URI uri) {
+    public StreamCssTokenizer(@NonNull CharSequence charSequence, @Nullable URI uri) {
         this(new CharSequenceCssScanner(charSequence), uri);
     }
 
-    public StreamCssTokenizer(CharSequence charSequence) {
+    public StreamCssTokenizer(@NonNull CharSequence charSequence) {
         this(new CharSequenceCssScanner(charSequence), null);
     }
 
-    public StreamCssTokenizer(Reader reader, @Nullable URI uri) {
+    public StreamCssTokenizer(@NonNull Reader reader, @Nullable URI uri) {
         this(new ReaderCssScanner(reader), uri);
     }
 
-    public StreamCssTokenizer(Reader reader) {
+    public StreamCssTokenizer(@NonNull Reader reader) {
         this(new ReaderCssScanner(reader), null);
     }
 
-    public StreamCssTokenizer(CssScanner reader, @Nullable URI uri) {
+    public StreamCssTokenizer(@NonNull CssScanner reader, @Nullable URI uri) {
         in = reader;
         this.uri = uri;
     }

@@ -113,7 +113,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
     /**
      * The name of the {@link #showingProperty}.
      */
-    public static final String SHOWING_PROPERTY = "showing";
+    public static final @NonNull String SHOWING_PROPERTY = "showing";
     /**
      * This placeholder is displayed to indicate that no value has
      * been specified for this property.

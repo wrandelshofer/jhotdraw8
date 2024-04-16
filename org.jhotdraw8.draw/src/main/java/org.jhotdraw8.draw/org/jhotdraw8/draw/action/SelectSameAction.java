@@ -27,7 +27,7 @@ import java.util.Objects;
  */
 public class SelectSameAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.selectSame";
+    public static final @NonNull String ID = "edit.selectSame";
 
     /**
      * Creates a new instance.

@@ -31,7 +31,7 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
     /**
      * The currentColor keyword.
      */
-    public static final String CURRENT_COLOR_KEYWORD = "currentColor";
+    public static final @NonNull String CURRENT_COLOR_KEYWORD = "currentColor";
 
     private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
 

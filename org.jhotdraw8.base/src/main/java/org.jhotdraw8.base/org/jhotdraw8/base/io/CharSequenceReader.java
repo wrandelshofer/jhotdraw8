@@ -15,10 +15,10 @@ import java.io.Reader;
  */
 public class CharSequenceReader extends Reader {
 
-    private final CharSequence buf;
+    private final @NonNull CharSequence buf;
     private int pos;
 
-    public CharSequenceReader(CharSequence buf) {
+    public CharSequenceReader(@NonNull CharSequence buf) {
         this.buf = buf;
     }
 

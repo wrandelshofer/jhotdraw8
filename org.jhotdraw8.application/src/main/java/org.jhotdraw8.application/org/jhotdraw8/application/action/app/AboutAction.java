@@ -38,7 +38,7 @@ public class AboutAction extends AbstractApplicationAction {
     /**
      * The id of this action.
      */
-    public static final String ID = "application.about";
+    public static final @NonNull String ID = "application.about";
 
     /**
      * Creates a new instance.

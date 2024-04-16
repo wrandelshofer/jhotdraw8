@@ -21,7 +21,7 @@ public class ResizeButton extends Region {
 
     private Point2D pressed;
     private Point2D size;
-    private final ObjectProperty<Region> target = new SimpleObjectProperty<>();
+    private final @NonNull ObjectProperty<Region> target = new SimpleObjectProperty<>();
 
     public ResizeButton() {
         setOnMousePressed(this::mousePressed);

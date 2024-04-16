@@ -182,7 +182,7 @@ public class FigureSvgTinyReader {
         accessorMap = Collections.unmodifiableMap(mutableAccessorMap);
     }
 
-    private final Key<String> textKey = SvgTextFigure.TEXT;
+    private final @NonNull Key<String> textKey = SvgTextFigure.TEXT;
 
     /**
      * @see #isBestEffort()
@@ -524,7 +524,7 @@ public class FigureSvgTinyReader {
         skipElement(r, ctx);
     }
 
-    private final NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
+    private final @NonNull NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;
@@ -646,7 +646,7 @@ public class FigureSvgTinyReader {
      * The list must be synchronized, because we do some processing in
      * a parallel stream.
      */
-    private final List<String> errors = Collections.synchronizedList(new ArrayList<>());
+    private final @NonNull List<String> errors = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Clears the errors list.
@@ -669,8 +669,8 @@ public class FigureSvgTinyReader {
      */
     private static class Context {
         final SimpleIdFactory idFactory = new SimpleIdFactory();
-        final List<CheckedRunnable> secondPass = new ArrayList<>();
-        final List<String> stylesheets = new ArrayList<>();
+        final @NonNull List<CheckedRunnable> secondPass = new ArrayList<>();
+        final @NonNull List<String> stylesheets = new ArrayList<>();
         final StringBuilder stringBuilder = new StringBuilder();
     }
 }

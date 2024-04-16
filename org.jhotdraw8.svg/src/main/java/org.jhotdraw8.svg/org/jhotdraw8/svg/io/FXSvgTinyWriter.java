@@ -32,9 +32,9 @@ import java.util.List;
  */
 public class FXSvgTinyWriter extends AbstractFXSvgWriter {
 
-    private static final String SVG_VERSION = "1.2";
-    private static final String SVG_BASE_PROFILE = "tiny";
-    public static final String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
+    private static final @NonNull String SVG_VERSION = "1.2";
+    private static final @NonNull String SVG_BASE_PROFILE = "tiny";
+    public static final @NonNull String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an

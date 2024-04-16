@@ -30,7 +30,7 @@ import java.util.Map;
  */
 public class FigureSpecificConstrainer extends AbstractConstrainer implements Constrainer {
 
-    private final Path node = new Path();
+    private final @NonNull Path node = new Path();
     // ----
     // property names
     // ----
@@ -38,11 +38,11 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     /**
      * The name of the "constrainerMap" property.
      */
-    public final String CONSTRAINER_MAP_PROPERTY = "constrainerMap";
+    public final @NonNull String CONSTRAINER_MAP_PROPERTY = "constrainerMap";
     /**
      * The name of the "defaultConstrainer" property.
      */
-    public final String DEFAULT_CONSTRAINER_PROPERTY = "defaultConstrainer";
+    public final @NonNull String DEFAULT_CONSTRAINER_PROPERTY = "defaultConstrainer";
 
     // ----
     // property fields
@@ -50,13 +50,13 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     /**
      * Maps figure classes to constrainers.
      */
-    private final ReadOnlyMapWrapper<Class<?>, Constrainer> constrainerMap
-            = new ReadOnlyMapWrapper<>(this, "CONSTRAINER_MAP_PROPERTY", FXCollections.observableHashMap());
+    private final @NonNull ReadOnlyMapWrapper<Class<?>, Constrainer> constrainerMap
+            = new ReadOnlyMapWrapper<>(this, CONSTRAINER_MAP_PROPERTY, FXCollections.observableHashMap());
 
     /**
      * All figures which are not in the map use the default constrainer.
      */
-    private final NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final @NonNull NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
 
     public FigureSpecificConstrainer() {
     }

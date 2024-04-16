@@ -51,11 +51,11 @@ public class BezierPathFigure extends AbstractLeafFigure
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
-    public static final NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(false), BezierPath.of());
+    public static final @NonNull NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(false), BezierPath.of());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Bezier";
+    public static final @NonNull String TYPE_SELECTOR = "Bezier";
 
     public BezierPathFigure() {
         setStyled(StyleOrigin.USER_AGENT, FILL, null);

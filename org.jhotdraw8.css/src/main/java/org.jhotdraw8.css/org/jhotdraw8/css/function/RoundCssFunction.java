@@ -43,9 +43,9 @@ public class RoundCssFunction<T> extends CalcCssFunction<T> {
     /**
      * Function name.
      */
-    public static final String NAME = "round";
+    public static final @NonNull String NAME = "round";
 
-    public RoundCssFunction(String name) {
+    public RoundCssFunction(@NonNull String name) {
         super(name);
     }
 

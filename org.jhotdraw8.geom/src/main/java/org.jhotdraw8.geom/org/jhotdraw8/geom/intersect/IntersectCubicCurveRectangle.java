@@ -39,7 +39,7 @@ public class IntersectCubicCurveRectangle {
         inter3 = IntersectCubicCurveLine.intersectCubicCurveLine(p0, p1, p2, p3, bottomRight, bottomLeft);
         inter4 = IntersectCubicCurveLine.intersectCubicCurveLine(p0, p1, p2, p3, bottomLeft, topLeft);
 
-        final List<IntersectionPoint> result = new ArrayList<>();
+        final @NonNull List<IntersectionPoint> result = new ArrayList<>();
 
         result.addAll(inter1.intersections().asList());
         result.addAll(inter2.intersections().asList());

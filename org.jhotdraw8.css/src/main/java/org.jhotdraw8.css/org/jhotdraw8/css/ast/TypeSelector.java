@@ -24,8 +24,7 @@ public class TypeSelector extends SimpleSelector {
      * <p>
      * Value: {@value #ANY_NAMESPACE}
      */
-    @NonNull
-    public static final String ANY_NAMESPACE = "*";
+    public static final @NonNull String ANY_NAMESPACE = "*";
     /**
      * Special namespace value which means 'without a namespace'.
      * <p>
@@ -33,8 +32,7 @@ public class TypeSelector extends SimpleSelector {
      * <p>
      * Value: {@code null}
      */
-    @Nullable
-    public static final String WITHOUT_NAMESPACE = null;
+    public static final @Nullable String WITHOUT_NAMESPACE = null;
     private final @Nullable String namespacePattern;
     private final @NonNull String type;
 

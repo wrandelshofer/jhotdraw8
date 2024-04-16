@@ -18,7 +18,7 @@ import org.jhotdraw8.application.EditableComponent;
  */
 public class PasteAction extends AbstractSelectionAction {
 
-    public static final String ID = "edit.paste";
+    public static final @NonNull String ID = "edit.paste";
 
     /**
      * Creates a new instance which acts on the currently focused component.

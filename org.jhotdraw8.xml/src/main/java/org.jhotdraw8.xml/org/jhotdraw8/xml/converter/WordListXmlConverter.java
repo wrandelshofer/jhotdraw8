@@ -42,7 +42,7 @@ import java.util.TreeSet;
  */
 public class WordListXmlConverter implements Converter<ImmutableList<String>> {
 
-    public static final Comparator<String> NFD_COMPARATOR
+    public static final @NonNull Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
 
     public WordListXmlConverter() {
@@ -55,7 +55,7 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
         if (value == null) {
             return;
         }
-        final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
+        final @NonNull TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(value.asList());
         boolean isFirst = true;
         for (String s : tree) {
@@ -71,7 +71,7 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
 
     @Override
     public ImmutableList<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) {
-        final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
+        final @NonNull TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
         return VectorList.copyOf(tree);

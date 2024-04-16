@@ -19,9 +19,9 @@ import java.text.ParsePosition;
  */
 public class ConverterFormatAdapter implements Converter<Object> {
 
-    private final Format format;
+    private final @NonNull Format format;
 
-    public ConverterFormatAdapter(Format format) {
+    public ConverterFormatAdapter(@NonNull Format format) {
         this.format = format;
     }
 

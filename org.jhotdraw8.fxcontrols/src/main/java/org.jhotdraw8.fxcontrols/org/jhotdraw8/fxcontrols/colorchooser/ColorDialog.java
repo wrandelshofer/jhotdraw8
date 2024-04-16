@@ -37,7 +37,7 @@ public class ColorDialog extends HBox {
         dialog.addEventHandler(KeyEvent.ANY, keyEventListener);
     }
 
-    private final EventHandler<KeyEvent> keyEventListener = e -> {
+    private final @NonNull EventHandler<KeyEvent> keyEventListener = e -> {
         switch (e.getCode()) {
         case ESCAPE:
             dialog.setScene(null);

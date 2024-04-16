@@ -19,7 +19,7 @@ import java.net.URI;
 public class SaveFileAction extends AbstractSaveFileAction {
 
 
-    public static final String ID = "file.save";
+    public static final @NonNull String ID = "file.save";
 
     /**
      * Creates a new instance.

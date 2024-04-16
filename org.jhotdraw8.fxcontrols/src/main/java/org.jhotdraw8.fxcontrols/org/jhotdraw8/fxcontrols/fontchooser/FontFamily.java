@@ -16,9 +16,9 @@ import org.jhotdraw8.annotation.NonNull;
  * @author Werner Randelshofer
  */
 public class FontFamily {
-    private final StringProperty name = new SimpleStringProperty();
+    private final @NonNull StringProperty name = new SimpleStringProperty();
 
-    private final ObservableList<FontTypeface> typefaces = FXCollections.observableArrayList();
+    private final @NonNull ObservableList<FontTypeface> typefaces = FXCollections.observableArrayList();
 
     public FontFamily() {
     }

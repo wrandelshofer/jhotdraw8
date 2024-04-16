@@ -398,7 +398,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
          * @param dfs
          */
         protected VertexOfShortSpliterator(final int root, final short[] array, final int stride,
-                                           final int offset, @NonNull final AddToIntSet visited, boolean dfs) {
+                                           final int offset, final @NonNull AddToIntSet visited, boolean dfs) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.array = array;
             this.stride = stride;
@@ -445,7 +445,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
          * @param dfs
          */
         protected VertexEnumeratorOfLongShortSpliterator(final int root, final short[] array, final int stride,
-                                                         final int offset, @NonNull final AddToIntSet visited, boolean dfs) {
+                                                         final int offset, final @NonNull AddToIntSet visited, boolean dfs) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.array = array;
             this.stride = stride;
@@ -526,7 +526,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return seachNextVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public Enumerator.@NonNull OfInt seachNextVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public Enumerator.@NonNull OfInt seachNextVerticesAsInt(final int vidx, final @NonNull AddToIntSet visited, boolean dfs) {
         return new VertexOfShortSpliterator(vidx, next, stride,
                 VERTEX_DATA_SIZE, visited, dfs);
     }
@@ -543,7 +543,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return searchPrevVerticesAsInt(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public Enumerator.@NonNull OfInt searchPrevVerticesAsInt(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public Enumerator.@NonNull OfInt searchPrevVerticesAsInt(final int vidx, final @NonNull AddToIntSet visited, boolean dfs) {
         return new VertexOfShortSpliterator(vidx, prev, stride,
                 VERTEX_DATA_SIZE, visited, dfs);
     }
@@ -560,7 +560,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return searchNextVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public Enumerator.@NonNull OfLong searchNextVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public Enumerator.@NonNull OfLong searchNextVerticesWithVertexData(final int vidx, final @NonNull AddToIntSet visited, boolean dfs) {
         return new VertexEnumeratorOfLongShortSpliterator(vidx, next, stride,
                 0, visited, dfs);
     }
@@ -578,7 +578,7 @@ public class MutableIntAttributed16BitIndexedBidiGraph implements MutableIndexed
         return searchPrevVerticesWithVertexData(vidx, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
     }
 
-    public Enumerator.@NonNull OfLong searchPrevVerticesWithVertexData(final int vidx, @NonNull final AddToIntSet visited, boolean dfs) {
+    public Enumerator.@NonNull OfLong searchPrevVerticesWithVertexData(final int vidx, final @NonNull AddToIntSet visited, boolean dfs) {
         return new VertexEnumeratorOfLongShortSpliterator(vidx, prev, stride,
                 0, visited, dfs);
     }

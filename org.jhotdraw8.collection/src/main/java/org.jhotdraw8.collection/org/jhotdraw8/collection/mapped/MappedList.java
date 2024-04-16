@@ -25,10 +25,10 @@ import java.util.function.Function;
  */
 public final class MappedList<E, F> extends AbstractList<E> {
 
-    private final List<F> backingList;
-    private final Function<F, E> mapf;
+    private final @NonNull List<F> backingList;
+    private final @NonNull Function<F, E> mapf;
 
-    public MappedList(List<F> backingList, Function<F, E> mapf) {
+    public MappedList(@NonNull List<F> backingList, @NonNull Function<F, E> mapf) {
         this.backingList = backingList;
         this.mapf = mapf;
     }
@@ -46,7 +46,7 @@ public final class MappedList<E, F> extends AbstractList<E> {
     @Override
     public @NonNull Iterator<E> iterator() {
         return new Iterator<>() {
-            private final Iterator<F> i = backingList.iterator();
+            private final @NonNull Iterator<F> i = backingList.iterator();
 
             @Override
             public boolean hasNext() {
@@ -68,7 +68,7 @@ public final class MappedList<E, F> extends AbstractList<E> {
     @Override
     public @NonNull Spliterator<E> spliterator() {
         class MappingSpliterator implements Spliterator<E> {
-            private final Spliterator<F> i;
+            private final @NonNull Spliterator<F> i;
 
             public MappingSpliterator(Spliterator<F> i) {
                 this.i = i;

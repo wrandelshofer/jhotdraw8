@@ -30,7 +30,7 @@ import java.util.function.Function;
 public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuilder
         implements MutableDirectedGraph<V, A>, AttributedIndexedDirectedGraph<V, A> {
 
-    private static final Object TOMBSTONE_OBJECT = new Object();
+    private static final @NonNull Object TOMBSTONE_OBJECT = new Object();
 
 
     /**

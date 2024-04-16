@@ -43,7 +43,7 @@ public class EllipseFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Ellipse";
+    public static final @NonNull String TYPE_SELECTOR = "Ellipse";
 
     public EllipseFigure() {
         this(0, 0, 2, 2);// the values must correspond to the default values of the property keys

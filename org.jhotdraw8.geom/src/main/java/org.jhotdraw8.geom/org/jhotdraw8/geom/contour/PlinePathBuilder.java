@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.geom.contour;
 
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.AbstractPathBuilder;
 
 import java.awt.geom.CubicCurve2D;
@@ -16,7 +17,7 @@ import java.util.List;
  * Path builder for {@link PlinePath}.
  */
 public class PlinePathBuilder extends AbstractPathBuilder<List<PlinePath>> {
-    private final List<PlinePath> paths = new ArrayList<>();
+    private final @NonNull List<PlinePath> paths = new ArrayList<>();
     private PlinePath current;
     private double flatness = 0.125;
 

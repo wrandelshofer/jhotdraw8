@@ -29,7 +29,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class UriCssConverter extends AbstractCssConverter<URI> {
-    private final String helpText;
+    private final @Nullable String helpText;
 
     public UriCssConverter() {
         this(false, null);
@@ -39,7 +39,7 @@ public class UriCssConverter extends AbstractCssConverter<URI> {
         this(nullable, null);
     }
 
-    public UriCssConverter(boolean nullable, String helpText) {
+    public UriCssConverter(boolean nullable, @Nullable String helpText) {
         super(nullable);
         this.helpText = helpText;
     }

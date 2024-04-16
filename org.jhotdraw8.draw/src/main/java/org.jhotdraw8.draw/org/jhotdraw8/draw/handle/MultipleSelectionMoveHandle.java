@@ -37,7 +37,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private @Nullable Point2D locationInDrawing;
     private final @NonNull Region node;
     private Point2D oldPoint;

@@ -79,7 +79,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     /**
      * Holds the max number of recent URIs.
      */
-    private final IntegerProperty maxNumberOfRecentUris//
+    private final @NonNull IntegerProperty maxNumberOfRecentUris//
             = new SimpleIntegerProperty(//
             this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
             10);
@@ -91,7 +91,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     /**
      * Holds the recent URIs.
      */
-    private final ReadOnlyMapProperty<URI, DataFormat> recentUris//
+    private final @NonNull ReadOnlyMapProperty<URI, DataFormat> recentUris//
             = new ReadOnlyMapWrapper<URI, DataFormat>(//
             this, RECENT_URIS_PROPERTY, //
             FXCollections.observableMap(new LinkedHashMap<>(16, 0.5f, true))).getReadOnlyProperty();

@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class AlignRightAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.alignRight";
+    public static final @NonNull String ID = "edit.alignRight";
 
     /**
      * Creates a new instance.

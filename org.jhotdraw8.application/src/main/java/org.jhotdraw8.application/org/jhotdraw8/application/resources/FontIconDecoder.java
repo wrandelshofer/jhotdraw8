@@ -28,8 +28,8 @@ import java.util.regex.Pattern;
 public class FontIconDecoder implements ResourceDecoder {
 
     private final @NonNull Pattern keyPattern;
-    private final String valuePrefix;
-    private final Font font;
+    private final @NonNull String valuePrefix;
+    private final @NonNull Font font;
 
     /**
      * Creates a new instance.
@@ -37,7 +37,7 @@ public class FontIconDecoder implements ResourceDecoder {
      * @param keyRegex the regex used on the property key
      * @param font     The font
      */
-    public FontIconDecoder(@NonNull String keyRegex, Font font) {
+    public FontIconDecoder(@NonNull String keyRegex, @NonNull Font font) {
         this(keyRegex, "fonticon:", font);
     }
 
@@ -48,7 +48,7 @@ public class FontIconDecoder implements ResourceDecoder {
      * @param valuePrefix the prefix for the value.
      * @param font        The font
      */
-    public FontIconDecoder(@NonNull String keyRegex, String valuePrefix, Font font) {
+    public FontIconDecoder(@NonNull String keyRegex, @NonNull String valuePrefix, @NonNull Font font) {
         this.keyPattern = Pattern.compile(keyRegex);
         this.valuePrefix = valuePrefix;
         this.font = font;

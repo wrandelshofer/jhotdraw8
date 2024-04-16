@@ -17,10 +17,10 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class FontTypeface {
 
-    private final StringProperty name = new SimpleStringProperty();
-    private final BooleanProperty regular = new SimpleBooleanProperty();
+    private final @NonNull StringProperty name = new SimpleStringProperty();
+    private final @NonNull BooleanProperty regular = new SimpleBooleanProperty();
 
-    private final StringProperty style = new SimpleStringProperty();
+    private final @NonNull StringProperty style = new SimpleStringProperty();
 
     public FontTypeface() {
     }

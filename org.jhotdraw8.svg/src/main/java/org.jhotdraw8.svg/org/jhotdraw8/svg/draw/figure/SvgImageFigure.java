@@ -62,7 +62,7 @@ public class SvgImageFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Image";
+    public static final @NonNull String TYPE_SELECTOR = "Image";
 
     public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
     public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;

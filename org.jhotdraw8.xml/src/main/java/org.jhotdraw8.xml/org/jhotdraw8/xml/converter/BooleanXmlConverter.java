@@ -27,12 +27,11 @@ import java.text.ParseException;
 public class BooleanXmlConverter implements Converter<Boolean> {
 
 
-
-    private final String trueString = "true";
-    private final String emptyString = "";
-    private final String falseString = "false";
-    private final String oneString = "1";
-    private final String zeroString = "0";
+    private final @NonNull String trueString = "true";
+    private final @NonNull String emptyString = "";
+    private final @NonNull String falseString = "false";
+    private final @NonNull String oneString = "1";
+    private final @NonNull String zeroString = "0";
     private final boolean nullable;
 
     /**

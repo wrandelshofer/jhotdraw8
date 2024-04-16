@@ -9,6 +9,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
@@ -59,9 +60,9 @@ import java.util.logging.Logger;
  */
 public class OpenRecentFileAction extends AbstractApplicationAction {
 
-    public static final String ID = "file.openRecent";
-    private final URI uri;
-    private final DataFormat format;
+    public static final @NonNull String ID = "file.openRecent";
+    private final @NonNull URI uri;
+    private final @Nullable DataFormat format;
     private final boolean reuseEmptyViews = true;
 
     /**
@@ -72,7 +73,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
      * @param format the data format that should be used to access the URI
      */
     @SuppressWarnings("this-escape")
-    public OpenRecentFileAction(Application app, @NonNull URI uri, DataFormat format) {
+    public OpenRecentFileAction(Application app, @NonNull URI uri, @Nullable DataFormat format) {
         super(app);
         this.uri = uri;
         this.format = format;
@@ -121,7 +122,6 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     private void onException(final @NonNull FileBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
-        Throwable value = exception;
         Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + exception.getMessage(), exception);
 
         Resources labels = ApplicationLabels.getResources();
@@ -138,7 +138,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, DataFormat format) {
+    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, @Nullable DataFormat format) {
         final Application app = getApplication();
         WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         v.addDisabler(workState);

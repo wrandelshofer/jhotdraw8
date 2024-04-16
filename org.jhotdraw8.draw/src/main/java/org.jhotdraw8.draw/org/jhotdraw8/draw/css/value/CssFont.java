@@ -22,13 +22,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CssFont {
 
-    private final String family;
+    private final @NonNull String family;
     private final @Nullable FontWeight weight;
     private final @Nullable FontPosture posture;
     private final @NonNull CssSize size;
     private final @NonNull Font font;
 
-    public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
+    public CssFont(@NonNull String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
         this.family = family;
         this.weight = weight;
         this.posture = posture;
@@ -40,7 +40,7 @@ public class CssFont {
                 : Font.font(family, weight, posture, size.getConvertedValue());
     }
 
-    public String getFamily() {
+    public @NonNull String getFamily() {
         return family;
     }
 
@@ -60,7 +60,7 @@ public class CssFont {
         return font;
     }
 
-    private static final Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
+    private static final @NonNull Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
 
     public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
         return cachedFonts.computeIfAbsent(family

@@ -21,7 +21,7 @@ import java.util.Set;
 
 public class AlignTopAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.alignTop";
+    public static final @NonNull String ID = "edit.alignTop";
 
     /**
      * Creates a new instance.

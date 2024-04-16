@@ -73,7 +73,7 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private @Nullable ReversedObservableList<Figure> layers;
 
-    private final Supplier<Layer> layerFactory;
+    private final @NonNull Supplier<Layer> layerFactory;
 
     private Node node;
 
@@ -344,9 +344,9 @@ public class LayersInspector extends AbstractDrawingInspector {
      */
     private class SelectionLabelDnDSupport {
 
-        private final ListView<Figure> listView;
+        private final @NonNull ListView<Figure> listView;
         private int draggedCellIndex;
-        private final ClipboardIO<Figure> io;
+        private final @NonNull ClipboardIO<Figure> io;
 
         public SelectionLabelDnDSupport(ListView<Figure> listView, ClipboardIO<Figure> io) {
             this.listView = listView;

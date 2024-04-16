@@ -18,16 +18,16 @@ import java.util.List;
  */
 public class URIExtensionFilter {
 
-    private final DataFormat format;
+    private final @NonNull DataFormat format;
 
     private final FileChooser.@NonNull ExtensionFilter extensionFilter;
 
-    public URIExtensionFilter(@NonNull String description, String mimeType, String... extensions) {
+    public URIExtensionFilter(@NonNull String description, @NonNull String mimeType, String... extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
         this.format = DataFormats.registerDataFormat(mimeType);
     }
 
-    public URIExtensionFilter(@NonNull String description, DataFormat format, String... extensions) {
+    public URIExtensionFilter(@NonNull String description, @NonNull DataFormat format, String... extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
         this.format = format;
     }

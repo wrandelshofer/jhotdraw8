@@ -236,53 +236,53 @@ import java.util.TreeSet;
  * </dl>
  */
 public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable {
-    public static final String DEFAULT_NAMESPACE = "";
-    public static final String DEFAULT_PREFIX = "";
-    public static final String END_CHAR_REF = ";";
-    public static final String END_ENTITY_REF = ";";
-    public static final String END_PROCESSING_INSTRUCTION = "?>";
-    public static final String START_CHAR_REF = "&#x";
-    public static final String START_ENTITY_REF = "&";
-    public static final String START_PROCESSING_INSTRUCTION = "<?";
-    private static final String CLOSE_EMPTY_ELEMENT = "/>";
-    private static final String CLOSE_END_TAG = ">";
-    private static final String CLOSE_START_TAG = ">";
-    private static final String DEFAULT_XML_VERSION = "1.0";
-    private static final String END_ATTRIBUTE_VALUE = "\"";
-    private static final String END_CDATA = "]]>";
-    private static final String END_COMMENT = "-->";
-    private static final String END_ENCODING = "\"";
-    private static final String END_VERSION = "\"";
-    private static final String END_XML_DECLARATION = "?>";
-    private static final String OPEN_END_TAG = "</";
-    private static final String OPEN_START_TAG = "<";
-    private static final String PREFIX_SEPARATOR = ":";
-    private static final String SPACE = " ";
-    private static final String STANDALONE = " standalone=\"no\"";
-    private static final String START_ATTRIBUTE_VALUE = "=\"";
-    private static final String START_CDATA = "<![CDATA[";
-    private static final String START_COMMENT = "<!--";
-    private static final String START_ENCODING = " encoding=\"";
-    private static final String START_VERSION = " version=\"";
-    private static final String START_XML_DECLARATION = "<?xml";
-    private static final String XMLNS_NAMESPACE = "https://www.w3.org/TR/REC-xml-names/";
-    private static final String XMLNS_PREFIX = "xmlns";
-    private static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
+    public static final @NonNull String DEFAULT_NAMESPACE = "";
+    public static final @NonNull String DEFAULT_PREFIX = "";
+    public static final @NonNull String END_CHAR_REF = ";";
+    public static final @NonNull String END_ENTITY_REF = ";";
+    public static final @NonNull String END_PROCESSING_INSTRUCTION = "?>";
+    public static final @NonNull String START_CHAR_REF = "&#x";
+    public static final @NonNull String START_ENTITY_REF = "&";
+    public static final @NonNull String START_PROCESSING_INSTRUCTION = "<?";
+    private static final @NonNull String CLOSE_EMPTY_ELEMENT = "/>";
+    private static final @NonNull String CLOSE_END_TAG = ">";
+    private static final @NonNull String CLOSE_START_TAG = ">";
+    private static final @NonNull String DEFAULT_XML_VERSION = "1.0";
+    private static final @NonNull String END_ATTRIBUTE_VALUE = "\"";
+    private static final @NonNull String END_CDATA = "]]>";
+    private static final @NonNull String END_COMMENT = "-->";
+    private static final @NonNull String END_ENCODING = "\"";
+    private static final @NonNull String END_VERSION = "\"";
+    private static final @NonNull String END_XML_DECLARATION = "?>";
+    private static final @NonNull String OPEN_END_TAG = "</";
+    private static final @NonNull String OPEN_START_TAG = "<";
+    private static final @NonNull String PREFIX_SEPARATOR = ":";
+    private static final @NonNull String SPACE = " ";
+    private static final @NonNull String STANDALONE = " standalone=\"no\"";
+    private static final @NonNull String START_ATTRIBUTE_VALUE = "=\"";
+    private static final @NonNull String START_CDATA = "<![CDATA[";
+    private static final @NonNull String START_COMMENT = "<!--";
+    private static final @NonNull String START_ENCODING = " encoding=\"";
+    private static final @NonNull String START_VERSION = " version=\"";
+    private static final @NonNull String START_XML_DECLARATION = "<?xml";
+    private static final @NonNull String XMLNS_NAMESPACE = "https://www.w3.org/TR/REC-xml-names/";
+    private static final @NonNull String XMLNS_PREFIX = "xmlns";
+    private static final @NonNull String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
     /**
      * The local name of the special {@code xml:space} attribute.
      */
-    private static final String XML_SPACE_ATTRIBUTE = "space";
+    private static final @NonNull String XML_SPACE_ATTRIBUTE = "space";
     /**
      * The value of the special {@code xml:space="preserve"} attribute.
      */
-    private static final String XML_SPACE_PRESERVE_VALUE = "preserve";
-    private final StringBuffer charBuffer = new StringBuffer();
-    private final CharsetEncoder encoder;
+    private static final @NonNull String XML_SPACE_PRESERVE_VALUE = "preserve";
+    private final @NonNull StringBuffer charBuffer = new StringBuffer();
+    private final @NonNull CharsetEncoder encoder;
     /**
      * Invariant: this stack always contains at least the root element.
      */
-    private final Deque<Element> stack = new ArrayDeque<>();
-    private final Writer w;
+    private final @NonNull Deque<Element> stack = new ArrayDeque<>();
+    private final @NonNull Writer w;
     private Set<Attribute> attributes = new TreeSet<>(Comparator.comparing(Attribute::namespace).thenComparing(Attribute::localName));
     private boolean escapeClosingAngleBracket = true;
     private boolean escapeLineBreak = true;
@@ -934,8 +934,8 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
     }
 
     private static class MyNamespaceContext implements NamespaceContext {
-        private final Map<String, List<String>> nsToPrefix = new HashMap<>();
-        private final Map<String, String> prefixToNs = new HashMap<>();
+        private final @NonNull Map<String, List<String>> nsToPrefix = new HashMap<>();
+        private final @NonNull Map<String, String> prefixToNs = new HashMap<>();
 
         @Override
         public String getNamespaceURI(@NonNull String prefix) {

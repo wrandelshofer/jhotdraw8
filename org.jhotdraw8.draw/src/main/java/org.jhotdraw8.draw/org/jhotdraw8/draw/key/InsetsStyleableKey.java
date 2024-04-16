@@ -18,7 +18,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements WritableStyleableMapAccessor<Insets> {
 
 
-    private final Converter<Insets> converter = new InsetsConverter(false);
+    private final @NonNull Converter<Insets> converter = new InsetsConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the

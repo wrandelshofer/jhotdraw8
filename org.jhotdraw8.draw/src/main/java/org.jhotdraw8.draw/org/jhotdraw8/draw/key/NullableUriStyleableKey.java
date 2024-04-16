@@ -19,7 +19,7 @@ import java.net.URI;
 public class NullableUriStyleableKey extends AbstractStyleableKey<URI> implements WritableStyleableMapAccessor<URI> {
 
 
-    private final Converter<URI> converter = new UriCssConverter(true);
+    private final @NonNull Converter<URI> converter = new UriCssConverter(true);
 
     /**
      * Creates a new instance with the specified name and with null as the

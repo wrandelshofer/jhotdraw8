@@ -35,7 +35,7 @@ import static org.jhotdraw8.icollection.MapEntries.ofEntries;
  */
 public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
-    private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
+    private final @NonNull MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
             new MappedConverter<>(linkedHashMap(ofEntries(
                     entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
                     entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
@@ -47,7 +47,7 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
                     entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
                     entry("larger", SvgFontSize.SizeKeyword.LARGER)
             )));
-    private final SizeCssConverter sizeConverter = new SizeCssConverter(false);
+    private final @NonNull SizeCssConverter sizeConverter = new SizeCssConverter(false);
 
     public SvgFontSizeConverter() {
         super(false);

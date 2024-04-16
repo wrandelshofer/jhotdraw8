@@ -30,7 +30,7 @@ import java.util.function.Consumer;
  */
 public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> {
 
-    private final SizeCssConverter sizeConverter = new SizeCssConverter(false);
+    private final @NonNull SizeCssConverter sizeConverter = new SizeCssConverter(false);
     private static final @NonNull Map<String, CssDimension2D> paperSizes;
     private static final @NonNull Map<CssDimension2D, String> sizePapers;
 
@@ -67,8 +67,8 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
         sizePapers = x;
     }
 
-    private static final String LANDSCAPE = "landscape";
-    private static final String PORTRAIT = "portrait";
+    private static final @NonNull String LANDSCAPE = "landscape";
+    private static final @NonNull String PORTRAIT = "portrait";
 
     public PaperSizeCssConverter() {
         super(false);

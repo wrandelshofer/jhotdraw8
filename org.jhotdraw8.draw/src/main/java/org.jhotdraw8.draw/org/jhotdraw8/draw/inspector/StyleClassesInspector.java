@@ -51,7 +51,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     @FXML
     private Button addButton;
-    private final Listener<DrawingModelEvent> drawingModelEventListener = change -> {
+    private final @NonNull Listener<DrawingModelEvent> drawingModelEventListener = change -> {
         DrawingView drawingView = getSubject();
         if (change.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED) {
             if ((Key<?>) change.getKey() == StyleableFigure.STYLE_CLASS) {
@@ -61,7 +61,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
             }
         }
     };
-    private final Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
+    private final @NonNull Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
     @FXML
     private ListView<StyleClassItem> listView;
     private final @Nullable ChangeListener<DrawingModel> modelListener = (o, oldv, newv) -> {

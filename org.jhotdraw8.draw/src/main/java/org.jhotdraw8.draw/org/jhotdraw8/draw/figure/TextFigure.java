@@ -42,8 +42,8 @@ public class TextFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Text";
-    public static final CssPoint2DStyleableKey ORIGIN = new CssPoint2DStyleableKey("origin", new CssPoint2D(0, 0));
+    public static final @NonNull String TYPE_SELECTOR = "Text";
+    public static final @NonNull CssPoint2DStyleableKey ORIGIN = new CssPoint2DStyleableKey("origin", new CssPoint2D(0, 0));
 
     private Text textNode;
 

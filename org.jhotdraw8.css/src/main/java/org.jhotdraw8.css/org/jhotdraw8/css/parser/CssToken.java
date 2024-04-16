@@ -7,7 +7,6 @@ package org.jhotdraw8.css.parser;
 import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.NumberConverter;
-import org.jhotdraw8.css.converter.StringCssConverter;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -40,7 +39,7 @@ public class CssToken {
 
     private final @Nullable Character preferredQuoteChar;
 
-    private static final NumberConverter NUMBER_CONVERTER = new NumberConverter();
+    private static final @NonNull NumberConverter NUMBER_CONVERTER = new NumberConverter();
 
     public CssToken(int ttype, @NonNull String stringValue) {
         this(ttype, stringValue, null, 0, 0, stringValue.length());
@@ -235,9 +234,6 @@ public class CssToken {
             throw new RuntimeException("Unexpected IOException", e);
         }
     }
-
-
-    private static final StringCssConverter STRING_CSS_CONVERTER = new StringCssConverter();
 
     private @NonNull String fromSTRING() {
         return fromSTRING(stringValue);

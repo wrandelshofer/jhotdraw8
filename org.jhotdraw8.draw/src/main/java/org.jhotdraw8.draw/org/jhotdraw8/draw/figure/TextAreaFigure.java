@@ -33,7 +33,7 @@ public class TextAreaFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "TextArea";
+    public static final @NonNull String TYPE_SELECTOR = "TextArea";
     private Path path;
 
     public TextAreaFigure() {

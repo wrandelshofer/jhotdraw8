@@ -89,7 +89,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
-    static final int SALT = new Random().nextInt();
+    static final @NonNull int SALT = new Random().nextInt();
     private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;

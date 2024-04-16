@@ -18,8 +18,8 @@ public class DirtyMask {
      */
     private final int bitmask;
 
-    public static final DirtyMask EMPTY = new DirtyMask(0);
-    public static final DirtyMask ALL = new DirtyMask(~0);
+    public static final @NonNull DirtyMask EMPTY = new DirtyMask(0);
+    public static final @NonNull DirtyMask ALL = new DirtyMask(~0);
 
     /**
      * Prevent instantiation.

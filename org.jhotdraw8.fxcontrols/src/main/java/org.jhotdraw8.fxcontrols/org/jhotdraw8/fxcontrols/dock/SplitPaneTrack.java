@@ -14,7 +14,7 @@ import static javafx.geometry.Orientation.VERTICAL;
 
 public class SplitPaneTrack
         extends AbstractDockParent implements Track {
-    private final SplitPane splitPane = new SplitPane();
+    private final @NonNull SplitPane splitPane = new SplitPane();
 
     public SplitPaneTrack(Orientation orientation) {
         splitPane.setOrientation(orientation);

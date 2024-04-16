@@ -52,12 +52,12 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * Up-Vector.
      */
-    private final Point2D UP = new Point2D(0, 1);
+    private final @NonNull Point2D UP = new Point2D(0, 1);
     /**
      * The angle for constrained rotations on the grid (in degrees). The value 0
      * turns the constrainer off for rotations.
      */
-    private final DoubleProperty angle = new SimpleDoubleProperty(this, "angle") {
+    private final @NonNull DoubleProperty angle = new SimpleDoubleProperty(this, "angle") {
 
         @Override
         public void invalidated() {
@@ -67,7 +67,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * Whether to draw the grid.
      */
-    private final BooleanProperty drawGrid = new SimpleBooleanProperty(this, "drawGrid") {
+    private final @NonNull BooleanProperty drawGrid = new SimpleBooleanProperty(this, "drawGrid") {
 
         @Override
         public void invalidated() {
@@ -78,7 +78,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Height of a grid cell. The value 0 turns the constrainer off for the
      * vertical axis.
      */
-    private final ObjectProperty<CssSize> height = new SimpleObjectProperty<>(this, "height") {
+    private final @NonNull ObjectProperty<CssSize> height = new SimpleObjectProperty<>(this, "height") {
 
         @Override
         public void invalidated() {
@@ -93,11 +93,11 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
-    private final Path majorNode = new Path();
+    private final @NonNull Path majorNode = new Path();
     /**
      * The x-factor for the major grid of the grid.
      */
-    private final IntegerProperty majorX = new SimpleIntegerProperty(this, "major-x", 5) {
+    private final @NonNull IntegerProperty majorX = new SimpleIntegerProperty(this, "major-x", 5) {
 
         @Override
         public void invalidated() {
@@ -107,7 +107,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * The x-factor for the major grid of the grid.
      */
-    private final IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
+    private final @NonNull IntegerProperty majorY = new SimpleIntegerProperty(this, "major-y", 5) {
 
         @Override
         public void invalidated() {
@@ -115,12 +115,12 @@ public class GridConstrainer extends AbstractConstrainer {
         }
     };
 
-    private final Path minorNode = new Path();
-    private final Group node = new Group();
+    private final @NonNull Path minorNode = new Path();
+    private final @NonNull Group node = new Group();
     /**
      * Whether to snap to the grid.
      */
-    private final BooleanProperty snapToGrid = new SimpleBooleanProperty(this, "snapToGrid", true) {
+    private final @NonNull BooleanProperty snapToGrid = new SimpleBooleanProperty(this, "snapToGrid", true) {
 
         @Override
         public void invalidated() {
@@ -131,7 +131,7 @@ public class GridConstrainer extends AbstractConstrainer {
      * Width of a grid cell. The value 0 turns the constrainer off for the
      * horizontal axis.
      */
-    private final ObjectProperty<CssSize> width = new SimpleObjectProperty<>(this, "width") {
+    private final @NonNull ObjectProperty<CssSize> width = new SimpleObjectProperty<>(this, "width") {
 
         @Override
         public void invalidated() {
@@ -141,7 +141,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * The x-origin of the grid.
      */
-    private final ObjectProperty<CssSize> x = new SimpleObjectProperty<>(this, "x") {
+    private final @NonNull ObjectProperty<CssSize> x = new SimpleObjectProperty<>(this, "x") {
 
         @Override
         public void invalidated() {
@@ -151,7 +151,7 @@ public class GridConstrainer extends AbstractConstrainer {
     /**
      * The y-origin of the grid.
      */
-    private final ObjectProperty<CssSize> y = new SimpleObjectProperty<>(this, "y") {
+    private final @NonNull ObjectProperty<CssSize> y = new SimpleObjectProperty<>(this, "y") {
 
         @Override
         public void invalidated() {

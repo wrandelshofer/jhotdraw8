@@ -35,7 +35,7 @@ public class SvgDefsFigure extends AbstractCompositeFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "defs";
+    public static final @NonNull String TYPE_SELECTOR = "defs";
 
     public SvgDefsFigure() {
         set(VISIBLE, false);

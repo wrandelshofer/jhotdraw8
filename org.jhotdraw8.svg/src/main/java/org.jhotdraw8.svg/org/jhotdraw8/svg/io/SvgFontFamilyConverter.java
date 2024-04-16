@@ -48,11 +48,11 @@ import java.util.function.Consumer;
  */
 public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String>> {
 
-    public static final String GENERIC_FONT_FAMILY_SERIF = "serif";
-    public static final String GENERIC_FONT_FAMILY_SANS_SERIF = "sans-serif";
-    public static final String GENERIC_FONT_FAMILY_CURSIVE = "cursive";
-    public static final String GENERIC_FONT_FAMILY_FANTASY = "fantasy";
-    public static final String GENERIC_FONT_FAMILY_MONOSPACE = "monospace";
+    public static final @NonNull String GENERIC_FONT_FAMILY_SERIF = "serif";
+    public static final @NonNull String GENERIC_FONT_FAMILY_SANS_SERIF = "sans-serif";
+    public static final @NonNull String GENERIC_FONT_FAMILY_CURSIVE = "cursive";
+    public static final @NonNull String GENERIC_FONT_FAMILY_FANTASY = "fantasy";
+    public static final @NonNull String GENERIC_FONT_FAMILY_MONOSPACE = "monospace";
 
     public SvgFontFamilyConverter() {
     }

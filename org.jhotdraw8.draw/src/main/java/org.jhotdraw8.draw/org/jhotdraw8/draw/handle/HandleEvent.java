@@ -27,14 +27,14 @@ public class HandleEvent extends Event<Handle> {
         FIGURE_INVALIDATED
     }
 
-    private final EventType eventType;
+    private final @NonNull EventType eventType;
 
-    public <T> HandleEvent(@NonNull Handle source, EventType type) {
+    public <T> HandleEvent(@NonNull Handle source, @NonNull EventType type) {
         super(source);
         this.eventType = type;
     }
 
-    public EventType getEventType() {
+    public @NonNull EventType getEventType() {
         return eventType;
     }
 

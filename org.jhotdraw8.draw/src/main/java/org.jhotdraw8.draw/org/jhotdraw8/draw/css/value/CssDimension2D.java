@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 public class CssDimension2D {
 
-    public static final CssDimension2D ZERO = new CssDimension2D();
+    public static final @NonNull CssDimension2D ZERO = new CssDimension2D();
 
     private final @NonNull CssSize width;
     private final @NonNull CssSize height;

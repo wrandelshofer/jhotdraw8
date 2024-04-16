@@ -45,7 +45,7 @@ import java.util.logging.Logger;
 public abstract class AbstractSaveFileAction extends AbstractActivityAction<FileBasedActivity> {
 
     private final boolean saveAs;
-    private Node oldFocusOwner;
+    private @Nullable Node oldFocusOwner;
     public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new NullableObjectKey<>("saveChooser", URIChooser.class);
     public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("saveChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));

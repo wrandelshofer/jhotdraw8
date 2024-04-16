@@ -212,7 +212,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean contains(@Nullable final Object o) {
+    public boolean contains(@Nullable final @NonNull Object o) {
         return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, Objects::equals);
     }

@@ -20,10 +20,10 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyList;
  * Abstract base class for implementations of {@link Dockable}.
  */
 public abstract class AbstractDockable implements Dockable {
-    protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
-    protected final ObjectProperty<Node> graphic = new SimpleObjectProperty<>(this, GRAPHIC_PROPERTY);
-    protected final StringProperty text = new SimpleStringProperty(this, TEXT_PROPERTY);
-    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
+    protected final @NonNull ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
+    protected final @NonNull ObjectProperty<Node> graphic = new SimpleObjectProperty<>(this, GRAPHIC_PROPERTY);
+    protected final @NonNull StringProperty text = new SimpleStringProperty(this, TEXT_PROPERTY);
+    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
 
     public AbstractDockable() {
     }

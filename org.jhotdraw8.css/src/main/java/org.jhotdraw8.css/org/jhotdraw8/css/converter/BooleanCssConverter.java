@@ -24,9 +24,8 @@ import java.util.function.Consumer;
 public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
 
 
-
-    private final String trueString = "true";
-    private final String falseString = "false";
+    private final @NonNull String trueString = "true";
+    private final @NonNull String falseString = "false";
 
     public BooleanCssConverter(boolean nullable) {
         super(nullable);

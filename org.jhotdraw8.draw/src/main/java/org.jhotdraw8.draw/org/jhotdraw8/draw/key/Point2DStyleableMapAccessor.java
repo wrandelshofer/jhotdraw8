@@ -26,7 +26,7 @@ public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
 
     private final @NonNull NonNullMapAccessor<Double> xKey;
     private final @NonNull NonNullMapAccessor<Double> yKey;
-    private final Converter<Point2D> converter;
+    private final @NonNull Converter<Point2D> converter;
 
     /**
      * Creates a new instance with the specified name.

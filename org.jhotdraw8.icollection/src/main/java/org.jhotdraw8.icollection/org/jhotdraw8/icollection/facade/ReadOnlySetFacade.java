@@ -25,9 +25,9 @@ import java.util.function.Supplier;
  */
 public class ReadOnlySetFacade<E> extends AbstractReadOnlySet<E> {
 
-    protected final Supplier<Iterator<E>> iteratorFunction;
-    protected final IntSupplier sizeFunction;
-    protected final Predicate<Object> containsFunction;
+    protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
+    protected final @NonNull IntSupplier sizeFunction;
+    protected final @NonNull Predicate<Object> containsFunction;
     /**
      * Characteristics of the spliterator.
      */

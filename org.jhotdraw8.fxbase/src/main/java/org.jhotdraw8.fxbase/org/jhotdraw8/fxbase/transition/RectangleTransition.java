@@ -8,6 +8,7 @@ import javafx.animation.Transition;
 import javafx.geometry.Bounds;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
+import org.jhotdraw8.annotation.NonNull;
 
 /**
  * RectangleTransition performs a linear transition of the bounds of a JavaFX Rectangle.
@@ -15,9 +16,9 @@ import javafx.util.Duration;
  * @author Werner Randelshofer
  */
 public class RectangleTransition extends Transition {
-    private final Rectangle rectangle;
-    private final Bounds fromBounds;
-    private final Bounds toBounds;
+    private final @NonNull Rectangle rectangle;
+    private final @NonNull Bounds fromBounds;
+    private final @NonNull Bounds toBounds;
 
 
     @SuppressWarnings("this-escape")

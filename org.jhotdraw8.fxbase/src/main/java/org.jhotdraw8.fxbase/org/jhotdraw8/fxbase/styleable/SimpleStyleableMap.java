@@ -43,8 +43,8 @@ public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements Style
     }
 
 
-    private static final Object NULL_VALUE = new Object();
-    private static final Object NO_VALUE = null;
+    private static final @NonNull Object NULL_VALUE = new Object();
+    private static final @NonNull Object NO_VALUE = null;
     private static final int numOrigins = 4;
     private static final int numOriginsMask = 3;
     private @Nullable CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;

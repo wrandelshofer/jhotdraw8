@@ -22,11 +22,11 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
  */
 public class TabPaneTrack extends AbstractDockParent implements Track {
 
-    private final TabPane tabPane = new TabPane();
+    private final @NonNull TabPane tabPane = new TabPane();
     private final @NonNull ResizePane resizePane = new ResizePane();
 
     static class MyTab extends Tab {
-        private final DockableDragHandler dockableDragHandler;
+        private final @NonNull DockableDragHandler dockableDragHandler;
         private final @NonNull DockChild dockChild;
 
         MyTab(@NonNull DockChild dockChild, @Nullable String text, @Nullable Node graphic) {

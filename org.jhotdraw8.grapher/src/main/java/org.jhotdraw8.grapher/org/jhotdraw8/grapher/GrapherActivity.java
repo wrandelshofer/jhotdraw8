@@ -166,8 +166,8 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
  */
 public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 
-    private static final String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
-    private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
+    private static final @NonNull String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
+    private static final @NonNull String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
     /**
      * Counter for incrementing layer names.
      */
@@ -176,7 +176,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     private ScrollPane detailsScrollPane;
     @FXML
     private VBox detailsVBox;
-    private final BooleanProperty detailsVisible = new SimpleBooleanProperty(this, "detailsVisible", true);
+    private final @NonNull BooleanProperty detailsVisible = new SimpleBooleanProperty(this, "detailsVisible", true);
 
     private DrawingView drawingView;
 

@@ -17,9 +17,9 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class ResizePane extends BorderPane {
 
-    private final BooleanProperty userResizable = new SimpleBooleanProperty(true);
+    private final @NonNull BooleanProperty userResizable = new SimpleBooleanProperty(true);
 
-    private final ResizeButton rb = new ResizeButton();
+    private final @NonNull ResizeButton rb = new ResizeButton();
 
     public ResizePane() {
         rb.setTarget(this);

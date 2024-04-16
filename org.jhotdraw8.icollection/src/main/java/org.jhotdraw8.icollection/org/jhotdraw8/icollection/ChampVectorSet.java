@@ -321,7 +321,7 @@ public class ChampVectorSet<E>
     }
 
     @Override
-    public boolean contains(@Nullable final Object o) {
+    public boolean contains(@Nullable final @NonNull Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
         return root.find(new SequencedElement<>(key), SequencedElement.keyHash(key), 0, Objects::equals) != Node.NO_DATA;
     }

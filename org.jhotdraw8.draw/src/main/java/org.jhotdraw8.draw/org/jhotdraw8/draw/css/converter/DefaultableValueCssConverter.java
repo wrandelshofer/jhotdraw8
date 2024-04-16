@@ -23,10 +23,9 @@ import java.util.function.Consumer;
 public class DefaultableValueCssConverter<T> implements CssConverter<CssDefaultableValue<T>> {
 
 
-    private final CssConverter<T> valueConverter;
+    private final @NonNull CssConverter<T> valueConverter;
 
-    public DefaultableValueCssConverter(CssConverter<T> valueConverter) {
-
+    public DefaultableValueCssConverter(@NonNull CssConverter<T> valueConverter) {
         this.valueConverter = valueConverter;
     }
 

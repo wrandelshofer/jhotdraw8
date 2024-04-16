@@ -22,7 +22,7 @@ import java.util.Set;
 
 public class AlignVerticalAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.alignVertical";
+    public static final @NonNull String ID = "edit.alignVertical";
 
     /**
      * Creates a new instance.

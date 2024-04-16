@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  */
 public class RegexCssConverter extends AbstractCssConverter<RegexReplace> {
 
-    public static final String REPLACE_FUNCTION = "replace";
+    public static final @NonNull String REPLACE_FUNCTION = "replace";
 
     public RegexCssConverter(final boolean nullable) {
         super(nullable);

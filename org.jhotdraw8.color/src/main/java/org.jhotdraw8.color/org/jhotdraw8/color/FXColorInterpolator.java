@@ -6,6 +6,7 @@
 package org.jhotdraw8.color;
 
 import javafx.scene.paint.Color;
+import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.util.MathUtil;
 
 import java.awt.color.ColorSpace;
@@ -14,7 +15,7 @@ import java.awt.color.ColorSpace;
  * Linear interpolation between two colors in the specified color space.
  */
 public class FXColorInterpolator {
-    private final NamedColorSpace cs;
+    private final @NonNull NamedColorSpace cs;
     private final float[] fromColor;
     private final float[] toColor;
     private final float diff1, diff2;
@@ -34,7 +35,7 @@ public class FXColorInterpolator {
      * @param fromColor the color at interpolation time 0
      * @param toColor   the color at interpolation time 1
      */
-    public FXColorInterpolator(NamedColorSpace cs, float[] fromColor, float[] toColor) {
+    public FXColorInterpolator(@NonNull NamedColorSpace cs, float[] fromColor, float[] toColor) {
         this(cs, fromColor, toColor,
                 cs.getType() == ColorSpace.TYPE_HSV
                         || cs.getType() == ColorSpace.TYPE_HLS ? 0 : -1);
@@ -53,7 +54,7 @@ public class FXColorInterpolator {
      * @param hueComponent the index of the hue component, or -1 if the color space
      *                     does not have a hue component
      */
-    public FXColorInterpolator(NamedColorSpace cs, float[] fromColor, float[] toColor, int hueComponent) {
+    public FXColorInterpolator(@NonNull NamedColorSpace cs, float[] fromColor, float[] toColor, int hueComponent) {
         this.cs = cs;
         this.fromColor = fromColor;
         this.toColor = toColor;

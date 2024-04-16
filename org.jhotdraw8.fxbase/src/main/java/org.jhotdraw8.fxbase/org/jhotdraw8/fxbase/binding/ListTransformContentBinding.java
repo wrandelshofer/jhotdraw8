@@ -24,8 +24,8 @@ class ListTransformContentBinding<D, S> {
 
     private int isChanging;
 
-    private final ListChangeListener<S> sourceChangeListener = this::onSourceChanged;
-    private final ListChangeListener<D> destChangeListener = this::onDestChanged;
+    private final @NonNull ListChangeListener<S> sourceChangeListener = this::onSourceChanged;
+    private final @NonNull ListChangeListener<D> destChangeListener = this::onDestChanged;
 
 
     ListTransformContentBinding(@NonNull ObservableList<D> dest, @NonNull ObservableList<S> source, @NonNull Function<S, D> toDest, @Nullable Function<D, S> toSource, @Nullable Consumer<D> destOnRemove, @Nullable Consumer<S> sourceOnRemove) {

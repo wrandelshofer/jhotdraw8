@@ -19,7 +19,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         implements WritableStyleableMapAccessor<CssColor> {
 
 
-    private final Converter<CssColor> converter = new ColorCssConverter(true);
+    private final @NonNull Converter<CssColor> converter = new ColorCssConverter(true);
 
     /**
      * Creates a new instance with the specified name and with null as the

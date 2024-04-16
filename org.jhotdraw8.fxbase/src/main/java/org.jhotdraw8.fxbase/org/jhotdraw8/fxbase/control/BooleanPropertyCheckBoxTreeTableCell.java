@@ -21,7 +21,7 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Boolean> {
 
-    private final CheckBox checkBox = new CheckBox();
+    private final @NonNull CheckBox checkBox = new CheckBox();
 
     @SuppressWarnings("this-escape")
     public BooleanPropertyCheckBoxTreeTableCell(@Nullable String styleClass) {

@@ -24,7 +24,7 @@ import java.beans.PropertyChangeListener;
  */
 public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 
-    public static final String ID = "file.clearRecentFiles";
+    public static final @NonNull String ID = "file.clearRecentFiles";
 
     private PropertyChangeListener applicationListener;
 

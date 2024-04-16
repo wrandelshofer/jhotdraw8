@@ -273,7 +273,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return AwtShapes.buildPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
     }
 
-    private static final BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);
+    private static final @NonNull BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);
 
 
     public static @NonNull BezierPath of() {

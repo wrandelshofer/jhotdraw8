@@ -172,10 +172,10 @@ import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
  */
 public class CssParser {
 
-    public static final String ANY_NAMESPACE_PREFIX = "*";
-    public static final String DEFAULT_NAMESPACE = "|";
-    public static final String NAMESPACE_AT_RULE = "namespace";
-    private final SequencedMap<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
+    public static final @NonNull String ANY_NAMESPACE_PREFIX = "*";
+    public static final @NonNull String DEFAULT_NAMESPACE = "|";
+    public static final @NonNull String NAMESPACE_AT_RULE = "namespace";
+    private final @NonNull SequencedMap<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
 
 
     private @NonNull List<ParseException> exceptions = new ArrayList<>();

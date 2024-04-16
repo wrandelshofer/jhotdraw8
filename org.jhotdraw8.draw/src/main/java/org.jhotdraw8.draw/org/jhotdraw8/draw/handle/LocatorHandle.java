@@ -20,7 +20,7 @@ import org.jhotdraw8.geom.Points;
  */
 public abstract class LocatorHandle extends AbstractHandle {
 
-    private final Locator locator;
+    private final @NonNull Locator locator;
 
     /**
      * Initializes the LocatorHandle with the given Locator.

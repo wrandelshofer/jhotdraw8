@@ -49,7 +49,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.
      */
-    public static final String NAME = "attr";
+    public static final @NonNull String NAME = "attr";
 
     /**
      * Creates a new instance with the function name {@value #NAME}.

@@ -27,7 +27,7 @@ import java.util.List;
  * @param <T> the element type of the DOM
  */
 public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T> {
-    protected final ColorCssConverter converter = new ColorCssConverter();
+    protected final @NonNull ColorCssConverter converter = new ColorCssConverter();
 
     public AbstractColorCssFunction(String name) {
         super(name);

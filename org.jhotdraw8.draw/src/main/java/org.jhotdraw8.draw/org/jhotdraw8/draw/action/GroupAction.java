@@ -29,8 +29,8 @@ import java.util.function.Supplier;
  */
 public class GroupAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.group";
-    public static final String COMBINE_PATHS_ID = "edit.combinePaths";
+    public static final @NonNull String ID = "edit.group";
+    public static final @NonNull String COMBINE_PATHS_ID = "edit.combinePaths";
     public final @Nullable Supplier<Figure> groupFactory;
 
     /**
@@ -56,7 +56,7 @@ public class GroupAction extends AbstractDrawingViewAction {
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
-        final LinkedList<Figure> figures = new LinkedList<>(drawingView.getSelectedFigures());
+        final @NonNull LinkedList<Figure> figures = new LinkedList<>(drawingView.getSelectedFigures());
         group(drawingView, figures, groupFactory);
 
     }

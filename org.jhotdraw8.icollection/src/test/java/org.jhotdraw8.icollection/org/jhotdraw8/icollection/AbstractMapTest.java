@@ -37,9 +37,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractMapTest {
 
-    private static final MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
-    private static final MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
-    private static final MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final @NonNull MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
+    private static final @NonNull MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
+    private static final @NonNull MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
 
     public static Stream<MapData> dataProvider() {
         return Stream.of(

@@ -114,7 +114,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * Defines the paint used for filling the interior of the icon shape. Default
      * value: {@code Color.BLACK}.
      */
-    public static final NullablePaintableStyleableKey ICON_FILL = new NullablePaintableStyleableKey("iconFill", new CssColor("canvastext", Color.BLACK));
+    public static final @NonNull NullablePaintableStyleableKey ICON_FILL = new NullablePaintableStyleableKey("iconFill", new CssColor("canvastext", Color.BLACK));
 
     public static final @NonNull DoubleStyleableKey ICON_ROTATE = new DoubleStyleableKey("iconRotate", 0.0);
 

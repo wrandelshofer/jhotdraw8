@@ -79,15 +79,15 @@ public class PageFigure extends AbstractCompositeFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Page";
-    public static final CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    public static final CssSizeStyleableKey X = RectangleFigure.X;
-    public static final CssSizeStyleableKey Y = RectangleFigure.Y;
-    public static final CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
-    private static final Object CONTENT_BOUNDS_PROPERTY = new Object();
-    private static final Object PAGE_INSETS_PROPERTY = new Object();
-    private static final Object PAGE_BOUNDS_PROPERTY = new Object();
-    private static final Object CURRENT_PAGE_PROPERTY = new Object();
+    public static final @NonNull String TYPE_SELECTOR = "Page";
+    public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
+    public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
+    public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
+    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    private static final @NonNull Object CONTENT_BOUNDS_PROPERTY = new Object();
+    private static final @NonNull Object PAGE_INSETS_PROPERTY = new Object();
+    private static final @NonNull Object PAGE_BOUNDS_PROPERTY = new Object();
+    private static final @NonNull Object CURRENT_PAGE_PROPERTY = new Object();
 
     public PageFigure() {
     }
@@ -420,8 +420,8 @@ public class PageFigure extends AbstractCompositeFigure
         int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
         int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
         final int n = numPagesX * numPagesY;
-        final List<PathElement> pbList = new ArrayList<>(n * 4);
-        final List<PathElement> pmList = new ArrayList<>(n * 4);
+        final @NonNull List<PathElement> pbList = new ArrayList<>(n * 4);
+        final @NonNull List<PathElement> pmList = new ArrayList<>(n * 4);
         for (int i = 0; i < n; i++) {
             addBounds(pbList, getPageBounds(i));
             addBounds(pmList, getContentBounds(i));

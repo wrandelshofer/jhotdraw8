@@ -97,7 +97,7 @@ public class IntersectPointQuadCurve {
         final double[] roots = new Polynomial(4 * a, 3 * b, 2 * c, d).getRoots();
 
         // Select roots with closest distance to point
-        final List<IntersectionPoint> result = new ArrayList<>();
+        final @NonNull List<IntersectionPoint> result = new ArrayList<>();
         final Point2D.Double p1, p2, p3;
         p1 = new Point2D.Double(x0, y0);
         p2 = new Point2D.Double(x1, y1);

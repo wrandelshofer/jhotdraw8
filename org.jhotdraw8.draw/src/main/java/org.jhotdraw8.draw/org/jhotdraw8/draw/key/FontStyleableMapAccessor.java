@@ -32,7 +32,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     private final @NonNull MapAccessor<FontWeight> weightKey;
     private final @NonNull MapAccessor<FontPosture> postureKey;
     private final @NonNull MapAccessor<@NonNull CssSize> sizeKey;
-    private final Converter<CssFont> converter = new FontCssConverter(false);
+    private final @NonNull Converter<CssFont> converter = new FontCssConverter(false);
 
     /**
      * Creates a new instance with the specified name.

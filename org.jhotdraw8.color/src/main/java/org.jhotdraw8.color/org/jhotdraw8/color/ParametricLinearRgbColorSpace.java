@@ -67,7 +67,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * <p>
      * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">brucelindbloom.com</a>.
      */
-    public static final Matrix3Double FROM_D65_TO_D50 = FROM_D50_XYZ_TO_D65_XYZ.inv();
+    public static final @NonNull Matrix3Double FROM_D65_TO_D50 = FROM_D50_XYZ_TO_D65_XYZ.inv();
 
     /**
      * The XYZ coordinates of the D50 white illuminant.

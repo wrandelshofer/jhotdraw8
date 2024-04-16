@@ -9,7 +9,7 @@ import javafx.scene.text.Text;
 import org.jhotdraw8.annotation.NonNull;
 
 public class SimpleDockable extends AbstractDockable {
-    private final Node node;
+    private final @NonNull Node node;
 
     public SimpleDockable(Node content) {
         this(null, content);

@@ -102,7 +102,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @return breadth first search
      */
     default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final boolean dfs) {
-        final Set<V> visited = new HashSet<>();
+        final @NonNull Set<V> visited = new HashSet<>();
         return searchPrevVertices(start, visited::add, dfs);
     }
 

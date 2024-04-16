@@ -38,25 +38,25 @@ import java.util.logging.Logger;
  * @author Werner Randelshofer
  */
 public abstract class AbstractFigureFactory implements FigureFactory {
-    private static final Logger LOGGER = Logger.getLogger(AbstractFigureFactory.class.getName());
-    private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
-    private final Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> elemToKey = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashSet<MapAccessor<?>>> figureAttributeKeys = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashSet<MapAccessor<?>>> figureNodeListKeys = new HashMap<>();
-    private final Map<Class<? extends Figure>, String> figureToName = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> keyToAttr = new HashMap<>();
-    private final Map<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> keyToElem = new HashMap<>();
-    private final Map<MapAccessor<?>, Converter<?>> keyValueFromXML = new HashMap<>();
-    private final Map<MapAccessor<?>, Converter<?>> keyValueToXML = new HashMap<>();
-    private final Map<String, Supplier<Figure>> nameToFigure = new HashMap<>();
-    private String objectIdAttribute = "id";
-    private final Map<String, HashSet<Class<? extends Figure>>> skipAttributes = new HashMap<>();
-    private final Set<String> skipElements = new HashSet<>();
-    private final Set<Class<? extends Figure>> skipFigures = new HashSet<>();
-    private final Map<Type, Converter<?>> valueFromXML = new HashMap<>();
+    private static final @NonNull Logger LOGGER = Logger.getLogger(AbstractFigureFactory.class.getName());
+    private final @NonNull Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> attrToKey = new HashMap<>();
+    private final @NonNull Map<FigureAccessorKey<?>, Object> defaultValueMap = new HashMap<>();
+    private final @NonNull Map<Class<? extends Figure>, HashMap<String, MapAccessor<?>>> elemToKey = new HashMap<>();
+    private final @NonNull Map<Class<? extends Figure>, HashSet<MapAccessor<?>>> figureAttributeKeys = new HashMap<>();
+    private final @NonNull Map<Class<? extends Figure>, HashSet<MapAccessor<?>>> figureNodeListKeys = new HashMap<>();
+    private final @NonNull Map<Class<? extends Figure>, String> figureToName = new HashMap<>();
+    private final @NonNull Map<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> keyToAttr = new HashMap<>();
+    private final @NonNull Map<Class<? extends Figure>, HashMap<MapAccessor<?>, String>> keyToElem = new HashMap<>();
+    private final @NonNull Map<MapAccessor<?>, Converter<?>> keyValueFromXML = new HashMap<>();
+    private final @NonNull Map<MapAccessor<?>, Converter<?>> keyValueToXML = new HashMap<>();
+    private final @NonNull Map<String, Supplier<Figure>> nameToFigure = new HashMap<>();
+    private @NonNull String objectIdAttribute = "id";
+    private final @NonNull Map<String, HashSet<Class<? extends Figure>>> skipAttributes = new HashMap<>();
+    private final @NonNull Set<String> skipElements = new HashSet<>();
+    private final @NonNull Set<Class<? extends Figure>> skipFigures = new HashSet<>();
+    private final @NonNull Map<Type, Converter<?>> valueFromXML = new HashMap<>();
 
-    private final Map<Type, Converter<?>> valueToXML = new HashMap<>();
+    private final @NonNull Map<Type, Converter<?>> valueToXML = new HashMap<>();
     private @Nullable IdFactory idFactory;
 
     public AbstractFigureFactory() {

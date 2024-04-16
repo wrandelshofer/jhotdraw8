@@ -240,7 +240,7 @@ public class TopologicalSortAlgo {
         }
 
         // Step 2: put all vertices with degree zero into queue
-        final Queue<V> queue = new ArrayDeque<>(n);
+        final @NonNull Queue<V> queue = new ArrayDeque<>(n);
         for (Map.Entry<V, Integer> entry : deg.entrySet()) {
             if (entry.getValue() == 0) {
                 queue.add(entry.getKey());
@@ -248,7 +248,7 @@ public class TopologicalSortAlgo {
         }
 
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
-        final List<V> result = new ArrayList<>(n);// result array
+        final @NonNull List<V> result = new ArrayList<>(n);// result array
         int done = 0;
         while (done < n) {
             for (; done < n; done++) {

@@ -28,7 +28,7 @@ public class ToolEvent extends Event<Tool> {
         TOOL_DONE
     }
 
-    private final EventType eventType;
+    private final @NonNull EventType eventType;
 
     public <T> ToolEvent(@NonNull Tool source, EventType type) {
         super(source);

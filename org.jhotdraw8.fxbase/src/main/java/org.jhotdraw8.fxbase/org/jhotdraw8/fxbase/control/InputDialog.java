@@ -62,7 +62,7 @@ public class InputDialog<R> extends Dialog<R> {
      *
      * @return the input form
      */
-    public final Node getInputForm() {
+    public final @NonNull Node getInputForm() {
         return inputForm;
     }
 

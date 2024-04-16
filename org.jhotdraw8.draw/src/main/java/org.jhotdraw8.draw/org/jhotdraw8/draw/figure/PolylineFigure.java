@@ -43,11 +43,11 @@ public class PolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
-    public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", VectorList.of());
+    public static final @NonNull Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", VectorList.of());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Polyline";
+    public static final @NonNull String TYPE_SELECTOR = "Polyline";
 
     public PolylineFigure() {
         this(0, 0, 1, 1);

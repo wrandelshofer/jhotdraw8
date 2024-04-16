@@ -266,7 +266,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
 
         if (layoutTransforms) {
-            final List<Transform> transforms = new ArrayList<>();
+            final @NonNull List<Transform> transforms = new ArrayList<>();
             if (!rotate.isIdentity()) {
                 transforms.add(rotate);
             }

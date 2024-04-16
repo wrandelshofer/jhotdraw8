@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class CssParserTest {
 
-    private static final String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+    private static final @NonNull String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 
     /**
      * Test of CSS syntax.

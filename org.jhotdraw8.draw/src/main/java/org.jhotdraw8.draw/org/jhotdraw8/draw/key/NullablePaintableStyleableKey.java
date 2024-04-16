@@ -18,7 +18,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WritableStyleableMapAccessor<Paintable> {
 
 
-    private final Converter<Paintable> converter;
+    private final @NonNull Converter<Paintable> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the

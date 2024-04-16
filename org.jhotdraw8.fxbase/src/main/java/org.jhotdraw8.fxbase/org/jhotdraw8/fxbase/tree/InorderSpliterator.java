@@ -24,7 +24,7 @@ public class InorderSpliterator<T> extends AbstractSpliterator<T> {
     private final @NonNull Function<T, Iterable<T>> getChildrenFunction;
     private @Nullable T root;
     private Spliterator<T> subtree;
-    private final Iterator<T> children;
+    private final @NonNull Iterator<T> children;
 
     public InorderSpliterator(@NonNull Function<T, Iterable<T>> getChildrenFunction, @NonNull T root) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);

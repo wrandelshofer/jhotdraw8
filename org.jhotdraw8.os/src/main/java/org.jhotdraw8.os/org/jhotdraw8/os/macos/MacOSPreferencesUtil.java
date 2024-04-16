@@ -28,11 +28,11 @@ public class MacOSPreferencesUtil {
     /**
      * Path to global preferences.
      */
-    public static final File GLOBAL_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/.GlobalPreferences.plist");
+    public static final @NonNull File GLOBAL_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/.GlobalPreferences.plist");
     /**
      * Path to finder preferences.
      */
-    public static final File FINDER_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/com.apple.finder.plist");
+    public static final @NonNull File FINDER_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/com.apple.finder.plist");
     /**
      * Each entry in this hash map represents a cached preferences file.
      */

@@ -34,9 +34,9 @@ public class ZoomToolbar extends BorderPane {
 
     @FXML
     private Slider zoomSlider;
-    private final DoubleProperty zoomPower = new SimpleDoubleProperty(this, "zoomPower", 0.0);
+    private final @NonNull DoubleProperty zoomPower = new SimpleDoubleProperty(this, "zoomPower", 0.0);
     private int isUpdating = 0;
-    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
+    private final @NonNull DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
 
     {
         zoomFactor.addListener((o, oldv, newv) -> {

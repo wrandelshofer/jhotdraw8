@@ -35,7 +35,6 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import java.util.logging.Logger;
 
 /**
  * Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.
@@ -52,8 +51,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
     public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
 
-    public static final NonNullBooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new NonNullBooleanStyleableKey("ShapePreserveRatio", false);
-    private static final Logger LOGGER = Logger.getLogger(AbstractRegionFigure.class.getName());
+    public static final @NonNull NonNullBooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new NonNullBooleanStyleableKey("ShapePreserveRatio", false);
 
     private transient ImmutableList<PathElement> pathElements;
 

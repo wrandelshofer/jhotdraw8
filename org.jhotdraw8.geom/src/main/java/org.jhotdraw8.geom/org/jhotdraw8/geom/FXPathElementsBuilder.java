@@ -22,7 +22,7 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>> {
-    public static final ClosePath CLOSE_PATH = new ClosePath();
+    public static final @NonNull ClosePath CLOSE_PATH = new ClosePath();
     private final @NonNull List<PathElement> elements;
 
     public FXPathElementsBuilder() {

@@ -24,8 +24,8 @@ import java.util.function.Consumer;
 public class SvgDefaultablePaintConverter<T extends Paintable> implements CssConverter<SvgDefaultablePaint<T>> {
 
 
-    public static final String CURRENT_COLOR = "currentColor";
-    private final CssConverter<T> valueConverter;
+    public static final @NonNull String CURRENT_COLOR = "currentColor";
+    private final @NonNull CssConverter<T> valueConverter;
 
     public SvgDefaultablePaintConverter(CssConverter<T> valueConverter) {
 

@@ -48,11 +48,11 @@ import java.awt.geom.PathIterator;
 public class PolygonOutlineHandle extends AbstractHandle {
 
     private final boolean editable;
-    private final NonNullMapAccessor<ImmutableList<Point2D>> key;
+    private final @NonNull NonNullMapAccessor<ImmutableList<Point2D>> key;
 
-    private final Group node;
-    private final Polygon poly1;
-    private final Polygon poly2;
+    private final @NonNull Group node;
+    private final @NonNull Polygon poly1;
+    private final @NonNull Polygon poly2;
 
     public PolygonOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key) {
         this(figure, key, true);

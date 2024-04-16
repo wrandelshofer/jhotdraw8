@@ -41,13 +41,13 @@ import java.util.function.Consumer;
 public class FontCssConverter extends AbstractCssConverter<CssFont> {
 
 
-    public static final String ITALIC_STYLE = "italic";
-    public static final String BOLD_WEIGHT = "bold";
-    public static final String NORMAL_STYLE = "normal";
-    public static final String NORMAL_WEIGHT = "normal";
-    public static final String OBLIQUE_STYLE = "oblique";
-    public static final String BOLDER_WEIGHT = "bolder";
-    public static final String LIGHTER_WEIGHT = "lighter";
+    public static final @NonNull String ITALIC_STYLE = "italic";
+    public static final @NonNull String BOLD_WEIGHT = "bold";
+    public static final @NonNull String NORMAL_STYLE = "normal";
+    public static final @NonNull String NORMAL_WEIGHT = "normal";
+    public static final @NonNull String OBLIQUE_STYLE = "oblique";
+    public static final @NonNull String BOLDER_WEIGHT = "bolder";
+    public static final @NonNull String LIGHTER_WEIGHT = "lighter";
 
     public FontCssConverter(boolean nullable) {
         super(nullable);

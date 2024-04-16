@@ -57,7 +57,7 @@ import java.util.logging.Logger;
 public class FXShapes {
 
 
-    private static final Logger LOGGER = Logger.getLogger(FXShapes.class.getName());
+    private static final @NonNull Logger LOGGER = Logger.getLogger(FXShapes.class.getName());
 
     /**
      * Don't let anyone instantiate this class.

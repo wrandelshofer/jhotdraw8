@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.IntFunction;
@@ -19,7 +21,7 @@ public class ChildIterator<T> implements Iterator<T> {
     /**
      * Returns a child element given an index.
      */
-    private final IntFunction<T> getElementFunction;
+    private final @NonNull IntFunction<T> getElementFunction;
     /**
      * The number of children (the size of the child collection).
      */

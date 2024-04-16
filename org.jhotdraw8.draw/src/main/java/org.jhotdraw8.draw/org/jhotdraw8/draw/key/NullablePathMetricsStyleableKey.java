@@ -44,7 +44,7 @@ public class NullablePathMetricsStyleableKey
 
     }
 
-    private final Converter<PathMetrics> converter = new PathMetricsCssConverter(true);
+    private final @NonNull Converter<PathMetrics> converter = new PathMetricsCssConverter(true);
 
     @Override
     public @NonNull Converter<PathMetrics> getCssConverter() {

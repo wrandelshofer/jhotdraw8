@@ -18,10 +18,10 @@ import org.jhotdraw8.application.resources.Resources;
  * @author Werner Randelshofer
  */
 public class ToggleBooleanAction extends AbstractActivityAction<Activity> {
-    private final BooleanProperty value;
+    private final @NonNull BooleanProperty value;
 
     @SuppressWarnings("this-escape")
-    public ToggleBooleanAction(@NonNull Activity activity, @Nullable String id, @Nullable Resources labels, BooleanProperty value) {
+    public ToggleBooleanAction(@NonNull Activity activity, @Nullable String id, @Nullable Resources labels, @NonNull BooleanProperty value) {
         super(activity);
         if (labels != null && id != null) {
             labels.configureAction(this, id);

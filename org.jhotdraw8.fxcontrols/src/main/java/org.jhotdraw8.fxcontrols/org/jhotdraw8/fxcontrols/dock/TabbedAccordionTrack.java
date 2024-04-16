@@ -39,8 +39,8 @@ import static java.lang.Double.max;
  */
 public class TabbedAccordionTrack extends AbstractDockParent implements Track {
 
-    private final BooleanProperty rotated = new SimpleBooleanProperty(false);
-    private final TabPane tabPane = new TabPane();
+    private final @NonNull BooleanProperty rotated = new SimpleBooleanProperty(false);
+    private final @NonNull TabPane tabPane = new TabPane();
     private final @NonNull Accordion accordion = new Accordion();
     private final @NonNull TitledPane titlePane = new TitledPane();
     private final @NonNull ResizePane resizePane = new ResizePane();

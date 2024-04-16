@@ -52,11 +52,11 @@ import java.util.regex.Pattern;
  * This reader does not support {@link FigureFactory#nodeListToValue(MapAccessor, List)}.
  */
 public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInputFormat {
-    private static final Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
+    private static final @NonNull Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
     private final @NonNull IdFactory idFactory;
     private @Nullable String namespaceURI;
     private @NonNull FigureFactory figureFactory;
-    private final String idAttribute = "id";
+    private final @NonNull String idAttribute = "id";
     private Supplier<Layer> layerFactory;
 
     public SimpleXmlReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {

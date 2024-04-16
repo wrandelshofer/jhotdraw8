@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  * Provides methods for parsing and generating SVG path strings from AWT paths.
  */
 public class SvgPaths {
-    private static final Logger LOGGER = Logger.getLogger(SvgPaths.class.getName());
+    private static final @NonNull Logger LOGGER = Logger.getLogger(SvgPaths.class.getName());
 
     /**
      * Don't let anyone instantiate this class.

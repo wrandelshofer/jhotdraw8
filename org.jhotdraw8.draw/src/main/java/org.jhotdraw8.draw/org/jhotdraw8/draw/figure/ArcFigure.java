@@ -12,7 +12,6 @@ import javafx.scene.shape.Arc;
 import javafx.scene.shape.ArcType;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
@@ -31,17 +30,17 @@ public class ArcFigure extends AbstractLeafFigure implements StrokableFigure, Fi
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Arc";
+    public static final @NonNull String TYPE_SELECTOR = "Arc";
 
     public static final @NonNull CssSizeStyleableKey CENTER_X = new CssSizeStyleableKey("centerX", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey CENTER_Y = new CssSizeStyleableKey("centerY", CssSize.ZERO);
-    public static final CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
-    public static final CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
-    public static final DoubleStyleableKey START_ANGLE = new DoubleStyleableKey("startAngle", 0.0);
-    public static final DoubleStyleableKey ARC_LENGTH = new DoubleStyleableKey("arcLength", 360.0);
-    public static final NonNullEnumStyleableKey<ArcType> ARC_TYPE = new NonNullEnumStyleableKey<>("arcType", ArcType.class, ArcType.ROUND);
-    public static final @Nullable CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
-    public static final CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
+    public static final @NonNull CssSizeStyleableKey RADIUS_X = new CssSizeStyleableKey("radiusX", CssSize.ONE);
+    public static final @NonNull CssSizeStyleableKey RADIUS_Y = new CssSizeStyleableKey("radiusY", CssSize.ONE);
+    public static final @NonNull DoubleStyleableKey START_ANGLE = new DoubleStyleableKey("startAngle", 0.0);
+    public static final @NonNull DoubleStyleableKey ARC_LENGTH = new DoubleStyleableKey("arcLength", 360.0);
+    public static final @NonNull NonNullEnumStyleableKey<ArcType> ARC_TYPE = new NonNullEnumStyleableKey<>("arcType", ArcType.class, ArcType.ROUND);
+    public static final @NonNull CssPoint2DStyleableMapAccessor CENTER = new CssPoint2DStyleableMapAccessor("center", CENTER_X, CENTER_Y);
+    public static final @NonNull CssPoint2DStyleableMapAccessor RADIUS = new CssPoint2DStyleableMapAccessor("radius", RADIUS_X, RADIUS_Y);
 
     public ArcFigure() {
         this(0, 0, 1, 1);

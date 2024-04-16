@@ -33,9 +33,9 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
  * @author Werner Randelshofer
  */
 public class BoundsInTranslationOutlineHandle extends AbstractHandle {
-    private final Group node;
-    private final Polygon poly1;
-    private final Polygon poly2;
+    private final @NonNull Group node;
+    private final @NonNull Polygon poly1;
+    private final @NonNull Polygon poly2;
     private final double[] points;
 
     public BoundsInTranslationOutlineHandle(Figure figure) {

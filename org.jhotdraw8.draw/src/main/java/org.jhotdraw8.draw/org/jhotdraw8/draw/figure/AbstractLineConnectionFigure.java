@@ -30,7 +30,7 @@ import java.util.SequencedSet;
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         implements NonTransformableFigure, LineConnectingFigure {
 
-    private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
+    private final @NonNull ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
     public AbstractLineConnectionFigure() {
         this(0, 0, 0, 0);

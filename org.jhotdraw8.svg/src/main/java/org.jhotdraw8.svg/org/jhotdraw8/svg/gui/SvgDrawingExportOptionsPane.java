@@ -57,7 +57,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @FXML
     private TextField drawingDpiField;
 
-    private final TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
+    private final @NonNull TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label drawingDpiLabel;
@@ -79,7 +79,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @SuppressWarnings("unused")
     @FXML
     private TextField pagesDpiField;
-    private final TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
+    private final @NonNull TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label pagesDpiLabel;
@@ -90,7 +90,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @SuppressWarnings("unused")
     @FXML
     private TextField slicesDpiField;
-    private final TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
+    private final @NonNull TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label slicesDpiLabel;
@@ -220,7 +220,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
         exportInvisibleElements.setVisible(invisibles);
     }
 
-    private final Set<DataFormat> dpiFormats = new HashSet<>();
+    private final @NonNull Set<DataFormat> dpiFormats = new HashSet<>();
 
     {
         dpiFormats.add(DataFormat.IMAGE);
@@ -228,7 +228,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
         dpiFormats.add(registerDataFormat(BitmapExportOutputFormat.JPEG_MIME_TYPE));
     }
 
-    private final Set<DataFormat> invisiblesFormats = new HashSet<>();
+    private final @NonNull Set<DataFormat> invisiblesFormats = new HashSet<>();
 
     {
         invisiblesFormats.add(registerDataFormat(SvgExportOutputFormat.SVG_MIME_TYPE));

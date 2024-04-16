@@ -20,7 +20,7 @@ import java.util.Objects;
  */
 public class CssPoint2D {
 
-    public static final CssPoint2D ZERO = new CssPoint2D();
+    public static final @NonNull CssPoint2D ZERO = new CssPoint2D();
 
     private final @NonNull CssSize x;
     private final @NonNull CssSize y;

@@ -21,10 +21,10 @@ import java.util.List;
  */
 public class FontCollection {
 
-    private final StringProperty name = new SimpleStringProperty();
+    private final @NonNull StringProperty name = new SimpleStringProperty();
 
-    private final ObservableList<FontFamily> families = FXCollections.observableArrayList();
-    private final BooleanProperty smartCollection = new SimpleBooleanProperty();
+    private final @NonNull ObservableList<FontFamily> families = FXCollections.observableArrayList();
+    private final @NonNull BooleanProperty smartCollection = new SimpleBooleanProperty();
 
     public FontCollection() {
     }

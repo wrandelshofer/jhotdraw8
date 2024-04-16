@@ -17,12 +17,8 @@ import java.util.logging.Logger;
  * A utility class for {@code ColorSpace} objects.
  *
  * @author Werner Randelshofer
-
  */
 public class ColorSpaceUtil {
-
-    private static final float EPSILON = 1f / 512;
-    private static final ColorSpace sRGB = ColorSpace.getInstance(ColorSpace.CS_sRGB);
 
     /**
      * Don't let anyone instantiate this class.

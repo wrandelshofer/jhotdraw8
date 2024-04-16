@@ -50,11 +50,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * The active view.
      */
-    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
+    private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
     /**
      * The active editor.
      */
-    private final ObjectProperty<DrawingEditor> drawingEditor = new SimpleObjectProperty<>(this, DRAWING_EDITOR_PROPERTY);
+    private final @NonNull ObjectProperty<DrawingEditor> drawingEditor = new SimpleObjectProperty<>(this, DRAWING_EDITOR_PROPERTY);
 
     {
         drawingView.addListener((ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) -> stopEditing());
@@ -145,9 +145,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     }
 
-    protected final BorderPane eventPane = new EventPane();
-    protected final BorderPane drawPane = new BorderPane();
-    protected final StackPane node = new StackPane();
+    protected final @NonNull BorderPane eventPane = new EventPane();
+    protected final @NonNull BorderPane drawPane = new BorderPane();
+    protected final @NonNull StackPane node = new StackPane();
 
     {
         eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
@@ -213,7 +213,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * Listeners.
      */
-    private final LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
+    private final @NonNull LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
 
     // ---
     // Constructors

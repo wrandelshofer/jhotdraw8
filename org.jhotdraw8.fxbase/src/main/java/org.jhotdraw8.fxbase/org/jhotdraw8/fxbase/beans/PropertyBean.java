@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * <pre><code>{@literal
  * public class MyBean implements PropertyBean {
- *      protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
+ *      protected final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableMap(new LinkedHashMap<>());
  *
  *     {@literal @}Override
  *     public ObservableMap{@literal <Key<?>, Object>} getProperties() {

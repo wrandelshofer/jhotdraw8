@@ -79,8 +79,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.SequencedMap;
 import java.util.WeakHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -108,8 +106,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             new SimpleParameterizedType(ChangeListener.class, Boolean.class));
     private static final @NonNull Key<Stage> STAGE_KEY = new NullableObjectKey<>("stage", Stage.class);
     public static final @NonNull String WINDOW_MENU_ID = "window";
-    public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
-    private final Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
+    public static final @NonNull String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
+    private final @NonNull Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
 
     /**
      * @param args the command line arguments
@@ -118,14 +116,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         launch(args);
     }
 
-    private final ReadOnlyObjectWrapper<Activity> activeActivity = new ReadOnlyObjectWrapper<>();
-    private final ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), (Runnable r) -> {
-        Thread t = new Thread(r);
-        t.setUncaughtExceptionHandler((Thread t1, Throwable e) -> {
-            throw (RuntimeException) e;
-        });
-        return t;
-    });
+    private final @NonNull ReadOnlyObjectWrapper<Activity> activeActivity = new ReadOnlyObjectWrapper<>();
     private boolean isSystemMenuSupported;
 
 
@@ -177,7 +168,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
             return null;
         }
         Deque<Menu> todo = new LinkedList<>(mb.getMenus());
-        final List<KeyCombination> accelerators = new ArrayList<>();
+        final @NonNull List<KeyCombination> accelerators = new ArrayList<>();
         while (!todo.isEmpty()) {
             final Menu menu = todo.remove();
             if (WINDOW_MENU_ID.equals(menu.getId())) {

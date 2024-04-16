@@ -24,8 +24,8 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
     protected @Nullable DrawingModel drawingModel;
     protected @Nullable Drawing drawing;
 
-    private final ChangeListener<Drawing> drawingListener = this::onDrawingChanged;
-    private final ChangeListener<DrawingModel> modelListener = this::onDrawingModelChanged;
+    private final @NonNull ChangeListener<Drawing> drawingListener = this::onDrawingChanged;
+    private final @NonNull ChangeListener<DrawingModel> modelListener = this::onDrawingModelChanged;
 
     {
         subject.addListener(this::onDrawingViewChanged);

@@ -15,7 +15,7 @@ import java.util.List;
  * Builds a list of {@link Double}s for a {@link Polygon}.
  */
 public class FXPolygonBuilder extends AbstractPathBuilder<List<Double>> {
-    private final List<Double> poly = new ArrayList<>();
+    private final @NonNull List<Double> poly = new ArrayList<>();
 
     public FXPolygonBuilder() {
     }

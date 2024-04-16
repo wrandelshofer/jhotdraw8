@@ -34,7 +34,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     private final @NonNull MapAccessor<StrokeLineJoin> lineJoinKey;
     private final @NonNull MapAccessor<StrokeLineCap> lineCapKey;
     private final @NonNull MapAccessor<CssSize> miterLimitKey;
-    private final Converter<CssStrokeStyle> converter = new StrokeStyleCssConverter(false);
+    private final @NonNull Converter<CssStrokeStyle> converter = new StrokeStyleCssConverter(false);
 
     public StrokeStyleableMapAccessor(String name,
                                       @NonNull MapAccessor<StrokeType> typeKey,

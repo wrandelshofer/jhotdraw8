@@ -26,7 +26,7 @@ import java.util.Set;
  */
 public class RemoveTransformationsAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.removeTransformations";
+    public static final @NonNull String ID = "edit.removeTransformations";
 
     /**
      * Creates a new instance.
@@ -42,7 +42,7 @@ public class RemoveTransformationsAction extends AbstractDrawingViewAction {
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
-        final LinkedList<Figure> figures = new LinkedList<>(drawingView.getSelectedFigures());
+        final @NonNull LinkedList<Figure> figures = new LinkedList<>(drawingView.getSelectedFigures());
         removeTransformations(drawingView, figures);
 
     }

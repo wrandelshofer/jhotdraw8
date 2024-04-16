@@ -111,10 +111,9 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
         return state.get();
     }
 
-    private @NonNull
-    final ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(State.READY);
-    private @NonNull
-    final ReadOnlyObjectWrapper<Throwable> throwable = new ReadOnlyObjectWrapper<>(null);
+    private final @NonNull ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(State.READY);
+    private final @NonNull ReadOnlyObjectWrapper<Throwable> throwable = new ReadOnlyObjectWrapper<>(null);
+
     @Override
     public ReadOnlyObjectProperty<State> stateProperty() {
         return state.getReadOnlyProperty();

@@ -31,12 +31,12 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "EqualsWithItself", "SimplifiableAssertion"})
 public abstract class AbstractSetTestOld {
 
-    public static final HashCollider ZERO = new HashCollider(0, -1);
-    public static final HashCollider THREE = new HashCollider(3, -1);
-    public static final HashCollider FIVE = new HashCollider(5, -1);
-    public static final HashCollider SIX = new HashCollider(6, -1);
-    public static final HashCollider SEVEN = new HashCollider(7, -1);
-    public static final HashCollider EIGHT = new HashCollider(8, -1);
+    public static final @NonNull HashCollider ZERO = new HashCollider(0, -1);
+    public static final @NonNull HashCollider THREE = new HashCollider(3, -1);
+    public static final @NonNull HashCollider FIVE = new HashCollider(5, -1);
+    public static final @NonNull HashCollider SIX = new HashCollider(6, -1);
+    public static final @NonNull HashCollider SEVEN = new HashCollider(7, -1);
+    public static final @NonNull HashCollider EIGHT = new HashCollider(8, -1);
 
     protected void assertEqualSets(Set<HashCollider> expected, Set<HashCollider> instance) {
         assertEquals(expected.size(), instance.size());

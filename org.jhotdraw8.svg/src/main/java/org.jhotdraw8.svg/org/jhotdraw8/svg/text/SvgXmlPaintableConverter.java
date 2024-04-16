@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  * Paintable representation in XML files is different from representation in CSS.
  */
 public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> implements Converter<Paintable> {
-    private final SvgCssPaintableConverter cssPaintableConverter = new SvgCssPaintableConverter(false);
+    private final @NonNull SvgCssPaintableConverter cssPaintableConverter = new SvgCssPaintableConverter(false);
 
     public SvgXmlPaintableConverter() {
         this(true);

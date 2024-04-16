@@ -32,13 +32,13 @@ public class ReplaceCssFunction<T> extends AbstractStringCssFunction<T> {
     /**
      * Function name.
      */
-    public static final String NAME = "replace";
+    public static final @NonNull String NAME = "replace";
 
     public ReplaceCssFunction() {
         this(NAME);
     }
 
-    public ReplaceCssFunction(String name) {
+    public ReplaceCssFunction(@NonNull String name) {
         super(name);
     }
 

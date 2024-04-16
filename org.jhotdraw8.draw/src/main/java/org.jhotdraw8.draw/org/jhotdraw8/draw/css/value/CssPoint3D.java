@@ -18,13 +18,13 @@ import java.util.Objects;
  */
 public class CssPoint3D {
 
-    public static final CssPoint3D ZERO = new CssPoint3D();
+    public static final @NonNull CssPoint3D ZERO = new CssPoint3D();
 
-    private final CssSize x;
-    private final CssSize y;
-    private final CssSize z;
+    private final @NonNull CssSize x;
+    private final @NonNull CssSize y;
+    private final @NonNull CssSize z;
 
-    public CssPoint3D(CssSize x, CssSize y, CssSize z) {
+    public CssPoint3D(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize z) {
         this.x = x;
         this.y = y;
         this.z = z;

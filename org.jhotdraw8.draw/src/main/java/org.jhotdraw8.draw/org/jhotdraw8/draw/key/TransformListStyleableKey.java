@@ -24,7 +24,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
         implements WritableStyleableMapAccessor<ImmutableList<Transform>>, NonNullKey<ImmutableList<Transform>> {
 
 
-    private final Converter<ImmutableList<Transform>> converter;
+    private final @NonNull Converter<ImmutableList<Transform>> converter;
 
     /**
      * Creates a new instance with the specified name and with an empty list as the

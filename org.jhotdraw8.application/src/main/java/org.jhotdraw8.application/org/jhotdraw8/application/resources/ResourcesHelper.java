@@ -27,7 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class ResourcesHelper {
-    static final Logger LOG = Logger.getLogger(Resources.class.getName());
+    static final @NonNull Logger LOG = Logger.getLogger(Resources.class.getName());
     /**
      * The global map of property name modifiers. The key of this map is the
      * name of the property name modifier, the value of this map is a fallback
@@ -49,7 +49,7 @@ class ResourcesHelper {
         propertyNameModifiers.put("os", new String[]{os, "default"});
     }
 
-    static final Set<String> acceleratorKeys = Collections.synchronizedSet(new HashSet<>(
+    static final @NonNull Set<String> acceleratorKeys = Collections.synchronizedSet(new HashSet<>(
             Arrays.asList("shift", "control", "ctrl", "meta", "alt", "altGraph")));
     /**
      * List of decoders. The first decoder which can decode a resource value is

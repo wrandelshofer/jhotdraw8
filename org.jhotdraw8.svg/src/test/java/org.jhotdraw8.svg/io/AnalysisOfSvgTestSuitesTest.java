@@ -67,14 +67,14 @@ public class AnalysisOfSvgTestSuitesTest {
      * <p>
      * <a href="https://github.com/web-platform-tests/wpt">github</a>
      */
-    private static final String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
+    private static final @NonNull String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
     /**
      * Set this constant to the path of the folder into which you checked
      * out the SVG Tiny 1.2 test suite.
      * <p>
      * <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
      */
-    private static final String W3C_SVG_12_TINY_TEST_SUITE = "/Users/Shared/Developer/SVG/W3C_SVG_12_TinyTestSuite";
+    private static final @NonNull String W3C_SVG_12_TINY_TEST_SUITE = "/Users/Shared/Developer/SVG/W3C_SVG_12_TinyTestSuite";
 
     private static final boolean INTERACTIVE = true;
     private static final long INTERACTIVE_TIMEOUT_SECONDS = 60;

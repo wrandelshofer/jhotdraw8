@@ -20,7 +20,7 @@ import java.text.ParseException;
  */
 public class StringConverterAdapter<T> extends StringConverter<T> {
 
-    private final Converter<T> converter;
+    private final @NonNull Converter<T> converter;
 
     public StringConverterAdapter(Converter<T> converter) {
         this.converter = converter;

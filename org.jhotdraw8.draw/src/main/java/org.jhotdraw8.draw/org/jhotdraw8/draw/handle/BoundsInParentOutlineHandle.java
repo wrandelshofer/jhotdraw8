@@ -27,7 +27,7 @@ import org.jhotdraw8.geom.FXTransforms;
  */
 public class BoundsInParentOutlineHandle extends AbstractHandle {
 
-    private final Polygon node;
+    private final @NonNull Polygon node;
     private final double[] points;
 
     public BoundsInParentOutlineHandle(Figure figure) {

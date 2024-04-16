@@ -50,7 +50,7 @@ import java.util.stream.Collectors;
  * @author Werner Randelshofer
  */
 public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
-    public static final String JAVA_CLASS_NAMESPACE = "http://java.net";
+    public static final @NonNull String JAVA_CLASS_NAMESPACE = "http://java.net";
 
     /**
      * Maps an attribute name to a key.
@@ -62,7 +62,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
      */
     private final @NonNull ConcurrentHashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new ConcurrentHashMap<>();
     private final @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
+    private final @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
 
     public FigureSelectorModel() {
     }
@@ -475,8 +475,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         }
     }
 
-    @NonNull
-    private final Map<Object, Object> inlinedValues = new ConcurrentHashMap<>();
+    private final @NonNull Map<Object, Object> inlinedValues = new ConcurrentHashMap<>();
 
     protected @Nullable Object intern(@Nullable Object convertedValue) {
         return convertedValue == null ? null : inlinedValues.computeIfAbsent(convertedValue, k -> convertedValue);

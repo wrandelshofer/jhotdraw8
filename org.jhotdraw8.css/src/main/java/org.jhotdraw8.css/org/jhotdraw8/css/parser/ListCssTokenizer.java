@@ -23,8 +23,8 @@ public class ListCssTokenizer implements CssTokenizer {
     private final @NonNull ImmutableList<CssToken> in;
     private int index = 0;
     private boolean pushBack = true;
-    private CssToken current;
-    private static final CssToken EOF = new CssToken(CssTokenType.TT_EOF);
+    private @Nullable CssToken current;
+    private static final @NonNull CssToken EOF = new CssToken(CssTokenType.TT_EOF);
 
     public ListCssTokenizer(@NonNull List<CssToken> in) {
         this(VectorList.copyOf(in));

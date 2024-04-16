@@ -45,11 +45,11 @@ import java.util.Map;
  */
 public class SelectionTool extends AbstractTool {
 
-    public static final String ID = "tool.selectFigure";
+    public static final @NonNull String ID = "tool.selectFigure";
     // ---
     // Property names
     // ---
-    public static final String SELECT_BEHIND_ENABLED = "selectBehindEnabled";
+    public static final @NonNull String SELECT_BEHIND_ENABLED = "selectBehindEnabled";
     // ---
     // Fields
     // ---
@@ -76,10 +76,10 @@ public class SelectionTool extends AbstractTool {
      */
     private final boolean updateCursor = true;
 
-    private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
+    private final @NonNull BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
     private boolean mouseDragged;
     private @Nullable Figure pressedFigure;
-    private final HandleType handleType;
+    private final @NonNull HandleType handleType;
     private HandleType leadHandleType;
     private HandleType anchorHandleType;
 

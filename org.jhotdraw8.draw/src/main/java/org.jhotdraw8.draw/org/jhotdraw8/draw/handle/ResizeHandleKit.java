@@ -160,14 +160,14 @@ public class ResizeHandleKit {
         return new WestHandle(owner);
     }
 
-    protected static final SVGPath NORTH_SHAPE = new SVGPath();
-    protected static final SVGPath EAST_SHAPE = new SVGPath();
-    protected static final SVGPath WEST_SHAPE = new SVGPath();
-    protected static final SVGPath SOUTH_SHAPE = new SVGPath();
-    protected static final SVGPath NORTH_EAST_SHAPE = new SVGPath();
-    protected static final SVGPath NORTH_WEST_SHAPE = new SVGPath();
-    protected static final SVGPath SOUTH_EAST_SHAPE = new SVGPath();
-    protected static final SVGPath SOUTH_WEST_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath NORTH_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath EAST_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath WEST_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath SOUTH_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath NORTH_EAST_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath NORTH_WEST_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath SOUTH_EAST_SHAPE = new SVGPath();
+    protected static final @NonNull SVGPath SOUTH_WEST_SHAPE = new SVGPath();
 
     static {
         final String square = "M 0,0 9,0 9,9 0,9 Z ";

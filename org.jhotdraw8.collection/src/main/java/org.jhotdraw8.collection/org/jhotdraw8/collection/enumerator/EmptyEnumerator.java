@@ -16,7 +16,7 @@ import java.util.Spliterator;
  * @param <E> the element type
  */
 public class EmptyEnumerator<E> implements Enumerator<E> {
-    private static final EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
+    private static final @NonNull EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
 
     @SuppressWarnings("unchecked")
     public static <T> @NonNull Enumerator<T> emptyEnumerator() {

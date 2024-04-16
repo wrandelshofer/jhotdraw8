@@ -8,10 +8,8 @@ package org.jhotdraw8.theme;
 import org.jhotdraw8.annotation.NonNull;
 
 public abstract class AbstractTheme implements Theme {
-    @NonNull
-    private final String name;
-    @NonNull
-    private final String appearance;
+    private final @NonNull String name;
+    private final @NonNull String appearance;
 
     protected AbstractTheme(@NonNull String name, @NonNull String appearance) {
         this.name = name;

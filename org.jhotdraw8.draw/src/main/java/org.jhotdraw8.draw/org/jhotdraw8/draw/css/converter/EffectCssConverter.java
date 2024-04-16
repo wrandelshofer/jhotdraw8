@@ -92,7 +92,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class EffectCssConverter implements CssConverter<Effect> {
-    private static final ImmutableList<String> examples = VectorList.of(
+    private static final @NonNull ImmutableList<String> examples = VectorList.of(
             "blend(hard-light)",
             "bloom(10%)",
             "box-blur(10,3,3)",
@@ -104,15 +104,15 @@ public class EffectCssConverter implements CssConverter<Effect> {
 
     );
 
-    private static final String BLEND = "blend";
-    private static final String BLOOM = "bloom";
-    private static final String BOX_BLUR = "box-blur";
-    private static final String COLOR_ADJUST = "color-adjust";
-    private static final String DROP_SHADOW = "drop-shadow";
-    private static final String GAUSSIAN_BLUR = "gaussian-blur";
-    private static final String GLOW = "glow";
-    private static final String INNER_SHADOW = "inner-shadow";
-    private static final String SHADOW = "shadow";
+    private static final @NonNull String BLEND = "blend";
+    private static final @NonNull String BLOOM = "bloom";
+    private static final @NonNull String BOX_BLUR = "box-blur";
+    private static final @NonNull String COLOR_ADJUST = "color-adjust";
+    private static final @NonNull String DROP_SHADOW = "drop-shadow";
+    private static final @NonNull String GAUSSIAN_BLUR = "gaussian-blur";
+    private static final @NonNull String GLOW = "glow";
+    private static final @NonNull String INNER_SHADOW = "inner-shadow";
+    private static final @NonNull String SHADOW = "shadow";
 
     private final @NonNull KebabCaseEnumCssConverter<BlurType> blurTypeConverter = new KebabCaseEnumCssConverter<>(BlurType.class, false);
     private final @NonNull KebabCaseEnumCssConverter<BlendMode> blendModeConverter = new KebabCaseEnumCssConverter<>(BlendMode.class, false);

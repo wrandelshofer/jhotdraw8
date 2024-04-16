@@ -441,7 +441,7 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
             return hasNext;
         }
 
-        public final Map.Entry<K, V> next() {
+        public final Map.@NonNull Entry<K, V> next() {
             if (!hasNext) {
                 throw new NoSuchElementException();
             }

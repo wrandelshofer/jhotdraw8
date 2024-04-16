@@ -20,7 +20,7 @@ import java.util.concurrent.CompletionStage;
  */
 public class CloseFileAction extends AbstractSaveUnsavedChangesAction {
 
-    public static final String ID = "file.close";
+    public static final @NonNull String ID = "file.close";
 
     /**
      * Creates a new instance.

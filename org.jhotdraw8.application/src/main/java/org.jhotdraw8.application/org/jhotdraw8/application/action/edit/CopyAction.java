@@ -18,7 +18,7 @@ import org.jhotdraw8.application.EditableComponent;
  */
 public class CopyAction extends AbstractSelectionAction {
 
-    public static final String ID = "edit.copy";
+    public static final @NonNull String ID = "edit.copy";
 
     /**
      * Creates a new instance which acts on the currently focused component.

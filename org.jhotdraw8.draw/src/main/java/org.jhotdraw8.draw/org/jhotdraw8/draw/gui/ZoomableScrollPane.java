@@ -100,25 +100,25 @@ public class ZoomableScrollPane extends GridPane {
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane";
+    public static final @NonNull String ZOOMABLE_SCROLL_PANE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-viewpprt";
+    public static final @NonNull String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-viewpprt";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-background";
+    public static final @NonNull String ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-background";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-subscene";
+    public static final @NonNull String ZOOMABLE_SCROLL_PANE_SUBSCENE_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-subscene";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-foreground";
-    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
-    private final ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
+    public static final @NonNull String ZOOMABLE_SCROLL_PANE_FOREGROUND_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-foreground";
+    private final @NonNull DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
+    private final @NonNull ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
 
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
@@ -303,7 +303,7 @@ public class ZoomableScrollPane extends GridPane {
 
     private static class StyleableProperties {
         @SuppressWarnings("unchecked")
-        private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> HBAR_POLICY =
+        private static final @NonNull CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> HBAR_POLICY =
                 new CssMetaData<>("-fx-hbar-policy",
                         StyleConverter.getEnumConverter(ScrollPane.ScrollBarPolicy.class),
                         ScrollPane.ScrollBarPolicy.AS_NEEDED) {
@@ -320,7 +320,7 @@ public class ZoomableScrollPane extends GridPane {
                 };
 
         @SuppressWarnings("unchecked")
-        private static final CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> VBAR_POLICY =
+        private static final @NonNull CssMetaData<ZoomableScrollPane, ScrollPane.ScrollBarPolicy> VBAR_POLICY =
                 new CssMetaData<>("-fx-vbar-policy",
                         StyleConverter.getEnumConverter(ScrollPane.ScrollBarPolicy.class),
                         ScrollPane.ScrollBarPolicy.AS_NEEDED) {
@@ -336,7 +336,7 @@ public class ZoomableScrollPane extends GridPane {
                     }
                 };
 
-        private static final CssMetaData<ZoomableScrollPane, Boolean> PANNABLE =
+        private static final @NonNull CssMetaData<ZoomableScrollPane, Boolean> PANNABLE =
                 new CssMetaData<>("-fx-pannable",
                         StyleConverter.getBooleanConverter(), Boolean.FALSE) {
 
@@ -351,7 +351,7 @@ public class ZoomableScrollPane extends GridPane {
                     }
                 };
 
-        private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
+        private static final @NonNull List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
 
         static {
             final List<CssMetaData<? extends Styleable, ?>> styleables =
@@ -611,7 +611,7 @@ public class ZoomableScrollPane extends GridPane {
         }
     }
 
-    private final Property<Transform> contentToView = new SimpleObjectProperty<>(this, "contentToView");
+    private final @NonNull Property<Transform> contentToView = new SimpleObjectProperty<>(this, "contentToView");
 
 
     public @NonNull ReadOnlyProperty<Transform> contentToViewProperty() {
@@ -693,11 +693,11 @@ public class ZoomableScrollPane extends GridPane {
         hbarPolicyProperty().set(value);
     }
 
-    public final ScrollPane.ScrollBarPolicy getHbarPolicy() {
+    public final ScrollPane.@NonNull ScrollBarPolicy getHbarPolicy() {
         return hbarPolicy == null ? ScrollPane.ScrollBarPolicy.AS_NEEDED : hbarPolicy.get();
     }
 
-    public final ObjectProperty<ScrollPane.ScrollBarPolicy> hbarPolicyProperty() {
+    public final @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> hbarPolicyProperty() {
         if (hbarPolicy == null) {
             hbarPolicy = new StyleableObjectProperty<>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
@@ -729,11 +729,11 @@ public class ZoomableScrollPane extends GridPane {
         vbarPolicyProperty().set(value);
     }
 
-    public final ScrollPane.ScrollBarPolicy getVbarPolicy() {
+    public final ScrollPane.@NonNull ScrollBarPolicy getVbarPolicy() {
         return vbarPolicy == null ? ScrollPane.ScrollBarPolicy.AS_NEEDED : vbarPolicy.get();
     }
 
-    public final ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicyProperty() {
+    public final @NonNull ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicyProperty() {
         if (vbarPolicy == null) {
             vbarPolicy = new StyleableObjectProperty<>(ScrollPane.ScrollBarPolicy.AS_NEEDED) {
 
@@ -773,7 +773,7 @@ public class ZoomableScrollPane extends GridPane {
         return pannable != null && pannable.get();
     }
 
-    public final StyleableBooleanProperty pannableProperty() {
+    public final @NonNull StyleableBooleanProperty pannableProperty() {
         if (pannable == null) {
             pannable = new StyleableBooleanProperty(false) {
                 @Override
@@ -800,7 +800,7 @@ public class ZoomableScrollPane extends GridPane {
         return pannable;
     }
 
-    private static final PseudoClass PANNABLE_PSEUDOCLASS_STATE =
+    private static final @NonNull PseudoClass PANNABLE_PSEUDOCLASS_STATE =
             PseudoClass.getPseudoClass("pannable");
 }
 

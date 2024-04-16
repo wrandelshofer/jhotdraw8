@@ -27,7 +27,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class LocatorCssConverter extends AbstractCssConverter<Locator> {
-    public static final String RELATIVE_FUNCTION = "relative";
+    public static final @NonNull String RELATIVE_FUNCTION = "relative";
 
     public LocatorCssConverter() {
         this(false);

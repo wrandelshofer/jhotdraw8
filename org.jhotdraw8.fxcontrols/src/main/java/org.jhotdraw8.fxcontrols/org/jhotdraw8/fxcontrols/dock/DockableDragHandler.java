@@ -17,8 +17,8 @@ import org.jhotdraw8.annotation.Nullable;
 
 class DockableDragHandler {
 
-    private final Dockable dockable;
-    private final ChangeListener<Node> graphicChangedListener = this::onGraphicChanged;
+    private final @NonNull Dockable dockable;
+    private final @NonNull ChangeListener<Node> graphicChangedListener = this::onGraphicChanged;
 
     public DockableDragHandler(Dockable dockable) {
         this.dockable = dockable;

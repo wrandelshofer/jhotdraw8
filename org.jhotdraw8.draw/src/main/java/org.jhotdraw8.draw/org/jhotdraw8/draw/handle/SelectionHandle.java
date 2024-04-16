@@ -40,7 +40,7 @@ public class SelectionHandle extends LocatorHandle {
 
     private Point2D pickLocation;
     private final @NonNull Region node;
-    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, null));
 

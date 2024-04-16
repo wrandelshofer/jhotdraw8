@@ -21,7 +21,7 @@ import java.util.Map;
 public class MappedConverter<E> implements Converter<E> {
     private final @NonNull Map<String, E> fromStringMap;
     private final @NonNull Map<E, String> toStringMap;
-    private final String nullValue;
+    private final @NonNull String nullValue;
 
 
     public MappedConverter(@NonNull Map<String, E> fromStringMap) {
@@ -32,7 +32,7 @@ public class MappedConverter<E> implements Converter<E> {
         this(fromStringMap, nullable ? "none" : null);
     }
 
-    public MappedConverter(@NonNull Map<String, E> fromStringMap, String nullValue) {
+    public MappedConverter(@NonNull Map<String, E> fromStringMap, @NonNull String nullValue) {
         this.fromStringMap = new LinkedHashMap<>();
         this.toStringMap = new LinkedHashMap<>();
         for (Map.Entry<String, E> entry : fromStringMap.entrySet()) {

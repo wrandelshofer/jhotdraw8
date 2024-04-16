@@ -16,20 +16,20 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 import java.util.Objects;
 
 public class CssStrokeStyle {
-    private final CssSize dashOffset;
-    private final ImmutableList<CssSize> dashArray;
-    private final StrokeType type;
-    private final StrokeLineJoin lineJoin;
-    private final StrokeLineCap lineCap;
-    private final CssSize miterLimit;
+    private final @NonNull CssSize dashOffset;
+    private final @NonNull ImmutableList<CssSize> dashArray;
+    private final @NonNull StrokeType type;
+    private final @NonNull StrokeLineJoin lineJoin;
+    private final @NonNull StrokeLineCap lineCap;
+    private final @NonNull CssSize miterLimit;
 
     public CssStrokeStyle() {
         this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.of(4.0),
                 CssSize.ZERO, VectorList.of());
     }
 
-    public CssStrokeStyle(StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,
-                          CssSize dashOffset,
+    public CssStrokeStyle(@NonNull StrokeType type, @NonNull StrokeLineCap lineCap, @NonNull StrokeLineJoin lineJoin, @NonNull CssSize miterLimit,
+                          @NonNull CssSize dashOffset,
                           ImmutableList<CssSize> dashArray) {
         this.dashOffset = dashOffset;
         this.dashArray = dashArray;
@@ -39,7 +39,7 @@ public class CssStrokeStyle {
         this.miterLimit = miterLimit;
     }
 
-    public CssSize getDashOffset() {
+    public @NonNull CssSize getDashOffset() {
         return dashOffset;
     }
 
@@ -47,19 +47,19 @@ public class CssStrokeStyle {
         return dashArray;
     }
 
-    public StrokeType getType() {
+    public @NonNull StrokeType getType() {
         return type;
     }
 
-    public StrokeLineJoin getLineJoin() {
+    public @NonNull StrokeLineJoin getLineJoin() {
         return lineJoin;
     }
 
-    public StrokeLineCap getLineCap() {
+    public @NonNull StrokeLineCap getLineCap() {
         return lineCap;
     }
 
-    public CssSize getMiterLimit() {
+    public @NonNull CssSize getMiterLimit() {
         return miterLimit;
     }
 

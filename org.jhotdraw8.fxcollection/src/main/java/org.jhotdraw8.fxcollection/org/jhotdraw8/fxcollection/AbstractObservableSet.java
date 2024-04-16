@@ -28,7 +28,7 @@ import java.util.stream.Stream;
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E>, ReadOnlySet<E> {
 
     private final List<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArrayList<>();
-    private final List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
+    private final @NonNull List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
     public AbstractObservableSet() {
     }

@@ -20,7 +20,7 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WritableStyleableMapAccessor<ImmutableList<Double>> {
 
 
-    private final Converter<ImmutableList<Double>> converter;
+    private final @NonNull Converter<ImmutableList<Double>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the

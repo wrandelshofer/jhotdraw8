@@ -65,7 +65,7 @@ public class CustomBinding {
     public static <T, M> void bindBidirectionalStrongly(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
-        final ChangeListener<M> changeListener = new ChangeListener<>() {
+        final @NonNull ChangeListener<M> changeListener = new ChangeListener<>() {
             private Property<T> strongReference;
 
             @Override
@@ -87,7 +87,7 @@ public class CustomBinding {
     public static <T, M> void bindBidirectionalStrongly2(
             @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
 
-        final ChangeListener<M> changeListener = new ChangeListener<>() {
+        final @NonNull ChangeListener<M> changeListener = new ChangeListener<>() {
             private Property<T> strongReference;
 
             @Override

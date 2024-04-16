@@ -140,7 +140,7 @@ public class IntersectCubicCurvePoint {
         roots.add(1.0);
 
         // Select roots with closest distance to point
-        final List<IntersectionPoint> result = new ArrayList<>();
+        final @NonNull List<IntersectionPoint> result = new ArrayList<>();
         final Point2D.Double p0, p1, p2, p3;
         p0 = new Point2D.Double(x0, y0);
         p1 = new Point2D.Double(x1, y1);

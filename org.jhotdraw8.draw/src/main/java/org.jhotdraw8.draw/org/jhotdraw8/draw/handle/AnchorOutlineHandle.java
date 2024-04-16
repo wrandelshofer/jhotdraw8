@@ -32,7 +32,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
     private static final double invsqrt2 = 1 / Math.sqrt(2);
     private final double growInView = 8.0;
 
-    private final Polygon node;
+    private final @NonNull Polygon node;
     private final double[] points;
 
     @SuppressWarnings("this-escape")

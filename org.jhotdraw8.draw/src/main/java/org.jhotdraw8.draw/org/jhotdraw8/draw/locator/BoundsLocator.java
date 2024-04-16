@@ -30,16 +30,16 @@ import org.jhotdraw8.draw.figure.Figure;
  */
 public class BoundsLocator extends AbstractLocator {
 
-    public static final BoundsLocator CENTER = new BoundsLocator(0.5, 0.5);
+    public static final @NonNull BoundsLocator CENTER = new BoundsLocator(0.5, 0.5);
 
-    public static final BoundsLocator EAST = new BoundsLocator(1.0, 0.5);
-    public static final BoundsLocator NORTH = new BoundsLocator(0.5, 0.0);
-    public static final BoundsLocator NORTH_EAST = new BoundsLocator(1.0, 0.0);
-    public static final BoundsLocator NORTH_WEST = new BoundsLocator(0.0, 0.0);
-    public static final BoundsLocator SOUTH = new BoundsLocator(0.5, 1.0);
-    public static final BoundsLocator SOUTH_EAST = new BoundsLocator(1.0, 1.0);
-    public static final BoundsLocator SOUTH_WEST = new BoundsLocator(0.0, 1.0);
-    public static final BoundsLocator WEST = new BoundsLocator(0.0, 0.5);
+    public static final @NonNull BoundsLocator EAST = new BoundsLocator(1.0, 0.5);
+    public static final @NonNull BoundsLocator NORTH = new BoundsLocator(0.5, 0.0);
+    public static final @NonNull BoundsLocator NORTH_EAST = new BoundsLocator(1.0, 0.0);
+    public static final @NonNull BoundsLocator NORTH_WEST = new BoundsLocator(0.0, 0.0);
+    public static final @NonNull BoundsLocator SOUTH = new BoundsLocator(0.5, 1.0);
+    public static final @NonNull BoundsLocator SOUTH_EAST = new BoundsLocator(1.0, 1.0);
+    public static final @NonNull BoundsLocator SOUTH_WEST = new BoundsLocator(0.0, 1.0);
+    public static final @NonNull BoundsLocator WEST = new BoundsLocator(0.0, 0.5);
 
     /**
      * Relative x-coordinate on the bounds of the figure. The value 0 is on the

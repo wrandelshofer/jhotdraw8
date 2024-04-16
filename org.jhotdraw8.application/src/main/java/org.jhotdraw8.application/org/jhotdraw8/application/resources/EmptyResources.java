@@ -18,7 +18,7 @@ import java.util.ResourceBundle;
 
 public class EmptyResources implements Resources {
     private @Nullable Resources parent;
-    private final ResourceBundle emptyResourceBundle;
+    private final @NonNull ResourceBundle emptyResourceBundle;
 
     {
         try {

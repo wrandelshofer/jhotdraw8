@@ -78,10 +78,10 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
  * </pre>
  */
 public class ColorChooserPaneModel {
-    public static final CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
-    public static final ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);
-    public static final OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
-    public static final OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
+    public static final @NonNull CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
+    public static final @NonNull ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);
+    public static final @NonNull OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
+    public static final @NonNull OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
     private final static FloatConverter number = new FloatConverter();
 
     private final static FloatConverter percentageNumber = new FloatConverter();

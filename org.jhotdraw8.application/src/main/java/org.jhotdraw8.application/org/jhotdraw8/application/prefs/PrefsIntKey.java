@@ -15,7 +15,7 @@ import java.util.prefs.Preferences;
  */
 public class PrefsIntKey {
 
-    private final String key;
+    private final @NonNull String key;
     private final int defaultValue;
     private final int clampMin;
     private final int clampMax;

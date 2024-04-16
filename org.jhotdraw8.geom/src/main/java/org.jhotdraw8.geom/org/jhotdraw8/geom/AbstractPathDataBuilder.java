@@ -20,12 +20,9 @@ public abstract class AbstractPathDataBuilder<B> extends AbstractPathBuilder<B> 
     private static final byte SEG_QUADTO = (int) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
-    @NonNull
-    protected final ByteArrayList commands = new ByteArrayList();
-    @NonNull
-    protected final IntArrayList offsets = new IntArrayList();
-    @NonNull
-    protected final DoubleArrayList coords = new DoubleArrayList();
+    protected final @NonNull ByteArrayList commands = new ByteArrayList();
+    protected final @NonNull IntArrayList offsets = new IntArrayList();
+    protected final @NonNull DoubleArrayList coords = new DoubleArrayList();
     protected
     final double[] temp = new double[8];
     protected int windingRule = PathIterator.WIND_EVEN_ODD;

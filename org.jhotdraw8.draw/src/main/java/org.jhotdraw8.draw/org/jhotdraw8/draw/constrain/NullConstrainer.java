@@ -21,7 +21,7 @@ import org.jhotdraw8.draw.figure.Figure;
  */
 public class NullConstrainer extends AbstractConstrainer {
 
-    private final Path node = new Path();
+    private final @NonNull Path node = new Path();
 
     public NullConstrainer() {
     }

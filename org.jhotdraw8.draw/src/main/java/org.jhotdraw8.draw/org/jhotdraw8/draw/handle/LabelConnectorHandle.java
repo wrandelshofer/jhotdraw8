@@ -48,11 +48,11 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
 
     protected @NonNull Background regionBackgroundConnected = new Background(new BackgroundFill(Color.BLUE, null, null));
     protected final @NonNull Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
-    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
+    private static final @NonNull Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(2)),
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
-    protected static final Circle REGION_SHAPE = new Circle(4);
+    protected static final @NonNull Circle REGION_SHAPE = new Circle(4);
 
     protected final @NonNull Group groupNode;
     protected final @NonNull Region targetNode;

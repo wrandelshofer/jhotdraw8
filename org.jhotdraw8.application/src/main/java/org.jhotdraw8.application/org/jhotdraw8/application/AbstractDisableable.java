@@ -29,14 +29,14 @@ public class AbstractDisableable implements Disableable {
      * <p>
      * This field is protected, so that it can be accessed by subclasses.
      */
-    protected final ObservableSet<Object> disablers = FXCollections.observableSet();
+    protected final @NonNull ObservableSet<Object> disablers = FXCollections.observableSet();
     /**
      * Holds the disabled state.
      * <p>
      * This field is protected, so that it can be bound to or-combinations of
      * disablers.
      */
-    protected final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
+    protected final @NonNull ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
 
     {
         disabled.bind(Bindings.isNotEmpty(disablers));

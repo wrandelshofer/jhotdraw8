@@ -236,8 +236,8 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
      * Performance: node.next is node.this. This saves 1 object per node.
      */
     private static class Node extends IntArrayList {
-        private final IntArrayList next = this;
-        private final IntArrayList prev = new IntArrayList();
+        private final @NonNull IntArrayList next = this;
+        private final @NonNull IntArrayList prev = new IntArrayList();
 
         private boolean isNodeEmpty() {
             return next.isEmpty() && prev.isEmpty();

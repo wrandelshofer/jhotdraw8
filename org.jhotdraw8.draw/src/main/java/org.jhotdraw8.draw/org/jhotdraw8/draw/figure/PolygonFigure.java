@@ -47,9 +47,9 @@ public class PolygonFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Polygon";
+    public static final @NonNull String TYPE_SELECTOR = "Polygon";
 
-    public static final Point2DListStyleableKey POINTS = PolylineFigure.POINTS;
+    public static final @NonNull Point2DListStyleableKey POINTS = PolylineFigure.POINTS;
 
     public PolygonFigure() {
         this(0, 0, 1, 1);

@@ -40,7 +40,7 @@ import java.util.ArrayList;
  * @author Werner Randelshofer
  */
 public class CardinalSplineExampleMain extends Application {
-    private final Polyline polyline = new Polyline(
+    private final @NonNull Polyline polyline = new Polyline(
             10, 100,
             60, 80,
             110, 20,

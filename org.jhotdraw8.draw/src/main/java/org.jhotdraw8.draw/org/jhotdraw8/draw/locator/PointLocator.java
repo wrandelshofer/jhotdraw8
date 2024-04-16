@@ -17,7 +17,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
  */
 public class PointLocator extends AbstractLocator {
 
-    private final NonNullMapAccessor<CssPoint2D> key;
+    private final @NonNull NonNullMapAccessor<CssPoint2D> key;
 
     public PointLocator(NonNullMapAccessor<CssPoint2D> key) {
         this.key = key;

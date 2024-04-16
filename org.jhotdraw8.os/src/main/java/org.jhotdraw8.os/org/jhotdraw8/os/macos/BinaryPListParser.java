@@ -60,7 +60,7 @@ public class BinaryPListParser {
     /**
      * Time interval based dates are measured in seconds from 2001-01-01.
      */
-    private static final long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001,
+    private static final @NonNull long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001,
             Calendar.JANUARY, 1, 1, 0, 0).getTimeInMillis();
     /**
      * Factory for generating XML data types.

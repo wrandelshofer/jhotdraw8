@@ -32,7 +32,7 @@ class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static @NonNull Object @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final Object @NonNull [] items) {
+    public static Object @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final Object @NonNull [] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -129,7 +129,7 @@ class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static @NonNull Object @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final Object @NonNull [] items) {
+    public static Object @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final Object @NonNull [] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;

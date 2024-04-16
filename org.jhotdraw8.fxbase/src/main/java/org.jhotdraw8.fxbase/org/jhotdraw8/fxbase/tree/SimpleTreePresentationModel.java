@@ -43,7 +43,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
      * an equality-based map.
      */
     private final Map<N, TreeItem<N>> items;
-    private final Listener<TreeModelEvent<N>> modelHandler = new Listener<>() {
+    private final @NonNull Listener<TreeModelEvent<N>> modelHandler = new Listener<>() {
         @Override
         public void handle(@NonNull TreeModelEvent<N> event) {
             updating++;
@@ -93,7 +93,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     }
 
     private final boolean reversed = true;
-    private final TreeItem<N> root = new LazyTreeItem<>(null);
+    private final @NonNull TreeItem<N> root = new LazyTreeItem<>(null);
 
     protected int updating;
 

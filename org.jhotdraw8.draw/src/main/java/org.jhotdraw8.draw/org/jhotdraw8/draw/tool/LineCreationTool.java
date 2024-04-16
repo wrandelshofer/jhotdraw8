@@ -23,8 +23,8 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import java.util.function.Supplier;
 
 public class LineCreationTool extends CreationTool {
-    private final MapAccessor<CssPoint2D> p1;
-    private final MapAccessor<CssPoint2D> p2;
+    private final @NonNull MapAccessor<CssPoint2D> p1;
+    private final @NonNull MapAccessor<CssPoint2D> p2;
 
     public LineCreationTool(String name, Resources rsrc, Supplier<? extends Figure> factory) {
         this(name, rsrc, factory, LayerFigure::new, LineFigure.START, LineFigure.END);

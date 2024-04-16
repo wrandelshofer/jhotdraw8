@@ -17,7 +17,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class ConstantStringExpression extends StringExpression {
 
-    private final String value;
+    private final @NonNull String value;
 
     private ConstantStringExpression(String value) {
         this.value = value;

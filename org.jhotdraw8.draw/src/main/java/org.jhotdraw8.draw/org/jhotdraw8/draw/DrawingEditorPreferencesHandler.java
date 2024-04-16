@@ -16,7 +16,7 @@ import java.util.prefs.Preferences;
  * Handles preferences for a drawing editor.
  */
 public class DrawingEditorPreferencesHandler {
-    private static final String DRAWING_EDITOR = "DrawingEditor.";
+    private static final @NonNull String DRAWING_EDITOR = "DrawingEditor.";
     private final @NonNull DrawingEditor editor;
     private final @NonNull Preferences prefs;
     private final @NonNull String prefix;

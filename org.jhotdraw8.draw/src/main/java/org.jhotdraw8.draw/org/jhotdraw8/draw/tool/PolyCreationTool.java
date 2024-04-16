@@ -37,7 +37,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
      */
     private @Nullable ArrayList<Point2D> points;
 
-    private final Point2DListStyleableKey key;
+    private final @NonNull Point2DListStyleableKey key;
 
     public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableKey key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);

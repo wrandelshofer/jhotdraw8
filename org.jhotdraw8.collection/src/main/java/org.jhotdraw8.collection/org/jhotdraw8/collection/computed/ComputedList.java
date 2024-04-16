@@ -18,7 +18,7 @@ public class ComputedList<E> extends AbstractReadOnlyList<E> {
     private final long size;
     private final long from;
     private final long to;
-    private final LongFunction<E> function;
+    private final @NonNull LongFunction<E> function;
 
     /**
      * Constructs a new instance.
@@ -26,7 +26,7 @@ public class ComputedList<E> extends AbstractReadOnlyList<E> {
      * @param size     the size of the list
      * @param function the function that computes an element for a given index
      */
-    public ComputedList(long size, LongFunction<E> function) {
+    public ComputedList(long size, @NonNull LongFunction<E> function) {
         this(size, function, false);
     }
 

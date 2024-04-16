@@ -39,16 +39,16 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class BiArcApproExampleMain extends Application {
-    private final Polyline polyline = new Polyline(
+    private final @NonNull Polyline polyline = new Polyline(
             110, 200,
             160, 180,
             210, 120,
             260, 180
     );
-    private final Path bezierPath = new Path();
-    private final Path approxPath = new Path();
-    private final Path inflectionPointsPath = new Path();
-    private final Path inflectionPointsPath2 = new Path();
+    private final @NonNull Path bezierPath = new Path();
+    private final @NonNull Path approxPath = new Path();
+    private final @NonNull Path inflectionPointsPath = new Path();
+    private final @NonNull Path inflectionPointsPath2 = new Path();
     StackPane canvas = new StackPane();
 
     @Override

@@ -22,7 +22,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class StringCssConverter extends AbstractCssConverter<String> {
-    private final String helpText;
+    private final @Nullable String helpText;
     private final char quoteChar;
     private final @NonNull String defaultValue;
 
@@ -34,7 +34,7 @@ public class StringCssConverter extends AbstractCssConverter<String> {
         this(nullable, '\"', null);
     }
 
-    public StringCssConverter(boolean nullable, char quoteChar, String helpText) {
+    public StringCssConverter(boolean nullable, char quoteChar, @Nullable String helpText) {
         super(nullable);
         this.quoteChar = quoteChar;
         this.helpText = helpText;
@@ -61,7 +61,7 @@ public class StringCssConverter extends AbstractCssConverter<String> {
     }
 
     @Override
-    public @Nullable String getDefaultValue() {
+    public @NonNull String getDefaultValue() {
         return defaultValue;
     }
 

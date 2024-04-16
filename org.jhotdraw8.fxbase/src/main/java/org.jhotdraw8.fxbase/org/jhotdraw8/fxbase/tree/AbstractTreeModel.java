@@ -18,9 +18,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public abstract class AbstractTreeModel<N> implements TreeModel<N> {
 
-    private final CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> treeModelListeners = new CopyOnWriteArrayList<>();
+    private final @NonNull CopyOnWriteArrayList<Listener<TreeModelEvent<N>>> treeModelListeners = new CopyOnWriteArrayList<>();
 
-    private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
+    private final @NonNull CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
     public AbstractTreeModel() {
     }

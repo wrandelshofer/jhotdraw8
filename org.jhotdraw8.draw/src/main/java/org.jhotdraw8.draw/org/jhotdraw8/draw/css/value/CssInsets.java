@@ -20,14 +20,14 @@ import java.util.Objects;
  */
 public class CssInsets {
 
-    public static final CssInsets ZERO = new CssInsets();
+    public static final @NonNull CssInsets ZERO = new CssInsets();
 
-    private final CssSize bottom;
-    private final CssSize left;
-    private final CssSize right;
-    private final CssSize top;
+    private final @NonNull CssSize bottom;
+    private final @NonNull CssSize left;
+    private final @NonNull CssSize right;
+    private final @NonNull CssSize top;
 
-    public CssInsets(CssSize top, CssSize right, CssSize bottom, CssSize left) {
+    public CssInsets(@NonNull CssSize top, @NonNull CssSize right, @NonNull CssSize bottom, @NonNull CssSize left) {
         this.top = top;
         this.right = right;
         this.bottom = bottom;

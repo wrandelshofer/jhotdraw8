@@ -241,7 +241,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     public Spliterator<E> spliterator() {
         return new Spliterators.AbstractSpliterator<>(size(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED | Spliterator.IMMUTABLE) {
-            private final Iterator<E> iterator = iterator();
+            private final @NonNull Iterator<E> iterator = iterator();
 
             @Override
             public boolean tryAdvance(@NonNull Consumer<? super E> action) {

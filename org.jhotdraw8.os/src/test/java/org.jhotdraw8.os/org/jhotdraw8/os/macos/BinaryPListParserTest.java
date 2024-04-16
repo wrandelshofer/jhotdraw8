@@ -25,7 +25,7 @@ import java.io.StringReader;
 import java.util.Properties;
 
 public class BinaryPListParserTest {
-    private static final Properties INDENT_XML_PROPERTIES = new Properties();
+    private static final @NonNull Properties INDENT_XML_PROPERTIES = new Properties();
 
     static {
         INDENT_XML_PROPERTIES.put(OutputKeys.INDENT, "yes");
@@ -33,7 +33,7 @@ public class BinaryPListParserTest {
         INDENT_XML_PROPERTIES.put("{http://xml.apache.org/xslt}indent-amount", "2");
     }
 
-    private static final Properties NO_INDENT_XML_PROPERTIES = new Properties();
+    private static final @NonNull Properties NO_INDENT_XML_PROPERTIES = new Properties();
 
     static {
         NO_INDENT_XML_PROPERTIES.put(OutputKeys.ENCODING, "UTF-8");

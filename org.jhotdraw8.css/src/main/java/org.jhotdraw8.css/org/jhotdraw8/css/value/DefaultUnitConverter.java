@@ -13,7 +13,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class DefaultUnitConverter implements UnitConverter {
 
-    static final DefaultUnitConverter instance = new DefaultUnitConverter(96);
+    static final @NonNull DefaultUnitConverter instance = new DefaultUnitConverter(96);
 
     public static @NonNull DefaultUnitConverter getInstance() {
         return instance;

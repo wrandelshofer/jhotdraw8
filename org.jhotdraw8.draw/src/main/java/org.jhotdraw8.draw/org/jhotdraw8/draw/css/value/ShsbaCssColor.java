@@ -42,8 +42,8 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * </dl>
  */
 public class ShsbaCssColor extends CssColor {
-    private static final DoubleCssConverter num = new DoubleCssConverter(false);
-    public static final SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
+    private static final @NonNull DoubleCssConverter num = new DoubleCssConverter(false);
+    public static final @NonNull SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
 
     private final @NonNull CssSize hue, saturation, brightness, opacity;
 

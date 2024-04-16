@@ -25,10 +25,10 @@ import java.util.function.Function;
  */
 public final class MappedSet<E, F> extends AbstractSet<E> {
 
-    private final Set<F> backingSet;
-    private final Function<F, E> mapf;
+    private final @NonNull Set<F> backingSet;
+    private final @NonNull Function<F, E> mapf;
 
-    public MappedSet(Set<F> backingSet, Function<F, E> mapf) {
+    public MappedSet(@NonNull Set<F> backingSet, Function<F, E> mapf) {
         this.backingSet = backingSet;
         this.mapf = mapf;
     }
@@ -42,7 +42,7 @@ public final class MappedSet<E, F> extends AbstractSet<E> {
     @Override
     public @NonNull Iterator<E> iterator() {
         return new Iterator<>() {
-            private final Iterator<F> i = backingSet.iterator();
+            private final @NonNull Iterator<F> i = backingSet.iterator();
 
             @Override
             public boolean hasNext() {
@@ -64,9 +64,9 @@ public final class MappedSet<E, F> extends AbstractSet<E> {
     @Override
     public @NonNull Spliterator<E> spliterator() {
         class MappingSpliterator implements Spliterator<E> {
-            private final Spliterator<F> i;
+            private final @NonNull Spliterator<F> i;
 
-            public MappingSpliterator(Spliterator<F> i) {
+            public MappingSpliterator(@NonNull Spliterator<F> i) {
                 this.i = i;
             }
 

@@ -64,17 +64,17 @@ import java.util.Properties;
  */
 public class XmlUtil {
 
-    public static final String LOCATION_ATTRIBUTE = "location";
-    public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
-    private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
-    private static final String SEPARATOR = "\0";
-    private static final Properties DEFAULT_PROPERTIES = new Properties();
+    public static final @NonNull String LOCATION_ATTRIBUTE = "location";
+    public static final @NonNull String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
+    private static final @NonNull String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
+    private static final @NonNull String SEPARATOR = "\0";
+    private static final @NonNull Properties DEFAULT_PROPERTIES = new Properties();
 
-    public static final String HTTP_XML_APACHE_ORG_XALAN_LINE_SEPARATOR = "{http://xml.apache.org/xalan}line-separator";
+    public static final @NonNull String HTTP_XML_APACHE_ORG_XALAN_LINE_SEPARATOR = "{http://xml.apache.org/xalan}line-separator";
 
-    public static final String HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
+    public static final @NonNull String HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
 
-    public static final String CANONICAL_LINE_SEPARATOR = "\n";
+    public static final @NonNull String CANONICAL_LINE_SEPARATOR = "\n";
 
     static {
         DEFAULT_PROPERTIES.put(OutputKeys.INDENT, "yes");

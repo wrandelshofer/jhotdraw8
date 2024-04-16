@@ -5,6 +5,7 @@
 package org.jhotdraw8.css.manager;
 
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
@@ -34,18 +35,18 @@ import java.util.logging.Logger;
  */
 public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     protected SelectorModel<T> model;
-    protected Map<String, ImmutableList<CssToken>> customProperties;
-    private final Map<String, CssFunction<T>> functions;
+    protected @Nullable Map<String, ImmutableList<CssToken>> customProperties;
+    private final @NonNull Map<String, CssFunction<T>> functions;
     /**
      * Value must be greater equal to zero.
      */
     private int maxRecursionDepth = 256;
 
-    public SimpleCssFunctionProcessor(List<CssFunction<T>> functions) {
+    public SimpleCssFunctionProcessor(@NonNull List<CssFunction<T>> functions) {
         this(functions, null, null);
     }
 
-    public SimpleCssFunctionProcessor(List<CssFunction<T>> functions, SelectorModel<T> model, Map<String, ImmutableList<CssToken>> customProperties) {
+    public SimpleCssFunctionProcessor(@NonNull List<CssFunction<T>> functions, @Nullable SelectorModel<T> model, @Nullable Map<String, @Nullable ImmutableList<CssToken>> customProperties) {
         this.model = model;
         this.customProperties = customProperties;
         this.functions = new LinkedHashMap<>();

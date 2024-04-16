@@ -18,7 +18,7 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
  */
 public class NewFileAction extends AbstractApplicationAction {
 
-    public static final String ID = "file.new";
+    public static final @NonNull String ID = "file.new";
 
     /**
      * Creates a new instance.

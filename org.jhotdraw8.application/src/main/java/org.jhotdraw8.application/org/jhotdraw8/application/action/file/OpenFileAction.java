@@ -20,7 +20,7 @@ import java.util.Map;
  */
 public class OpenFileAction extends AbstractOpenFileAction {
 
-    public static final String ID = "file.open";
+    public static final @NonNull String ID = "file.open";
     private final boolean reuseEmptyViews = true;
 
     /**

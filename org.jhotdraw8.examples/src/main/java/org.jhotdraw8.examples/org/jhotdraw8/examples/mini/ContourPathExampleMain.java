@@ -41,17 +41,17 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class ContourPathExampleMain extends Application {
-    private final Polyline polyline = new Polyline(
+    private final @NonNull Polyline polyline = new Polyline(
             110, 200,
             160, 180,
             210, 120,
             260, 180,
             310, 200);
-    private final Path offsetPath1 = new Path();
-    private final Path offsetPath2 = new Path();
+    private final @NonNull Path offsetPath1 = new Path();
+    private final @NonNull Path offsetPath2 = new Path();
     StackPane canvas = new StackPane();
-    private final DoubleProperty offset = new SimpleDoubleProperty(0.0);
-    private final BooleanProperty closed = new SimpleBooleanProperty();
+    private final @NonNull DoubleProperty offset = new SimpleDoubleProperty(0.0);
+    private final @NonNull BooleanProperty closed = new SimpleBooleanProperty();
 
     @Override
     public void start(@NonNull Stage primaryStage) {

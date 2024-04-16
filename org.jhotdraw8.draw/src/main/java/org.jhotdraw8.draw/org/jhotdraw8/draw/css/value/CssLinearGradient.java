@@ -30,11 +30,12 @@ public class CssLinearGradient implements Paintable {
     private final double endX;
     private final double endY;
     private final boolean proportional;
-    private final CycleMethod cycleMethod;
-    private final CssStop[] cstops;
+    private final @NonNull CycleMethod cycleMethod;
+    private final CssStop @NonNull [] cstops;
 
-    public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional, CycleMethod cycleMethod,
-                             CssStop... stops) {
+    public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional,
+                             @NonNull CycleMethod cycleMethod,
+                             CssStop @NonNull ... stops) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;

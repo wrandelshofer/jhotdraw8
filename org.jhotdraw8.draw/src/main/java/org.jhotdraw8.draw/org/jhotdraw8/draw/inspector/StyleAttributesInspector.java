@@ -46,9 +46,9 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
         return subject;
     }
 
-    private final InvalidationListener modelInvalidationHandler = this::invalidateTextArea;
+    private final @NonNull InvalidationListener modelInvalidationHandler = this::invalidateTextArea;
 
-    private final Listener<TreeModelEvent<Figure>> treeModelListener = event -> invalidateTextArea(event.getSource());
+    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = event -> invalidateTextArea(event.getSource());
 
     private final @NonNull ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
         if (oldValue != null) {

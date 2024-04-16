@@ -13,11 +13,11 @@ import java.util.Set;
  * The test data.
  */
 public final class SetData {
-    private final String name;
-    public final ReadOnlySet<Key> a;
-    public final ReadOnlySet<Key> b;
-    public final ReadOnlySet<Key> someAPlusSomeB;
-    public final ReadOnlySet<Key> c;
+    private final @NonNull String name;
+    public final @NonNull ReadOnlySet<Key> a;
+    public final @NonNull ReadOnlySet<Key> b;
+    public final @NonNull ReadOnlySet<Key> someAPlusSomeB;
+    public final @NonNull ReadOnlySet<Key> c;
 
     /**
      * Creates a new instance with 3 maps of the same non-empty size.

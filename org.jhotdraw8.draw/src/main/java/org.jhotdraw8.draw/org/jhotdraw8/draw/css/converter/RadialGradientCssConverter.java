@@ -48,7 +48,7 @@ import java.util.function.Consumer;
 public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGradient> {
 
     private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
-    public static final String RADIAL_GRADIENT_FUNCTION = "radial-gradient";
+    public static final @NonNull String RADIAL_GRADIENT_FUNCTION = "radial-gradient";
 
     public RadialGradientCssConverter(boolean nullable) {
         super(nullable);

@@ -22,7 +22,7 @@ import java.net.URI;
  * @author Werner Randelshofer
  */
 public class XmlEncoderOutputFormat implements OutputFormat {
-    public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
+    public static final @NonNull String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";
     private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
 
     public XmlEncoderOutputFormat() {

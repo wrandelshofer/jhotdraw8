@@ -19,7 +19,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class NullablePoint2DStyleableKey extends AbstractStyleableKey<Point2D> implements WritableStyleableMapAccessor<Point2D> {
 
 
-    private final Converter<Point2D> converter = new Point2DConverter(true);
+    private final @NonNull Converter<Point2D> converter = new Point2DConverter(true);
 
     /**
      * Creates a new instance with the specified name and with null as the

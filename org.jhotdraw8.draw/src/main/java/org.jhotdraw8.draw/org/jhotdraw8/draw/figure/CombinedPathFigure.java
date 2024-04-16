@@ -50,7 +50,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "CombinedPath";
+    public static final @NonNull String TYPE_SELECTOR = "CombinedPath";
 
     public CombinedPathFigure() {
     }

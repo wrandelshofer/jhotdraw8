@@ -41,7 +41,7 @@ public class FXTransforms {
      * JavaFX Transforms are not actually immutable.
      * Do not change the value of this transform!
      */
-    public static final Transform IDENTITY = new Translate();
+    public static final @NonNull Transform IDENTITY = new Translate();
 
     /**
      * Don't let anyone instantiate this class.

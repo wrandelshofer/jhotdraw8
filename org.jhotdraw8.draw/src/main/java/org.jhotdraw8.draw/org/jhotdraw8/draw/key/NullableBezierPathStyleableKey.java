@@ -42,7 +42,7 @@ public class NullableBezierPathStyleableKey
 
     }
 
-    private final Converter<BezierPath> converter = new BezierPathCssConverter(false);
+    private final @NonNull Converter<BezierPath> converter = new BezierPathCssConverter(false);
 
     @Override
     public @NonNull Converter<BezierPath> getCssConverter() {

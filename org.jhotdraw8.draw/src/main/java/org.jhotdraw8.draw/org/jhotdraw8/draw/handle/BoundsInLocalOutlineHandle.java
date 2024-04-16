@@ -29,9 +29,9 @@ import org.jhotdraw8.geom.FXTransforms;
  */
 public class BoundsInLocalOutlineHandle extends AbstractHandle {
 
-    private final Group node;
-    private final Polygon poly1;
-    private final Polygon poly2;
+    private final @NonNull Group node;
+    private final @NonNull Polygon poly1;
+    private final @NonNull Polygon poly2;
     private final double[] points;
 
     public BoundsInLocalOutlineHandle(Figure figure) {

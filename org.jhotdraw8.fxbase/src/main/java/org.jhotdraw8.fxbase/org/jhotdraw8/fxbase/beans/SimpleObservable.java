@@ -16,7 +16,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SimpleObservable implements ObservableMixin {
 
-    private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
+    private final @NonNull CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
     public SimpleObservable() {
     }

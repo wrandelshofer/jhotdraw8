@@ -4,6 +4,8 @@
  */
 package org.jhotdraw8.draw.inspector;
 
+import org.jhotdraw8.annotation.NonNull;
+
 /**
  * StyleClassItem.
  *
@@ -14,7 +16,7 @@ public class StyleClassItem {
     /**
      * The text of the tag.
      */
-    private final String text;
+    private final @NonNull String text;
     /**
      * Whether the tag is present in all elements.
      */

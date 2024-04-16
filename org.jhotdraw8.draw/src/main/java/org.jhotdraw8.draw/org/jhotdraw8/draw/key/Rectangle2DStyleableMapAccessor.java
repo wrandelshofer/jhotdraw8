@@ -30,7 +30,7 @@ public class Rectangle2DStyleableMapAccessor extends AbstractStyleableMapAccesso
     private final @NonNull NonNullMapAccessor<Double> yKey;
     private final @NonNull NonNullMapAccessor<Double> widthKey;
     private final @NonNull NonNullMapAccessor<Double> heightKey;
-    private final Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
+    private final @NonNull Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
 
     /**
      * Creates a new instance with the specified name.

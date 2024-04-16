@@ -258,7 +258,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean contains(@Nullable final Object o) {
+    public boolean contains(@Nullable final @NonNull Object o) {
         return Node.NO_DATA != root.find((E) o, ChampSet.keyHash(o), 0, Objects::equals);
     }
 

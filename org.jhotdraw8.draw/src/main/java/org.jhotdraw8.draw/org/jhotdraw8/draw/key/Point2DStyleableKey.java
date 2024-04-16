@@ -20,7 +20,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
         NonNullKey<Point2D> {
 
 
-    private final Converter<Point2D> converter = new Point2DConverter(false);
+    private final @NonNull Converter<Point2D> converter = new Point2DConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the

@@ -29,7 +29,7 @@ import java.net.URI;
  */
 public abstract class AbstractFileBasedActivity extends AbstractActivity implements FileBasedActivity {
 
-    protected final BooleanProperty modified = new SimpleBooleanProperty(this, MODIFIED_PROPERTY) {
+    protected final @NonNull BooleanProperty modified = new SimpleBooleanProperty(this, MODIFIED_PROPERTY) {
         @Override
         public void set(boolean newValue) {
             super.set(newValue); //To change body of generated methods, choose Tools | Templates.
@@ -37,9 +37,9 @@ public abstract class AbstractFileBasedActivity extends AbstractActivity impleme
 
     };
     @SuppressWarnings("this-escape")
-    protected final ObjectProperty<URI> uri = new SimpleObjectProperty<>(this, URI_PROPERTY);
+    protected final @NonNull ObjectProperty<URI> uri = new SimpleObjectProperty<>(this, URI_PROPERTY);
     @SuppressWarnings("this-escape")
-    protected final ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>(this, DATA_FORMAT_PROPERTY);
+    protected final @NonNull ObjectProperty<DataFormat> dataFormat = new SimpleObjectProperty<>(this, DATA_FORMAT_PROPERTY);
 
     public AbstractFileBasedActivity() {
     }

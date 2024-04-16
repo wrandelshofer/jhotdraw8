@@ -71,10 +71,10 @@ import java.util.function.Supplier;
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
-    private final Comparator<String> collator = new CachingCollator(new NaturalSortCollator(Locale.ENGLISH));
+    private final @NonNull Comparator<String> collator = new CachingCollator(new NaturalSortCollator(Locale.ENGLISH));
     private final @NonNull WordListXmlConverter wordListConverter = new WordListXmlConverter();
-    private final WordSetXmlConverter wordSetConverter = new WordSetXmlConverter();
-    private final SimpleDrawingModel stubDrawingModel = new SimpleDrawingModel();
+    private final @NonNull WordSetXmlConverter wordSetConverter = new WordSetXmlConverter();
+    private final @NonNull SimpleDrawingModel stubDrawingModel = new SimpleDrawingModel();
     private @Nullable DrawingView drawingView;
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
@@ -89,7 +89,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableColumn<Figure, ImmutableSet<String>> styleClassesColumn;
     @FXML
     private TreeTableView<Figure> treeView;
-    private final InvalidationListener treeSelectionHandler = change -> {
+    private final @NonNull InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
         } else {
@@ -101,7 +101,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     @FXML
     private TreeTableColumn<Figure, Boolean> visibleColumn;
     private boolean willUpdateSelectionInTree;
-    private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
+    private final @NonNull SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),

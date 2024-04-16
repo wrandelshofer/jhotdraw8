@@ -45,15 +45,15 @@ public class PolyPointMoveHandle extends AbstractHandle {
 
     private static final @Nullable Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
     private static final @Nullable Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
-    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
-    private Set<Figure> groupReshapeableFigures;
+    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private @Nullable Set<Figure> groupReshapeableFigures;
     private final @NonNull Region node;
-    private Point2D oldPoint;
-    private Point2D pickLocation;
+    private @Nullable Point2D oldPoint;
+    private @Nullable Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableList<Point2D>> pointKey;
+    private final @NonNull MapAccessor<ImmutableList<Point2D>> pointKey;
 
-    public PolyPointMoveHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
+    public PolyPointMoveHandle(@NonNull Figure figure, @NonNull MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;

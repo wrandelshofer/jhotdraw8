@@ -20,12 +20,12 @@ import java.util.Objects;
  */
 public class CssRectangle2D {
 
-    public static final CssRectangle2D ZERO = new CssRectangle2D();
+    public static final @NonNull CssRectangle2D ZERO = new CssRectangle2D();
 
-    private final CssSize width;
-    private final CssSize height;
-    private final CssSize y;
-    private final CssSize x;
+    private final @NonNull CssSize width;
+    private final @NonNull CssSize height;
+    private final @NonNull CssSize y;
+    private final @NonNull CssSize x;
 
     public CssRectangle2D(@NonNull Bounds b) {
         this(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
@@ -39,7 +39,7 @@ public class CssRectangle2D {
 
     }
 
-    public CssRectangle2D(CssSize x, CssSize y, CssSize width, CssSize height) {
+    public CssRectangle2D(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
         this.x = x;
         this.y = y;
         this.width = width;

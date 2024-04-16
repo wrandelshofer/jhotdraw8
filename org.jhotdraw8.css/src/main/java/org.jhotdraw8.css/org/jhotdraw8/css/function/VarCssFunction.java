@@ -42,13 +42,13 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.
      */
-    public static final String NAME = "var";
+    public static final @NonNull String NAME = "var";
 
     public VarCssFunction() {
         this(NAME);
     }
 
-    public VarCssFunction(String name) {
+    public VarCssFunction(@NonNull String name) {
         super(name);
     }
 

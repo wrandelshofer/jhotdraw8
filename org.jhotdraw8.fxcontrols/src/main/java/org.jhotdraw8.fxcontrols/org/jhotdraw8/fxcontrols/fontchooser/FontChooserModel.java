@@ -18,7 +18,7 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public class FontChooserModel {
 
-    private final ListProperty<FontCollection> fontCollections = new SimpleListProperty<>(FXCollections.observableArrayList());
+    private final @NonNull ListProperty<FontCollection> fontCollections = new SimpleListProperty<>(FXCollections.observableArrayList());
 
     public FontChooserModel() {
     }

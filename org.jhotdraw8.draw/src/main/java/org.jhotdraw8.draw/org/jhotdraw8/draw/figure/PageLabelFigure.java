@@ -24,14 +24,14 @@ import java.time.format.FormatStyle;
  */
 public class PageLabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
-    public static final String TYPE_SELECTOR = "PageLabel";
-    public static final String NUM_PAGES_PLACEHOLDER = "${numPages}";
-    public static final String PAGE_PLACEHOLDER = "${page}";
-    public static final String DATE_PLACEHOLDER = "${date}";
+    public static final @NonNull String TYPE_SELECTOR = "PageLabel";
+    public static final @NonNull String NUM_PAGES_PLACEHOLDER = "${numPages}";
+    public static final @NonNull String PAGE_PLACEHOLDER = "${page}";
+    public static final @NonNull String DATE_PLACEHOLDER = "${date}";
     /**
      * The text. Default value: {@code ""}.
      */
-    public static final StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", "",
+    public static final @NonNull StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", "",
             "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER + ", " + DATE_PLACEHOLDER);
 
     public PageLabelFigure() {

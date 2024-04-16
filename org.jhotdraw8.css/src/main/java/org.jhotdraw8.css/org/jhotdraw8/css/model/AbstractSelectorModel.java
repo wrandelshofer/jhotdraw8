@@ -12,7 +12,7 @@ import org.jhotdraw8.annotation.NonNull;
 import java.util.Set;
 
 public abstract class AbstractSelectorModel<E> implements SelectorModel<E> {
-    private final MapProperty<String, Set<E>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
+    private final @NonNull MapProperty<String, Set<E>> additionalPseudoClassStates = new SimpleMapProperty<>(FXCollections.observableHashMap());
 
     public AbstractSelectorModel() {
     }

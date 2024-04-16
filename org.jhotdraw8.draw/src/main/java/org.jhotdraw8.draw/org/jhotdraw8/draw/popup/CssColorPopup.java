@@ -22,9 +22,9 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 import java.util.function.BiConsumer;
 
 public class CssColorPopup {
-    private final ContextMenu contextMenu;
-    private final MenuItem noneItem;
-    private final ColorPicker colorPicker;
+    private final @NonNull ContextMenu contextMenu;
+    private final @NonNull MenuItem noneItem;
+    private final @NonNull ColorPicker colorPicker;
     private BiConsumer<Boolean, CssColor> callback;
 
     private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);

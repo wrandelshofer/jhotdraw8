@@ -20,7 +20,7 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
  */
 public class UndoAction extends AbstractActivityAction<Activity> {
 
-    public static final String ID = "edit.undo";
+    public static final @NonNull String ID = "edit.undo";
     private final @NonNull FXUndoManager manager;
 
     /**

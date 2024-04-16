@@ -23,7 +23,7 @@ import java.util.LinkedList;
  */
 public class SendToBackAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.sendToBack";
+    public static final @NonNull String ID = "edit.sendToBack";
 
     /**
      * Creates a new instance.
@@ -39,7 +39,7 @@ public class SendToBackAction extends AbstractDrawingViewAction {
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
-        final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
+        final @NonNull LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         sendToBack(dview, figures);
     }
 

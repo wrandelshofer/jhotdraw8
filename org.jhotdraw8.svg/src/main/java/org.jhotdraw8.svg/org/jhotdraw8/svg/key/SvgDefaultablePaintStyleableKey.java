@@ -27,7 +27,7 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
 
 
     private final @NonNull Converter<@NonNull SvgDefaultablePaint<T>> converter;
-    private final T initialValue;
+    private final @Nullable T initialValue;
 
 
     /**

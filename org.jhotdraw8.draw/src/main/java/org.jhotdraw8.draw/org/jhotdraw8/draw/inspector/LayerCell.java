@@ -54,7 +54,7 @@ public class LayerCell extends ListCell<Figure> {
     @FXML
     private Label selectionLabel;
 
-    private final WeakReference<DrawingModel> drawingModel;
+    private final @NonNull WeakReference<DrawingModel> drawingModel;
 
     private boolean isUpdating;
 
@@ -62,7 +62,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private TextField editField;
 
-    private final LayersInspector inspector;
+    private final @NonNull LayersInspector inspector;
 
     public LayerCell(DrawingModel drawingModel, LayersInspector inspector) {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);

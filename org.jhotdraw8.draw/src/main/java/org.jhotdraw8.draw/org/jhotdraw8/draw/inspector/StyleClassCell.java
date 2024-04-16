@@ -34,7 +34,7 @@ public class StyleClassCell extends ListCell<StyleClassItem> {
 
     @FXML
     private Button removeButton;
-    private final StyleClassesInspector inspector;
+    private final @NonNull StyleClassesInspector inspector;
 
     public StyleClassCell(StyleClassesInspector inspector) {
         this(LayersInspector.class.getResource("StyleClassCell.fxml"), inspector);

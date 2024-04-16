@@ -24,7 +24,7 @@ import java.util.List;
  */
 public class SelectChildrenAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.selectChildren";
+    public static final @NonNull String ID = "edit.selectChildren";
 
     /**
      * Creates a new instance.
@@ -40,7 +40,7 @@ public class SelectChildrenAction extends AbstractDrawingViewAction {
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
-        final List<Figure> figures = new ArrayList<>(dview.getSelectedFigures());
+        final @NonNull List<Figure> figures = new ArrayList<>(dview.getSelectedFigures());
         selectChildren(dview, figures);
 
     }

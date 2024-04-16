@@ -58,7 +58,7 @@ import static java.lang.Math.signum;
 public abstract class AbstractElbowLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    private final Polyline path = new Polyline();
+    private final @NonNull Polyline path = new Polyline();
 
     public AbstractElbowLineConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);

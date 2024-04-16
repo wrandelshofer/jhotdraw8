@@ -48,12 +48,12 @@ public class PolyPointEditHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
-    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(7, 7);
     private final @NonNull Region node;
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final NonNullMapAccessor<ImmutableList<Point2D>> pointKey;
+    private final @NonNull NonNullMapAccessor<ImmutableList<Point2D>> pointKey;
 
     public PolyPointEditHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
         super(figure);

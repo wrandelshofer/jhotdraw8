@@ -51,9 +51,9 @@ import java.util.function.Predicate;
 
 
 public class InteractiveDrawingRenderer extends AbstractPropertyBean {
-    public static final String RENDER_CONTEXT_PROPERTY = "renderContext";
-    public static final String MODEL_PROPERTY = "model";
-    public static final String DRAWING_VIEW_PROPERTY = "drawingView";
+    public static final @NonNull String RENDER_CONTEXT_PROPERTY = "renderContext";
+    public static final @NonNull String MODEL_PROPERTY = "model";
+    public static final @NonNull String DRAWING_VIEW_PROPERTY = "drawingView";
     private final @NonNull NonNullObjectProperty<WritableRenderContext> renderContext //
             = new NonNullObjectProperty<>(this, RENDER_CONTEXT_PROPERTY, new SimpleRenderContext());
     private final @NonNull NonNullObjectProperty<DrawingModel> model //
@@ -71,7 +71,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
             paint();
         }
     };
-    private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
+    private final @NonNull ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
 
     /**
@@ -81,9 +81,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * If many figures change constantly, and {@link #updateLimit} is a small
      * value, then the linked set ensures that all figures are updated eventually.
      */
-    private final SequencedSet<Figure> dirtyFigureNodes = new LinkedHashSet<>();
-    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
-    private final IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 10_000);
+    private final @NonNull SequencedSet<Figure> dirtyFigureNodes = new LinkedHashSet<>();
+    private final @NonNull DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
+    private final @NonNull IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 10_000);
     private final Map<Figure, Node> figureToNodeMap = new IdentityHashMap<>();
     private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();
     private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);

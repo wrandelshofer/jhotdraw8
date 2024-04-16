@@ -28,7 +28,7 @@ public class Scale3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     private final @NonNull MapAccessor<Double> xKey;
     private final @NonNull MapAccessor<Double> yKey;
     private final @NonNull MapAccessor<Double> zKey;
-    private final Converter<Point3D> converter;
+    private final @NonNull Converter<Point3D> converter;
 
     /**
      * Creates a new instance with the specified name.

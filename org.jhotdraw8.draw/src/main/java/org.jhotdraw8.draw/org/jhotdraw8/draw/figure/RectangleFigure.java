@@ -35,7 +35,7 @@ public class RectangleFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final String TYPE_SELECTOR = "Rectangle";
+    public static final @NonNull String TYPE_SELECTOR = "Rectangle";
 
     public static final @NonNull CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", CssSize.ZERO);
     public static final @NonNull CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", CssSize.ZERO);

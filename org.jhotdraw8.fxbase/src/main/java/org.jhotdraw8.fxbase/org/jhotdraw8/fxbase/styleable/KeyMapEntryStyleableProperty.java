@@ -26,9 +26,9 @@ public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> imple
     private final @NonNull WritableStyleableMapAccessor<T> key;
     private final CssMetaData<?, T> metaData;
     private final @NonNull ObservableMap<Key<?>, Object> mapp;
-    private final String name;
+    private final @NonNull String name;
     private final @NonNull StyleableMap<Key<?>, Object> map;
-    private final Object bean;
+    private final @NonNull Object bean;
 
     public KeyMapEntryStyleableProperty(@NonNull ReadOnlyMapProperty<Key<?>, Object> mapp, @NonNull WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         this(mapp.getBean(), mapp, key, name, metaData);

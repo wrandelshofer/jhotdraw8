@@ -28,8 +28,8 @@ import java.util.function.Supplier;
  */
 public class ExportFileAction extends AbstractSaveFileAction {
 
-    public static final String ID = "file.export";
-    private final Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialogFactory;
+    public static final @NonNull String ID = "file.export";
+    private final @Nullable Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialogFactory;
     public static final @NonNull Key<URIChooser> EXPORT_CHOOSER_KEY = new NullableObjectKey<>("exportChooser", URIChooser.class);
     public static final @NonNull Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("exportChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
@@ -43,7 +43,7 @@ public class ExportFileAction extends AbstractSaveFileAction {
         this(activity, ID, null);
     }
 
-    public ExportFileAction(@NonNull FileBasedActivity activity, Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(@NonNull FileBasedActivity activity, @Nullable Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
         this(activity, ID, optionsDialog);
     }
 

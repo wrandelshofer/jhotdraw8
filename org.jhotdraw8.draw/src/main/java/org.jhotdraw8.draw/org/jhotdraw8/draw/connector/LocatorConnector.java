@@ -17,14 +17,14 @@ import org.jhotdraw8.geom.PointAndDerivative;
  */
 public class LocatorConnector extends AbstractConnector {
 
-    private final Locator locator;
+    private final @NonNull Locator locator;
 
     /**
      * Creates a new instance
      *
      * @param locator the locator that should be used
      */
-    public LocatorConnector(Locator locator) {
+    public LocatorConnector(@NonNull Locator locator) {
         this.locator = locator;
     }
 
@@ -33,7 +33,7 @@ public class LocatorConnector extends AbstractConnector {
      *
      * @return the locator
      */
-    public Locator getLocator() {
+    public @NonNull Locator getLocator() {
         return locator;
     }
 

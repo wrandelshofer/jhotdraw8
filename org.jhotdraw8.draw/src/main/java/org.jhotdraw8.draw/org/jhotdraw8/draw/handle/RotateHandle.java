@@ -56,8 +56,8 @@ public class RotateHandle extends AbstractHandle {
     private static final @Nullable Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border HANDLE_REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
 
-    private static final Circle PICK_NODE_SHAPE = new Circle(3);
-    private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
+    private static final @NonNull Circle PICK_NODE_SHAPE = new Circle(3);
+    private static final @NonNull SVGPath PIVOT_NODE_SHAPE = new SVGPath();
 
     private static final @Nullable Background PIVOT_REGION_BACKGROUND = new Background(new BackgroundFill(Color.PURPLE, null, null));
     private static final @Nullable Border PIVOT_REGION_BORDER = null;

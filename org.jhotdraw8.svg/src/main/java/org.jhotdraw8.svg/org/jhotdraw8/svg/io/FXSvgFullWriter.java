@@ -28,9 +28,9 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class FXSvgFullWriter extends AbstractFXSvgWriter {
-    private static final String SVG_VERSION = "1.1";
-    private static final String SVG_BASE_PROFILE = "full";
-    public static final String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
+    private static final @NonNull String SVG_VERSION = "1.1";
+    private static final @NonNull String SVG_BASE_PROFILE = "full";
+    public static final @NonNull String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an

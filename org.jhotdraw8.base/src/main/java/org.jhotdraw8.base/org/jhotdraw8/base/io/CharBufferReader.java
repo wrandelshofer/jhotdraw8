@@ -17,9 +17,9 @@ import java.nio.CharBuffer;
  */
 public class CharBufferReader extends Reader {
 
-    private final CharBuffer buf;
+    private final @NonNull CharBuffer buf;
 
-    public CharBufferReader(CharBuffer buf) {
+    public CharBufferReader(@NonNull CharBuffer buf) {
         this.buf = buf;
     }
 

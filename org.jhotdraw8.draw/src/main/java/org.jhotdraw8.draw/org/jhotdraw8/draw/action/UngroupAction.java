@@ -29,7 +29,7 @@ import java.util.LinkedList;
  */
 public class UngroupAction extends AbstractDrawingViewAction {
 
-    public static final String ID = "edit.ungroup";
+    public static final @NonNull String ID = "edit.ungroup";
 
     /**
      * Creates a new instance.
@@ -45,7 +45,7 @@ public class UngroupAction extends AbstractDrawingViewAction {
 
     @Override
     protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
-        final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
+        final @NonNull LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         ungroup(dview, figures);
 
     }

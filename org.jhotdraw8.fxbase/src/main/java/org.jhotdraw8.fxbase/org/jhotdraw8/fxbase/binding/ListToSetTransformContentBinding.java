@@ -17,10 +17,10 @@ import java.util.function.Function;
  * Binds the content of a list to a set.
  */
 class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
-    private final ObservableList<D> dest;
-    private final ObservableSet<S> source;
+    private final @NonNull ObservableList<D> dest;
+    private final @NonNull ObservableSet<S> source;
     private final Function<S, D> toDest;
-    private final Consumer<D> disposeDest;
+    private final @NonNull Consumer<D> disposeDest;
 
 
     /**

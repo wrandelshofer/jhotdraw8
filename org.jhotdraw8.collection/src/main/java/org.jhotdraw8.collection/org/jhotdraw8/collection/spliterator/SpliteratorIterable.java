@@ -21,9 +21,9 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class SpliteratorIterable<T> implements Iterable<T> {
-    private final Supplier<Spliterator<T>> factory;
+    private final @NonNull Supplier<Spliterator<T>> factory;
 
-    public SpliteratorIterable(Supplier<Spliterator<T>> factory) {
+    public SpliteratorIterable(@NonNull Supplier<Spliterator<T>> factory) {
         this.factory = factory;
     }
 

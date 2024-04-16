@@ -20,7 +20,7 @@ public class DeleteAction extends AbstractSelectionAction {
     /**
      * The ID for this action.
      */
-    public static final String ID = "edit.delete";
+    public static final @NonNull String ID = "edit.delete";
 
     /**
      * Creates a new instance which acts on the currently focused component.

@@ -18,7 +18,7 @@ import org.jhotdraw8.application.EditableComponent;
  */
 public class SelectAllAction extends AbstractSelectionAction {
 
-    public static final String ID = "edit.selectAll";
+    public static final @NonNull String ID = "edit.selectAll";
 
     /**
      * Creates a new instance which acts on the currently focused component.

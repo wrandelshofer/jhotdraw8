@@ -27,9 +27,9 @@ public class FileURIChooser implements URIChooser {
     /**
      * The associated file chooser object.
      */
-    private final FileChooser chooser = new FileChooser();
+    private final @NonNull FileChooser chooser = new FileChooser();
 
-    private final ObservableList<URIExtensionFilter> filters = FXCollections.observableArrayList();
+    private final @NonNull ObservableList<URIExtensionFilter> filters = FXCollections.observableArrayList();
 
     private void updateFilters() {
         ObservableList<FileChooser.ExtensionFilter> cfilters = chooser.getExtensionFilters();

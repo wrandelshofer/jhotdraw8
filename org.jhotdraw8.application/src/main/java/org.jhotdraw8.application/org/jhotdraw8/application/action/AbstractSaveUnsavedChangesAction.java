@@ -55,7 +55,7 @@ import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<FileBasedActivity> {
 
-    private final Logger LOGGER = Logger.getLogger(AbstractSaveUnsavedChangesAction.class.getName());
+    private final @NonNull Logger LOGGER = Logger.getLogger(AbstractSaveUnsavedChangesAction.class.getName());
 
 
     private @Nullable Node oldFocusOwner = null;

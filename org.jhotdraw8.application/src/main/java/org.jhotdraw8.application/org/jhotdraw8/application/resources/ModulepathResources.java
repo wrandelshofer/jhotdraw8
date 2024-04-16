@@ -26,7 +26,7 @@ import java.util.spi.ResourceBundleProvider;
 public class ModulepathResources extends ResourceBundle implements Serializable, Resources {
     @Serial
     private static final long serialVersionUID = 1L;
-    private static final Logger LOG = Logger.getLogger(ModulepathResources.class.getName());
+    private static final @NonNull Logger LOG = Logger.getLogger(ModulepathResources.class.getName());
 
     /**
      * Get the appropriate ResourceBundle subclass.
@@ -109,7 +109,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
      * The module from which the resource bundle was instantiated
      * and which we use to load resources (i.e. images) from.
      */
-    private final Module module;
+    private final @NonNull Module module;
 
     /**
      * Creates a new object which wraps the provided resource bundle.
@@ -128,7 +128,7 @@ public class ModulepathResources extends ResourceBundle implements Serializable,
         try {
             moduleAndParentBaseName = this.resource.getString(PARENT_RESOURCE_KEY);
         } catch (MissingResourceException e) {
-
+            // empty
         }
         if (moduleAndParentBaseName != null) {
             String[] split = moduleAndParentBaseName.split("\\s+|\\s*,\\s*");

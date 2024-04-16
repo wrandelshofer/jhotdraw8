@@ -42,7 +42,7 @@ import java.util.function.Consumer;
  */
 public class PaintCssConverter extends AbstractCssConverter<Paint> {
 
-    protected static final PaintableCssConverter paintableConverter = new PaintableCssConverter(false);
+    protected static final @NonNull PaintableCssConverter paintableConverter = new PaintableCssConverter(false);
 
     public PaintCssConverter() {
         this(false);

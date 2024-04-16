@@ -25,7 +25,7 @@ import static org.jhotdraw8.color.FXColorUtil.toWebColor;
  * </dl>
  */
 public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
-    private final String uaStylesheetUrl;
+    private final @NonNull String uaStylesheetUrl;
 
     protected AbstractAtlantaFXTheme(String name, String appearance, String uaStylesheetUrl) {
         super(name, appearance);

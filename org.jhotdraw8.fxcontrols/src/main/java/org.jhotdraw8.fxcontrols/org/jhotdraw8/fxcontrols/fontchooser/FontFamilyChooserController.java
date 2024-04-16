@@ -42,11 +42,11 @@ public class FontFamilyChooserController {
     @FXML
     private URL location;
 
-    private final ObjectProperty<FontChooserModel> model = new SimpleObjectProperty<>();
+    private final @NonNull ObjectProperty<FontChooserModel> model = new SimpleObjectProperty<>();
 
-    private final ObjectProperty<EventHandler<ActionEvent>> onAction = new SimpleObjectProperty<>();
+    private final @NonNull ObjectProperty<EventHandler<ActionEvent>> onAction = new SimpleObjectProperty<>();
 
-    protected final DoubleProperty fontSize = new SimpleDoubleProperty(13.0);
+    protected final @NonNull DoubleProperty fontSize = new SimpleDoubleProperty(13.0);
 
     @FXML
     private TextArea previewTextArea;
@@ -101,12 +101,12 @@ public class FontFamilyChooserController {
 
     private void initListCells() {
         familyList.setCellFactory(lv -> {
-            final TextFieldListCell<FontFamily> listCell = new TextFieldListCell<>();
+            final @NonNull TextFieldListCell<FontFamily> listCell = new TextFieldListCell<>();
             return listCell;
         });
 
         collectionList.setCellFactory(lv -> {
-            final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<>();
+            final @NonNull TextFieldListCell<FontCollection> listCell = new TextFieldListCell<>();
             return listCell;
         });
     }

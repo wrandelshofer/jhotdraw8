@@ -25,7 +25,7 @@ import org.jhotdraw8.geom.FXRectangles;
  */
 public class MultipleSelectionOutlineHandle extends AbstractHandle {
 
-    private final Polygon node;
+    private final @NonNull Polygon node;
     private final double[] points;
 
     public MultipleSelectionOutlineHandle() {

@@ -20,7 +20,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull Str
         implements WritableStyleableMapAccessor<@NonNull String>, NonNullKey<@NonNull String> {
 
     private static final long serialVersionUID = 1L;
-    private final Converter<String> converter = new StringOrIdentCssConverter();
+    private final @NonNull Converter<String> converter = new StringOrIdentCssConverter();
 
     /**
      * Creates a new instance with the specified name and with an empty String

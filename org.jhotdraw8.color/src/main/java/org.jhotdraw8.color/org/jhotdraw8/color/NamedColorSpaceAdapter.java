@@ -31,10 +31,10 @@ public class NamedColorSpaceAdapter extends AbstractNamedColorSpace {
 
     @Serial
     private static final long serialVersionUID = 0L;
-    private final ColorSpace cs;
-    private final String name;
+    private final @NonNull ColorSpace cs;
+    private final @NonNull String name;
 
-    public NamedColorSpaceAdapter(String name, ColorSpace cs) {
+    public NamedColorSpaceAdapter(@NonNull String name, @NonNull ColorSpace cs) {
         super(cs.getType(), cs.getNumComponents());
         this.cs = cs;
         this.name = name;

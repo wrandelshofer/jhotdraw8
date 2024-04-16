@@ -6,17 +6,18 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.annotation.NonNull;
+import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 
 public class MappedSystemColorConverter implements SystemColorConverter {
-    private final ImmutableMap<String, Color> systemColors;
+    private final @NonNull ImmutableMap<String, Color> systemColors;
 
-    public MappedSystemColorConverter(ImmutableMap<String, Color> systemColors) {
+    public MappedSystemColorConverter(@NonNull ImmutableMap<String, Color> systemColors) {
         this.systemColors = systemColors;
     }
 
     @Override
-    public Color convert(@NonNull CssColor value) {
+    public @Nullable Color convert(@NonNull CssColor value) {
         Color systemColor = systemColors.get(value.getName());
         return systemColor != null ? systemColor : value.getColor();
     }

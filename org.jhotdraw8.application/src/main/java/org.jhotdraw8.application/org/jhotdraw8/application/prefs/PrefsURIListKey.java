@@ -16,11 +16,11 @@ import java.util.prefs.Preferences;
  * @author Werner Randelshofer
  */
 public class PrefsURIListKey {
-    private final String key;
+    private final @NonNull String key;
     private final @NonNull List<String> defaultValue;
 
 
-    public PrefsURIListKey(String key, @NonNull List<String> defaultValue) {
+    public PrefsURIListKey(@NonNull String key, @NonNull List<String> defaultValue) {
         this.key = key;
         this.defaultValue = List.copyOf(defaultValue);
 

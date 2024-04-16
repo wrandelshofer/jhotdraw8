@@ -22,7 +22,7 @@ public class DirectoryURIChooser implements URIChooser {
     /**
      * The associated file chooser object.
      */
-    private final DirectoryChooser chooser = new DirectoryChooser();
+    private final @NonNull DirectoryChooser chooser = new DirectoryChooser();
 
     public DirectoryURIChooser() {
     }

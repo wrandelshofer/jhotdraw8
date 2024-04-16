@@ -30,7 +30,7 @@ import java.util.Objects;
  */
 public class CssColor implements Paintable {
 
-    private static final DoubleCssConverter num = new DoubleCssConverter(false);
+    private static final @NonNull DoubleCssConverter num = new DoubleCssConverter(false);
 
     private final @NonNull String name;
     private final @NonNull Color color;

@@ -44,7 +44,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
      */
     private int dragStartIndex;
 
-    private final NonNullObjectStyleableKey<BezierPath> key;
+    private final @NonNull NonNullObjectStyleableKey<BezierPath> key;
     /**
      * The bezier nodes being created.
      */

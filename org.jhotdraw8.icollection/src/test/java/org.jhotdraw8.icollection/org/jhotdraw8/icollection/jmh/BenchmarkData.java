@@ -1,5 +1,7 @@
 package org.jhotdraw8.icollection.jmh;
 
+import org.jhotdraw8.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -20,13 +22,13 @@ public class BenchmarkData {
      * The elements have been shuffled, so that they
      * are not in contiguous memory addresses.
      */
-    public final List<Key> listA;
-    private final List<Integer> indicesA;
+    public final @NonNull List<Key> listA;
+    private final @NonNull List<Integer> indicesA;
     /**
      * Set 'a'.
      */
-    public final Set<Key> setA;
-    public final Set<Key> setB;
+    public final @NonNull Set<Key> setA;
+    public final @NonNull Set<Key> setB;
     /**
      * Map 'a'.
      */
@@ -37,7 +39,7 @@ public class BenchmarkData {
      * The elements have been shuffled, so that they
      * are not in contiguous memory addresses.
      */
-    public final List<Key> listB;
+    public final @NonNull List<Key> listB;
 
 
     private int index;

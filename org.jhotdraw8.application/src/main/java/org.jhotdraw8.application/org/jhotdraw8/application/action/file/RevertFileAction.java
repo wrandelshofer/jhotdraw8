@@ -31,7 +31,7 @@ import java.util.logging.Logger;
  */
 public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    public static final String ID = "file.revert";
+    public static final @NonNull String ID = "file.revert";
 
     /**
      * Creates a new instance.

@@ -62,13 +62,13 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
-    private static final Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
+    private static final @NonNull Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
 
-    public static final NonNullObjectKey<Boolean> RELATIVIZE_PATHS = new NonNullObjectKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
+    public static final @NonNull NonNullObjectKey<Boolean> RELATIVIZE_PATHS = new NonNullObjectKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
 
-    public static final DataFormat SVG_FORMAT;
-    public static final String SVG_MIME_TYPE = "image/svg+xml";
-    private static final String SKIP_KEY = "skip";
+    public static final @NonNull DataFormat SVG_FORMAT;
+    public static final @NonNull String SVG_MIME_TYPE = "image/svg+xml";
+    private static final @NonNull String SKIP_KEY = "skip";
 
     static {
         DataFormat fmt = DataFormat.lookupMimeType(SVG_MIME_TYPE);
@@ -78,9 +78,9 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         SVG_FORMAT = fmt;
     }
 
-    private final NumberConverter nb = new NumberConverter();
-    private final SizeCssConverter sc = new SizeCssConverter(false);
-    private final Converter<CssSize> sznb = new SizeCssConverter(false);
+    private final @NonNull NumberConverter nb = new NumberConverter();
+    private final @NonNull SizeCssConverter sc = new SizeCssConverter(false);
+    private final @NonNull Converter<CssSize> sznb = new SizeCssConverter(false);
     private final @NonNull IdFactory idFactory = new SimpleIdFactory();
 
     private BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory = FXSvgFullWriter::new;

@@ -609,7 +609,7 @@ public class SimpleStylesheetsManager<E> implements StylesheetsManager<E> {
 
     @Override
     public List<StylesheetInfo> getStylesheets() {
-        final ArrayList<StylesheetInfo> list = new ArrayList<>();
+        final @NonNull ArrayList<StylesheetInfo> list = new ArrayList<>();
         list.addAll(userAgentList.values());
         list.addAll(authorList.values());
         list.addAll(inlineList.values());

@@ -107,7 +107,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     private boolean valid = true;
     private final @NonNull Set<Figure> dirties = Collections.newSetFromMap(new IdentityHashMap<>());
-    private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
+    private final @NonNull Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
 
     private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<>(this, ROOT_PROPERTY) {
         @Override
@@ -348,7 +348,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         validating.set(false);
     }
 
-    private final ReadOnlyBooleanWrapper validating = new ReadOnlyBooleanWrapper(this, "layoutIsInProgress");
+    private final @NonNull ReadOnlyBooleanWrapper validating = new ReadOnlyBooleanWrapper(this, "layoutIsInProgress");
 
     public boolean isValidating() {
         return validating.get();

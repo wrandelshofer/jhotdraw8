@@ -74,8 +74,8 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 public class BitmapExportOutputFormat extends AbstractExportOutputFormat implements ClipboardOutputFormat, OutputFormat {
 
     private static final double INCH_2_MM = 25.4;
-    public static final String JPEG_MIME_TYPE = "image/jpeg";
-    public static final String PNG_MIME_TYPE = "image/png";
+    public static final @NonNull String JPEG_MIME_TYPE = "image/jpeg";
+    public static final @NonNull String PNG_MIME_TYPE = "image/png";
 
     public BitmapExportOutputFormat() {
     }

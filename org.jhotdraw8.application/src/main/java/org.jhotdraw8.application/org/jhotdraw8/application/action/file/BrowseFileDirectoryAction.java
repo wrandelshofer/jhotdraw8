@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedActivity> {
 
-    public static final String ID = "file.browseFileDirectory";
+    public static final @NonNull String ID = "file.browseFileDirectory";
 
     /**
      * Creates a new instance.

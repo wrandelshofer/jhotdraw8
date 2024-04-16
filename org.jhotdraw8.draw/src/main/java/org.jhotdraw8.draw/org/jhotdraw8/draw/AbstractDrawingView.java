@@ -93,7 +93,7 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     public void cut() {
         copy();
-        final List<Figure> selectedFigures = new ArrayList<>(getSelectedFigures());
+        final @NonNull List<Figure> selectedFigures = new ArrayList<>(getSelectedFigures());
         DrawingModel m = getModel();
         for (Figure f : selectedFigures) {
             if (f.isDeletable()) {
