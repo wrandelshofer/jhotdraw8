@@ -38,12 +38,39 @@ public interface PathMetrics extends Shape {
     }
 
     /**
+     * Evaluates the path at time t.
+     *
+     * @param reverse whether to reverse the path
+     * @param t       the time in the range [0,1]
+     * @return point and tangent at t
+     */
+    default @NonNull PointAndDerivative eval(double t, boolean reverse) {
+        return evalAtArcLength(t * arcLength(), reverse);
+    }
+
+    /**
      * Evaluates the path at the specified arc length
      *
      * @param s the arc length, the value will be clamped to [0,arcLength()]
      * @return point and tangent at s
      */
-    @NonNull PointAndDerivative evalAtArcLength(double s);
+    @NonNull
+    PointAndDerivative evalAtArcLength(double s);
+
+    /**
+     * Evaluates the path at the specified arc length
+     *
+     * @param s       the arc length, the value will be clamped to [0,arcLength()]
+     * @param reverse whether to reverse the path
+     * @return point and tangent at s
+     */
+    default @NonNull PointAndDerivative evalAtArcLength(double s, boolean reverse) {
+        if (reverse) {
+            return evalAtArcLength(arcLength() - s).reverse();
+        } else {
+            return evalAtArcLength(s);
+        }
+    }
 
     /**
      * Returns a path iterator of the specified sub-path.
@@ -68,14 +95,16 @@ public interface PathMetrics extends Shape {
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */
-    @NonNull PathIterator getSubPathIteratorAtArcLength(double s0, double s1, final @Nullable AffineTransform tx);
+    @NonNull
+    PathIterator getSubPathIteratorAtArcLength(double s0, double s1, final @Nullable AffineTransform tx);
 
     /**
      * Gets path metrics for the reversed path.
      *
      * @return reverse path metrics
      */
-    @NonNull PathMetrics reverse();
+    @NonNull
+    PathMetrics reverse();
 
     /**
      * Implementations of PathMetrics should implement their {@code toString}
