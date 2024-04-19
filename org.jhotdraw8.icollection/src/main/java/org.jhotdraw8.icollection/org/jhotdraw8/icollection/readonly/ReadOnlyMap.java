@@ -293,7 +293,9 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
 
     /**
      * Returns the spliterator characteristics of the key set.
-     * This implementation returns {@link Spliterator#SIZED}|{@link Spliterator#DISTINCT}.
+     * <p>
+     * The default implementation in this interface
+     * returns {@link Spliterator#SIZED}|{@link Spliterator#DISTINCT}.
      *
      * @return characteristics.
      */

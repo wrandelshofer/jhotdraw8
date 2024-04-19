@@ -161,7 +161,8 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
     /**
      * Returns the Spliterator characteristics of this collection.
      * <p>
-     * The default implementation returns {@link Spliterator#SIZED}.
+     * The default implementation in this interface
+     * returns {@link Spliterator#SIZED}.
      *
      * @return the characteristics
      */
