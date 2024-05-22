@@ -135,7 +135,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addFigureKeysAndNames("CombinedPath", CombinedPathFigure.class);
 
         {
-            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedMapAccessors(AbstractDrawing.class).asSet();
+            Set<MapAccessor<?>> keys = Figure.getDeclaredAndInheritedMapAccessors(AbstractDrawing.class).toMutable();
             keys.remove(Drawing.USER_AGENT_STYLESHEETS);
             keys.remove(Drawing.AUTHOR_STYLESHEETS);
             keys.remove(Drawing.INLINE_STYLESHEETS);

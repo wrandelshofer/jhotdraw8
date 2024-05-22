@@ -149,7 +149,7 @@ public abstract class AbstractFigureFactory implements FigureFactory {
     }
 
     public void addFigureKeysAndNames(String figureName, @NonNull Class<? extends Figure> f) {
-        addFigureKeysAndNames(figureName, f, Figure.getDeclaredAndInheritedMapAccessors(f).asSet());
+        addFigureKeysAndNames(figureName, f, Figure.getDeclaredAndInheritedMapAccessors(f));
     }
 
     public void addFigureKeysAndNames(String figureName, @NonNull Class<? extends Figure> f, @NonNull Iterable<MapAccessor<?>> keys) {
