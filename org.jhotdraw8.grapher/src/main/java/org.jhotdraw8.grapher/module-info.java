@@ -7,19 +7,19 @@ import org.jhotdraw8.grapher.spi.GrapherResourceBundleProvider;
 
 @SuppressWarnings("module")
 module org.jhotdraw8.grapher {
-    requires transitive javafx.graphics;
-    requires transitive javafx.controls;
     requires transitive java.desktop;
     requires transitive java.prefs;
+    requires transitive javafx.controls;
     requires transitive javafx.fxml;
-    requires transitive org.jhotdraw8.draw;
-    requires transitive static org.jhotdraw8.annotation;
-    requires transitive org.jhotdraw8.os;
-    requires transitive org.jhotdraw8.collection;
-    requires transitive org.jhotdraw8.fxcontrols;
+    requires transitive javafx.graphics;
     requires transitive org.jhotdraw8.base;
+    requires transitive org.jhotdraw8.collection;
+    requires transitive org.jhotdraw8.draw;
+    requires transitive org.jhotdraw8.fxcontrols;
+    requires transitive org.jhotdraw8.os;
     requires transitive org.jhotdraw8.svg;
     requires transitive org.jhotdraw8.theme;
+    requires transitive static org.jhotdraw8.annotation;
 
     opens org.jhotdraw8.grapher to javafx.fxml, javafx.graphics;
 
