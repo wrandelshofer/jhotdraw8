@@ -35,7 +35,6 @@ public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>
 
     @Override
     public @NonNull List<PathElement> build() {
-        pathDone();
         return elements;
     }
 
@@ -62,11 +61,6 @@ public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>
     @Override
     protected void doMoveTo(double x, double y) {
         elements.add(new MoveTo(x, y));
-    }
-
-    @Override
-    protected void doPathDone() {
-        // empty
     }
 
     @Override

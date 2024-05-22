@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import javafx.geometry.Bounds;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.CubicCurveTo;
@@ -573,19 +572,6 @@ public class FXSvgPaths {
         return builder;
     }
 
-    /**
-     * Fits the specified SVGPath into the given bounds.
-     *
-     * @param pathstr an SVGPath String
-     * @param b       the desired bounds
-     * @param elems   on output contains the reshaped path elements
-     */
-    public static void reshapePathElements(String pathstr, @NonNull Bounds b, List<PathElement> elems) {
-        FXPathElementsBuilder builder = new FXPathElementsBuilder(elems);
-        SvgPaths.buildReshapedSvgString(builder, pathstr, b);
-        builder.pathDone();
-    }
-
     public static @NonNull <T extends PathBuilder<?>> T buildPathElements(@NonNull T builder, @NonNull Iterable<PathElement> pathElements) {
         double x = 0;
         double y = 0;
@@ -659,7 +645,6 @@ public class FXSvgPaths {
                 y = iy;
             }
         }
-        builder.pathDone();
         return builder;
     }
 

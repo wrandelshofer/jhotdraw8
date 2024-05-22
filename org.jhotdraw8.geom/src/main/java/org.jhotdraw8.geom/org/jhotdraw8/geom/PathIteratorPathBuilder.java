@@ -60,11 +60,6 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     }
 
     @Override
-    protected void doPathDone() {
-        // empty
-    }
-
-    @Override
     protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         if (needsMoveTo) {
             doMoveTo(lastX, lastY);

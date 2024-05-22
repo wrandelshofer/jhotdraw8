@@ -38,18 +38,6 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doPathDone() {
-        papb.pathDone();
-        ContourBuilder contourBuilder = new ContourBuilder();
-        for (PlinePath path : papb.build()) {
-            for (PlinePath contourPath : contourBuilder.parallelOffset(path, -offset)) {
-                AwtShapes.buildPathIterator(consumer, contourPath.getPathIterator(null), false);
-            }
-        }
-        consumer.pathDone();
-    }
-
-    @Override
     protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         papb.curveTo(x1, y1, x2, y2, x, y);
     }
@@ -73,6 +61,12 @@ public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
 
     @Override
     public @Nullable T build() {
+        ContourBuilder contourBuilder = new ContourBuilder();
+        for (PlinePath path : papb.build()) {
+            for (PlinePath contourPath : contourBuilder.parallelOffset(path, -offset)) {
+                AwtShapes.buildPathIterator(consumer, contourPath.getPathIterator(null));
+            }
+        }
         return consumer.build();
     }
 }

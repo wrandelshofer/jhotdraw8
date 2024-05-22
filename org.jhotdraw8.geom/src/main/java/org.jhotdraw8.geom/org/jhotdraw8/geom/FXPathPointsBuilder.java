@@ -88,11 +88,6 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
     }
 
     @Override
-    protected void doPathDone() {
-// empty
-    }
-
-    @Override
     protected void doQuadTo(double lastX, double lastY, double x, double y, double x0, double y0) {
         needsSquareAtLastPoint = true;
     }

@@ -122,11 +122,4 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
     public @NonNull BezierPath build() {
         return new BezierPath(nodes);
     }
-
-    @Override
-    protected void doPathDone() {
-        //
-    }
-
-
 }

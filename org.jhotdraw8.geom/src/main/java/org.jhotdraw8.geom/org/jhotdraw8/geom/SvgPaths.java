@@ -297,8 +297,6 @@ public class SvgPaths {
         } catch (IllegalPathStateException | IOException e) {
             throw new ParseException(e.getMessage(), tt.getStartPosition());
         }
-
-        builder.pathDone();
         return builder;
     }
 

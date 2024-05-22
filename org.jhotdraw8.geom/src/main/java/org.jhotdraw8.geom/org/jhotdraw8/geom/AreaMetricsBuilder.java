@@ -30,11 +30,6 @@ public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
     }
 
     @Override
-    protected void doPathDone() {
-
-    }
-
-    @Override
     protected void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y) {
         addToArea(lastX, lastY, x, y);
     }

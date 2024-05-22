@@ -48,12 +48,6 @@ public class MarkerPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doPathDone() {
-        doEndMarker();
-        out.pathDone();
-    }
-
-    @Override
     protected void doLineTo(double lastX, double lastY, double x, double y) {
         doStartOrMidMarker(x, y);
         tangentX = lastX;

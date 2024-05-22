@@ -44,11 +44,6 @@ public class AffineTransformPathBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doPathDone() {
-        target.pathDone();
-    }
-
-    @Override
     protected void doLineTo(double lastX, double lastY, double x, double y) {
         Point2D p = transform.transform(new Point2D.Double(x, y), new Point2D.Double());
         target.lineTo(p.getX(), p.getY());

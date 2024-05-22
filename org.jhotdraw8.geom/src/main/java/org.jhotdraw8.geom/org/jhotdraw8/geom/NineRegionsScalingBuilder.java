@@ -172,11 +172,6 @@ public class NineRegionsScalingBuilder<T> extends AbstractPathBuilder<T> {
     }
 
     @Override
-    protected void doPathDone() {
-        target.pathDone();
-    }
-
-    @Override
     public @Nullable T build() {
         return target.build();
     }

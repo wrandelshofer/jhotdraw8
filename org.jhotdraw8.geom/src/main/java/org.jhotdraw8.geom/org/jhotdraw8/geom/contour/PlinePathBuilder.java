@@ -34,6 +34,10 @@ public class PlinePathBuilder extends AbstractPathBuilder<List<PlinePath>> {
 
     @Override
     public List<PlinePath> build() {
+        if (current != null) {
+            paths.add(current);
+            current = null;
+        }
         return paths;
     }
 
@@ -41,14 +45,6 @@ public class PlinePathBuilder extends AbstractPathBuilder<List<PlinePath>> {
     protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
         if (current != null) {
             current.isClosed(true);
-        }
-    }
-
-    @Override
-    protected void doPathDone() {
-        if (current != null) {
-            paths.add(current);
-            current = null;
         }
     }
 

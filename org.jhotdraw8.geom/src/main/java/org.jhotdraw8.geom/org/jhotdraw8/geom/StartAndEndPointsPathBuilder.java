@@ -5,7 +5,8 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,11 @@ import java.util.List;
  *
  * @author Werner Randelshofer
  */
-public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
+public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<StartAndEndPointsPathBuilder.StartAndEndPoints> {
+    public record StartAndEndPoints(@NonNull ImmutableList<PointAndDerivative> startPoints,
+                                    @NonNull ImmutableList<PointAndDerivative> endPoints) {
+    }
+
     private final @NonNull List<PointAndDerivative> startPoints = new ArrayList<>();
     private final @NonNull List<PointAndDerivative> endPoints = new ArrayList<>();
 
@@ -35,15 +40,6 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
 
     @Override
     protected void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY) {
-        startDone = false;
-    }
-
-    @Override
-    protected void doPathDone() {
-        if (startDone) {
-            startPoints.add(new PointAndDerivative(startX, startY, startTangentX, startTangentY));
-            endPoints.add(new PointAndDerivative(endX, endY, endTangentX, endTangentY));
-        }
         startDone = false;
     }
 
@@ -101,16 +97,13 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<Void> {
         endTangentY = y2 - y1;
     }
 
-    public @NonNull List<PointAndDerivative> getStartPoints() {
-        return startPoints;
-    }
-
-    public @NonNull List<PointAndDerivative> getEndPoints() {
-        return endPoints;
-    }
-
     @Override
-    public @Nullable Void build() {
-        return null;
+    public @NonNull StartAndEndPoints build() {
+        if (startDone) {
+            startPoints.add(new PointAndDerivative(startX, startY, startTangentX, startTangentY));
+            endPoints.add(new PointAndDerivative(endX, endY, endTangentX, endTangentY));
+            startDone = false;
+        }
+        return new StartAndEndPoints(VectorList.copyOf(startPoints), VectorList.copyOf(endPoints));
     }
 }

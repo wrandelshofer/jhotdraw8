@@ -90,11 +90,6 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
-    @Override
-    protected void doPathDone() {
-        // empty
-    }
-
     public boolean isFinite() {
         return Double.isFinite(minx) && Double.isFinite(miny)
                 && Double.isFinite(maxx) && Double.isFinite(maxy);

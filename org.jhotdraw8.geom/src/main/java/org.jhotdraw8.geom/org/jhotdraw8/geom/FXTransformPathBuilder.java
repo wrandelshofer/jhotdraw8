@@ -41,10 +41,6 @@ public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
         target.curveTo(p1.getX(), p1.getY(), p2.getX(), p2.getY(), p3.getX(), p3.getY());
     }
 
-    @Override
-    protected void doPathDone() {
-        target.pathDone();
-    }
 
     @Override
     protected void doLineTo(double lastX, double lastY, double x, double y) {

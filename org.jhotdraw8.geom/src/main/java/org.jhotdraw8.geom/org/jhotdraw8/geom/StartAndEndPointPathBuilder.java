@@ -48,11 +48,6 @@ public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     }
 
     @Override
-    protected void doPathDone() {
-        //empty
-    }
-
-    @Override
     protected void doLineTo(double lastX, double lastY, double x, double y) {
         if (!startDone) {
             startX = lastX;

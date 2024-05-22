@@ -63,8 +63,6 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
 
     protected abstract void doClosePath(double lastX, double lastY, double lastMoveToX, double lastMoveToY);
 
-    protected abstract void doPathDone();
-
     protected abstract void doCurveTo(double lastX, double lastY, double x1, double y1, double x2, double y2, double x, double y);
 
     protected abstract void doLineTo(double lastX, double lastY, double x, double y);
@@ -79,11 +77,6 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
 
     protected void doSmoothQuadTo(double lastX, double lastY, double x1, double y1, double x, double y) {
         doQuadTo(lastX, lastY, x1, y1, x, y);
-    }
-
-    @Override
-    public void pathDone() {
-        doPathDone();
     }
 
     @Override

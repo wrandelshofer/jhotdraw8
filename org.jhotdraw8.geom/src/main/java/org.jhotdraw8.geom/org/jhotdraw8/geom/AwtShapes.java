@@ -13,10 +13,6 @@ import java.util.List;
 
 public class AwtShapes {
     public static @NonNull <T extends PathBuilder<?>> T buildPathIterator(@NonNull T builder, @NonNull PathIterator iter) {
-        return buildPathIterator(builder, iter, true);
-    }
-
-    public static @NonNull <T extends PathBuilder<?>> T buildPathIterator(@NonNull T builder, @NonNull PathIterator iter, boolean doPathDone) {
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
@@ -38,9 +34,6 @@ public class AwtShapes {
                 default:
                     throw new IllegalArgumentException("Unsupported segment type:" + iter.currentSegment(coords));
             }
-        }
-        if (doPathDone) {
-            builder.pathDone();
         }
         return builder;
     }
