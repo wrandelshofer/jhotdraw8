@@ -16,14 +16,17 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
+ * An Algorithm for Automatically Fitting Digitized Curves.
+ * <p>
  * References:
- * <pre>
- *     GraphicsGems.c
- *     2d and 3d Vector C Library
- *     by Andrew Glassner
- *     from "Graphics Gems", Academic Press, 1990
- *     <a href="https://www.realtimerendering.com/resources/GraphicsGems/">GraphicsGems</a>
- * </pre>
+ * <dl>
+ *     <dt>gems/FitCurves.c</dt>
+ *     <dd>An Algorithm for Automatically Fitting Digitized Curves. Graphics Gems, Academic Press.
+ *     Copyright (c) 1990 Philip J. Schneider.
+ *     <br><a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/gems/FitCurves.c">github.com</a>
+ *     <br><a href="https://github.com/erich666/GraphicsGems/blob/7ef8b6990e125fa908dfaeb80bc42f4b4fae65b8/LICENSE.md">Graphics Gems License</a>
+ *     </dd>
+ * </dl>
  */
 public class PolylineToCubicCurve {
 
@@ -83,36 +86,36 @@ public class PolylineToCubicCurve {
             boolean first = true;
             for (ArrayList<Point2D> seg : segments) {
                 switch (seg.size()) {
-                case 0:
-                    break;
-                case 1:
-                    if (first) {
-                        builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
-                        first = false;
-                    } else {
-                        builder.lineTo(seg.getFirst().getX(), seg.getFirst().getY());
-                    }
-                    break;
-                case 2:
-                    if (first) {
-                        builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
-                        first = false;
-                    }
-                    builder.lineTo(seg.get(1).getX(), seg.get(1).getY());
-                    break;
-                default:
-                    if (first) {
-                        builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
-                        first = false;
-                    }
-                    /*  Unit tangent vectors at endpoints */
-                    Point2D tHat1;
-                    Point2D tHat2;
-                    tHat1 = computeLeftTangent(seg, 0);
-                    tHat2 = computeRightTangent(seg, seg.size() - 1);
+                    case 0:
+                        break;
+                    case 1:
+                        if (first) {
+                            builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
+                            first = false;
+                        } else {
+                            builder.lineTo(seg.getFirst().getX(), seg.getFirst().getY());
+                        }
+                        break;
+                    case 2:
+                        if (first) {
+                            builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
+                            first = false;
+                        }
+                        builder.lineTo(seg.get(1).getX(), seg.get(1).getY());
+                        break;
+                    default:
+                        if (first) {
+                            builder.moveTo(seg.getFirst().getX(), seg.getFirst().getY());
+                            first = false;
+                        }
+                        /*  Unit tangent vectors at endpoints */
+                        Point2D tHat1;
+                        Point2D tHat2;
+                        tHat1 = computeLeftTangent(seg, 0);
+                        tHat2 = computeRightTangent(seg, seg.size() - 1);
 
-                    fitCubic(builder, seg, 0, seg.size() - 1, tHat1, tHat2, errorSquared);
-                    break;
+                        fitCubic(builder, seg, 0, seg.size() - 1, tHat1, tHat2, errorSquared);
+                        break;
                 }
             }
         }
@@ -452,7 +455,7 @@ public class PolylineToCubicCurve {
         java.awt.geom.Point2D.Double lastNode = builder.getLastPoint();
         double error = Math.sqrt(errorSquared);
         if (connectsCorners && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[1].getX(), bezCurve[1].getY(), error)
-                && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[2].getX(), bezCurve[2].getY(), error)) {
+            && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[2].getX(), bezCurve[2].getY(), error)) {
             builder.lineTo(
                     bezCurve[3].getX(), bezCurve[3].getY());
 
@@ -526,7 +529,7 @@ public class PolylineToCubicCurve {
         u[0] = 0.0;
         for (i = first + 1; i <= last; i++) {
             u[i - first] = u[i - first - 1]
-                    + v2DistanceBetween2Points(d.get(i), d.get(i - 1));
+                           + v2DistanceBetween2Points(d.get(i), d.get(i - 1));
         }
 
         for (i = first + 1; i <= last; i++) {
@@ -600,7 +603,7 @@ public class PolylineToCubicCurve {
         /* Compute f(u)/f'(u) */
         numerator = (Q_u.getX() - P.getX()) * (Q1_u.getX()) + (Q_u.getY() - P.getY()) * (Q1_u.getY());
         denominator = (Q1_u.getX()) * (Q1_u.getX()) + (Q1_u.getY()) * (Q1_u.getY())
-                + (Q_u.getX() - P.getX()) * (Q2_u.getX()) + (Q_u.getY() - P.getY()) * (Q2_u.getY());
+                      + (Q_u.getX() - P.getX()) * (Q2_u.getX()) + (Q_u.getY() - P.getY()) * (Q2_u.getY());
 
         /* u = u - f(u)/f'(u) */
         uPrime = u - (numerator / denominator);
