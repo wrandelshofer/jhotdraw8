@@ -22,6 +22,7 @@ import java.util.List;
  *     2d and 3d Vector C Library
  *     by Andrew Glassner
  *     from "Graphics Gems", Academic Press, 1990
+ *     <a href="https://www.realtimerendering.com/resources/GraphicsGems/">GraphicsGems</a>
  * </pre>
  */
 public class PolylineToCubicCurve {
@@ -30,22 +31,6 @@ public class PolylineToCubicCurve {
      * Prevent instance creation.
      */
     private PolylineToCubicCurve() {
-    }
-
-    public static void main(String[] args) {
-        ArrayList<Point2D> d = new ArrayList<>();
-        d.add(new Point2D(0, 0));
-        d.add(new Point2D(5, 1));
-        d.add(new Point2D(10, 0));
-        d.add(new Point2D(10, 10));
-        d.add(new Point2D(0, 10));
-        d.add(new Point2D(0, 0));
-        ArrayList<ArrayList<Point2D>> segments = (splitAtCorners(d, 45 / 180d * Math.PI, 2d));
-        for (ArrayList<Point2D> seg : segments) {
-            for (int i = 0; i < 2; i++) {
-                seg = reduceNoise(seg, 0.8);
-            }
-        }
     }
 
     /**
@@ -66,14 +51,14 @@ public class PolylineToCubicCurve {
      * Fits a bezier path to the specified list of digitized points.
      *
      * @param builder         the builder for the bezier path
-     * @param digitizedPoints digited points.
+     * @param digitizedPoints digitized points.
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
     public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull List<Point2D> digitizedPoints, double error) {
         // Split into segments at corners
         ArrayList<ArrayList<Point2D>> segments;
-        segments = splitAtCorners(digitizedPoints, 77 / 180d * Math.PI, error * error);
+        segments = splitAtCorners(digitizedPoints, 44 / 180d * Math.PI, error * error);
 
         // Clean up the data in the segments
         for (int i = 0, n = segments.size(); i < n; i++) {
