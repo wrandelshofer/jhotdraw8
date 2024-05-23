@@ -2,13 +2,12 @@ package org.jhotdraw8.fxcontrols.fontchooser;
 
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 public interface FontCollectionsFactory {
-    @NonNull List<FontCollection> create();
+    List<FontCollection> create();
 
     /**
      * Creates a FontChooserModel asynchronously in a worker thread, and completes the returned
@@ -16,7 +15,7 @@ public interface FontCollectionsFactory {
      *
      * @return a {@link CompletableFuture}.
      */
-    default @NonNull CompletableFuture<List<FontCollection>> createAsync() {
+    default CompletableFuture<List<FontCollection>> createAsync() {
         CompletableFuture<List<FontCollection>> future = new CompletableFuture<>();
         Task<List<FontCollection>> task = new Task<>() {
             @Override

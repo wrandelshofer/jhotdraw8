@@ -15,8 +15,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.css.converter.SizeCssConverter;
@@ -28,6 +26,7 @@ import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +58,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
     @FXML
     private TextField majorYField;
 
-    private final @NonNull Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
+    private final Property<CssColor> gridColorProperty = new SimpleObjectProperty<>();
     private Node node;
 
     @FXML
@@ -75,7 +74,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         this(GridInspector.class.getResource("GridInspector.fxml"));
     }
 
-    public GridInspector(@NonNull URL fxmlUrl) {
+    public GridInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -84,7 +83,7 @@ public class GridInspector extends AbstractDrawingViewInspector {
         return node;
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {

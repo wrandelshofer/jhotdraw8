@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -18,17 +17,17 @@ import java.util.List;
  */
 public class StyleRule extends Rule {
 
-    private final @NonNull SelectorGroup selectorList;
-    private final @NonNull ImmutableList<Declaration> declarations;
+    private final SelectorGroup selectorList;
+    private final ImmutableList<Declaration> declarations;
 
-    public StyleRule(@Nullable SourceLocator sourceLocator, @NonNull SelectorGroup selectorGroup, @NonNull List<Declaration> declarations) {
+    public StyleRule(@Nullable SourceLocator sourceLocator, SelectorGroup selectorGroup, List<Declaration> declarations) {
         super(sourceLocator);
         this.selectorList = selectorGroup;
         this.declarations = VectorList.copyOf(declarations);
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder buf = new StringBuilder("StyleRule: ");
         buf.append(selectorList);
         buf.append("{");
@@ -44,7 +43,7 @@ public class StyleRule extends Rule {
         return selectorList;
     }
 
-    public @NonNull ImmutableList<Declaration> getDeclarations() {
+    public ImmutableList<Declaration> getDeclarations() {
         return declarations;
     }
 }

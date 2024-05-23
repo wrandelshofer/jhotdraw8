@@ -6,7 +6,6 @@
 package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -41,12 +40,12 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * </dl>
  */
 public class SrgbaCssColor extends CssColor {
-    private static final @NonNull FloatConverter num = new FloatConverter();
-    public static final @NonNull SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
+    private static final FloatConverter num = new FloatConverter();
+    public static final SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
 
-    private final @NonNull CssSize red, green, blue, opacity;
+    private final CssSize red, green, blue, opacity;
 
-    public SrgbaCssColor(@NonNull Color color) {
+    public SrgbaCssColor(Color color) {
         super(toName(
                 CssSize.of(color.getRed() * 100, UnitConverter.PERCENTAGE),
                 CssSize.of(color.getGreen() * 100, UnitConverter.PERCENTAGE),
@@ -58,7 +57,7 @@ public class SrgbaCssColor extends CssColor {
         this.opacity = CssSize.of(color.getOpacity());
     }
 
-    public SrgbaCssColor(@NonNull CssSize red, @NonNull CssSize green, @NonNull CssSize blue, @NonNull CssSize opacity) {
+    public SrgbaCssColor(CssSize red, CssSize green, CssSize blue, CssSize opacity) {
         super(toName(red, green, blue, opacity),
 
                 (UnitConverter.PERCENTAGE.equals(red.getUnits())
@@ -83,7 +82,7 @@ public class SrgbaCssColor extends CssColor {
         this.opacity = opacity;
     }
 
-    private static String toName(@NonNull CssSize red, @NonNull CssSize green, @NonNull CssSize blue, @NonNull CssSize opacity) {
+    private static String toName(CssSize red, CssSize green, CssSize blue, CssSize opacity) {
         StringBuilder buf = new StringBuilder(20);
         if (UnitConverter.PERCENTAGE.equals(opacity.getUnits()) && opacity.getValue() == 100.0
                 || opacity.getValue() == 1) {

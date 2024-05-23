@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.util.FloatFunction;
 
 import java.awt.color.ColorSpace;
@@ -14,15 +13,14 @@ import java.awt.color.ColorSpace;
  * Adds a non-linear transfer function to a linear {@code RGB} color space.
  */
 public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
-    private final @NonNull FloatFunction fromLinear;
-    private @NonNull
-    final NamedColorSpace linearCS;
-    private final @NonNull String name;
-    private final @NonNull FloatFunction toLinear;
+    private final FloatFunction fromLinear;
+    private final NamedColorSpace linearCS;
+    private final String name;
+    private final FloatFunction toLinear;
 
-    public ParametricNonLinearRgbColorSpace(@NonNull String name, @NonNull NamedColorSpace linearCS,
-                                            @NonNull FloatFunction toLinear,
-                                            @NonNull FloatFunction fromLinear) {
+    public ParametricNonLinearRgbColorSpace(String name, NamedColorSpace linearCS,
+                                            FloatFunction toLinear,
+                                            FloatFunction fromLinear) {
         super(ColorSpace.TYPE_RGB, 3);
         this.linearCS = linearCS;
         this.name = name;
@@ -31,7 +29,7 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
+    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
         return fromLinear(linearCS.fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
@@ -43,29 +41,29 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
+    public float[] fromRGB(float[] rgb, float[] colorvalue) {
         return fromLinear(linearCS.fromRGB(rgb, colorvalue), colorvalue);
     }
 
-    public @NonNull FloatFunction getFromLinear() {
+    public FloatFunction getFromLinear() {
         return fromLinear;
     }
 
-    public @NonNull NamedColorSpace getLinearColorSpace() {
+    public NamedColorSpace getLinearColorSpace() {
         return linearCS;
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
-    public @NonNull FloatFunction getToLinear() {
+    public FloatFunction getToLinear() {
         return toLinear;
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return linearCS.toCIEXYZ(toLinear(colorvalue, xyz), xyz);
     }
 
@@ -77,7 +75,7 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
+    public float[] toRGB(float[] colorvalue, float[] rgb) {
         return linearCS.toRGB(toLinear(colorvalue, rgb), rgb);
     }
 

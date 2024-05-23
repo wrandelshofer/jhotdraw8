@@ -6,8 +6,7 @@
 package org.jhotdraw8.fxbase.styleable;
 
 import javafx.beans.property.ReadOnlyProperty;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 /**
@@ -24,7 +23,6 @@ public interface StyleableBean {
      *
      * @return the type of this {@code StyleableBean}
      */
-    @NonNull
     String getTypeSelector();
 
     /**
@@ -43,7 +41,7 @@ public interface StyleableBean {
      *
      * @return a read-only view on the id property
      */
-    @NonNull ReadOnlyProperty<String> idProperty();
+    ReadOnlyProperty<String> idProperty();
 
     /**
      * The style class selector of this {@code StyleableBean}.
@@ -53,7 +51,6 @@ public interface StyleableBean {
      *
      * @return the classes of this {@code StyleableBean}
      */
-    @NonNull
     ReadOnlySet<String> getStyleClasses();
 
     /**
@@ -76,8 +73,7 @@ public interface StyleableBean {
      *
      * @return the style attributes
      */
-    // @NonNull
-    // ReadOnlyMap<String,String> getStyleAttributes();
+    // // ReadOnlyMap<String,String> getStyleAttributes();
 
     /**
      * Return the parent of this {@code StyleableBean}, or null if there is no parent.
@@ -92,7 +88,6 @@ public interface StyleableBean {
      *
      * @return the pseudo-class states
      */
-    @NonNull
     ReadOnlySet<String> getPseudoClassStates();
 
 }

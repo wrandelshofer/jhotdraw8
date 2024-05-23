@@ -5,10 +5,9 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.icollection.ChampAddOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -21,7 +20,7 @@ import java.util.function.BiFunction;
  * @param <A> the arrow type
  */
 public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLinkWithAncestorSet<V, A>> {
-    private final @NonNull V vertex;
+    private final V vertex;
     private final @Nullable A arrow;
 
     /**
@@ -41,10 +40,10 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
      * @param parent the parent back link
      */
     public ArcBackLinkWithAncestorSet(
-            @NonNull V vertex,
+            V vertex,
             @Nullable A arrow,
             @Nullable ArcBackLinkWithAncestorSet<V, A> parent,
-            @NonNull ChampAddOnlySet<V> ancestors) {
+            ChampAddOnlySet<V> ancestors) {
         super(parent);
         this.vertex = vertex;
         this.arrow = arrow;
@@ -64,9 +63,9 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
      * @return the converted {@link ArcBackLinkWithCost}
      */
     public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLinkWithAncestorSet<VV, AA> node,
-                                                                                                                               @NonNull CC zero,
-                                                                                                                               @NonNull Function3<VV, VV, AA, CC> costFunction,
-                                                                                                                               @NonNull BiFunction<CC, CC, CC> sumFunction) {
+                                                                                                                               CC zero,
+                                                                                                                               Function3<VV, VV, AA, CC> costFunction,
+                                                                                                                               BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;
         }
@@ -89,7 +88,7 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
         return newNode;
     }
 
-    public @NonNull ChampAddOnlySet<V> removeAncestors() {
+    public ChampAddOnlySet<V> removeAncestors() {
         if (ancestors == null) {
             throw new IllegalStateException("ancestors already removed");
         }
@@ -102,12 +101,12 @@ public class ArcBackLinkWithAncestorSet<V, A> extends AbstractBackLink<ArcBackLi
         return arrow;
     }
 
-    public @NonNull V getVertex() {
+    public V getVertex() {
         return vertex;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "ArcBackLink{" +
                 "depth=" + depth +
                 ", vertex=" + vertex +

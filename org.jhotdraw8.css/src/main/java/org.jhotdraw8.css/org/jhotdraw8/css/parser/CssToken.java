@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.css.parser;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.NumberConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -39,14 +38,14 @@ public class CssToken {
 
     private final @Nullable Character preferredQuoteChar;
 
-    private static final @NonNull NumberConverter NUMBER_CONVERTER = new NumberConverter();
+    private static final NumberConverter NUMBER_CONVERTER = new NumberConverter();
 
-    public CssToken(int ttype, @NonNull String stringValue) {
+    public CssToken(int ttype, String stringValue) {
         this(ttype, stringValue, null, 0, 0, stringValue.length());
 
     }
 
-    public CssToken(int ttype, @NonNull String stringValue, @Nullable Character preferredQuoteChar) {
+    public CssToken(int ttype, String stringValue, @Nullable Character preferredQuoteChar) {
         this(ttype, stringValue, null, preferredQuoteChar, 0, 0, stringValue.length());
 
     }
@@ -99,11 +98,11 @@ public class CssToken {
         this.preferredQuoteChar = preferredQuoteChar;
     }
 
-    public @NonNull String getStringValueNonNull() {
+    public String getStringValueNonNull() {
         return Objects.requireNonNull(stringValue, "stringValue");
     }
 
-    public @NonNull Number getNumericValueNonNull() {
+    public Number getNumericValueNonNull() {
         return Objects.requireNonNull(numericValue, "numericValue");
     }
 
@@ -144,19 +143,19 @@ public class CssToken {
         };
     }
 
-    private @NonNull String fromCDC() {
+    private String fromCDC() {
         return "<!--";
     }
 
-    private @NonNull String fromCDO() {
+    private String fromCDO() {
         return "-->";
     }
 
-    private @NonNull String fromIDENT() {
+    private String fromIDENT() {
         return fromIDENT(stringValue);
     }
 
-    private @NonNull String fromIDENT(@NonNull String value) {
+    private String fromIDENT(String value) {
         StringBuilder out = new StringBuilder();
         Reader r = new StringReader(value);
         try {
@@ -215,7 +214,7 @@ public class CssToken {
         }
     }
 
-    private @NonNull String fromHASHorAT(char hashOrAt, @NonNull String value) {
+    private String fromHASHorAT(char hashOrAt, String value) {
         StringBuilder out = new StringBuilder();
         out.append(hashOrAt);
         Reader r = new StringReader(value);
@@ -235,11 +234,11 @@ public class CssToken {
         }
     }
 
-    private @NonNull String fromSTRING() {
+    private String fromSTRING() {
         return fromSTRING(stringValue);
     }
 
-    private @NonNull String fromSTRING(@NonNull String value) {
+    private String fromSTRING(String value) {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
@@ -247,11 +246,11 @@ public class CssToken {
         return fromSTRING(value, quoteChar, quoteChar);
     }
 
-    private @NonNull String fromBAD_URI(String value) {
+    private String fromBAD_URI(String value) {
         return fromURL(value);
     }
 
-    private @NonNull String fromBAD_STRING(@NonNull String value) {
+    private String fromBAD_STRING(String value) {
         char quoteChar =
                 preferredQuoteChar != null
                         ? preferredQuoteChar
@@ -259,7 +258,7 @@ public class CssToken {
         return fromSTRING(value, quoteChar, '\n');
     }
 
-    private @NonNull String fromSTRING(@NonNull String value, final char firstQuoteChar, final char lastQuoteChar) {
+    private String fromSTRING(String value, final char firstQuoteChar, final char lastQuoteChar) {
         StringBuilder out = new StringBuilder();
         out.append(firstQuoteChar);
         for (char ch : value.toCharArray()) {
@@ -304,19 +303,19 @@ public class CssToken {
         return NUMBER_CONVERTER.toString(numericValue.doubleValue());
     }
 
-    private @NonNull String fromPERCENTAGE() {
+    private String fromPERCENTAGE() {
         return Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + "%" : fromNUMBER();
     }
 
-    private @NonNull String fromDIMENSION() {
+    private String fromDIMENSION() {
         return !stringValue.isEmpty() && Double.isFinite(numericValue.doubleValue()) ? fromNUMBER() + fromIDENT() : fromNUMBER();
     }
 
-    private @NonNull String fromURL() {
+    private String fromURL() {
         return fromURL(stringValue);
     }
 
-    private @NonNull String fromURL(@NonNull String stringValue) {
+    private String fromURL(String stringValue) {
         StringBuilder out = new StringBuilder();
         out.append("url(");
         Reader r = new StringReader(stringValue);
@@ -352,7 +351,7 @@ public class CssToken {
         return stringValue;
     }
 
-    private @NonNull String fromCOMMENT() {
+    private String fromCOMMENT() {
         return "/" + "*" + stringValue.replace("*" + '/', "* /") + '*' + '/';
     }
 

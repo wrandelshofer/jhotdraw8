@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Queue;
@@ -28,7 +27,7 @@ public interface LongQueue extends Queue<Long> {
     }
 
     @Override
-    default boolean addAll(@NonNull Collection<? extends Long> c) {
+    default boolean addAll(Collection<? extends Long> c) {
         boolean added = false;
         for (Long e : c) {
             added |= add(e);
@@ -37,7 +36,7 @@ public interface LongQueue extends Queue<Long> {
     }
 
     @Override
-    default boolean removeAll(@NonNull Collection<?> c) {
+    default boolean removeAll(Collection<?> c) {
         boolean removed = false;
         for (Object e : c) {
             removed |= remove(e);
@@ -46,7 +45,7 @@ public interface LongQueue extends Queue<Long> {
     }
 
     @Override
-    default boolean retainAll(@NonNull Collection<?> c) {
+    default boolean retainAll(Collection<?> c) {
         final LongArrayList tmp = new LongArrayList(size());
         ((Spliterator.OfLong) spliterator())
                 .forEachRemaining((LongConsumer) tmp::addAsLong);
@@ -127,7 +126,7 @@ public interface LongQueue extends Queue<Long> {
     }
 
     @Override
-    default boolean containsAll(@NonNull Collection<?> c) {
+    default boolean containsAll(Collection<?> c) {
         for (Object e : c) {
             if (!contains(e)) {
                 return false;

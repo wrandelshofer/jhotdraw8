@@ -9,22 +9,21 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import org.jhotdraw8.annotation.NonNull;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 
 public class FXUndoManager implements UndoableEditListener {
-    private final @NonNull UndoManager manager;
+    private final UndoManager manager;
     @SuppressWarnings("this-escape")
-    private final @NonNull BooleanProperty canUndo = new SimpleBooleanProperty(this, "canUndo", false);
+    private final BooleanProperty canUndo = new SimpleBooleanProperty(this, "canUndo", false);
     @SuppressWarnings("this-escape")
-    private final @NonNull BooleanProperty canRedo = new SimpleBooleanProperty(this, "canRedo", false);
+    private final BooleanProperty canRedo = new SimpleBooleanProperty(this, "canRedo", false);
     @SuppressWarnings("this-escape")
-    private final @NonNull StringProperty undoName = new SimpleStringProperty(this, "undoName", "Undo");
+    private final StringProperty undoName = new SimpleStringProperty(this, "undoName", "Undo");
     @SuppressWarnings("this-escape")
-    private final @NonNull StringProperty redoName = new SimpleStringProperty(this, "redoName", "Redo");
+    private final StringProperty redoName = new SimpleStringProperty(this, "redoName", "Redo");
 
     private boolean isBusy;
 
@@ -41,18 +40,18 @@ public class FXUndoManager implements UndoableEditListener {
     }
 
     @Override
-    public void undoableEditHappened(@NonNull UndoableEditEvent e) {
+    public void undoableEditHappened(UndoableEditEvent e) {
         if (!isBusy) {
             manager.undoableEditHappened(e);
             updateProperties();
         }
     }
 
-    public @NonNull BooleanProperty undoableProperty() {
+    public BooleanProperty undoableProperty() {
         return canUndo;
     }
 
-    public @NonNull BooleanProperty redoableProperty() {
+    public BooleanProperty redoableProperty() {
         return canRedo;
     }
 

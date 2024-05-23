@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -16,6 +14,7 @@ import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssLinearGradient;
 import org.jhotdraw8.draw.css.value.CssRadialGradient;
 import org.jhotdraw8.draw.css.value.Paintable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -41,9 +40,9 @@ import java.util.function.Consumer;
  */
 public class PaintableCssConverter extends AbstractCssConverter<Paintable> {
 
-    private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
-    private static final @NonNull LinearGradientCssConverter linearGradientConverter = new LinearGradientCssConverter(false);
-    private static final @NonNull RadialGradientCssConverter radialGradientConverter = new RadialGradientCssConverter(false);
+    private static final ColorCssConverter colorConverter = new ColorCssConverter(false);
+    private static final LinearGradientCssConverter linearGradientConverter = new LinearGradientCssConverter(false);
+    private static final RadialGradientCssConverter radialGradientConverter = new RadialGradientCssConverter(false);
 
     public PaintableCssConverter(boolean nullable) {
         super(nullable);
@@ -69,7 +68,7 @@ public class PaintableCssConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    public @NonNull Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Paintable parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_FUNCTION) {
             switch (tt.currentStringNonNull()) {
                 case LinearGradientCssConverter.LINEAR_GRADIENT_FUNCTION:
@@ -87,7 +86,7 @@ public class PaintableCssConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    protected <TT extends Paintable> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         switch (value) {
             case CssColor c -> colorConverter.produceTokens(c, idSupplier, out);
             case CssLinearGradient lg -> linearGradientConverter.produceTokens(lg, idSupplier, out);

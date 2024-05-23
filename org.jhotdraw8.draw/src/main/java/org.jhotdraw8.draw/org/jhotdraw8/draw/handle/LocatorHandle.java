@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.handle;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
@@ -20,7 +19,7 @@ import org.jhotdraw8.geom.Points;
  */
 public abstract class LocatorHandle extends AbstractHandle {
 
-    private final @NonNull Locator locator;
+    private final Locator locator;
 
     /**
      * Initializes the LocatorHandle with the given Locator.
@@ -42,13 +41,13 @@ public abstract class LocatorHandle extends AbstractHandle {
         return locator.locate(owner);
     }
 
-    protected Point2D getLocation(@NonNull DrawingView dv) {
+    protected Point2D getLocation(DrawingView dv) {
         return dv.worldToView(owner.localToWorld(getLocation()));
     }
 
 
     @Override
-    public boolean contains(@NonNull DrawingView dv, double x, double y, double tolerance) {
+    public boolean contains(DrawingView dv, double x, double y, double tolerance) {
         Point2D p = getLocation(dv);
         return Points.squaredDistance(x, y, p.getX(), p.getY()) <= tolerance * tolerance;
     }

@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -26,14 +25,14 @@ import java.util.Set;
  */
 public class RemoveTransformationsAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.removeTransformations";
+    public static final String ID = "edit.removeTransformations";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public RemoveTransformationsAction(@NonNull DrawingEditor editor) {
+    public RemoveTransformationsAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -41,13 +40,13 @@ public class RemoveTransformationsAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
-        final @NonNull LinkedList<Figure> figures = new LinkedList<>(drawingView.getSelectedFigures());
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
+        final LinkedList<Figure> figures = new LinkedList<>(drawingView.getSelectedFigures());
         removeTransformations(drawingView, figures);
 
     }
 
-    public static void removeTransformations(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
+    public static void removeTransformations(DrawingView view, Collection<Figure> figures) {
         Set<Key<?>> keys = TransformableFigure.getDeclaredKeys();
 
         DrawingModel model = view.getModel();

@@ -6,10 +6,9 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.control.Labeled;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A figure which holds text in an attribute.
@@ -32,7 +31,7 @@ public interface TextableFigure extends Figure {
      * @param ctx  the render context
      * @param text a text node
      */
-    default void applyTextableFigureProperties(@Nullable RenderContext ctx, @NonNull Text text) {
+    default void applyTextableFigureProperties(@Nullable RenderContext ctx, Text text) {
         text.setText(getStyled(TEXT));
     }
 
@@ -41,7 +40,7 @@ public interface TextableFigure extends Figure {
      *
      * @param text a text node
      */
-    default void applyTextableFigureProperties(@NonNull Labeled text) {
+    default void applyTextableFigureProperties(Labeled text) {
         text.setText(getStyled(TEXT));
     }
 }

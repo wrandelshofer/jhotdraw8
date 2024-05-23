@@ -10,16 +10,15 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Encapsulates system preferences.
  */
 public interface SystemPreferences {
-    @NonNull ObjectProperty<SystemPreferences> instance = new SimpleObjectProperty<>();
+    ObjectProperty<SystemPreferences> instance = new SimpleObjectProperty<>();
 
-    static @NonNull ObjectProperty<SystemPreferences> instanceProperty() {
+    static ObjectProperty<SystemPreferences> instanceProperty() {
         return instance;
     }
 
@@ -36,7 +35,7 @@ public interface SystemPreferences {
      *
      * @return accent color property
      */
-    @NonNull ReadOnlyObjectProperty<Color> accentColorProperty();
+    ReadOnlyObjectProperty<Color> accentColorProperty();
 
     default @Nullable Color getAccentColor() {
         return accentColorProperty().get();
@@ -47,7 +46,7 @@ public interface SystemPreferences {
      *
      * @return accent color property
      */
-    @NonNull ReadOnlyObjectProperty<String> appearanceProperty();
+    ReadOnlyObjectProperty<String> appearanceProperty();
 
     default @Nullable String getAppearance() {
         return appearanceProperty().get();
@@ -58,7 +57,7 @@ public interface SystemPreferences {
      *
      * @return font size property
      */
-    @NonNull ReadOnlyDoubleProperty fontSizeProperty();
+    ReadOnlyDoubleProperty fontSizeProperty();
 
     default double getFontSize() {
         return fontSizeProperty().get();

@@ -26,8 +26,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -40,6 +38,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -54,10 +53,10 @@ public class BezierControlPointEditHandle extends AbstractHandle {
             new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(
             new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    private static final @NonNull Path REGION_SHAPE_COLINEAR = new Path();
-    private static final @NonNull Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
-    private static final @NonNull Path REGION_SHAPE_EQUIDISTANT = new Path();
-    private static final @NonNull Circle REGION_SHAPE_SMOOTH = new Circle(0, 0, 3);
+    private static final Path REGION_SHAPE_COLINEAR = new Path();
+    private static final Rectangle REGION_SHAPE_CUSP = new Rectangle(5, 5);
+    private static final Path REGION_SHAPE_EQUIDISTANT = new Path();
+    private static final Circle REGION_SHAPE_SMOOTH = new Circle(0, 0, 3);
 
     static {
         final ObservableList<PathElement> elements = REGION_SHAPE_COLINEAR.getElements();
@@ -84,12 +83,12 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     private final int controlPointMask;
-    private final @NonNull Region node;
+    private final Region node;
     private Point2D pickLocation;
     private final int nodeIndex;
-    private final @NonNull MapAccessor<BezierPath> pathKey;
+    private final MapAccessor<BezierPath> pathKey;
 
-    public BezierControlPointEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int nodeIndex, int controlPointMask) {
+    public BezierControlPointEditHandle(Figure figure, MapAccessor<BezierPath> pathKey, int nodeIndex, int controlPointMask) {
         super(figure);
         this.pathKey = pathKey;
         this.nodeIndex = nodeIndex;
@@ -124,7 +123,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
-    private @NonNull Point2D getLocation() {
+    private Point2D getLocation() {
         BezierNode bezierNode = getBezierNode();
         return bezierNode == null ? Point2D.ZERO : bezierNode.getC(controlPointMask, Point2D::new);
 
@@ -135,7 +134,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         DrawingEditor editor = view.getEditor();
         if (editor == null) {
             return node;
@@ -154,7 +153,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseClicked(MouseEvent event, DrawingView dv) {
         if (event.getClickCount() == 1) {
             if (event.isControlDown() || event.isAltDown()) {
                 BezierNode bn = getBezierNode();
@@ -182,7 +181,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         final Figure f = getOwner();
 
@@ -280,13 +279,13 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
     }
 
-    private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void onPopupTriggered(MouseEvent event, DrawingView view) {
         BezierPath nullablePath = owner.get(pathKey);
         if (nullablePath == null) {
             return;
@@ -343,7 +342,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
@@ -355,7 +354,7 @@ public class BezierControlPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         final BezierPath path = owner.get(pathKey);

@@ -14,7 +14,6 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorSlider;
@@ -39,7 +38,7 @@ public class ColorSlidersTristimulusMain extends AbstractColorSlidersMain {
 
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         VBox vbox = new VBox();
 
         vbox.setBorder(new Border(new BorderStroke(null, null, null, new BorderWidths(12))));
@@ -94,7 +93,7 @@ public class ColorSlidersTristimulusMain extends AbstractColorSlidersMain {
     /**
      * @param args the command line arguments
      */
-    public static void main(@NonNull String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 

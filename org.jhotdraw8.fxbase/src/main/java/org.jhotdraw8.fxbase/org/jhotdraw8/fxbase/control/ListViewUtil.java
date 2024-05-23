@@ -18,8 +18,7 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
 import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
 
@@ -47,22 +46,22 @@ public class ListViewUtil {
 
     private static class DnDSupport<T> {
 
-        private final @NonNull ListView<T> listView;
+        private final ListView<T> listView;
         private int draggedCellIndex = -1;
-        private final @NonNull ClipboardIO<T> io;
+        private final ClipboardIO<T> io;
         private final boolean reorderingOnly;
-        private final @NonNull UndoableEditHelper undoHelper;
+        private final UndoableEditHelper undoHelper;
 
-        public DnDSupport(@NonNull ListView<T> listView, @NonNull ClipboardIO<T> io, boolean reorderingOnly, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+        public DnDSupport(ListView<T> listView, ClipboardIO<T> io, boolean reorderingOnly, Consumer<UndoableEditEvent> undoableEditEventConsumer) {
             this.listView = listView;
             this.io = io;
             this.reorderingOnly = reorderingOnly;
             this.undoHelper = new UndoableEditHelper(listView, undoableEditEventConsumer);
         }
 
-        private final @NonNull EventHandler<? super DragEvent> cellDragHandler = new EventHandler<>() {
+        private final EventHandler<? super DragEvent> cellDragHandler = new EventHandler<>() {
             @Override
-            public void handle(@NonNull DragEvent event) {
+            public void handle(DragEvent event) {
                 if (event.isConsumed()) {
                     return;
                 }
@@ -76,7 +75,7 @@ public class ListViewUtil {
                 }
             }
 
-            private void onDragDone(@NonNull DragEvent event) {
+            private void onDragDone(DragEvent event) {
                 if (reorderingOnly) {
                     // XXX assumes that the ListView autodetects reordering!
                     draggedCellIndex = -1;
@@ -89,7 +88,7 @@ public class ListViewUtil {
                 event.consume();
             }
 
-            private TransferMode[] acceptModes(@NonNull DragEvent event) {
+            private TransferMode[] acceptModes(DragEvent event) {
                 ListView<?> gestureTargetListView = null;
                 if (event.getGestureSource() instanceof ListCell<?> gestureTargetCell) {
                     gestureTargetListView = gestureTargetCell.getListView();
@@ -104,7 +103,7 @@ public class ListViewUtil {
                 return mode;
             }
 
-            private void onDragDropped(@NonNull DragEvent event) {
+            private void onDragDropped(DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
                 if (isAcceptable) {
                     boolean success = false;
@@ -148,7 +147,7 @@ public class ListViewUtil {
                 }
             }
 
-            private void onDragOver(@NonNull DragEvent event) {
+            private void onDragOver(DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
                 if (isAcceptable && (!reorderingOnly || draggedCellIndex != -1)) {
                     event.acceptTransferModes(acceptModes(event));
@@ -157,10 +156,10 @@ public class ListViewUtil {
             }
         };
 
-        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<>() {
+        private final EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<>() {
 
             @Override
-            public void handle(@NonNull MouseEvent event) {
+            public void handle(MouseEvent event) {
                 if (event.isConsumed()) {
                     return;
                 }
@@ -184,11 +183,10 @@ public class ListViewUtil {
 
         };
 
-        @NonNull
         final EventHandler<? super DragEvent> listDragHandler = new EventHandler<>() {
 
             @Override
-            public void handle(@NonNull DragEvent event) {
+            public void handle(DragEvent event) {
                 if (event.isConsumed()) {
                     return;
                 }
@@ -200,7 +198,7 @@ public class ListViewUtil {
                 }
             }
 
-            private TransferMode[] acceptModes(@NonNull DragEvent event) {
+            private TransferMode[] acceptModes(DragEvent event) {
                 ListView<?> gestureTargetListView = null;
                 if (event.getGestureSource() instanceof ListCell<?> gestureTargetCell) {
                     gestureTargetListView = gestureTargetCell.getListView();
@@ -215,7 +213,7 @@ public class ListViewUtil {
                 return mode;
             }
 
-            private void onDragDropped(@NonNull DragEvent event) {
+            private void onDragDropped(DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
                 if (isAcceptable) {
                     undoHelper.startCompositeEdit(null);
@@ -255,7 +253,7 @@ public class ListViewUtil {
                 }
             }
 
-            private void onDragOver(@NonNull DragEvent event) {
+            private void onDragOver(DragEvent event) {
                 boolean isAcceptable = io.canRead(event.getDragboard());
                 if (isAcceptable && (!reorderingOnly || draggedCellIndex != -1)) {
                     event.acceptTransferModes(acceptModes(event));
@@ -272,7 +270,7 @@ public class ListViewUtil {
      * @param listView                  the list view
      * @param clipboardIO               a reader/writer for the clipboard.
      */
-    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO) {
+    public static <T> void addDragAndDropSupport(ListView<T> listView, ClipboardIO<T> clipboardIO) {
         addDragAndDropSupport(listView, listView.getCellFactory(), clipboardIO, undoableEditEvent -> {
             // empty
         });
@@ -286,7 +284,7 @@ public class ListViewUtil {
      * @param clipboardIO               a reader/writer for the clipboard.
      * @param undoableEditEventConsumer a consumer for undoable edits
      */
-    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+    public static <T> void addDragAndDropSupport(ListView<T> listView, ClipboardIO<T> clipboardIO, Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         addDragAndDropSupport(listView, listView.getCellFactory(), clipboardIO, undoableEditEventConsumer);
     }
 
@@ -301,17 +299,17 @@ public class ListViewUtil {
      * @param clipboardIO               a reader/writer for the clipboard.
      * @param undoableEditEventConsumer
      */
-    public static <T> void addDragAndDropSupport(@NonNull ListView<T> listView,
+    public static <T> void addDragAndDropSupport(ListView<T> listView,
                                                  @Nullable Callback<ListView<T>, ListCell<T>> cellFactory,
-                                                 @NonNull ClipboardIO<T> clipboardIO,
-                                                 @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+                                                 ClipboardIO<T> clipboardIO,
+                                                 Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         addDragAndDropSupport(listView, cellFactory, clipboardIO, false, undoableEditEventConsumer);
     }
 
-    private static <T> void addDragAndDropSupport(@NonNull ListView<T> listView,
+    private static <T> void addDragAndDropSupport(ListView<T> listView,
                                                   @Nullable Callback<ListView<T>, ListCell<T>> cellFactory,
-                                                  @NonNull ClipboardIO<T> clipboardIO,
-                                                  boolean reorderingOnly, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+                                                  ClipboardIO<T> clipboardIO,
+                                                  boolean reorderingOnly, Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         DnDSupport<T> dndSupport = new DnDSupport<>(listView, clipboardIO, reorderingOnly, undoableEditEventConsumer);
         Callback<ListView<T>, ListCell<T>> dndCellFactory = lv -> {
             ListCell<T> cell = cellFactory == null ? new SimpleListCell<>() : cellFactory.call(lv);
@@ -330,7 +328,7 @@ public class ListViewUtil {
      * @param listView                  the list view
      * @param undoableEditEventConsumer
      */
-    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+    public static <T> void addReorderingSupport(ListView<T> listView, Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         addReorderingSupport(listView, listView.getCellFactory(), null, undoableEditEventConsumer);
     }
 
@@ -342,7 +340,7 @@ public class ListViewUtil {
      * @param clipboardIO               the clipboard i/o
      * @param undoableEditEventConsumer
      */
-    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+    public static <T> void addReorderingSupport(ListView<T> listView, ClipboardIO<T> clipboardIO, Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         addReorderingSupport(listView, listView.getCellFactory(), clipboardIO, undoableEditEventConsumer);
     }
 
@@ -359,11 +357,11 @@ public class ListViewUtil {
      * @param clipboardIO               a reader/writer for the clipboard. You can provide null if you don't want cut/copy/paste functionality.
      * @param undoableEditEventConsumer
      */
-    public static <T> void addReorderingSupport(@NonNull ListView<T> listView, @NonNull Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO, @NonNull Consumer<UndoableEditEvent> undoableEditEventConsumer) {
+    public static <T> void addReorderingSupport(ListView<T> listView, Callback<ListView<T>, ListCell<T>> cellFactory, @Nullable ClipboardIO<T> clipboardIO, Consumer<UndoableEditEvent> undoableEditEventConsumer) {
         if (clipboardIO == null) {
             clipboardIO = new ClipboardIO<>() {
                 @Override
-                public void write(@NonNull Clipboard clipboard, @NonNull List<T> items) {
+                public void write(Clipboard clipboard, List<T> items) {
                     // We just write the index of the selected item in the clipboard.
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
@@ -374,13 +372,13 @@ public class ListViewUtil {
                 }
 
                 @Override
-                public @NonNull List<T> read(Clipboard clipboard) {
+                public List<T> read(Clipboard clipboard) {
                     // We are not actually interested in the clipboard content.
                     return Collections.emptyList();
                 }
 
                 @Override
-                public boolean canRead(@NonNull Clipboard clipboard) {
+                public boolean canRead(Clipboard clipboard) {
                     return clipboard.hasString();
                 }
             };

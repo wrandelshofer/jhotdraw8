@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Event;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 
@@ -20,13 +19,13 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final @NonNull Key<?> key;
+    private final Key<?> key;
     private final @Nullable Object oldValue;
     private final @Nullable Object newValue;
     private final boolean wasAdded;
     private final boolean wasRemoved;
 
-    public <T> FigurePropertyChangeEvent(@NonNull Figure source, @NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
+    public <T> FigurePropertyChangeEvent(Figure source, Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         super(source);
         this.key = key;
         this.oldValue = oldValue;
@@ -40,7 +39,7 @@ public class FigurePropertyChangeEvent extends Event<Figure> {
      *
      * @return the key or null
      */
-    public @NonNull Key<?> getKey() {
+    public Key<?> getKey() {
         return key;
     }
 

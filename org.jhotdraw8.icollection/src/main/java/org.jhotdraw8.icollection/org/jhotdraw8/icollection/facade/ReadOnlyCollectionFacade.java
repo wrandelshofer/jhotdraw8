@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -26,22 +25,22 @@ import java.util.function.Supplier;
  */
 public class ReadOnlyCollectionFacade<E> extends AbstractReadOnlyCollection<E> {
 
-    protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
-    protected final @NonNull IntSupplier sizeFunction;
-    protected final @NonNull Predicate<Object> containsFunction;
+    protected final Supplier<Iterator<E>> iteratorFunction;
+    protected final IntSupplier sizeFunction;
+    protected final Predicate<Object> containsFunction;
     protected final int characteristics;
 
 
-    public ReadOnlyCollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
+    public ReadOnlyCollectionFacade(Supplier<Iterator<E>> iteratorFunction,
                                     @Nullable IntSupplier sizeFunction,
-                                    @NonNull Predicate<Object> containsFunction, int characteristics) {
+                                    Predicate<Object> containsFunction, int characteristics) {
         this.iteratorFunction = iteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsFunction = containsFunction;
         this.characteristics = characteristics;
     }
 
-    public ReadOnlyCollectionFacade(@NonNull Collection<E> c) {
+    public ReadOnlyCollectionFacade(Collection<E> c) {
         this(c::iterator, c::size, c::contains, Spliterator.SIZED | Spliterator.SUBSIZED);
     }
 
@@ -56,7 +55,7 @@ public class ReadOnlyCollectionFacade<E> extends AbstractReadOnlyCollection<E> {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new Iterator<>() {
             private final Iterator<? extends E> i = iteratorFunction.get();
 

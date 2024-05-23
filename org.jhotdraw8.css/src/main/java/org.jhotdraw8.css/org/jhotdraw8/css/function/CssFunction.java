@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
@@ -34,11 +33,11 @@ public interface CssFunction<T> {
      * @throws IOException    on IO failure
      * @throws ParseException on parsing failure
      */
-    void process(@NonNull T element,
-                 @NonNull CssTokenizer tt,
-                 @NonNull SelectorModel<T> model,
-                 @NonNull CssFunctionProcessor<T> functionProcessor,
-                 @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
+    void process(T element,
+                 CssTokenizer tt,
+                 SelectorModel<T> model,
+                 CssFunctionProcessor<T> functionProcessor,
+                 Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
 
 
     /**

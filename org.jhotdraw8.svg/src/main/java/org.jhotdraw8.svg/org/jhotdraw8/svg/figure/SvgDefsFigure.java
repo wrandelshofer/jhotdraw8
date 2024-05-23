@@ -7,7 +7,6 @@ package org.jhotdraw8.svg.figure;
 import javafx.collections.ObservableList;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import org.jhotdraw8.draw.figure.Figure;
@@ -35,14 +34,14 @@ public class SvgDefsFigure extends AbstractCompositeFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "defs";
+    public static final String TYPE_SELECTOR = "defs";
 
     public SvgDefsFigure() {
         set(VISIBLE, false);
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setAutoSizeChildren(false);
         g.setManaged(false);
@@ -50,13 +49,13 @@ public class SvgDefsFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
         applyHideableFigureProperties(ctx, n);
         applyStyleableFigureProperties(ctx, n);
         applySvgDefaultableCompositingProperties(ctx, n);
@@ -72,18 +71,18 @@ public class SvgDefsFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public boolean isSuitableParent(@NonNull Figure newParent) {
+    public boolean isSuitableParent(Figure newParent) {
         return true;
     }
 
 
     @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
+    public boolean isSuitableChild(Figure newChild) {
         return true;
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         // does nothing
     }
 }

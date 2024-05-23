@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.application.resources;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -22,22 +21,22 @@ import java.util.logging.Logger;
 
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class ClasspathResources extends ResourceBundle implements Serializable, Resources {
-    private static final @NonNull Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
+    private static final Logger LOG = Logger.getLogger(ClasspathResources.class.getName());
     @Serial
     private static final long serialVersionUID = 1L;
 
     /**
      * The base class
      */
-    private final @NonNull Class<?> baseClass = getClass();
+    private final Class<?> baseClass = getClass();
     /**
      * The base name of the resource bundle.
      */
-    private final @NonNull String baseName;
+    private final String baseName;
     /**
      * The locale. This field is currently only used for debugging.
      */
-    private final @NonNull Locale locale;
+    private final Locale locale;
 
     /**
      * The parent resources object.
@@ -55,7 +54,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @param baseName the base name
      * @param locale   the locale
      */
-    public ClasspathResources(@NonNull String baseName, @NonNull Locale locale) {
+    public ClasspathResources(String baseName, Locale locale) {
         this.locale = locale;
         this.baseName = baseName;
         this.resource = ResourceBundle.getBundle(baseName, locale);
@@ -120,7 +119,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
 
 
     @Override
-    protected @Nullable Object handleGetObject(@NonNull String key) {
+    protected @Nullable Object handleGetObject(String key) {
         Object obj = handleGetObjectRecursively(key);
         if (obj == null) {
             obj = "";
@@ -134,7 +133,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Override
-    public @Nullable Object handleGetObjectRecursively(@NonNull String key) {
+    public @Nullable Object handleGetObjectRecursively(String key) {
         Object obj = null;
         try {
             obj = resource.getObject(key);
@@ -147,13 +146,13 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "ClasspathResources" + "[" + baseName + "]";
     }
 
 
     @Override
-    public @NonNull String getBaseName() {
+    public String getBaseName() {
         return baseName;
     }
 
@@ -164,7 +163,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @return the resource bundle
      * @see ResourceBundle
      */
-    public static @NonNull Resources getResources(@NonNull String baseName)
+    public static Resources getResources(String baseName)
             throws MissingResourceException {
         return getResources(baseName, LocaleUtil.getDefault());
     }
@@ -177,7 +176,7 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
      * @return the resource bundle
      * @see ResourceBundle
      */
-    static Resources getResources(@NonNull String baseName, @NonNull Locale locale)
+    static Resources getResources(String baseName, Locale locale)
             throws MissingResourceException {
         Resources r;
         r = new ClasspathResources(baseName, locale);
@@ -185,17 +184,17 @@ public class ClasspathResources extends ResourceBundle implements Serializable, 
     }
 
     @Override
-    public @NonNull ResourceBundle asResourceBundle() {
+    public ResourceBundle asResourceBundle() {
         return this;
     }
 
     @Override
-    public @NonNull Locale getLocale() {
+    public Locale getLocale() {
         return super.getLocale();
     }
 
     @Override
-    public @NonNull Enumeration<String> getKeys() {
+    public Enumeration<String> getKeys() {
         SequencedSet<String> keys = new LinkedHashSet<>();
 
         for (Enumeration<String> i = resource.getKeys(); i.hasMoreElements(); ) {

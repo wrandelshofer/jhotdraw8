@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.geom.PointAndDerivative;
@@ -17,14 +16,14 @@ import org.jhotdraw8.geom.PointAndDerivative;
  */
 public class LocatorConnector extends AbstractConnector {
 
-    private final @NonNull Locator locator;
+    private final Locator locator;
 
     /**
      * Creates a new instance
      *
      * @param locator the locator that should be used
      */
-    public LocatorConnector(@NonNull Locator locator) {
+    public LocatorConnector(Locator locator) {
         this.locator = locator;
     }
 
@@ -33,18 +32,18 @@ public class LocatorConnector extends AbstractConnector {
      *
      * @return the locator
      */
-    public @NonNull Locator getLocator() {
+    public Locator getLocator() {
         return locator;
     }
 
     @Override
-    public @NonNull PointAndDerivative getPointAndDerivativeInLocal(@NonNull Figure connection, @NonNull Figure target) {
+    public PointAndDerivative getPointAndDerivativeInLocal(Figure connection, Figure target) {
         return new PointAndDerivative(locator.locate(target).getX(), locator.locate(target).getY(), new Point2D(1, 0).getX(), new Point2D(1, 0).getY());
     }
 
     /*
     @Override
-    public IntersectionPointEx chopStart(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, double startX, double startY, double endX, double endY) {
+    public IntersectionPointEx chopStart(RenderContext ctx, Figure connection, Figure target, double startX, double startY, double endX, double endY) {
         final Bounds b = target.getLayoutBounds();
         Point2D center = new Point2D(b.getMinX() + b.getWidth() * 0.5, b.getMinY() + b.getHeight() * 0.5);
         Point2D location = locator.locate(target);

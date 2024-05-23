@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
@@ -56,16 +55,16 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /**
      * Array of chunks for arrows to next vertices.
      */
-    private @NonNull GraphChunk @NonNull [] nextChunks = new GraphChunk[0];
+    private GraphChunk[] nextChunks = new GraphChunk[0];
     /**
      * Array of chunks for arrows to previous vertices.
      */
-    private @NonNull GraphChunk @NonNull [] prevChunks = new GraphChunk[0];
+    private GraphChunk[] prevChunks = new GraphChunk[0];
 
     /**
      * Factory for creating new chunks.
      */
-    private @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayCsrGraphChunk::new;
+    private BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayCsrGraphChunk::new;
 
     /**
      * Creates a new ins
@@ -79,7 +78,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     }
 
     public ChunkedMutableIndexedBidiGraph(final int chunkSize, final int initialArityCapacity,
-                                          @NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory) {
+                                          BiFunction<Integer, Integer, GraphChunk> chunkFactory) {
         if (Integer.bitCount(chunkSize) != 1) {
             throw new IllegalArgumentException("chunkSize=" + chunkSize + " is not a power of 2");
         }
@@ -174,7 +173,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @param visited the set of visited vertices
      * @return the enumerator provides the vertex index
      */
-    public Enumerator.@NonNull OfInt searchPrevVertices(final int vidx, boolean dfs, final @NonNull AddToIntSet visited) {
+    public Enumerator.OfInt searchPrevVertices(final int vidx, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexSpliterator(vidx, prevChunks, dfs, visited);
     }
 
@@ -187,7 +186,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the enumerator provides the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public Spliterator.@NonNull OfLong searchPrevVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+    public Spliterator.OfLong searchPrevVertexData(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexDataSpliterator(v, prevChunks, dfs, visited);
     }
 
@@ -199,7 +198,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @param visited the set of visited vertices
      * @return the enumerator provides the vertex index
      */
-    public Enumerator.@NonNull OfInt searchNextVertices(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+    public Enumerator.OfInt searchNextVertices(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexSpliterator(v, nextChunks, dfs, visited);
     }
 
@@ -212,7 +211,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
      * @return the enumerator provides the vertex data in the 32 high-bits
      * and the vertex index in the 32 low-bits of the long.
      */
-    public Spliterator.@NonNull OfLong searchNextVertexData(final int v, boolean dfs, final @NonNull AddToIntSet visited) {
+    public Spliterator.OfLong searchNextVertexData(final int v, boolean dfs, final AddToIntSet visited) {
         return new SearchVertexDataSpliterator(v, nextChunks, dfs, visited);
     }
 
@@ -254,7 +253,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         return getNextChunk(v).getSibling(v, i);
     }
 
-    private @NonNull GraphChunk getNextChunk(final int v) {
+    private GraphChunk getNextChunk(final int v) {
         return getOrCreateChunk(nextChunks, v);
     }
 
@@ -263,8 +262,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         return getNextChunk(v).getSiblingCount(v);
     }
 
-    @NonNull GraphChunk getOrCreateChunk(final GraphChunk[] chunks, final int v) {
-        @NonNull GraphChunk chunk = chunks[v >>> chunkShift];
+    GraphChunk getOrCreateChunk(final GraphChunk[] chunks, final int v) {
+        GraphChunk chunk = chunks[v >>> chunkShift];
         if (chunk == null) {
             chunk = chunkFactory.apply(chunkSize, initialArityCapacity);
             chunks[v >>> chunkShift] = chunk;
@@ -282,7 +281,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         return getPrevChunk(v).getSibling(v, k);
     }
 
-    private @NonNull GraphChunk getPrevChunk(final int v) {
+    private GraphChunk getPrevChunk(final int v) {
         return getOrCreateChunk(prevChunks, v);
     }
 
@@ -377,11 +376,11 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     private class SearchVertexDataSpliterator extends Spliterators.AbstractLongSpliterator {
 
         private final GraphChunk[] chunks;
-        private final @NonNull IntArrayDeque deque = new IntArrayDeque();
-        private final @NonNull AddToIntSet visited;
+        private final IntArrayDeque deque = new IntArrayDeque();
+        private final AddToIntSet visited;
         private final boolean dfs;
 
-        protected SearchVertexDataSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
+        protected SearchVertexDataSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
@@ -392,7 +391,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         }
 
         @Override
-        public boolean tryAdvance(@NonNull LongConsumer action) {
+        public boolean tryAdvance(LongConsumer action) {
             if (deque.isEmpty()) {
                 return false;
             }
@@ -417,11 +416,11 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     private class SearchVertexSpliterator extends AbstractIntEnumerator {
 
         private final GraphChunk[] chunks;
-        private final @NonNull IntArrayDeque deque = new IntArrayDeque();
-        private final @NonNull AddToIntSet visited;
+        private final IntArrayDeque deque = new IntArrayDeque();
+        private final AddToIntSet visited;
         private final boolean dfs;
 
-        protected SearchVertexSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final @NonNull AddToIntSet visited) {
+        protected SearchVertexSpliterator(final int root, final GraphChunk[] chunks, boolean dfs, final AddToIntSet visited) {
             super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
             this.chunks = chunks;
             this.visited = visited;
@@ -453,11 +452,11 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
         }
     }
 
-    public @NonNull BiFunction<Integer, Integer, GraphChunk> getChunkFactory() {
+    public BiFunction<Integer, Integer, GraphChunk> getChunkFactory() {
         return chunkFactory;
     }
 
-    public void setChunkFactory(@NonNull BiFunction<Integer, Integer, GraphChunk> chunkFactory) {
+    public void setChunkFactory(BiFunction<Integer, Integer, GraphChunk> chunkFactory) {
         this.chunkFactory = chunkFactory;
     }
 }

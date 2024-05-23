@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -22,12 +21,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 
 public abstract class AbstractSequencedCollectionTest {
-    private static final @NonNull SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
-    private static final @NonNull SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
-    private static final @NonNull SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
-    private static final @NonNull SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
 
-    public static @NonNull Stream<SetData> dataProvider() {
+    public static Stream<SetData> dataProvider() {
         return Stream.of(
                 NO_COLLISION_NICE_KEYS, NO_COLLISION, ALL_COLLISION, SOME_COLLISION
         );
@@ -38,7 +37,7 @@ public abstract class AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void shouldAddFirst(@NonNull SetData data) throws Exception {
+    public void shouldAddFirst(SetData data) throws Exception {
         SequencedCollection<Key> instance = newInstance();
         instance.addAll(data.b.asCollection());
         instance.addFirst(data.a.iterator().next());
@@ -50,11 +49,11 @@ public abstract class AbstractSequencedCollectionTest {
         assertEquals(expected, instance);
     }
 
-    protected abstract @NonNull SequencedCollection<Key> newInstance();
+    protected abstract SequencedCollection<Key> newInstance();
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void shouldAddLast(@NonNull SetData data) throws Exception {
+    public void shouldAddLast(SetData data) throws Exception {
         SequencedCollection<Key> instance = newInstance();
         instance.addAll(data.b.asCollection());
         instance.addLast(data.a.iterator().next());
@@ -68,7 +67,7 @@ public abstract class AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void shouldAddAll(@NonNull SetData data) throws Exception {
+    public void shouldAddAll(SetData data) throws Exception {
         SequencedCollection<Key> instance = newInstance();
         instance.addAll(data.a.asCollection());
         instance.addAll(data.b.asCollection());

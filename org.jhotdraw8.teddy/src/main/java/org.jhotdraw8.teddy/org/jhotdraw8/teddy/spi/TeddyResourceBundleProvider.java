@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.teddy.spi;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -14,7 +13,7 @@ public class TeddyResourceBundleProvider extends AbstractResourceBundleProvider 
 
 
     @Override
-    public ResourceBundle getBundle(@NonNull String baseName, @NonNull Locale locale) {
+    public ResourceBundle getBundle(String baseName, Locale locale) {
         return ResourceBundle.getBundle(baseName, locale);
     }
 }

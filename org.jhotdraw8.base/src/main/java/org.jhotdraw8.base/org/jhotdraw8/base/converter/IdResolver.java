@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 
@@ -27,7 +26,7 @@ public interface IdResolver {
      * @param id    the id or null
      * @return the object if present with the specified type
      */
-    default <T> @Nullable T getObject(@NonNull Class<T> clazz, @Nullable String id) {
+    default <T> @Nullable T getObject(Class<T> clazz, @Nullable String id) {
         Object object = getObject(id);
         if (clazz.isInstance(object)) {
             return clazz.cast(object);
@@ -48,5 +47,5 @@ public interface IdResolver {
      * @param uri an external URI (typically relative to document home)
      * @return an internal URI (typically an absolute path)
      */
-    @NonNull URI absolutize(@NonNull URI uri);
+    URI absolutize(URI uri);
 }

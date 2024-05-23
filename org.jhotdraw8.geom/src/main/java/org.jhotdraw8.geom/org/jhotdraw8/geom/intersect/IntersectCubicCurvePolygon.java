@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -25,7 +24,7 @@ public class IntersectCubicCurvePolygon {
      * @param points the points of the polygon
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectCubicCurvePolygon(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull List<Point2D.Double> points) {
+    public static IntersectionResult intersectCubicCurvePolygon(Point2D p0, Point2D p1, Point2D p2, Point2D p3, List<Point2D.Double> points) {
         List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 

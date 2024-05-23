@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
 
@@ -42,7 +41,7 @@ public class IntersectPathIteratorPoint {
      * @param tolerance radius around the point which counts as a hit.
      * @return the intersection
      */
-    public static @NonNull IntersectionResult intersectPathIteratorPoint(@NonNull PathIterator pit, double px, double py, double tolerance) {
+    public static IntersectionResult intersectPathIteratorPoint(PathIterator pit, double px, double py, double tolerance) {
         // FIXME we must take the winding rule into account!
         List<IntersectionPoint> lineIntersections = new ArrayList<>();
         List<IntersectionPoint> insideIntersections = new ArrayList<>();

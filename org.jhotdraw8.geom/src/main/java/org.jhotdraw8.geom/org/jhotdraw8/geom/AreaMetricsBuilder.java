@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.DoubleSummaryStatistics;
 
@@ -17,7 +16,7 @@ import java.util.DoubleSummaryStatistics;
  * XXX Only works with consolidated inputs, for example from a {@link java.awt.geom.Area} object
  */
 public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
-    private final @NonNull DoubleSummaryStatistics areaTimesTwo = new DoubleSummaryStatistics();
+    private final DoubleSummaryStatistics areaTimesTwo = new DoubleSummaryStatistics();
     double lastMoveToX, lastMoveToY;
 
     @Override
@@ -51,7 +50,7 @@ public class AreaMetricsBuilder extends AbstractPathBuilder<Double> {
     }
 
     @Override
-    public @NonNull Double build() {
+    public Double build() {
         return Math.abs(areaTimesTwo.getSum()) * 0.5;
     }
 }

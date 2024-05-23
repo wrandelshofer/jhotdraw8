@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.collection.enumerator;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterator;
 
@@ -16,10 +15,10 @@ import java.util.Spliterator;
  * @param <E> the element type
  */
 public class EmptyEnumerator<E> implements Enumerator<E> {
-    private static final @NonNull EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
+    private static final EmptyEnumerator<Object> singleton = new EmptyEnumerator<>();
 
     @SuppressWarnings("unchecked")
-    public static <T> @NonNull Enumerator<T> emptyEnumerator() {
+    public static <T> Enumerator<T> emptyEnumerator() {
         return (Enumerator<T>) singleton;
     }
 

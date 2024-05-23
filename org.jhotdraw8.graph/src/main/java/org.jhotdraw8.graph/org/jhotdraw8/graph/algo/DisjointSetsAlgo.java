@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.DirectedGraph;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ public class DisjointSetsAlgo {
      * @param graph a directed graph
      * @return the disjoint sets.
      */
-    public @NonNull <V, A> List<Set<V>> findDisjointSets(@NonNull DirectedGraph<V, A> graph) {
+    public <V, A> List<Set<V>> findDisjointSets(DirectedGraph<V, A> graph) {
         return findDisjointSets(graph.getVertices(), graph::getNextVertices);
     }
 
@@ -46,7 +45,7 @@ public class DisjointSetsAlgo {
      * @param getNextVertices a function that returns the next vertices given a vertex
      * @return the disjoint sets.
      */
-    public @NonNull <V> List<Set<V>> findDisjointSets(@NonNull Collection<V> vertices, @NonNull Function<V, Iterable<V>> getNextVertices) {
+    public <V> List<Set<V>> findDisjointSets(Collection<V> vertices, Function<V, Iterable<V>> getNextVertices) {
         // Create initial forest
         Map<V, List<V>> forest = MinimumSpanningTreeAlgo.createForest(vertices);
         // Merge sets.

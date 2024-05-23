@@ -13,8 +13,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.KebabCaseEnumCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
@@ -47,6 +45,7 @@ import org.jhotdraw8.svg.text.SvgShapeRendering;
 import org.jhotdraw8.svg.text.SvgStrokeAlignmentConverter;
 import org.jhotdraw8.svg.text.SvgTextAnchor;
 import org.jhotdraw8.svg.text.SvgVisibility;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -93,7 +92,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <a href="https://www.w3.org/TR/SVG11/painting.html#FillRuleProperty">
      * SVG Tiny 1.2, The 'fill-rule' property</a>
      */
-    @NonNull DefaultableStyleableKey<FillRule> FILL_RULE_KEY =
+    DefaultableStyleableKey<FillRule> FILL_RULE_KEY =
             new DefaultableStyleableKey<>("fill-rule",
                     new SimpleParameterizedType(CssDefaultableValue.class, FillRule.class),
                     new MappedCssConverter<>("fill-rule",
@@ -181,7 +180,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <a href="https://www.w3.org/TR/SVGTiny12/text.html#TextAlignmentProperties">
      * SVG Tiny 1.2, Text Alignment Properties</a>
      */
-    @NonNull DefaultableStyleableKey<SvgTextAnchor> TEXT_ANCHOR_KEY =
+    DefaultableStyleableKey<SvgTextAnchor> TEXT_ANCHOR_KEY =
             new DefaultableStyleableKey<>("text-anchor",
                     new SimpleParameterizedType(CssDefaultableValue.class, SvgTextAnchor.class),
                     new KebabCaseEnumCssConverter<>(SvgTextAnchor.class),
@@ -193,7 +192,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#ShapeRenderingProperty">
      * SVG Tiny 1.2, The 'shape-rendering' property</a>
      */
-    @NonNull DefaultableStyleableKey<SvgShapeRendering> SHAPE_RENDERING_KEY =
+    DefaultableStyleableKey<SvgShapeRendering> SHAPE_RENDERING_KEY =
             new DefaultableStyleableKey<>("shape-rendering",
                     new SimpleParameterizedType(CssDefaultableValue.class, SvgShapeRendering.class),
                     new MappedCssConverter<>("shape-rendering",
@@ -294,7 +293,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      *     <dt>SVG 2</dt><dd><a href="https://www.w3.org/TR/2018/CR-SVG2-20181004/render.html#VisibilityControl">w3.org</a></dd>
      * </dl>
      */
-    @NonNull DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<>("display",
+    DefaultableStyleableKey<SvgDisplay> DISPLAY_KEY = new DefaultableStyleableKey<>("display",
             new SimpleParameterizedType(CssDefaultableValue.class, SvgDisplay.class),
             new MappedCssConverter<>("display",
                     linkedHashMap(of("inline", SvgDisplay.INLINE)), true),
@@ -304,7 +303,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * opacity.
      * <a href="https://www.w3.org/TR/2011/REC-SVG11-20110816/masking.html#ObjectAndGroupOpacityProperties">link</a>
      */
-    @NonNull DefaultableStyleableKey<Double> OPACITY_KEY =
+    DefaultableStyleableKey<Double> OPACITY_KEY =
             new DefaultableStyleableKey<>("opacity",
                     new SimpleParameterizedType(CssDefaultableValue.class, Double.class),
                     new PercentageCssConverter(false),
@@ -322,7 +321,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applySvgDefaultableCompositingProperties(@NonNull RenderContext ctx, @NonNull Node node) {
+    default void applySvgDefaultableCompositingProperties(RenderContext ctx, Node node) {
         node.setOpacity(getDefaultableStyledNonNull(OPACITY_KEY));
         BlendMode bmValue = getDefaultableStyledNonNull(MIX_BLEND_MODE_KEY);
         if (bmValue == BlendMode.SRC_OVER) {// Workaround: set SRC_OVER to null
@@ -339,7 +338,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applySvgDefaultableFillProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySvgDefaultableFillProperties(RenderContext ctx, Shape shape) {
         Paintable fill = getDefaultableStyled(FILL_KEY);
         if ((fill instanceof CssColor) && ("currentColor".equals(((CssColor) fill).getName()))) {
             fill = getDefaultableStyled(COLOR_KEY);
@@ -356,7 +355,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applySvgDefaultableStrokeProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySvgDefaultableStrokeProperties(RenderContext ctx, Shape shape) {
         Paintable stroke = getDefaultableStyled(STROKE_KEY);
         if ((stroke instanceof CssColor) && ("currentColor".equals(((CssColor) stroke).getName()))) {
             stroke = getDefaultableStyled(COLOR_KEY);
@@ -398,7 +397,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
 
     }
 
-    default void applySvgShapeProperties(@NonNull RenderContext ctx, Shape fillShape, Shape strokeShape) {
+    default void applySvgShapeProperties(RenderContext ctx, Shape fillShape, Shape strokeShape) {
         double strokeOpacity = getDefaultableStyledNonNull(STROKE_OPACITY_KEY);
         double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
         if (strokeOpacity == fillOpacity) {
@@ -423,11 +422,11 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * @param key The property key
      * @return The styled value.
      */
-    default @Nullable <T extends Paintable> Paintable getDefaultableStyled(@NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
+    default @Nullable <T extends Paintable> Paintable getDefaultableStyled(SvgDefaultablePaintStyleableMapAccessor<T> key) {
         return getDefaultableStyled(StyleOrigin.INLINE, key);
     }
 
-    default @Nullable <T extends Paintable> Paintable getDefaultableStyled(@NonNull StyleOrigin origin, @NonNull SvgDefaultablePaintStyleableMapAccessor<T> key) {
+    default @Nullable <T extends Paintable> Paintable getDefaultableStyled(StyleOrigin origin, SvgDefaultablePaintStyleableMapAccessor<T> key) {
         // FIXME REVERT does not work this way, must use getStyled(origin,key) for _starting a search at the specified origin_ value
         SvgDefaultablePaint<T> dv = Objects.requireNonNull(getStyled(origin == StyleOrigin.INLINE ? null : origin, key));
         if (dv.getDefaulting() == null) {

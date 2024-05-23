@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.ChampAddOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -19,7 +18,7 @@ import java.util.function.BiFunction;
  * @param <V> the vertex data type
  */
 public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBackLinkWithAncestorSet<V>> {
-    private final @NonNull V vertex;
+    private final V vertex;
 
     /**
      * This set contains the vertex of this back link and the vertices of all
@@ -37,9 +36,9 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
      * @param parent the parent back link
      */
     public VertexBackLinkWithAncestorSet(
-            @NonNull V vertex,
+            V vertex,
             @Nullable VertexBackLinkWithAncestorSet<V> parent,
-            @NonNull ChampAddOnlySet<V> ancestors) {
+            ChampAddOnlySet<V> ancestors) {
         super(parent);
         this.vertex = vertex;
         this.ancestors = ancestors;
@@ -58,9 +57,9 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
      */
     public static <VV, CC extends Number & Comparable<CC>> @Nullable VertexBackLinkWithCost<VV, CC> toVertexBackLinkWithCost(
             @Nullable VertexBackLinkWithAncestorSet<VV> node,
-            @NonNull CC zero,
-            @NonNull BiFunction<VV, VV, CC> costFunction,
-            @NonNull BiFunction<CC, CC, CC> sumFunction) {
+            CC zero,
+            BiFunction<VV, VV, CC> costFunction,
+            BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;
         }
@@ -83,7 +82,7 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
         return newNode;
     }
 
-    public @NonNull ChampAddOnlySet<V> removeAncestors() {
+    public ChampAddOnlySet<V> removeAncestors() {
         if (ancestors == null) {
             throw new IllegalStateException("ancestors already removed");
         }
@@ -92,7 +91,7 @@ public class VertexBackLinkWithAncestorSet<V> extends AbstractBackLink<VertexBac
         return ancestors;
     }
 
-    public @NonNull V getVertex() {
+    public V getVertex() {
         return vertex;
     }
 }

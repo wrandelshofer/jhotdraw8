@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,13 +19,13 @@ import java.util.List;
  */
 public class Declaration extends AbstractSyntaxTree {
     private final @Nullable String namespace;
-    private final @NonNull String propertyName;
-    private final @NonNull ImmutableList<CssToken> terms;
+    private final String propertyName;
+    private final ImmutableList<CssToken> terms;
     private final int startPos;
     private final int endPos;
     private final int lineNumber;
 
-    public Declaration(@Nullable SourceLocator sourceLocator, @Nullable String namespace, @NonNull String propertyName, @NonNull List<CssToken> terms, int startPos, int endPos, int lineNumber) {
+    public Declaration(@Nullable SourceLocator sourceLocator, @Nullable String namespace, String propertyName, List<CssToken> terms, int startPos, int endPos, int lineNumber) {
         super(sourceLocator);
         this.namespace = namespace;
         this.propertyName = propertyName;
@@ -44,15 +43,15 @@ public class Declaration extends AbstractSyntaxTree {
         return namespace;
     }
 
-    public @NonNull String getPropertyName() {
+    public String getPropertyName() {
         return propertyName;
     }
 
-    public @NonNull ImmutableList<CssToken> getTerms() {
+    public ImmutableList<CssToken> getTerms() {
         return terms;
     }
 
-    public @NonNull String getTermsAsString() {
+    public String getTermsAsString() {
         StringBuilder buf = new StringBuilder();
 
         for (CssToken t : terms) {
@@ -62,7 +61,7 @@ public class Declaration extends AbstractSyntaxTree {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
 
         return propertyName + ":" + getTermsAsString();
     }

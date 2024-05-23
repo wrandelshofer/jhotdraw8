@@ -17,8 +17,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
@@ -40,6 +38,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -102,33 +101,33 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         TextFontableFigure, TextLayoutableFigure, ConnectableFigure, PathIterableFigure, ShapeableFigure,
         PaddableFigure {
 
-    public static final @NonNull CssSizeStyleableKey ORIGIN_X = new CssSizeStyleableKey("originX", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
-    public static final @NonNull CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
-    public static final @NonNull NullableFXPathElementsStyleableKey ICON_SHAPE = new NullableFXPathElementsStyleableKey("iconShape", null);
-    public static final @NonNull CssDimension2DStyleableKey ICON_SIZE = new CssDimension2DStyleableKey("iconSize", new CssDimension2D(16, 16));
-    public static final @NonNull CssSizeStyleableKey ICON_TEXT_GAP = new CssSizeStyleableKey("iconTextGap", CssSize.of(4));
-    public static final @NonNull NonNullEnumStyleableKey<IconPosition> ICON_POSITION =
+    public static final CssSizeStyleableKey ORIGIN_X = new CssSizeStyleableKey("originX", CssSize.ZERO);
+    public static final CssSizeStyleableKey ORIGIN_Y = new CssSizeStyleableKey("originY", CssSize.ZERO);
+    public static final CssPoint2DStyleableMapAccessor ORIGIN = new CssPoint2DStyleableMapAccessor("origin", ORIGIN_X, ORIGIN_Y);
+    public static final NullableFXPathElementsStyleableKey ICON_SHAPE = new NullableFXPathElementsStyleableKey("iconShape", null);
+    public static final CssDimension2DStyleableKey ICON_SIZE = new CssDimension2DStyleableKey("iconSize", new CssDimension2D(16, 16));
+    public static final CssSizeStyleableKey ICON_TEXT_GAP = new CssSizeStyleableKey("iconTextGap", CssSize.of(4));
+    public static final NonNullEnumStyleableKey<IconPosition> ICON_POSITION =
             new NonNullEnumStyleableKey<>("iconPosition", IconPosition.class, IconPosition.LEFT);
     /**
      * Defines the paint used for filling the interior of the icon shape. Default
      * value: {@code Color.BLACK}.
      */
-    public static final @NonNull NullablePaintableStyleableKey ICON_FILL = new NullablePaintableStyleableKey("iconFill", new CssColor("canvastext", Color.BLACK));
+    public static final NullablePaintableStyleableKey ICON_FILL = new NullablePaintableStyleableKey("iconFill", new CssColor("canvastext", Color.BLACK));
 
-    public static final @NonNull DoubleStyleableKey ICON_ROTATE = new DoubleStyleableKey("iconRotate", 0.0);
+    public static final DoubleStyleableKey ICON_ROTATE = new DoubleStyleableKey("iconRotate", 0.0);
 
-    public static final @NonNull CssSizeStyleableKey ICON_TRANSLATE_Y = new CssSizeStyleableKey("iconTranslateY", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey ICON_TRANSLATE_X = new CssSizeStyleableKey("iconTranslateX", CssSize.ZERO);
+    public static final CssSizeStyleableKey ICON_TRANSLATE_Y = new CssSizeStyleableKey("iconTranslateY", CssSize.ZERO);
+    public static final CssSizeStyleableKey ICON_TRANSLATE_X = new CssSizeStyleableKey("iconTranslateX", CssSize.ZERO);
     /**
      * The position relative to the parent (respectively the offset).
      */
-    public static final @NonNull CssPoint2DStyleableMapAccessor ICON_TRANSLATE = new CssPoint2DStyleableMapAccessor("iconTranslate", ICON_TRANSLATE_X, ICON_TRANSLATE_Y);
+    public static final CssPoint2DStyleableMapAccessor ICON_TRANSLATE = new CssPoint2DStyleableMapAccessor("iconTranslate", ICON_TRANSLATE_X, ICON_TRANSLATE_Y);
     /**
      * The horizontal position of the text. Default value: {@link HPos#LEFT}.
      * FIXME Move this to {@link TextLayoutableFigure}.
      */
-    public static final @NonNull NonNullEnumStyleableKey<HPos> TEXT_HPOS = new NonNullEnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
+    public static final NonNullEnumStyleableKey<HPos> TEXT_HPOS = new NonNullEnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 
     private @Nullable Bounds cachedLayoutBounds;
 
@@ -136,7 +135,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         this(0, 0);
     }
 
-    public AbstractLabelFigure(@NonNull Point2D position) {
+    public AbstractLabelFigure(Point2D position) {
         this(position.getX(), position.getY());
     }
 
@@ -164,7 +163,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @return the node
      */
     @Override
-    public @NonNull Node createNode(final @NonNull RenderContext ctx) {
+    public Node createNode(final RenderContext ctx) {
         Group g = new Group();
         g.setManaged(false);
         g.setAutoSizeChildren(false);
@@ -181,7 +180,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D p, @Nullable Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(Point2D p, @Nullable Figure prototype, double tolerance) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
@@ -189,14 +188,14 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return cachedLayoutBounds;
     }
 
-    protected void setCachedLayoutBounds(final @NonNull Bounds newValue) {
+    protected void setCachedLayoutBounds(final Bounds newValue) {
         if (!Objects.equals(cachedLayoutBounds, newValue)) {
             cachedLayoutBounds = newValue;
         }
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         Bounds boundsInLocal = getCachedLayoutBounds();
         if (boundsInLocal == null) {
             Point2D origin = getNonNull(ORIGIN).getConvertedValue();
@@ -206,7 +205,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
@@ -223,7 +222,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         Text tn = new Text();
         tn.setX(getStyledNonNull(ORIGIN_X).getConvertedValue());
         tn.setY(getStyledNonNull(ORIGIN_Y).getConvertedValue());
@@ -238,7 +237,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         return FXShapes.fxShapeToAwtShape(tn).getPathIterator(tx);
     }
 
-    protected abstract @Nullable String getText(@NonNull RenderContext ctx);
+    protected abstract @Nullable String getText(RenderContext ctx);
 
     /**
      * Computes the layout bounds of this figure.
@@ -246,7 +245,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx the render context
      */
     @Override
-    public void layout(final @NonNull RenderContext ctx) {
+    public void layout(final RenderContext ctx) {
         final Text textNode = new Text();
         updateTextNode(ctx, textNode);
         final Bounds textBounds = textNode.getLayoutBounds();
@@ -289,7 +288,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         CssRectangle2D layoutBounds = getCssLayoutBounds();
         CssSize dx = x.subtract(layoutBounds.getMinX());
         CssSize dy = y.subtract(layoutBounds.getMinY());
@@ -300,7 +299,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D delta) {
+    public void translateInLocal(CssPoint2D delta) {
         set(ORIGIN, getNonNull(ORIGIN).add(delta));
     }
 
@@ -312,7 +311,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx  the render context
      * @param node the group node
      */
-    protected void updateGroupNode(@NonNull RenderContext ctx, @NonNull Group node) {
+    protected void updateGroupNode(RenderContext ctx, Group node) {
 
     }
 
@@ -323,7 +322,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param node the node
      */
     @Override
-    public void updateNode(final @NonNull RenderContext ctx, final @NonNull Node node) {
+    public void updateNode(final RenderContext ctx, final Node node) {
         Group g = (Group) node;
         Path p = (Path) g.getProperties().get("pathNode");
         Text t = (Text) g.getProperties().get("textNode");
@@ -355,7 +354,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx           the render context
      * @param iconGroupNode the group node that holds the icon image
      */
-    protected void updateIconNode(final @NonNull RenderContext ctx, final @NonNull Group iconGroupNode) {
+    protected void updateIconNode(final RenderContext ctx, final Group iconGroupNode) {
         updateIconNodeImage(ctx, iconGroupNode);
         updateIconNodeTransform(ctx, iconGroupNode);
     }
@@ -366,7 +365,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx           the render context
      * @param iconGroupNode the group node that holds the icon image
      */
-    protected void updateIconNodeImage(final @NonNull RenderContext ctx, final @NonNull Group iconGroupNode) {
+    protected void updateIconNodeImage(final RenderContext ctx, final Group iconGroupNode) {
         final ImmutableList<PathElement> elements = getStyled(ICON_SHAPE);
         iconGroupNode.setVisible(elements != null);
         if (elements == null) {
@@ -393,7 +392,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx           the render context
      * @param iconGroupNode the group node that holds the icon image
      */
-    protected void updateIconNodeTransform(final @NonNull RenderContext ctx, final @NonNull Group iconGroupNode) {
+    protected void updateIconNodeTransform(final RenderContext ctx, final Group iconGroupNode) {
         final UnitConverter units = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         final CssPoint2D iconTranslate = getStyledNonNull(ICON_TRANSLATE);
         final double tx = iconTranslate.getX().getConvertedValue(units);
@@ -428,7 +427,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx  the render context
      * @param node the path node
      */
-    protected void updatePathNode(final @NonNull RenderContext ctx, final @NonNull Path node) {
+    protected void updatePathNode(final RenderContext ctx, final Path node) {
         applyFillableFigureProperties(ctx, node);
         applyStrokableFigureProperties(ctx, node);
         applyShapeableProperties(ctx, node, getVisualBounds());
@@ -448,7 +447,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx the render context
      * @param tn  the text node
      */
-    protected void updateTextNode(final @NonNull RenderContext ctx, final @NonNull Text tn) {
+    protected void updateTextNode(final RenderContext ctx, final Text tn) {
         updateTextNodeFontAndText(ctx, tn);
         updateTextNodeLayout(ctx, tn);
         updateTextNodePaint(ctx, tn);
@@ -460,7 +459,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx the render context
      * @param tn  the text node
      */
-    protected void updateTextNodePaint(final @NonNull RenderContext ctx, final @NonNull Text tn) {
+    protected void updateTextNodePaint(final RenderContext ctx, final Text tn) {
         applyTextFillableFigureProperties(ctx, tn);
     }
 
@@ -471,7 +470,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx the render context
      * @param tn  the text node
      */
-    protected void updateTextNodeLayout(final @NonNull RenderContext ctx, final @NonNull Text tn) {
+    protected void updateTextNodeLayout(final RenderContext ctx, final Text tn) {
         // Place the text object inside the content box
         // ---------------------------------------------
         final UnitConverter units = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
@@ -503,7 +502,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param ctx the render context
      * @param tn  the text node
      */
-    protected void updateTextNodeFontAndText(final @NonNull RenderContext ctx, final @NonNull Text tn) {
+    protected void updateTextNodeFontAndText(final RenderContext ctx, final Text tn) {
         applyTextFontableFigureProperties(ctx, tn);
         applyTextLayoutableFigureProperties(ctx, tn);
 

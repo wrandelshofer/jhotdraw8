@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.nio.CharBuffer;
@@ -25,7 +24,7 @@ public class FormatConverterAdapter extends Format {
     @Serial
     private static final long serialVersionUID = 1L;
 
-    private final @NonNull Converter<Object> converter;
+    private final Converter<Object> converter;
 
     public FormatConverterAdapter(Converter<?> converter) {
         @SuppressWarnings("unchecked")
@@ -34,13 +33,13 @@ public class FormatConverterAdapter extends Format {
     }
 
     @Override
-    public @NonNull StringBuffer format(Object obj, @NonNull StringBuffer toAppendTo, @NonNull FieldPosition pos) {
+    public StringBuffer format(Object obj, StringBuffer toAppendTo, FieldPosition pos) {
         toAppendTo.append(converter.toString(obj));
         return toAppendTo;
     }
 
     @Override
-    public @Nullable Object parseObject(@NonNull String source, @NonNull ParsePosition pos) {
+    public @Nullable Object parseObject(String source, ParsePosition pos) {
         try {
             CharBuffer buf = CharBuffer.wrap(source);
             Object value = converter.fromString(buf, null);

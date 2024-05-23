@@ -18,8 +18,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.HideableFigure;
@@ -27,6 +25,7 @@ import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LockableFigure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -54,7 +53,7 @@ public class LayerCell extends ListCell<Figure> {
     @FXML
     private Label selectionLabel;
 
-    private final @NonNull WeakReference<DrawingModel> drawingModel;
+    private final WeakReference<DrawingModel> drawingModel;
 
     private boolean isUpdating;
 
@@ -62,14 +61,14 @@ public class LayerCell extends ListCell<Figure> {
 
     private TextField editField;
 
-    private final @NonNull LayersInspector inspector;
+    private final LayersInspector inspector;
 
     public LayerCell(DrawingModel drawingModel, LayersInspector inspector) {
         this(LayersInspector.class.getResource("LayerCell.fxml"), drawingModel, inspector);
     }
 
     @SuppressWarnings("this-escape")
-    public LayerCell(@NonNull URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
+    public LayerCell(URL fxmlUrl, DrawingModel drawingModel, LayersInspector inspector) {
         this.drawingModel = new WeakReference<>(drawingModel);
         this.inspector = inspector;
         init(fxmlUrl);
@@ -77,7 +76,7 @@ public class LayerCell extends ListCell<Figure> {
 
     private Tooltip selectionLabelTooltip;
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -100,7 +99,7 @@ public class LayerCell extends ListCell<Figure> {
         selectionLabelTooltip = new Tooltip(rsrc.getString("figures.dragToLayer.toolTipText"));
     }
 
-    private void toggleAllVisible(@NonNull MouseEvent e) {
+    private void toggleAllVisible(MouseEvent e) {
         if (e.isShiftDown()) {
             e.consume();
             DrawingModel m = this.drawingModel.get();
@@ -115,7 +114,7 @@ public class LayerCell extends ListCell<Figure> {
         }
     }
 
-    private void toggleAllLocked(@NonNull MouseEvent e) {
+    private void toggleAllLocked(MouseEvent e) {
         if (e.isShiftDown()) {
             e.consume();
             DrawingModel m = this.drawingModel.get();
@@ -175,7 +174,7 @@ public class LayerCell extends ListCell<Figure> {
      * @param inspector    the layers inspector
      * @return callback
      */
-    public static @NonNull Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
+    public static Callback<ListView<Figure>, ListCell<Figure>> forListView(DrawingModel drawingModel, LayersInspector inspector) {
         return list -> new LayerCell(drawingModel, inspector);
     }
 
@@ -227,11 +226,11 @@ public class LayerCell extends ListCell<Figure> {
         updateItem(getItem(), false);
     }
 
-    private @NonNull String getItemText() {
+    private String getItemText() {
         return getItem() == null ? "" : getItem().get(StyleableFigure.ID);
     }
 
-    private @NonNull TextField createTextField() {
+    private TextField createTextField() {
         final TextField textField = new TextField();
 
         // Use onAction here rather than onKeyReleased (with check for Enter),

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.fxbase.styleable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
@@ -28,7 +27,6 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return the converter
      */
-    @NonNull
     Converter<T> getCssConverter();
 
     /**
@@ -39,7 +37,6 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      *
      * @return name string.
      */
-    @NonNull
     String getCssName();
 
     /**
@@ -61,7 +58,7 @@ public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
      * @param camelCaseName string
      * @return cssName string.
      */
-    static @NonNull String toCssName(@NonNull String camelCaseName) {
+    static String toCssName(String camelCaseName) {
         final StringBuilder b = new StringBuilder();
         final String name = camelCaseName;
         boolean insertDash = false;

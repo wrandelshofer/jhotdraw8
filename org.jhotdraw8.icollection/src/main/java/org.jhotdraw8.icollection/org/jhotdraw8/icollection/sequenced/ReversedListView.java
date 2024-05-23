@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.sequenced;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.impl.iteration.ReverseListSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.ReverseMutableListIterator;
 
@@ -13,15 +12,15 @@ import java.util.Spliterator;
 import java.util.function.IntSupplier;
 
 public class ReversedListView<E> extends AbstractList<E> implements List<E> {
-    private final @NonNull List<E> src;
-    private final @NonNull IntSupplier modCount;
+    private final List<E> src;
+    private final IntSupplier modCount;
 
     /**
      * Constructs a new instance.
      *
      * @param src the source set
      */
-    public ReversedListView(@NonNull List<E> src, @NonNull IntSupplier modCount) {
+    public ReversedListView(List<E> src, IntSupplier modCount) {
         this.src = src;
         this.modCount = modCount;
     }
@@ -42,17 +41,17 @@ public class ReversedListView<E> extends AbstractList<E> implements List<E> {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return listIterator();
     }
 
     @Override
-    public @NonNull ListIterator<E> listIterator() {
+    public ListIterator<E> listIterator() {
         return listIterator(0);
     }
 
     @Override
-    public @NonNull ListIterator<E> listIterator(int index) {
+    public ListIterator<E> listIterator(int index) {
         return new ReverseMutableListIterator<>(src, index, modCount);
     }
 
@@ -68,7 +67,7 @@ public class ReversedListView<E> extends AbstractList<E> implements List<E> {
     }
 
     @Override
-    public @NonNull List<E> reversed() {
+    public List<E> reversed() {
         return src;
     }
 
@@ -101,7 +100,7 @@ public class ReversedListView<E> extends AbstractList<E> implements List<E> {
     }
 
     @Override
-    public boolean addAll(@NonNull Collection<? extends E> c) {
+    public boolean addAll(Collection<? extends E> c) {
         return super.addAll(c);
     }
 

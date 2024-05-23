@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,7 +29,7 @@ public class PercentageCssConverter extends AbstractCssConverter<Double> {
     }
 
     @Override
-    public @NonNull Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Double parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         return switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> tt.currentNumberNonNull().doubleValue();
             case CssTokenType.TT_PERCENTAGE -> tt.currentNumberNonNull().doubleValue() / 100.0;
@@ -50,7 +49,7 @@ public class PercentageCssConverter extends AbstractCssConverter<Double> {
     }
 
     @Override
-    public <TT extends Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    public <TT extends Double> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         double v = value;
         if (value.isInfinite()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, (v > 0) ? "INF" : "-INF"));

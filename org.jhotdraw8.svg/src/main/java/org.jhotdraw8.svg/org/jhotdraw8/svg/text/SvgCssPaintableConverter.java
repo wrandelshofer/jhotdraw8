@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.svg.text;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -31,16 +30,16 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
     /**
      * The currentColor keyword.
      */
-    public static final @NonNull String CURRENT_COLOR_KEYWORD = "currentColor";
+    public static final String CURRENT_COLOR_KEYWORD = "currentColor";
 
-    private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
+    private static final ColorCssConverter colorConverter = new ColorCssConverter(false);
 
     public SvgCssPaintableConverter(boolean nullable) {
         super(nullable);
     }
 
     @Override
-    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Paintable> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         if (value instanceof CssColor c) {
             colorConverter.produceTokens(c, idSupplier, out);
         } else {
@@ -49,7 +48,7 @@ public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
     }
 
     @Override
-    public @NonNull Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Paintable parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_URL) {
             String url = tt.currentStringNonNull();
             if (url.startsWith("#")) {

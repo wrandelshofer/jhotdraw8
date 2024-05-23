@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -25,38 +24,38 @@ import java.util.stream.Stream;
  * @author Werner Randelshofer
  */
 public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
-    protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
-    protected final @NonNull Supplier<Spliterator<E>> spliteratorFunction;
-    protected final @NonNull IntSupplier sizeFunction;
-    protected final @NonNull Predicate<Object> containsFunction;
-    protected final @NonNull Predicate<E> addFunction;
-    protected final @NonNull Runnable clearFunction;
-    protected final @NonNull Predicate<Object> removeFunction;
+    protected final Supplier<Iterator<E>> iteratorFunction;
+    protected final Supplier<Spliterator<E>> spliteratorFunction;
+    protected final IntSupplier sizeFunction;
+    protected final Predicate<Object> containsFunction;
+    protected final Predicate<E> addFunction;
+    protected final Runnable clearFunction;
+    protected final Predicate<Object> removeFunction;
 
-    public SetFacade(@NonNull ReadOnlySet<E> backingSet) {
+    public SetFacade(ReadOnlySet<E> backingSet) {
         this(backingSet::iterator, backingSet::spliterator, backingSet::size,
                 backingSet::contains, null, null, null);
     }
 
-    public SetFacade(@NonNull Set<E> backingSet) {
+    public SetFacade(Set<E> backingSet) {
         this(backingSet::iterator,
                 backingSet::spliterator,
                 backingSet::size,
                 backingSet::contains, backingSet::clear, backingSet::add, backingSet::remove);
     }
 
-    public SetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                     @NonNull IntSupplier sizeFunction,
-                     @NonNull Predicate<Object> containsFunction) {
+    public SetFacade(Supplier<Iterator<E>> iteratorFunction,
+                     IntSupplier sizeFunction,
+                     Predicate<Object> containsFunction) {
         this(iteratorFunction,
                 () -> Spliterators.spliterator(iteratorFunction.get(), sizeFunction.getAsInt(), Spliterator.DISTINCT | Spliterator.SIZED),
                 sizeFunction, containsFunction, null, null, null);
     }
 
-    public SetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                     @NonNull Supplier<Spliterator<E>> spliteratorFunction,
-                     @NonNull IntSupplier sizeFunction,
-                     @NonNull Predicate<Object> containsFunction,
+    public SetFacade(Supplier<Iterator<E>> iteratorFunction,
+                     Supplier<Spliterator<E>> spliteratorFunction,
+                     IntSupplier sizeFunction,
+                     Predicate<Object> containsFunction,
                      @Nullable Runnable clearFunction,
                      @Nullable Predicate<E> addFunction,
                      @Nullable Predicate<Object> removeFunction) {
@@ -97,7 +96,7 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return iteratorFunction.get();
     }
 

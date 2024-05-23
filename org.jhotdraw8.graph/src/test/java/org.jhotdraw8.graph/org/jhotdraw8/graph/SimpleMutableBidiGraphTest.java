@@ -5,40 +5,39 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Tests {@link SimpleMutableBidiGraph}.
  */
 public class SimpleMutableBidiGraphTest extends AbstractMutableBidiGraphTest<Integer, Character> {
     @Override
-    protected @NonNull MutableBidiGraph<Integer, Character> newInstance() {
+    protected MutableBidiGraph<Integer, Character> newInstance() {
         return new SimpleMutableBidiGraph<>();
     }
 
     @Override
-    protected @NonNull MutableBidiGraph<Integer, Character> newInstance(@NonNull DirectedGraph<Integer, Character> g) {
+    protected MutableBidiGraph<Integer, Character> newInstance(DirectedGraph<Integer, Character> g) {
         return new SimpleMutableBidiGraph<>(g);
     }
 
     @Override
-    protected @NonNull Integer newVertex(int id) {
+    protected Integer newVertex(int id) {
         return id;
     }
 
     @Override
-    protected @NonNull Character newArrow(@NonNull Integer start, @NonNull Integer end, char id) {
+    protected Character newArrow(Integer start, Integer end, char id) {
         return id;
     }
 
     @Override
-    protected @NonNull char getArrowId(@Nullable Character character) {
+    protected char getArrowId(@Nullable Character character) {
         return character == null ? '\u0000' : character;
     }
 
     @Override
-    protected @NonNull int getVertexId(@NonNull Integer integer) {
+    protected int getVertexId(Integer integer) {
         return integer;
     }
 }

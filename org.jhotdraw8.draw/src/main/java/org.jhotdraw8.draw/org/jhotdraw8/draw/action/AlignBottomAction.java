@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -16,12 +14,13 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
 public class AlignBottomAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.alignBottom";
+    public static final String ID = "edit.alignBottom";
 
     /**
      * Creates a new instance.
@@ -29,7 +28,7 @@ public class AlignBottomAction extends AbstractDrawingViewAction {
      * @param editor the drawing editor
      */
     @SuppressWarnings("this-escape")
-    public AlignBottomAction(@NonNull DrawingEditor editor) {
+    public AlignBottomAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -37,13 +36,13 @@ public class AlignBottomAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
         final Set<Figure> figures = drawingView.getSelectedFigures();
         Figure lead = drawingView.getSelectionLead();
         alignBottom(drawingView, figures, lead);
     }
 
-    private void alignBottom(@NonNull DrawingView view, @NonNull Set<Figure> figures, @Nullable Figure lead) {
+    private void alignBottom(DrawingView view, Set<Figure> figures, @Nullable Figure lead) {
         if (figures.size() < 2 || lead == null) {
             return;
         }

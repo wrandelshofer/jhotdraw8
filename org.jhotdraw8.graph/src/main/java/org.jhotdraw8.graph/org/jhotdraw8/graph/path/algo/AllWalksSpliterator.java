@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.collection.pair.OrderedPair;
@@ -49,14 +48,14 @@ import java.util.function.Predicate;
  * @param <E> the element type of the path
  */
 public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumerator<OrderedPair<ImmutableList<E>, C>> {
-    private final @NonNull Queue<ArcBackLinkWithCost<V, A, C>> queue = new ArrayDeque<>();
-    private final @NonNull Predicate<V> goalPredicate;
+    private final Queue<ArcBackLinkWithCost<V, A, C>> queue = new ArrayDeque<>();
+    private final Predicate<V> goalPredicate;
     private final int maxDepth;
-    private final @NonNull C maxCost;
-    private final @NonNull Function3<V, V, A, C> costFunction;
-    private final @NonNull BiFunction<C, C, C> sumFunction;
-    private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
-    private final @NonNull Function<ArcBackLinkWithCost<V, A, C>,
+    private final C maxCost;
+    private final Function3<V, V, A, C> costFunction;
+    private final BiFunction<C, C, C> sumFunction;
+    private final Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
+    private final Function<ArcBackLinkWithCost<V, A, C>,
             OrderedPair<ImmutableList<E>, C>> sequenceFunction;
 
     /**
@@ -74,16 +73,16 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
      * @param costFunction     the cost function.
      * @param sumFunction      the function for adding two cost values
      */
-    public AllWalksSpliterator(@NonNull Iterable<V> startVertices,
-                               @NonNull Predicate<V> goalPredicate,
-                               @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                               @NonNull Function<ArcBackLinkWithCost<V, A, C>,
+    public AllWalksSpliterator(Iterable<V> startVertices,
+                               Predicate<V> goalPredicate,
+                               Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                               Function<ArcBackLinkWithCost<V, A, C>,
                                        OrderedPair<ImmutableList<E>, C>> sequenceFunction,
                                int maxDepth,
-                               @NonNull C maxCost,
-                               @NonNull C zero,
-                               @NonNull Function3<V, V, A, C> costFunction,
-                               @NonNull BiFunction<C, C, C> sumFunction) {
+                               C maxCost,
+                               C zero,
+                               Function3<V, V, A, C> costFunction,
+                               BiFunction<C, C, C> sumFunction) {
         super(Long.MAX_VALUE, 0);
         AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, maxCost);
 

@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.iteration;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
@@ -20,19 +19,19 @@ import java.util.function.IntSupplier;
  * @param <E> the element type
  */
 public class FailFastIterator<E> implements Iterator<E> {
-    private final @NonNull Iterator<? extends E> i;
+    private final Iterator<? extends E> i;
     private int expectedModCount;
-    private final @NonNull IntSupplier modCountSupplier;
-    private final @NonNull Consumer<E> removeFunction;
+    private final IntSupplier modCountSupplier;
+    private final Consumer<E> removeFunction;
     private @Nullable E current;
     private boolean canRemove;
 
-    public FailFastIterator(@NonNull Iterator<? extends E> i, @NonNull IntSupplier modCountSupplier) {
+    public FailFastIterator(Iterator<? extends E> i, IntSupplier modCountSupplier) {
         this(i, (e) -> i.remove(), modCountSupplier);
     }
 
-    public FailFastIterator(@NonNull Iterator<? extends E> i,
-                            @NonNull Consumer<E> removeFunction, @NonNull IntSupplier modCountSupplier) {
+    public FailFastIterator(Iterator<? extends E> i,
+                            Consumer<E> removeFunction, IntSupplier modCountSupplier) {
         this.i = i;
         this.modCountSupplier = modCountSupplier;
         this.expectedModCount = modCountSupplier.getAsInt();

@@ -14,7 +14,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -46,7 +45,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
     }
 
     @Override
-    protected @NonNull String getExtension() {
+    protected String getExtension() {
         return "png";
     }
 
@@ -55,7 +54,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return false;
     }
 
-    public Paper findPaper(@NonNull CssDimension2D paperSize) {
+    public Paper findPaper(CssDimension2D paperSize) {
         UnitConverter uc = new DefaultUnitConverter(72.0);
         double w = uc.convert(paperSize.getWidth(), UnitConverter.POINTS);
         double h = uc.convert(paperSize.getHeight(), UnitConverter.POINTS);
@@ -69,7 +68,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    private void printSlice(@NonNull CssDimension2D pageSize, @NonNull Figure slice, @NonNull Bounds viewportBounds, @NonNull Node node, double dpi) {
+    private void printSlice(CssDimension2D pageSize, Figure slice, Bounds viewportBounds, Node node, double dpi) {
         Paper paper = findPaper(pageSize);
         Dimension2D psize = pageSize.getConvertedValue();
         PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getWidth() <= psize.getHeight() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
@@ -126,7 +125,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
 
     }
 
-    private void setDPI(@NonNull IIOMetadata metadata, double dpi) throws IIOInvalidTreeException {
+    private void setDPI(IIOMetadata metadata, double dpi) throws IIOInvalidTreeException {
         double dotsPerMilli = dpi / INCH_2_MM;
 
         IIOMetadataNode horiz = new IIOMetadataNode("HorizontalPixelSize");
@@ -146,7 +145,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
     }
 
     @Override
-    protected void writePage(Path file, @NonNull Page page, @NonNull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.get(PageFigure.PAPER_WIDTH);
         double paperWidth = pw.getConvertedValue();
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
@@ -156,14 +155,14 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
     }
 
     @Override
-    protected boolean writeSlice(Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
+    protected boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException {
         printSlice(null, slice, slice.getLayoutBounds(), node, dpi);
         return false;
     }
 
     private PrinterJob job;
 
-    public void print(PrinterJob job, @NonNull Drawing drawing) throws IOException {
+    public void print(PrinterJob job, Drawing drawing) throws IOException {
         this.job = job;
         try {
             writePages(null, null, drawing);

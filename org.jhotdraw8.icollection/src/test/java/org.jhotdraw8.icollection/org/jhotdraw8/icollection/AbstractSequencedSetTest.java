@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
@@ -23,43 +22,43 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractSequencedSetTest extends AbstractSetTest {
-    protected abstract <E> @NonNull SequencedSet<E> newInstance();
+    protected abstract <E> SequencedSet<E> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract <E> @NonNull SequencedSet<E> newInstance(int numElements, float loadFactor);
+    protected abstract <E> SequencedSet<E> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <E> @NonNull SequencedSet<E> newInstance(@NonNull SequencedSet<E> m);
+    protected abstract <E> SequencedSet<E> newInstance(SequencedSet<E> m);
 
-    protected abstract <E> @NonNull SequencedSet<E> newInstance(@NonNull ReadOnlySequencedSet<E> m);
+    protected abstract <E> SequencedSet<E> newInstance(ReadOnlySequencedSet<E> m);
 
 
-    protected abstract <E> @NonNull SequencedSet<E> toClonedInstance(@NonNull SequencedSet<E> m);
+    protected abstract <E> SequencedSet<E> toClonedInstance(SequencedSet<E> m);
 
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <E> @NonNull SequencedSet<E> newInstance(Set<E> m);
+    protected abstract <E> SequencedSet<E> newInstance(Set<E> m);
 
-    protected abstract <E> @NonNull SequencedSet<E> newInstance(ReadOnlySet<E> m);
+    protected abstract <E> SequencedSet<E> newInstance(ReadOnlySet<E> m);
 
 
-    protected abstract <E> @NonNull SequencedSet<E> toClonedInstance(Set<E> m);
+    protected abstract <E> SequencedSet<E> toClonedInstance(Set<E> m);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <E> @NonNull SequencedSet<E> newInstance(Iterable<E> m);
+    protected abstract <E> SequencedSet<E> newInstance(Iterable<E> m);
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addFirstWithContainedElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void addFirstWithContainedElementShouldMoveElementToFirst(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         ArrayList<Key> shuffled = new ArrayList<>(data.a().asSet());
@@ -77,7 +76,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedAddLastWithContainedElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void reversedAddLastWithContainedElementShouldMoveElementToFirst(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         ArrayList<Key> shuffled = new ArrayList<>(data.a().asSet());
@@ -95,7 +94,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addFirstWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void addFirstWithNewElementShouldMoveElementToFirst(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         for (Key e : data.c()) {
@@ -113,7 +112,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedAddLastWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void reversedAddLastWithNewElementShouldMoveElementToFirst(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         for (Key e : data.c()) {
@@ -131,7 +130,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addLastWithContainedElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addLastWithContainedElementShouldMoveElementToLast(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         ArrayList<Key> shuffled = new ArrayList<>(data.a().asSet());
@@ -149,7 +148,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addLastWithLastElementShouldBeIdempotent(@NonNull SetData data) throws Exception {
+    public void addLastWithLastElementShouldBeIdempotent(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         Key e = expected.get(expected.size() - 1);
@@ -160,7 +159,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addFirstWithFirstElementShouldBeIdempotent(@NonNull SetData data) throws Exception {
+    public void addFirstWithFirstElementShouldBeIdempotent(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         Key e = expected.get(0);
@@ -171,7 +170,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedAddFirstWithContainedElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void reversedAddFirstWithContainedElementShouldMoveElementToLast(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         ArrayList<Key> shuffled = new ArrayList<>(data.a().asSet());
@@ -189,7 +188,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addLastWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addLastWithNewElementShouldMoveElementToLast(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         for (Key e : data.c()) {
@@ -203,7 +202,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedAddFirstWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void reversedAddFirstWithNewElementShouldMoveElementToLast(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         for (Key e : data.c()) {
@@ -217,7 +216,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addWithContainedElementShouldNotMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addWithContainedElementShouldNotMoveElementToLast(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         ArrayList<Key> shuffled = new ArrayList<>(data.a().asSet());
@@ -231,7 +230,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithLastElementShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeWithLastElementShouldNotChangeSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -242,7 +241,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeFirstShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeFirstShouldNotChangeSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -253,7 +252,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedRemoveLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void reversedRemoveLastShouldNotChangeSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -264,7 +263,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeFirstWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void removeFirstWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeFirst);
@@ -272,7 +271,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void removeLastWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeLast);
@@ -280,7 +279,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastShouldNotChangeSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -291,7 +290,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastStartingWithEmptySetShouldNotChangeSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance();
         instance.addAll(data.a.asSet());
         List<Key> expected = new ArrayList<>(data.a().asSet());
@@ -303,7 +302,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedRemoveFirstShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void reversedRemoveFirstShouldNotChangeSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -315,7 +314,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedContainsShouldYieldExpectedValue(@NonNull SetData data) {
+    public void reversedContainsShouldYieldExpectedValue(SetData data) {
         SequencedSet<Key> instance = newInstance(data.a());
         for (Key k : data.a()) {
             assertTrue(instance.reversed().contains(k));
@@ -339,7 +338,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithFirstElementShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeWithFirstElementShouldNotChangeSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -350,7 +349,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithMiddleElementShouldNotChangeSequenc(@NonNull SetData data) throws Exception {
+    public void removeWithMiddleElementShouldNotChangeSequenc(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         while (!expected.isEmpty()) {
@@ -363,7 +362,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addWithNewElementShouldMoveElementToLast(@NonNull SetData data) throws Exception {
+    public void addWithNewElementShouldMoveElementToLast(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         for (Key e : data.c()) {
@@ -377,7 +376,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedAddWithNewElementShouldMoveElementToFirst(@NonNull SetData data) throws Exception {
+    public void reversedAddWithNewElementShouldMoveElementToFirst(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         for (Key e : data.c()) {
@@ -391,7 +390,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedOfReversedShouldHaveSameSequence(@NonNull SetData data) throws Exception {
+    public void reversedOfReversedShouldHaveSameSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         ArrayList<Key> actual = new ArrayList<>(instance.reversed().reversed());
@@ -400,7 +399,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void reversedShouldHaveReversedSequence(@NonNull SetData data) throws Exception {
+    public void reversedShouldHaveReversedSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         Collections.reverse(expected);
@@ -411,7 +410,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void readOnlyReversedOfReadOnlyReversedShouldHaveSameSequence(@NonNull SetData data) throws Exception {
+    public void readOnlyReversedOfReadOnlyReversedShouldHaveSameSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         if (instance instanceof ReadOnlySequencedSet<?>) {
             ReadOnlySequencedSet<Key> readOnlyInstance = (ReadOnlySequencedSet<Key>) instance;
@@ -424,7 +423,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void readOnlyReversedShouldHaveReversedSequence(@NonNull SetData data) throws Exception {
+    public void readOnlyReversedShouldHaveReversedSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         if (instance instanceof ReadOnlySequencedSet<?>) {
             ReadOnlySequencedSet<Key> readOnlyInstance = (ReadOnlySequencedSet<Key>) instance;

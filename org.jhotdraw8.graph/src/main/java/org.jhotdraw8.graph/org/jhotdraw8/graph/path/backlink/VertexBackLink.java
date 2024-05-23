@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -18,7 +17,7 @@ import java.util.function.BiFunction;
  * @param <V> the vertex data type
  */
 public class VertexBackLink<V> extends AbstractBackLink<VertexBackLink<V>> {
-    private final @NonNull V vertex;
+    private final V vertex;
 
     /**
      * Creates a new instance.
@@ -26,13 +25,13 @@ public class VertexBackLink<V> extends AbstractBackLink<VertexBackLink<V>> {
      * @param vertex the vertex data
      * @param parent the parent back link
      */
-    public VertexBackLink(@NonNull V vertex, @Nullable VertexBackLink<V> parent) {
+    public VertexBackLink(V vertex, @Nullable VertexBackLink<V> parent) {
         super(parent);
         this.vertex = vertex;
     }
 
 
-    public @NonNull V getVertex() {
+    public V getVertex() {
         return vertex;
     }
 
@@ -49,9 +48,9 @@ public class VertexBackLink<V> extends AbstractBackLink<VertexBackLink<V>> {
      */
     public static <VV, CC extends Number & Comparable<CC>> @Nullable VertexBackLinkWithCost<VV, CC> toVertexBackLinkWithCost(
             @Nullable VertexBackLink<VV> node,
-            @NonNull CC zero,
-            @NonNull BiFunction<VV, VV, CC> costFunction,
-            @NonNull BiFunction<CC, CC, CC> sumFunction) {
+            CC zero,
+            BiFunction<VV, VV, CC> costFunction,
+            BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;
         }

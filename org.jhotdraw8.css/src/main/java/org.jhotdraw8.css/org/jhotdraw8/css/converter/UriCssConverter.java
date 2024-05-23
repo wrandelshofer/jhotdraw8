@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.URI;
@@ -51,7 +50,7 @@ public class UriCssConverter extends AbstractCssConverter<URI> {
     }
 
     @Override
-    public @NonNull URI parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public URI parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_URL) {
             throw new ParseException("Could not convert " + tt.getToken() + " to a URL value.", tt.getStartPosition());
         }
@@ -63,7 +62,7 @@ public class UriCssConverter extends AbstractCssConverter<URI> {
     }
 
     @Override
-    protected <TT extends URI> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends URI> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_URL, value.toString()));
     }
 }

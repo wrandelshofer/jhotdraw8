@@ -5,11 +5,10 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.BoundingBox;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -21,10 +20,10 @@ import java.util.Map;
 public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
 
 
-    private final @NonNull MapAccessor<Double> xKey;
-    private final @NonNull MapAccessor<Double> yKey;
-    private final @NonNull MapAccessor<Double> widthKey;
-    private final @NonNull MapAccessor<Double> heightKey;
+    private final MapAccessor<Double> xKey;
+    private final MapAccessor<Double> yKey;
+    private final MapAccessor<Double> widthKey;
+    private final MapAccessor<Double> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -35,7 +34,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
      * @param widthKey  the key for the width of the rectangle
      * @param heightKey the key for the height of the rectangle
      */
-    public BoundingBoxMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> widthKey, @NonNull MapAccessor<Double> heightKey) {
+    public BoundingBoxMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
         super(name, BoundingBox.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new BoundingBox(xKey.getDefaultValue(), yKey.getDefaultValue(), widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 
         this.xKey = xKey;
@@ -45,13 +44,13 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
     }
 
     @Override
-    public @NonNull BoundingBox get(@NonNull Map<? super Key<?>, Object> a) {
+    public BoundingBox get(Map<? super Key<?>, Object> a) {
         return new BoundingBox(xKey.get(a), yKey.get(a), widthKey.get(a), heightKey.get(a));
     }
 
 
     @Override
-    public @NonNull BoundingBox put(@NonNull Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
+    public BoundingBox put(Map<? super Key<?>, Object> a, @Nullable BoundingBox value) {
         BoundingBox oldValue = get(a);
         if (value == null) {
             remove(a);
@@ -65,7 +64,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
     }
 
     @Override
-    public @NonNull BoundingBox remove(@NonNull Map<? super Key<?>, Object> a) {
+    public BoundingBox remove(Map<? super Key<?>, Object> a) {
         BoundingBox oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);
@@ -75,7 +74,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable BoundingBox value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable BoundingBox value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -87,7 +86,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         a = yKey.remove(a);
         a = widthKey.remove(a);

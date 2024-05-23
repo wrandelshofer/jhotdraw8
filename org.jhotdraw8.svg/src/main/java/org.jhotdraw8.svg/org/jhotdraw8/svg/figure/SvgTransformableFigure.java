@@ -11,8 +11,6 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformCachingFigure;
@@ -23,6 +21,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -48,10 +47,9 @@ import java.util.Set;
  */
 public interface SvgTransformableFigure extends TransformCachingFigure {
     boolean CACHE = true;
-    @NonNull
     TransformListStyleableKey TRANSFORMS = TransformableFigure.TRANSFORMS;
 
-    static @NonNull Set<Key<?>> getDeclaredKeys() {
+    static Set<Key<?>> getDeclaredKeys() {
         SequencedSet<Key<?>> keys = new LinkedHashSet<>();
         Figure.getDeclaredKeys(SvgTransformableFigure.class, keys);
         return keys;
@@ -71,7 +69,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformableFigureProperties(@NonNull RenderContext ctx, @NonNull Node node) {
+    default void applyTransformableFigureProperties(RenderContext ctx, Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
         if (t == null || t.isIdentity()) {
@@ -121,11 +119,11 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default @NonNull Transform getLocalToParent() {
+    default Transform getLocalToParent() {
         return getLocalToParent(true);
     }
 
-    default @NonNull Transform getLocalToParent(boolean styled) {
+    default Transform getLocalToParent(boolean styled) {
         Transform l2p = CACHE && styled ? getCachedLocalToParent() : null;
         if (l2p == null) {
             Point2D center = getCenterInLocal();
@@ -144,7 +142,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         return l2p;
     }
 
-    default @NonNull List<Transform> getLocalToParentAsList(boolean styled) {
+    default List<Transform> getLocalToParentAsList(boolean styled) {
         ArrayList<Transform> list = new ArrayList<>();
 
         Point2D center = getCenterInLocal();
@@ -157,11 +155,11 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default @NonNull Transform getParentToLocal() {
+    default Transform getParentToLocal() {
         return getParentToLocal(true);
     }
 
-    default @NonNull Transform getParentToLocal(boolean styled) {
+    default Transform getParentToLocal(boolean styled) {
         Transform p2l = CACHE ? getCachedParentToLocal() : null;
         if (p2l == null) {
             Point2D center = getCenterInLocal();
@@ -224,7 +222,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default void reshapeInParent(@NonNull Transform transform) {
+    default void reshapeInParent(Transform transform) {
         final boolean hasCenters = hasCenterTransforms();
         final boolean hasTransforms = hasTransforms();
         if (!hasTransforms && (transform instanceof Translate)) {
@@ -264,7 +262,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
      *
      * @param transforms new value
      */
-    default void setTransforms(@NonNull Transform... transforms) {
+    default void setTransforms(Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
             set(TRANSFORMS, VectorList.of());
         } else {
@@ -273,14 +271,14 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     @Override
-    default void transformInLocal(@NonNull Transform t) {
+    default void transformInLocal(Transform t) {
         flattenTransforms();
         ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
         set(TRANSFORMS, transforms.add(t));
     }
 
     @Override
-    default void transformInParent(@NonNull Transform t) {
+    default void transformInParent(Transform t) {
         if (t.isIdentity()) {
             return;
         }

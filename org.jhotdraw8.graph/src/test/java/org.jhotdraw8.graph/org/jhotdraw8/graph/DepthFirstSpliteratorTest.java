@@ -10,7 +10,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.Test;
@@ -45,7 +44,7 @@ public class DepthFirstSpliteratorTest {
      *
      * @return
      */
-    static @NonNull DirectedGraph<Integer, Double> createGraph() {
+    static DirectedGraph<Integer, Double> createGraph() {
         SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex(1);
         builder.addVertex(2);
@@ -65,7 +64,7 @@ public class DepthFirstSpliteratorTest {
         return builder;
     }
 
-    public @NonNull Object[][] anyPathProvider() {
+    public Object[][] anyPathProvider() {
         return new Object[][]{
                 {1, 5, Arrays.asList(1, 6, 5)},
                 {1, 4, Arrays.asList(1, 6, 5, 3, 4)},

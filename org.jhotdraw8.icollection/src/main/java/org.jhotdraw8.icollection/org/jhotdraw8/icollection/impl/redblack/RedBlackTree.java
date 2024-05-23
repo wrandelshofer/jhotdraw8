@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.VectorList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Comparator;
@@ -43,14 +42,14 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
         return Empty.empty();
     }
 
-    static <K, V> RedBlackTree<K, V> of(@NonNull Comparator<? super K> comparator, K key, V value) {
+    static <K, V> RedBlackTree<K, V> of(Comparator<? super K> comparator, K key, V value) {
         Objects.requireNonNull(comparator, "comparator is null");
         final Empty<K, V> empty = Empty.empty();
         return new Node<>(Color.BLACK, empty, key, value, empty);
     }
 
     @SafeVarargs
-    static <K, V> RedBlackTree<K, V> of(@NonNull Comparator<? super K> comparator, K... keys) {
+    static <K, V> RedBlackTree<K, V> of(Comparator<? super K> comparator, K... keys) {
         Objects.requireNonNull(comparator, "comparator is null");
         Objects.requireNonNull(keys, "values is null");
         RedBlackTree<K, V> tree = empty();
@@ -61,7 +60,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     }
 
     @SuppressWarnings("unchecked")
-    static <K, V> RedBlackTree<K, V> ofAll(@NonNull Comparator<? super K> comparator, Iterable<? extends K> keys) {
+    static <K, V> RedBlackTree<K, V> ofAll(Comparator<? super K> comparator, Iterable<? extends K> keys) {
         Objects.requireNonNull(comparator, "comparator is null");
         Objects.requireNonNull(keys, "values is null");
         // function equality is not computable => same object check
@@ -157,7 +156,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      *
      * @return Node, if this is not empty, otherwise Empty
      */
-    default @NonNull RedBlackTree<K, V> max() {
+    default RedBlackTree<K, V> max() {
         return isEmpty() ? RedBlackTree.empty() : Node.maximum((Node<K, V>) this);
     }
 
@@ -166,7 +165,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      *
      * @return Node, if this is not empty, otherwise Empty
      */
-    default @NonNull RedBlackTree<K, V> min() {
+    default RedBlackTree<K, V> min() {
         return isEmpty() ? RedBlackTree.empty() : Node.minimum((Node<K, V>) this);
     }
 
@@ -176,7 +175,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      * @return The right child.
      * @throws UnsupportedOperationException if this RedBlackTree is empty
      */
-    @NonNull RedBlackTree<K, V> right();
+    RedBlackTree<K, V> right();
 
     /**
      * Returns the size of this tree.
@@ -201,7 +200,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      * @param tree the given tree
      * @return true if equal
      */
-    default boolean equals(@NonNull RedBlackTree<K, V> tree) {
+    default boolean equals(RedBlackTree<K, V> tree) {
         if (this == tree) {
             return true;
         }
@@ -256,7 +255,7 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      * See also <a href="http://n00tc0d3r.blogspot.de/2013/08/implement-iterator-for-binarytree-i-in.html">Implement Iterator for BinaryTree I (In-order)</a>.
      */
 
-    default @NonNull Iterator<Node<K, V>> iterator() {
+    default Iterator<Node<K, V>> iterator() {
         if (isEmpty()) {
             return VectorList.<Node<K, V>>of().iterator();
         } else {
@@ -359,25 +358,25 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
      * Returns the least {@code Node} in this tree greater than or equal to
      * the given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<K, V> ceiling(K e, @NonNull Comparator<? super K> comparator);
+    RedBlackTree<K, V> ceiling(K e, Comparator<? super K> comparator);
 
     /**
      * Returns the greatest {@code Node} in this tree less than or equal to
      * the given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<K, V> floor(K e, @NonNull Comparator<? super K> comparator);
+    RedBlackTree<K, V> floor(K e, Comparator<? super K> comparator);
 
     /**
      * Returns the least {@code Node} in this tree strictly greater than the
      * given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<K, V> higher(K e, @NonNull Comparator<? super K> comparator);
+    RedBlackTree<K, V> higher(K e, Comparator<? super K> comparator);
 
     /**
      * Returns the greatest {@code Node} in this tree strictly less than the
      * given element, or {@code Empty} if there is no such element.
      */
-    @NonNull RedBlackTree<K, V> lower(K e, @NonNull Comparator<? super K> comparator);
+    RedBlackTree<K, V> lower(K e, Comparator<? super K> comparator);
 
     /**
      * Returns this {@code RedBlackTree} if it is nonempty, otherwise return the alternative.
@@ -402,7 +401,8 @@ public interface RedBlackTree<K, V> extends Iterable<Node<K, V>> {
     /*
      * Returns the mapped value of this RedBlackTree or {@code null} if it is empty.
      */
-    @Nullable <E> E mapOrNull(@NonNull BiFunction<K, V, E> f);
+    @Nullable
+    <E> E mapOrNull(BiFunction<K, V, E> f);
 
 
 }

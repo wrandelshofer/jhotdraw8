@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.SequencedCollection;
 
@@ -52,11 +51,11 @@ public interface ByteSequencedCollection extends SequencedCollection<Byte> {
         return removeLastAsByte();
     }
 
-    default void addLastAllAsByte(byte @NonNull [] array) {
+    default void addLastAllAsByte(byte[] array) {
         addLastAllAsByte(array, 0, array.length);
     }
 
-    default void addLastAllAsByte(byte @NonNull [] array, int offset, int length) {
+    default void addLastAllAsByte(byte[] array, int offset, int length) {
         for (int i = offset, limit = offset + length; i < limit; i++) {
             addLastAsByte(array[i]);
         }

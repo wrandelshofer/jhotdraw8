@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
@@ -61,7 +60,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Serial
     private static final long serialVersionUID = 0L;
 
-    private transient @NonNull BitMappedTrie<E> root;
+    private transient BitMappedTrie<E> root;
 
     /**
      * Constructs a new empty list.
@@ -83,7 +82,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+    public ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlyListFacade<>(
                 this::size,
                 index -> get(root.length - 1 - index),
@@ -92,7 +91,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull List<E> reversed() {
+    public List<E> reversed() {
         return new ReversedListView<>(this, this::modCount);
     }
 
@@ -122,12 +121,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new ReadOnlyListFacade<>(() -> toIndex - fromIndex, i -> get(i - fromIndex));
     }
 
     @Override
-    public boolean addAll(int index, @NonNull Collection<? extends E> c) {
+    public boolean addAll(int index, Collection<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
         VectorList<E> immutable = toImmutable().addAll(index, c);
@@ -146,7 +145,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
      * @param c     the collection to be added to ths list
      * @return {@code true} if this list changed as a result of the call
      */
-    public boolean addAll(int index, @NonNull Iterable<? extends E> c) {
+    public boolean addAll(int index, Iterable<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
         VectorList<E> immutable = toImmutable().addAll(index, c);
@@ -164,12 +163,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
      * @param c the collection to be added to ths list
      * @return {@code true} if this list changed as a result of the call
      */
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
+    public boolean addAll(Iterable<? extends E> c) {
         return addAll(size(), c);
     }
 
     @Override
-    public boolean removeAll(@NonNull Collection<?> c) {
+    public boolean removeAll(Collection<?> c) {
         int oldSize = root.length;
         VectorList<E> immutable = toImmutable().removeAll(c);
         if (oldSize != immutable.size()) {
@@ -181,7 +180,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public boolean retainAll(@NonNull Collection<?> c) {
+    public boolean retainAll(Collection<?> c) {
         int oldSize = root.length;
         VectorList<E> immutable = toImmutable().retainAll(c);
         if (oldSize != immutable.size()) {
@@ -198,7 +197,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
      * @param c an iterable
      */
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableVectorList(@NonNull Iterable<? extends E> c) {
+    public MutableVectorList(Iterable<? extends E> c) {
         if (c instanceof MutableVectorList<?>) {
             c = ((MutableVectorList<? extends E>) c).toImmutable();
         }
@@ -211,13 +210,12 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         }
     }
 
-    @NonNull
     public VectorList<E> toImmutable() {
         return root.length == 0 ? VectorList.of() : new VectorList<>(root);
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new MutableVectorList.SerializationProxy<>(this);
     }
 
@@ -260,7 +258,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return root.spliterator(0, size(), Spliterator.ORDERED | Spliterator.SIZED | Spliterator.SUBSIZED);
     }
 
@@ -291,13 +289,13 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         @Serial
         private static final long serialVersionUID = 0L;
 
-        protected SerializationProxy(@NonNull List<E> target) {
+        protected SerializationProxy(List<E> target) {
             super(target);
         }
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return new MutableVectorList<>(deserializedElements);
         }
     }

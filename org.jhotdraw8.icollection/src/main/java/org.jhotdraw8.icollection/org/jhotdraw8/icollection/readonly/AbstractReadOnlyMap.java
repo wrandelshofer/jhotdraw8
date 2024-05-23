@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Abstract base class for {@link ReadOnlyMap}s.
@@ -29,7 +28,7 @@ public abstract class AbstractReadOnlyMap<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public final @NonNull String toString() {
+    public final String toString() {
         return ReadOnlyMap.mapToString(this);
     }
 }

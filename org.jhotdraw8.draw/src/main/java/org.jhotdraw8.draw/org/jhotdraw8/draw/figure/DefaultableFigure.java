@@ -6,11 +6,10 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssDefaulting;
 import org.jhotdraw8.draw.key.DefaultableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -22,11 +21,11 @@ public interface DefaultableFigure extends Figure {
      * @param key The property key
      * @return The styled value.
      */
-    default @Nullable <T> T getDefaultableStyled(@NonNull DefaultableStyleableMapAccessor<T> key) {
+    default @Nullable <T> T getDefaultableStyled(DefaultableStyleableMapAccessor<T> key) {
         return getDefaultableStyled(StyleOrigin.INLINE, key);
     }
 
-    default @Nullable <T> T getDefaultableStyled(@NonNull StyleOrigin origin, @NonNull DefaultableStyleableMapAccessor<T> key) {
+    default @Nullable <T> T getDefaultableStyled(StyleOrigin origin, DefaultableStyleableMapAccessor<T> key) {
         // FIXME REVERT does not work this way, must use getStyled(origin,key) for _starting a search at the specified origin_ value
         CssDefaultableValue<T> dv = Objects.requireNonNull(getStyled(origin == StyleOrigin.INLINE ? null : origin, key));
         if (dv.getDefaulting() == null) {
@@ -71,7 +70,7 @@ public interface DefaultableFigure extends Figure {
      * @param key The property key
      * @return The styled value.
      */
-    default @NonNull <T> T getDefaultableStyledNonNull(@NonNull DefaultableStyleableMapAccessor<T> key) {
+    default <T> T getDefaultableStyledNonNull(DefaultableStyleableMapAccessor<T> key) {
         return Objects.requireNonNull(getDefaultableStyled(key));
     }
 }

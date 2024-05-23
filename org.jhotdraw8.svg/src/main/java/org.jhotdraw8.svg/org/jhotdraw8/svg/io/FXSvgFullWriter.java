@@ -5,10 +5,9 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jspecify.annotations.Nullable;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
@@ -28,9 +27,9 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class FXSvgFullWriter extends AbstractFXSvgWriter {
-    private static final @NonNull String SVG_VERSION = "1.1";
-    private static final @NonNull String SVG_BASE_PROFILE = "full";
-    public static final @NonNull String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
+    private static final String SVG_VERSION = "1.1";
+    private static final String SVG_BASE_PROFILE = "full";
+    public static final String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
@@ -42,7 +41,7 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected void writeDocumentElementAttributes(@NonNull XMLStreamWriter
+    protected void writeDocumentElementAttributes(XMLStreamWriter
                                                           w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException {
         w.writeAttribute("version", getSvgVersion());
         w.writeAttribute("baseProfile", getSvgBaseProfile());
@@ -63,7 +62,7 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected void writeClipAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    protected void writeClipAttributes(XMLStreamWriter w, Node node) throws XMLStreamException {
         Node clip = node.getClip();
         if (clip == null) {
             return;
@@ -78,7 +77,7 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected void writeClipPathDefs(@NonNull XMLStreamWriter w, @NonNull Node node) throws IOException, XMLStreamException {
+    protected void writeClipPathDefs(XMLStreamWriter w, Node node) throws IOException, XMLStreamException {
         // FIXME clip nodes can in turn have clips - we need to support recursive calls to defsNode!!!
         Node clip = node.getClip();
         if (clip == null) {
@@ -94,7 +93,7 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
+    protected void writeCompositingAttributes(XMLStreamWriter w, Node
             node) throws XMLStreamException {
         if (node.getOpacity() != 1.0) {
             w.writeAttribute("opacity", nb.toString(node.getOpacity()));
@@ -115,7 +114,7 @@ public class FXSvgFullWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected List<String> getAdditionalNodeClasses(@NonNull Node node) {
+    protected List<String> getAdditionalNodeClasses(Node node) {
         String typeSelector = (String) node.getProperties().get(StyleableFigure.TYPE_SELECTOR_NODE_KEY);
         if (typeSelector != null) {
             return Collections.singletonList(typeSelector);

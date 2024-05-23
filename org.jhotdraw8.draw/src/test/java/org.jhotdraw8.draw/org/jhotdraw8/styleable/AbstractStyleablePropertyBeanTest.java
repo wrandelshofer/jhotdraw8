@@ -5,7 +5,6 @@
 package org.jhotdraw8.styleable;
 
 import javafx.beans.property.ReadOnlyProperty;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
@@ -54,38 +53,38 @@ public class AbstractStyleablePropertyBeanTest {
     public static class AbstractStyleablePropertyBeanImpl extends AbstractStyleablePropertyBean {
 
         @Override
-        public @NonNull String getTypeSelector() {
+        public String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull String getId() {
+        public String getId() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull ReadOnlyProperty<String> idProperty() {
+        public ReadOnlyProperty<String> idProperty() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull ReadOnlySet<String> getStyleClasses() {
+        public ReadOnlySet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull String getStyle() {
+        public String getStyle() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
 
         @Override
-        public @NonNull StyleableBean getStyleableParent() {
+        public StyleableBean getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull ReadOnlySet<String> getPseudoClassStates() {
+        public ReadOnlySet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

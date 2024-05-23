@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -24,14 +23,14 @@ import java.util.Set;
 
 public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.distributeHorizontally";
+    public static final String ID = "edit.distributeHorizontally";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public DistributeHorizontallyAction(@NonNull DrawingEditor editor) {
+    public DistributeHorizontallyAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -39,7 +38,7 @@ public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
         final Set<Figure> figures = drawingView.getSelectedFigures();
         distributeHorizontally(drawingView, figures);
     }
@@ -50,7 +49,7 @@ public class DistributeHorizontallyAction extends AbstractDrawingViewAction {
      * @param view    the drawing view
      * @param figures the figures to be distributed horizontally
      */
-    private void distributeHorizontally(@NonNull DrawingView view, @NonNull Set<Figure> figures) {
+    private void distributeHorizontally(DrawingView view, Set<Figure> figures) {
         if (figures.size() < 3) {
             return;
         }

@@ -5,11 +5,10 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterators;
 import java.util.function.BiFunction;
@@ -68,11 +67,11 @@ public interface SequencedData {
     @SuppressWarnings("unchecked")
     static <K extends SequencedData> OrderedPair<BitmapIndexedNode<K>, VectorList<Object>> vecRenumber(
             @Nullable IdentityObject owner, int size, int sizeWithTombstones,
-            @NonNull BitmapIndexedNode<K> root,
-            @NonNull BitMappedTrie<Object> vector,
-            @NonNull ToIntFunction<K> hashFunction,
-            @NonNull BiPredicate<K, K> equalsFunction,
-            @NonNull BiFunction<K, Integer, K> factoryFunction) {
+            BitmapIndexedNode<K> root,
+            BitMappedTrie<Object> vector,
+            ToIntFunction<K> hashFunction,
+            BiPredicate<K, K> equalsFunction,
+            BiFunction<K, Integer, K> factoryFunction) {
         if (size == 0) {
             new OrderedPair<>(root, vector);
         }

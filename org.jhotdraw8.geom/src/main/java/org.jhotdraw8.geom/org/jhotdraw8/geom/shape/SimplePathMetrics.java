@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.geom.shape;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.AbstractShape;
 import org.jhotdraw8.geom.AwtShapes;
@@ -18,6 +16,7 @@ import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -57,14 +56,14 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     private static final byte SEG_QUADTO = (byte) PathIterator.SEG_QUADTO;
     private static final byte SEG_CUBICTO = (byte) PathIterator.SEG_CUBICTO;
     private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
-    private final byte @NonNull [] commands;
-    private final int @NonNull [] offsets;
-    private final double @NonNull [] coords;
-    private final double @NonNull [] lengths;
+    private final byte[] commands;
+    private final int[] offsets;
+    private final double[] coords;
+    private final double[] lengths;
     private final int windingRule;
     private final double epsilon;
 
-    SimplePathMetrics(byte @NonNull [] commands, int @NonNull [] offsets, double @NonNull [] coords, double @NonNull [] lengths, int windingRule, double epsilon) {
+    SimplePathMetrics(byte[] commands, int[] offsets, double[] coords, double[] lengths, int windingRule, double epsilon) {
         this.commands = commands;
         this.offsets = offsets;
         this.coords = coords;
@@ -74,15 +73,15 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         this.epsilon = epsilon;
     }
 
-    public SimplePathMetrics(@NonNull Shape shape) {
+    public SimplePathMetrics(Shape shape) {
         this(shape.getPathIterator(null), 0.125);
     }
 
-    public SimplePathMetrics(@NonNull PathIterator pathIterator) {
+    public SimplePathMetrics(PathIterator pathIterator) {
         this(pathIterator, 0.125);
     }
 
-    public SimplePathMetrics(@NonNull PathIterator pathIterator, double epsilon) {
+    public SimplePathMetrics(PathIterator pathIterator, double epsilon) {
         PathMetricsBuilder b = AwtShapes.buildPathIterator(new PathMetricsBuilder(), pathIterator);
         this.commands = b.getCommands().toByteArray();
         this.offsets = b.getOffsets().toIntArray();
@@ -98,7 +97,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @param s the arc length, the value will be clamped to [0,arcLength()]
      * @return point and tangent at s
      */
-    public @NonNull PointAndDerivative evalAtArcLength(double s) {
+    public PointAndDerivative evalAtArcLength(double s) {
         if (commands.length == 0) {
             return new PointAndDerivative(0, 0, 1, 0);
         }
@@ -144,15 +143,15 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
     }
 
     @Override
-    public @NonNull PathMetrics reverse() {
+    public PathMetrics reverse() {
         if (commands.length == 0) {
             return this;
         }
 
-        byte @NonNull [] rCommands = new byte[commands.length];
-        int @NonNull [] rOffsets = new int[offsets.length];
-        double @NonNull [] rCoords = new double[coords.length];
-        double @NonNull [] rLengths = new double[lengths.length];
+        byte[] rCommands = new byte[commands.length];
+        int[] rOffsets = new int[offsets.length];
+        double[] rCoords = new double[coords.length];
+        double[] rLengths = new double[lengths.length];
 
         // reverse coordinates
         for (int i = 0, n = coords.length; i < n; i += 2) {
@@ -263,7 +262,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @return true if this shape contains r
      */
     @Override
-    public boolean contains(@NonNull Rectangle2D r) {
+    public boolean contains(Rectangle2D r) {
         return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
@@ -276,7 +275,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * @return the path iterator
      */
     @Override
-    public @NonNull PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
+    public PathIterator getSubPathIteratorAtArcLength(double s0, double s1, @Nullable AffineTransform tx) {
         if (commands.length == 0) {
             return new EmptyPathIterator();
         }
@@ -315,11 +314,11 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      * object.
      */
     private static class FullPathIterator implements PathIterator {
-        private final @NonNull SimplePathMetrics m;
-        private final @NonNull AffineTransform tt;
+        private final SimplePathMetrics m;
+        private final AffineTransform tt;
         int current = 0;
 
-        public FullPathIterator(@NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
+        public FullPathIterator(SimplePathMetrics m, @Nullable AffineTransform tt) {
             this.m = m;
             this.tt = tt == null ? AffineTransform.getTranslateInstance(0, 0) : tt;
         }
@@ -376,8 +375,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
      */
     private static class SubPathIterator implements PathIterator {
         private final double s0, s1;
-        private final @NonNull SimplePathMetrics m;
-        private final @NonNull AffineTransform tt;
+        private final SimplePathMetrics m;
+        private final AffineTransform tt;
         int current = 0;
         /**
          * The index of the first command that ends inside the sub-path.
@@ -388,7 +387,7 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
          */
         int i1;
         final double[] splitCoords = new double[8];
-        private final double @NonNull [] segCoords = new double[6];
+        private final double[] segCoords = new double[6];
         private int segType;
 
         enum State {
@@ -401,10 +400,10 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         }
 
         private final double epsilon = 0.125;
-        private @NonNull State state;
+        private State state;
         final private boolean endsAtSegment;
 
-        public SubPathIterator(double s0, double s1, @NonNull SimplePathMetrics m, @Nullable AffineTransform tt) {
+        public SubPathIterator(double s0, double s1, SimplePathMetrics m, @Nullable AffineTransform tt) {
             double totalArcLength = m.arcLength();
             this.s0 = s0 = Math.max(0, s0);
             this.s1 = s1 = Math.min(totalArcLength, Math.max(this.s0, s1));

@@ -8,7 +8,6 @@ package org.jhotdraw8.fxbase.binding;
 import javafx.beans.InvalidationListener;
 import javafx.beans.binding.StringExpression;
 import javafx.beans.value.ChangeListener;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * ConstantStringExpression.
@@ -17,13 +16,13 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class ConstantStringExpression extends StringExpression {
 
-    private final @NonNull String value;
+    private final String value;
 
     private ConstantStringExpression(String value) {
         this.value = value;
     }
 
-    public static @NonNull ConstantStringExpression of(String value) {
+    public static ConstantStringExpression of(String value) {
         return new ConstantStringExpression(value);
     }
 

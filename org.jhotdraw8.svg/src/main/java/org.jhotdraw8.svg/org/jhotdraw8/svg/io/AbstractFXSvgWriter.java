@@ -45,8 +45,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
@@ -68,6 +66,7 @@ import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.jhotdraw8.xml.converter.DoubleXmlConverter;
 import org.jhotdraw8.xml.converter.FloatXmlConverter;
 import org.jhotdraw8.xml.converter.IntegerXmlConverter;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -105,19 +104,19 @@ import java.util.Objects;
 import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 
 public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
-    public static final @NonNull String SVG_MIME_TYPE = "image/svg+xml";
-    public static final @NonNull String SVG_NS = "http://www.w3.org/2000/svg";
-    protected static final @NonNull String XLINK_NS = "http://www.w3.org/1999/xlink";
-    protected static final @NonNull String XLINK_PREFIX = "xlink";
-    protected final @NonNull DoubleXmlConverter nb = new DoubleXmlConverter();
-    protected final @NonNull IntegerXmlConverter nbi = new IntegerXmlConverter();
-    protected final @NonNull FloatXmlConverter nbf = new FloatXmlConverter();
+    public static final String SVG_MIME_TYPE = "image/svg+xml";
+    public static final String SVG_NS = "http://www.w3.org/2000/svg";
+    protected static final String XLINK_NS = "http://www.w3.org/1999/xlink";
+    protected static final String XLINK_PREFIX = "xlink";
+    protected final DoubleXmlConverter nb = new DoubleXmlConverter();
+    protected final IntegerXmlConverter nbi = new IntegerXmlConverter();
+    protected final FloatXmlConverter nbf = new FloatXmlConverter();
     private final @Nullable Object imageUriKey;
-    private final @NonNull Converter<ImmutableList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
-    private final @NonNull Converter<Paint> paintConverter = new SvgPaintCssConverter(true);
+    private final Converter<ImmutableList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
+    private final Converter<Paint> paintConverter = new SvgPaintCssConverter(true);
     private final @Nullable Object skipKey;
-    private final @NonNull Converter<ImmutableList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
-    protected final @NonNull IdFactory idFactory = new SimpleIdFactory();
+    private final Converter<ImmutableList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
+    protected final IdFactory idFactory = new SimpleIdFactory();
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
@@ -145,12 +144,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
      *                       values
      * @return Returns the actual bounds of the paragraph.
      */
-    private Rectangle2D.@NonNull Double drawParagraph(@NonNull XMLStreamWriter w,
-                                                      FontRenderContext frc, @NonNull String
-                                                              paragraph, @NonNull AttributedCharacterIterator styledText,
+    private Rectangle2D.Double drawParagraph(XMLStreamWriter w,
+                                             FontRenderContext frc, String
+                                                     paragraph, AttributedCharacterIterator styledText,
                                                       float verticalPos, float maxVerticalPos, float leftMargin,
-                                                      float rightMargin, float @NonNull [] tabStops, int tabCount,
-                                                      @NonNull TextAlignment textAlignment, float lineSpacing) throws XMLStreamException {
+                                             float rightMargin, float[] tabStops, int tabCount,
+                                             TextAlignment textAlignment, float lineSpacing) throws XMLStreamException {
         // This method is based on the code sample given
         // in the class comment of java.awt.font.LineBreakMeasurer,
         // assume styledText is an AttributedCharacterIterator, and the number
@@ -297,11 +296,11 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
      * @param lineSpacing     the line spacing of the text
      * @throws XMLStreamException on write failure
      */
-    private void drawText(@NonNull XMLStreamWriter w, @Nullable String str,
-                          @NonNull Bounds textRect,
-                          @NonNull Font tfont, int tabSize, boolean isUnderlined,
+    private void drawText(XMLStreamWriter w, @Nullable String str,
+                          Bounds textRect,
+                          Font tfont, int tabSize, boolean isUnderlined,
                           boolean isStrikethrough,
-                          @NonNull TextAlignment textAlignment,
+                          TextAlignment textAlignment,
                           double lineSpacing) throws XMLStreamException {
         FontRenderContext frc = new FontRenderContext(new AffineTransform(), true, true);
         java.awt.Font font = new java.awt.Font(tfont.getName(), java.awt.Font.PLAIN, (int) tfont.getSize()).deriveFont((float) tfont.getSize());
@@ -344,14 +343,14 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    protected abstract List<String> getAdditionalNodeClasses(@NonNull Node node);
+    protected abstract List<String> getAdditionalNodeClasses(Node node);
 
     protected abstract String getSvgBaseProfile();
 
     protected abstract String getSvgVersion();
 
 
-    private void initIdFactoryRecursively(@NonNull Node node) {
+    private void initIdFactoryRecursively(Node node) {
         String id = node.getId();
         if (id != null && idFactory.getObject(id) == null) {
             idFactory.putIdAndObject(id, node);
@@ -422,7 +421,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         return false;
     }
 
-    private boolean shouldWriteNode(@NonNull Node node) {
+    private boolean shouldWriteNode(Node node) {
         if (skipKey != null && Objects.equals(Boolean.TRUE, node.getProperties().get(skipKey))) {
             return false;
         }
@@ -456,7 +455,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         return true;
     }
 
-    public Document toDocument(@NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public Document toDocument(Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setNamespaceAware(true);
@@ -475,7 +474,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    public void write(@NonNull OutputStream out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public void write(OutputStream out, Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
             writeDocument(w, drawingNode, size);
@@ -485,7 +484,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    public void write(@NonNull Writer out, @NonNull Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public void write(Writer out, Node drawingNode, @Nullable CssDimension2D size) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
             writeDocument(w, drawingNode, size);
@@ -495,7 +494,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeArcStartElement(@NonNull XMLStreamWriter w, @NonNull Arc node) throws XMLStreamException {
+    private void writeArcStartElement(XMLStreamWriter w, Arc node) throws XMLStreamException {
         w.writeStartElement("path");
 
         StringBuilder buf = new StringBuilder();
@@ -553,7 +552,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeAttribute("d", buf.toString());
     }
 
-    private void writeCircleStartElement(@NonNull XMLStreamWriter w, @NonNull Circle node) throws XMLStreamException {
+    private void writeCircleStartElement(XMLStreamWriter w, Circle node) throws XMLStreamException {
         w.writeStartElement("circle");
         if (node.getCenterX() != 0.0) {
             w.writeAttribute("cx", nb.toString(node.getCenterX()));
@@ -566,7 +565,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeClassAttribute(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    private void writeClassAttribute(XMLStreamWriter w, Node node) throws XMLStreamException {
         List<String> styleClass = new ArrayList<>(node.getStyleClass());
         styleClass.addAll(getAdditionalNodeClasses(node));
 
@@ -582,14 +581,14 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    protected abstract void writeClipAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException;
+    protected abstract void writeClipAttributes(XMLStreamWriter w, Node node) throws XMLStreamException;
 
     protected abstract void writeClipPathDefs(XMLStreamWriter w, Node node) throws XMLStreamException, IOException;
 
-    protected abstract void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
+    protected abstract void writeCompositingAttributes(XMLStreamWriter w, Node
             node) throws XMLStreamException;
 
-    private void writeCubicCurveStartElement(@NonNull XMLStreamWriter w, @NonNull CubicCurve node) throws XMLStreamException {
+    private void writeCubicCurveStartElement(XMLStreamWriter w, CubicCurve node) throws XMLStreamException {
         w.writeStartElement("path");
         final StringBuilder buf = new StringBuilder();
         buf.append('M')
@@ -638,7 +637,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
     }
 
-    protected void writeDescElement(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    protected void writeDescElement(XMLStreamWriter w, Node node) throws XMLStreamException {
         Object descObj = node.getProperties().get(DESC_PROPERTY_NAME);
         if ((descObj instanceof String)) {
             String desc = ((String) descObj).trim();
@@ -669,10 +668,10 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeEndDocument();
     }
 
-    protected abstract void writeDocumentElementAttributes(@NonNull XMLStreamWriter
+    protected abstract void writeDocumentElementAttributes(XMLStreamWriter
                                                                    w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException;
 
-    private void writeEllipseStartElement(@NonNull XMLStreamWriter w, @NonNull Ellipse node) throws XMLStreamException {
+    private void writeEllipseStartElement(XMLStreamWriter w, Ellipse node) throws XMLStreamException {
         w.writeStartElement("ellipse");
         if (node.getCenterX() != 0.0) {
             w.writeAttribute("cx", nb.toString(node.getCenterX()));
@@ -688,7 +687,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeFillAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException {
+    private void writeFillAttributes(XMLStreamWriter w, Shape shape) throws XMLStreamException {
         Paint fill = shape.getFill();
         String id = idFactory.getId(fill);
         double fillOpacity = shape.getOpacity();
@@ -725,20 +724,20 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    protected void writeGroupStartElement(@NonNull XMLStreamWriter w, @NonNull Group
+    protected void writeGroupStartElement(XMLStreamWriter w, Group
             node) throws XMLStreamException {
         w.writeStartElement("g");
         writeClipAttributes(w, node);
     }
 
-    protected void writeIdAttribute(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    protected void writeIdAttribute(XMLStreamWriter w, Node node) throws XMLStreamException {
         String id = node.getId();
         if (id != null && !id.isEmpty()) {
             w.writeAttribute("id", id);
         }
     }
 
-    private void writeImageViewStartElement(@NonNull XMLStreamWriter w, @NonNull ImageView
+    private void writeImageViewStartElement(XMLStreamWriter w, ImageView
             node) throws IOException, XMLStreamException {
         w.writeStartElement("image");
 
@@ -771,7 +770,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeLineStartElement(@NonNull XMLStreamWriter w, @NonNull Line
+    private void writeLineStartElement(XMLStreamWriter w, Line
             node) throws XMLStreamException {
         w.writeStartElement("line");
         if (node.getStartX() != 0.0) {
@@ -789,7 +788,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
     }
 
-    private void writeLinearGradientDef(@NonNull XMLStreamWriter w, LinearGradient g) throws IOException, XMLStreamException {
+    private void writeLinearGradientDef(XMLStreamWriter w, LinearGradient g) throws IOException, XMLStreamException {
         String id = idFactory.createId(g, "linearGradient");
         w.writeStartElement("linearGradient");
 
@@ -834,12 +833,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeEndElement();
     }
 
-    private void writeMetadataChildElements(@NonNull XMLStreamWriter w, Node node) throws XMLStreamException {
+    private void writeMetadataChildElements(XMLStreamWriter w, Node node) throws XMLStreamException {
         writeTitleElement(w, node);
         writeDescElement(w, node);
     }
 
-    protected void writeNodeRecursively(@NonNull XMLStreamWriter w, @NonNull Node node, int depth) throws IOException, XMLStreamException {
+    protected void writeNodeRecursively(XMLStreamWriter w, Node node, int depth) throws IOException, XMLStreamException {
         if (!shouldWriteNode(node)) {
             return;
         }
@@ -881,7 +880,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writePaintDefs(@NonNull XMLStreamWriter w, Paint paint) throws IOException, XMLStreamException {
+    private void writePaintDefs(XMLStreamWriter w, Paint paint) throws IOException, XMLStreamException {
         if (idFactory.getId(paint) == null) {
             if (paint instanceof LinearGradient g) {
                 writeLinearGradientDef(w, g);
@@ -891,7 +890,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    protected void writePathStartElement(@NonNull XMLStreamWriter w, @NonNull Path node) throws XMLStreamException {
+    protected void writePathStartElement(XMLStreamWriter w, Path node) throws XMLStreamException {
         w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
@@ -902,7 +901,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeAttribute("d", d);
     }
 
-    protected void writeStrokedShapeElement(@NonNull XMLStreamWriter w, @NonNull Shape fxShape) throws XMLStreamException, IOException {
+    protected void writeStrokedShapeElement(XMLStreamWriter w, Shape fxShape) throws XMLStreamException, IOException {
         w.writeStartElement("path");
 
         java.awt.Shape shape = FXShapes.fxShapeToAwtShape(fxShape);
@@ -952,7 +951,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeEndElement();
     }
 
-    private void writePolygonStartElement(@NonNull XMLStreamWriter w, @NonNull Polygon node) throws XMLStreamException {
+    private void writePolygonStartElement(XMLStreamWriter w, Polygon node) throws XMLStreamException {
         w.writeStartElement("polygon");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
@@ -968,7 +967,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
 
     }
 
-    private void writePolylineStartElement(@NonNull XMLStreamWriter w, @NonNull Polyline node) throws XMLStreamException {
+    private void writePolylineStartElement(XMLStreamWriter w, Polyline node) throws XMLStreamException {
         w.writeStartElement("polyline");
         StringBuilder buf = new StringBuilder();
         List<Double> ps = node.getPoints();
@@ -983,7 +982,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeAttribute("points", buf.toString());
     }
 
-    private void writeQuadCurveStartElement(@NonNull XMLStreamWriter w, @NonNull QuadCurve
+    private void writeQuadCurveStartElement(XMLStreamWriter w, QuadCurve
             node) throws XMLStreamException {
         w.writeStartElement("path");
         final StringBuilder buf = new StringBuilder();
@@ -1003,7 +1002,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeAttribute("d", buf.substring(0));
     }
 
-    private void writeRadialGradientDef(@NonNull XMLStreamWriter w, RadialGradient g) throws IOException, XMLStreamException {
+    private void writeRadialGradientDef(XMLStreamWriter w, RadialGradient g) throws IOException, XMLStreamException {
         String id = idFactory.createId(g, "radialGradient");
         w.writeStartElement("radialGradient");
         w.writeAttribute("id", id);
@@ -1049,7 +1048,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeEndElement();
     }
 
-    private void writeRectangleStartElement(@NonNull XMLStreamWriter w, @NonNull Rectangle node) throws XMLStreamException {
+    private void writeRectangleStartElement(XMLStreamWriter w, Rectangle node) throws XMLStreamException {
         if (!node.getStrokeDashArray().isEmpty()) {
             // If the rectangle has a non-empty stroke dasharray, then
             // we must render it as an SVG path, because SVG uses a different
@@ -1079,11 +1078,11 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeRegionStartElement(@NonNull XMLStreamWriter w, @NonNull Region region) throws XMLStreamException {
+    private void writeRegionStartElement(XMLStreamWriter w, Region region) throws XMLStreamException {
         w.writeStartElement("g");
     }
 
-    private void writeRegionChildElements(@NonNull XMLStreamWriter w, @NonNull Region region) throws IOException, XMLStreamException {
+    private void writeRegionChildElements(XMLStreamWriter w, Region region) throws IOException, XMLStreamException {
 
         double x = region.getLayoutX();
         double y = region.getLayoutY();
@@ -1168,7 +1167,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeSVGPathStartElement(@NonNull XMLStreamWriter w, @NonNull SVGPath node) throws XMLStreamException {
+    private void writeSVGPathStartElement(XMLStreamWriter w, SVGPath node) throws XMLStreamException {
         w.writeStartElement("path");
         w.writeAttribute("d", node.getContent());
         switch (node.getFillRule()) {
@@ -1181,7 +1180,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeShapeChildElements(@NonNull XMLStreamWriter w, Shape node) throws XMLStreamException {
+    private void writeShapeChildElements(XMLStreamWriter w, Shape node) throws XMLStreamException {
         if (node instanceof Text) {
             if (!isConvertTextToPath()) {
                 writeTextChildElements(w, (Text) node);
@@ -1189,7 +1188,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeShapeStartElement(@NonNull XMLStreamWriter w, Shape node) throws IOException, XMLStreamException {
+    private void writeShapeStartElement(XMLStreamWriter w, Shape node) throws IOException, XMLStreamException {
         switch (node) {
             case Arc arc -> writeArcStartElement(w, arc);
             case Circle circle -> writeCircleStartElement(w, circle);
@@ -1207,7 +1206,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException {
+    private void writeStrokeAttributes(XMLStreamWriter w, Shape shape) throws XMLStreamException {
         Paint stroke = shape.getStroke();
         if (stroke == null) {
             return;
@@ -1267,7 +1266,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }*/
     }
 
-    private void writeStrokedShapeAttributes(@NonNull XMLStreamWriter w, @NonNull Shape shape) throws XMLStreamException {
+    private void writeStrokedShapeAttributes(XMLStreamWriter w, Shape shape) throws XMLStreamException {
         Paint stroke = shape.getStroke();
         if (stroke == null) {
             return;
@@ -1287,7 +1286,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeBorderStrokeAttributes(@NonNull XMLStreamWriter w, @NonNull BorderStroke shape) throws XMLStreamException {
+    private void writeBorderStrokeAttributes(XMLStreamWriter w, BorderStroke shape) throws XMLStreamException {
         if (shape.getTopStroke() != null) {
             w.writeAttribute("stroke", paintConverter.toString(shape.getTopStroke()));
         }
@@ -1330,13 +1329,13 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }*/
     }
 
-    protected void writeStyleAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    protected void writeStyleAttributes(XMLStreamWriter w, Node node) throws XMLStreamException {
         writeIdAttribute(w, node);
         writeClassAttribute(w, node);
         writeVisibleAttribute(w, node);
     }
 
-    private void writeTextAttributes(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
+    private void writeTextAttributes(XMLStreamWriter w, Text node) throws XMLStreamException {
         Font ft = node.getFont();
         w.writeAttribute("font-family", (ft.getFamily().equals(ft.getName())) ? "'" + ft.getName() + "'" : "'" + ft.getName() + "', '" + ft.getFamily() + "'");
         w.writeAttribute("font-size", nb.toString(ft.getSize()));
@@ -1377,7 +1376,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeTextChildElements(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
+    private void writeTextChildElements(XMLStreamWriter w, Text node) throws XMLStreamException {
         double lineSpacing = node.getLineSpacing();//+node.getFont().getSize()*0.15625;
         Bounds textRect = node.getLayoutBounds();
         if (hasNoWrapping(node)) {
@@ -1391,12 +1390,12 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private boolean hasNoWrapping(@NonNull Text node) {
+    private boolean hasNoWrapping(Text node) {
         String text = node.getText();
         return node.getWrappingWidth() <= 0 && text == null || text.indexOf('\n') < 0;
     }
 
-    private void writeTextStartElement(@NonNull XMLStreamWriter w, @NonNull Text node) throws XMLStreamException {
+    private void writeTextStartElement(XMLStreamWriter w, Text node) throws XMLStreamException {
         if (isConvertTextToPath()) {
             w.writeStartElement("path");
             w.writeAttribute("d",
@@ -1407,7 +1406,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    protected void writeTitleElement(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    protected void writeTitleElement(XMLStreamWriter w, Node node) throws XMLStreamException {
         Object titleObj = node.getProperties().get(TITLE_PROPERTY_NAME);
         if ((titleObj instanceof String)) {
             String title = ((String) titleObj).trim();
@@ -1419,7 +1418,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    private void writeTransformAttributes(XMLStreamWriter w, Node node) throws XMLStreamException {
 
         // The transforms are applied before translateX, translateY, scaleX,
         // scaleY and rotate transforms.
@@ -1438,7 +1437,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         writeTransformAttributes(w, txs);
     }
 
-    private void writeTransformAttributes(@NonNull XMLStreamWriter w, @NonNull List<Transform> txs) throws XMLStreamException {
+    private void writeTransformAttributes(XMLStreamWriter w, List<Transform> txs) throws XMLStreamException {
 
         if (!txs.isEmpty()) {
             String value = tx.toString(VectorList.copyOf(txs));
@@ -1448,7 +1447,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeVisibleAttribute(@NonNull XMLStreamWriter w, @NonNull Node node) throws XMLStreamException {
+    private void writeVisibleAttribute(XMLStreamWriter w, Node node) throws XMLStreamException {
         if (!node.isVisible()) {
             //w.writeAttribute("visibility", "hidden");
             w.writeAttribute("display", "none");

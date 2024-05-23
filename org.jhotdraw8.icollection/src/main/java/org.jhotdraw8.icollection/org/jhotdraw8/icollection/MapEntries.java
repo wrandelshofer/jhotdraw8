@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractMap;
 import java.util.AbstractMap.SimpleImmutableEntry;
@@ -34,7 +33,7 @@ public class MapEntries {
      *
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of() {
+    public static <K, V> List<Map.Entry<K, V>> of() {
         return new ArrayList<>();
     }
 
@@ -49,7 +48,7 @@ public class MapEntries {
      * @param v1  value 1
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1) {
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         return l;
@@ -69,7 +68,7 @@ public class MapEntries {
      * @param v2  value 2
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2) {
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -91,7 +90,7 @@ public class MapEntries {
      * @param v3  value 3
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3) {
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -117,7 +116,7 @@ public class MapEntries {
      * @param v4  value 4
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -145,7 +144,7 @@ public class MapEntries {
      * @param v5  value 5
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
         l.add(new SimpleImmutableEntry<>(k2, v2));
@@ -176,7 +175,7 @@ public class MapEntries {
      * @param v6  value 6
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
                                                            K k6, V v6) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
@@ -211,7 +210,7 @@ public class MapEntries {
      * @param v7  value 7
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
                                                            K k6, V v6, K k7, V v7) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
@@ -249,7 +248,7 @@ public class MapEntries {
      * @param v8  value 8
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
                                                            K k6, V v6, K k7, V v7, K k8, V v8) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
@@ -290,7 +289,7 @@ public class MapEntries {
      * @param v9  value 9
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
                                                            K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
@@ -334,7 +333,7 @@ public class MapEntries {
      * @param <V> the value type
      * @return a list containing the entries
      */
-    public static @NonNull <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
+    public static <K, V> List<Map.Entry<K, V>> of(K k1, V v1, K k2, V v2, K k3, V v3, K k4, V v4, K k5, V v5,
                                                            K k6, V v6, K k7, V v7, K k8, V v8, K k9, V v9, K k10, V v10) {
         ArrayList<Map.Entry<K, V>> l = new ArrayList<>();
         l.add(new SimpleImmutableEntry<>(k1, v1));
@@ -362,7 +361,7 @@ public class MapEntries {
      */
     @SafeVarargs
     @SuppressWarnings({"varargs", "unchecked"})
-    public static <K, V> @NonNull List<Map.Entry<K, V>> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
+    public static <K, V> List<Map.Entry<K, V>> ofEntries(Map.Entry<? extends K, ? extends V>... entries) {
         return (List<Map.Entry<K, V>>) (List<?>) Arrays.asList(entries);
     }
 
@@ -374,7 +373,7 @@ public class MapEntries {
      * @param <V> the value type
      * @return a new linked hash map
      */
-    public static <K, V> LinkedHashMap<K, V> linkedHashMap(@NonNull List<? extends Map.Entry<? extends K, ? extends V>> l) {
+    public static <K, V> LinkedHashMap<K, V> linkedHashMap(List<? extends Map.Entry<? extends K, ? extends V>> l) {
         return map(LinkedHashMap::new, l);
     }
 
@@ -386,7 +385,7 @@ public class MapEntries {
      * @param <V> the value type
      * @return a new linked hash map
      */
-    public static <K, V, M extends Map<K, V>> M map(@NonNull Supplier<M> factory, @NonNull List<? extends Map.Entry<? extends K, ? extends V>> l) {
+    public static <K, V, M extends Map<K, V>> M map(Supplier<M> factory, List<? extends Map.Entry<? extends K, ? extends V>> l) {
         M m = factory.get();
         for (Map.Entry<? extends K, ? extends V> entry : l) {
             m.put(entry.getKey(), entry.getValue());
@@ -405,7 +404,7 @@ public class MapEntries {
      * @param <V> the value type
      * @return a new map entry
      */
-    public static <K, V> Map.@NonNull Entry<K, V> entry(K k, V v) {
+    public static <K, V> Map.Entry<K, V> entry(K k, V v) {
         return new AbstractMap.SimpleEntry<>(k, v);
     }
 }

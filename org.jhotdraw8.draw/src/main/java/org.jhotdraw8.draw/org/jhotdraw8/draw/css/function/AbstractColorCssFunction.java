@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.function.AbstractCssFunction;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.parser.CssToken;
@@ -14,6 +12,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -27,13 +26,13 @@ import java.util.List;
  * @param <T> the element type of the DOM
  */
 public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T> {
-    protected final @NonNull ColorCssConverter converter = new ColorCssConverter();
+    protected final ColorCssConverter converter = new ColorCssConverter();
 
     public AbstractColorCssFunction(String name) {
         super(name);
     }
 
-    protected @Nullable CssColor parseColorValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssColor parseColorValue(T element, CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssColor color = null;
         switch (tt.next()) {
         case CssTokenType.TT_FUNCTION:
@@ -54,7 +53,7 @@ public abstract class AbstractColorCssFunction<T> extends AbstractCssFunction<T>
         return color;
     }
 
-    protected @Nullable CssColor parseResolvedColorValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssColor parseResolvedColorValue(T element, CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         return converter.parse(tt, null);
     }
 

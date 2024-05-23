@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.GrowableIntSet8Bit;
 import org.jhotdraw8.collection.primitive.LongArrayDeque;
@@ -77,14 +76,14 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
      * @return
      */
     @Override
-    public boolean tryToReach(@NonNull Iterable<Integer> startVertices,
-                              @NonNull IntPredicate goalPredicate,
-                              @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+    public boolean tryToReach(Iterable<Integer> startVertices,
+                              IntPredicate goalPredicate,
+                              Function<Integer, Spliterator.OfInt> nextVerticesFunction,
                               int maxDepth,
-                              @NonNull C zero,
-                              @NonNull C costLimit,
-                              @NonNull BiFunction<Integer, Integer, C> costFunction,
-                              @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToIntSet visited) {
+                              C zero,
+                              C costLimit,
+                              BiFunction<Integer, Integer, C> costFunction,
+                              BiFunction<C, C, C> sumFunction, AddToIntSet visited) {
         AlgoArguments.checkZero(zero);
         return tryToReach(startVertices, goalPredicate, nextVerticesFunction,
                 new GrowableIntSet8Bit()::addAsInt,
@@ -104,11 +103,11 @@ public class AnyIndexedVertexReachabilityAlgo<C extends Number & Comparable<C>> 
      * @param maxDepth      the maximal depth (inclusive) of the search.
      * @return true on success, false on failure
      */
-    public boolean tryToReach(@NonNull Iterable<Integer> startVertices,
-                              @NonNull IntPredicate goalPredicate,
-                              @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-                              @NonNull AddToIntSet visited,
-                              @NonNull Integer maxDepth) {
+    public boolean tryToReach(Iterable<Integer> startVertices,
+                              IntPredicate goalPredicate,
+                              Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+                              AddToIntSet visited,
+                              Integer maxDepth) {
         AlgoArguments.checkMaxDepth(maxDepth);
 
         LongArrayDeque queue = new LongArrayDeque(32);

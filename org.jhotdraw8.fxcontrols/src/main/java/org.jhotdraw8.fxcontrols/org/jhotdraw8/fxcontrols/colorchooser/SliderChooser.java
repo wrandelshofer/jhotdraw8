@@ -15,7 +15,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
@@ -40,13 +39,13 @@ import java.util.ResourceBundle;
  */
 public class SliderChooser extends VBox {
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
+    private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
 
     public ColorChooserPaneModel getModel() {
         return model.get();
     }
 
-    public @NonNull ObjectProperty<ColorChooserPaneModel> modelProperty() {
+    public ObjectProperty<ColorChooserPaneModel> modelProperty() {
         return model;
     }
 

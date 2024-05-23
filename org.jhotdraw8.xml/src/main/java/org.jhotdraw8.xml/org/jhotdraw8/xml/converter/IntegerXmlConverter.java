@@ -1,10 +1,9 @@
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -33,7 +32,7 @@ public class IntegerXmlConverter implements Converter<Integer> {
 
 
     @Override
-    public @Nullable Integer fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Integer fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
             if (in.isEmpty() && nullable) {

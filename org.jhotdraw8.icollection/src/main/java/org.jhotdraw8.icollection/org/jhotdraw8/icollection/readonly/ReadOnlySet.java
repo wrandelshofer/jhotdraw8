@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.SetFacade;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -31,7 +30,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * @return the sum of the hash codes of the elements
      * @see Set#hashCode()
      */
-    static <E> int iteratorToHashCode(@NonNull Iterator<E> iterator) {
+    static <E> int iteratorToHashCode(Iterator<E> iterator) {
         int h = 0;
         while (iterator.hasNext()) {
             E e = iterator.next();
@@ -52,7 +51,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      * @param <E> the element type
      * @return {@code true} if the object is equal to the set
      */
-    static <E> boolean setEquals(@NonNull ReadOnlySet<E> set, @Nullable Object o) {
+    static <E> boolean setEquals(ReadOnlySet<E> set, @Nullable Object o) {
         if (o == set) {
             return true;
         }
@@ -70,7 +69,7 @@ public interface ReadOnlySet<E> extends ReadOnlyCollection<E> {
      *
      * @return the wrapped set
      */
-    default @NonNull Set<E> asSet() {
+    default Set<E> asSet() {
         return new SetFacade<>(this);
     }
 

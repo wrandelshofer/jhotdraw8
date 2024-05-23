@@ -4,14 +4,13 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.io.CharBufferReader;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -28,7 +27,7 @@ public class StringOrIdentCssConverter implements Converter<String> {
     }
 
     @Override
-    public @Nullable String fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable String fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         StreamCssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf), null);
         try {
             if (tt.next() != CssTokenType.TT_STRING && tt.current() != CssTokenType.TT_IDENT) {
@@ -43,7 +42,7 @@ public class StringOrIdentCssConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable String value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable String value) throws IOException {
         if (value == null) {
             out.append("none");
             return;

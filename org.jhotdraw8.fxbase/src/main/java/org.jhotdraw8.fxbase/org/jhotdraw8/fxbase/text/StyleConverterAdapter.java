@@ -7,9 +7,8 @@ package org.jhotdraw8.fxbase.text;
 import javafx.css.ParsedValue;
 import javafx.css.StyleConverter;
 import javafx.scene.text.Font;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jspecify.annotations.Nullable;
 
 import java.text.ParseException;
 
@@ -22,14 +21,14 @@ import java.text.ParseException;
  */
 public class StyleConverterAdapter<T> extends StyleConverter<String, T> {
 
-    private final @NonNull Converter<T> converter;
+    private final Converter<T> converter;
 
     public StyleConverterAdapter(Converter<T> converter) {
         this.converter = converter;
     }
 
     @Override
-    public @Nullable T convert(@NonNull ParsedValue<String, T> value, Font font) {
+    public @Nullable T convert(ParsedValue<String, T> value, Font font) {
         try {
             return converter.fromString(value.getValue());
         } catch (ParseException ex) {

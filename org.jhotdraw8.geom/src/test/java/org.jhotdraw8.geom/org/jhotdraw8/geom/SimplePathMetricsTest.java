@@ -1,6 +1,5 @@
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.shape.PathMetrics;
 import org.jhotdraw8.geom.shape.PathMetricsBuilder;
 import org.jhotdraw8.geom.shape.SimplePathMetrics;
@@ -15,7 +14,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class SimplePathMetricsTest {
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsShouldMeasureArcLength() {
+    public List<DynamicTest> dynamicTestsShouldMeasureArcLength() {
         return Arrays.asList(
                 dynamicTest("horizontal-line", () -> shouldMeasureArcLength("M0,0 1,0", 1.0)),
                 dynamicTest("degenerated-smoothQuadTo", () -> shouldMeasureArcLength("M36.16707689026681,195.13717962388827 Q65,75,100,75 320,75,250,75 T223.30609011754328,195.29469477095358", 475.24631578037315))
@@ -32,7 +31,7 @@ public class SimplePathMetricsTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsShouldReversePath() {
+    public List<DynamicTest> dynamicTestsShouldReversePath() {
         return Arrays.asList(
                 dynamicTest("moveTo-lineTo-moveTo", () -> shouldReversePath("M100,200 200,200 M300,200", "M300,200 M200,200 100,200")),
                 dynamicTest("moveTo-lineTo-moveTo-moveTo-lineTo", () -> shouldReversePath("M100,200 200,200 M300,200 M400,200 500,200", "M500,200 400,200 M300,200 M200,200 100,200")),
@@ -61,7 +60,7 @@ public class SimplePathMetricsTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsShouldBuildSubPathAtArcLength() {
+    public List<DynamicTest> dynamicTestsShouldBuildSubPathAtArcLength() {
         return Arrays.asList(
                 dynamicTest("moveTo-lineTo-lineTo-moveTo-cut-end", () -> shouldIterateSubPath("M100,200 200,200 300,200 M400,200", 0, 95, "M100,200 195,200")),
                 dynamicTest("moveTo-lineTo-moveTo-cut-end", () -> shouldIterateSubPath("M100,200 200,200 M300,200", 0, 95, "M100,200 195,200")),
@@ -98,7 +97,7 @@ public class SimplePathMetricsTest {
         );
     }
 
-    private void shouldIterateSubPath(@NonNull String input, double s0, double s1, @NonNull String expected) throws Exception {
+    private void shouldIterateSubPath(String input, double s0, double s1, String expected) throws Exception {
         var metrics = SvgPaths.buildSvgString(new PathMetricsBuilder(), input).build();
 
         // should getSubPathIteratorAtArcLength

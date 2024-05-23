@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLink;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -45,13 +44,13 @@ public class AnyVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implem
      */
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            int maxDepth, @NonNull C zero,
-            @NonNull C costLimit,
-            @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            Function<V, Iterable<V>> nextVerticesFunction,
+            int maxDepth, C zero,
+            C costLimit,
+            BiFunction<V, V, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
         AlgoArguments.checkZero(zero);
         return VertexBackLink.toVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,
@@ -71,10 +70,10 @@ public class AnyVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implem
      * @param maxDepth             the maximal depth
      * @return on success: a back link, otherwise: null
      */
-    protected @Nullable VertexBackLink<V> search(@NonNull Iterable<V> startVertices,
-                                                 @NonNull Predicate<V> goalPredicate,
-                                                 @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-                                                 @NonNull AddToSet<V> visited,
+    protected @Nullable VertexBackLink<V> search(Iterable<V> startVertices,
+                                                 Predicate<V> goalPredicate,
+                                                 Function<V, Iterable<V>> nextVerticesFunction,
+                                                 AddToSet<V> visited,
                                                  int maxDepth) {
         AlgoArguments.checkMaxDepth(maxDepth);
 

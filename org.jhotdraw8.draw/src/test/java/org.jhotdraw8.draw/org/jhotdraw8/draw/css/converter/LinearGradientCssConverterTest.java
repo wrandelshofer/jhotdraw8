@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssLinearGradient;
@@ -43,7 +42,7 @@ public class LinearGradientCssConverterTest {
     /**
      * Test of fromString method, of class CssLinearGradientConverter.
      */
-    public static void testFromString(CssLinearGradient expected, @NonNull String string) throws Exception {
+    public static void testFromString(CssLinearGradient expected, String string) throws Exception {
         CharBuffer in = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         LinearGradientCssConverter instance = new LinearGradientCssConverter(true);
@@ -53,7 +52,7 @@ public class LinearGradientCssConverterTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("1", () -> testFromString(new CssLinearGradient(0, 1, 2, 3, false, CycleMethod.NO_CYCLE, new CssStop(0.0, new CssColor("red", Color.RED))), "linear-gradient(from 0px 1px to 2px 3px, red 0)")),
@@ -68,7 +67,7 @@ public class LinearGradientCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsToString() {
+    public List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString(null, "none")),
                 dynamicTest("1", () -> testToString(new CssLinearGradient(0, 1, 2, 3, false, CycleMethod.NO_CYCLE, new CssStop(0.0, new CssColor("red", Color.RED))), "linear-gradient(from 0 1 to 2 3, red 0%)")),

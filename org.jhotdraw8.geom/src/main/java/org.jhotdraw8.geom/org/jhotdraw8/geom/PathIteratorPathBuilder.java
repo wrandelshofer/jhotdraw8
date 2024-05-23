@@ -4,15 +4,14 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.PathIterator;
 
 public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     private int numCommands;
     private int numCoords;
-    private byte @NonNull [] commands = new byte[10];
-    private double @NonNull [] coords = new double[60];
+    private byte[] commands = new byte[10];
+    private double[] coords = new double[60];
     private final int windingRule;
     private boolean needsMoveTo = true;
 
@@ -108,7 +107,7 @@ public class PathIteratorPathBuilder extends AbstractPathBuilder<PathIterator> {
     }
 
     @Override
-    public @NonNull PathIterator build() {
+    public PathIterator build() {
         return new MyPathIterator(windingRule, numCommands, numCoords, commands, coords);
     }
 

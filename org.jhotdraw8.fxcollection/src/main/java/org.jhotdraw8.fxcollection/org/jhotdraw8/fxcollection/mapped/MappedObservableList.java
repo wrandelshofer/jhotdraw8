@@ -7,8 +7,7 @@ package org.jhotdraw8.fxcollection.mapped;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.TransformationList;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +26,7 @@ public class MappedObservableList<A, B> extends TransformationList<A, B> {
     private final Function<A, B> toB;
     private final Function<B, A> toA;
 
-    public MappedObservableList(@NonNull ObservableList<B> source,
+    public MappedObservableList(ObservableList<B> source,
                                 Function<A, B> toB, Function<B, A> toA) {
         super(source);
         this.toB = toB;
@@ -136,7 +135,7 @@ public class MappedObservableList<A, B> extends TransformationList<A, B> {
         }
 
         @Override
-        public @NonNull List<A> getRemoved() {
+        public List<A> getRemoved() {
             @SuppressWarnings("unchecked")
             List<B> temp = (List<B>) change.getRemoved();
             ArrayList<A> list = new ArrayList<>(temp.size());

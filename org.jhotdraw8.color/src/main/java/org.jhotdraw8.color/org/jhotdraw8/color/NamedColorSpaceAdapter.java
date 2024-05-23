@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 import java.io.Serial;
@@ -31,10 +30,10 @@ public class NamedColorSpaceAdapter extends AbstractNamedColorSpace {
 
     @Serial
     private static final long serialVersionUID = 0L;
-    private final @NonNull ColorSpace cs;
-    private final @NonNull String name;
+    private final ColorSpace cs;
+    private final String name;
 
-    public NamedColorSpaceAdapter(@NonNull String name, @NonNull ColorSpace cs) {
+    public NamedColorSpaceAdapter(String name, ColorSpace cs) {
         super(cs.getType(), cs.getNumComponents());
         this.cs = cs;
         this.name = name;
@@ -51,7 +50,7 @@ public class NamedColorSpaceAdapter extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName(int component) {
+    public String getName(int component) {
         return cs.getName(component);
     }
 
@@ -66,12 +65,12 @@ public class NamedColorSpaceAdapter extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] lrgb, float @NonNull [] srgb) {
+    public float[] toRGB(float[] lrgb, float[] srgb) {
         float[] floats = cs.toRGB(lrgb);
         System.arraycopy(floats, 0, srgb, 0, floats.length);
         return srgb;
@@ -79,43 +78,43 @@ public class NamedColorSpaceAdapter extends AbstractNamedColorSpace {
 
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] srgb, float @NonNull [] lrgb) {
+    public float[] fromRGB(float[] srgb, float[] lrgb) {
         float[] floats = cs.fromRGB(srgb);
         System.arraycopy(floats, 0, lrgb, 0, floats.length);
         return lrgb;
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] lrgb, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] lrgb, float[] xyz) {
         float[] floats = cs.toCIEXYZ(lrgb);
         System.arraycopy(floats, 0, xyz, 0, floats.length);
         return xyz;
     }
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lrgb) {
+    public float[] fromCIEXYZ(float[] xyz, float[] lrgb) {
         float[] floats = cs.fromCIEXYZ(xyz);
         System.arraycopy(floats, 0, lrgb, 0, floats.length);
         return lrgb;
     }
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz) {
+    public float[] fromCIEXYZ(float[] xyz) {
         return cs.fromCIEXYZ(xyz);
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] lrgb) {
+    public float[] toRGB(float[] lrgb) {
         return cs.toRGB(lrgb);
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] srgb) {
+    public float[] fromRGB(float[] srgb) {
         return cs.fromRGB(srgb);
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] lrgb) {
+    public float[] toCIEXYZ(float[] lrgb) {
         return cs.toCIEXYZ(lrgb);
     }
 

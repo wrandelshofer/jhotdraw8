@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.List;
@@ -25,10 +24,10 @@ public class Stylesheet extends AbstractSyntaxTree {
 
 
     private final @Nullable URI uri;
-    private final @NonNull ImmutableList<Rule> rules;
-    private final @NonNull ImmutableList<StyleRule> styleRules;
+    private final ImmutableList<Rule> rules;
+    private final ImmutableList<StyleRule> styleRules;
 
-    public Stylesheet(@Nullable URI uri, @NonNull List<Rule> rules) {
+    public Stylesheet(@Nullable URI uri, List<Rule> rules) {
         super(new SourceLocator(0, 0, uri));
         this.uri = uri;
         this.rules = VectorList.copyOf(rules);
@@ -53,7 +52,7 @@ public class Stylesheet extends AbstractSyntaxTree {
      *
      * @return the rules
      */
-    public @NonNull ReadOnlyList<StyleRule> getStyleRules() {
+    public ReadOnlyList<StyleRule> getStyleRules() {
         return styleRules;
     }
 
@@ -62,12 +61,12 @@ public class Stylesheet extends AbstractSyntaxTree {
      *
      * @return the rules
      */
-    public @NonNull ReadOnlyList<Rule> getRules() {
+    public ReadOnlyList<Rule> getRules() {
         return rules;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder buf = new StringBuilder();
         boolean first = true;
         for (Rule r : rules) {

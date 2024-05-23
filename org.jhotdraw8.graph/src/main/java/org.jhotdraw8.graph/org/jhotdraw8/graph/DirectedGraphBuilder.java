@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,7 +28,7 @@ public class DirectedGraphBuilder {
      * @param graph a graph
      * @return a new graph with inverted arrows
      */
-    public @NonNull <V, A> MutableDirectedGraph<V, A> inverseOfDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public <V, A> MutableDirectedGraph<V, A> inverseOfDirectedGraph(DirectedGraph<V, A> graph) {
         final int arrowCount = graph.getArrowCount();
 
         SimpleMutableDirectedGraph<V, A> b = new SimpleMutableDirectedGraph<>(graph.getVertexCount(), arrowCount);
@@ -55,7 +54,7 @@ public class DirectedGraphBuilder {
      * @param vertexPredicate a predicate for the vertices
      * @return a subset of the directed graph
      */
-    public @NonNull <V, A> MutableDirectedGraph<V, A> subsetOfDirectedGraph(@NonNull DirectedGraph<V, A> graph, @NonNull Predicate<V> vertexPredicate) {
+    public <V, A> MutableDirectedGraph<V, A> subsetOfDirectedGraph(DirectedGraph<V, A> graph, Predicate<V> vertexPredicate) {
         SimpleMutableDirectedGraph<V, A> b = new SimpleMutableDirectedGraph<>();
         for (V v : graph.getVertices()) {
             if (vertexPredicate.test(v)) {
@@ -80,7 +79,7 @@ public class DirectedGraphBuilder {
      * @param <V>    the vertex type
      * @param <A>    the arrow type
      */
-    public <V, A> void addAll(final @NonNull DirectedGraph<V, A> source, final @NonNull MutableDirectedGraph<V, A> target) {
+    public <V, A> void addAll(final DirectedGraph<V, A> source, final MutableDirectedGraph<V, A> target) {
         for (V v : source.getVertices()) {
             target.addVertex(v);
         }
@@ -101,8 +100,8 @@ public class DirectedGraphBuilder {
      * @param <VV>   the vertex type of the source graph
      * @param <AA>   the arrow type of the target graph
      */
-    public <V, A, VV, AA> void addAll(final @NonNull DirectedGraph<VV, AA> source, final @NonNull MutableDirectedGraph<V, A> target,
-                                      @NonNull final Function<VV, V> vertexMapper, @NonNull final Function<AA, A> arrowMapper) {
+    public <V, A, VV, AA> void addAll(final DirectedGraph<VV, AA> source, final MutableDirectedGraph<V, A> target,
+                                      final Function<VV, V> vertexMapper, final Function<AA, A> arrowMapper) {
         LinkedHashMap<VV, V> vertexMap = new LinkedHashMap<>(2 * target.getVertexCount());
         for (final VV vv : source.getVertices()) {
             V v = vertexMapper.apply(vv);

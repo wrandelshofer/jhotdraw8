@@ -28,7 +28,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CardinalSplines;
 import org.jhotdraw8.geom.Points;
 
@@ -40,19 +39,19 @@ import java.util.ArrayList;
  * @author Werner Randelshofer
  */
 public class CardinalSplineExampleMain extends Application {
-    private final @NonNull Polyline polyline = new Polyline(
+    private final Polyline polyline = new Polyline(
             10, 100,
             60, 80,
             110, 20,
             160, 80,
             210, 100);
-    private final @NonNull Path path = new Path();
-    @NonNull StackPane canvas = new StackPane();
-    private final @NonNull DoubleProperty tension = new SimpleDoubleProperty(0.5);
-    private final @NonNull BooleanProperty closed = new SimpleBooleanProperty();
+    private final Path path = new Path();
+    StackPane canvas = new StackPane();
+    private final DoubleProperty tension = new SimpleDoubleProperty(0.5);
+    private final BooleanProperty closed = new SimpleBooleanProperty();
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         BorderPane borderPane = new BorderPane();
         HBox hbox = new HBox();
         Slider slider = new Slider();

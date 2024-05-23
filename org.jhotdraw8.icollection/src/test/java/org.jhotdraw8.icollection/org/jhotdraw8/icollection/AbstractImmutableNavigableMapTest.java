@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.immutable.ImmutableNavigableMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
@@ -17,23 +16,23 @@ public abstract class AbstractImmutableNavigableMapTest extends AbstractImmutabl
     /**
      * Creates a new empty instance.
      */
-    protected abstract <K, V> @NonNull ImmutableNavigableMap<K, V> newInstance();
+    protected abstract <K, V> ImmutableNavigableMap<K, V> newInstance();
 
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <K, V> @NonNull ImmutableNavigableMap<K, V> newInstance(@NonNull Map<K, V> m);
+    protected abstract <K, V> ImmutableNavigableMap<K, V> newInstance(Map<K, V> m);
 
-    protected abstract <K, V> @NonNull ImmutableNavigableMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> m);
+    protected abstract <K, V> ImmutableNavigableMap<K, V> newInstance(ReadOnlyMap<K, V> m);
 
 
-    protected abstract <K, V> @NonNull ImmutableNavigableMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m);
+    protected abstract <K, V> ImmutableNavigableMap<K, V> toClonedInstance(ImmutableMap<K, V> m);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <K, V> @NonNull ImmutableNavigableMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
+    protected abstract <K, V> ImmutableNavigableMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
 
     @Test
     public void spliteratorShouldHaveSequencedMapCharacteristics() throws Exception {

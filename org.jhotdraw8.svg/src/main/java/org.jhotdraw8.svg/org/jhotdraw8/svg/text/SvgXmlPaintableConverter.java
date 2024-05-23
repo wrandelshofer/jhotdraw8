@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.svg.text;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.value.Paintable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -25,7 +24,7 @@ import java.util.function.Consumer;
  * Paintable representation in XML files is different from representation in CSS.
  */
 public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> implements Converter<Paintable> {
-    private final @NonNull SvgCssPaintableConverter cssPaintableConverter = new SvgCssPaintableConverter(false);
+    private final SvgCssPaintableConverter cssPaintableConverter = new SvgCssPaintableConverter(false);
 
     public SvgXmlPaintableConverter() {
         this(true);
@@ -36,7 +35,7 @@ public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> im
     }
 
     @Override
-    public @NonNull Paintable parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Paintable parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Objects.requireNonNull(idResolver, "idResolver");
         if (tt.next() == CssTokenType.TT_URL) {
             final String urlString = tt.currentStringNonNull();
@@ -65,7 +64,7 @@ public class SvgXmlPaintableConverter extends AbstractCssConverter<Paintable> im
     }
 
     @Override
-    protected <TT extends Paintable> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    protected <TT extends Paintable> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         cssPaintableConverter.produceTokensNonNull(value, idSupplier, out);
     }
 }

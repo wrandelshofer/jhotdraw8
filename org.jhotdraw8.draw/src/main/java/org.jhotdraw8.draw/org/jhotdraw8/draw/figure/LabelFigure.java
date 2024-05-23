@@ -6,11 +6,10 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 /**
  * LabelFigure presents a text on a drawing.
@@ -24,13 +23,13 @@ public class LabelFigure extends AbstractLabelFigure
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Label";
+    public static final String TYPE_SELECTOR = "Label";
 
     public LabelFigure() {
         this(0, 0, "");
     }
 
-    public LabelFigure(@NonNull Point2D position, String text) {
+    public LabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
@@ -46,12 +45,12 @@ public class LabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    public @NonNull TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
+    public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, @Nullable Node node) {
         return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         super.updateNode(ctx, node);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, node);
@@ -60,13 +59,13 @@ public class LabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    protected @Nullable String getText(@NonNull RenderContext ctx) {
+    protected @Nullable String getText(RenderContext ctx) {
         return getStyled(TEXT);
     }
 
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

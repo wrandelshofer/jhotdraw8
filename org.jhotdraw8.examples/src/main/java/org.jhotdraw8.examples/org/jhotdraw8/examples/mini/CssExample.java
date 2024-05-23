@@ -8,7 +8,6 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.SimpleDrawingEditor;
@@ -39,7 +38,7 @@ import java.util.ArrayList;
 public class CssExample extends Application {
 
     @Override
-    public void start(@NonNull Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) throws Exception {
         Drawing drawing = new SimpleDrawing();
 
         RectangleFigure vertex1 = new RectangleFigure(10, 10, 30, 20);

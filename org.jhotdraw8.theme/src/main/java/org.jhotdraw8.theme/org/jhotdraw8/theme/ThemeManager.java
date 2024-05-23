@@ -10,29 +10,28 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyListProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public interface ThemeManager {
-    @NonNull ObjectProperty<ThemeManager> instance = new SimpleObjectProperty<>(new SimpleThemeManager());
+    ObjectProperty<ThemeManager> instance = new SimpleObjectProperty<>(new SimpleThemeManager());
 
-    static @NonNull ObjectProperty<ThemeManager> instanceProperty() {
+    static ObjectProperty<ThemeManager> instanceProperty() {
         return instance;
     }
 
-    static @NonNull ThemeManager getInstance() {
+    static ThemeManager getInstance() {
         return instance.get();
     }
 
-    static void setInstance(@NonNull ThemeManager newInstance) {
+    static void setInstance(ThemeManager newInstance) {
         instance.set(newInstance);
     }
 
-    @NonNull ReadOnlyListProperty<Theme> themesProperty();
+    ReadOnlyListProperty<Theme> themesProperty();
 
-    @NonNull ObjectProperty<ThemeParameters> themeParametersProperty();
+    ObjectProperty<ThemeParameters> themeParametersProperty();
 
-    default @NonNull ThemeParameters getThemeParameters() {
+    default ThemeParameters getThemeParameters() {
         return themeParametersProperty().get();
     }
 
@@ -40,11 +39,11 @@ public interface ThemeManager {
         this.themeParametersProperty().set(ThemeParameters);
     }
 
-    default @NonNull ObservableList<Theme> getThemes() {
+    default ObservableList<Theme> getThemes() {
         return themesProperty().get();
     }
 
-    @NonNull ObjectProperty<Theme> themeProperty();
+    ObjectProperty<Theme> themeProperty();
 
 
     default @Nullable Theme getTheme() {

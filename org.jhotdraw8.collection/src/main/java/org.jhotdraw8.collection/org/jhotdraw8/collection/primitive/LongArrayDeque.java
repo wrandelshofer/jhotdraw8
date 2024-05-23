@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractCollection;
 import java.util.ConcurrentModificationException;
@@ -80,11 +79,11 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         }
     }
 
-    public void addLastAllAsLong(long @NonNull [] array) {
+    public void addLastAllAsLong(long[] array) {
         addLastAllAsLong(array, 0, array.length);
     }
 
-    public void addLastAllAsLong(long @NonNull [] array, int offset, int length) {
+    public void addLastAllAsLong(long[] array, int offset, int length) {
         grow(length + size());
 
         int firstPart = elements.length - tail;
@@ -139,7 +138,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
     }
 
     @Override
-    public @NonNull Iterator<Long> descendingIterator() {
+    public Iterator<Long> descendingIterator() {
         throw new UnsupportedOperationException();
     }
 
@@ -275,7 +274,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
     }
 
     @Override
-    public @NonNull Iterator<Long> iterator() {
+    public Iterator<Long> iterator() {
         return new DeqIterator();
     }
 
@@ -383,7 +382,7 @@ public class LongArrayDeque extends AbstractCollection<Long> implements LongDequ
         return (tail - head) & (elements.length - 1);
     }
 
-    public @NonNull String toString() {
+    public String toString() {
         Iterator<Long> it = iterator();
         if (!it.hasNext()) {
             return "[]";

@@ -1,8 +1,7 @@
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -12,7 +11,7 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 public class AwtShapes {
-    public static @NonNull <T extends PathBuilder<?>> T buildPathIterator(@NonNull T builder, @NonNull PathIterator iter) {
+    public static <T extends PathBuilder<?>> T buildPathIterator(T builder, PathIterator iter) {
         double[] coords = new double[6];
         for (; !iter.isDone(); iter.next()) {
             switch (iter.currentSegment(coords)) {
@@ -46,7 +45,7 @@ public class AwtShapes {
      * @param tolerance The tolerance for the test.
      * @return true if contained within tolerance
      */
-    public static boolean outlineContains(@NonNull Shape shape, Point2D.@NonNull Double p, double tolerance) {
+    public static boolean outlineContains(Shape shape, Point2D.Double p, double tolerance) {
         AwtPathBuilder b = new AwtPathBuilder();
 
         double[] coords = new double[6];
@@ -81,7 +80,7 @@ public class AwtShapes {
         return false;
     }
 
-    public static @NonNull PathIterator emptyPathIterator() {
+    public static PathIterator emptyPathIterator() {
         return new PathIterator() {
             @Override
             public int getWindingRule() {
@@ -110,7 +109,7 @@ public class AwtShapes {
         };
     }
 
-    public static @NonNull PathIterator pointCoordsToPathIterator(@NonNull List<Double> coordsList, boolean closed, int windingRule, @Nullable AffineTransform tx) {
+    public static PathIterator pointCoordsToPathIterator(List<Double> coordsList, boolean closed, int windingRule, @Nullable AffineTransform tx) {
         return new PathIterator() {
             private final int size = coordsList.size();
             int index = 0;

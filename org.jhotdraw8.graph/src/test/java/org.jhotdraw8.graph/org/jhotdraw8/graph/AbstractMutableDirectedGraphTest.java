@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
@@ -33,16 +32,16 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
 
     protected abstract MutableDirectedGraph<V, A> newInstance(DirectedGraph<V, A> g);
 
-    protected abstract @NonNull V newVertex(int id);
+    protected abstract V newVertex(int id);
 
-    protected abstract @NonNull A newArrow(@NonNull V start, @NonNull V end, char id);
+    protected abstract A newArrow(V start, V end, char id);
 
     /**
      * Returns the arrow id. Returns \u0000 if the arrow is null.
      */
     protected abstract char getArrowId(@Nullable A a);
 
-    protected abstract int getVertexId(@NonNull V v);
+    protected abstract int getVertexId(V v);
 
     /**
      * Example graph:
@@ -56,7 +55,6 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
      *     3 ←e─ 4
      * </pre>
      */
-    @NonNull
     protected MutableDirectedGraph<V, A> buildGraph() {
         MutableDirectedGraph<V, A> g = newInstance();
         V v0 = newVertex(0);
@@ -98,7 +96,7 @@ public abstract class AbstractMutableDirectedGraphTest<V, A> {
         assertEqualsToInitialGraph(g);
     }
 
-    private void assertEqualsToInitialGraph(@NonNull MutableDirectedGraph<V, A> g) {
+    private void assertEqualsToInitialGraph(MutableDirectedGraph<V, A> g) {
         assertEquals(5, g.getVertexCount());
         assertEquals(6, g.getArrowCount());
         V[] v = getVertices(g);

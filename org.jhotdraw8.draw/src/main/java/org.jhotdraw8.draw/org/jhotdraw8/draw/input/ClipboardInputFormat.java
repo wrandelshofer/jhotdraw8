@@ -5,10 +5,10 @@
 package org.jhotdraw8.draw.input;
 
 import javafx.scene.input.Clipboard;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Set;

@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.fxbase.spi;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ public class NodeReaderRegistry {
     private NodeReaderRegistry() {
     }
 
-    public static @NonNull List<NodeReader> getNodeReaders(@NonNull URL url) {
+    public static List<NodeReader> getNodeReaders(URL url) {
         List<NodeReader> list = new ArrayList<>();
         for (NodeReaderProvider spi : ServiceLoader.load(NodeReaderProvider.class)) {
             if (spi.canDecodeInput(url)) {
@@ -27,7 +26,7 @@ public class NodeReaderRegistry {
         return list;
     }
 
-    public static @NonNull List<NodeReader> getNodeReaders(@NonNull String path) {
+    public static List<NodeReader> getNodeReaders(String path) {
         List<NodeReader> list = new ArrayList<>();
         for (NodeReaderProvider spi : ServiceLoader.load(NodeReaderProvider.class)) {
             if (spi.canDecodeInput(path)) {
@@ -37,12 +36,12 @@ public class NodeReaderRegistry {
         return list;
     }
 
-    public static @Nullable NodeReader getNodeReader(@NonNull URL url) {
+    public static @Nullable NodeReader getNodeReader(URL url) {
         List<NodeReader> list = getNodeReaders(url);
         return list.isEmpty() ? null : list.getFirst();
     }
 
-    public static @Nullable NodeReader getNodeReader(@NonNull String path) {
+    public static @Nullable NodeReader getNodeReader(String path) {
         List<NodeReader> list = getNodeReaders(path);
         return list.isEmpty() ? null : list.getFirst();
     }

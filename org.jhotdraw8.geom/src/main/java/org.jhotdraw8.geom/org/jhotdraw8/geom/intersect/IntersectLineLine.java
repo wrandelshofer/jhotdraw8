@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 
@@ -28,7 +27,7 @@ public class IntersectLineLine {
      * @return computed intersection with parameters of line 'a' at the intersection point
      * @see IntersectLineLine#intersectLineLineEx(double, double, double, double, double, double, double, double, double)
      */
-    public static @NonNull IntersectionResultEx intersectLineLineEx(
+    public static IntersectionResultEx intersectLineLineEx(
             double a0x, double a0y, double a1x, double a1y,
             double b0x, double b0y, double b1x, double b1y) {
         return intersectLineLineEx(a0x, a0y, a1x, a1y, b0x, b0y, b1x, b1y, REAL_THRESHOLD);
@@ -44,12 +43,12 @@ public class IntersectLineLine {
      * @return computed intersection with parameters of line 'a' at the intersection point
      * @see #intersectLineLineEx(double, double, double, double, double, double, double, double)
      */
-    public static @NonNull IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static IntersectionResultEx intersectLineLineEx(Point2D a0, Point2D a1, Point2D b0, Point2D b1) {
         return intersectLineLineEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(),
                 b0.getX(), b0.getY(), b1.getX(), b1.getY());
     }
 
-    public static @NonNull IntersectionResultEx intersectLineLineEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D b0, @NonNull Point2D b1, double epsilon) {
+    public static IntersectionResultEx intersectLineLineEx(Point2D a0, Point2D a1, Point2D b0, Point2D b1, double epsilon) {
         return intersectLineLineEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(),
                 b0.getX(), b0.getY(), b1.getX(), b1.getY(), epsilon);
     }
@@ -88,7 +87,7 @@ public class IntersectLineLine {
      * @param b1y end y coordinate of line segment 'b'
      * @return computed intersection with parameters t of 'a' at the intersection point
      */
-    public static @NonNull IntersectionResultEx intersectLineLineEx(
+    public static IntersectionResultEx intersectLineLineEx(
             double a0x, double a0y, double a1x, double a1y,
             double b0x, double b0y, double b1x, double b1y, double epsilon) {
 

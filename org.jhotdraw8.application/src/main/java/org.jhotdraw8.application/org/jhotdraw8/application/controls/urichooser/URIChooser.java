@@ -8,7 +8,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 

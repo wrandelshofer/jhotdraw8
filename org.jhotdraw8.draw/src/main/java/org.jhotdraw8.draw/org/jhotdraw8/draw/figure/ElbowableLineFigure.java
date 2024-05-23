@@ -4,9 +4,9 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.key.NullableCssSizeStyleableKey;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A figure which supports drawing an elbow.

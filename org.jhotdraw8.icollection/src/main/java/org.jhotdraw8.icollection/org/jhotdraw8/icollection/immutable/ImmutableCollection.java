@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 
 import java.util.Collection;
@@ -28,7 +27,7 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      * @return this collection instance if it already contains the element, or
      * a different collection instance with the element added
      */
-    @NonNull ImmutableCollection<E> add(E element);
+    ImmutableCollection<E> add(E element);
 
     /**
      * Returns a copy of this collection that contains all elements
@@ -43,7 +42,7 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      * a different collection instance with the elements added
      */
     @SuppressWarnings("unchecked")
-    @NonNull ImmutableCollection<E> addAll(@NonNull Iterable<? extends E> c);
+    ImmutableCollection<E> addAll(Iterable<? extends E> c);
 
     /**
      * Returns an empty collection instance that has the specified
@@ -52,7 +51,7 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      * @param <T> the element type of the returned collection
      * @return an empty collection of the specified element type.
      */
-    @NonNull <T> ImmutableCollection<T> empty();
+    <T> ImmutableCollection<T> empty();
 
     /**
      * Retains all elements in this collection that satisfy the specified predicate.
@@ -61,7 +60,7 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      * @return a collection that only contains elements that satisfy the predicate
      *
      */
-    default ImmutableCollection<E> filter(@NonNull Predicate<E> p) {
+    default ImmutableCollection<E> filter(Predicate<E> p) {
         ImmutableCollection<E> result = this.empty();
         for(E e:this){
             if (p.test(e)) {
@@ -87,7 +86,7 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      * @return this collection instance if it already does not contain the element, or
      * a different collection instance with the element removed
      */
-    @NonNull ImmutableCollection<E> remove(E element);
+    ImmutableCollection<E> remove(E element);
 
     /**
      * Returns a copy of this collection that contains all elements
@@ -99,7 +98,7 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      * a different collection instance with the elements removed
      */
     @SuppressWarnings("unchecked")
-    @NonNull ImmutableCollection<E> removeAll(@NonNull Iterable<?> c);
+    ImmutableCollection<E> removeAll(Iterable<?> c);
 
     /**
      * Returns a copy of this collection that contains only elements
@@ -110,12 +109,12 @@ public interface ImmutableCollection<E> extends ReadOnlyCollection<E> {
      * a different collection instance with elements removed
      */
     @SuppressWarnings("unchecked")
-    @NonNull ImmutableCollection<E> retainAll(@NonNull Iterable<?> c);
+    ImmutableCollection<E> retainAll(Iterable<?> c);
 
     /**
      * Returns a mutable copy of this collection.
      *
      * @return a mutable copy.
      */
-    @NonNull Collection<E> toMutable();
+    Collection<E> toMutable();
 }

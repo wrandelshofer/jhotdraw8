@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.icollection.facade.SetFacade;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,21 +29,21 @@ import java.util.function.Function;
 public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuilder
         implements MutableDirectedGraph<V, A>, AttributedIndexedDirectedGraph<V, A> {
 
-    private static final @NonNull Object TOMBSTONE_OBJECT = new Object();
+    private static final Object TOMBSTONE_OBJECT = new Object();
 
 
     /**
      * Maps a vertex to a vertex index.
      */
-    private final @NonNull Map<V, Integer> vertexMap;
+    private final Map<V, Integer> vertexMap;
     /**
      * Maps a vertex index to a vertex object.
      */
-    private final @NonNull List<V> vertices;
+    private final List<V> vertices;
     /**
      * Maps an arrow index to an arrow object. May contain {@link #TOMBSTONE_OBJECT}s.
      */
-    private final @NonNull List<Object> arrows;
+    private final List<Object> arrows;
 
     /**
      * Creates a new instance with an initial capacity for 16 vertices and 16 arrows.
@@ -91,7 +90,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      *
      * @param graph a graph
      */
-    public SimpleMutableDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public SimpleMutableDirectedGraph(DirectedGraph<V, A> graph) {
         this(graph, Function.identity(), (v1, v2, a) -> a);
     }
 
@@ -106,9 +105,9 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param <VV>         the vertex data type of the graph
      * @param <AA>         the arrow data type of the graph
      */
-    public <VV, AA> SimpleMutableDirectedGraph(@NonNull DirectedGraph<VV, AA> graph,
-                                               @NonNull Function<VV, V> vertexMapper,
-                                               @NonNull Function3<VV, VV, AA, A> arrowMapper) {
+    public <VV, AA> SimpleMutableDirectedGraph(DirectedGraph<VV, AA> graph,
+                                               Function<VV, V> vertexMapper,
+                                               Function3<VV, VV, AA, A> arrowMapper) {
         super(graph.getVertexCount(), graph.getArrowCount());
         final int vcount = graph.getVertexCount();
         this.vertexMap = new HashMap<>(vcount);
@@ -125,7 +124,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         }
         for (VV vv : graph.getVertices()) {
             for (int j = 0, n = graph.getNextCount(vv); j < n; j++) {
-                @NonNull VV next = graph.getNext(vv, j);
+                VV next = graph.getNext(vv, j);
                 addArrow(vertexMapper.apply(vv),
                         vertexMapper.apply(next),
                         arrowMapper.apply(vv, next, graph.getNextArrow(vv, j)));
@@ -141,7 +140,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param arrow the arrow
      */
     @Override
-    public void addArrow(@NonNull V va, @NonNull V vb, @Nullable A arrow) {
+    public void addArrow(V va, V vb, @Nullable A arrow) {
         Objects.requireNonNull(va, "va");
         Objects.requireNonNull(vb, "vb");
         int a = vertexMap.get(va);
@@ -156,7 +155,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
 
     @Override
-    public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
+    public void removeArrow(V v, V u, @Nullable A a) {
         int vidx = vertexMap.get(v);
         int uidx = vertexMap.get(u);
         int index = 0;
@@ -172,7 +171,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public void removeArrow(@NonNull V v, @NonNull V u) {
+    public void removeArrow(V v, V u) {
         Integer vidx = vertexMap.get(v);
         int index = 0;
         for (Enumerator.OfInt it = nextVerticesEnumerator(vidx); it.moveNext(); ) {
@@ -187,7 +186,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public void removeNext(@NonNull V v, int k) {
+    public void removeNext(V v, int k) {
         int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), k);
         arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
     }
@@ -199,7 +198,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param vb    vertex b
      * @param arrow the arrow
      */
-    public void addBidiArrow(@NonNull V va, @NonNull V vb, A arrow) {
+    public void addBidiArrow(V va, V vb, A arrow) {
         addArrow(va, vb, arrow);
         addArrow(vb, va, arrow);
     }
@@ -210,7 +209,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param v vertex
      */
     @Override
-    public void addVertex(@NonNull V v) {
+    public void addVertex(V v) {
         Objects.requireNonNull(v, "v");
         vertexMap.computeIfAbsent(v, addVertexIfAbsent);
     }
@@ -221,7 +220,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param v    vertex
      * @param vidx vertex index
      */
-    public void addVertex(@NonNull V v, int vidx) {
+    public void addVertex(V v, int vidx) {
         Objects.requireNonNull(v, "v");
         buildInsertVertexAt(vidx);
         vertices.add(vidx, v);
@@ -235,7 +234,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public void removeVertex(@NonNull V v) {
+    public void removeVertex(V v) {
         Integer vidxBox = vertexMap.remove(v);
         if (vidxBox == null) {
             return;
@@ -270,7 +269,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * Performance: We need this lambda very often if a large graph is created
      * with this builder.
      */
-    private final @NonNull Function<V, Integer> addVertexIfAbsent;
+    private final Function<V, Integer> addVertexIfAbsent;
 
 
     @Override
@@ -282,7 +281,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public @NonNull A getNextArrow(@NonNull V v, int index) {
+    public A getNextArrow(V v, int index) {
         int arrowId = getNextArrowIndex(getVertexIndex(v), index);
         @SuppressWarnings("unchecked")
         A a = (A) arrows.get(arrowId);
@@ -290,17 +289,17 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public @NonNull V getNext(@NonNull V v, int i) {
+    public V getNext(V v, int i) {
         return getVertex(getNextAsInt(getVertexIndex(v), i));
     }
 
     @Override
-    public int getNextCount(@NonNull V v) {
+    public int getNextCount(V v) {
         return getNextCount(getVertexIndex(v));
     }
 
     @Override
-    public @NonNull V getVertex(int vi) {
+    public V getVertex(int vi) {
         if (vertices.get(vi) == null) {
             System.err.println("DIrectedGraphBuilder is broken");
         }
@@ -314,7 +313,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public @NonNull A getArrow(int index) {
+    public A getArrow(int index) {
         // This has quadratic performance!
         int i = index;
         int vidx = 0;
@@ -329,7 +328,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull A getNextArrow(int v, int index) {
+    public A getNextArrow(int v, int index) {
         int arrowId = getNextArrowIndex(v, index);
         return (A) arrows.get(arrowId);
     }
@@ -340,7 +339,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
-    public @NonNull Set<V> getVertices() {
+    public Set<V> getVertices() {
         return new SetFacade<>(vertices::iterator, vertices::spliterator, vertices::size, vertices::contains, null, null, null);
     }
 }

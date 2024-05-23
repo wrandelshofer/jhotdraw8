@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -21,7 +20,7 @@ import java.util.function.Consumer;
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
-    private final @NonNull String attributeName;
+    private final String attributeName;
 
     /**
      * Creates a new instance.
@@ -31,24 +30,24 @@ public class ExistsMatchSelector extends AbstractAttributeSelector {
      *                         null means no namespace)
      * @param attributeName the attribute name
      */
-    public ExistsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, @NonNull String attributeName) {
+    public ExistsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;
         this.attributeName = attributeName;
     }
 
     @Override
-    protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
+    protected @Nullable <T> T match(SelectorModel<T> model, T element) {
         return model.hasAttribute(element, namespacePattern, attributeName) ? element : null;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "[" + namespacePattern + ":" + attributeName + ']';
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
         if (!TypeSelector.ANY_NAMESPACE.equals(namespacePattern)) {
             if (namespacePattern != null) {

@@ -6,8 +6,7 @@ package org.jhotdraw8.fxbase.styleable;
 
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxbase.beans.PropertyBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -41,7 +40,8 @@ public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
      * @param key The property key
      * @return The styled value.
      */
-    @Nullable <T> T getStyled(@NonNull MapAccessor<T> key);
+    @Nullable
+    <T> T getStyled(MapAccessor<T> key);
 
     /**
      * Returns the styled value.
@@ -50,7 +50,7 @@ public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
      * @param key The property key
      * @return The styled value.
      */
-    default @NonNull <T> T getStyledNonNull(@NonNull NonNullMapAccessor<T> key) {
+    default <T> T getStyledNonNull(NonNullMapAccessor<T> key) {
         T value = getStyled(key);
         return Objects.requireNonNull(value, "value");
     }
@@ -63,7 +63,8 @@ public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
      * @param origin The style origin
      * @return The styled value.
      */
-    @Nullable <T> T getStyled(@Nullable StyleOrigin origin, @NonNull MapAccessor<T> key);
+    @Nullable
+    <T> T getStyled(@Nullable StyleOrigin origin, MapAccessor<T> key);
 
     /**
      * Removes all styled values on all origins except on the USER origin.
@@ -79,7 +80,8 @@ public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
      * @param value  The new value
      * @return The old value of that origin
      */
-    @Nullable <T> T setStyled(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key, @Nullable T value);
+    @Nullable
+    <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, @Nullable T value);
 
     /**
      * Removes a value.
@@ -89,14 +91,15 @@ public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
      * @param key    The property key.
      * @return The removed value.
      */
-    @Nullable <T> T remove(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key);
+    @Nullable
+    <T> T remove(StyleOrigin origin, MapAccessor<T> key);
 
     /**
      * Removes all values of that style origin.
      *
      * @param origin The origin.
      */
-    void removeAll(@NonNull StyleOrigin origin);
+    void removeAll(StyleOrigin origin);
 
     /**
      * Returns if a key is present for that style origin.
@@ -106,7 +109,7 @@ public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
      * @param origin The style origin
      * @return True if a value is present.
      */
-    <T> boolean containsMapAccessor(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key);
+    <T> boolean containsMapAccessor(StyleOrigin origin, MapAccessor<T> key);
 
 
 }

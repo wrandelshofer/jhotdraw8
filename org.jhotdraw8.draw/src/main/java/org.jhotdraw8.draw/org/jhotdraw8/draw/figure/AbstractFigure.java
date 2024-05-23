@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.manager.StylesheetsManager;
 import org.jhotdraw8.css.value.CssDefaultableValue;
@@ -22,6 +20,7 @@ import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.IdentityHashMap;
@@ -39,7 +38,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
 
     private Set<Figure> layoutObservers;
     private @Nullable Drawing drawing;
-    private final @NonNull ObjectProperty<Figure> parent = new SimpleObjectProperty<>(this, Figure.PARENT_PROPERTY);
+    private final ObjectProperty<Figure> parent = new SimpleObjectProperty<>(this, Figure.PARENT_PROPERTY);
     private CopyOnWriteArrayList<Listener<FigurePropertyChangeEvent>> propertyChangeListeners;
     private Transform cachedLocalToWorld;
     private Transform cachedWorldToParent;
@@ -52,7 +51,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    protected @NonNull Map<Key<?>, Integer> createKeyMap() {
+    protected Map<Key<?>, Integer> createKeyMap() {
         return keyMaps.computeIfAbsent(getClass(), k -> {
             int index = 0;
 
@@ -73,7 +72,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      * @param drawing the drawing
      */
     @Override
-    public final void addedToDrawing(@NonNull Drawing drawing) {
+    public final void addedToDrawing(Drawing drawing) {
         this.drawing = drawing;
         doAddedToDrawing(drawing);
     }
@@ -84,7 +83,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
      *
      * @param drawing the drawing
      */
-    protected void doAddedToDrawing(@NonNull Drawing drawing) {
+    protected void doAddedToDrawing(Drawing drawing) {
 
     }
 
@@ -105,7 +104,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    public final @NonNull Set<Figure> getLayoutObservers() {
+    public final Set<Figure> getLayoutObservers() {
         if (layoutObservers == null) {
             layoutObservers = Collections.newSetFromMap(new IdentityHashMap<>(1));
         }
@@ -113,7 +112,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
+    public ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
         if (layoutObservers == null) {
             return ChampSet.of();
         }
@@ -134,7 +133,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    public @NonNull ObjectProperty<Figure> parentProperty() {
+    public ObjectProperty<Figure> parentProperty() {
         return parent;
     }
 
@@ -227,7 +226,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
 
 
     @Override
-    public void updateCss(@NonNull RenderContext ctx) {
+    public void updateCss(RenderContext ctx) {
         Drawing d = getDrawing();
         if (d != null) {
             StylesheetsManager<Figure> styleManager = d.getStyleManager();
@@ -254,7 +253,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    public <T> @NonNull T getStyledNonNull(@NonNull NonNullMapAccessor<T> key) {
+    public <T> T getStyledNonNull(NonNullMapAccessor<T> key) {
         T value = super.getStyledNonNull(key);
         if (value instanceof CssDefaultableValue<?>) {
             @SuppressWarnings("unchecked") CssDefaultableValue<T> dv = (CssDefaultableValue<T>) value;

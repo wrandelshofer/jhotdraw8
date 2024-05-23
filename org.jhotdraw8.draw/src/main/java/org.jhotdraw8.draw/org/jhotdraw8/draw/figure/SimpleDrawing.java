@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.render.RenderContext;
 
 /**
@@ -22,27 +21,27 @@ public class SimpleDrawing extends AbstractViewBoxDrawing
     }
 
     @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
+    public boolean isSuitableChild(Figure newChild) {
         return true;
     }
 
     @Override
-    public void reshapeInParent(@NonNull Transform transform) {
+    public void reshapeInParent(Transform transform) {
         // cannot be reshaped
     }
 
     @Override
-    public void transformInLocal(@NonNull Transform transform) {
+    public void transformInLocal(Transform transform) {
         // cannot be transformed
     }
 
     @Override
-    public void transformInParent(@NonNull Transform transform) {
+    public void transformInParent(Transform transform) {
         // cannot be transformed
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
         super.updateNode(ctx, n);
         applyStyleableFigureProperties(ctx, n);
     }

@@ -5,13 +5,12 @@
 package org.jhotdraw8.css.converter;
 
 import javafx.css.PseudoClass;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -44,14 +43,14 @@ public class PseudoClassCssConverter extends AbstractCssConverter<PseudoClass> {
     }
 
     @Override
-    public @NonNull PseudoClass parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public PseudoClass parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, " ⟨PseudoClass⟩: ⟨identifier⟩ expected");
         return PseudoClass.getPseudoClass(tt.currentStringNonNull());
     }
 
 
     @Override
-    protected <TT extends PseudoClass> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends PseudoClass> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_IDENT, value.getPseudoClassName()));
     }
 

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
@@ -23,13 +22,13 @@ public class IntersectQuadCurveCubicCurve {
     private IntersectQuadCurveCubicCurve() {
     }
 
-    public static @NonNull IntersectionResult intersectQuadCurveCubicCurve(
+    public static IntersectionResult intersectQuadCurveCubicCurve(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
         return intersectQuadCurveCubicCurve(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Rectangles.REAL_THRESHOLD);
     }
 
-    public static @NonNull IntersectionResultEx intersectQuadCurveCubicCurveEx(
+    public static IntersectionResultEx intersectQuadCurveCubicCurveEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
         return intersectQuadCurveCubicCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Rectangles.REAL_THRESHOLD);
@@ -59,8 +58,8 @@ public class IntersectQuadCurveCubicCurve {
      * @param b3 control point P3 of 'b'
      * @return the computed result
      */
-    public static @NonNull IntersectionResult intersectQuadCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2,
-                                                                           @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3) {
+    public static IntersectionResult intersectQuadCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2,
+                                                                  Point2D b0, Point2D b1, Point2D b2, Point2D b3) {
         return intersectQuadCurveCubicCurve(a0, a1, a2, b0, b1, b2, b3, Rectangles.REAL_THRESHOLD);
     }
 
@@ -75,8 +74,8 @@ public class IntersectQuadCurveCubicCurve {
      * @param epsilon
      * @return
      */
-    public static IntersectionResult intersectQuadCurveCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2,
-                                                                  @NonNull Point2D b0, @NonNull Point2D b1, @NonNull Point2D b2, @NonNull Point2D b3, double epsilon) {
+    public static IntersectionResult intersectQuadCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2,
+                                                                  Point2D b0, Point2D b1, Point2D b2, Point2D b3, double epsilon) {
         final Point2D c12, c11, c10;
         final Point2D c23, c22, c21, c20;
         c12 = Points2D.add(a0, Points2D.add(Points2D.multiply(a1, -2), a2));
@@ -185,7 +184,7 @@ public class IntersectQuadCurveCubicCurve {
                 result);
     }
 
-    public static @NonNull IntersectionResultEx intersectQuadCurveCubicCurveEx(
+    public static IntersectionResultEx intersectQuadCurveCubicCurveEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y, double epsilon) {
         IntersectionResult resultA = intersectQuadCurveCubicCurve(

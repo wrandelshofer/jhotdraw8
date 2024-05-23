@@ -25,7 +25,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +39,7 @@ public class TransformFlattener {
     public TransformFlattener() {
     }
 
-    private boolean canFlattenTranslate(@NonNull Node node) {
+    private boolean canFlattenTranslate(Node node) {
         if (node.getRotate() != 0.0
                 || node.getScaleX() != 1.0
                 || node.getScaleY() != 1.0) {
@@ -65,7 +64,7 @@ public class TransformFlattener {
      * @return Returns the summed up translate of the node.
      */
 
-    private @NonNull Translate flattenTranslateTransforms(@NonNull Node node) {
+    private Translate flattenTranslateTransforms(Node node) {
         Translate translate = new Translate(node.getTranslateX(), node.getTranslateY());
         for (Transform t : node.getTransforms()) {
             if ((t instanceof Translate tt)) {
@@ -100,7 +99,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInParent(@NonNull Parent parent) {
+    private void flattenTranslatesInParent(Parent parent) {
         if (!canFlattenTranslate(parent)) {
             return;
         }
@@ -120,7 +119,7 @@ public class TransformFlattener {
 
     }
 
-    private void flattenTranslatesInPath(@NonNull Path path) {
+    private void flattenTranslatesInPath(Path path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
@@ -157,7 +156,7 @@ public class TransformFlattener {
         path.getElements().setAll(list);
     }
 
-    private void flattenTranslatesInPolygon(@NonNull Polygon path) {
+    private void flattenTranslatesInPolygon(Polygon path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
@@ -172,7 +171,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInPolyline(@NonNull Polyline path) {
+    private void flattenTranslatesInPolyline(Polyline path) {
         if (!canFlattenTranslate(path)) {
             return;
         }
@@ -187,7 +186,7 @@ public class TransformFlattener {
         }
     }
 
-    private void flattenTranslatesInLine(@NonNull Line shape) {
+    private void flattenTranslatesInLine(Line shape) {
         if (!canFlattenTranslate(shape)) {
             return;
         }
@@ -200,7 +199,7 @@ public class TransformFlattener {
         shape.setEndY(p2.getY());
     }
 
-    private void flattenTranslatesInEllipse(@NonNull Ellipse shape) {
+    private void flattenTranslatesInEllipse(Ellipse shape) {
         if (!canFlattenTranslate(shape)) {
             return;
         }
@@ -210,7 +209,7 @@ public class TransformFlattener {
         shape.setCenterY(p.getY());
     }
 
-    private void flattenTranslatesInRectangle(@NonNull Rectangle shape) {
+    private void flattenTranslatesInRectangle(Rectangle shape) {
         if (!canFlattenTranslate(shape)) {
             return;
         }
@@ -220,7 +219,7 @@ public class TransformFlattener {
         shape.setY(p.getY());
     }
 
-    private void flattenTranslatesInText(@NonNull Text shape) {
+    private void flattenTranslatesInText(Text shape) {
         if (!canFlattenTranslate(shape)) {
             return;
         }

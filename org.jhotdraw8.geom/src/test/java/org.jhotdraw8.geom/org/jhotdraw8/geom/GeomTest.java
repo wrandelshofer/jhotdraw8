@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class GeomTest {
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSinDegrees() {
+    public List<DynamicTest> dynamicTestsSinDegrees() {
         List<DynamicTest> list = new ArrayList<>();
         for (double i = -360; i <= 360; i += 0.5) {
             double aDeg = i;
@@ -33,7 +32,7 @@ public class GeomTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsCosDegrees() {
+    public List<DynamicTest> dynamicTestsCosDegrees() {
         List<DynamicTest> list = new ArrayList<>();
         for (double i = -360; i <= 360; i += 0.5) {
             double aDeg = i;

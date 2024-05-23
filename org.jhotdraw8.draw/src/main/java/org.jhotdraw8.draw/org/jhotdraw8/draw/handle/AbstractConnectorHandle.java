@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.handle;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -22,6 +20,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.Points;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -41,13 +40,13 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
      * @param connector       a connector
      * @param connectedFigure the connected figure
      */
-    public record ConnectorAndConnectedFigure(@NonNull Connector connector,
-                                              @NonNull Figure connectedFigure) {
+    public record ConnectorAndConnectedFigure(Connector connector,
+                                              Figure connectedFigure) {
     }
 
-    protected final @NonNull MapAccessor<Connector> connectorKey;
-    protected final @NonNull NonNullMapAccessor<CssPoint2D> pointKey;
-    protected final @NonNull MapAccessor<Figure> targetKey;
+    protected final MapAccessor<Connector> connectorKey;
+    protected final NonNullMapAccessor<CssPoint2D> pointKey;
+    protected final MapAccessor<Figure> targetKey;
     protected @Nullable Point2D connectorLocation;
     protected Point2D pickLocation;
     private boolean isConnected;
@@ -55,10 +54,10 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     private boolean editable = true;
     private @Nullable Figure prevTarget;
 
-    public AbstractConnectorHandle(@NonNull ConnectingFigure figure,
+    public AbstractConnectorHandle(ConnectingFigure figure,
                                    NonNullMapAccessor<CssPoint2D> pointKey,
-                                   @NonNull MapAccessor<Connector> connectorKey,
-                                   @NonNull MapAccessor<Figure> targetKey) {
+                                   MapAccessor<Connector> connectorKey,
+                                   MapAccessor<Figure> targetKey) {
         super(figure);
         this.pointKey = pointKey;
         this.connectorKey = connectorKey;
@@ -89,7 +88,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull ConnectingFigure getOwner() {
+    public ConnectingFigure getOwner() {
         return (ConnectingFigure) super.getOwner();
     }
 
@@ -108,7 +107,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         if (!editable) {
             return;
         }
@@ -185,14 +184,14 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
         model.set(o, targetKey, newConnectedFigure);
     }
 
-    protected @Nullable ConnectorAndConnectedFigure find(@NonNull CssPoint2D pointInWorld, @NonNull ConnectingFigure o, @NonNull ConnectableFigure cff, @NonNull MouseEvent mouseEvent,
+    protected @Nullable ConnectorAndConnectedFigure find(CssPoint2D pointInWorld, ConnectingFigure o, ConnectableFigure cff, MouseEvent mouseEvent,
                                                double tolerance) {
         final Connector connector = cff.findConnector(cff.worldToLocal(pointInWorld.getConvertedValue()), o, tolerance);
         return connector == null ? null : new ConnectorAndConnectedFigure(connector, cff);
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
@@ -210,7 +209,7 @@ public abstract class AbstractConnectorHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }

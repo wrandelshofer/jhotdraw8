@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * The {@code sRGB} color space.
@@ -41,13 +40,13 @@ public class SrgbColorSpace extends ParametricNonLinearRgbColorSpace {
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
+    public float[] toRGB(float[] colorvalue, float[] rgb) {
         System.arraycopy(colorvalue, 0, rgb, 0, 3);
         return rgb;
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
+    public float[] fromRGB(float[] rgb, float[] colorvalue) {
         System.arraycopy(rgb, 0, colorvalue, 0, 3);
         return colorvalue;
     }

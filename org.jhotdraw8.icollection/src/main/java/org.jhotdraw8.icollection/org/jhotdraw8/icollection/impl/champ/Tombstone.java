@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.ChampVectorSet;
 
 /**
@@ -79,14 +78,14 @@ public record Tombstone(int skip) {
      * If we get lucky, and the tombstones do not cluster too much,
      * we can save lots of memory by this.
      */
-    private static final @NonNull Tombstone[] TOMBS = {
+    private static final Tombstone[] TOMBS = {
             new Tombstone(0),
             new Tombstone(1),
             new Tombstone(2),
             new Tombstone(3),
     };
 
-    static @NonNull Tombstone create(int skip) {
+    static Tombstone create(int skip) {
         assert skip >= 0;
         return skip < TOMBS.length ? TOMBS[skip] : new Tombstone(skip);
     }

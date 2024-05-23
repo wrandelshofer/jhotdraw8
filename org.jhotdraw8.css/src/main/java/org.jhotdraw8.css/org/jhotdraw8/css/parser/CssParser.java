@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.css.parser;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.jhotdraw8.base.converter.UriResolver;
 import org.jhotdraw8.css.ast.AbstractAttributeSelector;
@@ -39,6 +37,7 @@ import org.jhotdraw8.css.ast.SubstringMatchSelector;
 import org.jhotdraw8.css.ast.SuffixMatchSelector;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.ast.UniversalSelector;
+import org.jspecify.annotations.Nullable;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -172,31 +171,31 @@ import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
  */
 public class CssParser {
 
-    public static final @NonNull String ANY_NAMESPACE_PREFIX = "*";
-    public static final @NonNull String DEFAULT_NAMESPACE = "|";
-    public static final @NonNull String NAMESPACE_AT_RULE = "namespace";
-    private final @NonNull SequencedMap<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
+    public static final String ANY_NAMESPACE_PREFIX = "*";
+    public static final String DEFAULT_NAMESPACE = "|";
+    public static final String NAMESPACE_AT_RULE = "namespace";
+    private final SequencedMap<String, String> prefixToNamespaceMap = new LinkedHashMap<>();
 
 
-    private @NonNull List<ParseException> exceptions = new ArrayList<>();
+    private List<ParseException> exceptions = new ArrayList<>();
     private @Nullable URI stylesheetHome;
     private @Nullable URI stylesheetUri;
-    private @NonNull UriResolver uriResolver = new SimpleUriResolver();
+    private UriResolver uriResolver = new SimpleUriResolver();
 
     private boolean strict = false;
 
     /**
      * To reduce memory pressure, we deduplicate selectors.
      */
-    private final @NonNull SequencedMap<Selector, Selector> deduplicatedSelectors = new LinkedHashMap<>();
+    private final SequencedMap<Selector, Selector> deduplicatedSelectors = new LinkedHashMap<>();
 
 
     public CssParser() {
     }
 
-    private @NonNull FunctionPseudoClassSelector createFunctionPseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private FunctionPseudoClassSelector createFunctionPseudoClassSelector(CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "FunctionPseudoClassSelector: Function expected");
-        final @NonNull String ident = tt.currentStringNonNull();
+        final String ident = tt.currentStringNonNull();
         switch (ident) {
             case "not":
                 final SimpleSelector simpleSelector = parseSimpleSelector(tt);
@@ -223,7 +222,7 @@ public class CssParser {
         }
     }
 
-    public @NonNull List<ParseException> getParseExceptions() {
+    public List<ParseException> getParseExceptions() {
         return exceptions;
     }
 
@@ -250,7 +249,7 @@ public class CssParser {
         }
     }
 
-    private @NonNull AtRule parseAtRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private AtRule parseAtRule(CssTokenizer tt) throws IOException, ParseException {
         var sourceLocator = tt.getSourceLocator();
         if (tt.nextNoSkip() != CssTokenType.TT_AT_KEYWORD) {
             throw tt.createParseException("Could not parse the At-Rule, because it does not start with an '@' character.");
@@ -277,7 +276,7 @@ public class CssParser {
         }
     }
 
-    private @NonNull AbstractAttributeSelector parseAttributeSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private AbstractAttributeSelector parseAttributeSelector(CssTokenizer tt) throws IOException, ParseException {
         tt.requireNextNoSkip('[', "Could not parse an AttributeSelector because it does not start with an opening square bracket '[' character.");
         String prefixOrName = null;
         String namespacePattern = null;
@@ -364,7 +363,7 @@ public class CssParser {
         return selector;
     }
 
-    private void parseBracketedTerms(@NonNull CssTokenizer tt, @NonNull List<CssToken> terms, int endBracket) throws IOException, ParseException {
+    private void parseBracketedTerms(CssTokenizer tt, List<CssToken> terms, int endBracket) throws IOException, ParseException {
         terms.add(new CssToken(tt.current(), tt.currentString(), tt.currentNumber(),
                 tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
         tt.nextNoSkip();
@@ -392,7 +391,7 @@ public class CssParser {
                 tt.getLineNumber(), tt.getStartPosition(), tt.getEndPosition()));
     }
 
-    private void parseComponentValue(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
+    private void parseComponentValue(CssTokenizer tt, List<CssToken> preservedTokens) throws IOException, ParseException {
         switch (tt.nextNoSkip()) {
             case '{':
                 tt.pushBack();
@@ -417,7 +416,7 @@ public class CssParser {
         }
     }
 
-    private void parseCurlyBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
+    private void parseCurlyBlock(CssTokenizer tt, List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != '{') {
             throw tt.createParseException("Could not parse a CurlyBlock because it does not start with an opening curly bracket '{' character.");
         }
@@ -433,7 +432,7 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    private @NonNull Declaration parseDeclaration(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private Declaration parseDeclaration(CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != CssTokenType.TT_IDENT) {
             throw tt.createParseException("Could not parse a Declaration because it does not start with an identifier.");
         }
@@ -470,7 +469,7 @@ public class CssParser {
      * @return the declaration list
      * @throws IOException if parsing fails
      */
-    public @NonNull List<Declaration> parseDeclarationList(@NonNull String css) throws IOException {
+    public List<Declaration> parseDeclarationList(String css) throws IOException {
         return CssParser.this.parseDeclarationList(new StringReader(css));
     }
 
@@ -481,7 +480,7 @@ public class CssParser {
      * @return the declaration list
      * @throws IOException if parsing fails
      */
-    public @NonNull List<Declaration> parseDeclarationList(Reader css) throws IOException {
+    public List<Declaration> parseDeclarationList(Reader css) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css, null);
         try {
@@ -492,7 +491,7 @@ public class CssParser {
         return new ArrayList<>();
     }
 
-    private @NonNull List<Declaration> parseDeclarationList(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private List<Declaration> parseDeclarationList(CssTokenizer tt) throws IOException, ParseException {
         List<Declaration> declarations = new ArrayList<>();
 
         while (tt.next() != CssTokenType.TT_EOF
@@ -521,7 +520,7 @@ public class CssParser {
 
     }
 
-    private void parseFunctionBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
+    private void parseFunctionBlock(CssTokenizer tt, List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != CssTokenType.TT_FUNCTION) {
             throw tt.createParseException("Could not parse a FunctionBlock because it does not start with a function.");
         }
@@ -538,14 +537,14 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    private void parsePreservedToken(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
+    private void parsePreservedToken(CssTokenizer tt, List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() == CssTokenType.TT_EOF) {
             throw tt.createParseException("Could not parse a PreservedToken because of unexpected end-of-file.");
         }
         preservedTokens.add(tt.getToken());
     }
 
-    private @NonNull PseudoClassSelector parsePseudoClassSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private PseudoClassSelector parsePseudoClassSelector(CssTokenizer tt) throws IOException, ParseException {
         if (tt.nextNoSkip() != ':') {
             throw tt.createParseException("Could not parse a PseudoClassSelector because it does not start with a colon ':' character.");
         }
@@ -563,7 +562,7 @@ public class CssParser {
         }
     }
 
-    private void parseRoundBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
+    private void parseRoundBlock(CssTokenizer tt, List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != '(') {
             throw tt.createParseException("Could not parse a RoundBlock because it does not start with an opening bracket '(' character.");
         }
@@ -580,7 +579,7 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    private @NonNull Selector parseSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private Selector parseSelector(CssTokenizer tt) throws IOException, ParseException {
         SimpleSelector simpleSelector = parseSimpleSelector(tt);
         Selector selector = simpleSelector;
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -620,7 +619,7 @@ public class CssParser {
         return deduplicatedSelectors.computeIfAbsent(selector, Function.identity());
     }
 
-    public @NonNull SelectorGroup parseSelectorGroup(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    public SelectorGroup parseSelectorGroup(CssTokenizer tt) throws IOException, ParseException {
         List<Selector> selectors = new ArrayList<>();
         selectors.add(parseSelector(tt));
         while (tt.nextNoSkip() != CssTokenType.TT_EOF
@@ -638,12 +637,12 @@ public class CssParser {
         return new SelectorGroup(tt.getSourceLocator(), selectors);
     }
 
-    private @NonNull SimpleSelector parseSimpleSelector(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private SimpleSelector parseSimpleSelector(CssTokenizer tt) throws IOException, ParseException {
         final SimpleSelector simpleSelector = parseSimpleSelector0(tt);
         return (SimpleSelector) deduplicatedSelectors.computeIfAbsent(simpleSelector, Function.identity());
     }
 
-    private @NonNull SimpleSelector parseSimpleSelector0(@NonNull CssTokenizer tt) throws IOException {
+    private SimpleSelector parseSimpleSelector0(CssTokenizer tt) throws IOException {
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
 
@@ -696,7 +695,7 @@ public class CssParser {
         }
     }
 
-    private void parseSquareBlock(@NonNull CssTokenizer tt, @NonNull List<CssToken> preservedTokens) throws IOException, ParseException {
+    private void parseSquareBlock(CssTokenizer tt, List<CssToken> preservedTokens) throws IOException, ParseException {
         if (tt.nextNoSkip() != '[') {
             throw tt.createParseException("Could not parse a SquareBlock because it does not start with an opening square bracket '[' character.");
         }
@@ -713,7 +712,7 @@ public class CssParser {
         preservedTokens.add(tt.getToken());
     }
 
-    private @NonNull StyleRule parseStyleRule(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private StyleRule parseStyleRule(CssTokenizer tt) throws IOException, ParseException {
         SelectorGroup selectorGroup;
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
@@ -746,7 +745,7 @@ public class CssParser {
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
+    public Stylesheet parseStylesheet(URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         try (Reader in = new BufferedReader(new InputStreamReader(stylesheetUri.toURL().openConnection().getInputStream(), StandardCharsets.UTF_8))) {
             return parseStylesheet(in, stylesheetUri, stylesheetHome);
         }
@@ -761,7 +760,7 @@ public class CssParser {
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull String css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
+    public Stylesheet parseStylesheet(String css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         return parseStylesheet(new StringReader(css), stylesheetUri, stylesheetHome);
     }
 
@@ -772,7 +771,7 @@ public class CssParser {
      * @return the parsed selector
      * @throws ParseException on failure
      */
-    public @NonNull Selector parseSelector(@NonNull String css) throws ParseException {
+    public Selector parseSelector(String css) throws ParseException {
         try {
             return parseSelector(new StreamCssTokenizer(new StringReader(css)));
         } catch (IOException e) {
@@ -789,7 +788,7 @@ public class CssParser {
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(Reader css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
+    public Stylesheet parseStylesheet(Reader css, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         exceptions = new ArrayList<>();
         CssTokenizer tt = new StreamCssTokenizer(css, stylesheetUri);
         return parseStylesheet(tt, stylesheetUri, stylesheetHome);
@@ -804,7 +803,7 @@ public class CssParser {
      * @return the parsed stylesheet
      * @throws IOException on failure
      */
-    public @NonNull Stylesheet parseStylesheet(@NonNull CssTokenizer tt, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
+    public Stylesheet parseStylesheet(CssTokenizer tt, @Nullable URI stylesheetUri, @Nullable URI stylesheetHome) throws IOException {
         setStylesheetUri(stylesheetUri);
         setStylesheetHome(stylesheetHome);
         List<Rule> rules = new ArrayList<>();
@@ -839,12 +838,12 @@ public class CssParser {
         return new Stylesheet(getStylesheetUri(), rules);
     }
 
-    private @NonNull List<CssToken> parseTerms(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private List<CssToken> parseTerms(CssTokenizer tt) throws IOException, ParseException {
         List<CssToken> terms = new ArrayList<>();
         return parseTerms(tt, terms);
     }
 
-    private @NonNull List<CssToken> parseTerms(@NonNull CssTokenizer tt, List<CssToken> terms) throws IOException, ParseException {
+    private List<CssToken> parseTerms(CssTokenizer tt, List<CssToken> terms) throws IOException, ParseException {
         tt.nextNoSkip();
         skipWhitespaceAndComments(tt);
         tt.pushBack();
@@ -886,8 +885,7 @@ public class CssParser {
      * @param relativeUri an URL string
      * @return the resolved URL
      */
-    @NonNull
-    private String absolutizeUri(@NonNull String relativeUri) {
+    private String absolutizeUri(String relativeUri) {
         if (stylesheetHome == null) {
             return relativeUri;
         }
@@ -928,7 +926,7 @@ public class CssParser {
         };
     }
 
-    private void skipWhitespaceAndComments(@NonNull CssTokenizer tt) throws IOException {
+    private void skipWhitespaceAndComments(CssTokenizer tt) throws IOException {
         while (tt.current() == CssTokenType.TT_S//
                 || tt.current() == CssTokenType.TT_CDC//
                 || tt.current() == CssTokenType.TT_CDO
@@ -954,11 +952,11 @@ public class CssParser {
         this.stylesheetHome = stylesheetHome;
     }
 
-    public @NonNull UriResolver getUriResolver() {
+    public UriResolver getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver(@NonNull UriResolver uriResolver) {
+    public void setUriResolver(UriResolver uriResolver) {
         this.uriResolver = uriResolver;
     }
 

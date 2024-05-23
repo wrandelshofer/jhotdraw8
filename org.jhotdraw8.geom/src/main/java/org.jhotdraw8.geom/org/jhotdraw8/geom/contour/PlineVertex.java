@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Consumer4;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
@@ -119,7 +118,7 @@ public class PlineVertex implements Cloneable {
      * Computes a fast approximate AABB of a segment described by v1 to v2, bounding box may be larger
      * than the true bounding box for the segment
      */
-    static @NonNull AABB createFastApproxBoundingBox(final @NonNull PlineVertex v1, final @NonNull PlineVertex v2) {
+    static AABB createFastApproxBoundingBox(final PlineVertex v1, final PlineVertex v2) {
         if (v1.bulgeIsZero()) {
             return new AABB(
                     min(v1.getX(), v2.getX()),

@@ -6,7 +6,6 @@ package org.jhotdraw8.application.action.edit;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.EditableComponent;
@@ -18,14 +17,14 @@ import org.jhotdraw8.application.EditableComponent;
  */
 public class SelectAllAction extends AbstractSelectionAction {
 
-    public static final @NonNull String ID = "edit.selectAll";
+    public static final String ID = "edit.selectAll";
 
     /**
      * Creates a new instance which acts on the currently focused component.
      *
      * @param app the application
      */
-    public SelectAllAction(@NonNull Application app) {
+    public SelectAllAction(Application app) {
         this(app, null);
     }
 
@@ -37,13 +36,13 @@ public class SelectAllAction extends AbstractSelectionAction {
      *               focused component.
      */
     @SuppressWarnings("this-escape")
-    public SelectAllAction(@NonNull Application app, Node target) {
+    public SelectAllAction(Application app, Node target) {
         super(app, target);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull EditableComponent c) {
+    protected void onActionPerformed(ActionEvent event, EditableComponent c) {
         c.selectAll();
     }
 

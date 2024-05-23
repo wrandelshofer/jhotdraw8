@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.model;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.TransformationList;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.event.SimpleWeakListener;
@@ -21,14 +20,14 @@ import java.util.function.Function;
  * the proxy performs all changes on the children list via the DrawingModel.
  */
 public class DrawingModelFigureChildrenObservableList extends TransformationList<Figure, Figure> {
-    private final @NonNull DrawingModel model;
-    private final @NonNull Figure parent;
-    private final @NonNull Listener<DrawingModelEvent> drawingModelEventListener;
+    private final DrawingModel model;
+    private final Figure parent;
+    private final Listener<DrawingModelEvent> drawingModelEventListener;
 
     /**
      * Creates a new Transformation list wrapped around the source list.
      */
-    public DrawingModelFigureChildrenObservableList(@NonNull DrawingModel model, @NonNull Figure parent) {
+    public DrawingModelFigureChildrenObservableList(DrawingModel model, Figure parent) {
         super(parent.getChildren());
         this.model = model;
         this.parent = parent;

@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.css.converter;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
@@ -33,7 +32,7 @@ public class CssStrokeConverterTest {
     /**
      * Test of fromString method, of class CssStrokeStyleConverter.
      */
-    public static void doTestFromString(CssStrokeStyle expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssStrokeStyle expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         StrokeStyleCssConverter instance = new StrokeStyleCssConverter(false);
@@ -53,14 +52,14 @@ public class CssStrokeConverterTest {
     /**
      * Test of fromString and toString methods, of class CssStrokeStyleConverter.
      */
-    public static void testStrokeStyle(CssStrokeStyle value, @NonNull String str) throws Exception {
+    public static void testStrokeStyle(CssStrokeStyle value, String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsStrokeStyle() {
+    public List<DynamicTest> dynamicTestsStrokeStyle() {
         return Arrays.asList(
                 dynamicTest("1", () -> testStrokeStyle(
                         new CssStrokeStyle(),

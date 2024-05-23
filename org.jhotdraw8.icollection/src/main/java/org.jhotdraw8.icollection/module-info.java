@@ -3,13 +3,17 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Defines interfaces for read-only collections and immutable collections,
  * and provides efficient implementations of these interfaces.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.icollection {
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires java.logging;
     exports org.jhotdraw8.icollection.exception;
     exports org.jhotdraw8.icollection.facade;

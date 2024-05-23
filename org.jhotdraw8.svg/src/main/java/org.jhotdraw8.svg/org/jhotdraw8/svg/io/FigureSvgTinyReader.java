@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.svg.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.CheckedRunnable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
@@ -51,6 +49,7 @@ import org.jhotdraw8.svg.figure.SvgTextFigure;
 import org.jhotdraw8.svg.text.SvgXmlPaintableConverter;
 import org.jhotdraw8.xml.converter.StringXmlConverter;
 import org.jhotdraw8.xml.converter.WordSetXmlConverter;
+import org.jspecify.annotations.Nullable;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
@@ -93,35 +92,35 @@ import java.util.stream.Collectors;
  * </dl>
  */
 public class FigureSvgTinyReader {
-    public static final @NonNull String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
-    public static final @NonNull String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
+    public static final String SVG_NAMESPACE = "http://www.w3.org/2000/svg";
+    public static final String XML_NAMESPACE = "http://www.w3.org/XML/1998/namespace";
     /**
      * Maps from an attribute name to an accessor.
      */
-    private static final @NonNull Map<String, Map<String, MapAccessor<?>>> accessorMap;
+    private static final Map<String, Map<String, MapAccessor<?>>> accessorMap;
     /**
      * Maps from an element name to a figure factory.
      */
-    private static final @NonNull Map<QName, Supplier<Figure>> figureMap;
+    private static final Map<QName, Supplier<Figure>> figureMap;
 
     /**
      * Converts a CSS size string into a CssSize value.
      * <p>
      * FIXME we must use XmlSizeConverter and not CssSizeConverter!
      */
-    private final @NonNull SizeCssConverter sizeConverter = new SizeCssConverter(true);
-    private final @NonNull DefaultableValueCssConverter<CssSize> defaultableSizeConverter = new DefaultableValueCssConverter<>(new SizeCssConverter(false));
+    private final SizeCssConverter sizeConverter = new SizeCssConverter(true);
+    private final DefaultableValueCssConverter<CssSize> defaultableSizeConverter = new DefaultableValueCssConverter<>(new SizeCssConverter(false));
 
     /**
      * Converts a CSS color string into a CssColor value.
      * <p>
      * FIXME we must use XmlColorConverter and not CssColorConverter!
      */
-    private final @NonNull SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new ColorCssConverter(true));
+    private final SvgDefaultablePaintConverter<CssColor> colorConverter = new SvgDefaultablePaintConverter<>(new ColorCssConverter(true));
     /**
      * Maps from a type to a converter.
      */
-    private static final @NonNull Map<Type, Converter<?>> converterMap;
+    private static final Map<Type, Converter<?>> converterMap;
 
     static {
         final SequencedMap<String, SequencedMap<String, MapAccessor<?>>> mutableAccessorMap = new LinkedHashMap<>();
@@ -182,7 +181,7 @@ public class FigureSvgTinyReader {
         accessorMap = Collections.unmodifiableMap(mutableAccessorMap);
     }
 
-    private final @NonNull Key<String> textKey = SvgTextFigure.TEXT;
+    private final Key<String> textKey = SvgTextFigure.TEXT;
 
     /**
      * @see #isBestEffort()
@@ -242,7 +241,7 @@ public class FigureSvgTinyReader {
      * @param message the error message
      * @see #isBestEffort()
      */
-    private void handleError(@Nullable Location r, @NonNull String message) throws XMLStreamException {
+    private void handleError(@Nullable Location r, String message) throws XMLStreamException {
         handleError(r, message, null);
     }
 
@@ -254,7 +253,7 @@ public class FigureSvgTinyReader {
      * @param cause   the cause of the error
      * @see #isBestEffort()
      */
-    private void handleError(@Nullable Location r, @NonNull String message, @Nullable Throwable cause) throws XMLStreamException {
+    private void handleError(@Nullable Location r, String message, @Nullable Throwable cause) throws XMLStreamException {
         if (bestEffort) {
             errors.add(message + " " + toLocationString(r));
         } else {
@@ -266,13 +265,13 @@ public class FigureSvgTinyReader {
         }
     }
 
-    public Figure read(@NonNull Path file) throws IOException {
+    public Figure read(Path file) throws IOException {
         try (final InputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(new StreamSource(in));
         }
     }
 
-    public Figure read(@NonNull URL file) throws IOException {
+    public Figure read(URL file) throws IOException {
         try (final InputStream in = new BufferedInputStream(file.openStream())) {
             return read(new StreamSource(in));
         }
@@ -281,7 +280,7 @@ public class FigureSvgTinyReader {
     /**
      * Warning: this method does not close the input source.
      */
-    public Figure read(@NonNull Source in) throws IOException {
+    public Figure read(Source in) throws IOException {
         try {
 
             XMLInputFactory dbf = XMLInputFactory.newInstance();
@@ -524,7 +523,7 @@ public class FigureSvgTinyReader {
         skipElement(r, ctx);
     }
 
-    private final @NonNull NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
+    private final NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;
@@ -559,7 +558,7 @@ public class FigureSvgTinyReader {
     /**
      * Reads all text content until ELEMENT_END is encountered.
      */
-    private @NonNull String readTextContent(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
+    private String readTextContent(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         StringBuilder buf = new StringBuilder();
         int depth = 1;
         Loop:
@@ -646,7 +645,7 @@ public class FigureSvgTinyReader {
      * The list must be synchronized, because we do some processing in
      * a parallel stream.
      */
-    private final @NonNull List<String> errors = Collections.synchronizedList(new ArrayList<>());
+    private final List<String> errors = Collections.synchronizedList(new ArrayList<>());
 
     /**
      * Clears the errors list.
@@ -669,8 +668,8 @@ public class FigureSvgTinyReader {
      */
     private static class Context {
         final SimpleIdFactory idFactory = new SimpleIdFactory();
-        final @NonNull List<CheckedRunnable> secondPass = new ArrayList<>();
-        final @NonNull List<String> stylesheets = new ArrayList<>();
+        final List<CheckedRunnable> secondPass = new ArrayList<>();
+        final List<String> stylesheets = new ArrayList<>();
         final StringBuilder stringBuilder = new StringBuilder();
     }
 }

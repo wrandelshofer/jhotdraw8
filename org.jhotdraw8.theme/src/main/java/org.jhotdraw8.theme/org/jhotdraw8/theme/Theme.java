@@ -6,8 +6,7 @@
 package org.jhotdraw8.theme;
 
 import javafx.application.Application;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Base64;
 
@@ -22,7 +21,7 @@ public interface Theme {
      *
      * @return the name of the theme.
      */
-    @NonNull String getName();
+    String getName();
 
     /**
      * Generates a user agent stylesheet that can be set on
@@ -36,7 +35,7 @@ public interface Theme {
      * @return a stylesheet URL
      */
     @Nullable
-    String createUserAgentStylesheet(@NonNull ThemeParameters params);
+    String createUserAgentStylesheet(ThemeParameters params);
 
     /**
      * Gets the appearance of the theme.
@@ -53,7 +52,6 @@ public interface Theme {
      *
      * @return the appearance
      */
-    @NonNull
     String getAppearance();
 
 

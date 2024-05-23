@@ -11,13 +11,12 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -27,7 +26,7 @@ import org.jhotdraw8.geom.FXTransforms;
  */
 public class BoundsInParentOutlineHandle extends AbstractHandle {
 
-    private final @NonNull Polygon node;
+    private final Polygon node;
     private final double[] points;
 
     public BoundsInParentOutlineHandle(Figure figure) {
@@ -49,14 +48,14 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         Color color1 = (Color) Paintable.getPaint(color);
         node.setStroke(color1);
         return node;
     }
 
-    protected void initNode(@NonNull Polygon r) {
+    protected void initNode(Polygon r) {
         r.setFill(null);
     }
 
@@ -66,7 +65,7 @@ public class BoundsInParentOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getParentToWorld());
 

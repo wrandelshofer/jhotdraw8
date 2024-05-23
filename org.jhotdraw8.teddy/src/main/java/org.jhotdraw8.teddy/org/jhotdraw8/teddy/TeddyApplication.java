@@ -6,7 +6,6 @@ package org.jhotdraw8.teddy;
 
 import javafx.collections.ObservableMap;
 import javafx.stage.Screen;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractFileBasedApplication;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
@@ -52,7 +51,7 @@ public class TeddyApplication extends AbstractFileBasedApplication {
     }
 
     @Override
-    protected void initActions(@NonNull ObservableMap<String, Action> map) {
+    protected void initActions(ObservableMap<String, Action> map) {
         super.initActions(map);
     }
 

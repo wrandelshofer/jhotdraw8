@@ -6,8 +6,7 @@ package org.jhotdraw8.draw.render;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.DefaultSystemColorConverter;
@@ -41,14 +40,12 @@ public interface RenderContext extends ReadOnlyPropertyBean {
     /**
      * Contains a non-null value if the rendering is clipped. The clip bounds are given in world coordinates.
      */
-    @NonNull
     Key<Bounds> CLIP_BOUNDS = new NullableObjectKey<>("clipBounds", Bounds.class, null);
     /**
      * Number of nodes that can be rendered per layer in the drawing editor..
      */
     NonNullObjectKey<Integer> MAX_NODES_PER_LAYER = new NonNullObjectKey<>("maxNodesPerLayer", Integer.class, 10_000);
 
-    @NonNull
     Key<Page> RENDER_PAGE = new NullableObjectKey<>("renderPage", Page.class, null);
     Key<Integer> RENDER_PAGE_NUMBER = new NullableObjectKey<>("renderPageNumber", Integer.class, 0);
     Key<Integer> RENDER_NUMBER_OF_PAGES = new NullableObjectKey<>("renderNumberOfPages", Integer.class, 1);

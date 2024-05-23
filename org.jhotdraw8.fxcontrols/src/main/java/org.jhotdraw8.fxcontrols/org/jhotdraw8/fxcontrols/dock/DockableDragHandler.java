@@ -12,13 +12,12 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 class DockableDragHandler {
 
-    private final @NonNull Dockable dockable;
-    private final @NonNull ChangeListener<Node> graphicChangedListener = this::onGraphicChanged;
+    private final Dockable dockable;
+    private final ChangeListener<Node> graphicChangedListener = this::onGraphicChanged;
 
     public DockableDragHandler(Dockable dockable) {
         this.dockable = dockable;
@@ -42,7 +41,7 @@ class DockableDragHandler {
         DockRoot.setDraggedDockable(null);
     }
 
-    private void onDragDetected(@NonNull MouseEvent e) {
+    private void onDragDetected(MouseEvent e) {
         if (dockable.getDockRoot() == null) {
             return;
         }

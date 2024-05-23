@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.StringOrIdentCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -16,11 +15,11 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
  *
  * @author Werner Randelshofer
  */
-public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull String>
-        implements WritableStyleableMapAccessor<@NonNull String>, NonNullKey<@NonNull String> {
+public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
+        implements WritableStyleableMapAccessor<String>, NonNullKey<String> {
 
     private static final long serialVersionUID = 1L;
-    private final @NonNull Converter<String> converter = new StringOrIdentCssConverter();
+    private final Converter<String> converter = new StringOrIdentCssConverter();
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -28,7 +27,7 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull Str
      *
      * @param name The name of the key.
      */
-    public StringOrIdentStyleableKey(@NonNull String name) {
+    public StringOrIdentStyleableKey(String name) {
         this(name, "");
     }
 
@@ -38,12 +37,12 @@ public class StringOrIdentStyleableKey extends AbstractStyleableKey<@NonNull Str
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public StringOrIdentStyleableKey(@NonNull String name, String defaultValue) {
+    public StringOrIdentStyleableKey(String name, String defaultValue) {
         super(null, name, String.class, false, defaultValue);
     }
 
     @Override
-    public @NonNull Converter<String> getCssConverter() {
+    public Converter<String> getCssConverter() {
         return converter;
     }
 }

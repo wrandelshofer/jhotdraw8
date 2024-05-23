@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.css.value;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -25,7 +24,7 @@ public class CssDefaultableValue<T> {
         this.value = value;
     }
 
-    public CssDefaultableValue(@NonNull CssDefaulting defaulting) {
+    public CssDefaultableValue(CssDefaulting defaulting) {
         this(defaulting, null);
     }
 

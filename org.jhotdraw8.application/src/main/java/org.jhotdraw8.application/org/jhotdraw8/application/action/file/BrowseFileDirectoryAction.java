@@ -5,10 +5,9 @@
 package org.jhotdraw8.application.action.file;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.io.File;
@@ -22,7 +21,7 @@ import java.util.logging.Logger;
 
 public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedActivity> {
 
-    public static final @NonNull String ID = "file.browseFileDirectory";
+    public static final String ID = "file.browseFileDirectory";
 
     /**
      * Creates a new instance.
@@ -30,13 +29,13 @@ public class BrowseFileDirectoryAction extends AbstractActivityAction<FileBasedA
      * @param activity the view
      */
     @SuppressWarnings("this-escape")
-    public BrowseFileDirectoryAction(@NonNull FileBasedActivity activity) {
+    public BrowseFileDirectoryAction(FileBasedActivity activity) {
         super(activity);
         activity.getApplication().getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull FileBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, FileBasedActivity activity) {
         if (isDisabled()) {
             return;
         }

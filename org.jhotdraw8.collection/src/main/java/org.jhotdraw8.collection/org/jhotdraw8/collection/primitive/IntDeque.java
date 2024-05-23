@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Deque;
 import java.util.NoSuchElementException;

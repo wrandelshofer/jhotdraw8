@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.draw.css.value.function;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.DocumentSelectorModel;
 import org.jhotdraw8.css.parser.CssToken;

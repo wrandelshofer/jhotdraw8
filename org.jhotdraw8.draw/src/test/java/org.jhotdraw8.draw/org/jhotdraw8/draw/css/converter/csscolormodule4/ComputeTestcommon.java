@@ -1,8 +1,7 @@
 package org.jhotdraw8.draw.css.converter.csscolormodule4;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class ComputeTestcommon {
     private final static ColorCssConverter colorConverter = new ColorCssConverter();
 
-    public static void test_computed_value(@NonNull String property, @NonNull String specified, @NonNull String computed) {
+    public static void test_computed_value(String property, String specified, String computed) {
         test_computed_value(property, specified, computed, null);
     }
 
@@ -34,7 +33,7 @@ public class ComputeTestcommon {
      *                   If omitted, defaults to {@code specified}.
      * @param titleExtra Optional extra title.
      */
-    public static void test_computed_value(@NonNull String property, @NonNull String specified, @NonNull String computed, @Nullable String titleExtra) {
+    public static void test_computed_value(String property, String specified, String computed, @Nullable String titleExtra) {
         String message = "specified=\"" + specified + (titleExtra == null ? "\"" : "\" " + titleExtra);
         try {
             CssColor parsed = colorConverter.fromString(specified);
@@ -62,7 +61,7 @@ public class ComputeTestcommon {
      *                   If omitted, defaults to {@code specified}.
      * @param titleExtra Optional extra title.
      */
-    public static void test_computed_value_to_rgb(@NonNull String property, @NonNull String specified, @NonNull String computed, @Nullable String titleExtra) {
+    public static void test_computed_value_to_rgb(String property, String specified, String computed, @Nullable String titleExtra) {
         String message = "specified=\"" + specified + (titleExtra == null ? "\"" : "\" " + titleExtra);
         try {
             CssColor parsed = colorConverter.fromString(specified);

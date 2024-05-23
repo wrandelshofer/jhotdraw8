@@ -6,8 +6,7 @@ package org.jhotdraw8.draw.render;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
@@ -38,7 +37,7 @@ public class SimpleDrawingRenderer extends AbstractPropertyBean implements Rende
     // Behavior
     // ---
     @Override
-    public Node getNode(@NonNull Figure f) {
+    public Node getNode(Figure f) {
         Node n = figureToNodeMap.get(f);
         if (n == null) {
             n = f.createNode(this);
@@ -53,7 +52,7 @@ public class SimpleDrawingRenderer extends AbstractPropertyBean implements Rende
      * @param figure The figure
      * @return the rendered node
      */
-    public Node render(@NonNull Figure figure) {
+    public Node render(Figure figure) {
         figureToNodeMap.clear();
         renderRecursive(figure);
         return getNode(figure);
@@ -64,14 +63,14 @@ public class SimpleDrawingRenderer extends AbstractPropertyBean implements Rende
      *
      * @param figure The figure
      */
-    private void renderRecursive(@NonNull Figure figure) {
+    private void renderRecursive(Figure figure) {
         figure.updateNode(this, getNode(figure));
         for (Figure child : figure.getChildren()) {
             renderRecursive(child);
         }
     }
 
-    public static Node toNode(@NonNull Drawing external, @NonNull Collection<Figure> selection, @Nullable Map<Key<?>, Object> renderingHints) {
+    public static Node toNode(Drawing external, Collection<Figure> selection, @Nullable Map<Key<?>, Object> renderingHints) {
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         if (renderingHints != null) {
             r.getProperties().putAll(renderingHints);

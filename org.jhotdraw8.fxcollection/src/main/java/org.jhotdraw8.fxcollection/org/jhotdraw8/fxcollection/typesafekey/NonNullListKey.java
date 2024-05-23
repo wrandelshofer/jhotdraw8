@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -19,11 +18,11 @@ import java.lang.reflect.Type;
 public class NonNullListKey<E> extends NonNullObjectKey<ImmutableList<E>> {
 
 
-    public NonNullListKey(@NonNull String key, @NonNull Type elementType) {
+    public NonNullListKey(String key, Type elementType) {
         super(key, new SimpleParameterizedType(ImmutableList.class, elementType), VectorList.of());
     }
 
-    public NonNullListKey(@NonNull String key, @NonNull Type elementType, @NonNull ImmutableList<E> defaultValue) {
+    public NonNullListKey(String key, Type elementType, ImmutableList<E> defaultValue) {
         super(key, new SimpleParameterizedType(ImmutableList.class, elementType), defaultValue);
     }
 }

@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.tree.TreeNode;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -17,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TreeNodeTest {
     static class Node implements TreeNode<Node> {
-        private final @NonNull List<Node> children = new ArrayList<>();
+        private final List<Node> children = new ArrayList<>();
         private @Nullable Node parent;
         private final int value;
 
@@ -34,7 +33,7 @@ public class TreeNodeTest {
         }
 
         @Override
-        public @NonNull List<Node> getChildren() {
+        public List<Node> getChildren() {
             return children;
         }
 

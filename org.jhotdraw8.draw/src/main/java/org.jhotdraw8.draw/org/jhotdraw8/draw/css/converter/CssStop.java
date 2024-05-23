@@ -4,14 +4,13 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssColor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * CssStop.
  *
  * @author Werner Randelshofer
  */
-public record CssStop(@Nullable Double offset, @NonNull CssColor color) {
+public record CssStop(@Nullable Double offset, CssColor color) {
 }

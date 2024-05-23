@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.VectorList;
 
 import java.util.Spliterators;
@@ -19,11 +18,11 @@ import java.util.function.Function;
  * @param <E> the element type
  */
 public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
-    private final @NonNull VectorList<Object> vector;
-    private final @NonNull Function<Object, E> mapper;
+    private final VectorList<Object> vector;
+    private final Function<Object, E> mapper;
     private int index;
 
-    public ReverseTombSkippingVectorSpliterator(@NonNull VectorList<Object> vector, @NonNull Function<Object, E> mapper, long est, int additionalCharacteristics) {
+    public ReverseTombSkippingVectorSpliterator(VectorList<Object> vector, Function<Object, E> mapper, long est, int additionalCharacteristics) {
         super(est, additionalCharacteristics);
         this.vector = vector;
         this.mapper = mapper;
@@ -31,7 +30,7 @@ public class ReverseTombSkippingVectorSpliterator<E> extends Spliterators.Abstra
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
+    public boolean tryAdvance(Consumer<? super E> action) {
         if (index < 0) {
             return false;
         }

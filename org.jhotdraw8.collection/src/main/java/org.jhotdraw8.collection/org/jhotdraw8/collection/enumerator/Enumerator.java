@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.collection.enumerator;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -22,7 +21,7 @@ import java.util.function.LongConsumer;
  */
 public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
     @Override
-    default boolean tryAdvance(@NonNull Consumer<? super E> action) {
+    default boolean tryAdvance(Consumer<? super E> action) {
         if (moveNext()) {
             action.accept(current());
             return true;
@@ -45,7 +44,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default @NonNull Long current() {
+        default Long current() {
             return currentAsLong();
         }
 
@@ -61,7 +60,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default boolean tryAdvance(@NonNull LongConsumer action) {
+        default boolean tryAdvance(LongConsumer action) {
             if (moveNext()) {
                 action.accept(currentAsLong());
                 return true;
@@ -73,7 +72,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default boolean tryAdvance(@NonNull Consumer<? super Long> action) {
+        default boolean tryAdvance(Consumer<? super Long> action) {
             return Enumerator.super.tryAdvance(action);
         }
 
@@ -88,7 +87,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default @NonNull Double current() {
+        default Double current() {
             return currentAsDouble();
         }
 
@@ -104,7 +103,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default boolean tryAdvance(@NonNull DoubleConsumer action) {
+        default boolean tryAdvance(DoubleConsumer action) {
             if (moveNext()) {
                 action.accept(currentAsDouble());
                 return true;
@@ -116,7 +115,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default boolean tryAdvance(@NonNull Consumer<? super Double> action) {
+        default boolean tryAdvance(Consumer<? super Double> action) {
             return Enumerator.super.tryAdvance(action);
         }
 
@@ -131,7 +130,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default @NonNull Integer current() {
+        default Integer current() {
             return currentAsInt();
         }
 
@@ -147,7 +146,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default boolean tryAdvance(@NonNull IntConsumer action) {
+        default boolean tryAdvance(IntConsumer action) {
             if (moveNext()) {
                 action.accept(currentAsInt());
                 return true;
@@ -159,7 +158,7 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
          * {@inheritDoc}
          */
         @Override
-        default boolean tryAdvance(@NonNull Consumer<? super Integer> action) {
+        default boolean tryAdvance(Consumer<? super Integer> action) {
             return Enumerator.super.tryAdvance(action);
         }
 

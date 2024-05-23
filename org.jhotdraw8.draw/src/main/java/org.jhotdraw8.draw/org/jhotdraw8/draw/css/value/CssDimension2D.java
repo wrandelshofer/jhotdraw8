@@ -6,10 +6,9 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,17 +19,17 @@ import java.util.Objects;
  */
 public class CssDimension2D {
 
-    public static final @NonNull CssDimension2D ZERO = new CssDimension2D();
+    public static final CssDimension2D ZERO = new CssDimension2D();
 
-    private final @NonNull CssSize width;
-    private final @NonNull CssSize height;
+    private final CssSize width;
+    private final CssSize height;
 
-    public CssDimension2D(@NonNull CssSize width, @NonNull CssSize height) {
+    public CssDimension2D(CssSize width, CssSize height) {
         this.width = width;
         this.height = height;
     }
 
-    public CssDimension2D(double width, double height, @NonNull String units) {
+    public CssDimension2D(double width, double height, String units) {
         this(CssSize.of(width, units), CssSize.of(height, units));
     }
 
@@ -42,7 +41,7 @@ public class CssDimension2D {
         this(width, height, UnitConverter.DEFAULT);
     }
 
-    public CssDimension2D(@NonNull Point2D p) {
+    public CssDimension2D(Point2D p) {
         this(p.getX(), p.getY());
     }
 
@@ -64,11 +63,11 @@ public class CssDimension2D {
         return Objects.equals(this.height, other.height);
     }
 
-    public @NonNull CssSize getWidth() {
+    public CssSize getWidth() {
         return width;
     }
 
-    public @NonNull CssSize getHeight() {
+    public CssSize getHeight() {
         return height;
     }
 
@@ -81,22 +80,22 @@ public class CssDimension2D {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssPoint2D{" + width +
                 ", " + height +
                 '}';
     }
 
-    public @NonNull Dimension2D getConvertedValue() {
+    public Dimension2D getConvertedValue() {
         return new Dimension2D(width.getConvertedValue(), height.getConvertedValue());
 
     }
 
-    public @NonNull CssDimension2D subtract(@NonNull CssDimension2D that) {
+    public CssDimension2D subtract(CssDimension2D that) {
         return new CssDimension2D(width.subtract(that.width), height.subtract(that.height));
     }
 
-    public @NonNull CssDimension2D add(@NonNull CssDimension2D that) {
+    public CssDimension2D add(CssDimension2D that) {
         return new CssDimension2D(width.add(that.width), height.add(that.height));
     }
 }

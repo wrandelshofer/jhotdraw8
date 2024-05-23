@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.jhotdraw8.fxcontrols.dock.DockChild;
@@ -30,8 +29,8 @@ import java.util.logging.Logger;
 
 public class DockingFrameworkExampleMain extends Application {
 
-    public @NonNull DockRoot initStage(String title,
-                                       @NonNull Stage primaryStage) {
+    public DockRoot initStage(String title,
+                              Stage primaryStage) {
         SimpleDockRoot root = new SimpleDockRoot();
         root.setZSupplier(TabbedAccordionTrack::new);
         Scene scene = new Scene(root.getNode(), 300, 250);
@@ -42,7 +41,7 @@ public class DockingFrameworkExampleMain extends Application {
     }
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
 
 
         Thread.currentThread().setUncaughtExceptionHandler((t, e) -> Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e));

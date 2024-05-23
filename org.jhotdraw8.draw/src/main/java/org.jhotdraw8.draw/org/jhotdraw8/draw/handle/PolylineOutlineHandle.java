@@ -16,8 +16,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -35,6 +33,7 @@ import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.PathIterator;
 
@@ -48,11 +47,11 @@ import java.awt.geom.PathIterator;
 public class PolylineOutlineHandle extends AbstractHandle {
 
     private final boolean editable;
-    private final @NonNull NonNullMapAccessor<ImmutableList<Point2D>> key;
+    private final NonNullMapAccessor<ImmutableList<Point2D>> key;
 
-    private final @NonNull Group node;
-    private final @NonNull Polyline poly1;
-    private final @NonNull Polyline poly2;
+    private final Group node;
+    private final Polyline poly1;
+    private final Polyline poly2;
 
     public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key) {
         this(figure, key, true);
@@ -85,7 +84,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         poly1.setStroke(Color.WHITE);
         poly2.setStroke(Paintable.getPaint(color));
@@ -96,20 +95,20 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMousePressed(MouseEvent event, DrawingView dv) {
         if (editable && event.isPopupTrigger()) {
             onPopupTriggered(event, dv);
         }
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (editable && event.isPopupTrigger()) {
             onPopupTriggered(event, dv);
         }
     }
 
-    protected void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onPopupTriggered(MouseEvent event, DrawingView dv) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
         addPoint.setOnAction(actionEvent -> addPoint(event, dv));
@@ -119,13 +118,13 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseClicked(MouseEvent event, DrawingView view) {
         if (editable && key != null && event.getClickCount() == 2) {
             addPoint(event, view);
         }
     }
 
-    private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void addPoint(MouseEvent event, DrawingView view) {
         ImmutableList<Point2D> points = owner.get(key);
 
         Point2D pInDrawing = view.viewToWorld(new Point2D(event.getX(), event.getY()));
@@ -160,7 +159,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getLayoutBounds();

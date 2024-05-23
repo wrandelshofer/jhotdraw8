@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.collection.mapped;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.Iterator;
@@ -25,10 +24,10 @@ import java.util.function.Function;
  */
 public final class MappedList<E, F> extends AbstractList<E> {
 
-    private final @NonNull List<F> backingList;
-    private final @NonNull Function<F, E> mapf;
+    private final List<F> backingList;
+    private final Function<F, E> mapf;
 
-    public MappedList(@NonNull List<F> backingList, @NonNull Function<F, E> mapf) {
+    public MappedList(List<F> backingList, Function<F, E> mapf) {
         this.backingList = backingList;
         this.mapf = mapf;
     }
@@ -44,9 +43,9 @@ public final class MappedList<E, F> extends AbstractList<E> {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new Iterator<>() {
-            private final @NonNull Iterator<F> i = backingList.iterator();
+            private final Iterator<F> i = backingList.iterator();
 
             @Override
             public boolean hasNext() {
@@ -66,16 +65,16 @@ public final class MappedList<E, F> extends AbstractList<E> {
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         class MappingSpliterator implements Spliterator<E> {
-            private final @NonNull Spliterator<F> i;
+            private final Spliterator<F> i;
 
             public MappingSpliterator(Spliterator<F> i) {
                 this.i = i;
             }
 
             @Override
-            public boolean tryAdvance(@NonNull Consumer<? super E> action) {
+            public boolean tryAdvance(Consumer<? super E> action) {
                 return i.tryAdvance(f -> action.accept(mapf.apply(f)));
             }
 
@@ -104,7 +103,7 @@ public final class MappedList<E, F> extends AbstractList<E> {
     }
 
     @Override
-    public @NonNull List<E> subList(int fromIndex, int toIndex) {
+    public List<E> subList(int fromIndex, int toIndex) {
         return new MappedList<>(backingList.subList(fromIndex, toIndex), mapf);
     }
 }

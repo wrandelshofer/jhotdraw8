@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -40,7 +39,7 @@ public interface Converter<T> {
      *                        set to the position where parsing failed. The position of the buffer is
      *                        undefined.
      */
-    default @Nullable T fromString(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
+    default @Nullable T fromString(CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
         return fromString(CharBuffer.wrap(in), idResolver);
     }
 
@@ -64,7 +63,7 @@ public interface Converter<T> {
      *                        undefined.
      */
     @Nullable
-    T fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException;
+    T fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException;
 
     /**
      * Constructs a value from a string.
@@ -83,7 +82,7 @@ public interface Converter<T> {
      *                        set to the position where parsing failed. The position of the buffer is
      *                        undefined.
      */
-    default @Nullable T fromString(@NonNull CharBuffer in) throws ParseException {
+    default @Nullable T fromString(CharBuffer in) throws ParseException {
         return fromString(in, null);
     }
 
@@ -101,7 +100,7 @@ public interface Converter<T> {
      * @return The value. Nullable.
      * @throws ParseException on conversion failure
      */
-    default @Nullable T fromString(@NonNull CharSequence in) throws ParseException {
+    default @Nullable T fromString(CharSequence in) throws ParseException {
         CharBuffer buf = CharBuffer.wrap(in);
         T value = fromString(buf);
         if (buf.remaining() != 0) {
@@ -118,7 +117,7 @@ public interface Converter<T> {
      * @return the value
      * @throws ParseException if the value is null
      */
-    default @NonNull T fromStringNonNull(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    default T fromStringNonNull(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         T m = fromString(in, idResolver);
         if (m == null) {
             throw new ParseException("Value must not be null.", 0);
@@ -133,7 +132,7 @@ public interface Converter<T> {
      * @return the value
      * @throws ParseException if the value is null
      */
-    default @NonNull T fromStringNonNull(@NonNull CharBuffer in) throws ParseException {
+    default T fromStringNonNull(CharBuffer in) throws ParseException {
         T m = fromString(in);
         if (m == null) {
             throw new ParseException("Value must not be null.", 0);
@@ -149,7 +148,7 @@ public interface Converter<T> {
      * @return the value
      * @throws ParseException if the value is null
      */
-    default @NonNull T fromStringNonNull(@NonNull CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
+    default T fromStringNonNull(CharSequence in, @Nullable IdResolver idResolver) throws ParseException {
         T m = fromString(in, idResolver);
         if (m == null) {
             throw new ParseException("Value must not be null.", 0);
@@ -164,7 +163,7 @@ public interface Converter<T> {
      * @return the value
      * @throws ParseException if the value is null
      */
-    default @NonNull T fromStringNonNull(@NonNull CharSequence in) throws ParseException {
+    default T fromStringNonNull(CharSequence in) throws ParseException {
         T m = fromString(in);
         if (m == null) {
             throw new ParseException("Value must not be null.", 0);
@@ -247,7 +246,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @throws IOException thrown by Appendable
      */
-    default <TT extends T> void toString(@NonNull Appendable out, @Nullable TT value) throws IOException {
+    default <TT extends T> void toString(Appendable out, @Nullable TT value) throws IOException {
         toString(out, null, value);
     }
 
@@ -263,7 +262,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @return The String.
      */
-    default @NonNull <TT extends T> String toString(@Nullable TT value) {
+    default <TT extends T> String toString(@Nullable TT value) {
         StringBuilder out = new StringBuilder();
         try {
             toString(out, value);
@@ -285,7 +284,7 @@ public interface Converter<T> {
      * @param value The value. Nullable.
      * @return The String.
      */
-    default @NonNull <TT extends T> String toString(@Nullable IdSupplier idSupplier, @Nullable TT value) {
+    default <TT extends T> String toString(@Nullable IdSupplier idSupplier, @Nullable TT value) {
         StringBuilder out = new StringBuilder();
         try {
             toString(out, idSupplier, value);

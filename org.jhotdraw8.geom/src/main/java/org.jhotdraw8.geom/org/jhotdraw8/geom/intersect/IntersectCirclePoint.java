@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
@@ -19,11 +18,11 @@ public class IntersectCirclePoint {
     private IntersectCirclePoint() {
     }
 
-    public static @NonNull IntersectionResult intersectCirclePoint(double cx, double cy, double cr, double px, double py, double pr) {
+    public static IntersectionResult intersectCirclePoint(double cx, double cy, double cr, double px, double py, double pr) {
         return intersectCirclePoint(cx, cy, cr, px, py, pr, Rectangles.REAL_THRESHOLD);
     }
 
-    public static @NonNull IntersectionResultEx intersectCirclePointEx(double cx, double cy, double cr, double px, double py, double pr) {
+    public static IntersectionResultEx intersectCirclePointEx(double cx, double cy, double cr, double px, double py, double pr) {
         return intersectCirclePointEx(cx, cy, cr, px, py, pr, Rectangles.REAL_THRESHOLD);
     }
 
@@ -31,7 +30,7 @@ public class IntersectCirclePoint {
         return intersectCirclePoint(new Point2D.Double(cx, cy), cr, new Point2D.Double(px, py), pr, epsilon);
     }
 
-    public static @NonNull IntersectionResult intersectCirclePoint(@NonNull Point2D cc, double cr, @NonNull Point2D pc, double pr, double epsilon) {
+    public static IntersectionResult intersectCirclePoint(Point2D cc, double cr, Point2D pc, double pr, double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>();
 
         double c_dist = cc.distance(pc);
@@ -62,7 +61,7 @@ public class IntersectCirclePoint {
      * @param radius the radius of the circle
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectPointCircle(@NonNull Point2D point, @NonNull Point2D center, double radius) {
+    public static IntersectionResult intersectPointCircle(Point2D point, Point2D center, double radius) {
         List<IntersectionPoint> result = new ArrayList<>();
 
         final double distance = point.distance(center);

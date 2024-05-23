@@ -12,7 +12,6 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.concurrent.Worker;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionStage;
@@ -26,18 +25,18 @@ import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
  * @param <V> the result type
  */
 public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
-    private static final @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();
-    private final @NonNull WorkState<V> workState;
-    private final @NonNull CompletableFuture<V> completableFuture = new CompletableFuture<>();
+    private static final Object NO_UPDATE_IS_IN_PROGRESS = new Object();
+    private final WorkState<V> workState;
+    private final CompletableFuture<V> completableFuture = new CompletableFuture<>();
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyObjectWrapper<Worker.State> state = new ReadOnlyObjectWrapper<>(this, "state", Worker.State.READY);
-    private final @NonNull AtomicReference<Object> stateUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyObjectWrapper<Worker.State> state = new ReadOnlyObjectWrapper<>(this, "state", Worker.State.READY);
+    private final AtomicReference<Object> stateUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyObjectWrapper<Throwable> exception = new ReadOnlyObjectWrapper<>(this, "exception", null);
-    private final @NonNull AtomicReference<Object> exceptionUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyObjectWrapper<Throwable> exception = new ReadOnlyObjectWrapper<>(this, "exception", null);
+    private final AtomicReference<Object> exceptionUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, "running", true);
-    private final @NonNull AtomicReference<Object> runningUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, "running", true);
+    private final AtomicReference<Object> runningUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
 
     public SimpleCompletableWorker(WorkState<V> workState) {
         this.workState = workState;
@@ -49,12 +48,12 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
     }
 
     @Override
-    public Worker.@NonNull State getState() {
+    public Worker.State getState() {
         return state.get();
     }
 
     @Override
-    public @NonNull ReadOnlyObjectProperty<Worker.State> stateProperty() {
+    public ReadOnlyObjectProperty<Worker.State> stateProperty() {
         return state.getReadOnlyProperty();
     }
 
@@ -63,7 +62,7 @@ public class SimpleCompletableWorker<V> implements CompletableWorker<V> {
      *
      * @param newValue the new value
      */
-    public void updateState(Worker.@NonNull State newValue) {
+    public void updateState(Worker.State newValue) {
         update(newValue, state, stateUpdate);
     }
 

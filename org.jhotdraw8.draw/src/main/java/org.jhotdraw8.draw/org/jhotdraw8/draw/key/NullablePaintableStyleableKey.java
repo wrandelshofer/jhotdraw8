@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.PaintableCssConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -18,7 +17,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WritableStyleableMapAccessor<Paintable> {
 
 
-    private final @NonNull Converter<Paintable> converter;
+    private final Converter<Paintable> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -26,7 +25,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
      *
      * @param name The name of the key.
      */
-    public NullablePaintableStyleableKey(@NonNull String name) {
+    public NullablePaintableStyleableKey(String name) {
         this(name, null);
     }
 
@@ -38,14 +37,14 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullablePaintableStyleableKey(@NonNull String key, Paintable defaultValue) {
+    public NullablePaintableStyleableKey(String key, Paintable defaultValue) {
         super(key, Paintable.class, defaultValue);
 
         converter = new PaintableCssConverter(true);
     }
 
     @Override
-    public @NonNull Converter<Paintable> getCssConverter() {
+    public Converter<Paintable> getCssConverter() {
         return converter;
     }
 }

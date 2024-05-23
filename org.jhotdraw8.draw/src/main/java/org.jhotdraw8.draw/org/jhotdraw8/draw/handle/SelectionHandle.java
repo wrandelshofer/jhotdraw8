@@ -19,13 +19,12 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -39,8 +38,8 @@ public class SelectionHandle extends LocatorHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
     private Point2D pickLocation;
-    private final @NonNull Region node;
-    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private final Region node;
+    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, null));
 
@@ -62,7 +61,7 @@ public class SelectionHandle extends LocatorHandle {
     }
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -78,7 +77,7 @@ public class SelectionHandle extends LocatorHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = owner;
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();

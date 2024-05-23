@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
@@ -37,7 +36,7 @@ public class IntersectQuadCurveRay {
      * @param ad point 1 of 'a'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectQuadCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D ao, @NonNull Point2D ad, double maxT) {
+    public static IntersectionResult intersectQuadCurveRay(Point2D p0, Point2D p1, Point2D p2, Point2D ao, Point2D ad, double maxT) {
         return intersectQuadCurveRay(p0, p1, p2, ao, ad, maxT, Rectangles.REAL_THRESHOLD);
     }
 
@@ -51,7 +50,7 @@ public class IntersectQuadCurveRay {
      * @param epsilon
      * @return
      */
-    public static IntersectionResult intersectQuadCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D ao, @NonNull Point2D ad, double maxT,
+    public static IntersectionResult intersectQuadCurveRay(Point2D p0, Point2D p1, Point2D p2, Point2D ao, Point2D ad, double maxT,
                                                            double epsilon) {
 
         // Bezier curve:
@@ -112,13 +111,13 @@ public class IntersectQuadCurveRay {
         return new IntersectionResult(status, result);
     }
 
-    public static @NonNull IntersectionResult intersectQuadCurveRay(
+    public static IntersectionResult intersectQuadCurveRay(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double box, double boy, double bdx, double bdy, double maxT) {
         return intersectQuadCurveRay(ax0, ay0, ax1, ay1, ax2, ay2, box, boy, bdx, bdy, maxT, Rectangles.REAL_THRESHOLD);
     }
 
-    public static @NonNull IntersectionResult intersectQuadCurveRay(
+    public static IntersectionResult intersectQuadCurveRay(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double box, double boy, double bdx, double bdy, double maxT, double epsilon) {
         return intersectQuadCurveRay(new Point2D.Double(ax0, ay0), new Point2D.Double(ax1, ay1), new Point2D.Double(ax2, ay2),

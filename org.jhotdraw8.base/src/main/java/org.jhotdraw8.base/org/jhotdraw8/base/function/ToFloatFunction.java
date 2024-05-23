@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.base.function;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.function.Function;
 
@@ -12,7 +11,6 @@ import java.util.function.Function;
 public interface ToFloatFunction<T1> extends Function<T1, Float> {
 
     @Override
-    @NonNull
     default Float apply(T1 t1) {
         return applyAsFloat(t1);
     }

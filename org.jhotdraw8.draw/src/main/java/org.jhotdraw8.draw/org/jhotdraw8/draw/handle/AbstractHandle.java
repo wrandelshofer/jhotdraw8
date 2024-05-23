@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**
@@ -17,12 +16,12 @@ public abstract class AbstractHandle implements Handle {
     // ---
     // Fields
     // ---
-    protected final @NonNull Figure owner;
+    protected final Figure owner;
 
     // ---
     // Constructors
     // ---
-    public AbstractHandle(@NonNull Figure owner) {
+    public AbstractHandle(Figure owner) {
         this.owner = owner;
     }
 
@@ -34,7 +33,7 @@ public abstract class AbstractHandle implements Handle {
     }
 
     @Override
-    public @NonNull Figure getOwner() {
+    public Figure getOwner() {
         return owner;
     }
 
@@ -42,7 +41,7 @@ public abstract class AbstractHandle implements Handle {
      * Returns true if both handles have the same class.
      */
     @Override
-    public boolean isCompatible(@NonNull Handle that) {
+    public boolean isCompatible(Handle that) {
         return that.getClass() == this.getClass();
     }
 

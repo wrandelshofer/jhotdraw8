@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -18,10 +17,10 @@ import java.util.Objects;
  */
 public abstract class Combinator extends Selector {
 
-    protected final @NonNull SimpleSelector first;
-    protected final @NonNull Selector second;
+    protected final SimpleSelector first;
+    protected final Selector second;
 
-    public Combinator(@Nullable SourceLocator sourceLocator, @NonNull SimpleSelector firstSelector, @NonNull Selector secondSelector) {
+    public Combinator(@Nullable SourceLocator sourceLocator, SimpleSelector firstSelector, Selector secondSelector) {
         super(sourceLocator);
         this.first = firstSelector;
         this.second = secondSelector;
@@ -29,7 +28,7 @@ public abstract class Combinator extends Selector {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "Combinator{" + "simpleSelector=" + first + ", selector=" + second + '}';
     }
 

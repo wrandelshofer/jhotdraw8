@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -27,11 +26,11 @@ import java.text.ParseException;
 public class BooleanXmlConverter implements Converter<Boolean> {
 
 
-    private final @NonNull String trueString = "true";
-    private final @NonNull String emptyString = "";
-    private final @NonNull String falseString = "false";
-    private final @NonNull String oneString = "1";
-    private final @NonNull String zeroString = "0";
+    private final String trueString = "true";
+    private final String emptyString = "";
+    private final String falseString = "false";
+    private final String oneString = "1";
+    private final String zeroString = "0";
     private final boolean nullable;
 
     /**
@@ -48,12 +47,12 @@ public class BooleanXmlConverter implements Converter<Boolean> {
     }
 
     @Override
-    public void toString(@NonNull Appendable buf, @Nullable IdSupplier idSupplier, Boolean value) throws IOException {
+    public void toString(Appendable buf, @Nullable IdSupplier idSupplier, Boolean value) throws IOException {
         buf.append(value ? trueString : falseString);
     }
 
     @Override
-    public @Nullable Boolean fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Boolean fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         in.position(in.length());
         switch (str) {

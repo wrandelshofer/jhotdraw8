@@ -29,8 +29,6 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -45,6 +43,7 @@ import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 import org.jhotdraw8.fxcollection.ReversedObservableList;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -73,11 +72,11 @@ public class LayersInspector extends AbstractDrawingInspector {
 
     private @Nullable ReversedObservableList<Figure> layers;
 
-    private final @NonNull Supplier<Layer> layerFactory;
+    private final Supplier<Layer> layerFactory;
 
     private Node node;
 
-    private final @NonNull HashMap<Layer, Integer> selectionCount = new HashMap<>();
+    private final HashMap<Layer, Integer> selectionCount = new HashMap<>();
 
     private final @Nullable ChangeListener<Figure> selectedLayerHandler = new ChangeListener<>() {
         int changedRecursion = 0;
@@ -125,18 +124,18 @@ public class LayersInspector extends AbstractDrawingInspector {
     };
 
 
-    private final @NonNull InvalidationListener selectionInvalidationListener = observable -> onSelectionChanged();
+    private final InvalidationListener selectionInvalidationListener = observable -> onSelectionChanged();
 
     public LayersInspector() {
         this(LayersInspector.class.getResource("LayersInspector.fxml"));
     }
 
-    public LayersInspector(@NonNull URL fxmlUrl) {
+    public LayersInspector(URL fxmlUrl) {
         this(fxmlUrl, LayerFigure::new);
     }
 
     @SuppressWarnings("this-escape")
-    public LayersInspector(@NonNull URL fxmlUrl, Supplier<Layer> layerFactory) {
+    public LayersInspector(URL fxmlUrl, Supplier<Layer> layerFactory) {
         this.layerFactory = layerFactory;
         init(fxmlUrl);
     }
@@ -187,7 +186,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         }
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
@@ -235,7 +234,7 @@ public class LayersInspector extends AbstractDrawingInspector {
             ClipboardIO<Figure> io = new ClipboardIO<>() {
 
                 @Override
-                public void write(@NonNull Clipboard clipboard, @NonNull List<Figure> items) {
+                public void write(Clipboard clipboard, List<Figure> items) {
                     if (items.size() != 1) {
                         throw new UnsupportedOperationException("Not supported yet.");
                     }
@@ -247,7 +246,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                 }
 
                 @Override
-                public @Nullable List<Figure> read(@NonNull Clipboard clipboard) {
+                public @Nullable List<Figure> read(Clipboard clipboard) {
                     List<Figure> list;
                     if (clipboard.hasString()) {
                         list = new ArrayList<>();
@@ -261,7 +260,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                 }
 
                 @Override
-                public boolean canRead(@NonNull Clipboard clipboard) {
+                public boolean canRead(Clipboard clipboard) {
                     return clipboard.hasString();
                 }
             };
@@ -272,7 +271,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         });
     }
 
-    public @NonNull LayerCell createCell(ListView<Figure> listView) {
+    public LayerCell createCell(ListView<Figure> listView) {
         return new LayerCell(getModel(), this);
     }
 
@@ -319,8 +318,8 @@ public class LayersInspector extends AbstractDrawingInspector {
         }
     }
 
-    private @NonNull Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(
-            @NonNull ListView<Figure> listView, @NonNull Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
+    private Callback<ListView<Figure>, ListCell<Figure>> addSelectionLabelDndSupport(
+            ListView<Figure> listView, Callback<ListView<Figure>, LayerCell> cellFactory, ClipboardIO<Figure> clipboardIO
     ) {
         SelectionLabelDnDSupport dndSupport = new SelectionLabelDnDSupport(listView, clipboardIO);
         Callback<ListView<Figure>, ListCell<Figure>> dndCellFactory = lv -> {
@@ -344,19 +343,19 @@ public class LayersInspector extends AbstractDrawingInspector {
      */
     private class SelectionLabelDnDSupport {
 
-        private final @NonNull ListView<Figure> listView;
+        private final ListView<Figure> listView;
         private int draggedCellIndex;
-        private final @NonNull ClipboardIO<Figure> io;
+        private final ClipboardIO<Figure> io;
 
         public SelectionLabelDnDSupport(ListView<Figure> listView, ClipboardIO<Figure> io) {
             this.listView = listView;
             this.io = io;
         }
 
-        private final @NonNull EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<>() {
+        private final EventHandler<? super MouseEvent> cellMouseHandler = new EventHandler<>() {
 
             @Override
-            public void handle(@NonNull MouseEvent event) {
+            public void handle(MouseEvent event) {
                 if (event.isConsumed()) {
                     return;
                 }
@@ -388,11 +387,10 @@ public class LayersInspector extends AbstractDrawingInspector {
 
         };
 
-        @NonNull
         final EventHandler<? super DragEvent> cellDragHandler = new EventHandler<>() {
 
             @Override
-            public void handle(@NonNull DragEvent event) {
+            public void handle(DragEvent event) {
                 if (event.isConsumed()) {
                     return;
                 }
@@ -404,7 +402,7 @@ public class LayersInspector extends AbstractDrawingInspector {
                 }
             }
 
-            private void onDragDropped(@NonNull DragEvent event) {
+            private void onDragDropped(DragEvent event) {
                 if (isAcceptable(event)) {
                     undoHelper.startCompositeEdit(null);
                     event.acceptTransferModes(TransferMode.MOVE);
@@ -425,14 +423,14 @@ public class LayersInspector extends AbstractDrawingInspector {
                 }
             }
 
-            private boolean isAcceptable(@NonNull DragEvent event) {
+            private boolean isAcceptable(DragEvent event) {
                 boolean isAcceptable = (event.getGestureSource() instanceof Label)
                         && (((Label) event.getGestureSource()).getParent().getParent() instanceof LayerCell)
                         && ((LayerCell) ((Label) event.getGestureSource()).getParent().getParent()).getListView() == listView;
                 return isAcceptable;
             }
 
-            private void onDragOver(@NonNull DragEvent event) {
+            private void onDragOver(DragEvent event) {
                 if (isAcceptable(event)) {
                     event.acceptTransferModes(TransferMode.MOVE);
                     event.consume();
@@ -443,7 +441,7 @@ public class LayersInspector extends AbstractDrawingInspector {
         };
     }
 
-    protected void moveSelectedFiguresFromToLayer(Layer from, @NonNull Layer to) {
+    protected void moveSelectedFiguresFromToLayer(Layer from, Layer to) {
         undoHelper.startCompositeEdit(null);
         DrawingModel model = getModel();
         DrawingView view = getSubject();

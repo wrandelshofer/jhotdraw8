@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.biarc;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.CubicCurveCharacteristics;
@@ -59,8 +58,8 @@ public class CubicCurveToBiArc {
             Point2D C1 = bezier.getP1().equals(bezier.getCtrlP1()) ? bezier.getCtrlP2() : bezier.getCtrlP1();
             Point2D C2 = bezier.getP2().equals(bezier.getCtrlP2()) ? bezier.getCtrlP1() : bezier.getCtrlP2();
 
-            @NonNull Point2D a0 = bezier.getP1();
-            @NonNull Point2D b0 = bezier.getP2();
+            Point2D a0 = bezier.getP1();
+            Point2D b0 = bezier.getP2();
 
             IntersectionResultEx intersectionResultEx = IntersectRayRay.intersectRayRayEx(a0, Points2D.subtract(C1, a0),
                     b0, Points2D.subtract(C2, b0));

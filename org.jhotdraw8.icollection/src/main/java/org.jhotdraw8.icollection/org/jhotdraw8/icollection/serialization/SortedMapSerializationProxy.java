@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.serialization;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -72,7 +71,7 @@ public abstract class SortedMapSerializationProxy<K, V> implements Serializable 
     }
 
     @Serial
-    private void writeObject(@NonNull ObjectOutputStream s)
+    private void writeObject(ObjectOutputStream s)
             throws IOException {
         s.writeObject(serialized.comparator());
         s.writeInt(serialized.size());
@@ -84,7 +83,7 @@ public abstract class SortedMapSerializationProxy<K, V> implements Serializable 
 
     @SuppressWarnings("unchecked")
     @Serial
-    private void readObject(@NonNull ObjectInputStream s)
+    private void readObject(ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         deserializedComparator = (Comparator<? super K>) s.readObject();
         int n = s.readInt();
@@ -99,5 +98,5 @@ public abstract class SortedMapSerializationProxy<K, V> implements Serializable 
     }
 
     @Serial
-    protected abstract @NonNull Object readResolve();
+    protected abstract Object readResolve();
 }

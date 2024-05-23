@@ -14,7 +14,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.converter.Translate3DCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
@@ -64,74 +63,62 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      * <p>
      * Default value: {@code 0}.
      */
-    @NonNull
     DoubleStyleableKey ROTATE = new DoubleStyleableKey("rotate", 0.0);
     /**
      * Defines the pivot of the rotation.
      * <p>
      * Default value: {@code 0.5, 0.5}.
      */
-    @NonNull
     CssPoint2DStyleableKey ROTATION_PIVOT = new CssPoint2DStyleableKey("rotation-pivot", new CssPoint2D(0.5, 0.5));
     /**
      * Defines the rotation axis used.
      * <p>
      * Default value: {@code Rotate.Z_AXIS}.
      */
-    @NonNull
     NonNullObjectKey<Point3D> ROTATION_AXIS = new NonNullObjectKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    @NonNull
     DoubleStyleableKey SCALE_X = new DoubleStyleableKey("scaleX", 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the y axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    @NonNull
     DoubleStyleableKey SCALE_Y = new DoubleStyleableKey("scaleY", 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the z axis
      * about the center of the figure. Default value: {@code 1}.
      */
-    @NonNull
     DoubleStyleableKey SCALE_Z = new DoubleStyleableKey("scaleZ", 1.0);
     /**
      * Defines the scale factor by which coordinates are scaled on the axes
      * about the center of the figure.
      */
-    @NonNull
     Scale3DStyleableMapAccessor SCALE = new Scale3DStyleableMapAccessor("scale", SCALE_X, SCALE_Y, SCALE_Z);
-    @NonNull
     TransformListStyleableKey TRANSFORMS = new TransformListStyleableKey("transform", VectorList.of());
     /**
      * Defines the translation on the x axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    @NonNull
     DoubleStyleableKey TRANSLATE_X = new DoubleStyleableKey("translateX", 0.0);
     /**
      * Defines the translation on the y axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    @NonNull
     DoubleStyleableKey TRANSLATE_Y = new DoubleStyleableKey("translateY", 0.0);
     /**
      * Defines the translation on the z axis about the center of the figure.
      * Default value: {@code 0}.
      */
-    @NonNull
     DoubleStyleableKey TRANSLATE_Z = new DoubleStyleableKey("translateZ", 0.0);
     /**
      * Defines the translation on the axes about the center of the
      * figure.
      */
-    @NonNull
     Point3DStyleableMapAccessor TRANSLATE = new Point3DStyleableMapAccessor("translate", TRANSLATE_X, TRANSLATE_Y, TRANSLATE_Z, new Translate3DCssConverter(false));
 
-    static @NonNull Set<Key<?>> getDeclaredKeys() {
+    static Set<Key<?>> getDeclaredKeys() {
         SequencedSet<Key<?>> keys = new LinkedHashSet<>();
         Figure.getDeclaredKeys(TransformableFigure.class, keys);
         return keys;
@@ -151,7 +138,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyTransformableFigureProperties(@NonNull RenderContext ctx, @NonNull Node node) {
+    default void applyTransformableFigureProperties(RenderContext ctx, Node node) {
         Transform t = getLocalToParent();
         List<Transform> transforms = node.getTransforms();
         if (t.isIdentity()) {
@@ -192,7 +179,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     }
 
 
-    default @NonNull Transform getInverseTransform() {
+    default Transform getInverseTransform() {
         ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
@@ -211,11 +198,11 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     }
 
     @Override
-    default @NonNull Transform getLocalToParent() {
+    default Transform getLocalToParent() {
         return getLocalToParent(true);
     }
 
-    default @NonNull Transform getLocalToParent(boolean styled) {
+    default Transform getLocalToParent(boolean styled) {
         Transform l2p = CACHE && styled ? getCachedLocalToParent() : null;
         if (l2p == null) {
             final Bounds layoutBounds = getLayoutBounds();
@@ -255,7 +242,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         return l2p;
     }
 
-    default @NonNull List<Transform> getLocalToParentAsList(boolean styled) {
+    default List<Transform> getLocalToParentAsList(boolean styled) {
         ArrayList<Transform> list = new ArrayList<>();
 
         Point2D center = getCenterInLocal();
@@ -287,12 +274,12 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
 
 
     @Override
-    default @NonNull Transform getParentToLocal() {
+    default Transform getParentToLocal() {
         return getParentToLocal(true);
     }
 
 
-    default @NonNull Transform getParentToLocal(boolean styled) {
+    default Transform getParentToLocal(boolean styled) {
         Transform p2l = CACHE ? getCachedParentToLocal() : null;
         if (p2l == null) {
             Point2D center = getCenterInLocal();
@@ -335,7 +322,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      *
      * @return the flattened transforms
      */
-    default @NonNull Transform getTransform() {
+    default Transform getTransform() {
         ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
@@ -383,7 +370,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
 
 
     @Override
-    default void reshapeInParent(@NonNull Transform transform) {
+    default void reshapeInParent(Transform transform) {
         if (transform instanceof Translate) {
             Point2D p = FXTransforms.deltaTransform(getInverseTransform(), transform.getTx(), transform.getTy());
             reshapeInLocal(new Translate(p.getX(), p.getY()));
@@ -400,7 +387,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      *
      * @param transforms new value
      */
-    default void setTransforms(@NonNull Transform... transforms) {
+    default void setTransforms(Transform... transforms) {
         if (transforms.length == 1 && transforms[0].isIdentity()) {
             set(TRANSFORMS, VectorList.of());
         } else {
@@ -409,7 +396,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     }
 
     @Override
-    default void transformInLocal(@NonNull Transform t) {
+    default void transformInLocal(Transform t) {
         flattenTransforms();
         ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
         if (transforms.isEmpty()) {
@@ -420,7 +407,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     }
 
     @Override
-    default void transformInParent(@NonNull Transform t) {
+    default void transformInParent(Transform t) {
         if (t.isIdentity()) {
             return;
         }

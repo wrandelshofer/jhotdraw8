@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.net;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.net.URI;
@@ -54,7 +53,7 @@ public class UriUtil {
      * @param uri the uri
      * @return the name
      */
-    public static String getName(@NonNull URI uri) {
+    public static String getName(URI uri) {
         if (uri.getScheme() != null && "file".equals(uri.getScheme())) {
             Path file = Paths.get(clearQuery(uri));
             String userHome = System.getProperty("user.home");
@@ -83,7 +82,7 @@ public class UriUtil {
      * @param value the value
      * @return the updated query
      */
-    public static URI addQuery(@NonNull URI uri, @Nullable String key, @Nullable String value) {
+    public static URI addQuery(URI uri, @Nullable String key, @Nullable String value) {
         if (key == null || value == null) {
             return uri;
         }
@@ -105,7 +104,7 @@ public class UriUtil {
      * @param query the query
      * @return the updated query
      */
-    public static URI addQuery(@NonNull URI uri, @Nullable String query) {
+    public static URI addQuery(URI uri, @Nullable String query) {
         if (query == null) {
             return uri;
         }
@@ -153,7 +152,7 @@ public class UriUtil {
      * @param uri an URI
      * @return a map
      */
-    public static @NonNull Map<String, String> parseQuery(@NonNull URI uri) {
+    public static Map<String, String> parseQuery(URI uri) {
         String query = uri.getQuery();
         SequencedMap<String, String> map = new LinkedHashMap<>();
         if (query != null) {
@@ -167,7 +166,7 @@ public class UriUtil {
         return map;
     }
 
-    public static @NonNull URI relativize(@Nullable URI base, @NonNull URI uri) {
+    public static URI relativize(@Nullable URI base, URI uri) {
         URI relativized = uri;
         // Paths is better at relativizing URIs than URI.relativize().
         if (base == null) {
@@ -206,7 +205,7 @@ public class UriUtil {
      * @param uri  an URI that is relative to the base URI
      * @return the absolutized URI
      */
-    public static @NonNull URI absolutize(@Nullable URI base, @NonNull URI uri) {
+    public static URI absolutize(@Nullable URI base, URI uri) {
         if (base == null) {
             return uri;
         }
@@ -235,7 +234,7 @@ public class UriUtil {
         return absolutized;
     }
 
-    public static @NonNull URI getParent(@NonNull URI uri) {
+    public static URI getParent(URI uri) {
         if ("jar".equals(uri.getScheme())) {
             try {
                 final String str = uri.toString();

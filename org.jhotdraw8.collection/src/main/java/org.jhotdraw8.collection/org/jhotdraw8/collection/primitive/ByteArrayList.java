@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.util.ListHelper;
 import org.jhotdraw8.icollection.facade.ListFacade;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -56,7 +55,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      *
      * @param collection a collection of integers
      */
-    public ByteArrayList(@NonNull Collection<Byte> collection) {
+    public ByteArrayList(Collection<Byte> collection) {
         this.size = collection.size();
         this.items = new byte[size];
 
@@ -68,7 +67,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
         }
     }
 
-    private ByteArrayList(byte @NonNull [] items) {
+    private ByteArrayList(byte[] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -80,7 +79,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull ByteArrayList of(byte @NonNull ... items) {
+    public static ByteArrayList of(byte... items) {
         return new ByteArrayList(items);
     }
 
@@ -114,7 +113,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      *
      * @param that another list
      */
-    public void addAllAsByte(@NonNull ByteArrayList that) {
+    public void addAllAsByte(ByteArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -130,7 +129,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      * @param out the output collection
      * @return out
      */
-    public @NonNull <T extends Collection<Byte>> T addAllInto(@NonNull T out) {
+    public <T extends Collection<Byte>> T addAllInto(T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -152,7 +151,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(byte @NonNull [] a, int offset) {
+    public void copyInto(byte[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -361,7 +360,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      * @return an iterator over the elements of this list
      */
     @Override
-    public @NonNull PrimitiveIteratorOfByte iterator() {
+    public PrimitiveIteratorOfByte iterator() {
         return new PrimitiveIteratorOfByte() {
             private int index = 0;
             private final int size = ByteArrayList.this.size;
@@ -388,7 +387,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      * @return a spliterator over the elements of this list
      */
     @Override
-    public @NonNull SpliteratorOfByte spliterator() {
+    public SpliteratorOfByte spliterator() {
         return new ByteArraySpliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
@@ -397,7 +396,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      *
      * @return a stream
      */
-    public @NonNull IntStream byteStream() {
+    public IntStream byteStream() {
         return (size == 0) ? IntStream.empty() : Arrays.stream(toIntArray(), 0, size);
     }
 
@@ -406,7 +405,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      *
      * @return array
      */
-    public byte @NonNull [] toByteArray() {
+    public byte[] toByteArray() {
         byte[] result = new byte[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
@@ -417,7 +416,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      *
      * @return array
      */
-    public int @NonNull [] toIntArray() {
+    public int[] toIntArray() {
         int[] result = new int[size];
         for (int i = 0; i < size; i++) {
             result[i] = items[i];
@@ -446,7 +445,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
 
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; i < size; i++) {
@@ -473,7 +472,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIfAsByte(@NonNull IntPredicate filter) {
+    public boolean removeIfAsByte(IntPredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {
@@ -514,7 +513,7 @@ public class ByteArrayList extends AbstractList<Byte> implements ByteList {
     }
 
     @Override
-    public @NonNull List<Byte> reversed() {
+    public List<Byte> reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)

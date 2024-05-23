@@ -16,7 +16,6 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
 
@@ -37,17 +36,17 @@ public class FXSvgPaths {
 
     }
 
-    public static @NonNull String pathElementsToDoubleSvgString(@NonNull Iterable<PathElement> elements) {
+    public static String pathElementsToDoubleSvgString(Iterable<PathElement> elements) {
         NumberConverter nb = new NumberConverter();
         return pathElementsToSvgString(elements, nb);
     }
 
-    public static @NonNull String pathElementsToFloatSvgString(@NonNull Iterable<PathElement> elements) {
+    public static String pathElementsToFloatSvgString(Iterable<PathElement> elements) {
         NumberConverter nb = new NumberConverter(Float.class);
         return pathElementsToSvgString(elements, nb);
     }
 
-    public static @NonNull String pathElementsToSvgString(@NonNull Iterable<PathElement> elements, NumberConverter nb) {
+    public static String pathElementsToSvgString(Iterable<PathElement> elements, NumberConverter nb) {
         StringBuilder buf = new StringBuilder();
         char next = 'Z'; // next instruction
         double x = 0, y = 0;// current point
@@ -236,7 +235,7 @@ public class FXSvgPaths {
      * because {@link PathBuilder} does not understand relative path commands
      * and horizontal and vertical lineto commands.
      */
-    public static @NonNull List<PathElement> svgStringToPathElements(@NonNull String str) throws ParseException {
+    public static List<PathElement> svgStringToPathElements(String str) throws ParseException {
         List<PathElement> builder = new ArrayList<>();
         try {
 
@@ -572,7 +571,7 @@ public class FXSvgPaths {
         return builder;
     }
 
-    public static @NonNull <T extends PathBuilder<?>> T buildPathElements(@NonNull T builder, @NonNull Iterable<PathElement> pathElements) {
+    public static <T extends PathBuilder<?>> T buildPathElements(T builder, Iterable<PathElement> pathElements) {
         double x = 0;
         double y = 0;
         double ix = 0, iy = 0;
@@ -648,7 +647,7 @@ public class FXSvgPaths {
         return builder;
     }
 
-    public static @NonNull List<PathElement> transformPathElements(@NonNull List<PathElement> elements, FillRule fillRule, Transform fxT) {
+    public static List<PathElement> transformPathElements(List<PathElement> elements, FillRule fillRule, Transform fxT) {
         ArrayList<PathElement> result = new ArrayList<>();
         FXShapes.fxPathELementsToAwtShape(elements, fillRule);
         return result;

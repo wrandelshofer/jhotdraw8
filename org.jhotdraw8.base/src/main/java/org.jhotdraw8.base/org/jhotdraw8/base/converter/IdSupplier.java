@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 
@@ -32,6 +31,6 @@ public interface IdSupplier {
      * @param uri an internal URI (typically an absolute path)
      * @return an external URI (typically relative to document home)
      */
-    @NonNull URI relativize(@NonNull URI uri);
+    URI relativize(URI uri);
 
 }

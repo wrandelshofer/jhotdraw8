@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -31,9 +30,9 @@ public interface AllArcSequencesFinder<V, A, C extends Number & Comparable<C>> {
      * @param costLimit     the algorithm-specific cost limit
      * @return all paths
      */
-    @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            int maxDepth, @NonNull C costLimit);
+    Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            int maxDepth, C costLimit);
 
 }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 
 import java.util.Map;
@@ -14,9 +13,9 @@ import java.util.Map;
  *
  * @param <T> the value type
  */
-public interface NonNullKey<@NonNull T> extends Key<@NonNull T>, NonNullMapAccessor<@NonNull T> {
+public interface NonNullKey<T> extends Key<T>, NonNullMapAccessor<T> {
     @Override
-    default @NonNull T get(@NonNull Map<? super Key<?>, Object> a) {
+    default T get(Map<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow
         //return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
         @SuppressWarnings("unchecked")
@@ -31,7 +30,7 @@ public interface NonNullKey<@NonNull T> extends Key<@NonNull T>, NonNullMapAcces
      * @return The value of the attribute.
      */
     @Override
-    default @NonNull T get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+    default T get(ReadOnlyMap<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow
         //return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
         @SuppressWarnings("unchecked")

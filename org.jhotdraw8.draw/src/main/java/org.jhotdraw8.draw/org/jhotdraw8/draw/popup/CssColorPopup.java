@@ -11,8 +11,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -22,12 +21,12 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 import java.util.function.BiConsumer;
 
 public class CssColorPopup {
-    private final @NonNull ContextMenu contextMenu;
-    private final @NonNull MenuItem noneItem;
-    private final @NonNull ColorPicker colorPicker;
+    private final ContextMenu contextMenu;
+    private final MenuItem noneItem;
+    private final ColorPicker colorPicker;
     private BiConsumer<Boolean, CssColor> callback;
 
-    private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
+    private final ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
 
     public CssColorPopup() {
         Resources labels = DrawLabels.getResources();
@@ -78,7 +77,7 @@ public class CssColorPopup {
     }
 
 
-    public void show(@NonNull Node anchor, double screenX, double screenY) {
+    public void show(Node anchor, double screenX, double screenY) {
         contextMenu.show(anchor, screenX, screenY);
     }
 

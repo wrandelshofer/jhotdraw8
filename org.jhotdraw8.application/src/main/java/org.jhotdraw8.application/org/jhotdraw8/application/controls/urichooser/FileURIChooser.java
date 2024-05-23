@@ -9,8 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.net.URI;
@@ -27,9 +26,9 @@ public class FileURIChooser implements URIChooser {
     /**
      * The associated file chooser object.
      */
-    private final @NonNull FileChooser chooser = new FileChooser();
+    private final FileChooser chooser = new FileChooser();
 
-    private final @NonNull ObservableList<URIExtensionFilter> filters = FXCollections.observableArrayList();
+    private final ObservableList<URIExtensionFilter> filters = FXCollections.observableArrayList();
 
     private void updateFilters() {
         ObservableList<FileChooser.ExtensionFilter> cfilters = chooser.getExtensionFilters();
@@ -50,11 +49,11 @@ public class FileURIChooser implements URIChooser {
         this(Mode.OPEN);
     }
 
-    public FileURIChooser(@NonNull Mode newValue) {
+    public FileURIChooser(Mode newValue) {
         this(newValue, Collections.emptyList());
     }
 
-    public FileURIChooser(@NonNull Mode newValue, @NonNull List<URIExtensionFilter> extensionFilters) {
+    public FileURIChooser(Mode newValue, List<URIExtensionFilter> extensionFilters) {
         mode = newValue;
         this.filters.setAll(extensionFilters);
     }
@@ -67,7 +66,7 @@ public class FileURIChooser implements URIChooser {
         return mode;
     }
 
-    public @NonNull FileChooser getFileChooser() {
+    public FileChooser getFileChooser() {
         return chooser;
     }
 

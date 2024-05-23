@@ -10,8 +10,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
@@ -25,6 +23,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampMap;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.LinkedHashMap;
@@ -46,8 +45,8 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
 
     private final boolean saveAs;
     private @Nullable Node oldFocusOwner;
-    public static final @NonNull Key<URIChooser> SAVE_CHOOSER_KEY = new NullableObjectKey<>("saveChooser", URIChooser.class);
-    public static final @NonNull Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("saveChooserFactory",
+    public static final Key<URIChooser> SAVE_CHOOSER_KEY = new NullableObjectKey<>("saveChooser", URIChooser.class);
+    public static final Key<Supplier<URIChooser>> SAVE_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("saveChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
     /**
@@ -57,7 +56,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
      * @param id       the id
      * @param saveAs   whether to force a file dialog
      */
-    public AbstractSaveFileAction(@NonNull FileBasedActivity activity, String id, boolean saveAs) {
+    public AbstractSaveFileAction(FileBasedActivity activity, String id, boolean saveAs) {
         this(activity, id, saveAs, activity.getApplication().getResources());
     }
 
@@ -69,13 +68,13 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
      * @param saveAs    whether to force a file dialog
      * @param resources the resources are used for setting labels and icons for the action
      */
-    public AbstractSaveFileAction(@NonNull FileBasedActivity activity, @NonNull String id, boolean saveAs, @NonNull Resources resources) {
+    public AbstractSaveFileAction(FileBasedActivity activity, String id, boolean saveAs, Resources resources) {
         super(activity);
         this.saveAs = saveAs;
         resources.configureAction(this, id);
     }
 
-    protected @NonNull URIChooser getChooser(FileBasedActivity view) {
+    protected URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(SAVE_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(SAVE_CHOOSER_FACTORY_KEY);
@@ -87,14 +86,14 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
 
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull FileBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent evt, FileBasedActivity activity) {
         oldFocusOwner = activity.getNode().getScene().getFocusOwner();
         WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         activity.addDisabler(workState);
         saveFileChooseUri(activity, workState);
     }
 
-    protected void saveFileChooseUri(final @NonNull FileBasedActivity v, WorkState<Void> workState) {
+    protected void saveFileChooseUri(final FileBasedActivity v, WorkState<Void> workState) {
         if (v.getURI() == null || saveAs) {
             URIChooser chsr = getChooser(v);
             URI uri = chsr.showDialog(v.getNode());
@@ -111,7 +110,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         }
     }
 
-    protected void saveFileChooseOptions(final @NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format, WorkState<Void> workState) {
+    protected void saveFileChooseOptions(final FileBasedActivity v, URI uri, DataFormat format, WorkState<Void> workState) {
         SequencedMap<Key<?>, Object> options = new LinkedHashMap<>();
         Dialog<SequencedMap<Key<?>, Object>> dialog = null;
         try {
@@ -140,7 +139,7 @@ public abstract class AbstractSaveFileAction extends AbstractActivityAction<File
         saveFileToUri(v, uri, format, options, workState);
     }
 
-    protected void saveFileToUri(final @NonNull FileBasedActivity view, final @NonNull URI uri, final DataFormat format, @NonNull Map<Key<?>, Object> options, WorkState<Void> workState) {
+    protected void saveFileToUri(final FileBasedActivity view, final URI uri, final DataFormat format, Map<Key<?>, Object> options, WorkState<Void> workState) {
         view.write(uri, format, ChampMap.copyOf(options), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 view.removeDisabler(workState);

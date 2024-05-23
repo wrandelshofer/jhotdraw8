@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IteratorEnumeratorFacade;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
@@ -65,8 +64,8 @@ public class StronglyConnectedComponentsAlgo {
      * @param <A>   the arrow data type
      * @return set of strongly connected components (sets of vertices).
      */
-    public @NonNull <V, A> List<List<V>> findStronglyConnectedComponents(
-            final @NonNull DirectedGraph<V, A> graph) {
+    public <V, A> List<List<V>> findStronglyConnectedComponents(
+            final DirectedGraph<V, A> graph) {
         return findStronglyConnectedComponents(graph.getVertices(), graph::getNextVertices);
     }
 
@@ -78,8 +77,8 @@ public class StronglyConnectedComponentsAlgo {
      * @param nextNodeFunction returns the next nodes of a given node
      * @return set of strongly connected components (sets of vertices).
      */
-    public @NonNull <V> List<List<V>> findStronglyConnectedComponents(
-            final @NonNull Collection<? extends V> vertices, final @NonNull Function<V, Iterable<? extends V>> nextNodeFunction
+    public <V> List<List<V>> findStronglyConnectedComponents(
+            final Collection<? extends V> vertices, final Function<V, Iterable<? extends V>> nextNodeFunction
     ) {
 
         final List<List<V>> sccs = new ArrayList<>();

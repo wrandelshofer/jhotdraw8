@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.draw.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -38,7 +37,7 @@ public class Path2DDoubleXmlConverter implements Converter<Path2D.Double> {
     }
 
     @Override
-    public Path2D.@Nullable Double fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public Path2D.@Nullable Double fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         final String string = buf.toString();
         buf.position(buf.length());
         if ("none".equals(string)) {
@@ -48,7 +47,7 @@ public class Path2DDoubleXmlConverter implements Converter<Path2D.Double> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, Path2D.@Nullable Double value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, Path2D.@Nullable Double value) throws IOException {
         final String content = value == null ? null : SvgPaths.awtPathIteratorToDoubleSvgString(value.getPathIterator(null));
         out.append(content == null ? "none" : content);
     }

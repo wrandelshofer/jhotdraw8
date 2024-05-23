@@ -10,8 +10,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 
@@ -25,7 +24,7 @@ public class FXRectangles {
      * @param shape an AWT shape
      * @return JavaFX bounds
      */
-    public static @NonNull BoundingBox getBounds(@NonNull Shape shape) {
+    public static BoundingBox getBounds(Shape shape) {
         java.awt.geom.Rectangle2D r = shape.getBounds2D();
         return new BoundingBox(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
@@ -36,7 +35,7 @@ public class FXRectangles {
      * @param r a bounding box
      * @return the rectangle
      */
-    public static java.awt.geom.Rectangle2D.@NonNull Double toAwtRectangle2D(@NonNull Bounds r) {
+    public static java.awt.geom.Rectangle2D.Double toAwtRectangle2D(Bounds r) {
         return new java.awt.geom.Rectangle2D.Double(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
@@ -46,11 +45,11 @@ public class FXRectangles {
      * @param r a bounding box
      * @return the rectangle
      */
-    public static @NonNull Rectangle2D toRectangle2D(@NonNull Bounds r) {
+    public static Rectangle2D toRectangle2D(Bounds r) {
         return new Rectangle2D(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
-    public static @NonNull BoundingBox add(@NonNull Bounds a, @NonNull Bounds b) {
+    public static BoundingBox add(Bounds a, Bounds b) {
         double x = min(a.getMinX(), b.getMinX());
         double y = min(a.getMinY(), b.getMinY());
         return new BoundingBox(x, y, max(a.getMaxX(), b.getMaxX()) - x, max(a.getMaxY(), b.getMaxY()) - y);
@@ -62,7 +61,7 @@ public class FXRectangles {
      * @param r the bounds
      * @return the center
      */
-    public static @NonNull Point2D center(@NonNull Bounds r) {
+    public static Point2D center(Bounds r) {
         return new Point2D(
                 r.getMinX() + r.getWidth() * 0.5,
                 r.getMinY() + r.getHeight() * 0.5
@@ -78,7 +77,7 @@ public class FXRectangles {
      * @param tolerance the tolerance
      * @return true if inside
      */
-    public static boolean contains(@NonNull Bounds r, @NonNull Point2D p, double tolerance) {
+    public static boolean contains(Bounds r, Point2D p, double tolerance) {
         return contains(r, p.getX(), p.getY(), tolerance);
     }
 
@@ -92,7 +91,7 @@ public class FXRectangles {
      * @param tolerance the tolerance
      * @return true if inside
      */
-    public static boolean contains(@NonNull Bounds r, double x, double y, double tolerance) {
+    public static boolean contains(Bounds r, double x, double y, double tolerance) {
         return Rectangles.contains(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight(), x, y, tolerance);
     }
 
@@ -102,7 +101,7 @@ public class FXRectangles {
      * @param r a rectangle
      * @return JavaFX bounds
      */
-    public static @NonNull Bounds getBounds(@NonNull Rectangle2D r) {
+    public static Bounds getBounds(Rectangle2D r) {
         return new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
     }
 
@@ -128,7 +127,7 @@ public class FXRectangles {
      * @param v the vertical expansion
      * @return the new rectangle
      */
-    public static @NonNull Bounds grow(@NonNull Bounds r, double h, double v) {
+    public static Bounds grow(Bounds r, double h, double v) {
         return new BoundingBox(
                 r.getMinX() - h,
                 r.getMinY() - v,
@@ -144,12 +143,12 @@ public class FXRectangles {
      * @return the new rectangle
      * @see #grow(Bounds, double, double)
      */
-    public static @NonNull Bounds grow(@NonNull Bounds r, double hv) {
+    public static Bounds grow(Bounds r, double hv) {
         return grow(r, hv, hv);
 
     }
 
-    public static @NonNull Bounds union(@NonNull Bounds a, @NonNull Bounds... bs) {
+    public static Bounds union(Bounds a, Bounds... bs) {
         double minx = a.getMinX();
         double miny = a.getMinY();
         double maxx = a.getMaxX();
@@ -170,14 +169,14 @@ public class FXRectangles {
      * @param bounds the bounds
      * @return true if finiite
      */
-    public static boolean isFinite(@NonNull Bounds bounds) {
+    public static boolean isFinite(Bounds bounds) {
         return Double.isFinite(bounds.getMinX())
                 && Double.isFinite(bounds.getMinY())
                 && Double.isFinite(bounds.getWidth())
                 && Double.isFinite(bounds.getHeight());
     }
 
-    public static @NonNull Bounds intersection(@NonNull Bounds a, @NonNull Bounds b) {
+    public static Bounds intersection(Bounds a, Bounds b) {
         double minx = Math.max(a.getMinX(), b.getMinX());
         double miny = Math.max(a.getMinY(), b.getMinY());
         double maxx = Math.min(a.getMaxX(), b.getMaxX());
@@ -185,7 +184,7 @@ public class FXRectangles {
         return new BoundingBox(minx, miny, maxx - minx, maxy - miny);
     }
 
-    private static @NonNull Rectangle2D add(@NonNull Rectangle2D r, double newx, double newy) {
+    private static Rectangle2D add(Rectangle2D r, double newx, double newy) {
         double x1 = Math.min(r.getMinX(), newx);
         double x2 = Math.max(r.getMaxX(), newx);
         double y1 = Math.min(r.getMinY(), newy);
@@ -193,7 +192,7 @@ public class FXRectangles {
         return new Rectangle2D(x1, y1, x2 - x1, y2 - y1);
     }
 
-    public static @NonNull Point2D center(java.awt.geom.@NonNull Rectangle2D r) {
+    public static Point2D center(java.awt.geom.Rectangle2D r) {
         return new Point2D(r.getCenterX(), r.getCenterY());
     }
 
@@ -203,17 +202,17 @@ public class FXRectangles {
      * @param r the bounds
      * @return the center
      */
-    public static @NonNull Point2D center(@NonNull Rectangle2D r) {
+    public static Point2D center(Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
                 + r.getHeight() * 0.5);
     }
 
-    public static @NonNull Point2D east(@NonNull Rectangle2D r) {
+    public static Point2D east(Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth(), r.getMinY()
                 + r.getHeight() / 2);
     }
 
-    public static @NonNull Point2D north(@NonNull Rectangle2D r) {
+    public static Point2D north(Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY());
     }
 
@@ -228,7 +227,7 @@ public class FXRectangles {
      * @return the logical OR of all appropriate out codes OUT_RIGHT, OUT_LEFT,
      * OUT_BOTTOM, OUT_TOP.
      */
-    public static int outcode(@NonNull Rectangle2D r1, @NonNull Rectangle2D r2) {
+    public static int outcode(Rectangle2D r1, Rectangle2D r2) {
         int outcode = 0;
 
         if (r2.getMinX() > r1.getMinX() + r1.getWidth()) {
@@ -246,12 +245,12 @@ public class FXRectangles {
         return outcode;
     }
 
-    public static @NonNull Point2D south(@NonNull Rectangle2D r) {
+    public static Point2D south(Rectangle2D r) {
         return new Point2D(r.getMinX() + r.getWidth() * 0.5, r.getMinY()
                 + r.getHeight());
     }
 
-    static @NonNull BoundingBox subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
+    static BoundingBox subtractInsets(Bounds b, Insets i) {
         return new BoundingBox(
                 b.getMinX() + i.getLeft(),
                 b.getMinY() + i.getTop(),
@@ -266,11 +265,11 @@ public class FXRectangles {
      * @param b a rectangle
      * @return true if empty
      */
-    public static boolean isEmpty(@NonNull Rectangle2D b) {
+    public static boolean isEmpty(Rectangle2D b) {
         return b.getWidth() <= 0 || b.getHeight() <= 0;
     }
 
-    public static @NonNull String toString(@Nullable Bounds b) {
+    public static String toString(@Nullable Bounds b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
@@ -284,7 +283,7 @@ public class FXRectangles {
      * @param r2 Rectangle2D 2.
      * @return true if r1 contains r2.
      */
-    public static boolean contains(@NonNull Rectangle2D r1, @NonNull Rectangle2D r2) {
+    public static boolean contains(Rectangle2D r1, Rectangle2D r2) {
         return (r2.getMinX() >= r1.getMinX()
                 && r2.getMinY() >= r1.getMinY()
                 && (r2.getMinX() + max(0, r2.getWidth())) <= r1.getMinX()
@@ -315,7 +314,7 @@ public class FXRectangles {
      * @param v the vertical expansion
      * @return the new rectangle
      */
-    public static @NonNull Rectangle2D grow(@NonNull Rectangle2D r, double h, double v) {
+    public static Rectangle2D grow(Rectangle2D r, double h, double v) {
         return new Rectangle2D(
                 r.getMinX() - h,
                 r.getMinY() - v,
@@ -323,11 +322,11 @@ public class FXRectangles {
                 r.getHeight() + v * 2d);
     }
 
-    public static @NonNull String toString(@Nullable Rectangle2D b) {
+    public static String toString(@Nullable Rectangle2D b) {
         return b == null ? "null" : b.getMinX() + "," + b.getMinY() + "," + b.getWidth() + "," + b.getHeight();
     }
 
-    public static @NonNull Point2D west(@NonNull Rectangle2D r) {
+    public static Point2D west(Rectangle2D r) {
         return new Point2D(r.getMinX(), r.getMinY() + r.getHeight() / 2);
     }
 }

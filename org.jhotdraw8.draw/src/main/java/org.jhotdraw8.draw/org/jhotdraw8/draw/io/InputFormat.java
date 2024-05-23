@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import javax.xml.stream.XMLStreamException;
 import java.io.BufferedInputStream;
@@ -28,9 +27,9 @@ import java.nio.file.Paths;
  * @author Werner Randelshofer
  */
 public interface InputFormat {
-    void setOptions(@NonNull ImmutableMap<Key<?>, Object> newValue);
+    void setOptions(ImmutableMap<Key<?>, Object> newValue);
 
-    @NonNull ImmutableMap<Key<?>, Object> getOptions();
+    ImmutableMap<Key<?>, Object> getOptions();
 
     /**
      * Reads a figure from an URI
@@ -44,7 +43,7 @@ public interface InputFormat {
      * @return the figure
      * @throws IOException if an IO error occurs
      */
-    default @NonNull Figure read(@NonNull URI uri, @Nullable Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    default Figure read(URI uri, @Nullable Drawing drawing, WorkState<Void> workState) throws IOException {
         return read(Paths.get(uri), drawing, workState);
     }
 
@@ -60,7 +59,7 @@ public interface InputFormat {
      * @return the figure
      * @throws IOException if an IO error occurs
      */
-    default @NonNull Figure read(@NonNull Path file, @Nullable Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    default Figure read(Path file, @Nullable Drawing drawing, WorkState<Void> workState) throws IOException {
         URI documentHome = file.getParent() == null ? FileSystems.getDefault().getPath(System.getProperty("user.home")).toUri() : file.getParent().toUri();
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(in, drawing, documentHome, workState);
@@ -85,6 +84,6 @@ public interface InputFormat {
      * @return the drawing
      * @throws IOException if an IO error occurs
      */
-    @NonNull Figure read(@NonNull InputStream in, Drawing drawing, URI documentHome, @NonNull WorkState<Void> workState) throws IOException;
+    Figure read(InputStream in, Drawing drawing, URI documentHome, WorkState<Void> workState) throws IOException;
 
 }

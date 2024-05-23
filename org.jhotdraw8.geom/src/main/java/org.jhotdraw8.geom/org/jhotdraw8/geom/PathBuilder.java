@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.biarc.ArcToCubicCurve;
 
 import java.awt.geom.Point2D;
@@ -93,7 +92,7 @@ public interface PathBuilder<T> {
      * @param c2 the control point 2
      * @param p  the end point
      */
-    default void curveTo(@NonNull Point2D c1, @NonNull Point2D c2, @NonNull Point2D p) {
+    default void curveTo(Point2D c1, Point2D c2, Point2D p) {
         curveTo(c1.getX(), c1.getY(), c2.getX(), c2.getY(), p.getX(), p.getY());
     }
 
@@ -116,7 +115,7 @@ public interface PathBuilder<T> {
      *
      * @return the last end point.
      */
-    default Point2D.@NonNull Double getLastPoint() {
+    default Point2D.Double getLastPoint() {
         return new Point2D.Double(getLastX(), getLastY());
     }
 
@@ -142,7 +141,7 @@ public interface PathBuilder<T> {
      *
      * @param p the end point
      */
-    default void lineTo(@NonNull Point2D p) {
+    default void lineTo(Point2D p) {
         lineTo(p.getX(), p.getY());
     }
 
@@ -162,7 +161,7 @@ public interface PathBuilder<T> {
      *
      * @param p the end point
      */
-    default void moveTo(@NonNull Point2D p) {
+    default void moveTo(Point2D p) {
         moveTo(p.getX(), p.getY());
     }
 
@@ -206,7 +205,7 @@ public interface PathBuilder<T> {
      * @param c the control point
      * @param p the end point
      */
-    default void quadTo(@NonNull Point2D c, @NonNull Point2D p) {
+    default void quadTo(Point2D c, Point2D p) {
         quadTo(c.getX(), c.getY(), p.getX(), p.getY());
     }
 
@@ -223,7 +222,7 @@ public interface PathBuilder<T> {
      * @param c2 the control point 2
      * @param p  the end point
      */
-    default void smoothCurveTo(@NonNull Point2D c2, @NonNull Point2D p) {
+    default void smoothCurveTo(Point2D c2, Point2D p) {
         smoothCurveTo(c2.getX(), c2.getY(), p.getX(), p.getY());
     }
 
@@ -255,7 +254,7 @@ public interface PathBuilder<T> {
      *
      * @param p the end point
      */
-    default void smoothQuadTo(@NonNull Point2D p) {
+    default void smoothQuadTo(Point2D p) {
         smoothQuadTo(p.getX(), p.getY());
     }
 

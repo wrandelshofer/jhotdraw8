@@ -14,14 +14,13 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_X;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
@@ -33,9 +32,9 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
  * @author Werner Randelshofer
  */
 public class BoundsInTranslationOutlineHandle extends AbstractHandle {
-    private final @NonNull Group node;
-    private final @NonNull Polygon poly1;
-    private final @NonNull Polygon poly2;
+    private final Group node;
+    private final Polygon poly1;
+    private final Polygon poly2;
     private final double[] points;
 
     public BoundsInTranslationOutlineHandle(Figure figure) {
@@ -66,7 +65,7 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         poly2.setStroke(Paintable.getPaint(color));
         double handleStrokeWidth = view.getEditor().getHandleStrokeWidth();
@@ -80,7 +79,7 @@ public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getParentToWorld());
         if (f instanceof TransformableFigure tf) {

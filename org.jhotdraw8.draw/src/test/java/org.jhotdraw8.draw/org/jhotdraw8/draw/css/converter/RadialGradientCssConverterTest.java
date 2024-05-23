@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.value.CssRadialGradient;
 import org.junit.jupiter.api.DynamicTest;
@@ -22,7 +21,7 @@ public class RadialGradientCssConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
-    public static void doTestFromString(CssRadialGradient expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssRadialGradient expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         RadialGradientCssConverter instance = new RadialGradientCssConverter(false);
@@ -31,7 +30,7 @@ public class RadialGradientCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new CssRadialGradient(), "radial-gradient()"))
         );

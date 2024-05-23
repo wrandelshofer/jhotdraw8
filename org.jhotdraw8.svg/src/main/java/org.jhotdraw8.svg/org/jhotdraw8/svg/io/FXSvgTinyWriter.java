@@ -6,12 +6,11 @@ package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Element;
 
 import javax.xml.stream.XMLStreamException;
@@ -32,9 +31,9 @@ import java.util.List;
  */
 public class FXSvgTinyWriter extends AbstractFXSvgWriter {
 
-    private static final @NonNull String SVG_VERSION = "1.2";
-    private static final @NonNull String SVG_BASE_PROFILE = "tiny";
-    public static final @NonNull String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
+    private static final String SVG_VERSION = "1.2";
+    private static final String SVG_BASE_PROFILE = "tiny";
+    public static final String SVG_MIME_TYPE_WITH_VERSION = SVG_MIME_TYPE + ";version=\"" + SVG_VERSION + "\"";
 
     /**
      * @param imageUriKey this property is used to retrieve an URL from an
@@ -56,7 +55,7 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected void writeDocumentElementAttributes(@NonNull XMLStreamWriter
+    protected void writeDocumentElementAttributes(XMLStreamWriter
                                                           w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException {
         w.writeAttribute("version", getSvgVersion());
         w.writeAttribute("baseProfile", getSvgBaseProfile());
@@ -67,18 +66,18 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected void writeClipAttributes(@NonNull XMLStreamWriter w, @NonNull Node node) {
+    protected void writeClipAttributes(XMLStreamWriter w, Node node) {
         // do not write clip attributes
     }
 
     @Override
-    protected void writeClipPathDefs(@NonNull XMLStreamWriter w, @NonNull Node node) {
+    protected void writeClipPathDefs(XMLStreamWriter w, Node node) {
 
         // do not write clip node defs
     }
 
     @Override
-    protected void writeCompositingAttributes(@NonNull XMLStreamWriter w, @NonNull Node
+    protected void writeCompositingAttributes(XMLStreamWriter w, Node
             node) {
         // do not write compositing attributes
     }
@@ -87,7 +86,7 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
         return true;
     }
 
-    protected void writePathStartElement(@NonNull XMLStreamWriter w, @NonNull Path node) throws XMLStreamException {
+    protected void writePathStartElement(XMLStreamWriter w, Path node) throws XMLStreamException {
         w.writeStartElement("path");
         String d;
         if (isRelativizePaths()) {
@@ -99,11 +98,11 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
     }
 
     @Override
-    protected List<String> getAdditionalNodeClasses(@NonNull Node node) {
+    protected List<String> getAdditionalNodeClasses(Node node) {
         return Collections.emptyList();
     }
 
-    protected void writeIdAttribute(@NonNull Element elem, @NonNull Node node) {
+    protected void writeIdAttribute(Element elem, Node node) {
         // suppress id attribute
     }
 

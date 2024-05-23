@@ -8,8 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -44,7 +43,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
      */
     private int dragStartIndex;
 
-    private final @NonNull NonNullObjectStyleableKey<BezierPath> key;
+    private final NonNullObjectStyleableKey<BezierPath> key;
     /**
      * The bezier nodes being created.
      */
@@ -52,7 +51,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     /**
      * The rubber band shows where the next point will be added.
      */
-    private final @NonNull Line rubberBand = new Line();
+    private final Line rubberBand = new Line();
 
     public BezierCreationTool(String name, Resources rsrc, NonNullObjectStyleableKey<BezierPath> key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);
@@ -73,7 +72,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
      * This implementation is empty.
      */
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         requestFocus();
         rubberBand.setVisible(false);
         createdFigure = null;
@@ -81,7 +80,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
         if (event.getClickCount() > 1) {
             if (createdFigure != null) {
                 for (int i = path.size() - 1; i > 0; i--) {
@@ -106,7 +105,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
         if (createdFigure != null && path != null) {
             double x2 = event.getX();
             double y2 = event.getY();
@@ -124,7 +123,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseMoved(MouseEvent event, DrawingView dv) {
         if (createdFigure != null && path != null) {
             if (!path.isEmpty()) {
                 BezierNode lastNode = path.get(path.size() - 1);
@@ -140,7 +139,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
         if (event.getClickCount() != 1) {
             return;
         }
@@ -174,7 +173,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (createdFigure == null || path == null) {
             return;
         }
@@ -220,7 +219,7 @@ public class BezierCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public String getHelpText() {
         return """
                BezierCreationTool
                  Click on the drawing view. The tool will create a new bezier curve with a point at that location.

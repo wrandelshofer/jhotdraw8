@@ -1,6 +1,5 @@
 package org.jhotdraw8.geom.jmh;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.Lines;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -95,7 +94,7 @@ public class CubicCurvesJmh {
      * @param epsilon the error tolerance
      * @return the arc length
      */
-    public static double arcLengthIterator(double @NonNull [] p, int offset, double t, double epsilon) {
+    public static double arcLengthIterator(double[] p, int offset, double t, double epsilon) {
         PathIterator it = new CubicCurve2D.Double(p[0], p[1], p[2], p[3], p[4], p[5], p[6], p[7]).getPathIterator(null, epsilon);
         double arcLength = 0;
         double lastX = 0, lastY = 0;

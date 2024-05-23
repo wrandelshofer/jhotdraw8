@@ -6,12 +6,11 @@ package org.jhotdraw8.fxcontrols.dock;
 
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 public class HBoxTrack extends AbstractDockParent implements Track {
-    private final @NonNull ScrollPane scrollPane = new ScrollPane();
-    private final @NonNull HBox hbox = new HBox();
+    private final ScrollPane scrollPane = new ScrollPane();
+    private final HBox hbox = new HBox();
 
     public HBoxTrack() {
         getChildren().add(scrollPane);
@@ -28,7 +27,7 @@ public class HBoxTrack extends AbstractDockParent implements Track {
     }
 
     @Override
-    public @NonNull TrackAxis getDockAxis() {
+    public TrackAxis getDockAxis() {
         return TrackAxis.X;
     }
 

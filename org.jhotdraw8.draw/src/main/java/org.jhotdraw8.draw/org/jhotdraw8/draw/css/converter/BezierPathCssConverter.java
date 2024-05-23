@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.shape.BezierPath;
 import org.jhotdraw8.geom.shape.BezierPathBuilder;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -34,7 +33,7 @@ public class BezierPathCssConverter extends AbstractCssConverter<BezierPath> {
     }
 
     @Override
-    public @NonNull BezierPath parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public BezierPath parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw new ParseException("Could not convert " + tt.getToken() + " to a BezierPath.", tt.getStartPosition());
         }
@@ -44,7 +43,7 @@ public class BezierPathCssConverter extends AbstractCssConverter<BezierPath> {
     }
 
     @Override
-    protected <TT extends BezierPath> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends BezierPath> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         if (value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {

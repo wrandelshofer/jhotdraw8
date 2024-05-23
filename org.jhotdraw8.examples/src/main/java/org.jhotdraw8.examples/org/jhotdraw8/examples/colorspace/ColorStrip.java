@@ -15,17 +15,16 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
 import org.jhotdraw8.color.SrgbColorSpace;
 
 
 public class ColorStrip extends HBox {
-    private final @NonNull ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", new SrgbColorSpace()));
-    private final @NonNull ObjectProperty<float[]> color = new SimpleObjectProperty<>(new float[3]);
-    private final @NonNull IntegerProperty component = new SimpleIntegerProperty(0);
-    private final @NonNull Canvas canvas = new Canvas();
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", new SrgbColorSpace()));
+    private final ObjectProperty<float[]> color = new SimpleObjectProperty<>(new float[3]);
+    private final IntegerProperty component = new SimpleIntegerProperty(0);
+    private final Canvas canvas = new Canvas();
 
     @SuppressWarnings("this-escape")
     public ColorStrip() {

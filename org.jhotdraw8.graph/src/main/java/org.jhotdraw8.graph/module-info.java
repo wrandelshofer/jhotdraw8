@@ -3,12 +3,16 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Defines data structures and algorithms for graphs.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.graph {
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;
     requires org.jhotdraw8.icollection;

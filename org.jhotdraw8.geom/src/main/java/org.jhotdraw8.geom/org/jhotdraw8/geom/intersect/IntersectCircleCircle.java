@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Points;
 
@@ -27,15 +26,15 @@ public class IntersectCircleCircle {
      * @param r2 the radius of circle 2
      * @return computed intersection with parameters of circle 1 at the intersection point
      */
-    public static @NonNull IntersectionResultEx intersectCircleCircleEx(@NonNull Point2D c1, double r1, @NonNull Point2D c2, double r2) {
+    public static IntersectionResultEx intersectCircleCircleEx(Point2D c1, double r1, Point2D c2, double r2) {
         return intersectCircleCircleEx(c1.getX(), c1.getY(), r1, c2.getX(), c2.getY(), r2, Intersections.EPSILON);
     }
 
-    public static @NonNull IntersectionResult intersectCircleCircle(@NonNull Point2D c1, double r1, @NonNull Point2D c2, double r2, double epsilon) {
+    public static IntersectionResult intersectCircleCircle(Point2D c1, double r1, Point2D c2, double r2, double epsilon) {
         return intersectCircleCircle(c1.getX(), c1.getY(), r1, c2.getX(), c2.getY(), r2, epsilon);
     }
 
-    public static @NonNull IntersectionResultEx intersectCircleCircleEx(double c1x, double c1y, double r1, double c2x, double c2y, double r2) {
+    public static IntersectionResultEx intersectCircleCircleEx(double c1x, double c1y, double r1, double c2x, double c2y, double r2) {
         return intersectCircleCircleEx(c1x, c1y, r1, c2x, c2y, r2, Intersections.EPSILON);
     }
 
@@ -50,7 +49,7 @@ public class IntersectCircleCircle {
      * @param r2  the radius of circle 2
      * @return computed intersection with parameters of circle 1 at the intersection point
      */
-    public static @NonNull IntersectionResultEx intersectCircleCircleEx(double c1x, double c1y, double r1, double c2x, double c2y, double r2, double epsilon) {
+    public static IntersectionResultEx intersectCircleCircleEx(double c1x, double c1y, double r1, double c2x, double c2y, double r2, double epsilon) {
         List<IntersectionPointEx> result = new ArrayList<>();
 
         // Determine minimum and maximum radii where circles can intersect
@@ -126,7 +125,7 @@ public class IntersectCircleCircle {
      * @param r2  the radius of circle 2
      * @return computed intersection with parameters of circle 1 at the intersection point
      */
-    public static @NonNull IntersectionResult intersectCircleCircle(double c1x, double c1y, double r1, double c2x, double c2y, double r2, double epsilon) {
+    public static IntersectionResult intersectCircleCircle(double c1x, double c1y, double r1, double c2x, double c2y, double r2, double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>();
 
         // Determine minimum and maximum radii where circles can intersect

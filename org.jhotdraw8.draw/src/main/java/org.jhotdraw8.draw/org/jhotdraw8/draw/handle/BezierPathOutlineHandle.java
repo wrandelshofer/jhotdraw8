@@ -16,8 +16,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -33,20 +31,21 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BezierPathOutlineHandle extends AbstractHandle {
-    private final @NonNull Group node;
-    private final @NonNull Path path2;
-    private final @NonNull Path path1;
+    private final Group node;
+    private final Path path2;
+    private final Path path1;
     private double strokeWidth = 1;
 
-    private final @NonNull MapAccessor<BezierPath> bezierPathKey;
+    private final MapAccessor<BezierPath> bezierPathKey;
     private final boolean selectable;
 
-    public BezierPathOutlineHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pointKey, boolean selectable) {
+    public BezierPathOutlineHandle(Figure figure, MapAccessor<BezierPath> pointKey, boolean selectable) {
         super(figure);
         this.bezierPathKey = pointKey;
         node = new Group();
@@ -74,7 +73,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
 
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         path1.setStroke(Color.WHITE);
         path2.setStroke(Paintable.getPaint(color));
@@ -85,7 +84,7 @@ public class BezierPathOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         final BezierPath path = f.get(bezierPathKey);
         if (path == null) {

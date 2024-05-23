@@ -5,8 +5,6 @@
 package org.jhotdraw8.geom.shape;
 
 import javafx.scene.shape.FillRule;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.BoundingBoxBuilder;
 import org.jhotdraw8.geom.CubicCurves;
@@ -20,6 +18,7 @@ import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.PrivateData;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -52,7 +51,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         this.windingRule = windingRule;
     }
 
-    public BezierPath(@NonNull PrivateData privateData, int windingRule) {
+    public BezierPath(PrivateData privateData, int windingRule) {
         super(privateData);
         this.windingRule = windingRule;
     }
@@ -83,7 +82,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    public boolean contains(@NonNull Point2D p) {
+    public boolean contains(Point2D p) {
         return contains(p.getX(), p.getY());
     }
 
@@ -93,7 +92,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    public boolean contains(@NonNull Rectangle2D r) {
+    public boolean contains(Rectangle2D r) {
         return contains(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
@@ -103,7 +102,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    public @NonNull Rectangle2D getBounds2D() {
+    public Rectangle2D getBounds2D() {
         if (bounds == null) {
             bounds = AwtShapes.buildPathIterator(new BoundingBoxBuilder(), getPathIterator(null)).buildRectangle2D();
         }
@@ -111,12 +110,12 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(AffineTransform at) {
+    public PathIterator getPathIterator(AffineTransform at) {
         return new BezierPathIterator(this, at);
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(AffineTransform at, double flatness) {
+    public PathIterator getPathIterator(AffineTransform at, double flatness) {
         return new FlatteningPathIterator(getPathIterator(at), flatness);
     }
 
@@ -126,7 +125,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    public boolean intersects(@NonNull Rectangle2D r) {
+    public boolean intersects(Rectangle2D r) {
         return intersects(r.getX(), r.getY(), r.getWidth(), r.getHeight());
     }
 
@@ -269,96 +268,96 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
      * Reverses the direction of the path.
      */
     @Override
-    public @NonNull BezierPath reverse() {
+    public BezierPath reverse() {
         return AwtShapes.buildPathIterator(new BezierPathBuilder(), new ReversePathIterator(getPathIterator(null), windingRule)).build();
     }
 
-    private static final @NonNull BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);
+    private static final BezierPath EMPTY = new BezierPath(PathIterator.WIND_EVEN_ODD);
 
 
-    public static @NonNull BezierPath of() {
+    public static BezierPath of() {
         return EMPTY;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull BezierPath empty() {
+    public BezierPath empty() {
         return isEmpty() ? this : new BezierPath(windingRule);
     }
 
     @Override
-    protected @NonNull VectorList<BezierNode> newInstance(@NonNull PrivateData privateData) {
+    protected VectorList<BezierNode> newInstance(PrivateData privateData) {
         return new BezierPath(privateData, windingRule);
     }
 
     @Override
-    public @NonNull BezierPath add(@NonNull BezierNode element) {
+    public BezierPath add(BezierNode element) {
         return (BezierPath) super.add(element);
     }
 
     @Override
-    public @NonNull BezierPath add(int index, @NonNull BezierNode element) {
+    public BezierPath add(int index, BezierNode element) {
         return (BezierPath) super.add(index, element);
     }
 
     @Override
-    public @NonNull BezierPath addAll(@NonNull Iterable<? extends BezierNode> c) {
+    public BezierPath addAll(Iterable<? extends BezierNode> c) {
         return (BezierPath) super.addAll(c);
     }
 
     @Override
-    public @NonNull BezierPath addFirst(@Nullable BezierNode element) {
+    public BezierPath addFirst(@Nullable BezierNode element) {
         return (BezierPath) super.addFirst(element);
     }
 
     @Override
-    public @NonNull BezierPath addLast(@Nullable BezierNode element) {
+    public BezierPath addLast(@Nullable BezierNode element) {
         return (BezierPath) super.addLast(element);
     }
 
     @Override
-    public @NonNull BezierPath addAll(int index, @NonNull Iterable<? extends BezierNode> c) {
+    public BezierPath addAll(int index, Iterable<? extends BezierNode> c) {
         return (BezierPath) super.addAll(index, c);
     }
 
 
     @Override
-    public @NonNull BezierPath remove(BezierNode element) {
+    public BezierPath remove(BezierNode element) {
         return (BezierPath) super.remove(element);
     }
 
     @Override
-    public @NonNull BezierPath removeAt(int index) {
+    public BezierPath removeAt(int index) {
         return (BezierPath) super.removeAt(index);
     }
 
     @Override
-    public @NonNull BezierPath removeFirst() {
+    public BezierPath removeFirst() {
         return (BezierPath) super.removeFirst();
     }
 
     @Override
-    public @NonNull BezierPath removeLast() {
+    public BezierPath removeLast() {
         return (BezierPath) super.removeLast();
     }
 
     @Override
-    public @NonNull BezierPath retainAll(@NonNull Iterable<?> c) {
+    public BezierPath retainAll(Iterable<?> c) {
         return (BezierPath) super.retainAll(c);
     }
 
     @Override
-    public @NonNull BezierPath removeRange(int fromIndex, int toIndex) {
+    public BezierPath removeRange(int fromIndex, int toIndex) {
         return (BezierPath) super.removeRange(fromIndex, toIndex);
     }
 
     @Override
-    public @NonNull BezierPath removeAll(@NonNull Iterable<?> c) {
+    public BezierPath removeAll(Iterable<?> c) {
         return (BezierPath) super.removeAll(c);
     }
 
     @Override
-    public @NonNull BezierPath set(int index, @NonNull BezierNode element) {
+    public BezierPath set(int index, BezierNode element) {
         return (BezierPath) super.set(index, element);
     }
 
@@ -367,7 +366,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
         return super.get(index);
     }
 
-    public @NonNull PathMetrics getPathMetrics() {
+    public PathMetrics getPathMetrics() {
         if (pathMetrics == null) {
             pathMetrics = new SimplePathMetrics(this);
         }
@@ -375,7 +374,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    public @NonNull BezierPath readOnlySubList(int fromIndex, int toIndex) {
+    public BezierPath readOnlySubList(int fromIndex, int toIndex) {
         return (BezierPath) super.readOnlySubList(fromIndex, toIndex);
     }
 
@@ -390,7 +389,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
      * @return the point and derivative of the first point in the path
      * @throws java.util.NoSuchElementException if the path is empty
      */
-    public @NonNull PointAndDerivative evalFirst() {
+    public PointAndDerivative evalFirst() {
         BezierNode first = getFirst();
         double y0 = first.pointY();
         double x0 = first.pointX();
@@ -418,7 +417,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
      * @return the reverse derivative
      * @throws java.util.NoSuchElementException if the path is empty
      */
-    public @NonNull PointAndDerivative evalLastInReverse() {
+    public PointAndDerivative evalLastInReverse() {
         BezierNode last = getLast();
         BezierNode secondLast = size() > 1 ? get(size() - 2) : null;
         if (last.hasMask(BezierNode.CLOSE_MASK) && size() > 1) {

@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -16,19 +14,20 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Set;
 
 public class AlignLeftAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.alignLeft";
+    public static final String ID = "edit.alignLeft";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public AlignLeftAction(@NonNull DrawingEditor editor) {
+    public AlignLeftAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -36,13 +35,13 @@ public class AlignLeftAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
         final Set<Figure> figures = drawingView.getSelectedFigures();
         Figure lead = drawingView.getSelectionLead();
         alignLeft(drawingView, figures, lead);
     }
 
-    private void alignLeft(@NonNull DrawingView view, @NonNull Set<Figure> figures, @Nullable Figure lead) {
+    private void alignLeft(DrawingView view, Set<Figure> figures, @Nullable Figure lead) {
         if (figures.size() < 2 || lead == null) {
             return;
         }

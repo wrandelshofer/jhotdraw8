@@ -6,7 +6,6 @@
 package org.jhotdraw8.geom;
 
 import javafx.scene.shape.Polygon;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +14,13 @@ import java.util.List;
  * Builds a list of {@link Double}s for a {@link Polygon}.
  */
 public class FXPolygonBuilder extends AbstractPathBuilder<List<Double>> {
-    private final @NonNull List<Double> poly = new ArrayList<>();
+    private final List<Double> poly = new ArrayList<>();
 
     public FXPolygonBuilder() {
     }
 
     @Override
-    public @NonNull List<Double> build() {
+    public List<Double> build() {
         return poly;
     }
 

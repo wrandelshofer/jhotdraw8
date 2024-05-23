@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -18,12 +17,12 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<StartAndEndPointsPathBuilder.StartAndEndPoints> {
-    public record StartAndEndPoints(@NonNull ImmutableList<PointAndDerivative> startPoints,
-                                    @NonNull ImmutableList<PointAndDerivative> endPoints) {
+    public record StartAndEndPoints(ImmutableList<PointAndDerivative> startPoints,
+                                    ImmutableList<PointAndDerivative> endPoints) {
     }
 
-    private final @NonNull List<PointAndDerivative> startPoints = new ArrayList<>();
-    private final @NonNull List<PointAndDerivative> endPoints = new ArrayList<>();
+    private final List<PointAndDerivative> startPoints = new ArrayList<>();
+    private final List<PointAndDerivative> endPoints = new ArrayList<>();
 
     private double startX;
     private double startY;
@@ -98,7 +97,7 @@ public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<StartAndEn
     }
 
     @Override
-    public @NonNull StartAndEndPoints build() {
+    public StartAndEndPoints build() {
         if (startDone) {
             startPoints.add(new PointAndDerivative(startX, startY, startTangentX, startTangentY));
             endPoints.add(new PointAndDerivative(endX, endY, endTangentX, endTangentY));

@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.function.ToDoubleFunction;
 
@@ -101,7 +100,7 @@ public class Integrals {
      * @param max  the upper bound of the interval
      * @return the area under the curve
      */
-    public static double simpson(@NonNull ToDoubleFunction<Double> func, double min, double max, double eps) {
+    public static double simpson(ToDoubleFunction<Double> func, double min, double max, double eps) {
         int maxSteps = 20;
 
         double range = max - min;
@@ -156,7 +155,7 @@ public class Integrals {
      * @return the area under the curve
      */
 
-    public static double gaussLegendre3(@NonNull ToDoubleFunction<Double> func, double a, double b) {
+    public static double gaussLegendre3(ToDoubleFunction<Double> func, double a, double b) {
         double c = (b - a) * 0.5;
         double d = (a + b) * 0.5;
         double Qd1 = func.applyAsDouble(-0.774596669 * c + d);
@@ -179,7 +178,7 @@ public class Integrals {
      * @param b    the upper bound of the interval
      * @return the area under the curve
      */
-    public static double gaussLegendre5(@NonNull ToDoubleFunction<Double> func, double a, double b) {
+    public static double gaussLegendre5(ToDoubleFunction<Double> func, double a, double b) {
         double c = (b - a) * 0.5;
         double d = (a + b) * 0.5;
         double Qd1 = func.applyAsDouble(-0.90618 * c + d);
@@ -204,7 +203,7 @@ public class Integrals {
      * @param b    the upper bound of the interval
      * @return the area under the curve
      */
-    public static double gaussLegendre7(@NonNull ToDoubleFunction<Double> func, double a, double b) {
+    public static double gaussLegendre7(ToDoubleFunction<Double> func, double a, double b) {
         double c = (b - a) * 0.5;
         double d = (a + b) * 0.5;
         double Qd1 = func.applyAsDouble(-0.949108 * c + d);

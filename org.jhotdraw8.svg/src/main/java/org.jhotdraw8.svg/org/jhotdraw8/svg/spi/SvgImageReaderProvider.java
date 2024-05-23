@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.svg.spi;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.spi.NodeReader;
 import org.jhotdraw8.fxbase.spi.NodeReaderProvider;
 
@@ -16,12 +15,12 @@ public class SvgImageReaderProvider implements NodeReaderProvider {
     }
 
     @Override
-    public boolean canDecodeInput(@NonNull URL source) {
+    public boolean canDecodeInput(URL source) {
         return canDecodeInput(source.getFile());
     }
 
     @Override
-    public boolean canDecodeInput(@NonNull String path) {
+    public boolean canDecodeInput(String path) {
         return path.toLowerCase().endsWith(".svg");
     }
 

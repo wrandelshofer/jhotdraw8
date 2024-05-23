@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
@@ -14,6 +12,7 @@ import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.graph.path.SimpleVertexSequenceFinder;
 import org.jhotdraw8.graph.path.VertexSequenceFinder;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -36,7 +35,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     public UniqueOnDagVertexPathSearchAlgoTest() {
     }
 
-    private @NonNull DirectedGraph<Integer, Double> createGraph() {
+    private DirectedGraph<Integer, Double> createGraph() {
         SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |   6
@@ -68,7 +67,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
         return builder;
     }
 
-    private @NonNull DirectedGraph<Integer, Double> createDiamondGraph() {
+    private DirectedGraph<Integer, Double> createDiamondGraph() {
         SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |
@@ -111,7 +110,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindUniqueVertexPath() {
+    public List<DynamicTest> dynamicTestsFindUniqueVertexPath() {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -127,7 +126,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath) throws Exception {
+    public void testFindUniqueVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, ImmutableList<Integer> expPath) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
         SimpleOrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
@@ -142,7 +141,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindUniqueMultiGoalPath() throws Exception {
+    public List<DynamicTest> dynamicTestsFindUniqueMultiGoalPath() throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -160,7 +159,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
+    public void testFindUniqueMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, List<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
                 new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
 
@@ -176,7 +175,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     }
 
 
-    private @NonNull DirectedGraph<Integer, Double> createGraph2() {
+    private DirectedGraph<Integer, Double> createGraph2() {
         SimpleMutableDirectedGraph<Integer, Double> b = new SimpleMutableDirectedGraph<>();
         b.addVertex(1);
         b.addVertex(2);
@@ -195,7 +194,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindUniqueVertexPathOverWaypoints() throws Exception {
+    public List<DynamicTest> dynamicTestsFindUniqueVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> testFindUniqueVertexPathOverWaypoints(Arrays.asList(1, 3, 5), null)),
                 dynamicTest("2", () -> testFindUniqueVertexPathOverWaypoints(Arrays.asList(1, 4), null)),
@@ -207,7 +206,7 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindUniqueVertexPathOverWaypoints(@NonNull List<Integer> waypoints, @Nullable ImmutableList<Integer> expResult) throws Exception {
+    private void testFindUniqueVertexPathOverWaypoints(List<Integer> waypoints, @Nullable ImmutableList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
                 new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());

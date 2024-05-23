@@ -1,9 +1,8 @@
 package org.jhotdraw8.geom.shape;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -33,7 +32,7 @@ public interface PathMetrics extends Shape {
      * @param t the time in the range [0,1]
      * @return point and tangent at t
      */
-    default @NonNull PointAndDerivative eval(double t) {
+    default PointAndDerivative eval(double t) {
         return evalAtArcLength(t * arcLength());
     }
 
@@ -44,7 +43,7 @@ public interface PathMetrics extends Shape {
      * @param t       the time in the range [0,1]
      * @return point and tangent at t
      */
-    default @NonNull PointAndDerivative eval(double t, boolean reverse) {
+    default PointAndDerivative eval(double t, boolean reverse) {
         return evalAtArcLength(t * arcLength(), reverse);
     }
 
@@ -54,7 +53,6 @@ public interface PathMetrics extends Shape {
      * @param s the arc length, the value will be clamped to [0,arcLength()]
      * @return point and tangent at s
      */
-    @NonNull
     PointAndDerivative evalAtArcLength(double s);
 
     /**
@@ -64,7 +62,7 @@ public interface PathMetrics extends Shape {
      * @param reverse whether to reverse the path
      * @return point and tangent at s
      */
-    default @NonNull PointAndDerivative evalAtArcLength(double s, boolean reverse) {
+    default PointAndDerivative evalAtArcLength(double s, boolean reverse) {
         if (reverse) {
             return evalAtArcLength(arcLength() - s).reverse();
         } else {
@@ -80,7 +78,7 @@ public interface PathMetrics extends Shape {
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */
-    default @NonNull PathIterator getSubPathIterator(double t0, double t1, final @Nullable AffineTransform tx) {
+    default PathIterator getSubPathIterator(double t0, double t1, final @Nullable AffineTransform tx) {
         double totalArcLength = arcLength();
         double s0 = t0 * totalArcLength;
         double s1 = t1 * totalArcLength;
@@ -95,7 +93,6 @@ public interface PathMetrics extends Shape {
      * @param tx an optional transformation for the path iterator
      * @return the path iterator
      */
-    @NonNull
     PathIterator getSubPathIteratorAtArcLength(double s0, double s1, final @Nullable AffineTransform tx);
 
     /**
@@ -103,14 +100,13 @@ public interface PathMetrics extends Shape {
      *
      * @return reverse path metrics
      */
-    @NonNull
     PathMetrics reverse();
 
     /**
      * Implementations of PathMetrics should implement their {@code toString}
      * as follows:
      * <pre>
-     * public @NonNull toString() {
+     * public toString() {
      *     return PathMetrics.pathMetricsToString(this);
      * }
      * </pre>
@@ -118,7 +114,7 @@ public interface PathMetrics extends Shape {
      * @param pm the path metrics implementation
      * @return a string representation
      */
-    static String pathMetricsToString(@NonNull PathMetrics pm) {
+    static String pathMetricsToString(PathMetrics pm) {
         return "PathMetrics{" + pm.arcLength() + "px, \"" + SvgPaths.awtPathIteratorToDoubleSvgString(pm.getPathIterator(null)) + "\"}";
     }
 

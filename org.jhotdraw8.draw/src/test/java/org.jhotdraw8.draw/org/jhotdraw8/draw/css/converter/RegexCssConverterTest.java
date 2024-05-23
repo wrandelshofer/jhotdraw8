@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.text.RegexReplace;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -26,7 +25,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class RegexCssConverterTest {
 
-    public static void testFromStringApply(@NonNull String inputCssRegex, String inputValue, String expectedValue) throws Exception {
+    public static void testFromStringApply(String inputCssRegex, String inputValue, String expectedValue) throws Exception {
         RegexCssConverter c = new RegexCssConverter(false);
         RegexReplace rgx = c.fromString(inputCssRegex);
         String actualValue = rgx.apply(inputValue);
@@ -34,14 +33,14 @@ public class RegexCssConverterTest {
     }
 
 
-    public static void testRegexFromStringReplace(@NonNull String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
+    public static void testRegexFromStringReplace(String inputCssRegex, String expectedFind, String expectedReplace) throws Exception {
         RegexCssConverter c = new RegexCssConverter(false);
         RegexReplace rgx = c.fromString(inputCssRegex);
         assertEquals(rgx.getFind(), expectedFind, "find");
         assertEquals(rgx.getReplace(), expectedReplace, "replace");
     }
 
-    public static void testRegexFromStringReplaceNullable(@NonNull String inputCssRegex, boolean expectNull) throws Exception {
+    public static void testRegexFromStringReplaceNullable(String inputCssRegex, boolean expectNull) throws Exception {
         RegexCssConverter cNullable = new RegexCssConverter(true);
         RegexReplace rgx = cNullable.fromString(inputCssRegex);
         if (expectNull) {
@@ -65,7 +64,7 @@ public class RegexCssConverterTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRegexFromStringReplace() {
+    public List<DynamicTest> dynamicTestsRegexFromStringReplace() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRegexFromStringReplace("replace('' '')", "", "")),
                 dynamicTest("2", () -> testRegexFromStringReplace("replace('.*@(.*)')", ".*@(.*)", null)),
@@ -87,7 +86,7 @@ public class RegexCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRegexFromStringApply() {
+    public List<DynamicTest> dynamicTestsRegexFromStringApply() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromStringApply("replace('' '')", "", "")),
                 dynamicTest("2", () -> testFromStringApply("replace('.*@(.*)')", "a@b", "a@b")),
@@ -100,7 +99,7 @@ public class RegexCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRegexFromStringReplaceNullable() {
+    public List<DynamicTest> dynamicTestsRegexFromStringReplaceNullable() {
         return Arrays.asList(
                 dynamicTest("1", () -> testRegexFromStringReplaceNullable("replace('' '')", false)),
                 dynamicTest("2", () -> testRegexFromStringReplaceNullable("none", true))

@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.draw.undo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
@@ -26,7 +25,7 @@ import java.text.MessageFormat;
  */
 public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
 
-    private final @NonNull Listener<DrawingModelEvent> drawingModelListener = event -> {
+    private final Listener<DrawingModelEvent> drawingModelListener = event -> {
         if (event.getSource().isValidating()) {
             return;
         }
@@ -44,27 +43,27 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
     public DrawingModelUndoAdapter() {
     }
 
-    public DrawingModelUndoAdapter(@NonNull DrawingModel model) {
+    public DrawingModelUndoAdapter(DrawingModel model) {
         bind(model);
     }
 
 
-    public void bind(@NonNull DrawingModel model) {
+    public void bind(DrawingModel model) {
         super.bind(model);
         model.addDrawingModelListener(drawingModelListener);
     }
 
 
-    public void unbind(@NonNull DrawingModel model) {
+    public void unbind(DrawingModel model) {
         super.unbind(model);
         model.removeDrawingModelListener(drawingModelListener);
     }
 
 
     class PropertyChangedEdit<E> extends AbstractUndoableEdit {
-        private final @NonNull DrawingModel model;
-        private final @NonNull Figure figure;
-        private final @NonNull Key<Object> key;
+        private final DrawingModel model;
+        private final Figure figure;
+        private final Key<Object> key;
         private final @Nullable Object oldValue;
         private @Nullable Object newValue;
         /**
@@ -77,7 +76,7 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
         private final boolean wasRemoved;
 
 
-        public PropertyChangedEdit(@NonNull DrawingModel model, @NonNull Figure figure, @NonNull Key<Object> key, @Nullable Object oldValue, @Nullable Object newValue, boolean wasAdded, boolean wasRemoved) {
+        public PropertyChangedEdit(DrawingModel model, Figure figure, Key<Object> key, @Nullable Object oldValue, @Nullable Object newValue, boolean wasAdded, boolean wasRemoved) {
             this.model = model;
             this.figure = figure;
             this.key = key;

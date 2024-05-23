@@ -8,8 +8,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -23,6 +21,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.svg.text.SvgShapeRendering;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
@@ -39,21 +38,21 @@ public class SvgLineFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "line";
-    public static final @NonNull CssSizeStyleableKey X1 = new CssSizeStyleableKey("x1", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey Y1 = new CssSizeStyleableKey("y1", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey X2 = new CssSizeStyleableKey("x2", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey Y2 = new CssSizeStyleableKey("y2", CssSize.ZERO);
+    public static final String TYPE_SELECTOR = "line";
+    public static final CssSizeStyleableKey X1 = new CssSizeStyleableKey("x1", CssSize.ZERO);
+    public static final CssSizeStyleableKey Y1 = new CssSizeStyleableKey("y1", CssSize.ZERO);
+    public static final CssSizeStyleableKey X2 = new CssSizeStyleableKey("x2", CssSize.ZERO);
+    public static final CssSizeStyleableKey Y2 = new CssSizeStyleableKey("y2", CssSize.ZERO);
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+    public Node createNode(RenderContext ctx) {
         Line n = new Line();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         Path2D.Double p = new Path2D.Double();
         p.moveTo(getNonNull(X1).getConvertedValue(),
                 getNonNull(Y1).getConvertedValue());
@@ -64,12 +63,12 @@ public class SvgLineFigure extends AbstractLeafFigure
 
 
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         CssSize startX = getNonNull(X1);
         CssSize startY = getNonNull(Y1);
         CssSize endX = getNonNull(X2);
@@ -79,7 +78,7 @@ public class SvgLineFigure extends AbstractLeafFigure
 
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         CssSize startX = getNonNull(X1);
         CssSize startY = getNonNull(Y1);
         CssSize endX = getNonNull(X2);
@@ -97,7 +96,7 @@ public class SvgLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         reshapeInLocal(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
     }
 
@@ -107,7 +106,7 @@ public class SvgLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Line n = (Line) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double startX = getNonNull(X1).getConvertedValue(unit);
@@ -142,7 +141,7 @@ public class SvgLineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

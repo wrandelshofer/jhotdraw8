@@ -9,8 +9,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
@@ -22,6 +20,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
@@ -39,14 +38,14 @@ public class SvgEllipseFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "ellipse";
-    public static final @NonNull CssSizeStyleableKey CX = SvgCircleFigure.CX;
-    public static final @NonNull CssSizeStyleableKey CY = SvgCircleFigure.CY;
-    public static final @NonNull CssSizeStyleableKey RX = new CssSizeStyleableKey("rx", CssSize.ONE);
-    public static final @NonNull CssSizeStyleableKey RY = new CssSizeStyleableKey("ry", CssSize.ONE);
+    public static final String TYPE_SELECTOR = "ellipse";
+    public static final CssSizeStyleableKey CX = SvgCircleFigure.CX;
+    public static final CssSizeStyleableKey CY = SvgCircleFigure.CY;
+    public static final CssSizeStyleableKey RX = new CssSizeStyleableKey("rx", CssSize.ONE);
+    public static final CssSizeStyleableKey RY = new CssSizeStyleableKey("ry", CssSize.ONE);
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+    public Node createNode(RenderContext ctx) {
         Group g = new Group();
         Ellipse n0 = new Ellipse();
         Ellipse n1 = new Ellipse();
@@ -57,7 +56,7 @@ public class SvgEllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double rx = getStyledNonNull(RX).getConvertedValue(unit);
         double ry = getStyledNonNull(RY).getConvertedValue(unit);
@@ -71,12 +70,12 @@ public class SvgEllipseFigure extends AbstractLeafFigure
 
 
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         double rx = getNonNull(RX).getConvertedValue();
         double ry = getNonNull(RY).getConvertedValue();
         double cx = getNonNull(CX).getConvertedValue();
@@ -85,7 +84,7 @@ public class SvgEllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         CssSize rx = getNonNull(RX);
         CssSize ry = getNonNull(RY);
         return new CssRectangle2D(
@@ -96,7 +95,7 @@ public class SvgEllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         CssSize rx = CssSize.max(width.multiply(0.5), CssSize.ZERO);
         CssSize ry = CssSize.max(height.multiply(0.5), CssSize.ZERO);
         set(CX, x.add(rx));
@@ -111,7 +110,7 @@ public class SvgEllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double rx = getStyledNonNull(RX).getConvertedValue(unit);
@@ -144,7 +143,7 @@ public class SvgEllipseFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

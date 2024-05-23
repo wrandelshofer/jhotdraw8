@@ -6,13 +6,12 @@ package org.jhotdraw8.draw.action;
 
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.AbstractAction;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
@@ -29,8 +28,8 @@ import javax.swing.event.UndoableEditEvent;
  */
 public abstract class AbstractDrawingViewAction extends AbstractAction {
 
-    private final @NonNull DrawingEditor editor;
-    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
+    private final DrawingEditor editor;
+    protected final UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
 
     /**
      * Creates an action which acts on the selected figures on the current view
@@ -38,7 +37,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
      *
      * @param editor the drawing editor
      */
-    public AbstractDrawingViewAction(@NonNull DrawingEditor editor) {
+    public AbstractDrawingViewAction(DrawingEditor editor) {
         this.editor = editor;
 
         // If the editor has no active drawing view, or the drawing view is disabled,
@@ -48,7 +47,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
         CustomBinding.bindMembershipToBoolean(disablers(), new Object(), editorHasNoDrawingViewOrDrawingViewIsDisabledProperty);
     }
 
-    public void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+    public void forwardUndoableEdit(UndoableEditEvent event) {
         editor.getUndoManager().undoableEditHappened(event);
     }
 
@@ -57,7 +56,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
      *
      * @return the drawing editor
      */
-    public @NonNull DrawingEditor getEditor() {
+    public DrawingEditor getEditor() {
         return editor;
     }
 
@@ -72,7 +71,7 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event) {
+    protected void onActionPerformed(ActionEvent event) {
         DrawingView view = getView();
         if (view != null) {
             undoHelper.startCompositeEdit(null);
@@ -81,6 +80,6 @@ public abstract class AbstractDrawingViewAction extends AbstractAction {
         }
     }
 
-    protected abstract void onActionPerformed(@NonNull ActionEvent even, @NonNull DrawingView view);
+    protected abstract void onActionPerformed(ActionEvent even, DrawingView view);
 
 }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
@@ -17,7 +16,7 @@ import java.lang.reflect.Type;
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<@NonNull T>,
+public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<T>,
         NonNullKey<T> {
 
 
@@ -29,7 +28,7 @@ public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T
      * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public NonNullObjectStyleableKey(@NonNull String name, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
+    public NonNullObjectStyleableKey(String name, Type type, Converter<T> converter, T defaultValue) {
         super(name, type, converter, defaultValue);
     }
 
@@ -42,7 +41,7 @@ public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T
      * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public NonNullObjectStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type type, @NonNull Converter<T> converter, @NonNull T defaultValue) {
+    public NonNullObjectStyleableKey(String xmlName, String cssName, Type type, Converter<T> converter, T defaultValue) {
         super(xmlName, cssName, type, converter, defaultValue);
     }
 

@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.function.AttrCssFunction;
 import org.jhotdraw8.css.function.CalcCssFunction;
 import org.jhotdraw8.css.function.ConcatCssFunction;
@@ -32,7 +31,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class ExtendedCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
 
     @Override
-    protected @NonNull CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
+    protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
         List<CssFunction<Element>> functions = new ArrayList<>();
         functions.add(new AttrCssFunction<>());
         functions.add(new CalcCssFunction<>());
@@ -45,7 +44,7 @@ public class ExtendedCssFunctionProcessorTest extends AbstractCssFunctionProcess
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsProcessingOfExtendedFunctions() {
+    public List<DynamicTest> dynamicTestsProcessingOfExtendedFunctions() {
         return Arrays.asList(
                 dynamicTest("301", () -> doTestProcess("concat()", "\"\"")),
                 dynamicTest("302", () -> doTestProcess("concat(\"a\",\"b\")", "\"ab\"")),

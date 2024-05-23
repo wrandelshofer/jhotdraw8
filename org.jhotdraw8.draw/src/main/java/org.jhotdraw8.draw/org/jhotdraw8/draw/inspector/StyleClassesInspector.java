@@ -17,8 +17,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TextField;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -30,6 +28,7 @@ import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +50,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
     @FXML
     private Button addButton;
-    private final @NonNull Listener<DrawingModelEvent> drawingModelEventListener = change -> {
+    private final Listener<DrawingModelEvent> drawingModelEventListener = change -> {
         DrawingView drawingView = getSubject();
         if (change.getEventType() == DrawingModelEvent.EventType.PROPERTY_VALUE_CHANGED) {
             if ((Key<?>) change.getKey() == StyleableFigure.STYLE_CLASS) {
@@ -61,7 +60,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
             }
         }
     };
-    private final @NonNull Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
+    private final Supplier<Collection<String>> listFactory = FXCollections::observableArrayList;
     @FXML
     private ListView<StyleClassItem> listView;
     private final @Nullable ChangeListener<DrawingModel> modelListener = (o, oldv, newv) -> {
@@ -78,7 +77,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
     private Button removeButton;
 
     @SuppressWarnings("unchecked")
-    private final @NonNull WordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
+    private final WordSetKey tagsKey = StyleableFigure.STYLE_CLASS;
     @FXML
     private TextField textField;
     private boolean willUpdateList;
@@ -87,11 +86,11 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         this(StyleClassesInspector.class.getResource("StyleClassesInspector.fxml"));
     }
 
-    public StyleClassesInspector(@NonNull URL fxmlUrl) {
+    public StyleClassesInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    public void addTag(@NonNull String wordList) {
+    public void addTag(String wordList) {
        undoHelper.startCompositeEdit(null);
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
@@ -141,7 +140,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         updateListLater();
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {
@@ -172,7 +171,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
         });
     }
 
-    public void removeTag(@NonNull String wordList) {
+    public void removeTag(String wordList) {
         for (String tagName : wordList.split(" ")) {
             if (tagName != null && !tagName.trim().isEmpty()) {
                 tagName = tagName.trim();

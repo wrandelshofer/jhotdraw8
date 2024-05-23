@@ -31,7 +31,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.CieLabColorSpace;
 import org.jhotdraw8.color.DisplayP3ColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
@@ -70,7 +69,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
 
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         // start is called on the FX Application Thread,
         // so Thread.currentThread() is the FX application thread:
         Thread.currentThread().setUncaughtExceptionHandler((thread, throwable) -> System.out.println("Handler caught exception: " + throwable.getMessage()));
@@ -278,7 +277,7 @@ public class ColorSlidersHslMain extends AbstractColorSlidersMain {
     /**
      * @param args the command line arguments
      */
-    public static void main(@NonNull String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 

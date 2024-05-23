@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * StartAndEndPointPathBuilder gets the first start point and last end point of a path,

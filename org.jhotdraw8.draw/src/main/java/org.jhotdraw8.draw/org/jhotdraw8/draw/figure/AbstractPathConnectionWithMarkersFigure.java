@@ -12,8 +12,6 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -41,6 +39,7 @@ import org.jhotdraw8.geom.shape.BezierPath;
 import org.jhotdraw8.geom.shape.PathMetrics;
 import org.jhotdraw8.geom.shape.SimplePathMetrics;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Line2D;
@@ -61,14 +60,14 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    public static final @NonNull NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(true), BezierPath.of());
+    public static final NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(true), BezierPath.of());
 
 
     public AbstractPathConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
     }
 
-    public AbstractPathConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
+    public AbstractPathConnectionWithMarkersFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -77,7 +76,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.MOVE) {
@@ -124,7 +123,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         final Path line = new Path();
         final Path startMarker = new Path();
@@ -148,7 +147,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         BezierPath path = get(PATH);
         if (path == null || path.isEmpty()) {
             Point2D start = getNonNull(START).getConvertedValue();
@@ -158,12 +157,12 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         return path.getPathIterator(tx);
     }
 
-    public abstract double getStrokeCutEnd(@NonNull RenderContext ctx);
+    public abstract double getStrokeCutEnd(RenderContext ctx);
 
-    public abstract double getStrokeCutStart(@NonNull RenderContext ctx);
+    public abstract double getStrokeCutStart(RenderContext ctx);
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         Point2D start = getNonNull(START).getConvertedValue();
         Point2D end = getNonNull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);
@@ -223,7 +222,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
-    public void transformInLocal(@NonNull Transform tx) {
+    public void transformInLocal(Transform tx) {
         set(START, new CssPoint2D(tx.transform(getNonNull(START).getConvertedValue())));
         set(END, new CssPoint2D(tx.transform(getNonNull(END).getConvertedValue())));
         BezierPath path = get(PATH);
@@ -237,7 +236,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D t) {
+    public void translateInLocal(CssPoint2D t) {
         set(START, getNonNull(START).add(t));
         set(END, getNonNull(END).add(t));
         BezierPath path = get(PATH);
@@ -253,7 +252,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform tx) {
+    public void reshapeInLocal(Transform tx) {
         super.reshapeInLocal(tx);
         BezierPath path = get(PATH);
         if (path != null) {
@@ -275,7 +274,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateEndMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 
@@ -286,13 +285,13 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateLineNode(RenderContext ctx, Path node) {
 
     }
 
-    protected void updateMarkerNode(@NonNull RenderContext ctx, Group group,
-                                    @NonNull Path markerNode,
-                                    @NonNull PointAndDerivative pd, @Nullable ImmutableList<PathElement> markerShape, double markerScaleFactor) {
+    protected void updateMarkerNode(RenderContext ctx, Group group,
+                                    Path markerNode,
+                                    PointAndDerivative pd, @Nullable ImmutableList<PathElement> markerShape, double markerScaleFactor) {
         if (markerShape != null) {
             markerNode.getElements().setAll(markerShape.asCollection());
             double angle = Math.PI + pd.getAngle();
@@ -309,7 +308,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         PathMetrics pathMetrics = getPathMetrics();
 
 
@@ -344,7 +343,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    public @NonNull PathMetrics getPathMetrics() {
+    public PathMetrics getPathMetrics() {
         BezierPath path = get(PATH);
         if (path == null || path.isEmpty()) {
             Point2D start = getNonNull(START).getConvertedValue();
@@ -365,7 +364,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateStartMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 }

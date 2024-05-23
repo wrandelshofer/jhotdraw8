@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * A named color.
@@ -26,6 +25,6 @@ import org.jhotdraw8.annotation.NonNull;
  * @param colorSpace the color space
  * @param name       the name of the color
  */
-public record NamedColor(float c0, float c1, float c2, float c4, float alpha, @NonNull NamedColorSpace colorSpace,
-                         @NonNull String name) {
+public record NamedColor(float c0, float c1, float c2, float c4, float alpha, NamedColorSpace colorSpace,
+                         String name) {
 }

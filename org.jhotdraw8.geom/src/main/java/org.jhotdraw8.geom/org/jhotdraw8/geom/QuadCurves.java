@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.DoubleConsumer4;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.Point2D;
 import java.util.function.ToDoubleFunction;
@@ -57,7 +56,7 @@ public class QuadCurves {
      * @param epsilon the error tolerance
      * @return the arc length
      */
-    public static double arcLength(double @NonNull [] p, int offset, double epsilon) {
+    public static double arcLength(double[] p, int offset, double epsilon) {
         return arcLength(p, offset, 1, epsilon);
     }
 
@@ -177,7 +176,7 @@ public class QuadCurves {
      * @param epsilon the error tolerance
      * @return the arc length
      */
-    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
+    public static double arcLength(double[] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
@@ -191,7 +190,7 @@ public class QuadCurves {
      * @param t  the time
      * @return the point at time t
      */
-    public static @NonNull PointAndDerivative eval(Point2D p0, Point2D p1, Point2D p2, double t) {
+    public static PointAndDerivative eval(Point2D p0, Point2D p1, Point2D p2, double t) {
         return eval(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY(), t);
     }
 
@@ -207,7 +206,7 @@ public class QuadCurves {
      * @param t  the time
      * @return the point at time t
      */
-    public static @NonNull PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
+    public static PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double t) {
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
         y01 = lerp(y0, y1, t);
@@ -221,7 +220,7 @@ public class QuadCurves {
         return new PointAndDerivative(x012, y012, x12 - x01, y12 - y01);
     }
 
-    public static @NonNull PointAndDerivative eval(double[] p, int offset, double t) {
+    public static PointAndDerivative eval(double[] p, int offset, double t) {
         double x0 = p[offset], y0 = p[offset + 1], x1 = p[offset + 2], y1 = p[offset + 3], x2 = p[offset + 4], y2 = p[offset + 5];
         final double x01, y01, x12, y12, x012, y012;
         x01 = lerp(x0, x1, t);
@@ -347,7 +346,7 @@ public class QuadCurves {
                                             final double x012, final double y012, final double x12, final double y12, final double x2, final double y2,
                                             double tolerance) {
         final Point2D.Double start = new Point2D.Double(x0, y0);
-        @NonNull Point2D b0 = new Point2D.Double(x2, y2);
+        Point2D b0 = new Point2D.Double(x2, y2);
 
         final IntersectionResultEx isect = IntersectRayRay.intersectRayRayEx(start, Points2D.subtract(new Point2D.Double(x01, y01), start),
                 b0, Points2D.subtract(new Point2D.Double(x12, y12), b0));
@@ -422,7 +421,7 @@ public class QuadCurves {
      * @param first  if not null, accepts the curve from x1,y1 to t
      * @param second if not null, accepts the curve from t to x3,y3
      */
-    public static void split(double @NonNull [] p, int o, double t,
+    public static void split(double[] p, int o, double t,
                              double @Nullable [] first, int offsetFirst,
                              double @Nullable [] second, int offsetSecond) {
         double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3], x2 = p[o + 4], y2 = p[o + 5];
@@ -458,9 +457,9 @@ public class QuadCurves {
      * @param ta where to split
      * @param tb where to split
      */
-    public static void subCurve(double @NonNull [] q, int offset,
+    public static void subCurve(double[] q, int offset,
                                 double ta, double tb,
-                                double @NonNull [] first, int offsetFirst) {
+                                double[] first, int offsetFirst) {
         double tab = ta / tb;
         split(q, offset,
                 tb, null, 0, first, offsetFirst);

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntArrayEnumerator;
 
@@ -60,7 +59,7 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
      * {@code offset = nextOffset[vi]}
      * {@code count = nextOffset.length - offset}
      */
-    protected final int @NonNull [] next;
+    protected final int[] next;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -78,7 +77,7 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
      * {@code nextOffset.length - nextOffset[vi]} yields the
      * number of outgoing arrows of that vertex.
      */
-    protected final int @NonNull [] nextOffset;
+    protected final int[] nextOffset;
 
     /**
      * Holds the arrow objects.
@@ -88,28 +87,28 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
      * <p>
      * See {@link #next}.
      */
-    protected final @NonNull A @NonNull [] nextArrows;
+    protected final A[] nextArrows;
     /**
      * Holds the vertex objects.
      * <p>
      * Given vertex index {@code vi},<br>
      * {@code vertices[vi|} yields the vertex {@code v}.
      */
-    protected final @NonNull V @NonNull [] vertices;
+    protected final V[] vertices;
     /**
      * Maps vertices the vertex indices.
      * <p>
      * Given vertex {@code v},<br>
      * {@code vertexToIndexMap.get(v)} yields the vertex index {@code vi}.
      */
-    protected final @NonNull Map<V, Integer> vertexToIndexMap;
+    protected final Map<V, Integer> vertexToIndexMap;
 
     /**
      * Creates a new instance from the specified graph.
      *
      * @param graph a graph
      */
-    public ImmutableAttributed32BitIndexedDirectedGraph(@NonNull AttributedIndexedDirectedGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedDirectedGraph(AttributedIndexedDirectedGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -144,7 +143,7 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
      *
      * @param graph a graph
      */
-    public ImmutableAttributed32BitIndexedDirectedGraph(@NonNull DirectedGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedDirectedGraph(DirectedGraph<V, A> graph) {
 
         final int arrowCapacity = graph.getArrowCount();
         final int vertexCapacity = graph.getVertexCount();
@@ -186,11 +185,11 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
 
 
     @Override
-    public @NonNull A getArrow(int index) {
+    public A getArrow(int index) {
         return nextArrows[index];
     }
 
-    public @NonNull A getArrow(int vertex, int index) {
+    public A getArrow(int vertex, int index) {
         return nextArrows[getArrowIndex(vertex, index)];
     }
 
@@ -207,12 +206,12 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public @NonNull V getNext(@NonNull V v, int i) {
+    public V getNext(V v, int i) {
         return vertices[getNextAsInt(vertexToIndexMap.get(v), i)];
     }
 
     @Override
-    public @NonNull A getNextArrow(int v, int i) {
+    public A getNextArrow(int v, int i) {
         if (i < 0 || i >= getNextCount(v)) {
             throw new IllegalArgumentException("i(" + i + ") < 0 || i >= " + getNextCount(v));
         }
@@ -225,7 +224,7 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public @NonNull A getNextArrow(@NonNull V v, int i) {
+    public A getNextArrow(V v, int i) {
         return this.getNextArrow(getVertexIndex(v), i);
     }
 
@@ -245,12 +244,12 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public int getNextCount(@NonNull V v) {
+    public int getNextCount(V v) {
         return getNextCount(vertexToIndexMap.get(v));
     }
 
     @Override
-    public @NonNull V getVertex(int index) {
+    public V getVertex(int index) {
         return vertices[index];
     }
 
@@ -266,13 +265,13 @@ public class ImmutableAttributed32BitIndexedDirectedGraph<V, A> implements Attri
     }
 
     @Override
-    public @NonNull Set<V> getVertices() {
+    public Set<V> getVertices() {
         return Collections.unmodifiableSet(vertexToIndexMap.keySet());
 
     }
 
     @Override
-    public Enumerator.@NonNull OfInt nextVerticesEnumerator(int v) {
+    public Enumerator.OfInt nextVerticesEnumerator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
         return new IntArrayEnumerator(this.next, offset, nextOffset);

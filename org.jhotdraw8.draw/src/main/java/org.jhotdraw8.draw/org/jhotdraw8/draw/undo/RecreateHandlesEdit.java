@@ -1,6 +1,5 @@
 package org.jhotdraw8.draw.undo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -11,9 +10,9 @@ import javax.swing.undo.UndoableEdit;
  * as part of an undo/redo operation.
  */
 public class RecreateHandlesEdit extends AbstractUndoableEdit {
-    private final @NonNull DrawingView drawingView;
+    private final DrawingView drawingView;
 
-    public RecreateHandlesEdit(@NonNull DrawingView drawingView) {
+    public RecreateHandlesEdit(DrawingView drawingView) {
         this.drawingView = drawingView;
     }
 

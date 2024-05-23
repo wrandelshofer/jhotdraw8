@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.draw.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
@@ -29,7 +28,7 @@ public class PathConnectionBezierPathXmlConverter extends BezierPathXmlConverter
 
 
     @Override
-    public <TT extends BezierPath> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier,
+    public <TT extends BezierPath> void toString(Appendable out, @Nullable IdSupplier idSupplier,
                                                  @Nullable TT value) throws IOException {
         if (value == null
             || value.size() == 2

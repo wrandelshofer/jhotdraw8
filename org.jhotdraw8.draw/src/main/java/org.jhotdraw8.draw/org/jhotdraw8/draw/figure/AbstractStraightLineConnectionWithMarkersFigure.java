@@ -12,8 +12,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.handle.Handle;
@@ -28,6 +26,7 @@ import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -49,7 +48,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
         this(0, 0, 1, 1);
     }
 
-    public AbstractStraightLineConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
+    public AbstractStraightLineConnectionWithMarkersFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -58,7 +57,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -89,7 +88,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         final Line line = new Line();
         final Path startMarker = new Path();
@@ -113,7 +112,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         // FIXME include markers in path
         return FXShapes.fxShapeToAwtShape(new Line(
                 getNonNull(START_X).getConvertedValue(),
@@ -122,12 +121,12 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
                 getNonNull(END_Y).getConvertedValue())).getPathIterator(tx);
     }
 
-    public abstract double getStrokeCutEnd(@NonNull RenderContext ctx);
+    public abstract double getStrokeCutEnd(RenderContext ctx);
 
-    public abstract double getStrokeCutStart(@NonNull RenderContext ctx);
+    public abstract double getStrokeCutStart(RenderContext ctx);
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         Point2D start = getNonNull(START).getConvertedValue();
         Point2D end = getNonNull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);
@@ -156,7 +155,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D t) {
+    public void translateInLocal(CssPoint2D t) {
         set(START, getNonNull(START).add(t));
         set(END, getNonNull(END).add(t));
     }
@@ -168,7 +167,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateEndMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 
@@ -180,13 +179,13 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param node the node
      */
 
-    protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Line node) {
+    protected void updateLineNode(RenderContext ctx, Line node) {
     }
 
-    protected void updateMarkerNode(@NonNull RenderContext ctx,
-                                    @NonNull Group group,
-                                    @NonNull Path markerNode,
-                                    @NonNull PointAndDerivative pd,
+    protected void updateMarkerNode(RenderContext ctx,
+                                    Group group,
+                                    Path markerNode,
+                                    PointAndDerivative pd,
                                     @Nullable ImmutableList<PathElement> markerPath, double markerScaleFactor) {
         if (markerPath != null) {
                 // Note: we must not add individual elements to the ObservableList
@@ -206,7 +205,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         Line lineNode = (Line) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);
@@ -248,7 +247,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateStartMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 }

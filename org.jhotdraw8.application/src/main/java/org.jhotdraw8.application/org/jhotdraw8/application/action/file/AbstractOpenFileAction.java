@@ -8,8 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
@@ -26,6 +24,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampMap;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.Map;
@@ -36,11 +35,11 @@ import java.util.logging.Logger;
 
 
 public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
-    public static final @NonNull Key<URIChooser> OPEN_CHOOSER_KEY = new NullableObjectKey<>("openChooser", URIChooser.class);
-    public static final @NonNull Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("openChooserFactory",
+    public static final Key<URIChooser> OPEN_CHOOSER_KEY = new NullableObjectKey<>("openChooser", URIChooser.class);
+    public static final Key<Supplier<URIChooser>> OPEN_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("openChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
-    public AbstractOpenFileAction(@NonNull FileBasedApplication app) {
+    public AbstractOpenFileAction(FileBasedApplication app) {
         super(app);
     }
 
@@ -57,7 +56,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     protected abstract boolean isReuseEmptyViews();
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent evt, Application app) {
         {
             WorkState<Void> workState = new SimpleWorkState<>(getLabel());
             app.addDisabler(workState);
@@ -83,7 +82,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
     }
 
 
-    public void doIt(@NonNull FileBasedActivity view, boolean disposeView, WorkState<Void> workState) {
+    public void doIt(FileBasedActivity view, boolean disposeView, WorkState<Void> workState) {
         URIChooser chooser = getChooser(view);
         URI uri = chooser.showDialog(app.getNode());
         if (uri != null) {
@@ -114,7 +113,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openActivityFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @NonNull URIChooser chooser, WorkState<Void> workState) {
+    protected void openActivityFromURI(final FileBasedActivity v, final URI uri, final URIChooser chooser, WorkState<Void> workState) {
         final Application app = getApplication();
         Map<Key<?>, Object> options = getReadOptions();
         app.removeDisabler(workState);
@@ -161,7 +160,7 @@ public abstract class AbstractOpenFileAction extends AbstractApplicationAction {
      *
      * @return options or null if the user has aborted the dialog window
      */
-    protected abstract @NonNull Map<Key<?>, Object> getReadOptions();
+    protected abstract Map<Key<?>, Object> getReadOptions();
 
 
 }

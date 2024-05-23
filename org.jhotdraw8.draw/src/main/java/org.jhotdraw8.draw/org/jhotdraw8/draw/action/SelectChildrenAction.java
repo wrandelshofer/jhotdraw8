@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
@@ -24,14 +23,14 @@ import java.util.List;
  */
 public class SelectChildrenAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.selectChildren";
+    public static final String ID = "edit.selectChildren";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public SelectChildrenAction(@NonNull DrawingEditor editor) {
+    public SelectChildrenAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();
         set(Action.ID_KEY, ID);
@@ -39,13 +38,13 @@ public class SelectChildrenAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
-        final @NonNull List<Figure> figures = new ArrayList<>(dview.getSelectedFigures());
+    protected void onActionPerformed(ActionEvent e, DrawingView dview) {
+        final List<Figure> figures = new ArrayList<>(dview.getSelectedFigures());
         selectChildren(dview, figures);
 
     }
 
-    public static void selectChildren(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
+    public static void selectChildren(DrawingView view, Collection<Figure> figures) {
         List<Figure> selectedChildren = new ArrayList<>();
         for (Figure f : figures) {
             selectedChildren.addAll(f.getChildren());

@@ -5,7 +5,6 @@
 package org.jhotdraw8.geom.intersect;
 
 import javafx.scene.shape.Line;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class IntersectLineLineTest {
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsIntersectLineLine() {
+    public List<DynamicTest> dynamicTestsIntersectLineLine() {
         return Arrays.asList(
                 dynamicTest("intersection", () -> testIntersectLineLine(
                         new Line(0, 0.0, 10.0, 0),
@@ -85,7 +84,7 @@ public class IntersectLineLineTest {
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectLineLine(@NonNull Line a, @NonNull Line b, @NonNull IntersectionStatus expectedStatus,
+    public static void testIntersectLineLine(Line a, Line b, IntersectionStatus expectedStatus,
                                              double[] expectedParamsA, double[] expectedParamsB) {
         IntersectionResultEx isec = IntersectLineLine.intersectLineLineEx(a.getStartX(), a.getStartY(),
                 a.getEndX(), a.getEndY(),

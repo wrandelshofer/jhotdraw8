@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.converter.Dimension2DCssConverter;
@@ -17,11 +16,11 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
  *
  * @author Werner Randelshofer
  */
-public class CssDimension2DStyleableKey extends AbstractStyleableKey<@NonNull CssDimension2D>
-        implements WritableStyleableMapAccessor<@NonNull CssDimension2D>, NonNullKey<@NonNull CssDimension2D> {
+public class CssDimension2DStyleableKey extends AbstractStyleableKey<CssDimension2D>
+        implements WritableStyleableMapAccessor<CssDimension2D>, NonNullKey<CssDimension2D> {
 
 
-    private final Converter<@NonNull CssDimension2D> converter;
+    private final Converter<CssDimension2D> converter;
 
     /**
      * Creates a new instance with the specified name and with 0,0 as the
@@ -29,7 +28,7 @@ public class CssDimension2DStyleableKey extends AbstractStyleableKey<@NonNull Cs
      *
      * @param name The name of the key.
      */
-    public CssDimension2DStyleableKey(@NonNull String name) {
+    public CssDimension2DStyleableKey(String name) {
         this(name, CssDimension2D.ZERO);
     }
 
@@ -42,18 +41,18 @@ public class CssDimension2DStyleableKey extends AbstractStyleableKey<@NonNull Cs
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public CssDimension2DStyleableKey(@NonNull String key, @NonNull CssDimension2D defaultValue) {
+    public CssDimension2DStyleableKey(String key, CssDimension2D defaultValue) {
         this(key, defaultValue, new Dimension2DCssConverter(false));
     }
 
-    public CssDimension2DStyleableKey(@NonNull String key, @NonNull CssDimension2D defaultValue, @NonNull CssConverter<CssDimension2D> converter) {
+    public CssDimension2DStyleableKey(String key, CssDimension2D defaultValue, CssConverter<CssDimension2D> converter) {
         super(key, CssDimension2D.class, defaultValue);
         this.converter = converter;
     }
 
 
     @Override
-    public @NonNull Converter<CssDimension2D> getCssConverter() {
+    public Converter<CssDimension2D> getCssConverter() {
         return converter;
     }
 

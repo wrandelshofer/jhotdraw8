@@ -1,11 +1,19 @@
+/*
+ * @(#)module-info.java
+ * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
+ */
+
+import org.jspecify.annotations.NullMarked;
 /**
  * Provides examples for various features of the JHotDraw drawing framework.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.examples {
     requires transitive java.desktop;
     requires transitive org.jhotdraw8.draw;
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.color;
     requires transitive org.jhotdraw8.os;
     requires transitive org.jhotdraw8.collection;

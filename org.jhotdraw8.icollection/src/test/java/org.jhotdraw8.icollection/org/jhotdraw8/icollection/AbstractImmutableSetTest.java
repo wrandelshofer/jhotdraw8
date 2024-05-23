@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSortedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
@@ -41,14 +40,14 @@ public abstract class AbstractImmutableSetTest {
     /**
      * Creates a new empty instance.
      */
-    protected abstract <E> @NonNull ImmutableSet<E> newInstance();
+    protected abstract <E> ImmutableSet<E> newInstance();
 
 
-    protected abstract <E> @NonNull Set<E> toMutableInstance(ImmutableSet<E> m);
+    protected abstract <E> Set<E> toMutableInstance(ImmutableSet<E> m);
 
-    protected abstract <E> @NonNull ImmutableSet<E> toImmutableInstance(Set<E> m);
+    protected abstract <E> ImmutableSet<E> toImmutableInstance(Set<E> m);
 
-    protected abstract <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m);
+    protected abstract <E> ImmutableSet<E> toClonedInstance(ImmutableSet<E> m);
 
     protected abstract boolean supportsNullKeys();
 
@@ -56,20 +55,20 @@ public abstract class AbstractImmutableSetTest {
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m);
+    protected abstract <E> ImmutableSet<E> newInstance(Iterable<E> m);
 
-    public static @NonNull Stream<SetData> dataProvider() {
+    public static Stream<SetData> dataProvider() {
         return Stream.of(
                 NO_COLLISION_NICE_KEYS, NO_COLLISION, ALL_COLLISION, SOME_COLLISION
         );
     }
 
-    private static final @NonNull SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
-    private static final @NonNull SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
-    private static final @NonNull SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
-    private static final @NonNull SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
 
-    private static int createNewValue(@NonNull Random rng, @NonNull Set<Integer> usedValues, int bound) {
+    private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {
         int value;
         int count = 0;
         do {
@@ -83,11 +82,11 @@ public abstract class AbstractImmutableSetTest {
     }
 
 
-    protected void assertEqualSet(@NonNull ReadOnlySet<Key> expected, @NonNull ImmutableSet<Key> actual) {
+    protected void assertEqualSet(ReadOnlySet<Key> expected, ImmutableSet<Key> actual) {
         assertEqualSet(expected.asSet(), actual);
     }
 
-    protected void assertEqualSet(@NonNull Set<Key> expected, @NonNull ImmutableSet<Key> actual) {
+    protected void assertEqualSet(Set<Key> expected, ImmutableSet<Key> actual) {
         ArrayList<Key> expectedValues = new ArrayList<>(expected);
         ArrayList<Key> actualValues = new ArrayList<>(actual.asSet());
         expectedValues.sort(Comparator.comparing(Key::getValue));
@@ -105,7 +104,7 @@ public abstract class AbstractImmutableSetTest {
         assertEquals(actual.asSet(), expected);
     }
 
-    protected void assertNotEqualSet(Set<Key> expected, @NonNull ImmutableSet<Key> actual) {
+    protected void assertNotEqualSet(Set<Key> expected, ImmutableSet<Key> actual) {
         assertNotEquals(expected, actual.asSet());
         assertNotEquals(actual.asSet(), expected);
     }
@@ -119,14 +118,14 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceSetArgsShouldBeEqualToSet(@NonNull SetData data) {
+    public void newInstanceSetArgsShouldBeEqualToSet(SetData data) {
         ImmutableSet<Key> actual = newInstance(data.a().asSet());
         assertEqualSet(data.a().asSet(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceSetArgsOfSameTypeShouldBeEqualToSet(@NonNull SetData data) {
+    public void newInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData data) {
         ImmutableSet<Key> actual1 = newInstance(data.a().asSet());
         ImmutableSet<Key> actual = newInstance(actual1);
         assertEqualSet(data.a().asSet(), actual);
@@ -134,14 +133,14 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceReadOnlySetArgShouldBeEqualToArg(@NonNull SetData data) {
+    public void newInstanceReadOnlySetArgShouldBeEqualToArg(SetData data) {
         ImmutableSet<Key> actual = newInstance(data.a());
         assertEqualSet(data.a().asSet(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceReadOnlySetArgWithThisShouldBeEqualToArg(@NonNull SetData data) {
+    public void newInstanceReadOnlySetArgWithThisShouldBeEqualToArg(SetData data) {
         ImmutableSet<Key> actual = newInstance(data.a());
         ImmutableSet<Key> actual2 = newInstance(actual);
         assertEqualSet(data.a().asSet(), actual2);
@@ -149,7 +148,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceReadOnlySetArgsWithMutableSetArgsOfSameTypeShouldBeEqualToSet(@NonNull SetData data) {
+    public void newInstanceReadOnlySetArgsWithMutableSetArgsOfSameTypeShouldBeEqualToSet(SetData data) {
         ImmutableSet<Key> actual1 = newInstance(data.a());
         ImmutableSet<Key> actual = newInstance(toMutableInstance(actual1));
         assertEqualSet(data.a().asSet(), actual);
@@ -157,7 +156,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void emptyShouldYieldEmptySet(@NonNull SetData data) {
+    public void emptyShouldYieldEmptySet(SetData data) {
         ImmutableSet<Key> actual = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), actual);
         ImmutableSet<Key> actual2 = actual.empty();
@@ -169,7 +168,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void cloneShouldYieldEqualSet(@NonNull SetData data) {
+    public void cloneShouldYieldEqualSet(SetData data) {
         //   io.vavr.collection.TreeSet<Key> vavrSet=    io.vavr.collection.TreeSet.empty();
         //  vavrSet= vavrSet.addAll(data.a());
         //  System.out.println("vavrSet="+vavrSet);
@@ -182,7 +181,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void containsShouldYieldExpectedValue(@NonNull SetData data) {
+    public void containsShouldYieldExpectedValue(SetData data) {
         ImmutableSet<Key> instance = newInstance(data.a());
         for (Key k : data.a()) {
             assertTrue(instance.contains(k));
@@ -201,7 +200,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorRemoveShouldThrowUnsupportedOperationException(@NonNull SetData data) {
+    public void iteratorRemoveShouldThrowUnsupportedOperationException(SetData data) {
         ImmutableSet<Key> instance = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
@@ -221,7 +220,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorRemoveShouldThrowException(@NonNull SetData data) {
+    public void iteratorRemoveShouldThrowException(SetData data) {
         ImmutableSet<Key> instance = newInstance(data.a());
         Iterator<Key> i = instance.iterator();
         assertThrows(Exception.class, i::remove);
@@ -232,7 +231,7 @@ public abstract class AbstractImmutableSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void serializationShouldYieldSameSet(@NonNull SetData data) throws Exception {
+    public void serializationShouldYieldSameSet(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a());
         if (instance instanceof Serializable) {
             assertEqualSet(data.a().asSet(), instance);
@@ -251,21 +250,21 @@ public abstract class AbstractImmutableSetTest {
     @SuppressWarnings({"ConstantConditions", "SimplifiableAssertion"})
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithNullShouldYieldFalse(@NonNull SetData data) throws Exception {
+    public void equalsWithNullShouldYieldFalse(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a());
         assertFalse(instance.equals(null));
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalWithThisShouldYieldTrue(@NonNull SetData data) {
+    public void equalWithThisShouldYieldTrue(SetData data) {
         ImmutableSet<Key> instance = newInstance(data.a());
         assertEquals(instance, instance);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithCloneShouldYieldTrue(@NonNull SetData data) throws Exception {
+    public void equalsWithCloneShouldYieldTrue(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a());
         ImmutableSet<Key> clone = toClonedInstance(instance);
         assertEquals(data.a().asSet(), clone.asSet());
@@ -274,7 +273,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addNullContainsNullShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addNullContainsNullShouldReturnTrue(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance();
         var expected = new LinkedHashSet<Key>();
         expected.add(null);
@@ -286,7 +285,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllNullContainsNullShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addAllNullContainsNullShouldReturnTrue(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance();
         var expected = new LinkedHashSet<Key>();
         expected.addAll(Collections.singleton(null));
@@ -298,7 +297,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addWithNewElementShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void addWithNewElementShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.c) {
@@ -312,7 +311,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addWithContainedElementShouldReturnSameInstance(@NonNull SetData data) throws Exception {
+    public void addWithContainedElementShouldReturnSameInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.a) {
@@ -324,7 +323,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithNewElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithNewElementsShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.addAll(data.c);
         assertNotSame(instance, instance2);
@@ -335,7 +334,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithContainedElementsShouldReturnSameInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithContainedElementsShouldReturnSameInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.addAll(data.a.asSet());
         assertSame(instance, instance2);
@@ -344,7 +343,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSelfShouldReturnSameInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithSelfShouldReturnSameInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.addAll(instance);
         assertSame(instance, instance2);
@@ -353,7 +352,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithCloneShouldReturnSameInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithCloneShouldReturnSameInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> clone = toClonedInstance(instance);
         assertNotSame(instance, clone);
@@ -364,7 +363,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithCloneToMutableShouldReturnSameInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithCloneToMutableShouldReturnSameInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = toClonedInstance(instance);
         ImmutableSet<Key> instance3 = instance.addAll(instance2.toMutable());
@@ -374,14 +373,14 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithObjectShouldYieldFalse(@NonNull SetData data) throws Exception {
+    public void equalsWithObjectShouldYieldFalse(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a());
         assertNotEquals(instance, new Object());
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithNewElementShouldReturnSameInstance(@NonNull SetData data) throws Exception {
+    public void removeWithNewElementShouldReturnSameInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         for (Key e : data.c) {
             ImmutableSet<Key> instance2 = instance.remove(e);
@@ -392,7 +391,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void removeWithContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         for (Key e : data.a) {
@@ -406,7 +405,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithNewKeyShouldReturnSameInstance(@NonNull SetData data) throws Exception {
+    public void removeAllWithNewKeyShouldReturnSameInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.removeAll(data.c.asSet());
         assertSame(instance, instance2);
@@ -415,7 +414,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void removeAllWithContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.removeAll(data.a.asSet());
         assertNotSame(instance, instance2);
@@ -424,7 +423,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithCloneShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void removeAllWithCloneShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> clone = toClonedInstance(instance);
         assertNotSame(instance, clone);
@@ -435,7 +434,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void removeAllWithReadOnlySetWithSomeContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.removeAll(data.someAPlusSomeB);
         assertNotSame(instance, instance2);
@@ -444,7 +443,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithSetWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void removeAllWithSetWithSomeContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.removeAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);
@@ -453,7 +452,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void removeAllWithSameTypeWithSomeContainedKeyShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.removeAll(newInstance(data.someAPlusSomeB));
         assertNotSame(instance, instance2);
@@ -465,7 +464,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSomeNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithSomeNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.addAll(data.someAPlusSomeB());
         assertNotSame(instance, instance2);
@@ -477,7 +476,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
 
         ArrayList<Key> listA = new ArrayList<>(data.a.asSet());
@@ -501,7 +500,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = newInstance(data.c);
         ImmutableSet<Key> instance3 = instance.addAll(instance2);
@@ -514,7 +513,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void addAllWithSameTypeToMutableAndAllNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = newInstance(data.c);
         ImmutableSet<Key> instance3 = instance.addAll(instance2.toMutable());
@@ -527,7 +526,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void toMutableAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void toMutableAddAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = newInstance(data.c);
         Set<Key> mutableInstance = instance.toMutable();
@@ -540,7 +539,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void toStringShouldContainAllElements(@NonNull SetData data) {
+    public void toStringShouldContainAllElements(SetData data) {
         ImmutableSet<Key> instance = newInstance();
         assertEquals("[]", instance.toString());
 
@@ -556,7 +555,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithCloneShouldReturnThis(@NonNull SetData data) throws Exception {
+    public void retainAllWithCloneShouldReturnThis(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> clone = toClonedInstance(instance);
         assertNotSame(instance, clone);
@@ -567,7 +566,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithContainedElementsShouldReturnThis(@NonNull SetData data) throws Exception {
+    public void retainAllWithContainedElementsShouldReturnThis(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> actual = instance.retainAll(data.a.asSet());
         assertSame(instance, actual);
@@ -576,7 +575,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSomeContainedElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void retainAllWithSomeContainedElementsShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         ImmutableSet<Key> actual = instance.retainAll(data.someAPlusSomeB.asSet());
@@ -588,7 +587,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithNewElementsShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void retainAllWithNewElementsShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.retainAll(data.c.asSet());
         assertNotSame(instance, instance2);
@@ -598,7 +597,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void retainAllWithSameTypeAndAllNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = newInstance(data.c);
         ImmutableSet<Key> instance3 = instance.retainAll(instance2);
@@ -610,7 +609,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void retainAllWithSameTypeAndSomeNewKeysShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
 
         ArrayList<Key> listA = new ArrayList<>(data.a.asSet());
@@ -634,7 +633,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSelfShouldReturnThis(@NonNull SetData data) throws Exception {
+    public void retainAllWithSelfShouldReturnThis(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         assertSame(instance, instance.retainAll(instance));
         assertEqualSet(data.a, instance);
@@ -642,7 +641,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSomeNewKeysShouldReturnNewInstance(org.jhotdraw8.icollection.@NonNull SetData data) throws Exception {
+    public void retainAllWithSomeNewKeysShouldReturnNewInstance(org.jhotdraw8.icollection.SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = instance.retainAll(data.someAPlusSomeB.asSet());
         assertNotSame(instance, instance2);
@@ -654,7 +653,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllOfEmptySetShouldReturnThis(@NonNull SetData data) throws Exception {
+    public void retainAllOfEmptySetShouldReturnThis(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance();
         assertSame(instance, instance.retainAll(data.c.asSet()));
         assertEqualSet(Collections.emptySet(), instance);
@@ -662,7 +661,7 @@ public abstract class AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithEmptySetShouldReturnNewInstance(@NonNull SetData data) throws Exception {
+    public void retainAllWithEmptySetShouldReturnNewInstance(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a.asSet());
         ImmutableSet<Key> instance2 = instance.retainAll(Collections.emptySet());
         assertNotSame(instance, instance2);

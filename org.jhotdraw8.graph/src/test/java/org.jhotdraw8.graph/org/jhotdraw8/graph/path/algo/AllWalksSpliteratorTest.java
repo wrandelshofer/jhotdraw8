@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
@@ -31,12 +30,12 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class AllWalksSpliteratorTest {
 
-    private @NonNull CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
+    private CombinedAllSequencesFinder<Integer, Double, Double> newAllInstance(final DirectedGraph<Integer, Double> graph) {
         return new SimpleCombinedAllSequencesFinder<>(graph::getNextArcs, 0.0, (u, v, a) -> a, Double::sum);
     }
 
 
-    private @NonNull DirectedGraph<Integer, Double> createGraph2() {
+    private DirectedGraph<Integer, Double> createGraph2() {
         // __|  1  |  2  |  3  |  4  |  5
         // 1 |       1.0   1.0
         // 2 |             1.0
@@ -62,7 +61,7 @@ public class AllWalksSpliteratorTest {
         return b;
     }
 
-    private @NonNull DirectedGraph<Integer, Double> createGraphWithCycles2() {
+    private DirectedGraph<Integer, Double> createGraphWithCycles2() {
         // __|  1  |  2  |  3  |  4  |  5
         // 1 |       1.0   1.0         1.0
         // 2 |             1.0
@@ -90,7 +89,7 @@ public class AllWalksSpliteratorTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindAllPaths() {
+    public List<DynamicTest> dynamicTestsFindAllPaths() {
         DirectedGraph<Integer, Double> graph = createGraph2();
 
         return Arrays.asList(
@@ -108,7 +107,7 @@ public class AllWalksSpliteratorTest {
         );
     }
 
-    private void testFindAllPaths(@NonNull DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<ImmutableList<Integer>> expected) {
+    private void testFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<ImmutableList<Integer>> expected) {
         CombinedAllSequencesFinder<Integer, Double, Double> instance = newAllInstance(graph);
         List<ImmutableList<Integer>> actual = StreamSupport.stream(instance.findAllVertexSequences(
                         Collections.singletonList(start),

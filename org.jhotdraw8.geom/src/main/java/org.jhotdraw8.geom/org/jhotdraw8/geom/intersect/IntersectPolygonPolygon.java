@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class IntersectPolygonPolygon {
      * @param points2 the points of the second polygon
      * @return computed intersection
      */
-    public static @NonNull IntersectionResultEx intersectPolygonPolygonEx(@NonNull List<Point2D.Double> points1, @NonNull List<Point2D.Double> points2) {
+    public static IntersectionResultEx intersectPolygonPolygonEx(List<Point2D.Double> points1, List<Point2D.Double> points2) {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
         int length = points1.size();

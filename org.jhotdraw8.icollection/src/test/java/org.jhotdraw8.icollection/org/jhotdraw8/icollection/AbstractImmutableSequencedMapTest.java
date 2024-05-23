@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
@@ -22,19 +21,19 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public abstract class AbstractImmutableSequencedMapTest extends AbstractImmutableMapTest {
     @Override
-    protected abstract @NonNull <K, V> ImmutableSequencedMap<K, V> newInstance();
+    protected abstract <K, V> ImmutableSequencedMap<K, V> newInstance();
 
     @Override
-    protected abstract @NonNull <K, V> ImmutableSequencedMap<K, V> newInstance(@NonNull Map<K, V> m);
+    protected abstract <K, V> ImmutableSequencedMap<K, V> newInstance(Map<K, V> m);
 
     @Override
-    protected abstract @NonNull <K, V> ImmutableSequencedMap<K, V> newInstance(@NonNull ReadOnlyMap<K, V> m);
+    protected abstract <K, V> ImmutableSequencedMap<K, V> newInstance(ReadOnlyMap<K, V> m);
 
     @Override
-    protected abstract @NonNull <K, V> ImmutableSequencedMap<K, V> toClonedInstance(@NonNull ImmutableMap<K, V> m);
+    protected abstract <K, V> ImmutableSequencedMap<K, V> toClonedInstance(ImmutableMap<K, V> m);
 
     @Override
-    protected abstract @NonNull <K, V> ImmutableSequencedMap<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
+    protected abstract <K, V> ImmutableSequencedMap<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
 
 
     @ParameterizedTest

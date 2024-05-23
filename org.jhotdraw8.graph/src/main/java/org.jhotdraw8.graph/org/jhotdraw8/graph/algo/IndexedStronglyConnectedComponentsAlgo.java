@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
@@ -38,8 +37,8 @@ public class IndexedStronglyConnectedComponentsAlgo {
 
     }
 
-    public @NonNull List<IntList> findStronglyConnectedComponents(
-            final @NonNull IndexedDirectedGraph graph) {
+    public List<IntList> findStronglyConnectedComponents(
+            final IndexedDirectedGraph graph) {
         return findStronglyConnectedComponents(graph.getVertexCount(), graph::nextVerticesEnumerator);
     }
 
@@ -51,13 +50,13 @@ public class IndexedStronglyConnectedComponentsAlgo {
      * @param nextNodeFunction returns the next nodes of a given node
      * @return set of strongly connected components (sets of vertices).
      */
-    public @NonNull List<IntList> findStronglyConnectedComponents(
-            int vertexCount, @NonNull Function<Integer, Enumerator.OfInt> nextNodeFunction) {
+    public List<IntList> findStronglyConnectedComponents(
+            int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
         // The following non-recursive implementation "Tarjan's strongly connected components"
         // algorithm has been taken from
         // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm
 
-        final @NonNull List<IntList> sccs = new ArrayList<>(vertexCount);
+        final List<IntList> sccs = new ArrayList<>(vertexCount);
         final int[] lows = new int[vertexCount];
         Arrays.fill(lows, -1);
 

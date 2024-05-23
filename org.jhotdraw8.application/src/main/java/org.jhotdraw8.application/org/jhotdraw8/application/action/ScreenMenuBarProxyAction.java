@@ -7,10 +7,9 @@ package org.jhotdraw8.application.action;
 import javafx.beans.binding.Bindings;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 /**
  * ScreenMenuBarProxyAction.
@@ -19,10 +18,10 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
  */
 public class ScreenMenuBarProxyAction extends AbstractAction implements MapChangeListener<Key<?>, Object> {
 
-    private final @NonNull Application app;
+    private final Application app;
     private @Nullable Action currentAction;
 
-    public ScreenMenuBarProxyAction(@NonNull Application app, String id) {
+    public ScreenMenuBarProxyAction(Application app, String id) {
         this.app = app;
         set(ID_KEY, id);
         disabled.unbind();
@@ -52,7 +51,7 @@ public class ScreenMenuBarProxyAction extends AbstractAction implements MapChang
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event) {
+    protected void onActionPerformed(ActionEvent event) {
         if (currentAction != null) {
             currentAction.handle(event);
         }

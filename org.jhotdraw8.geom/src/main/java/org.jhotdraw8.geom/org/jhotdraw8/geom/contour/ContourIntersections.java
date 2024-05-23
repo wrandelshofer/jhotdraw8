@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Consumer3;
 import org.jhotdraw8.base.function.Consumer4;
 import org.jhotdraw8.base.function.Function3;
@@ -73,7 +72,7 @@ public class ContourIntersections {
 
     public static final double REAL_THRESHOLD = 1e-8;
 
-    public static @NonNull IntersectionResultEx intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
+    public static IntersectionResultEx intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
                                                                      final Point2D.Double v2) {
         return IntersectLineLine.intersectLineLineEx(u1, u2, v1, v2, REAL_THRESHOLD);
     }

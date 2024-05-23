@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.UriCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -19,7 +18,7 @@ import java.net.URI;
 public class NullableUriStyleableKey extends AbstractStyleableKey<URI> implements WritableStyleableMapAccessor<URI> {
 
 
-    private final @NonNull Converter<URI> converter = new UriCssConverter(true);
+    private final Converter<URI> converter = new UriCssConverter(true);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -44,7 +43,7 @@ public class NullableUriStyleableKey extends AbstractStyleableKey<URI> implement
     }
 
     @Override
-    public @NonNull Converter<URI> getCssConverter() {
+    public Converter<URI> getCssConverter() {
         return converter;
     }
 }

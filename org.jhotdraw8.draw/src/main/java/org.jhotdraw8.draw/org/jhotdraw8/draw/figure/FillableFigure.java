@@ -7,12 +7,11 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -37,7 +36,7 @@ public interface FillableFigure extends Figure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applyFillableFigureProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
+    default void applyFillableFigureProperties(@Nullable RenderContext ctx, Shape shape) {
         Paint p = Paintable.getPaint(getStyled(FILL), ctx);
         if (!Objects.equals(shape.getFill(), p)) {
             shape.setFill(p);

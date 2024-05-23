@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -25,10 +24,10 @@ public class EnumPicker<T extends Enum<T>> extends AbstractPicker<T> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
     private BiConsumer<Boolean, T> callback;
-    private final @NonNull Converter<T> converter;
-    private final @NonNull Class<T> enumClazz;
+    private final Converter<T> converter;
+    private final Class<T> enumClazz;
 
-    public EnumPicker(@NonNull Class<T> enumClazz, @NonNull Converter<T> converter) {
+    public EnumPicker(Class<T> enumClazz, Converter<T> converter) {
         this.enumClazz = enumClazz;
         this.converter = converter;
     }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcollection;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -23,7 +22,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
 
     private Set<E> backingSet;
 
-    public ModifiableObservableSet(@NonNull Collection<E> copyMe) {
+    public ModifiableObservableSet(Collection<E> copyMe) {
         backingSet = new LinkedHashSet<>(copyMe);
     }
 
@@ -55,7 +54,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
     }
 
     @Override
-    protected Object @NonNull [] backingSetToArray() {
+    protected Object[] backingSetToArray() {
         return backingSet == null ? new Object[0] : backingSet.toArray();
     }
 
@@ -65,7 +64,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
     }
 
     @Override
-    protected boolean backingSetContainsAll(@NonNull Collection<?> c) {
+    protected boolean backingSetContainsAll(Collection<?> c) {
         return backingSet != null && backingSet.containsAll(c);
     }
 
@@ -75,7 +74,7 @@ public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
     }
 
     @Override
-    protected @NonNull Iterator<E> backingSetIterator() {
+    protected Iterator<E> backingSetIterator() {
         return backingSet == null ? Collections.emptyIterator() : backingSet.iterator();
     }
 

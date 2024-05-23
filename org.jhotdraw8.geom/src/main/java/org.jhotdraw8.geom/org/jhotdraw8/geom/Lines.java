@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.DoubleConsumer2;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.Point2D;
 
@@ -25,7 +24,7 @@ public class Lines {
      * @param t  the time
      * @return the point at time t
      */
-    public static @NonNull PointAndDerivative eval(double x0, double y0, double x1, double y1, double t) {
+    public static PointAndDerivative eval(double x0, double y0, double x1, double y1, double t) {
         return new PointAndDerivative(lerp(x0, x1, t), lerp(y0, y1, t), x1 - x0, y1 - y0);
     }
 
@@ -206,7 +205,7 @@ public class Lines {
      * @param s      arc length
      * @return t at s
      */
-    public static double invArcLength(double @NonNull [] p, int offset, double s) {
+    public static double invArcLength(double[] p, int offset, double s) {
         return s / arcLength(p[offset], p[offset + 1], p[offset + 2], p[offset + 3]);
     }
 
@@ -238,7 +237,7 @@ public class Lines {
     /**
      * Splits the provided line into two parts.
      */
-    public static void split(double @NonNull [] p, int o,
+    public static void split(double[] p, int o,
                              double t,
                              double @Nullable [] first, int offsetFirst,
                              double @Nullable [] second, int offsetSecond) {
@@ -263,9 +262,9 @@ public class Lines {
     /**
      * Extracts a sub-line.
      */
-    public static void subLine(double @NonNull [] p, int o,
+    public static void subLine(double[] p, int o,
                                double t0, double t1,
-                               double @NonNull [] first, int offsetFirst) {
+                               double[] first, int offsetFirst) {
         double x0 = p[o], y0 = p[o + 1], x1 = p[o + 2], y1 = p[o + 3];
         final double x11 = (x1 - x0) * t0 + x0;
         final double y11 = (y1 - y0) * t0 + y0;
@@ -278,16 +277,16 @@ public class Lines {
         first[offsetFirst + 3] = y22;
     }
 
-    public static Point2D.@NonNull Double lerp(double x0, double y0, double x1, double y1, double t) {
+    public static Point2D.Double lerp(double x0, double y0, double x1, double y1, double t) {
         return new Point2D.Double(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
-    public static Point2D.@NonNull Double lerp(double[] a, int offset, double t) {
+    public static Point2D.Double lerp(double[] a, int offset, double t) {
         double x0 = a[offset], y0 = a[offset + 1], x1 = a[offset + 2], y1 = a[offset + 3];
         return new Point2D.Double(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
-    public static @NonNull PointAndDerivative eval(double[] a, int offset, double t) {
+    public static PointAndDerivative eval(double[] a, int offset, double t) {
         double x0 = a[offset], y0 = a[offset + 1], x1 = a[offset + 2], y1 = a[offset + 3];
         return new PointAndDerivative(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t,
                 x1 - x0, y1 - y0);
@@ -302,7 +301,7 @@ public class Lines {
      *              b. Values outside this range yield an extrapolation.
      * @return the interpolated or extrapolated value
      */
-    public static Point2D.@NonNull Double lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
+    public static Point2D.Double lerp(Point2D start, Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 }

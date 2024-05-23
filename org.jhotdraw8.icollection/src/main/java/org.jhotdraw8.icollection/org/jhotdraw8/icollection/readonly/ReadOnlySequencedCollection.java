@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.SequencedCollectionFacade;
 
 import java.util.SequencedCollection;
@@ -45,10 +44,10 @@ public interface ReadOnlySequencedCollection<E> extends ReadOnlyCollection<E> {
      *
      * @return a reversed-order view of this collection
      */
-    @NonNull ReadOnlySequencedCollection<E> readOnlyReversed();
+    ReadOnlySequencedCollection<E> readOnlyReversed();
 
     @Override
-    default @NonNull SequencedCollection<E> asCollection() {
+    default SequencedCollection<E> asCollection() {
         return new SequencedCollectionFacade<>(this);
     }
 }

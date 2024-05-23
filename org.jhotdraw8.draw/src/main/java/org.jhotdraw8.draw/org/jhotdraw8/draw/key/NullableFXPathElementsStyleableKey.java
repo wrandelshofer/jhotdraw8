@@ -5,13 +5,12 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.FXPathElementsCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 /**
  * NullableFXSvgPathStyleableKey.
@@ -21,8 +20,7 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<ImmutableList<PathElement>> implements WritableStyleableMapAccessor<ImmutableList<PathElement>> {
 
 
-
-    private final @NonNull Converter<ImmutableList<PathElement>> converter;
+    private final Converter<ImmutableList<PathElement>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -30,7 +28,7 @@ public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<Imm
      *
      * @param name The name of the key.
      */
-    public NullableFXPathElementsStyleableKey(@NonNull String name) {
+    public NullableFXPathElementsStyleableKey(String name) {
         this(name, null);
     }
 
@@ -44,14 +42,14 @@ public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<Imm
      * @param defaultValue The default value.
      */
     @SuppressWarnings("this-escape")
-    public NullableFXPathElementsStyleableKey(@NonNull String key, @Nullable ImmutableList<PathElement> defaultValue) {
+    public NullableFXPathElementsStyleableKey(String key, @Nullable ImmutableList<PathElement> defaultValue) {
         super(null, key, new SimpleParameterizedType(ImmutableList.class, PathElement.class), true, defaultValue);
 
         converter = new FXPathElementsCssConverter(isNullable());
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<PathElement>> getCssConverter() {
+    public Converter<ImmutableList<PathElement>> getCssConverter() {
         return converter;
     }
 }

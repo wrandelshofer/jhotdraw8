@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.CharBuffer;
 import java.text.Format;
@@ -19,18 +18,18 @@ import java.text.ParsePosition;
  */
 public class ConverterFormatAdapter implements Converter<Object> {
 
-    private final @NonNull Format format;
+    private final Format format;
 
-    public ConverterFormatAdapter(@NonNull Format format) {
+    public ConverterFormatAdapter(Format format) {
         this.format = format;
     }
 
     @Override
-    public @NonNull String toString(Object value) {
+    public String toString(Object value) {
         return format.format(value);
     }
 
-    public Object fromString(String string, IdFactory idFactory, @NonNull ParsePosition pp) {
+    public Object fromString(String string, IdFactory idFactory, ParsePosition pp) {
         Object value = format.parseObject(string, pp);
         return value;
     }
@@ -41,7 +40,7 @@ public class ConverterFormatAdapter implements Converter<Object> {
     }
 
     @Override
-    public Object fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public Object fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         int pos = buf.position();
         String str = buf.toString();
         ParsePosition pp = new ParsePosition(0);

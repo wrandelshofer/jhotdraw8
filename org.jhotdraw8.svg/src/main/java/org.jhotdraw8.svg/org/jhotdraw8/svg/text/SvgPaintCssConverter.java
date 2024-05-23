@@ -6,11 +6,10 @@ package org.jhotdraw8.svg.text;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.draw.css.converter.PaintCssConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -30,7 +29,7 @@ public class SvgPaintCssConverter extends PaintCssConverter {
     }
 
     @Override
-    protected <TT extends Paint> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    protected <TT extends Paint> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if ((value instanceof Color c) && !value.isOpaque()) {
             Color opaqueColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), 1.0);
             super.produceTokensNonNull(opaqueColor, idSupplier, out);

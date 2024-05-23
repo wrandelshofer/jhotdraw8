@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.contour.ContourBuilder;
 import org.jhotdraw8.geom.contour.PlinePath;
 import org.jhotdraw8.geom.contour.PlinePathBuilder;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Builds a contour path around a path.
@@ -18,15 +17,15 @@ import org.jhotdraw8.geom.contour.PlinePathBuilder;
 public class ContourPathBuilder<T> extends AbstractPathBuilder<T> {
     private final double offset;
 
-    private final @NonNull PathBuilder<T> consumer;
-    private final @NonNull PlinePathBuilder papb = new PlinePathBuilder();
+    private final PathBuilder<T> consumer;
+    private final PlinePathBuilder papb = new PlinePathBuilder();
     private final double eps2;
 
-    public ContourPathBuilder(@NonNull PathBuilder<T> consumer, double offset) {
+    public ContourPathBuilder(PathBuilder<T> consumer, double offset) {
         this(consumer, offset, 0);
     }
 
-    public ContourPathBuilder(@NonNull PathBuilder<T> consumer, double offset, double epsilon) {
+    public ContourPathBuilder(PathBuilder<T> consumer, double offset, double epsilon) {
         this.offset = offset;
         this.consumer = consumer;
         this.eps2 = epsilon * epsilon;

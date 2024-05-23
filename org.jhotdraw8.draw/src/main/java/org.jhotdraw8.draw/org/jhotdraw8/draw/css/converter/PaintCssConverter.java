@@ -8,8 +8,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -19,6 +17,7 @@ import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssLinearGradient;
 import org.jhotdraw8.draw.css.value.CssRadialGradient;
 import org.jhotdraw8.draw.css.value.Paintable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -42,7 +41,7 @@ import java.util.function.Consumer;
  */
 public class PaintCssConverter extends AbstractCssConverter<Paint> {
 
-    protected static final @NonNull PaintableCssConverter paintableConverter = new PaintableCssConverter(false);
+    protected static final PaintableCssConverter paintableConverter = new PaintableCssConverter(false);
 
     public PaintCssConverter() {
         this(false);
@@ -53,7 +52,7 @@ public class PaintCssConverter extends AbstractCssConverter<Paint> {
     }
 
     @Override
-    public @NonNull Paint parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Paint parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         Paintable p = paintableConverter.parseNonNull(tt, idResolver);
         if (p.getPaint() == null) {
             throw new ParseException("paint", 0);
@@ -67,7 +66,7 @@ public class PaintCssConverter extends AbstractCssConverter<Paint> {
     }
 
     @Override
-    protected <TT extends Paint> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    protected <TT extends Paint> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         Paintable p = switch (value) {
             case Color color -> new CssColor(color);
             case LinearGradient linearGradient -> new CssLinearGradient(linearGradient);

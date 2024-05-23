@@ -9,7 +9,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.control.Disableable;
 
 /**
@@ -29,14 +28,14 @@ public class AbstractDisableable implements Disableable {
      * <p>
      * This field is protected, so that it can be accessed by subclasses.
      */
-    protected final @NonNull ObservableSet<Object> disablers = FXCollections.observableSet();
+    protected final ObservableSet<Object> disablers = FXCollections.observableSet();
     /**
      * Holds the disabled state.
      * <p>
      * This field is protected, so that it can be bound to or-combinations of
      * disablers.
      */
-    protected final @NonNull ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
+    protected final ReadOnlyBooleanWrapper disabled = new ReadOnlyBooleanWrapper(this, DISABLED_PROPERTY);
 
     {
         disabled.bind(Bindings.isNotEmpty(disablers));
@@ -51,7 +50,7 @@ public class AbstractDisableable implements Disableable {
     }
 
     @Override
-    public @NonNull ObservableSet<Object> disablers() {
+    public ObservableSet<Object> disablers() {
         return disablers;
     }
 }

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -19,20 +18,20 @@ import java.util.Map;
  * @param <E> the data type
  */
 public class MappedConverter<E> implements Converter<E> {
-    private final @NonNull Map<String, E> fromStringMap;
-    private final @NonNull Map<E, String> toStringMap;
-    private final @NonNull String nullValue;
+    private final Map<String, E> fromStringMap;
+    private final Map<E, String> toStringMap;
+    private final String nullValue;
 
 
-    public MappedConverter(@NonNull Map<String, E> fromStringMap) {
+    public MappedConverter(Map<String, E> fromStringMap) {
         this(fromStringMap, false);
     }
 
-    public MappedConverter(@NonNull Map<String, E> fromStringMap, boolean nullable) {
+    public MappedConverter(Map<String, E> fromStringMap, boolean nullable) {
         this(fromStringMap, nullable ? "none" : null);
     }
 
-    public MappedConverter(@NonNull Map<String, E> fromStringMap, @NonNull String nullValue) {
+    public MappedConverter(Map<String, E> fromStringMap, String nullValue) {
         this.fromStringMap = new LinkedHashMap<>();
         this.toStringMap = new LinkedHashMap<>();
         for (Map.Entry<String, E> entry : fromStringMap.entrySet()) {
@@ -43,7 +42,7 @@ public class MappedConverter<E> implements Converter<E> {
     }
 
     @Override
-    public @Nullable E fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable E fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String identifier = in.toString();
         in.position(in.length());
         if (nullValue != null && nullValue.equals(identifier)) {
@@ -62,7 +61,7 @@ public class MappedConverter<E> implements Converter<E> {
     }
 
     @Override
-    public <TT extends E> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends E> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             if (nullValue != null) {
                 throw new IOException("Could not convert the value=null to a non-null string.");

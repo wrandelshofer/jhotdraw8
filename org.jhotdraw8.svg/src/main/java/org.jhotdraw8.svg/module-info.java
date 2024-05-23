@@ -4,16 +4,19 @@
  */
 
 import org.jhotdraw8.svg.spi.SvgImageReaderProvider;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Provides SVG interoperability for drawing editors.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.svg {
     requires transitive java.logging;
     requires transitive java.xml;
     requires transitive javafx.graphics;
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.css;

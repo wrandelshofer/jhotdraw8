@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.render.RenderContext;
 
@@ -23,7 +22,7 @@ public class SimpleLayeredDrawing extends AbstractViewBoxDrawing
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
         super.updateNode(ctx, n);
         applyStyleableFigureProperties(ctx, n);
     }

@@ -23,7 +23,6 @@ import javafx.collections.ObservableMap;
 import javafx.collections.ObservableSet;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.EmptyResources;
 import org.jhotdraw8.application.resources.Resources;
@@ -49,37 +48,37 @@ import java.util.prefs.Preferences;
  */
 public abstract class AbstractApplication extends javafx.application.Application implements org.jhotdraw8.application.Application {
 
-    private static final @NonNull String RECENT_URIS = ".recentUriFormats";
+    private static final String RECENT_URIS = ".recentUriFormats";
 
     /**
      * Holds the disabled state.
      */
-    private final @NonNull ReadOnlyBooleanProperty disabled;
+    private final ReadOnlyBooleanProperty disabled;
     /**
      * Holds the disablers.
      */
-    private final @NonNull ObservableSet<Object> disablers = FXCollections.observableSet();
+    private final ObservableSet<Object> disablers = FXCollections.observableSet();
 
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(this, ACTIONS_PROPERTY, FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
+    private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(this, ACTIONS_PROPERTY, FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlySetProperty<Activity> activities = new ReadOnlySetWrapper<Activity>(this, ACTIVITIES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>())).getReadOnlyProperty();
+    private final ReadOnlySetProperty<Activity> activities = new ReadOnlySetWrapper<Activity>(this, ACTIVITIES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>())).getReadOnlyProperty();
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyListProperty<String> stylesheets = new ReadOnlyListWrapper<String>(this, STYLESHEETS_PROPERTY, FXCollections.observableArrayList()).getReadOnlyProperty();
+    private final ReadOnlyListProperty<String> stylesheets = new ReadOnlyListWrapper<String>(this, STYLESHEETS_PROPERTY, FXCollections.observableArrayList()).getReadOnlyProperty();
 
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<Supplier<Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
+    private final ObjectProperty<Supplier<Activity>> activityFactory = new SimpleObjectProperty<>(this, ACTIVITY_FACTORY_PROPERTY);
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
+    private final ObjectProperty<Supplier<MenuBar>> menuFactory = new SimpleObjectProperty<>(this, MENU_BAR_FACTORY_PROPERTY);
     @SuppressWarnings("this-escape")
-    private final @NonNull NonNullObjectProperty<Resources> resources = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
+    private final NonNullObjectProperty<Resources> resources = new NonNullObjectProperty<>(this, RESOURCE_BUNDLE_PROPERTY, new EmptyResources());
     @SuppressWarnings("this-escape")
-    private final @NonNull NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
+    private final NonNullObjectProperty<Preferences> preferences = new NonNullObjectProperty<>(this, PREFERENCES_PROPERTY, Preferences.userNodeForPackage(getClass()));
 
     /**
      * Holds the max number of recent URIs.
      */
-    private final @NonNull IntegerProperty maxNumberOfRecentUris//
+    private final IntegerProperty maxNumberOfRecentUris//
             = new SimpleIntegerProperty(//
             this, MAX_NUMBER_OF_RECENT_URIS_PROPERTY, //
             10);
@@ -91,7 +90,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     /**
      * Holds the recent URIs.
      */
-    private final @NonNull ReadOnlyMapProperty<URI, DataFormat> recentUris//
+    private final ReadOnlyMapProperty<URI, DataFormat> recentUris//
             = new ReadOnlyMapWrapper<URI, DataFormat>(//
             this, RECENT_URIS_PROPERTY, //
             FXCollections.observableMap(new LinkedHashMap<>(16, 0.5f, true))).getReadOnlyProperty();
@@ -111,12 +110,12 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public @NonNull ObservableSet<Object> disablers() {
+    public ObservableSet<Object> disablers() {
         return disablers;
     }
 
     @Override
-    public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties = FXCollections.observableHashMap();
         }
@@ -176,7 +175,7 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public @NonNull IntegerProperty maxNumberOfRecentUrisProperty() {
+    public IntegerProperty maxNumberOfRecentUrisProperty() {
         return maxNumberOfRecentUris;
     }
 
@@ -186,37 +185,37 @@ public abstract class AbstractApplication extends javafx.application.Application
     }
 
     @Override
-    public @NonNull ReadOnlyMapProperty<String, Action> actionsProperty() {
+    public ReadOnlyMapProperty<String, Action> actionsProperty() {
         return actions;
     }
 
     @Override
-    public @NonNull ReadOnlySetProperty<Activity> activitiesProperty() {
+    public ReadOnlySetProperty<Activity> activitiesProperty() {
         return activities;
     }
 
     @Override
-    public @NonNull ReadOnlyListProperty<String> stylesheetsProperty() {
+    public ReadOnlyListProperty<String> stylesheetsProperty() {
         return stylesheets;
     }
 
     @Override
-    public @NonNull ObjectProperty<Supplier<Activity>> activityFactoryProperty() {
+    public ObjectProperty<Supplier<Activity>> activityFactoryProperty() {
         return activityFactory;
     }
 
     @Override
-    public @NonNull ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty() {
+    public ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty() {
         return menuFactory;
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<Resources> resourcesProperty() {
+    public NonNullObjectProperty<Resources> resourcesProperty() {
         return resources;
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<Preferences> preferencesProperty() {
+    public NonNullObjectProperty<Preferences> preferencesProperty() {
         return preferences;
     }
 

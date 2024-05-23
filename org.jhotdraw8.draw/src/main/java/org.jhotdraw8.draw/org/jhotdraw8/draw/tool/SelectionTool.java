@@ -10,8 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -45,11 +44,11 @@ import java.util.Map;
  */
 public class SelectionTool extends AbstractTool {
 
-    public static final @NonNull String ID = "tool.selectFigure";
+    public static final String ID = "tool.selectFigure";
     // ---
     // Property names
     // ---
-    public static final @NonNull String SELECT_BEHIND_ENABLED = "selectBehindEnabled";
+    public static final String SELECT_BEHIND_ENABLED = "selectBehindEnabled";
     // ---
     // Fields
     // ---
@@ -76,10 +75,10 @@ public class SelectionTool extends AbstractTool {
      */
     private final boolean updateCursor = true;
 
-    private final @NonNull BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
+    private final BooleanProperty selectBehindEnabled = new SimpleBooleanProperty(this, SELECT_BEHIND_ENABLED, true);
     private boolean mouseDragged;
     private @Nullable Figure pressedFigure;
-    private final @NonNull HandleType handleType;
+    private final HandleType handleType;
     private HandleType leadHandleType;
     private HandleType anchorHandleType;
 
@@ -109,7 +108,7 @@ public class SelectionTool extends AbstractTool {
     // ---
     // Properties
     // ---
-    public @NonNull BooleanProperty selectBehindEnabledProperty() {
+    public BooleanProperty selectBehindEnabledProperty() {
         return selectBehindEnabled;
     }
 
@@ -122,7 +121,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
         requestFocus();
         mouseDragged = false;
 
@@ -230,7 +229,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
         mouseDragged = true;
         if (tracker != null) {
             tracker.trackMouseDragged(event, dv);
@@ -238,7 +237,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (tracker != null) {
             tracker.trackMouseReleased(event, dv);
         }
@@ -246,7 +245,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
         if (tracker != null) {
             tracker.trackMouseClicked(event, dv);
         }
@@ -254,7 +253,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseMoved(MouseEvent event, DrawingView view) {
         double vx = event.getX();
         double vy = event.getY();
         Handle h = view.findHandle(vx, vy);
@@ -270,21 +269,21 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onKeyPressed(@NonNull KeyEvent event, @NonNull DrawingView view) {
+    protected void onKeyPressed(KeyEvent event, DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyPressed(event, view);
         }
     }
 
     @Override
-    protected void onKeyReleased(@NonNull KeyEvent event, @NonNull DrawingView view) {
+    protected void onKeyReleased(KeyEvent event, DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyReleased(event, view);
         }
     }
 
     @Override
-    protected void onKeyTyped(@NonNull KeyEvent event, @NonNull DrawingView view) {
+    protected void onKeyTyped(KeyEvent event, DrawingView view) {
         if (tracker != null) {
             tracker.trackKeyTyped(event, view);
         }
@@ -380,7 +379,7 @@ public class SelectionTool extends AbstractTool {
     }
 
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         for (DrawingView view : editor.getDrawingViews()) {
             view.getEditor().setHandleType(handleType);
             view.getEditor().setAnchorHandleType(anchorHandleType);
@@ -400,17 +399,17 @@ public class SelectionTool extends AbstractTool {
     double zoomFactor = 1.0;
 
     @Override
-    protected void onZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoom(ZoomEvent event, DrawingView dv) {
         dv.setZoomFactor(zoomFactor * event.getTotalZoomFactor());
     }
 
     @Override
-    protected void onZoomStarted(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoomStarted(ZoomEvent event, DrawingView dv) {
         zoomFactor = dv.getZoomFactor();
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public String getHelpText() {
         return """
                SelectionTool
                  Click on the drawing view. The tool will select the figure at that location.

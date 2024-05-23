@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.Rectangle2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -18,7 +17,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> implements WritableStyleableMapAccessor<Rectangle2D> {
 
 
-    private final @NonNull Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
+    private final Converter<Rectangle2D> converter = new Rectangle2DConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -26,7 +25,7 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
      *
      * @param name The name of the key.
      */
-    public Rectangle2DStyleableKey(@NonNull String name) {
+    public Rectangle2DStyleableKey(String name) {
         this(name, null);
     }
 
@@ -36,13 +35,13 @@ public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> i
      * @param key          The name of the key.
      * @param defaultValue The default value.
      */
-    public Rectangle2DStyleableKey(@NonNull String key, Rectangle2D defaultValue) {
+    public Rectangle2DStyleableKey(String key, Rectangle2D defaultValue) {
         super(key, Rectangle2D.class, defaultValue);
 
     }
 
     @Override
-    public @NonNull Converter<Rectangle2D> getCssConverter() {
+    public Converter<Rectangle2D> getCssConverter() {
         return converter;
     }
 }

@@ -4,11 +4,13 @@
  */
 
 import org.jhotdraw8.application.spi.ApplicationResourceBundleProvider;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Defines a framework for document-oriented applications.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.application {
     requires transitive javafx.graphics;
     requires transitive javafx.controls;
@@ -16,7 +18,8 @@ module org.jhotdraw8.application {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive javafx.fxml;
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.fxbase;

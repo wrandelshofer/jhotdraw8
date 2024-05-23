@@ -1,7 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
@@ -13,6 +11,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.serialization.SortedSetSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -44,12 +43,12 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings({"serial", "RedundantSuppression"})// Conditionally serializable
-    final @NonNull Comparator<E> comparator;
+    final Comparator<E> comparator;
     /**
      * The number of times this set has been structurally modified.
      */
     protected transient int modCount;
-    transient @NonNull RedBlackTree<E, Void> root;
+    transient RedBlackTree<E, Void> root;
     /**
      * Constructs a new, empty set, sorted according to the
      * specified comparator.
@@ -98,7 +97,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         this.addAll(c);
     }
 
-    MutableRedBlackSet(@Nullable Comparator<E> comparator, @NonNull RedBlackTree<E, Void> root) {
+    MutableRedBlackSet(@Nullable Comparator<E> comparator, RedBlackTree<E, Void> root) {
         this.comparator = comparator == null ? NaturalComparator.instance() : comparator;
         this.root = root;
     }
@@ -114,7 +113,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return false;
     }
 
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
+    public boolean addAll(Iterable<? extends E> c) {
         boolean modified = false;
         for (E e : c) {
             if (add(e)) {
@@ -160,7 +159,6 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return root.contains((E) o, comparator);
     }
 
-    @NonNull
     @Override
     public Iterator<E> descendingIterator() {
         return new FailFastIterator<>(
@@ -169,7 +167,6 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         );
     }
 
-    @NonNull
     @Override
     public NavigableSet<E> descendingSet() {
         return new DescendingNavigableSetView<>(this, this::getModCount);
@@ -205,14 +202,12 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return modCount;
     }
 
-    @NonNull
     @Override
     public NavigableSet<E> headSet(E toElement, boolean inclusive) {
         return new SubsetNavigableSetView<>(this, this::getModCount,
                 true, null, true, false, toElement, inclusive, true);
     }
 
-    @NonNull
     @Override
     public SortedSet<E> headSet(E toElement) {
         return headSet(toElement, false);
@@ -229,7 +224,6 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return root.isEmpty();
     }
 
-    @NonNull
     @Override
     public Iterator<E> iterator() {
         return new FailFastIterator<>(
@@ -270,7 +264,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     }
 
     @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+    public ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,
@@ -293,7 +287,6 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return false;
     }
 
-    @NonNull
     Iterator<E> reverseIterator() {
         return new FailFastIterator<>(
                 new MappedIterator<>(root.reverseIterator(), Map.Entry::getKey),
@@ -319,27 +312,23 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         return super.stream();
     }
 
-    @NonNull
     @Override
     public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
         return new SubsetNavigableSetView<>(this, this::getModCount,
                 false, fromElement, fromInclusive, false, toElement, toInclusive, true);
     }
 
-    @NonNull
     @Override
     public SortedSet<E> subSet(E fromElement, E toElement) {
         return subSet(fromElement, true, toElement, false);
     }
 
-    @NonNull
     @Override
     public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
         return new SubsetNavigableSetView<>(this, this::getModCount,
                 false, fromElement, inclusive, true, null, true, true);
     }
 
-    @NonNull
     @Override
     public SortedSet<E> tailSet(E fromElement) {
         return tailSet(fromElement, true);
@@ -351,7 +340,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
      *
      * @return an immutable copy
      */
-    public @NonNull RedBlackSet<E> toImmutable() {
+    public RedBlackSet<E> toImmutable() {
         return new RedBlackSet<>(comparator, root);
     }
 
@@ -361,7 +350,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new MutableRedBlackSet.SerializationProxy<>(this);
     }
 
@@ -369,13 +358,13 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
         @Serial
         private static final long serialVersionUID = 0L;
 
-        protected SerializationProxy(@NonNull SortedSet<E> target) {
+        protected SerializationProxy(SortedSet<E> target) {
             super(target);
         }
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return new MutableRedBlackSet<>(deserializedComparator, deserializedElements);
         }
     }

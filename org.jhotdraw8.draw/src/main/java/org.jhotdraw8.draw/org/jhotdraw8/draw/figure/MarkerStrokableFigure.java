@@ -9,8 +9,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -21,6 +19,7 @@ import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -88,7 +87,6 @@ public interface MarkerStrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     NullablePaintableStyleableKey MARKER_STROKE = new NullablePaintableStyleableKey("marker-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
@@ -145,7 +143,7 @@ public interface MarkerStrokableFigure extends Figure {
             MARKER_STROKE_TYPE, MARKER_STROKE_LINE_CAP, MARKER_STROKE_LINE_JOIN, MARKER_STROKE_MITER_LIMIT,
             MARKER_STROKE_DASH_OFFSET, MARKER_STROKE_DASH_ARRAY);
 
-    default void applyMarkerStrokeCapAndJoinProperties(@NonNull Shape shape) {
+    default void applyMarkerStrokeCapAndJoinProperties(Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(MARKER_STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -161,7 +159,7 @@ public interface MarkerStrokableFigure extends Figure {
         }
     }
 
-    default void applyMarkerStrokeDashProperties(@NonNull Shape shape) {
+    default void applyMarkerStrokeDashProperties(Shape shape) {
         double d = getStyledNonNull(MARKER_STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -178,7 +176,7 @@ public interface MarkerStrokableFigure extends Figure {
         }
     }
 
-    default void applyMarkerStrokeTypeProperties(@NonNull Shape shape) {
+    default void applyMarkerStrokeTypeProperties(Shape shape) {
         StrokeType st = getStyled(MARKER_STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -190,7 +188,7 @@ public interface MarkerStrokableFigure extends Figure {
      *
      * @param shape a shape node
      */
-    default void applyMarkerStrokableFigureProperties(@NonNull Shape shape) {
+    default void applyMarkerStrokableFigureProperties(Shape shape) {
         applyMarkerStrokeColorProperties(shape);
         applyMarkerStrokeWidthProperties(shape);
         applyMarkerStrokeCapAndJoinProperties(shape);
@@ -199,14 +197,14 @@ public interface MarkerStrokableFigure extends Figure {
         applyMarkerStrokeDashProperties(shape);
     }
 
-    default void applyMarkerStrokeColorProperties(@NonNull Shape shape) {
+    default void applyMarkerStrokeColorProperties(Shape shape) {
         Paint p = Paintable.getPaint(getStyled(MARKER_STROKE));
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
 
-    default void applyMarkerStrokeWidthProperties(@NonNull Shape shape) {
+    default void applyMarkerStrokeWidthProperties(Shape shape) {
         double d = getStyledNonNull(MARKER_STROKE_WIDTH).getConvertedValue();
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);

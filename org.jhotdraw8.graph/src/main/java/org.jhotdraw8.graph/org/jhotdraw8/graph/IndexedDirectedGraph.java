@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
 
@@ -105,7 +104,7 @@ public interface IndexedDirectedGraph {
      * @param v a vertex index
      * @return a collection view on the direct successor vertices of vertex
      */
-    default Enumerator.@NonNull OfInt nextVerticesEnumerator(int v) {
+    default Enumerator.OfInt nextVerticesEnumerator(int v) {
         return new IntRangeEnumerator(i -> getNextAsInt(v, i), 0, getNextCount(v));
     }
 }

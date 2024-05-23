@@ -10,8 +10,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TreeTableCell;
 import javafx.scene.control.TreeTableColumn;
 import javafx.util.Callback;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * BooleanPropertyCheckBoxTreeTableCell.
@@ -21,7 +20,7 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Boolean> {
 
-    private final @NonNull CheckBox checkBox = new CheckBox();
+    private final CheckBox checkBox = new CheckBox();
 
     @SuppressWarnings("this-escape")
     public BooleanPropertyCheckBoxTreeTableCell(@Nullable String styleClass) {
@@ -44,11 +43,11 @@ public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Bo
         }
     }
 
-    public static @NonNull <S> Callback<TreeTableColumn<S, Boolean>, TreeTableCell<S, Boolean>> forTreeTableColumn() {
+    public static <S> Callback<TreeTableColumn<S, Boolean>, TreeTableCell<S, Boolean>> forTreeTableColumn() {
         return forTreeTableColumn(null);
     }
 
-    public static @NonNull <S> Callback<TreeTableColumn<S, Boolean>, TreeTableCell<S, Boolean>> forTreeTableColumn(@Nullable String styleClass) {
+    public static <S> Callback<TreeTableColumn<S, Boolean>, TreeTableCell<S, Boolean>> forTreeTableColumn(@Nullable String styleClass) {
         return list -> new BooleanPropertyCheckBoxTreeTableCell<>(styleClass);
     }
 

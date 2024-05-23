@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
 import org.jhotdraw8.collection.enumerator.Enumerator;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 
@@ -180,7 +179,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
      * @param lastArrow  the array of last arrows
      * @param arrowHeads the array of arrow heads
      */
-    protected int doAddArrow(int a, int b, int @NonNull [] arrowHeads, int @NonNull [] lastArrow) {
+    protected int doAddArrow(int a, int b, int[] arrowHeads, int[] lastArrow) {
         int arrowCountOfA = lastArrow_getCount(lastArrow, a);
         int lastArrowPointer = arrowCountOfA == 0 ? SENTINEL : lastArrow[a * LASTARROW_NUM_FIELDS + LASTARROW_POINTER_FIELD];
 
@@ -252,7 +251,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
      * @param arrowHeads the array of arrow heads
      * @param arrowCount the number of arrows
      */
-    protected int buildRemoveArrowAt(int vidx, int i, int @NonNull [] lastArrow, int @NonNull [] arrowHeads, int arrowCount) {
+    protected int buildRemoveArrowAt(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
         if (vidx < 0 || vidx >= getVertexCount()) {
             throw new IllegalArgumentException("vidx:" + i);
         }
@@ -366,7 +365,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         return getArrowIndex(vi, i, nextLastArrow, nextArrowHeads);
     }
 
-    protected int getArrowIndex(int vi, int i, int @NonNull [] lastArrow, int @NonNull [] arrowHeads) {
+    protected int getArrowIndex(int vi, int i, int[] lastArrow, int[] arrowHeads) {
         int arrowPointer = lastArrow_getLast(lastArrow, vi);
         int nextCount = lastArrow_getCount(lastArrow, vi);
         for (int j = nextCount - 1; j > i; j--) {
@@ -411,7 +410,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
     }
 
     @Override
-    public Enumerator.@NonNull OfInt nextVerticesEnumerator(int v) {
+    public Enumerator.OfInt nextVerticesEnumerator(int v) {
         if (ordered) {
             return getNextVerticesOrdered(v);
         } else {
@@ -419,7 +418,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         }
     }
 
-    public Enumerator.@NonNull OfInt getNextVerticesUnordered(int vidx) {
+    public Enumerator.OfInt getNextVerticesUnordered(int vidx) {
         class MySpliterator extends AbstractIntEnumerator {
             private int arrowPtr;
 
@@ -444,12 +443,12 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         return new MySpliterator(vidx, 0, getNextCount(vidx));
     }
 
-    public Enumerator.@NonNull OfInt getNextVerticesOrdered(int vidx) {
+    public Enumerator.OfInt getNextVerticesOrdered(int vidx) {
         class MySpliterator extends AbstractIntEnumerator {
             private int index;
             private final int limit;
             private final int vidx;
-            private final int @NonNull [] arrows;
+            private final int[] arrows;
 
             public MySpliterator(int vidx, int lo, int hi) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
@@ -470,7 +469,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
                 }
             }
 
-            private MySpliterator(int vidx, int lo, int hi, int @NonNull [] arrows) {
+            private MySpliterator(int vidx, int lo, int hi, int[] arrows) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
                 this.vidx = vidx;
                 this.index = lo;

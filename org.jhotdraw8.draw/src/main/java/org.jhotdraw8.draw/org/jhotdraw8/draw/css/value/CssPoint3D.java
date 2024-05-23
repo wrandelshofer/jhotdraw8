@@ -5,9 +5,8 @@
 package org.jhotdraw8.draw.css.value;
 
 import javafx.geometry.Point3D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -18,13 +17,13 @@ import java.util.Objects;
  */
 public class CssPoint3D {
 
-    public static final @NonNull CssPoint3D ZERO = new CssPoint3D();
+    public static final CssPoint3D ZERO = new CssPoint3D();
 
-    private final @NonNull CssSize x;
-    private final @NonNull CssSize y;
-    private final @NonNull CssSize z;
+    private final CssSize x;
+    private final CssSize y;
+    private final CssSize z;
 
-    public CssPoint3D(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize z) {
+    public CssPoint3D(CssSize x, CssSize y, CssSize z) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -85,14 +84,14 @@ public class CssPoint3D {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssPoint3D{" + x +
                 ", " + y +
                 ", " + z +
                 '}';
     }
 
-    public @NonNull Point3D getConvertedValue() {
+    public Point3D getConvertedValue() {
         return new Point3D(x.getConvertedValue(), y.getConvertedValue(), z.getConvertedValue());
 
     }

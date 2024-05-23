@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.impl.vector;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -154,7 +153,7 @@ public interface ArrayType<T> {
     final class BooleanArrayType implements ArrayType<Boolean>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull BooleanArrayType INSTANCE = new BooleanArrayType();
+        static final BooleanArrayType INSTANCE = new BooleanArrayType();
         static final boolean[] EMPTY = new boolean[0];
 
         private static boolean[] cast(Object array) {
@@ -207,7 +206,7 @@ public interface ArrayType<T> {
     final class ByteArrayType implements ArrayType<Byte>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull ByteArrayType INSTANCE = new ByteArrayType();
+        static final ByteArrayType INSTANCE = new ByteArrayType();
         static final byte[] EMPTY = new byte[0];
 
         private static byte[] cast(Object array) {
@@ -260,7 +259,7 @@ public interface ArrayType<T> {
     final class CharArrayType implements ArrayType<Character>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull CharArrayType INSTANCE = new CharArrayType();
+        static final CharArrayType INSTANCE = new CharArrayType();
         static final char[] EMPTY = new char[0];
 
         private static char[] cast(Object array) {
@@ -313,7 +312,7 @@ public interface ArrayType<T> {
     final class DoubleArrayType implements ArrayType<Double>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull DoubleArrayType INSTANCE = new DoubleArrayType();
+        static final DoubleArrayType INSTANCE = new DoubleArrayType();
         static final double[] EMPTY = new double[0];
 
         private static double[] cast(Object array) {
@@ -366,7 +365,7 @@ public interface ArrayType<T> {
     final class FloatArrayType implements ArrayType<Float>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull FloatArrayType INSTANCE = new FloatArrayType();
+        static final FloatArrayType INSTANCE = new FloatArrayType();
         static final float[] EMPTY = new float[0];
 
         private static float[] cast(Object array) {
@@ -419,7 +418,7 @@ public interface ArrayType<T> {
     final class IntArrayType implements ArrayType<Integer>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull IntArrayType INSTANCE = new IntArrayType();
+        static final IntArrayType INSTANCE = new IntArrayType();
         static final int[] EMPTY = new int[0];
 
         private static int[] cast(Object array) {
@@ -472,7 +471,7 @@ public interface ArrayType<T> {
     final class LongArrayType implements ArrayType<Long>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull LongArrayType INSTANCE = new LongArrayType();
+        static final LongArrayType INSTANCE = new LongArrayType();
         static final long[] EMPTY = new long[0];
 
         private static long[] cast(Object array) {
@@ -525,7 +524,7 @@ public interface ArrayType<T> {
     final class ShortArrayType implements ArrayType<Short>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull ShortArrayType INSTANCE = new ShortArrayType();
+        static final ShortArrayType INSTANCE = new ShortArrayType();
         static final short[] EMPTY = new short[0];
 
         private static short[] cast(Object array) {
@@ -578,7 +577,7 @@ public interface ArrayType<T> {
     final class ObjectArrayType implements ArrayType<Object>, Serializable {
         @Serial
         private static final long serialVersionUID = 1L;
-        static final @NonNull ObjectArrayType INSTANCE = new ObjectArrayType();
+        static final ObjectArrayType INSTANCE = new ObjectArrayType();
         static final Object[] EMPTY = new Object[0];
 
         private static Object[] cast(Object array) {

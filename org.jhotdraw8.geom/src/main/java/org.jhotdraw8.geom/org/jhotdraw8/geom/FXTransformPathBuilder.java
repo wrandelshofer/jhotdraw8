@@ -6,7 +6,6 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * TransformPathBuilder.
@@ -16,14 +15,14 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
 
-    private final @NonNull PathBuilder<T> target;
-    private @NonNull Transform transform;
+    private final PathBuilder<T> target;
+    private Transform transform;
 
-    public FXTransformPathBuilder(@NonNull PathBuilder<T> target) {
+    public FXTransformPathBuilder(PathBuilder<T> target) {
         this(target, FXTransforms.IDENTITY);
     }
 
-    public FXTransformPathBuilder(@NonNull PathBuilder<T> target, @NonNull Transform transform) {
+    public FXTransformPathBuilder(PathBuilder<T> target, Transform transform) {
         this.target = target;
         this.transform = transform;
     }
@@ -61,11 +60,11 @@ public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
         target.quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
-    public @NonNull Transform getTransform() {
+    public Transform getTransform() {
         return transform;
     }
 
-    public void setTransform(@NonNull Transform transform) {
+    public void setTransform(Transform transform) {
         this.transform = transform;
     }
 

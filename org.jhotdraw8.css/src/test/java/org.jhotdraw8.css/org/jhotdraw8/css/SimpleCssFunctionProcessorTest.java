@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.function.AttrCssFunction;
 import org.jhotdraw8.css.function.CalcCssFunction;
 import org.jhotdraw8.css.function.CssFunction;
@@ -39,7 +38,7 @@ public class SimpleCssFunctionProcessorTest extends AbstractCssFunctionProcessor
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsProcessingOfStandardFunctions() {
+    public List<DynamicTest> dynamicTestsProcessingOfStandardFunctions() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestProcess("foo", "foo")),
                 dynamicTest("2", () -> doTestProcess("attr(id)", "\"o1\"")),

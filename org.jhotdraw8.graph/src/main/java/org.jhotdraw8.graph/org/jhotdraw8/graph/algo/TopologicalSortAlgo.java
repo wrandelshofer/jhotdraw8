@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.IntArrayList;
@@ -42,7 +41,7 @@ public class TopologicalSortAlgo {
      * @return the sorted list of vertices
      */
     @SuppressWarnings("unchecked")
-    public @NonNull <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
+    public <V, A> List<V> sortTopologically(DirectedGraph<V, A> m) {
         final AttributedIndexedDirectedGraph<V, A> im;
         if (!(m instanceof AttributedIndexedDirectedGraph)) {
             return sortTopologicallyObject(m);
@@ -64,7 +63,7 @@ public class TopologicalSortAlgo {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public int @NonNull [] sortTopologicallyInt(@NonNull IndexedDirectedGraph model) {
+    public int[] sortTopologicallyInt(IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
 
         // Step 1: compute number of incoming arrows for each vertex
@@ -130,7 +129,7 @@ public class TopologicalSortAlgo {
      * @return the sorted list of vertices and the list of batches,
      * batches will be empty if the graph has cycles
      */
-    public @NonNull SimpleOrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(@NonNull IndexedDirectedGraph model) {
+    public SimpleOrderedPair<int[], IntArrayList> sortTopologicallyIntBatches(IndexedDirectedGraph model) {
         final int n = model.getVertexCount();
         IntArrayList batches = new IntArrayList();
         boolean hasLoop = false;
@@ -210,7 +209,7 @@ public class TopologicalSortAlgo {
      * @param model the graph
      * @return the sorted list of vertices
      */
-    public @NonNull <V, A> List<V> sortTopologicallyObject(@NonNull DirectedGraph<V, A> model) {
+    public <V, A> List<V> sortTopologicallyObject(DirectedGraph<V, A> model) {
         return sortTopologically(model.getVertices(), model::getNextVertices);
     }
 
@@ -225,8 +224,8 @@ public class TopologicalSortAlgo {
      * @param nextVertices a function that delivers the next vertices for a given vertex
      * @return the sorted list of vertices
      */
-    public @NonNull <V> List<V> sortTopologically(@NonNull Collection<V> vertices,
-                                                  @NonNull Function<V, Iterable<? extends V>> nextVertices) {
+    public <V> List<V> sortTopologically(Collection<V> vertices,
+                                         Function<V, Iterable<? extends V>> nextVertices) {
         final int n = vertices.size();
         Set<V> verticesInLoops = null;
 
@@ -240,7 +239,7 @@ public class TopologicalSortAlgo {
         }
 
         // Step 2: put all vertices with degree zero into queue
-        final @NonNull Queue<V> queue = new ArrayDeque<>(n);
+        final Queue<V> queue = new ArrayDeque<>(n);
         for (Map.Entry<V, Integer> entry : deg.entrySet()) {
             if (entry.getValue() == 0) {
                 queue.add(entry.getKey());
@@ -248,7 +247,7 @@ public class TopologicalSortAlgo {
         }
 
         // Step 3: Repeat until all vertices have been processed or a loop has been detected
-        final @NonNull List<V> result = new ArrayList<>(n);// result array
+        final List<V> result = new ArrayList<>(n);// result array
         int done = 0;
         while (done < n) {
             for (; done < n; done++) {

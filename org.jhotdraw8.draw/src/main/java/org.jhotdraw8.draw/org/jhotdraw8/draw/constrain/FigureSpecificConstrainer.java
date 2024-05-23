@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
@@ -30,7 +29,7 @@ import java.util.Map;
  */
 public class FigureSpecificConstrainer extends AbstractConstrainer implements Constrainer {
 
-    private final @NonNull Path node = new Path();
+    private final Path node = new Path();
     // ----
     // property names
     // ----
@@ -38,11 +37,11 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     /**
      * The name of the "constrainerMap" property.
      */
-    public final @NonNull String CONSTRAINER_MAP_PROPERTY = "constrainerMap";
+    public final String CONSTRAINER_MAP_PROPERTY = "constrainerMap";
     /**
      * The name of the "defaultConstrainer" property.
      */
-    public final @NonNull String DEFAULT_CONSTRAINER_PROPERTY = "defaultConstrainer";
+    public final String DEFAULT_CONSTRAINER_PROPERTY = "defaultConstrainer";
 
     // ----
     // property fields
@@ -50,13 +49,13 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     /**
      * Maps figure classes to constrainers.
      */
-    private final @NonNull ReadOnlyMapWrapper<Class<?>, Constrainer> constrainerMap
+    private final ReadOnlyMapWrapper<Class<?>, Constrainer> constrainerMap
             = new ReadOnlyMapWrapper<>(this, CONSTRAINER_MAP_PROPERTY, FXCollections.observableHashMap());
 
     /**
      * All figures which are not in the map use the default constrainer.
      */
-    private final @NonNull NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final NonNullObjectProperty<Constrainer> defaultConstrainer = new NonNullObjectProperty<>(this, DEFAULT_CONSTRAINER_PROPERTY, new NullConstrainer());
 
     public FigureSpecificConstrainer() {
     }
@@ -64,11 +63,11 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     // ----
     // property methods
     // ----
-    public @NonNull ObservableMap<Class<?>, Constrainer> constrainerMapProperty() {
+    public ObservableMap<Class<?>, Constrainer> constrainerMapProperty() {
         return constrainerMap;
     }
 
-    public @NonNull NonNullObjectProperty<Constrainer> defaultConstrainerProperty() {
+    public NonNullObjectProperty<Constrainer> defaultConstrainerProperty() {
         return defaultConstrainer;
     }
 
@@ -90,43 +89,43 @@ public class FigureSpecificConstrainer extends AbstractConstrainer implements Co
     /**
      * Retrieves the constrainer for the specified figure.
      */
-    private Constrainer getConstrainer(@NonNull Figure f) {
+    private Constrainer getConstrainer(Figure f) {
         Constrainer c = constrainerMap.get(f.getClass());
         return c != null ? c : defaultConstrainer.get();
     }
 
     @Override
-    public CssPoint2D translatePoint(@NonNull Figure f, CssPoint2D p, CssPoint2D dir) {
+    public CssPoint2D translatePoint(Figure f, CssPoint2D p, CssPoint2D dir) {
         return getConstrainer(f).translatePoint(f, p, dir);
     }
 
     @Override
-    public CssRectangle2D translateRectangle(@NonNull Figure f, CssRectangle2D r, CssPoint2D dir) {
+    public CssRectangle2D translateRectangle(Figure f, CssRectangle2D r, CssPoint2D dir) {
         return getConstrainer(f).translateRectangle(f, r, dir);
     }
 
     @Override
-    public double translateAngle(@NonNull Figure f, double angle, double dir) {
+    public double translateAngle(Figure f, double angle, double dir) {
         return getConstrainer(f).translateAngle(f, angle, dir);
     }
 
     @Override
-    public CssPoint2D constrainPoint(@NonNull Figure f, CssPoint2D p) {
+    public CssPoint2D constrainPoint(Figure f, CssPoint2D p) {
         return getConstrainer(f).constrainPoint(f, p);
     }
 
     @Override
-    public CssRectangle2D constrainRectangle(@NonNull Figure f, CssRectangle2D r) {
+    public CssRectangle2D constrainRectangle(Figure f, CssRectangle2D r) {
         return getConstrainer(f).constrainRectangle(f, r);
     }
 
     @Override
-    public double constrainAngle(@NonNull Figure f, double angle) {
+    public double constrainAngle(Figure f, double angle) {
         return getConstrainer(f).constrainAngle(f, angle);
     }
 
     @Override
-    public @NonNull Node getNode() {
+    public Node getNode() {
         return node;
     }
 

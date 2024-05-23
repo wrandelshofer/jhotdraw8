@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -20,10 +19,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public abstract class AbstractMutableBidiGraphTest<V, A>
         extends AbstractMutableDirectedGraphTest<V, A> {
     @Override
-    protected abstract @NonNull MutableBidiGraph<V, A> newInstance();
+    protected abstract MutableBidiGraph<V, A> newInstance();
 
     @Override
-    protected abstract @NonNull MutableBidiGraph<V, A> newInstance(@NonNull DirectedGraph<V, A> g);
+    protected abstract MutableBidiGraph<V, A> newInstance(DirectedGraph<V, A> g);
 
     /**
      * Test getters.
@@ -54,7 +53,7 @@ public abstract class AbstractMutableBidiGraphTest<V, A>
         assertEqualsInitialGraph(g);
     }
 
-    private void assertEqualsInitialGraph(@NonNull MutableBidiGraph<V, A> g) {
+    private void assertEqualsInitialGraph(MutableBidiGraph<V, A> g) {
         assertEquals(5, g.getVertexCount());
         assertEquals(6, g.getArrowCount());
         V[] v = getVertices(g);

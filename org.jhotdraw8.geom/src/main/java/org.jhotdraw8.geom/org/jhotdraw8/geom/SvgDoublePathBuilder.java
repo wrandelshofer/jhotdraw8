@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * SvgDoublePathBuilder.
@@ -13,7 +12,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class SvgDoublePathBuilder implements PathBuilder<String> {
 
-    private final @NonNull StringBuilder buf = new StringBuilder();
+    private final StringBuilder buf = new StringBuilder();
 
     public SvgDoublePathBuilder() {
     }
@@ -117,7 +116,7 @@ public class SvgDoublePathBuilder implements PathBuilder<String> {
     }
 
     @Override
-    public @NonNull String build() {
+    public String build() {
         return buf.toString();
     }
 

@@ -1,7 +1,6 @@
 package org.jhotdraw8.icollection;
 
 import de.sandec.jmemorybuddy.JMemoryBuddy;
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,11 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
 
-    protected abstract @NonNull List<Key> newListInstance();
+    protected abstract List<Key> newListInstance();
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void iteratorShouldThrowNoSuchElementException(SetData data) throws Exception {
         List<Key> l = newListInstance();
         l.add(data.a.iterator().next());
         Iterator<Key> i = l.iterator();
@@ -37,7 +36,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorShouldThrowConcurrentModificationException(@NonNull SetData data) throws Exception {
+    public void iteratorShouldThrowConcurrentModificationException(SetData data) throws Exception {
         List<Key> l = newListInstance();
         Key valueA = data.a.iterator().next();
         l.add(valueA);
@@ -49,7 +48,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorNextShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void listIteratorNextShouldThrowNoSuchElementException(SetData data) throws Exception {
         List<Key> l = newListInstance();
         l.add(data.a.iterator().next());
         ListIterator<Key> i = l.listIterator();
@@ -61,7 +60,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorNextShouldThrowNoSuchElementException2(@NonNull SetData data) throws Exception {
+    public void listIteratorNextShouldThrowNoSuchElementException2(SetData data) throws Exception {
         List<Key> l = newListInstance();
         l.add(data.a.iterator().next());
         ListIterator<Key> i = l.listIterator();
@@ -73,7 +72,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorPreviousShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void listIteratorPreviousShouldThrowNoSuchElementException(SetData data) throws Exception {
         List<Key> l = newListInstance();
         l.add(data.a.iterator().next());
         ListIterator<Key> i = l.listIterator(0);
@@ -85,7 +84,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorPreviousShouldThrowNoSuchElementException2(@NonNull SetData data) throws Exception {
+    public void listIteratorPreviousShouldThrowNoSuchElementException2(SetData data) throws Exception {
         List<Key> l = newListInstance();
         l.add(data.a.iterator().next());
         ListIterator<Key> i = l.listIterator(0);
@@ -97,7 +96,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listIteratorRemoveShouldThrowIllegalStateException(@NonNull SetData data) throws Exception {
+    public void listIteratorRemoveShouldThrowIllegalStateException(SetData data) throws Exception {
         List<Key> l = newListInstance();
         ListIterator<Key> i = l.listIterator();
         i.add(data.a.iterator().next());
@@ -106,7 +105,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void listShouldAffectSubList(@NonNull SetData data) throws Exception {
+    public void listShouldAffectSubList(SetData data) throws Exception {
         List<Key> l = newListInstance();
         l.add(data.a.iterator().next());
         List<Key> subList = l.subList(0, 1);
@@ -131,7 +130,7 @@ public abstract class AbstractListTest extends AbstractSequencedCollectionTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     @Disabled("test is flaky")
-    public void removeOneElementShouldMakeElementCollectable(@NonNull SetData data) throws Exception {
+    public void removeOneElementShouldMakeElementCollectable(SetData data) throws Exception {
         JMemoryBuddy.memoryTest(checker -> {
             var a = data.a.stream().map(Key::clone).toList();
             var b = data.b.stream().map(Key::clone).toList();

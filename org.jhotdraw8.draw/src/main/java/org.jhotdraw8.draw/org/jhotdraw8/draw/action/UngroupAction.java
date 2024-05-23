@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -29,14 +28,14 @@ import java.util.LinkedList;
  */
 public class UngroupAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.ungroup";
+    public static final String ID = "edit.ungroup";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public UngroupAction(@NonNull DrawingEditor editor) {
+    public UngroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -44,13 +43,13 @@ public class UngroupAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
-        final @NonNull LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
+    protected void onActionPerformed(ActionEvent e, DrawingView dview) {
+        final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         ungroup(dview, figures);
 
     }
 
-    public static void ungroup(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
+    public static void ungroup(DrawingView view, Collection<Figure> figures) {
         if (figures.isEmpty()) {
             final Alert alert = new Alert(Alert.AlertType.INFORMATION, "Empty selection can not be ungrouped");
             alert.getDialogPane().setMaxWidth(640.0);
@@ -94,7 +93,7 @@ public class UngroupAction extends AbstractDrawingViewAction {
         view.getSelectedFigures().addAll(newSelection);
     }
 
-    private static void ungroup(@NonNull DrawingView view, @NonNull Figure group, @NonNull LinkedHashSet<Figure> newSelection) {
+    private static void ungroup(DrawingView view, Figure group, LinkedHashSet<Figure> newSelection) {
         Figure parent = group.getParent();
         if (parent != null && (!parent.isEditable() || !parent.isDecomposable())) {
             // FIXME internationalize me

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractCollection;
 import java.util.ConcurrentModificationException;
@@ -86,12 +85,12 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public void addLastAllAsInt(int @NonNull [] array) {
+    public void addLastAllAsInt(int[] array) {
         addLastAllAsInt(array, 0, array.length);
     }
 
     @Override
-    public void addLastAllAsInt(int @NonNull [] array, int offset, int length) {
+    public void addLastAllAsInt(int[] array, int offset, int length) {
         grow(length + size());
 
 
@@ -167,7 +166,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public PrimitiveIterator.@NonNull OfInt descendingIterator() {
+    public PrimitiveIterator.OfInt descendingIterator() {
         return new ReverseDeqIterator();
     }
 
@@ -283,12 +282,12 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
     }
 
     @Override
-    public @NonNull Deque<Integer> reversed() {
+    public Deque<Integer> reversed() {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public PrimitiveIterator.@NonNull OfInt iterator() {
+    public PrimitiveIterator.OfInt iterator() {
         return new DeqIterator();
     }
 
@@ -407,7 +406,7 @@ public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeq
         return (tail - head) & (elements.length - 1);
     }
 
-    public @NonNull String toString() {
+    public String toString() {
         Iterator<Integer> it = iterator();
         if (!it.hasNext()) {
             return "[]";

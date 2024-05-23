@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
@@ -29,7 +28,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param v a vertex
      * @return a collection view on the previous arrows
      */
-    default @NonNull Collection<A> getPrevArrows(@NonNull V v) {
+    default Collection<A> getPrevArrows(V v) {
         return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrevArrow(v, i));
     }
 
@@ -39,7 +38,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param v a vertex
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull Collection<V> getPrevVertices(@NonNull V v) {
+    default Collection<V> getPrevVertices(V v) {
         return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrev(v, i));
     }
 
@@ -51,7 +50,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param i the index into the list of outgoing arrows
      * @return the arc data
      */
-    default @NonNull Arc<V, A> getPrevArc(@NonNull V v, int i) {
+    default Arc<V, A> getPrevArc(V v, int i) {
         return new Arc<>(getPrev(v, i), v, getPrevArrow(v, i));
     }
 
@@ -61,7 +60,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param v a vertex
      * @return a collection view on the arc data
      */
-    default @NonNull Collection<Arc<V, A>> getPrevArcs(@NonNull V v) {
+    default Collection<Arc<V, A>> getPrevArcs(V v) {
         return new ListFacade<>(() -> this.getPrevCount(v), i -> getPrevArc(v, i));
     }
 
@@ -73,7 +72,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param u a vertex
      * @return index of vertex {@code u} or a value {@literal < 0}
      */
-    default int findIndexOfPrev(final @NonNull V v, final @NonNull V u) {
+    default int findIndexOfPrev(final V v, final V u) {
         for (int i = 0, n = getPrevCount(v); i < n; i++) {
             if (u.equals(getPrev(v, i))) {
                 return i;
@@ -90,7 +89,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param u a vertex
      * @return true if {@code u} is previous of {@code v}
      */
-    default boolean isPrev(final @NonNull V v, final @NonNull V u) {
+    default boolean isPrev(final V v, final V u) {
         return findIndexOfPrev(v, u) >= 0;
     }
 
@@ -101,8 +100,8 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param dfs   whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final boolean dfs) {
-        final @NonNull Set<V> visited = new HashSet<>();
+    default Enumerator<V> searchPrevVertices(final V start, final boolean dfs) {
+        final Set<V> visited = new HashSet<>();
         return searchPrevVertices(start, visited::add, dfs);
     }
 
@@ -114,7 +113,7 @@ public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A
      * @param dfs     whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchPrevVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+    default Enumerator<V> searchPrevVertices(final V start, final AddToSet<V> visited, final boolean dfs) {
         return new BfsDfsVertexSpliterator<>(this::getPrevVertices, start, visited, dfs);
     }
 

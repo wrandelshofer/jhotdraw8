@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractCollection;
 import java.util.Collection;
@@ -25,34 +24,35 @@ import java.util.stream.Stream;
  * @author Werner Randelshofer
  */
 public class CollectionFacade<E> extends AbstractCollection<E> implements ReadOnlyCollection<E> {
-    protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
-    protected final @NonNull Supplier<Spliterator<E>> spliteratorFunction;
-    protected final @NonNull IntSupplier sizeFunction;
-    protected final @NonNull Predicate<Object> containsFunction;
-    protected final @NonNull Runnable clearFunction;
-    protected final @NonNull Predicate<Object> removeFunction;
-    protected final @NonNull Predicate<E> addFunction;
-    public CollectionFacade(@NonNull ReadOnlyCollection<E> backingCollection) {
+    protected final Supplier<Iterator<E>> iteratorFunction;
+    protected final Supplier<Spliterator<E>> spliteratorFunction;
+    protected final IntSupplier sizeFunction;
+    protected final Predicate<Object> containsFunction;
+    protected final Runnable clearFunction;
+    protected final Predicate<Object> removeFunction;
+    protected final Predicate<E> addFunction;
+
+    public CollectionFacade(ReadOnlyCollection<E> backingCollection) {
         this(backingCollection::iterator, backingCollection::spliterator, backingCollection::size,
                 backingCollection::contains, null, null, null);
     }
 
-    public CollectionFacade(@NonNull Collection<E> backingCollection) {
+    public CollectionFacade(Collection<E> backingCollection) {
         this(backingCollection::iterator, backingCollection::spliterator, backingCollection::size,
                 backingCollection::contains, backingCollection::clear, backingCollection::add, backingCollection::remove);
     }
 
-    public CollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                            @NonNull IntSupplier sizeFunction,
-                            @NonNull Predicate<Object> containsFunction) {
+    public CollectionFacade(Supplier<Iterator<E>> iteratorFunction,
+                            IntSupplier sizeFunction,
+                            Predicate<Object> containsFunction) {
         this(iteratorFunction, null,
                 sizeFunction, containsFunction, null, null, null);
     }
 
-    public CollectionFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
+    public CollectionFacade(Supplier<Iterator<E>> iteratorFunction,
                             @Nullable Supplier<Spliterator<E>> spliteratorFunction,
-                            @NonNull IntSupplier sizeFunction,
-                            @NonNull Predicate<Object> containsFunction,
+                            IntSupplier sizeFunction,
+                            Predicate<Object> containsFunction,
                             @Nullable Runnable clearFunction,
                             @Nullable Predicate<E> addFunction,
                             @Nullable Predicate<Object> removeFunction) {
@@ -97,7 +97,7 @@ public class CollectionFacade<E> extends AbstractCollection<E> implements ReadOn
 
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return iteratorFunction.get();
     }
 

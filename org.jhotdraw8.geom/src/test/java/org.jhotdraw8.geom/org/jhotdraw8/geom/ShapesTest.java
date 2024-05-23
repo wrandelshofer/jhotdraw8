@@ -6,7 +6,6 @@
 package org.jhotdraw8.geom;
 
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -25,14 +24,14 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class ShapesTest {
 
-    void testDoubleSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
+    void testDoubleSvgStringFromAWT(String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
         String actual = SvgPaths.awtPathIteratorToDoubleSvgString(((Shape) path).getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsDoubleSvgStringFromAWT() {
+    public List<DynamicTest> dynamicTestsDoubleSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "M0,0 1,0 1,1 0,1 Z")),
                 dynamicTest("2", () -> testDoubleSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "M0,0 1,0 1,1 0,1 Z")),
@@ -49,26 +48,26 @@ public class ShapesTest {
         );
     }
 
-    void testDoubleRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
+    void testDoubleRelativeSvgStringFromAWT(String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
         String actual = SvgPaths.awtPathIteratorToDoubleRelativeSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
-    void testFloatRelativeSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
+    void testFloatRelativeSvgStringFromAWT(String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
         String actual = SvgPaths.awtPathIteratorToFloatRelativeSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
-    void testFloatSvgStringFromAWT(@NonNull String input, String expected) throws ParseException {
+    void testFloatSvgStringFromAWT(String input, String expected) throws ParseException {
         Path2D.Double path = SvgPaths.svgStringToAwtShape(input);
         String actual = SvgPaths.awtPathIteratorToFloatSvgString(path.getPathIterator(null));
         assertEquals(expected, actual);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFloatSvgStringFromAWT() {
+    public List<DynamicTest> dynamicTestsFloatSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFloatSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "M0,0 1,0 1,1 0,1 Z")),
                 dynamicTest("2", () -> testFloatSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "M0,0 1,0 1,1 0,1 Z")),
@@ -93,7 +92,7 @@ public class ShapesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsDoubleRelativeSvgStringFromAWT() {
+    public List<DynamicTest> dynamicTestsDoubleRelativeSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleRelativeSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "m0,0 1,0 0,1 -1,0 z")),
                 dynamicTest("2", () -> testDoubleRelativeSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 z")),
@@ -119,14 +118,14 @@ public class ShapesTest {
         );
     }
 
-    void testSvgStringFromElements(@NonNull String input, String expected) throws ParseException {
+    void testSvgStringFromElements(String input, String expected) throws ParseException {
         List<PathElement> elements = FXSvgPaths.svgStringToPathElements(input);
         String actual = FXSvgPaths.pathElementsToDoubleSvgString(elements);
         assertEquals(expected, actual);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsDoubleSvgStringFromElements() {
+    public List<DynamicTest> dynamicTestsDoubleSvgStringFromElements() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSvgStringFromElements("M0,0 1,0 1,1 0,1Z", "M0,0 1,0 1,1 0,1 Z")),
                 dynamicTest("2", () -> testSvgStringFromElements("m0,0 1,0 0,1 -1,0Z", "M0,0 l1,0 0,1 -1,0 Z")),
@@ -145,7 +144,7 @@ public class ShapesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFloatRelativeSvgStringFromAWT() {
+    public List<DynamicTest> dynamicTestsFloatRelativeSvgStringFromAWT() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFloatRelativeSvgStringFromAWT("M0,0 1,0 1,1 0,1Z", "m0,0 1,0 0,1 -1,0 z")),
                 dynamicTest("2", () -> testFloatRelativeSvgStringFromAWT("m0,0 1,0 0,1 -1,0Z", "m0,0 1,0 0,1 -1,0 z")),

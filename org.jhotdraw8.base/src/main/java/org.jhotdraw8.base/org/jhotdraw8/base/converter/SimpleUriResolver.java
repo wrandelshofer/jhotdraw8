@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.net.UriUtil;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 
@@ -21,17 +20,17 @@ public class SimpleUriResolver implements UriResolver {
     }
 
     @Override
-    public @NonNull URI relativize(@Nullable URI base, @NonNull URI uri) {
+    public URI relativize(@Nullable URI base, URI uri) {
         return UriUtil.relativize(base, uri);
     }
 
     @Override
-    public @NonNull URI absolutize(@Nullable URI base, @NonNull URI uri) {
+    public URI absolutize(@Nullable URI base, URI uri) {
         return UriUtil.absolutize(base, uri);
     }
 
     @Override
-    public @NonNull URI getParent(@NonNull URI uri) {
+    public URI getParent(URI uri) {
         return UriUtil.getParent(uri);
     }
 }

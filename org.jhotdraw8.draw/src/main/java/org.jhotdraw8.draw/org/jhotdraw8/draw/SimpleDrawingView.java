@@ -23,8 +23,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.constrain.Constrainer;
@@ -80,28 +79,28 @@ public class SimpleDrawingView extends AbstractDrawingView {
     /**
      * The style class of the canvas pane is {@value #CANVAS_REGION_STYLE_CLASS}.
      */
-    public static final @NonNull String CANVAS_REGION_STYLE_CLASS = "jhotdraw8-drawing-view-canvas-region";
+    public static final String CANVAS_REGION_STYLE_CLASS = "jhotdraw8-drawing-view-canvas-region";
 
     /**
      * The style class of the drawing view is {@value #DRAWING_VIEW_STYLE_CLASS}.
      */
-    public static final @NonNull String DRAWING_VIEW_STYLE_CLASS = "jhotdraw8-drawing-view";
-    private final @NonNull ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
-    private final @NonNull SimpleDrawingViewNode node = new SimpleDrawingViewNode();
-    private final @NonNull NonNullObjectProperty<DrawingModel> model //
+    public static final String DRAWING_VIEW_STYLE_CLASS = "jhotdraw8-drawing-view";
+    private final ZoomableScrollPane zoomableScrollPane = ZoomableScrollPane.create();
+    private final SimpleDrawingViewNode node = new SimpleDrawingViewNode();
+    private final NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
-    private final @NonNull ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
-    private final @NonNull ObjectProperty<Figure> activeParent = new SimpleObjectProperty<>(this, ACTIVE_PARENT_PROPERTY);
-    private final @NonNull NonNullObjectProperty<Constrainer> constrainer = new NonNullObjectProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
-    private final @NonNull ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
-    private final @NonNull Region background = new Region();
-    private final @NonNull StackPane foreground = new StackPane();
-    private final @NonNull InteractiveDrawingRenderer drawingRenderer = new InteractiveDrawingRenderer();
-    private final @NonNull InteractiveHandleRenderer handleRenderer = new InteractiveHandleRenderer();
+    private final ReadOnlyObjectWrapper<Drawing> drawing = new ReadOnlyObjectWrapper<>(this, DRAWING_PROPERTY);
+    private final ObjectProperty<Figure> activeParent = new SimpleObjectProperty<>(this, ACTIVE_PARENT_PROPERTY);
+    private final NonNullObjectProperty<Constrainer> constrainer = new NonNullObjectProperty<>(this, CONSTRAINER_PROPERTY, new NullConstrainer());
+    private final ReadOnlyBooleanWrapper focused = new ReadOnlyBooleanWrapper(this, FOCUSED_PROPERTY);
+    private final Region background = new Region();
+    private final StackPane foreground = new StackPane();
+    private final InteractiveDrawingRenderer drawingRenderer = new InteractiveDrawingRenderer();
+    private final InteractiveHandleRenderer handleRenderer = new InteractiveHandleRenderer();
     private boolean constrainerNodeValid;
     private boolean isLayoutValid = true;
     private @Nullable Runnable repainter = null;
-    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
+    private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
 
 
     public SimpleDrawingView() {
@@ -112,7 +111,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull ObjectProperty<Figure> activeParentProperty() {
+    public ObjectProperty<Figure> activeParentProperty() {
         return activeParent;
     }
 
@@ -121,7 +120,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<Constrainer> constrainerProperty() {
+    public NonNullObjectProperty<Constrainer> constrainerProperty() {
         return constrainer;
     }
 
@@ -153,7 +152,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull ReadOnlyObjectProperty<Drawing> drawingProperty() {
+    public ReadOnlyObjectProperty<Drawing> drawingProperty() {
         return drawing.getReadOnlyProperty();
     }
 
@@ -162,22 +161,22 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @Nullable Node findFigureNode(@NonNull Figure figure, double vx, double vy) {
+    public @Nullable Node findFigureNode(Figure figure, double vx, double vy) {
         return drawingRenderer.findFigureNode(figure, vx, vy);
     }
 
     @Override
-    public @NonNull List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, @NonNull Predicate<Figure> predicate) {
+    public List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, Predicate<Figure> predicate) {
         return drawingRenderer.findFigures(vx, vy, decompose, predicate);
     }
 
     @Override
-    public @NonNull List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+    public List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         return drawingRenderer.findFiguresInside(vx, vy, vwidth, vheight, decompose, Figure::isSelectable);
     }
 
     @Override
-    public @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
+    public List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
         return drawingRenderer.findFiguresIntersecting(vx, vy, vwidth, vheight, decompose, predicate);
     }
 
@@ -187,27 +186,27 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull ReadOnlyBooleanProperty focusedProperty() {
+    public ReadOnlyBooleanProperty focusedProperty() {
         return focused.getReadOnlyProperty();
     }
 
     @Override
-    public @NonNull Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle) {
+    public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle) {
         return handleRenderer.getFiguresWithCompatibleHandle(figures, handle);
     }
 
     @Override
-    public @NonNull Node getNode() {
+    public Node getNode() {
         return node;
     }
 
     @Override
-    public @Nullable Node getNode(@NonNull Figure f) {
+    public @Nullable Node getNode(Figure f) {
         return drawingRenderer.getNode(f);
     }
 
     @Override
-    public @NonNull Transform getViewToWorld() {
+    public Transform getViewToWorld() {
         return zoomableScrollPane.getViewToContent();
     }
 
@@ -217,12 +216,12 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull Transform getWorldToView() {
+    public Transform getWorldToView() {
         return zoomableScrollPane.getContentToView();
     }
 
     @Override
-    public @NonNull ReadOnlySetProperty<Handle> handlesProperty() {
+    public ReadOnlySetProperty<Handle> handlesProperty() {
         return handleRenderer.handlesProperty();
     }
 
@@ -282,11 +281,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<DrawingModel> modelProperty() {
+    public NonNullObjectProperty<DrawingModel> modelProperty() {
         return model;
     }
 
-    private void onConstrainerChanged(@NonNull Observable o, @Nullable Constrainer oldValue, @Nullable Constrainer newValue) {
+    private void onConstrainerChanged(Observable o, @Nullable Constrainer oldValue, @Nullable Constrainer newValue) {
         if (oldValue != null) {
             foreground.getChildren().remove(oldValue.getNode());
             oldValue.removeListener(this::onConstrainerInvalidated);
@@ -303,19 +302,19 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void onConstrainerInvalidated(@NonNull Observable o) {
+    private void onConstrainerInvalidated(Observable o) {
         invalidateConstrainer();
         repaint();
     }
 
-    private void onContentToViewChanged(@NonNull Observable observable) {
+    private void onContentToViewChanged(Observable observable) {
         updateBackgroundNode();
     }
 
     private void onDrawingChanged() {
     }
 
-    private void onDrawingModelChanged(@NonNull Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    private void onDrawingModelChanged(Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(treeModelListener);
         }
@@ -325,13 +324,13 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void onNodeChanged(@NonNull Figure f) {
+    private void onNodeChanged(Figure f) {
         if (f == getDrawing()) {
             revalidateLayout();
         }
     }
 
-    private void onNodeRemoved(@NonNull Figure f) {
+    private void onNodeRemoved(Figure f) {
         ObservableSet<Figure> selectedFigures = getSelectedFigures();
         for (Figure d : f.preorderIterable()) {
             selectedFigures.remove(d);
@@ -347,11 +346,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
         repaint();
     }
 
-    private void onSubtreeNodesChanged(@NonNull Figure f) {
+    private void onSubtreeNodesChanged(Figure f) {
     }
 
     @Override
-    protected void onToolChanged(@NonNull Observable observable, @Nullable Tool oldValue, @Nullable Tool newValue) {
+    protected void onToolChanged(Observable observable, @Nullable Tool oldValue, @Nullable Tool newValue) {
         if (oldValue != null) {
             foreground.getChildren().remove(oldValue.getNode());
             oldValue.setDrawingView(null);
@@ -364,7 +363,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
+    private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
             case NODE_ADDED_TO_PARENT:
@@ -389,11 +388,11 @@ public class SimpleDrawingView extends AbstractDrawingView {
         }
     }
 
-    private void onViewRectChanged(@NonNull Observable observable, @Nullable Bounds oldValue, @Nullable Bounds newValue) {
+    private void onViewRectChanged(Observable observable, @Nullable Bounds oldValue, @Nullable Bounds newValue) {
         revalidateLayout();
     }
 
-    private void onZoomFactorChanged(@NonNull Observable observable) {
+    private void onZoomFactorChanged(Observable observable) {
         revalidateLayout();
     }
 
@@ -435,7 +434,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public void scrollRectToVisible(@NonNull Bounds boundsInView) {
+    public void scrollRectToVisible(Bounds boundsInView) {
         zoomableScrollPane.scrollViewRectToVisible(boundsInView);
     }
 
@@ -505,7 +504,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
     }
 
     @Override
-    public @NonNull DoubleProperty zoomFactorProperty() {
+    public DoubleProperty zoomFactorProperty() {
         return zoomableScrollPane.zoomFactorProperty();
     }
 

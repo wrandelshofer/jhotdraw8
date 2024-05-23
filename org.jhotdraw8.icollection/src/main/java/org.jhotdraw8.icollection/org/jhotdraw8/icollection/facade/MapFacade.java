@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Iterator;
@@ -28,29 +27,29 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class MapFacade<K, V> extends AbstractMap<K, V> {
-    protected final @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
-    protected final @NonNull Supplier<Spliterator<Entry<K, V>>> spliteratorFunction;
-    protected final @NonNull IntSupplier sizeFunction;
-    protected final @NonNull Predicate<Object> containsKeyFunction;
-    protected final @NonNull Runnable clearFunction;
-    protected final @NonNull Function<Object, V> removeFunction;
-    protected final @NonNull Function<K, V> getFunction;
-    protected final @NonNull BiFunction<K, V, V> putFunction;
+    protected final Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
+    protected final Supplier<Spliterator<Entry<K, V>>> spliteratorFunction;
+    protected final IntSupplier sizeFunction;
+    protected final Predicate<Object> containsKeyFunction;
+    protected final Runnable clearFunction;
+    protected final Function<Object, V> removeFunction;
+    protected final Function<K, V> getFunction;
+    protected final BiFunction<K, V, V> putFunction;
 
 
-    public MapFacade(@NonNull ReadOnlyMap<K, V> m) {
+    public MapFacade(ReadOnlyMap<K, V> m) {
         this(m::iterator, m::spliterator, m::size, m::containsKey, m::get, null, null, null);
     }
 
-    public MapFacade(@NonNull Map<K, V> m) {
+    public MapFacade(Map<K, V> m) {
         this(() -> m.entrySet().iterator(), () -> m.entrySet().spliterator(), m::size, m::containsKey, m::get, m::clear,
                 m::remove, m::put);
     }
 
-    public MapFacade(@NonNull Supplier<Iterator<Entry<K, V>>> iteratorFunction,
-                     @NonNull Supplier<Spliterator<Entry<K, V>>> spliteratorFunction, @NonNull IntSupplier sizeFunction,
-                     @NonNull Predicate<Object> containsKeyFunction,
-                     @NonNull Function<K, V> getFunction,
+    public MapFacade(Supplier<Iterator<Entry<K, V>>> iteratorFunction,
+                     Supplier<Spliterator<Entry<K, V>>> spliteratorFunction, IntSupplier sizeFunction,
+                     Predicate<Object> containsKeyFunction,
+                     Function<K, V> getFunction,
                      @Nullable Runnable clearFunction,
                      @Nullable Function<Object, V> removeFunction,
                      @Nullable BiFunction<K, V, V> putFunction) {
@@ -106,7 +105,7 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
                 iteratorFunction,
                 spliteratorFunction, sizeFunction,

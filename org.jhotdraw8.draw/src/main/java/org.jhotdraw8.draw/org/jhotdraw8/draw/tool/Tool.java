@@ -8,8 +8,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.scene.Node;
 import javafx.scene.input.KeyCombination;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -103,7 +102,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the drawingView property, with {@code getBean()} returning this
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
-    @NonNull ObjectProperty<DrawingView> drawingViewProperty();
+    ObjectProperty<DrawingView> drawingViewProperty();
 
     /**
      * The currently active drawing editor. By convention, this property is only
@@ -112,7 +111,7 @@ public interface Tool extends PropertyBean, Disableable {
      * @return the drawingView property, with {@code getBean()} returning this
      * tool, and {@code getLabel()} returning {@code DRAWING_VIEW_PROPERTY}.
      */
-    @NonNull ObjectProperty<DrawingEditor> drawingEditorProperty();
+    ObjectProperty<DrawingEditor> drawingEditorProperty();
 
     // ---
     // Behaviors
@@ -123,7 +122,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @return a node
      */
-    @NonNull Node getNode();
+    Node getNode();
 
     /**
      * Deletes the selection. Depending on the tool, this could be selected
@@ -222,7 +221,7 @@ public interface Tool extends PropertyBean, Disableable {
      *
      * @param editor the editor
      */
-    void deactivate(@NonNull DrawingEditor editor);
+    void deactivate(DrawingEditor editor);
 
     /**
      * Activates the tool for the given editor. This method is called whenever

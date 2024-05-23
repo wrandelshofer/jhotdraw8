@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Path2D;
 
@@ -55,7 +54,7 @@ public class AwtPathBuilder extends AbstractPathBuilder<Path2D.Double> {
     }
 
     @Override
-    public Path2D.@NonNull Double build() {
+    public Path2D.Double build() {
         path.trimToSize();
         return path;
     }

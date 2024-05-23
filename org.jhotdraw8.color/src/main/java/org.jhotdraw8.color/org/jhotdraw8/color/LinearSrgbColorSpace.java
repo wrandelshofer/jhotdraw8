@@ -6,7 +6,6 @@
 package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Linear {@code sRGB} Color Space.
@@ -30,12 +29,12 @@ public class LinearSrgbColorSpace extends ParametricLinearRgbColorSpace {
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
+    public float[] toRGB(float[] colorvalue, float[] rgb) {
         return fromLinear(colorvalue, rgb);
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
+    public float[] fromRGB(float[] rgb, float[] colorvalue) {
         return toLinear(rgb, colorvalue);
     }
 

@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
@@ -21,24 +20,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class AbstractImmutableNavigableSetTest extends AbstractImmutableSortedSetTest {
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> newInstance();
+    protected abstract <E> ImmutableNavigableSet<E> newInstance();
 
     @Override
-    protected abstract @NonNull <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m);
+    protected abstract <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> toImmutableInstance(Set<E> m);
+    protected abstract <E> ImmutableNavigableSet<E> toImmutableInstance(Set<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> toClonedInstance(ImmutableSet<E> m);
+    protected abstract <E> ImmutableNavigableSet<E> toClonedInstance(ImmutableSet<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableNavigableSet<E> newInstance(Iterable<E> m);
+    protected abstract <E> ImmutableNavigableSet<E> newInstance(Iterable<E> m);
 
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
         ImmutableNavigableSet<Key> instance = newInstance(data.a());
         instance = instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeLast);

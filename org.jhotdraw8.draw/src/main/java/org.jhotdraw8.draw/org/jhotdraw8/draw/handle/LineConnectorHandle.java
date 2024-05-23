@@ -18,8 +18,6 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -30,6 +28,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -47,20 +46,20 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 public class LineConnectorHandle extends AbstractConnectorHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
 
-    private @NonNull Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
-    private final @NonNull Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private Background REGION_BACKGROUND_CONNECTED = new Background(new BackgroundFill(Color.BLUE, null, null));
+    private final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
 
-    private static final @NonNull Function<Color, Border> REGION_BORDER = color -> new Border(
+    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(2)),
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
-    private static final @NonNull Circle REGION_SHAPE = new Circle(4);
+    private static final Circle REGION_SHAPE = new Circle(4);
 
-    private final @NonNull Region targetNode;
+    private final Region targetNode;
 
-    public LineConnectorHandle(@NonNull ConnectingFigure figure,
-                               @NonNull NonNullMapAccessor<CssPoint2D> pointKey,
-                               @NonNull MapAccessor<Connector> connectorKey, @NonNull MapAccessor<Figure> targetKey) {
+    public LineConnectorHandle(ConnectingFigure figure,
+                               NonNullMapAccessor<CssPoint2D> pointKey,
+                               MapAccessor<Connector> connectorKey, MapAccessor<Figure> targetKey) {
         super(figure, pointKey,
                 connectorKey, targetKey);
         targetNode = new Region();
@@ -74,7 +73,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
 
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (targetNode.getWidth() != size) {
             targetNode.resize(size, size);
@@ -88,7 +87,7 @@ public class LineConnectorHandle extends AbstractConnectorHandle {
 
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonNull(pointKey).getConvertedValue();

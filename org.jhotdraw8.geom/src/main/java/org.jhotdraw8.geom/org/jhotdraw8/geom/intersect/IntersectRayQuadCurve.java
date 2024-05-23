@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
@@ -37,7 +36,7 @@ public class IntersectRayQuadCurve {
      * @param maxT maximal parameter value for ray 'a'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectRayQuadCurve(@NonNull Point2D ao, @NonNull Point2D ad, double maxT, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
+    public static IntersectionResult intersectRayQuadCurve(Point2D ao, Point2D ad, double maxT, Point2D p0, Point2D p1, Point2D p2) {
         return intersectRayQuadCurve(
                 ao.getX(), ao.getY(),
                 ad.getX(), ad.getY(), maxT,
@@ -46,7 +45,7 @@ public class IntersectRayQuadCurve {
                 p2.getX(), p2.getY());
     }
 
-    public static @NonNull IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
+    public static IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
                                                                     double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         return intersectRayQuadCurve(
                 aox, aoy,
@@ -56,7 +55,7 @@ public class IntersectRayQuadCurve {
                 p2x, p2y, Rectangles.REAL_THRESHOLD);
     }
 
-    public static @NonNull IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
+    public static IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
                                                                     double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
                                                                     double epsilon) {
         /* steps:

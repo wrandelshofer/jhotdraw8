@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * OKLab Gamut Mapper.
@@ -19,7 +18,7 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public class OKLabGamutMapper implements GamutMapper {
     @Override
-    public float @NonNull [] map(float @NonNull [] value, float @NonNull [] mapped) {
+    public float[] map(float[] value, float[] mapped) {
         return new float[0];
     }
 }

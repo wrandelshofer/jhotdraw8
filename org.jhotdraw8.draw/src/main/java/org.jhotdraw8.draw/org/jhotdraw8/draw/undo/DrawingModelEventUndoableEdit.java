@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.undo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.model.DrawingModelEvent;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -16,9 +15,9 @@ import java.io.Serial;
 public class DrawingModelEventUndoableEdit extends AbstractUndoableEdit {
     @Serial
     private static final long serialVersionUID = 0L;
-    private final @NonNull DrawingModelEvent event;
+    private final DrawingModelEvent event;
 
-    public DrawingModelEventUndoableEdit(@NonNull DrawingModelEvent event) {
+    public DrawingModelEventUndoableEdit(DrawingModelEvent event) {
         this.event = event;
     }
 

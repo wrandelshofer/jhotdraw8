@@ -6,8 +6,7 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.geometry.Dimension2D;
 import javafx.stage.FileChooser;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.application.resources.Resources;
@@ -40,7 +39,7 @@ import java.util.function.Supplier;
  */
 public class ImageCreationTool extends CreationTool {
 
-    private final @NonNull MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;
+    private final MapAccessor<URI> uriKey = ImageFigure.IMAGE_URI;
     private URIChooser uriChooser;
     private @Nullable URI uri;
     private Future<Dimension2D> dimensionFuture;
@@ -50,7 +49,7 @@ public class ImageCreationTool extends CreationTool {
     }
 
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         super.activate(editor);
         Map.Entry<URI, Future<Dimension2D>> entry = chooseFile();
         if (entry != null) {
@@ -92,7 +91,7 @@ public class ImageCreationTool extends CreationTool {
         return dim != null ? dim.getWidth() : super.getDefaultWidth();
     }
 
-    protected @NonNull URIChooser createURIChooser() {
+    protected URIChooser createURIChooser() {
         FileURIChooser c = new FileURIChooser();
         c.setMode(FileURIChooser.Mode.OPEN);
         c.getFileChooser().getExtensionFilters().add(new FileChooser.ExtensionFilter("Image", "*.bmp", "*.gif", "*.jpg", "*.png"));

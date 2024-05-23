@@ -5,14 +5,13 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.geometry.BoundingBox;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -39,7 +38,7 @@ public class BoundingBoxCssConverter extends AbstractCssConverter<BoundingBox> {
     }
 
     @Override
-    public @NonNull BoundingBox parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public BoundingBox parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, width, height;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨BoundingBox⟩: ⟨min-x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
@@ -57,7 +56,7 @@ public class BoundingBoxCssConverter extends AbstractCssConverter<BoundingBox> {
     }
 
     @Override
-    protected <TT extends BoundingBox> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends BoundingBox> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_NUMBER, value.getMinX()));
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));

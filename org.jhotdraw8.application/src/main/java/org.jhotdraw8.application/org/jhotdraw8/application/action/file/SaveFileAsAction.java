@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application.action.file;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.FileBasedActivity;
 
 /**
@@ -15,14 +14,14 @@ import org.jhotdraw8.application.FileBasedActivity;
  */
 public class SaveFileAsAction extends SaveFileAction {
 
-    public static final @NonNull String ID = "file.saveAs";
+    public static final String ID = "file.saveAs";
 
     /**
      * Creates a new instance.
      *
      * @param view the view
      */
-    public SaveFileAsAction(@NonNull FileBasedActivity view) {
+    public SaveFileAsAction(FileBasedActivity view) {
         super(view, ID, true);
     }
 

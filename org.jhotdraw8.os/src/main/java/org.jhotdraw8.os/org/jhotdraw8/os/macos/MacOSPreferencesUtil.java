@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.os.macos;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 
 import java.io.File;
@@ -28,11 +27,11 @@ public class MacOSPreferencesUtil {
     /**
      * Path to global preferences.
      */
-    public static final @NonNull File GLOBAL_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/.GlobalPreferences.plist");
+    public static final File GLOBAL_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/.GlobalPreferences.plist");
     /**
      * Path to finder preferences.
      */
-    public static final @NonNull File FINDER_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/com.apple.finder.plist");
+    public static final File FINDER_PREFERENCES = new File(System.getProperty("user.home"), "Library/Preferences/com.apple.finder.plist");
     /**
      * Each entry in this hash map represents a cached preferences file.
      */
@@ -44,15 +43,15 @@ public class MacOSPreferencesUtil {
     public MacOSPreferencesUtil() {
     }
 
-    public static @Nullable String getString(@NonNull File file, @NonNull String key) {
+    public static @Nullable String getString(File file, String key) {
         return (String) get(file, key);
     }
 
-    public static @NonNull String getString(@NonNull File file, String key, String defaultValue) {
+    public static String getString(File file, String key, String defaultValue) {
         return (String) get(file, key, defaultValue);
     }
 
-    public static boolean isStringEqualTo(@NonNull File file, String key, String defaultValue, String compareWithThisValue) {
+    public static boolean isStringEqualTo(File file, String key, String defaultValue, String compareWithThisValue) {
         return get(file, key, defaultValue).equals(compareWithThisValue);
     }
 
@@ -63,14 +62,14 @@ public class MacOSPreferencesUtil {
      * @param key  the key may contain tabulator separated entries to directly access a value in a sub-dictionary
      * @return the value associated with the key
      */
-    public static @Nullable Object get(@NonNull File file, @NonNull String key) {
+    public static @Nullable Object get(File file, String key) {
         ensureCached(file);
         final Map<String, Object> map = cachedFiles.get(file);
         return map == null ? null : get(map, key);
     }
 
     @SuppressWarnings("unchecked")
-    public static @NonNull Map<String, Object> flatten(@NonNull Map<String, Object> map) {
+    public static Map<String, Object> flatten(Map<String, Object> map) {
         LinkedHashMap<String, Object> flattened = new LinkedHashMap<>();
         final Object plist = map.get("plist");
         if (plist instanceof List<?> list) {
@@ -83,7 +82,7 @@ public class MacOSPreferencesUtil {
         return flattened;
     }
 
-    public static @Nullable Object get(@NonNull Map<String, Object> map, @NonNull String key) {
+    public static @Nullable Object get(Map<String, Object> map, String key) {
         final String[] split = key.split("\t");
         final Object plist = map.get("plist");
         if (plist instanceof List<?> list) {
@@ -117,7 +116,7 @@ public class MacOSPreferencesUtil {
      *
      * @return
      */
-    public static @NonNull Set<String> getKeySet(@NonNull File file) {
+    public static Set<String> getKeySet(File file) {
         ensureCached(file);
         return cachedFiles.get(file).keySet();
     }
@@ -145,12 +144,12 @@ public class MacOSPreferencesUtil {
      * @param defaultValue This value is returned when the key does not exist.
      * @return Returns the preferences value.
      */
-    public static Object get(@NonNull File file, String key, Object defaultValue) {
+    public static Object get(File file, String key, Object defaultValue) {
         ensureCached(file);
         return cachedFiles.get(file).getOrDefault(key, defaultValue);
     }
 
-    private static void ensureCached(@NonNull File file) {
+    private static void ensureCached(File file) {
         if (cachedFiles == null) {
             cachedFiles = new ConcurrentHashMap<>();
         }
@@ -172,7 +171,7 @@ public class MacOSPreferencesUtil {
         return osName != null && osName.toLowerCase().startsWith("mac");
     }
 
-    public static void readPreferences(@NonNull File file, @NonNull Map<String, Object> cache) {
+    public static void readPreferences(File file, Map<String, Object> cache) {
         cache.clear();
 
         if (isMacOs()) {

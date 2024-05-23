@@ -4,8 +4,8 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.Points;
+import org.jspecify.annotations.Nullable;
 
 public class IntersectPointRay {
     /**

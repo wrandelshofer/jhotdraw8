@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 
 import java.util.ArrayDeque;
@@ -20,8 +19,8 @@ import java.util.function.Function;
  */
 public class TreeDepthFirstSpliterator<V> extends AbstractEnumerator<V> {
 
-    private final @NonNull Function<V, Iterable<V>> nextFunction;
-    private final @NonNull Deque<V> deque;
+    private final Function<V, Iterable<V>> nextFunction;
+    private final Deque<V> deque;
 
     /**
      * Creates a new instance.
@@ -29,7 +28,7 @@ public class TreeDepthFirstSpliterator<V> extends AbstractEnumerator<V> {
      * @param nextFunction the nextFunction
      * @param root         the root vertex
      */
-    public TreeDepthFirstSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root) {
+    public TreeDepthFirstSpliterator(Function<V, Iterable<V>> nextFunction, V root) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         Objects.requireNonNull(nextFunction, "nextFunction");
         Objects.requireNonNull(root, "root");

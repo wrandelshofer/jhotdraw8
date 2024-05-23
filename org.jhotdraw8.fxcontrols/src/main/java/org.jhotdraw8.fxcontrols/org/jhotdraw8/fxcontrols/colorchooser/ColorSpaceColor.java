@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.fxcontrols.colorchooser;
 
-import org.jhotdraw8.annotation.NonNull;
 
 public class ColorSpaceColor {
-    public static final @NonNull ColorSpaceColor WHITE = new ColorSpaceColor();
-    public static final @NonNull ColorSpaceColor TRANSPARENT = new ColorSpaceColor();
+    public static final ColorSpaceColor WHITE = new ColorSpaceColor();
+    public static final ColorSpaceColor TRANSPARENT = new ColorSpaceColor();
 
     /**
      * Don't let anyone instantiate this class.

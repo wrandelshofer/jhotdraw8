@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 
@@ -22,11 +21,11 @@ public class IntersectCircleEllipse {
      * @param ry the y-radius of the ellipse
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectCircleEllipse(@NonNull Point2D cc, double r, @NonNull Point2D ec, double rx, double ry) {
+    public static IntersectionResult intersectCircleEllipse(Point2D cc, double r, Point2D ec, double rx, double ry) {
         return IntersectEllipseEllipse.intersectEllipseEllipse(cc, r, r, ec, rx, ry);
     }
 
-    public static @NonNull IntersectionResult intersectCircleEllipse(double cx1, double cy1, double r1, double cx2, double cy2, double rx2, double ry2) {
+    public static IntersectionResult intersectCircleEllipse(double cx1, double cy1, double r1, double cx2, double cy2, double rx2, double ry2) {
         return IntersectEllipseEllipse.intersectEllipseEllipse(cx1, cy1, r1, r1, cx2, cy2, rx2, ry2);
     }
 

@@ -37,7 +37,6 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
@@ -52,19 +51,19 @@ import java.util.stream.IntStream;
  * @author Werner Randelshofer
  */
 public class HitTestExampleMain extends Application {
-    private final @NonNull DoubleProperty width = new SimpleDoubleProperty(0.5);
-    private final @NonNull DoubleProperty miterLimit = new SimpleDoubleProperty(10);
-    private final @NonNull ObjectProperty<StrokeLineJoin> lineJoin = new SimpleObjectProperty<>(StrokeLineJoin.MITER);
+    private final DoubleProperty width = new SimpleDoubleProperty(0.5);
+    private final DoubleProperty miterLimit = new SimpleDoubleProperty(10);
+    private final ObjectProperty<StrokeLineJoin> lineJoin = new SimpleObjectProperty<>(StrokeLineJoin.MITER);
     private Shape path = null;
-    private final @NonNull ImageView iview = new ImageView();
+    private final ImageView iview = new ImageView();
     private StackPane canvas;
     private WritableImage image;
-    private final @NonNull Circle mouse = new Circle(0, 0, 4);
-    private final @NonNull DoubleProperty epsilon = mouse.radiusProperty();
+    private final Circle mouse = new Circle(0, 0, 4);
+    private final DoubleProperty epsilon = mouse.radiusProperty();
     private String ch = "H";
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         BorderPane borderPane = new BorderPane();
         HBox hbox = new HBox();
         Slider widthSlider = new Slider();
@@ -197,7 +196,7 @@ public class HitTestExampleMain extends Application {
         mouse.setFill(getColor(r));
     }
 
-    private @NonNull Color getColor(IntersectionResult r) {
+    private Color getColor(IntersectionResult r) {
         return switch (r.getStatus()) {
             case INTERSECTION -> Color.RED;
             case NO_INTERSECTION -> Color.YELLOW;

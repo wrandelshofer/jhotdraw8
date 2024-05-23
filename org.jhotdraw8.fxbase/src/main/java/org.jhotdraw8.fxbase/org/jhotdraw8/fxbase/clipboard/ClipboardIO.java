@@ -5,7 +5,7 @@
 package org.jhotdraw8.fxbase.clipboard;
 
 import javafx.scene.input.Clipboard;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 

@@ -24,8 +24,6 @@ import javafx.scene.control.TreeTableView;
 import javafx.scene.control.cell.TextFieldTreeTableCell;
 import javafx.util.Callback;
 import javafx.util.converter.DefaultStringConverter;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.base.text.CachingCollator;
 import org.jhotdraw8.base.text.NaturalSortCollator;
@@ -47,6 +45,7 @@ import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.xml.converter.WordListXmlConverter;
 import org.jhotdraw8.xml.converter.WordSetXmlConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,10 +70,10 @@ import java.util.function.Supplier;
  */
 public class HierarchyInspector extends AbstractDrawingViewInspector {
 
-    private final @NonNull Comparator<String> collator = new CachingCollator(new NaturalSortCollator(Locale.ENGLISH));
-    private final @NonNull WordListXmlConverter wordListConverter = new WordListXmlConverter();
-    private final @NonNull WordSetXmlConverter wordSetConverter = new WordSetXmlConverter();
-    private final @NonNull SimpleDrawingModel stubDrawingModel = new SimpleDrawingModel();
+    private final Comparator<String> collator = new CachingCollator(new NaturalSortCollator(Locale.ENGLISH));
+    private final WordListXmlConverter wordListConverter = new WordListXmlConverter();
+    private final WordSetXmlConverter wordSetConverter = new WordSetXmlConverter();
+    private final SimpleDrawingModel stubDrawingModel = new SimpleDrawingModel();
     private @Nullable DrawingView drawingView;
     @FXML
     private TreeTableColumn<Figure, String> idColumn;
@@ -89,7 +88,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreeTableColumn<Figure, ImmutableSet<String>> styleClassesColumn;
     @FXML
     private TreeTableView<Figure> treeView;
-    private final @NonNull InvalidationListener treeSelectionHandler = change -> {
+    private final InvalidationListener treeSelectionHandler = change -> {
         if (model.isUpdating()) {
 //        updateSelectionInTree();
         } else {
@@ -101,18 +100,17 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     @FXML
     private TreeTableColumn<Figure, Boolean> visibleColumn;
     private boolean willUpdateSelectionInTree;
-    private final @NonNull SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
+    private final SetChangeListener<Figure> viewSelectionHandler = this::updateSelectionInTreeLater;
 
     public HierarchyInspector() {
         this(HierarchyInspector.class.getResource("HierarchyInspector.fxml"),
                 InspectorLabels.getResources().asResourceBundle());
     }
 
-    public HierarchyInspector(@NonNull URL fxmlUrl, ResourceBundle resources) {
+    public HierarchyInspector(URL fxmlUrl, ResourceBundle resources) {
         init(fxmlUrl, resources);
     }
 
-    @NonNull
     private Callback<TreeTableView<Figure>, TreeTableRow<Figure>> createRow() {
         return tv -> {
             ContextMenu contextMenu = new ContextMenu();
@@ -168,7 +166,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         return node;
     }
 
-    private void init(@NonNull URL fxmlUrl, ResourceBundle resources) {
+    private void init(URL fxmlUrl, ResourceBundle resources) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
         loader.setResources(resources);
@@ -225,7 +223,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                 new Callback<>() {
 
                     @Override
-                    public @NonNull TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
+                    public TreeTableCell<Figure, String> call(TreeTableColumn<Figure, String> paramTableColumn) {
                         return new TextFieldTreeTableCell<>(new DefaultStringConverter()) {
                             @Override
                             public void cancelEdit() {
@@ -279,10 +277,10 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             //   so that it updates automatically.
 
             @Override
-            public @NonNull TreeTableCell<Figure, ImmutableSet<String>> call(TreeTableColumn<Figure, ImmutableSet<String>> paramTableColumn) {
+            public TreeTableCell<Figure, ImmutableSet<String>> call(TreeTableColumn<Figure, ImmutableSet<String>> paramTableColumn) {
                 // Type arguments needed for Java 8!
                 return new TextFieldTreeTableCell<>() {
-                    private final @NonNull Set<String> syntheticClasses = new HashSet<>();
+                    private final Set<String> syntheticClasses = new HashSet<>();
 
                     {
                         setConverter(new StringConverterAdapter<>(wordSetConverter));
@@ -296,7 +294,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void commitEdit(@NonNull ImmutableSet<String> newValue) {
+                    public void commitEdit(ImmutableSet<String> newValue) {
                         ImmutableSet<String> newValueSet = newValue.removeAll(syntheticClasses);
                         super.commitEdit(newValueSet);
                     }

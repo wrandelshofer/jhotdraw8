@@ -20,7 +20,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.fxbase.binding.Via;
 
@@ -49,8 +48,8 @@ import java.util.ResourceBundle;
  */
 public class HlsChooser extends HBox {
 
-    private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
-    private final @NonNull Via<ColorChooserPaneModel> viaModel = new Via<>(model);
+    private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
+    private final Via<ColorChooserPaneModel> viaModel = new Via<>(model);
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
     @FXML // URL location of the FXML file that was given to the FXMLLoader
@@ -148,7 +147,7 @@ public class HlsChooser extends HBox {
         this.model.set(model);
     }
 
-    public @NonNull ObjectProperty<ColorChooserPaneModel> modelProperty() {
+    public ObjectProperty<ColorChooserPaneModel> modelProperty() {
         return model;
     }
 }

@@ -5,7 +5,7 @@
 package org.jhotdraw8.application;
 
 import javafx.beans.property.ReadOnlyBooleanProperty;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * EditableComponent defines an API for objects which can perform clipboard operations

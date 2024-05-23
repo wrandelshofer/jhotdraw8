@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -30,9 +29,9 @@ import java.util.function.Consumer;
  */
 public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> {
 
-    private final @NonNull SizeCssConverter sizeConverter = new SizeCssConverter(false);
-    private static final @NonNull Map<String, CssDimension2D> paperSizes;
-    private static final @NonNull Map<CssDimension2D, String> sizePapers;
+    private final SizeCssConverter sizeConverter = new SizeCssConverter(false);
+    private static final Map<String, CssDimension2D> paperSizes;
+    private static final Map<CssDimension2D, String> sizePapers;
 
     static {
         SequencedMap<String, CssDimension2D> m = new LinkedHashMap<>();
@@ -67,14 +66,14 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
         sizePapers = x;
     }
 
-    private static final @NonNull String LANDSCAPE = "landscape";
-    private static final @NonNull String PORTRAIT = "portrait";
+    private static final String LANDSCAPE = "landscape";
+    private static final String PORTRAIT = "portrait";
 
     public PaperSizeCssConverter() {
         super(false);
     }
 
-    private @Nullable CssDimension2D parsePageSize(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
+    private @Nullable CssDimension2D parsePageSize(CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT) {
             CssDimension2D paperSize = paperSizes.get(tt.currentString());
             if (paperSize == null) {
@@ -103,7 +102,7 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @NonNull CssDimension2D value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, CssDimension2D value) throws IOException {
         String paper = sizePapers.get(value);
         if (paper != null) {
             out.append(paper);
@@ -115,12 +114,12 @@ public class PaperSizeCssConverter extends AbstractCssConverter<CssDimension2D> 
     }
 
     @Override
-    public @NonNull CssDimension2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssDimension2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         return parsePageSize(tt, idResolver);
     }
 
     @Override
-    protected <TT extends CssDimension2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssDimension2D> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         String paper = sizePapers.get(value);
         if (paper != null) {
             boolean first = true;

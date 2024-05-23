@@ -7,8 +7,7 @@ package org.jhotdraw8.draw.render;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -19,8 +18,8 @@ import java.util.Map;
 import java.util.Objects;
 
 public class SimpleRenderContext implements WritableRenderContext {
-    private final @NonNull Map<Figure, Node> nodeMap = new HashMap<>();
-    private final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    private final Map<Figure, Node> nodeMap = new HashMap<>();
+    private final ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
     public SimpleRenderContext() {
     }
@@ -30,12 +29,12 @@ public class SimpleRenderContext implements WritableRenderContext {
         return nodeMap.computeIfAbsent(figure, f -> f.createNode(this));
     }
 
-    public @NonNull ObservableMap<Key<?>, Object> getProperties() {
+    public ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 
     @Override
-    public <T> void set(@NonNull MapAccessor<T> key, @Nullable T value) {
+    public <T> void set(MapAccessor<T> key, @Nullable T value) {
         key.set(properties, value);
     }
 
@@ -47,7 +46,7 @@ public class SimpleRenderContext implements WritableRenderContext {
      * @return the value
      */
     @Override
-    public @Nullable <T> T get(@NonNull MapAccessor<T> key) {
+    public @Nullable <T> T get(MapAccessor<T> key) {
         return key.get(getProperties());
     }
 
@@ -59,7 +58,7 @@ public class SimpleRenderContext implements WritableRenderContext {
      * @return the value
      */
     @Override
-    public @NonNull <T> T getNonNull(@NonNull NonNullMapAccessor<T> key) {
+    public <T> T getNonNull(NonNullMapAccessor<T> key) {
         T value = key.get(getProperties());
         return Objects.requireNonNull(value, "value");
     }

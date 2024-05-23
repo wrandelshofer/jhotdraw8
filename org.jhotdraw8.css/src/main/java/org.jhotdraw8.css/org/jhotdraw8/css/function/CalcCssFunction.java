@@ -4,14 +4,13 @@
  */
 package org.jhotdraw8.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -49,22 +48,22 @@ public class CalcCssFunction<T> extends AbstractMathCssFunction<T> {
     /**
      * Function name.
      */
-    public static final @NonNull String NAME = "calc";
+    public static final String NAME = "calc";
 
     public CalcCssFunction() {
         this(NAME);
     }
 
-    public CalcCssFunction(@NonNull String name) {
+    public CalcCssFunction(String name) {
         super(name);
     }
 
     @Override
-    public void process(@NonNull T element,
-                        @NonNull CssTokenizer tt,
-                        @NonNull SelectorModel<T> model,
-                        @NonNull CssFunctionProcessor<T> functionProcessor,
-                        @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
+    public void process(T element,
+                        CssTokenizer tt,
+                        SelectorModel<T> model,
+                        CssFunctionProcessor<T> functionProcessor,
+                        Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         int line = tt.getLineNumber();
         int start = tt.getStartPosition();
         CssSize dim = parseCalcFunction(element, tt, functionProcessor);
@@ -72,7 +71,7 @@ public class CalcCssFunction<T> extends AbstractMathCssFunction<T> {
         produceNumberPercentageOrDimension(out, dim, line, start, end);
     }
 
-    private @Nullable CssSize parseCalcFunction(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    private @Nullable CssSize parseCalcFunction(T element, CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "(): " + getName() + "() function expected.");
         if (!getName().equals(tt.currentStringNonNull())) {
             throw new ParseException(getName() + "(): " + getName() + "() function expected.", tt.getStartPosition());

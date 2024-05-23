@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.print.PrinterJob;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
@@ -26,7 +25,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
  */
 public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    public static final @NonNull String ID = "file.print";
+    public static final String ID = "file.print";
 
 
     /**
@@ -35,13 +34,13 @@ public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
      * @param activity the activity
      */
     @SuppressWarnings("this-escape")
-    public PrintFileAction(@NonNull FileBasedActivity activity) {
+    public PrintFileAction(FileBasedActivity activity) {
         super(activity);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull FileBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, FileBasedActivity activity) {
         WorkState<Void> workState = new SimpleWorkState<>();
         activity.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();

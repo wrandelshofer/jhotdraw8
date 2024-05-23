@@ -5,8 +5,6 @@
 package org.jhotdraw8.draw.css.model;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.ast.TypeSelector;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -25,6 +23,7 @@ import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -50,36 +49,36 @@ import java.util.stream.Collectors;
  * @author Werner Randelshofer
  */
 public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
-    public static final @NonNull String JAVA_CLASS_NAMESPACE = "http://java.net";
+    public static final String JAVA_CLASS_NAMESPACE = "http://java.net";
 
     /**
      * Maps an attribute name to a key.
      */
-    private final @NonNull Map<Class<?>, Map<QualifiedName, WritableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
-    private final @NonNull Map<Class<?>, Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Map<QualifiedName, WritableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
     /**
      * Maps a key to an attribute name.
      */
-    private final @NonNull ConcurrentHashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new ConcurrentHashMap<>();
-    private final @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
-    private final @NonNull ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<WritableStyleableMapAccessor<?>, QualifiedName> keyToNameMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
 
     public FigureSelectorModel() {
     }
 
 
     @Override
-    public boolean hasId(@NonNull Figure element, @NonNull String id) {
+    public boolean hasId(Figure element, String id) {
         return id.equals(element.getId());
     }
 
     @Override
-    public String getId(@NonNull Figure element) {
+    public String getId(Figure element) {
         return element.getId();
     }
 
     @Override
-    public boolean hasType(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String type) {
+    public boolean hasType(Figure element, @Nullable String namespacePattern, String type) {
         if (namespacePattern == null || TypeSelector.ANY_NAMESPACE.equals(namespacePattern)) {
             return type.equals(element.getTypeSelector());
         }
@@ -90,27 +89,27 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public @Nullable QualifiedName getType(@NonNull Figure element) {
+    public @Nullable QualifiedName getType(Figure element) {
         return new QualifiedName(null, element.getTypeSelector());
     }
 
     @Override
-    public boolean hasStyleClass(@NonNull Figure element, @NonNull String clazz) {
+    public boolean hasStyleClass(Figure element, String clazz) {
         return element.getStyleClasses().contains(clazz);
     }
 
     @Override
-    public @NonNull ReadOnlySet<String> getStyleClasses(@NonNull Figure element) {
+    public ReadOnlySet<String> getStyleClasses(Figure element) {
         return element.getStyleClasses();
     }
 
     @Override
-    public @NonNull ReadOnlySet<String> getPseudoClasses(final @NonNull Figure element) {
+    public ReadOnlySet<String> getPseudoClasses(final Figure element) {
         return element.getPseudoClassStates();
     }
 
 
-    private WritableStyleableMapAccessor<?> findKey(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+    private WritableStyleableMapAccessor<?> findKey(Figure element, @Nullable String namespace, String attributeName) {
         Map<QualifiedName, WritableStyleableMapAccessor<?>> mm = nameToKeyMap.computeIfAbsent(element.getClass(), k -> {
             SequencedMap<QualifiedName, WritableStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
@@ -126,7 +125,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return mm.get(new QualifiedName(namespace, element.getClass() + "$" + attributeName));
     }
 
-    private ReadOnlyStyleableMapAccessor<?> findReadableKey(@NonNull Figure element, @Nullable String namespacePattern, String attributeName) {
+    private ReadOnlyStyleableMapAccessor<?> findReadableKey(Figure element, @Nullable String namespacePattern, String attributeName) {
         Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>> mm = nameToReadableKeyMap.computeIfAbsent(element.getClass(), k -> {
             SequencedMap<QualifiedName, ReadOnlyStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
@@ -145,29 +144,29 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasAttribute(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
+    public boolean hasAttribute(Figure element, @Nullable String namespace, String attributeName) {
         return getReadableMetaMap(element).containsKey(new QualifiedName(namespace, attributeName));
     }
 
     @Override
-    public boolean attributeValueEquals(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String requestedValue) {
+    public boolean attributeValueEquals(Figure element, @Nullable String namespacePattern, String attributeName, String requestedValue) {
         String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return Objects.equals(stringValue, requestedValue);
     }
 
     @Override
-    public boolean attributeValueStartsWith(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+    public boolean attributeValueStartsWith(Figure element, @Nullable String namespacePattern, String attributeName, String substring) {
         String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return stringValue != null && stringValue.startsWith(substring);
     }
 
-    protected @Nullable ReadOnlyStyleableMapAccessor<Object> getReadableAttributeAccessor(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
+    protected @Nullable ReadOnlyStyleableMapAccessor<Object> getReadableAttributeAccessor(Figure element, @Nullable String namespace, String attributeName) {
         @SuppressWarnings("unchecked")
         ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
         return k;
     }
 
-    protected @Nullable String getReadOnlyAttributeValueAsString(@NonNull Figure element, @Nullable String namespace, @NonNull String attributeName) {
+    protected @Nullable String getReadOnlyAttributeValueAsString(Figure element, @Nullable String namespace, String attributeName) {
         ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
         if (k == null) {
             return null;
@@ -181,19 +180,19 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public boolean attributeValueEndsWith(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+    public boolean attributeValueEndsWith(Figure element, @Nullable String namespacePattern, String attributeName, String substring) {
         String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return stringValue != null && stringValue.endsWith(substring);
     }
 
     @Override
-    public boolean attributeValueContains(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String substring) {
+    public boolean attributeValueContains(Figure element, @Nullable String namespacePattern, String attributeName, String substring) {
         String stringValue = getReadOnlyAttributeValueAsString(element, namespacePattern, attributeName);
         return stringValue != null && stringValue.contains(substring);
     }
 
     @Override
-    public boolean attributeValueContainsWord(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String word) {
+    public boolean attributeValueContainsWord(Figure element, @Nullable String namespacePattern, String attributeName, String word) {
         ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespacePattern, attributeName);
         if (k == null) {
             return false;
@@ -216,7 +215,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public boolean hasPseudoClass(@NonNull Figure element, @NonNull String pseudoClass) {
+    public boolean hasPseudoClass(Figure element, String pseudoClass) {
         Set<Figure> fs = additionalPseudoClassStatesProperty().get(pseudoClass);
         if (fs != null && fs.contains(element)) {
             return true;
@@ -228,12 +227,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public Figure getParent(@NonNull Figure element) {
+    public Figure getParent(Figure element) {
         return element.getParent();
     }
 
     @Override
-    public @Nullable Figure getPreviousSibling(@NonNull Figure element) {
+    public @Nullable Figure getPreviousSibling(Figure element) {
         if (element.getParent() == null) {
             return null;
         }
@@ -242,12 +241,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public @NonNull Set<QualifiedName> getAttributeNames(@NonNull Figure element) {
+    public Set<QualifiedName> getAttributeNames(Figure element) {
         return getWritableMetaMap(element).keySet();
     }
 
     @Override
-    public @NonNull Set<QualifiedName> getComposedAttributeNames(@NonNull Figure element) {
+    public Set<QualifiedName> getComposedAttributeNames(Figure element) {
         Set<QualifiedName> attr = new HashSet<>();
         Set<WritableStyleableMapAccessor<?>> attrk = new HashSet<>();
         for (MapAccessor<?> key : element.getSupportedKeys()) {
@@ -267,7 +266,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public @NonNull Set<QualifiedName> getDecomposedAttributeNames(@NonNull Figure element) {
+    public Set<QualifiedName> getDecomposedAttributeNames(Figure element) {
         // FIXME use keyToName map
         Set<QualifiedName> attr = new HashSet<>();
         Set<WritableStyleableMapAccessor<?>> attrk = new HashSet<>();
@@ -283,12 +282,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable String namespacePattern, @NonNull String attributeName) {
+    public @Nullable String getAttributeAsString(Figure element, @Nullable String namespacePattern, String attributeName) {
         return getAttributeAsString(element, StyleOrigin.USER, namespacePattern, attributeName);
     }
 
     @Override
-    public @Nullable String getAttributeAsString(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String attributeName) {
+    public @Nullable String getAttributeAsString(Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, String attributeName) {
         ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {
             return null;
@@ -354,7 +353,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public @Nullable List<CssToken> getAttribute(@NonNull Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, @NonNull String attributeName) {
+    public @Nullable List<CssToken> getAttribute(Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, String attributeName) {
         ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {
             return null;
@@ -392,16 +391,16 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         }
     }
 
-    public @Nullable Converter<?> getConverter(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+    public @Nullable Converter<?> getConverter(Figure element, @Nullable String namespace, String attributeName) {
         WritableStyleableMapAccessor<?> k = findKey(element, namespace, attributeName);
         return k == null ? null : k.getCssConverter();
     }
 
-    public @Nullable WritableStyleableMapAccessor<?> getAccessor(@NonNull Figure element, @Nullable String namespace, String attributeName) {
+    public @Nullable WritableStyleableMapAccessor<?> getAccessor(Figure element, @Nullable String namespace, String attributeName) {
         return findKey(element, namespace, attributeName);
     }
 
-    protected Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> getWritableMetaMap(@NonNull Figure elem) {
+    protected Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> getWritableMetaMap(Figure elem) {
         return figureToMetaMap.computeIfAbsent(elem.getClass(), klass -> {
             Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
@@ -422,7 +421,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         });
     }
 
-    private Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> getReadableMetaMap(@NonNull Figure elem) {
+    private Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> getReadableMetaMap(Figure elem) {
         return figureToReadOnlyMetaMap.computeIfAbsent(elem.getClass(), klass -> {
             Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
@@ -444,7 +443,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(@NonNull Figure elem, @NonNull StyleOrigin origin, @Nullable String namespace, @NonNull String name, @Nullable ReadOnlyList<CssToken> value) {
+    public void setAttribute(Figure elem, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadOnlyList<CssToken> value) {
         Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = getWritableMetaMap(elem);
 
         List<WritableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
@@ -475,7 +474,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         }
     }
 
-    private final @NonNull Map<Object, Object> inlinedValues = new ConcurrentHashMap<>();
+    private final Map<Object, Object> inlinedValues = new ConcurrentHashMap<>();
 
     protected @Nullable Object intern(@Nullable Object convertedValue) {
         return convertedValue == null ? null : inlinedValues.computeIfAbsent(convertedValue, k -> convertedValue);
@@ -514,7 +513,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public void reset(@NonNull Figure elem) {
+    public void reset(Figure elem) {
         elem.resetStyledValues();
     }
 

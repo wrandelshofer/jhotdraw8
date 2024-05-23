@@ -6,7 +6,6 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
@@ -21,12 +20,10 @@ public interface LineConnectingFigure extends ConnectingFigure {
     /**
      * The end position of the line.
      */
-    @NonNull
     CssPoint2DStyleableMapAccessor END = LineFigure.END;
     /**
      * The end connector.
      */
-    @NonNull
     NullableObjectKey<Connector> END_CONNECTOR = new NullableObjectKey<>("endConnector", Connector.class, null);
     /**
      * The end target.
@@ -35,27 +32,22 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * layout observer relationship between the label and the target
      * figure.
      */
-    @NonNull
     NullableObjectKey<Figure> END_TARGET = new NullableObjectKey<>("endTarget", Figure.class, null);
     /**
      * The end position of the line.
      */
-    @NonNull
     CssSizeStyleableKey END_X = LineFigure.END_X;
     /**
      * The end position of the line.
      */
-    @NonNull
     CssSizeStyleableKey END_Y = LineFigure.END_Y;
     /**
      * The start position of the line.
      */
-    @NonNull
     CssPoint2DStyleableMapAccessor START = LineFigure.START;
     /**
      * The start connector.
      */
-    @NonNull
     NullableObjectKey<Connector> START_CONNECTOR = new NullableObjectKey<>("startConnector", Connector.class, null);
     /**
      * The start target.
@@ -64,16 +56,15 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * layout observer relationship between the label and the target
      * figure.
      */
-    @NonNull
     NullableObjectKey<Figure> START_TARGET = new NullableObjectKey<>("startTarget", Figure.class, null);
     /**
      * The start position of the line.
      */
-    @NonNull CssSizeStyleableKey START_X = LineFigure.START_X;
+    CssSizeStyleableKey START_X = LineFigure.START_X;
     /**
      * The start position of the line.
      */
-    @NonNull CssSizeStyleableKey START_Y = LineFigure.START_Y;
+    CssSizeStyleableKey START_Y = LineFigure.START_Y;
 
     default boolean isStartConnected() {
         return get(START_CONNECTOR) != null && get(START_TARGET) != null;
@@ -88,7 +79,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      *
      * @return start target point or start point.
      */
-    default @NonNull Point2D getStartTargetPoint() {
+    default Point2D getStartTargetPoint() {
         Connector connector = get(START_CONNECTOR);
         Figure target = get(START_TARGET);
         if (connector != null && target != null) {
@@ -103,7 +94,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      *
      * @return end target point or end point.
      */
-    default @NonNull Point2D getEndTargetPoint() {
+    default Point2D getEndTargetPoint() {
         Connector connector = get(END_CONNECTOR);
         Figure target = get(END_TARGET);
         if (connector != null && target != null) {

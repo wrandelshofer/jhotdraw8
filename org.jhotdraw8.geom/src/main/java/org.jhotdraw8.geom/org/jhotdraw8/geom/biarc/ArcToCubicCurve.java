@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom.biarc;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.DoubleConsumer2;
 import org.jhotdraw8.base.function.DoubleConsumer6;
 import org.jhotdraw8.base.util.MathUtil;
@@ -84,8 +83,8 @@ public class ArcToCubicCurve {
             double xAxisRotation,
             double x, double y,
             boolean largeArcFlag, boolean sweepFlag,
-            @NonNull DoubleConsumer2 lineTo,
-            @NonNull DoubleConsumer6 curveTo
+            DoubleConsumer2 lineTo,
+            DoubleConsumer6 curveTo
     ) {
         final double x1, y1, x2, y2, phi;
         double rx, ry;

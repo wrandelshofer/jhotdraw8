@@ -6,7 +6,6 @@ package org.jhotdraw8.application.action.edit;
 
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractActivityAction;
@@ -21,9 +20,9 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
  */
 public class RedoAction extends AbstractActivityAction<Activity> {
 
-    public static final @NonNull String ID = "edit.redo";
-    private final @NonNull Resources labels = ApplicationLabels.getResources();
-    private final @NonNull FXUndoManager manager;
+    public static final String ID = "edit.redo";
+    private final Resources labels = ApplicationLabels.getResources();
+    private final FXUndoManager manager;
 
     /**
      * Creates a new instance.
@@ -31,7 +30,7 @@ public class RedoAction extends AbstractActivityAction<Activity> {
      * @param view the view
      */
     @SuppressWarnings("this-escape")
-    public RedoAction(@NonNull Activity view, @NonNull FXUndoManager manager) {
+    public RedoAction(Activity view, FXUndoManager manager) {
         super(view);
         this.manager = manager;
         ApplicationLabels.getResources().configureAction(this, ID);
@@ -49,7 +48,7 @@ public class RedoAction extends AbstractActivityAction<Activity> {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Activity activity) {
+    protected void onActionPerformed(ActionEvent event, Activity activity) {
         manager.redo();
     }
 }

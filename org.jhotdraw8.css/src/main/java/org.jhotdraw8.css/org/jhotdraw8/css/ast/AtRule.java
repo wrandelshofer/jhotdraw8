@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,9 +19,9 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class AtRule extends Rule {
-    private final @NonNull String atKeyword;
-    private final @NonNull ImmutableList<CssToken> header;
-    private final @NonNull ImmutableList<CssToken> body;
+    private final String atKeyword;
+    private final ImmutableList<CssToken> header;
+    private final ImmutableList<CssToken> body;
 
     /**
      * Creates a new instance.
@@ -32,8 +31,8 @@ public class AtRule extends Rule {
      * @param header        the list of header tokens
      * @param body          the list of body tokens
      */
-    public AtRule(@Nullable SourceLocator sourceLocator, @NonNull String atKeyword,
-                  @NonNull List<? extends CssToken> header, @NonNull List<? extends CssToken> body) {
+    public AtRule(@Nullable SourceLocator sourceLocator, String atKeyword,
+                  List<? extends CssToken> header, List<? extends CssToken> body) {
         super(sourceLocator);
         this.atKeyword = atKeyword;
         this.header = VectorList.copyOf(header);
@@ -41,7 +40,7 @@ public class AtRule extends Rule {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder buf = new StringBuilder("AtRule: ");
         buf.append(atKeyword);
         if (!header.isEmpty()) {
@@ -68,7 +67,7 @@ public class AtRule extends Rule {
      *
      * @return the "at-keyword".
      */
-    public @NonNull String getAtKeyword() {
+    public String getAtKeyword() {
         return atKeyword;
     }
 
@@ -77,7 +76,7 @@ public class AtRule extends Rule {
      *
      * @return the header tokens
      */
-    public @NonNull ReadOnlyList<CssToken> getHeader() {
+    public ReadOnlyList<CssToken> getHeader() {
         return header;
     }
 
@@ -86,7 +85,7 @@ public class AtRule extends Rule {
      *
      * @return the body tokens
      */
-    public @NonNull ReadOnlyList<CssToken> getBody() {
+    public ReadOnlyList<CssToken> getBody() {
         return body;
     }
 

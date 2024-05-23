@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ListFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.icollection.impl.iteration.ReadOnlyListSpliterator;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -110,7 +109,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return an iterator.
      */
     @Override
-    default @NonNull Iterator<E> iterator() {
+    default Iterator<E> iterator() {
         return new ReadOnlyListSpliterator<>(this);
     }
 
@@ -120,7 +119,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return an iterator.
      */
     @Override
-    default @NonNull Spliterator<E> spliterator() {
+    default Spliterator<E> spliterator() {
         return new ReadOnlyListSpliterator<>(this);
     }
 
@@ -129,7 +128,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      *
      * @return a list iterator.
      */
-    default @NonNull ListIterator<E> listIterator() {
+    default ListIterator<E> listIterator() {
         return new ReadOnlyListSpliterator<>(this);
     }
 
@@ -140,7 +139,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @param index the start index
      * @return a list iterator.
      */
-    default @NonNull ListIterator<E> listIterator(int index) {
+    default ListIterator<E> listIterator(int index) {
         return new ReadOnlyListSpliterator<>(this, index, size());
     }
 
@@ -149,7 +148,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      *
      * @return the wrapped list
      */
-    default @NonNull List<E> asList() {
+    default List<E> asList() {
         return new ListFacade<>(this);
     }
 
@@ -161,7 +160,6 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @param toIndex   the to index (exclusive)
      * @return the sub list
      */
-    @NonNull
     ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex);
 
     /**
@@ -207,7 +205,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @param <E>  the element type of the list
      * @return {@code true} if the object is equal to this list
      */
-    static <E> boolean listEquals(@NonNull ReadOnlyList<E> list, @Nullable Object o) {
+    static <E> boolean listEquals(ReadOnlyList<E> list, @Nullable Object o) {
         if (o == list) {
             return true;
         }
@@ -236,7 +234,7 @@ public interface ReadOnlyList<E> extends ReadOnlySequencedCollection<E> {
      * @return the ordered sum of the hash codes of the elements in the list
      * @see List#hashCode()
      */
-    static <E> int iteratorToHashCode(@NonNull Iterator<E> iterator) {
+    static <E> int iteratorToHashCode(Iterator<E> iterator) {
         int h = 1;
         while (iterator.hasNext()) {
             E e = iterator.next();

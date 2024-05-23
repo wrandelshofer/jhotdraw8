@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.io;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.DirectedGraph;
 
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class AdjacencyListWriter {
      * @param graph the graph to be dumped
      * @return the dump
      */
-    public <V, A> String write(@NonNull DirectedGraph<V, A> graph) {
+    public <V, A> String write(DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {
             write(w, graph, Object::toString);
@@ -48,7 +47,7 @@ public class AdjacencyListWriter {
      * @param graph the graph to be dumped
      * @throws IOException if writing fails
      */
-    public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
+    public <V, A> void write(Appendable w, DirectedGraph<V, A> graph) throws IOException {
         write(w, graph, Object::toString);
     }
 
@@ -62,7 +61,7 @@ public class AdjacencyListWriter {
      * @param toStringFunction a function which converts a vertex to a string
      * @throws IOException if writing fails
      */
-    public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph, @NonNull Function<V, String> toStringFunction) throws IOException {
+    public <V, A> void write(Appendable w, DirectedGraph<V, A> graph, Function<V, String> toStringFunction) throws IOException {
         {
             int i = 0;
             for (V v : graph.getVertices()) {

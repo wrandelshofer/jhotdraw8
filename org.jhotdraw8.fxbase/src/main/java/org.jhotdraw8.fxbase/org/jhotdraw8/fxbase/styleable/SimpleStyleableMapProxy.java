@@ -5,18 +5,17 @@
 package org.jhotdraw8.fxbase.styleable;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Set;
 
 class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
-    private final @NonNull SimpleStyleableMap<K, V> target;
+    private final SimpleStyleableMap<K, V> target;
     private final @Nullable StyleOrigin origin;
     private final int originOrdinal;
 
-    public SimpleStyleableMapProxy(@NonNull SimpleStyleableMap<K, V> target, @Nullable StyleOrigin origin) {
+    public SimpleStyleableMapProxy(SimpleStyleableMap<K, V> target, @Nullable StyleOrigin origin) {
         this.target = target;
         this.originOrdinal = origin == null ? SimpleStyleableMap.AUTO_ORIGIN : origin.ordinal();
         this.origin = origin;
@@ -34,7 +33,7 @@ class SimpleStyleableMapProxy<K, V> extends AbstractMap<K, V> {
     }
 
     @Override
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public Set<Entry<K, V>> entrySet() {
         return target.entrySet(origin);
     }
 

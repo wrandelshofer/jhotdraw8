@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
@@ -25,11 +24,11 @@ import java.util.function.Predicate;
  */
 public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
         implements ReachabilityChecker<V, C> {
-    private final @NonNull ArcReachabilityAlgo<V, A, C> algo;
-    private final @NonNull C zero;
-    private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
-    private final @NonNull Function3<V, V, A, C> costFunction;
-    private final @NonNull BiFunction<C, C, C> sumFunction;
+    private final ArcReachabilityAlgo<V, A, C> algo;
+    private final C zero;
+    private final Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
+    private final Function3<V, V, A, C> costFunction;
+    private final BiFunction<C, C, C> sumFunction;
 
     /**
      * Creates a new instance.
@@ -44,11 +43,11 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * @param algo             The search algorithm.
      */
     public SimpleReachabilityChecker(
-            @NonNull C zero,
-            @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-            @NonNull Function3<V, V, A, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction,
-            @NonNull ArcReachabilityAlgo<V, A, C> algo) {
+            C zero,
+            Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            Function3<V, V, A, C> costFunction,
+            BiFunction<C, C, C> sumFunction,
+            ArcReachabilityAlgo<V, A, C> algo) {
         if (zero.doubleValue() != 0.0) {
             throw new IllegalArgumentException("zero(" + zero + ") is != 0");
         }
@@ -71,10 +70,10 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * @param <VV>             the vertex data type
      * @return the new {@link SimpleReachabilityChecker} instance.
      */
-    public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
-            @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull Function3<VV, VV, AA, Integer> costFunction,
-            @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
+    public static <VV, AA> SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
+            Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
+            Function3<VV, VV, AA, Integer> costFunction,
+            ArcReachabilityAlgo<VV, AA, Integer> algo) {
         return new SimpleReachabilityChecker<>(0, nextArcsFunction, costFunction, Integer::sum, algo);
     }
 
@@ -89,9 +88,9 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * @param <VV>             the vertex data type
      * @return the new {@link SimpleReachabilityChecker} instance.
      */
-    public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
-            @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull ArcReachabilityAlgo<VV, AA, Integer> algo) {
+    public static <VV, AA> SimpleReachabilityChecker<VV, AA, Integer> newIntCostInstance(
+            Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
+            ArcReachabilityAlgo<VV, AA, Integer> algo) {
         return new SimpleReachabilityChecker<>(0, nextArcsFunction, (u, v, a) -> 1, Integer::sum, algo);
     }
 
@@ -107,18 +106,18 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
      * @param <VV>             the vertex data type
      * @return the new {@link SimpleReachabilityChecker} instance.
      */
-    public static <VV, AA> @NonNull SimpleReachabilityChecker<VV, AA, Long> newLongCostInstance(
-            @NonNull Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
-            @NonNull Function3<VV, VV, AA, Long> costFunction,
-            @NonNull ArcReachabilityAlgo<VV, AA, Long> algo) {
+    public static <VV, AA> SimpleReachabilityChecker<VV, AA, Long> newLongCostInstance(
+            Function<VV, Iterable<Arc<VV, AA>>> nextArcsFunction,
+            Function3<VV, VV, AA, Long> costFunction,
+            ArcReachabilityAlgo<VV, AA, Long> algo) {
         return new SimpleReachabilityChecker<>(0L, nextArcsFunction, costFunction, Long::sum, algo);
     }
 
 
     @Override
-    public boolean isReachable(@NonNull Iterable<V> startVertices,
-                               @NonNull Predicate<V> goalPredicate,
-                               int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
+    public boolean isReachable(Iterable<V> startVertices,
+                               Predicate<V> goalPredicate,
+                               int maxDepth, C costLimit, AddToSet<V> visited) {
         return algo.tryToReach(
                 startVertices, goalPredicate, nextArcsFunction, maxDepth, zero, costLimit,
                 costFunction, sumFunction
@@ -126,8 +125,8 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     }
 
     @Override
-    public boolean isReachable(@NonNull V start,
-                               @NonNull Predicate<V> goalPredicate, int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
+    public boolean isReachable(V start,
+                               Predicate<V> goalPredicate, int maxDepth, C costLimit, AddToSet<V> visited) {
         return algo.tryToReach(
                 Collections.singletonList(start), goalPredicate, nextArcsFunction, maxDepth, zero, costLimit,
                 costFunction, sumFunction
@@ -135,7 +134,7 @@ public class SimpleReachabilityChecker<V, A, C extends Number & Comparable<C>>
     }
 
     @Override
-    public boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited) {
+    public boolean isReachable(V start, V goal, int maxDepth, C costLimit, AddToSet<V> visited) {
         return algo.tryToReach(
                 Collections.singletonList(start), goal::equals, nextArcsFunction, maxDepth, zero, costLimit, costFunction, sumFunction
         );

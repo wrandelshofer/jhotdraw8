@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
@@ -16,12 +15,12 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
  *
  * @author Werner Randelshofer
  */
-public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> implements WritableStyleableMapAccessor<@NonNull CssSize>,
-        NonNullKey<@NonNull CssSize> {
+public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implements WritableStyleableMapAccessor<CssSize>,
+        NonNullKey<CssSize> {
 
     private static final long serialVersionUID = 1L;
 
-    private final Converter<@NonNull CssSize> converter = new SizeCssConverter(false);
+    private final Converter<CssSize> converter = new SizeCssConverter(false);
 
 
     /**
@@ -30,14 +29,14 @@ public class CssSizeStyleableKey extends AbstractStyleableKey<@NonNull CssSize> 
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public CssSizeStyleableKey(String name, @NonNull CssSize defaultValue) {
+    public CssSizeStyleableKey(String name, CssSize defaultValue) {
         super(name, CssSize.class, defaultValue);
 
     }
 
 
     @Override
-    public @NonNull Converter<CssSize> getCssConverter() {
+    public Converter<CssSize> getCssConverter() {
         return converter;
     }
 

@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
 import org.jhotdraw8.icollection.ChampAddOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
@@ -52,14 +51,14 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
      */
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull Function<V, Iterable<V>> nextVerticesFunction,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            Function<V, Iterable<V>> nextVerticesFunction,
             int maxDepth,
-            @NonNull C zero,
-            @NonNull C costLimit,
-            @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
+            C zero,
+            C costLimit,
+            BiFunction<V, V, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
         AlgoArguments.checkZero(zero);
         return VertexBackLinkWithAncestorSet.toVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction, maxDepth),
@@ -76,9 +75,9 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
      * @return on success: a back link, otherwise: null
      */
     public @Nullable VertexBackLinkWithAncestorSet<V> search(
-            final @NonNull Iterable<V> startVertices,
-            final @NonNull Predicate<V> goalPredicate,
-            final @NonNull Function<V, Iterable<V>> nextVerticesFunction,
+            final Iterable<V> startVertices,
+            final Predicate<V> goalPredicate,
+            final Function<V, Iterable<V>> nextVerticesFunction,
             final int maxDepth) {
         AlgoArguments.checkMaxDepth(maxDepth);
 
@@ -112,10 +111,10 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
      * (the latter is ignored when determining whether
      * the result is unique).
      */
-    private @NonNull SimpleOrderedPair<SearchResultType, @Nullable VertexBackLinkWithAncestorSet<V>>
-    searchSingleStartVertex(final @NonNull V startVertex,
-                            final @NonNull Predicate<V> goalPredicate,
-                            final @NonNull Function<V, Iterable<V>> nextVerticesFunction,
+    private SimpleOrderedPair<SearchResultType, @Nullable VertexBackLinkWithAncestorSet<V>>
+    searchSingleStartVertex(final V startVertex,
+                            final Predicate<V> goalPredicate,
+                            final Function<V, Iterable<V>> nextVerticesFunction,
                             final int maxDepth) {
         final Queue<VertexBackLinkWithAncestorSet<V>> queue = new ArrayDeque<>(16);
         final SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);

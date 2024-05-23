@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A read-only interface to a navigable set.

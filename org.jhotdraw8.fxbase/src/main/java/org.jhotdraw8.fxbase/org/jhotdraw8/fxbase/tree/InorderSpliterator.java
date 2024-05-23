@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -21,12 +20,12 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class InorderSpliterator<T> extends AbstractSpliterator<T> {
-    private final @NonNull Function<T, Iterable<T>> getChildrenFunction;
+    private final Function<T, Iterable<T>> getChildrenFunction;
     private @Nullable T root;
     private Spliterator<T> subtree;
-    private final @NonNull Iterator<T> children;
+    private final Iterator<T> children;
 
-    public InorderSpliterator(@NonNull Function<T, Iterable<T>> getChildrenFunction, @NonNull T root) {
+    public InorderSpliterator(Function<T, Iterable<T>> getChildrenFunction, T root) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.getChildrenFunction = getChildrenFunction;
         this.root = root;
@@ -39,7 +38,7 @@ public class InorderSpliterator<T> extends AbstractSpliterator<T> {
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super T> action) {
+    public boolean tryAdvance(Consumer<? super T> action) {
         if (root == null) {
             return false;
         }

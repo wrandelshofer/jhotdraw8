@@ -8,8 +8,7 @@ import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.WeakMapChangeListener;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -25,15 +24,15 @@ import java.util.Objects;
 public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
-    protected @NonNull K key;
-    protected @NonNull ObservableMap<K, V> map;
+    protected K key;
+    protected ObservableMap<K, V> map;
     private @Nullable WeakMapChangeListener<K, V> weakListener;
     /**
      * Here char is used as an uint16.
      */
     private char changing;
 
-    public MapEntryProperty(@NonNull ObservableMap<K, V> map, @NonNull K key, @NonNull Type tClazz) {
+    public MapEntryProperty(ObservableMap<K, V> map, K key, Type tClazz) {
         this.map = map;
         this.key = key;
 
@@ -58,7 +57,7 @@ public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
     }
 
     @Override
-    public void onChanged(@NonNull Change<? extends K, ? extends V> change) {
+    public void onChanged(Change<? extends K, ? extends V> change) {
         if (changing++ == 0) {
             if (this.key.equals(change.getKey())) {
                 if (change.wasAdded()) {// was added, or removed and then added

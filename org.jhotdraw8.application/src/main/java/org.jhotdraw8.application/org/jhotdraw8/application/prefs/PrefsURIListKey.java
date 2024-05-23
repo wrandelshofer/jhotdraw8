@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.application.prefs;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.List;
 import java.util.prefs.Preferences;
@@ -16,17 +15,17 @@ import java.util.prefs.Preferences;
  * @author Werner Randelshofer
  */
 public class PrefsURIListKey {
-    private final @NonNull String key;
-    private final @NonNull List<String> defaultValue;
+    private final String key;
+    private final List<String> defaultValue;
 
 
-    public PrefsURIListKey(@NonNull String key, @NonNull List<String> defaultValue) {
+    public PrefsURIListKey(String key, List<String> defaultValue) {
         this.key = key;
         this.defaultValue = List.copyOf(defaultValue);
 
     }
 
-    public @NonNull List<String> get(Preferences prefs) {
+    public List<String> get(Preferences prefs) {
         return defaultValue;
     }
 

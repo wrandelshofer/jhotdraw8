@@ -20,7 +20,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.color.A98RgbColorSpace;
 import org.jhotdraw8.color.CieLabColorSpace;
@@ -78,78 +77,78 @@ import static org.jhotdraw8.color.util.MathUtil.clamp;
  * </pre>
  */
 public class ColorChooserPaneModel {
-    public static final @NonNull CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
-    public static final @NonNull ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);
-    public static final @NonNull OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
-    public static final @NonNull OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
+    public static final CieLabColorSpace CIE_LAB_COLOR_SPACE = new CieLabColorSpace();
+    public static final ParametricLchColorSpace CIE_LCH_COLOR_SPACE = new ParametricLchColorSpace("CIE LCH", CIE_LAB_COLOR_SPACE);
+    public static final OKLabColorSpace OK_LAB_COLOR_SPACE = new OKLabColorSpace();
+    public static final OKLchColorSpace OK_LCH_COLOR_SPACE = new OKLchColorSpace();
     private final static FloatConverter number = new FloatConverter();
 
     private final static FloatConverter percentageNumber = new FloatConverter();
 
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
+    public final FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty c0 = new SimpleFloatProperty(this, "c0");
+    public final FloatProperty c0 = new SimpleFloatProperty(this, "c0");
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty c1 = new SimpleFloatProperty(this, "c1");
+    public final FloatProperty c1 = new SimpleFloatProperty(this, "c1");
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty c2 = new SimpleFloatProperty(this, "c2");
+    public final FloatProperty c2 = new SimpleFloatProperty(this, "c2");
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty hue = new SimpleFloatProperty(this, "hue");
+    public final FloatProperty hue = new SimpleFloatProperty(this, "hue");
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty hueSliderC0 = new SimpleFloatProperty(this, "hueSliderC0", 0.125f);
+    public final FloatProperty hueSliderC0 = new SimpleFloatProperty(this, "hueSliderC0", 0.125f);
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty hueSliderC1 = new SimpleFloatProperty(this, "hueSliderC1", 0.125f);
+    public final FloatProperty hueSliderC1 = new SimpleFloatProperty(this, "hueSliderC1", 0.125f);
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty hueSliderC2 = new SimpleFloatProperty(this, "hueSliderC2", 0.5f);
+    public final FloatProperty hueSliderC2 = new SimpleFloatProperty(this, "hueSliderC2", 0.5f);
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty chroma = new SimpleFloatProperty(this, "chroma");
+    public final FloatProperty chroma = new SimpleFloatProperty(this, "chroma");
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty lightness = new SimpleFloatProperty(this, "lightness");
+    public final FloatProperty lightness = new SimpleFloatProperty(this, "lightness");
     @SuppressWarnings("this-escape")
-    public final @NonNull FloatProperty c3 = new SimpleFloatProperty(this, "c3");
+    public final FloatProperty c3 = new SimpleFloatProperty(this, "c3");
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<NamedColor> sourceColor = new SimpleObjectProperty<>(this, "chooserColor");
+    public final ObjectProperty<NamedColor> sourceColor = new SimpleObjectProperty<>(this, "chooserColor");
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<ChooserType> chooserType = new SimpleObjectProperty<>(this, "ChooserType");
+    public final ObjectProperty<ChooserType> chooserType = new SimpleObjectProperty<>(this, "ChooserType");
     @SuppressWarnings("this-escape")
-    public final @NonNull ListProperty<ChooserType> chooserTypes = new SimpleListProperty<>(this, "ChooserTypes", FXCollections.observableArrayList());
+    public final ListProperty<ChooserType> chooserTypes = new SimpleListProperty<>(this, "ChooserTypes", FXCollections.observableArrayList());
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepth = new SimpleObjectProperty<>(this, "displayBitDepth");
+    public final ObjectProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepth = new SimpleObjectProperty<>(this, "displayBitDepth");
     @SuppressWarnings("this-escape")
-    public final @NonNull ListProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepths = new SimpleListProperty<>(this, "displayBitDepths", FXCollections.observableArrayList());
+    public final ListProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepths = new SimpleListProperty<>(this, "displayBitDepths", FXCollections.observableArrayList());
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<NamedColor> displayColor = new SimpleObjectProperty<>(this, "displayColor");
+    public final ObjectProperty<NamedColor> displayColor = new SimpleObjectProperty<>(this, "displayColor");
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(this, "displayColorSpace");
+    public final ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(this, "displayColorSpace");
     @SuppressWarnings("this-escape")
-    public final @NonNull ListProperty<NamedColorSpace> displayColorSpaces = new SimpleListProperty<>(this, "displayColorSpaces", FXCollections.observableArrayList());
+    public final ListProperty<NamedColorSpace> displayColorSpaces = new SimpleListProperty<>(this, "displayColorSpaces", FXCollections.observableArrayList());
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<Color> previewColor = new SimpleObjectProperty<>(this, "previewColor");
+    public final ObjectProperty<Color> previewColor = new SimpleObjectProperty<>(this, "previewColor");
     @SuppressWarnings("this-escape")
-    public final @NonNull StringProperty sourceColorField = new SimpleStringProperty(this, "sourceColorField");
+    public final StringProperty sourceColorField = new SimpleStringProperty(this, "sourceColorField");
     @SuppressWarnings("this-escape")
-    public final @NonNull StringProperty targetColorField = new SimpleStringProperty(this, "targetColorField");
+    public final StringProperty targetColorField = new SimpleStringProperty(this, "targetColorField");
     @SuppressWarnings("this-escape")
-    public final @NonNull StringProperty displayColorField = new SimpleStringProperty(this, "displayColorField");
+    public final StringProperty displayColorField = new SimpleStringProperty(this, "displayColorField");
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty<>(this, "chooserColorSpace");
+    public final ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty<>(this, "chooserColorSpace");
     @SuppressWarnings("this-escape")
-    public final @NonNull IntegerProperty sourceColorSpaceHueIndex = new SimpleIntegerProperty(this, "sourceColorSpaceHueIndex");
+    public final IntegerProperty sourceColorSpaceHueIndex = new SimpleIntegerProperty(this, "sourceColorSpaceHueIndex");
     @SuppressWarnings("this-escape")
-    public final @NonNull IntegerProperty sourceColorSpaceLightnessValueIndex = new SimpleIntegerProperty(this, "sourceColorSpaceLightnessValueIndex");
+    public final IntegerProperty sourceColorSpaceLightnessValueIndex = new SimpleIntegerProperty(this, "sourceColorSpaceLightnessValueIndex");
     @SuppressWarnings("this-escape")
-    public final @NonNull IntegerProperty sourceColorSpaceSaturationChromaIndex = new SimpleIntegerProperty(this, "sourceColorSpaceSaturationChromaIndex");
+    public final IntegerProperty sourceColorSpaceSaturationChromaIndex = new SimpleIntegerProperty(this, "sourceColorSpaceSaturationChromaIndex");
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<NamedColor> targetColor = new SimpleObjectProperty<>(this, "targetColor");
+    public final ObjectProperty<NamedColor> targetColor = new SimpleObjectProperty<>(this, "targetColor");
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<NamedColorSpace> targetColorSpace = new SimpleObjectProperty<>(this, "targetColorSpace");
+    public final ObjectProperty<NamedColorSpace> targetColorSpace = new SimpleObjectProperty<>(this, "targetColorSpace");
     @SuppressWarnings("this-escape")
-    public final @NonNull ListProperty<NamedColorSpace> targetColorSpaces = new SimpleListProperty<>(this, "targetColorSpaces", FXCollections.observableArrayList());
+    public final ListProperty<NamedColorSpace> targetColorSpaces = new SimpleListProperty<>(this, "targetColorSpaces", FXCollections.observableArrayList());
     @SuppressWarnings("this-escape")
-    public final @NonNull ObjectProperty<ColorSyntax> targetColorSyntax = new SimpleObjectProperty<>(this, "ColorSyntax");
+    public final ObjectProperty<ColorSyntax> targetColorSyntax = new SimpleObjectProperty<>(this, "ColorSyntax");
     @SuppressWarnings("this-escape")
-    public final @NonNull ListProperty<ColorSyntax> targetColorSyntaxes = new SimpleListProperty<>(this, "ColorSyntaxes", FXCollections.observableArrayList());
+    public final ListProperty<ColorSyntax> targetColorSyntaxes = new SimpleListProperty<>(this, "ColorSyntaxes", FXCollections.observableArrayList());
 
     public ColorChooserPaneModel() {
         sourceColorSpace.addListener(this::updateSourceColorSpaceProperties);
@@ -172,55 +171,55 @@ public class ColorChooserPaneModel {
         targetColorSyntax.addListener(changeListener);
     }
 
-    public @NonNull FloatProperty alphaProperty() {
+    public FloatProperty alphaProperty() {
         return alpha;
     }
 
-    public @NonNull FloatProperty c0Property() {
+    public FloatProperty c0Property() {
         return c0;
     }
 
-    public @NonNull FloatProperty c1Property() {
+    public FloatProperty c1Property() {
         return c1;
     }
 
-    public @NonNull FloatProperty c2Property() {
+    public FloatProperty c2Property() {
         return c2;
     }
 
-    public @NonNull FloatProperty c3Property() {
+    public FloatProperty c3Property() {
         return c3;
     }
 
-    public @NonNull ObjectProperty<NamedColor> sourceColorProperty() {
+    public ObjectProperty<NamedColor> sourceColorProperty() {
         return sourceColor;
     }
 
-    public @NonNull ObjectProperty<ChooserType> chooserTypeProperty() {
+    public ObjectProperty<ChooserType> chooserTypeProperty() {
         return chooserType;
     }
 
-    public @NonNull ListProperty<ChooserType> colorChoosersProperty() {
+    public ListProperty<ChooserType> colorChoosersProperty() {
         return chooserTypes;
     }
 
-    public @NonNull ObjectProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepthProperty() {
+    public ObjectProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepthProperty() {
         return displayBitDepth;
     }
 
-    public @NonNull ListProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepthsProperty() {
+    public ListProperty<Map.Entry<String, ToIntFunction<Integer>>> displayBitDepthsProperty() {
         return displayBitDepths;
     }
 
-    public @NonNull ObjectProperty<NamedColor> displayColorProperty() {
+    public ObjectProperty<NamedColor> displayColorProperty() {
         return displayColor;
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> displayColorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> displayColorSpaceProperty() {
         return displayColorSpace;
     }
 
-    public @NonNull ListProperty<NamedColorSpace> displayColorSpacesProperty() {
+    public ListProperty<NamedColorSpace> displayColorSpacesProperty() {
         return displayColorSpaces;
     }
 
@@ -470,11 +469,11 @@ public class ColorChooserPaneModel {
         displayBitDepth.set(new AbstractMap.SimpleImmutableEntry<>("24", argb -> argb));
     }
 
-    public @NonNull ObjectProperty<Color> previewColorProperty() {
+    public ObjectProperty<Color> previewColorProperty() {
         return previewColor;
     }
 
-    public @NonNull StringProperty sourceColorFieldProperty() {
+    public StringProperty sourceColorFieldProperty() {
         return sourceColorField;
     }
 
@@ -497,39 +496,39 @@ public class ColorChooserPaneModel {
     }
 
 
-    public @NonNull IntegerProperty sourceColorSpaceHueIndexProperty() {
+    public IntegerProperty sourceColorSpaceHueIndexProperty() {
         return sourceColorSpaceHueIndex;
     }
 
-    public @NonNull IntegerProperty sourceColorSpaceLightnessValueIndexProperty() {
+    public IntegerProperty sourceColorSpaceLightnessValueIndexProperty() {
         return sourceColorSpaceLightnessValueIndex;
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> sourceColorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> sourceColorSpaceProperty() {
         return sourceColorSpace;
     }
 
-    public @NonNull IntegerProperty sourceColorSpaceSaturationChromaIndexProperty() {
+    public IntegerProperty sourceColorSpaceSaturationChromaIndexProperty() {
         return sourceColorSpaceSaturationChromaIndex;
     }
 
-    public @NonNull ObjectProperty<NamedColor> targetColorProperty() {
+    public ObjectProperty<NamedColor> targetColorProperty() {
         return targetColor;
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> targetColorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> targetColorSpaceProperty() {
         return targetColorSpace;
     }
 
-    public @NonNull ListProperty<NamedColorSpace> targetColorSpacesProperty() {
+    public ListProperty<NamedColorSpace> targetColorSpacesProperty() {
         return targetColorSpaces;
     }
 
-    public @NonNull ObjectProperty<ColorSyntax> targetColorSyntaxProperty() {
+    public ObjectProperty<ColorSyntax> targetColorSyntaxProperty() {
         return targetColorSyntax;
     }
 
-    public @NonNull ListProperty<ColorSyntax> targetColorSyntaxesProperty() {
+    public ListProperty<ColorSyntax> targetColorSyntaxesProperty() {
         return targetColorSyntaxes;
     }
 
@@ -577,7 +576,6 @@ public class ColorChooserPaneModel {
             "xyz-d65", "xyz-d65"
     );
 
-    @NonNull
     private String toCssString(NamedColorSpace cs, float c0, float c1, float c2, float alpha, ColorSyntax colorSyntax) {
         StringBuilder b = new StringBuilder();
         if (cs == null) {
@@ -854,7 +852,7 @@ public class ColorChooserPaneModel {
         return targetColorField.get();
     }
 
-    public @NonNull StringProperty targetColorFieldProperty() {
+    public StringProperty targetColorFieldProperty() {
         return targetColorField;
     }
 
@@ -891,7 +889,7 @@ public class ColorChooserPaneModel {
         return displayColorField.get();
     }
 
-    public @NonNull StringProperty displayColorFieldProperty() {
+    public StringProperty displayColorFieldProperty() {
         return displayColorField;
     }
 
@@ -903,7 +901,7 @@ public class ColorChooserPaneModel {
         return hue.get();
     }
 
-    public @NonNull FloatProperty hueProperty() {
+    public FloatProperty hueProperty() {
         return hue;
     }
 
@@ -915,7 +913,7 @@ public class ColorChooserPaneModel {
         return chroma.get();
     }
 
-    public @NonNull FloatProperty chromaProperty() {
+    public FloatProperty chromaProperty() {
         return chroma;
     }
 
@@ -927,7 +925,7 @@ public class ColorChooserPaneModel {
         return lightness.get();
     }
 
-    public @NonNull FloatProperty lightnessProperty() {
+    public FloatProperty lightnessProperty() {
         return lightness;
     }
 
@@ -939,7 +937,7 @@ public class ColorChooserPaneModel {
         return hueSliderC0.get();
     }
 
-    public @NonNull FloatProperty hueSliderC0Property() {
+    public FloatProperty hueSliderC0Property() {
         return hueSliderC0;
     }
 
@@ -951,7 +949,7 @@ public class ColorChooserPaneModel {
         return hueSliderC1.get();
     }
 
-    public @NonNull FloatProperty hueSliderC1Property() {
+    public FloatProperty hueSliderC1Property() {
         return hueSliderC1;
     }
 
@@ -963,7 +961,7 @@ public class ColorChooserPaneModel {
         return hueSliderC2.get();
     }
 
-    public @NonNull FloatProperty hueSliderC2Property() {
+    public FloatProperty hueSliderC2Property() {
         return hueSliderC2;
     }
 

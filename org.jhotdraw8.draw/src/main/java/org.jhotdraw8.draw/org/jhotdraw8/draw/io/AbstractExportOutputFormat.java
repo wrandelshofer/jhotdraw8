@@ -8,8 +8,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -22,6 +20,7 @@ import org.jhotdraw8.draw.render.SimpleDrawingRenderer;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.ChampMap;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -40,12 +39,12 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
-    private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
+    private ImmutableMap<Key<?>, Object> options = ChampMap.of();
 
     public AbstractExportOutputFormat() {
     }
 
-    protected abstract @NonNull String getExtension();
+    protected abstract String getExtension();
 
 
     public boolean isExportDrawing() {
@@ -83,7 +82,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      */
     protected abstract void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
-    protected void writePages(@Nullable Path dir, String basename, @NonNull Drawing drawing) throws IOException {
+    protected void writePages(@Nullable Path dir, String basename, Drawing drawing) throws IOException {
         List<Page> pages = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Page) {
@@ -107,7 +106,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param hints    the hints
      * @throws IOException in case of failure
      */
-    protected void writePages(@Nullable Path dir, String basename, @NonNull Drawing drawing, @NonNull List<Page> pages, @NonNull Map<Key<?>, Object> hints) throws IOException {
+    protected void writePages(@Nullable Path dir, String basename, Drawing drawing, List<Page> pages, Map<Key<?>, Object> hints) throws IOException {
         IdFactory idFactory = new SimpleIdFactory();
         int numberOfPages = 0;
         for (Page page : pages) {
@@ -170,7 +169,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      */
     protected abstract boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException;
 
-    protected void writeSlices(@Nullable Path dir, @NonNull Drawing drawing) throws IOException {
+    protected void writeSlices(@Nullable Path dir, Drawing drawing) throws IOException {
         List<Slice> slices = new ArrayList<>();
         for (Figure f : drawing.preorderIterable()) {
             if (f instanceof Slice) {
@@ -195,7 +194,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param slices
      * @throws IOException
      */
-    private void writeSlices(@NonNull Path dir, @NonNull Drawing drawing, @NonNull List<Slice> slices, String suffix, double dpi) throws IOException {
+    private void writeSlices(Path dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);
@@ -221,12 +220,12 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> getOptions() {
+    public ImmutableMap<Key<?>, Object> getOptions() {
         return options;
     }
 
     @Override
-    public void setOptions(@NonNull ImmutableMap<Key<?>, Object> options) {
+    public void setOptions(ImmutableMap<Key<?>, Object> options) {
         this.options = options;
     }
 

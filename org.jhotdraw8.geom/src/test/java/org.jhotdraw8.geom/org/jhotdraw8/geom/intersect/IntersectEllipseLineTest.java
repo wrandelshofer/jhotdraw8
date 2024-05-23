@@ -6,7 +6,6 @@ package org.jhotdraw8.geom.intersect;
 
 import javafx.scene.shape.Ellipse;
 import javafx.scene.shape.Line;
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -26,7 +25,7 @@ public class IntersectEllipseLineTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsLineEllipse() {
+    public List<DynamicTest> dynamicTestsLineEllipse() {
         return Arrays.asList(
                 dynamicTest("1", () -> testIntersectLineEllipse_5args(
                         new Line(10, 40, 200, 40), new Ellipse(100, 100, 60, 60), new double[]{0.47368421052631576})),
@@ -35,7 +34,7 @@ public class IntersectEllipseLineTest {
         );
     }
 
-    public static void testIntersectLineEllipse_5args(@NonNull Line a, @NonNull Ellipse b, @NonNull double[] expected) {
+    public static void testIntersectLineEllipse_5args(Line a, Ellipse b, double[] expected) {
         Point2D bc = new Point2D.Double(b.getCenterX(), b.getCenterX());
         double brx = b.getRadiusX();
         double bry = b.getRadiusY();

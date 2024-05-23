@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.svg.css;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.Paintable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -26,7 +25,7 @@ public class SvgDefaultablePaint<T extends Paintable> {
         this.value = value;
     }
 
-    public SvgDefaultablePaint(@NonNull SvgPaintDefaulting defaulting) {
+    public SvgDefaultablePaint(SvgPaintDefaulting defaulting) {
         this(defaulting, null);
     }
 

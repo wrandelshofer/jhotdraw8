@@ -7,7 +7,6 @@ package org.jhotdraw8.fxbase.control;
 import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.collections.ObservableSet;
 import javafx.concurrent.Worker;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * This interface is used to coordinate user interactions with an object.
@@ -50,7 +49,7 @@ public interface Disableable {
      *
      * @return The disablers.
      */
-    @NonNull ObservableSet<Object> disablers();
+    ObservableSet<Object> disablers();
 
     // Convenience method
     default boolean isDisabled() {

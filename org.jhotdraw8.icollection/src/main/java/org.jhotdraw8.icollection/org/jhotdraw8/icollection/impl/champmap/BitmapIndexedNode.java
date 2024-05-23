@@ -5,10 +5,9 @@
 
 package org.jhotdraw8.icollection.impl.champmap;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.ArrayHelper;
 import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.ToIntFunction;
@@ -20,14 +19,14 @@ import java.util.function.ToIntFunction;
  * @param <V> the value type
  */
 public class BitmapIndexedNode<K, V> extends Node<K, V> {
-    static final @NonNull BitmapIndexedNode<?, ?> EMPTY_NODE = ChampTrie.newBitmapIndexedNode(null, (0), (0), new Object[]{});
+    static final BitmapIndexedNode<?, ?> EMPTY_NODE = ChampTrie.newBitmapIndexedNode(null, (0), (0), new Object[]{});
 
-    public final Object @NonNull [] mixed;
+    public final Object[] mixed;
     private final int nodeMap;
     private final int dataMap;
 
     protected BitmapIndexedNode(final int nodeMap,
-                                final int dataMap, final @NonNull Object @NonNull [] mixed) {
+                                final int dataMap, final Object[] mixed) {
         this.nodeMap = nodeMap;
         this.dataMap = dataMap;
         this.mixed = mixed;
@@ -35,11 +34,11 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull BitmapIndexedNode<K, V> emptyNode() {
+    public static <K, V> BitmapIndexedNode<K, V> emptyNode() {
         return (BitmapIndexedNode<K, V>) EMPTY_NODE;
     }
 
-    @NonNull BitmapIndexedNode<K, V> copyAndInsertValue(final @Nullable IdentityObject mutator, final int bitpos,
+    BitmapIndexedNode<K, V> copyAndInsertValue(final @Nullable IdentityObject mutator, final int bitpos,
                                                         final K key, final V val) {
         final int idx = ENTRY_LENGTH * dataIndex(bitpos);
         final Object[] dst = ArrayHelper.copyComponentAdd(this.mixed, idx, ENTRY_LENGTH);
@@ -49,7 +48,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap, dataMap | bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<K, V> copyAndMigrateFromDataToNode(final @Nullable IdentityObject mutator,
+    BitmapIndexedNode<K, V> copyAndMigrateFromDataToNode(final @Nullable IdentityObject mutator,
                                                                   final int bitpos, final Node<K, V> node) {
 
         final int idxOld = ENTRY_LENGTH * dataIndex(bitpos);
@@ -67,8 +66,8 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap | bitpos, dataMap ^ bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<K, V> copyAndMigrateFromNodeToData(final @Nullable IdentityObject mutator,
-                                                                  final int bitpos, final @NonNull Node<K, V> node) {
+    BitmapIndexedNode<K, V> copyAndMigrateFromNodeToData(final @Nullable IdentityObject mutator,
+                                                         final int bitpos, final Node<K, V> node) {
 
         final int idxOld = this.mixed.length - 1 - nodeIndex(bitpos);
         final int idxNew = ENTRY_LENGTH * dataIndex(bitpos);
@@ -86,7 +85,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return ChampTrie.newBitmapIndexedNode(mutator, nodeMap ^ bitpos, dataMap | bitpos, dst);
     }
 
-    @NonNull BitmapIndexedNode<K, V> copyAndSetNode(final @Nullable IdentityObject mutator, final int bitpos,
+    BitmapIndexedNode<K, V> copyAndSetNode(final @Nullable IdentityObject mutator, final int bitpos,
                                                     final Node<K, V> node) {
 
         final int idx = this.mixed.length - 1 - nodeIndex(bitpos);
@@ -101,7 +100,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         }
     }
 
-    @NonNull BitmapIndexedNode<K, V> copyAndSetValue(final @Nullable IdentityObject mutator, final int bitpos,
+    BitmapIndexedNode<K, V> copyAndSetValue(final @Nullable IdentityObject mutator, final int bitpos,
                                                      final V val) {
         final int idx = ENTRY_LENGTH * dataIndex(bitpos) + 1;
         if (isAllowedToEdit(mutator)) {
@@ -129,7 +128,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    public boolean equivalent(final @NonNull Object other) {
+    public boolean equivalent(final Object other) {
         if (this == other) {
             return true;
         }
@@ -164,7 +163,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    Object @NonNull [] getDataEntry(int index) {
+    Object[] getDataEntry(int index) {
         Object[] entry = new Object[ENTRY_LENGTH];
         System.arraycopy(mixed, ENTRY_LENGTH * index, entry, 0, ENTRY_LENGTH);
         return entry;
@@ -172,14 +171,12 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
 
     @Override
     @SuppressWarnings("unchecked")
-    @NonNull
     public K getKey(final int index) {
         return (K) mixed[ENTRY_LENGTH * index];
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    @NonNull
     EditableMapEntry<K, V> getMapEntry(final int index) {
         return new EditableMapEntry<>(
                 (K) mixed[ENTRY_LENGTH * index],
@@ -190,7 +187,6 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
 
     @Override
     @SuppressWarnings("unchecked")
-    @NonNull
     Node<K, V> getNode(final int index) {
         return (Node<K, V>) mixed[mixed.length - 1 - index];
     }
@@ -223,7 +219,6 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull
     Node<K, V> nodeAt(final int bitpos) {
         return (Node<K, V>) mixed[mixed.length - 1 - nodeIndex(bitpos)];
     }
@@ -246,9 +241,9 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<K, V> remove(final @Nullable IdentityObject mutator, final K key,
+    public BitmapIndexedNode<K, V> remove(final @Nullable IdentityObject mutator, final K key,
                                                    final int keyHash, final int shift,
-                                                   final @NonNull ChangeEvent<V> details) {
+                                          final ChangeEvent<V> details) {
         final int mask = mask(keyHash, shift);
         final int bitpos = bitpos(mask);
 
@@ -261,7 +256,7 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         return this;
     }
 
-    private @NonNull BitmapIndexedNode<K, V> removeData(@Nullable IdentityObject mutator, K key, int keyHash, int shift, @NonNull ChangeEvent<V> details, int bitpos) {
+    private BitmapIndexedNode<K, V> removeData(@Nullable IdentityObject mutator, K key, int keyHash, int shift, ChangeEvent<V> details, int bitpos) {
         final int dataIndex = dataIndex(bitpos);
 
         if (!Objects.equals(getKey(dataIndex), key)) {
@@ -288,8 +283,8 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
         }
     }
 
-    private @NonNull BitmapIndexedNode<K, V> removeSubNode(@Nullable IdentityObject mutator, K key, int keyHash, int shift,
-                                                           @NonNull ChangeEvent<V> details,
+    private BitmapIndexedNode<K, V> removeSubNode(@Nullable IdentityObject mutator, K key, int keyHash, int shift,
+                                                  ChangeEvent<V> details,
                                                            int bitpos) {
         final Node<K, V> subNode = nodeAt(bitpos);
         final Node<K, V> subNodeNew =
@@ -312,11 +307,11 @@ public class BitmapIndexedNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    public @NonNull BitmapIndexedNode<K, V> put(final @Nullable IdentityObject mutator,
+    public BitmapIndexedNode<K, V> put(final @Nullable IdentityObject mutator,
                                                 final K key, final V val,
                                                 final int keyHash, final int shift,
-                                                final @NonNull ChangeEvent<V> details,
-                                                final @NonNull ToIntFunction<K> hashFunction) {
+                                       final ChangeEvent<V> details,
+                                       final ToIntFunction<K> hashFunction) {
         final int mask = mask(keyHash, shift);
         final int bitpos = bitpos(mask);
 

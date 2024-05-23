@@ -29,8 +29,7 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
@@ -76,7 +75,6 @@ public class IntersectionExampleMain extends Application {
     StackPane canvas;
     ChoiceBox<String> choice1;
     ChoiceBox<String> choice2;
-    @NonNull
     final List<Map.Entry<Shape, List<Handle>>> shapes = new ArrayList<>();
 
     {
@@ -84,7 +82,6 @@ public class IntersectionExampleMain extends Application {
         shapes.add(null);
     }
 
-    @NonNull
     final Path isectPath = new Path();
 
     private static class Point extends Circle {
@@ -266,7 +263,6 @@ public class IntersectionExampleMain extends Application {
 
     private class Handle {
 
-        @NonNull
         final Rectangle node = new Rectangle(5, 5);
         Runnable updateHandle;
         Consumer<Point2D> updateShape;
@@ -291,7 +287,7 @@ public class IntersectionExampleMain extends Application {
             node.setY(y - node.getHeight() / 2);
         }
 
-        private void onMouseDragged(@NonNull MouseEvent evt) {
+        private void onMouseDragged(MouseEvent evt) {
             updateShape.accept(new Point2D(evt.getX() - evt.getX() % 10, evt.getY() - evt.getY() % 10));
             updateHandles();
             updateIntersections();
@@ -299,7 +295,7 @@ public class IntersectionExampleMain extends Application {
     }
 
     @Override
-    public void start(@NonNull Stage stage) {
+    public void start(Stage stage) {
         choice1 = new ChoiceBox<>();
         choice1.getItems().setAll("Circle", "CubicCurve", "Ellipse", "Line", "Rectangle", "QuadCurve");
         choice2 = new ChoiceBox<>();
@@ -343,7 +339,7 @@ public class IntersectionExampleMain extends Application {
         }
     }
 
-    private void print(@NonNull Shape shape, String name) {
+    private void print(Shape shape, String name) {
         System.out.print(name + " new ");
         if (shape.getClass() == Circle.class) {
             Circle l0 = (Circle) shape;
@@ -581,7 +577,7 @@ public class IntersectionExampleMain extends Application {
         }
     }
 
-    private void updateShapes(@NonNull ActionEvent evt) {
+    private void updateShapes(ActionEvent evt) {
         int index = (evt.getSource() == choice1) ? 0 : 1;
         Color color = index == 0 ? Color.GREEN : Color.CYAN;
         @SuppressWarnings("unchecked") final Map.Entry<Shape, List<Handle>> newEntry = createShapeAndHandles(((ChoiceBox<String>) evt.getSource()).getValue(), color, color);

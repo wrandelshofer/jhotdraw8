@@ -26,8 +26,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Actions;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
@@ -38,6 +36,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
 import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
@@ -53,9 +52,9 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    private static final @NonNull Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
-    private static final @NonNull Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
-    private static final @NonNull Path REGION_SHAPE_QUADRATIC = new Path();
+    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
+    private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
+    private static final Path REGION_SHAPE_QUADRATIC = new Path();
 
 
     static {
@@ -73,13 +72,13 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         elements.add(new LineTo(3, 6));
     }
 
-    private final @NonNull Region node;
+    private final Region node;
     private @Nullable Point2D pickLocation;
     private final int nodeIndex;
-    private final @NonNull MapAccessor<BezierPath> pathKey;
+    private final MapAccessor<BezierPath> pathKey;
 
 
-    public BezierNodeNonMovableEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int nodeIndex) {
+    public BezierNodeNonMovableEditHandle(Figure figure, MapAccessor<BezierPath> pathKey, int nodeIndex) {
         super(figure);
         this.pathKey = pathKey;
         this.nodeIndex = nodeIndex;
@@ -110,7 +109,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
         return Cursor.CROSSHAIR;
     }
 
-    private @NonNull Point2D getLocation() {
+    private Point2D getLocation() {
         return getBezierNode().getPoint(Point2D::new);
 
     }
@@ -120,7 +119,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -137,20 +136,20 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseClicked(MouseEvent event, DrawingView dv) {
         // do nothing on mouse clicked, because it may happen accidentally
     }
 
 
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
     }
 
-    private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void onPopupTriggered(MouseEvent event, DrawingView view) {
         ContextMenu contextMenu = new ContextMenu();
 
         // path menu ----
@@ -233,7 +232,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
 
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
@@ -245,7 +244,7 @@ public class BezierNodeNonMovableEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         BezierPath path = f.get(pathKey);

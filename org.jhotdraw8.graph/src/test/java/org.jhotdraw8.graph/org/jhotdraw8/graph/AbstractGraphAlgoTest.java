@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Base class for graph algorithm tests.
@@ -20,7 +19,7 @@ public abstract class AbstractGraphAlgoTest {
      *
      * @return a graph with two disjoint vertex sets
      */
-    protected @NonNull DirectedGraph<String, Integer> createDisjointGraph() {
+    protected DirectedGraph<String, Integer> createDisjointGraph() {
         SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex("a");
         builder.addVertex("b");
@@ -51,7 +50,7 @@ public abstract class AbstractGraphAlgoTest {
      *
      * @return a graph with a loop
      */
-    protected @NonNull DirectedGraph<String, Integer> createLoopGraph() {
+    protected DirectedGraph<String, Integer> createLoopGraph() {
         SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
         builder.addVertex("a");
         builder.addVertex("b");
@@ -82,7 +81,6 @@ public abstract class AbstractGraphAlgoTest {
      *
      * @return Graph with more edges than the minimal spanning tree.
      */
-    @NonNull
     protected DirectedGraph<String, Integer> createNonMSTGraph() {
 
         SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
@@ -115,7 +113,6 @@ public abstract class AbstractGraphAlgoTest {
      *
      * @return Graph with only the edges for minimal spanning tree
      */
-    @NonNull
     protected DirectedGraph<String, Integer> createMSTGraph() {
 
         SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();

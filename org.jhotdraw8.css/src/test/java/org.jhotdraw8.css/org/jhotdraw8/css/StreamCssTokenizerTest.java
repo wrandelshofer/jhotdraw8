@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.junit.jupiter.api.DynamicTest;
@@ -30,7 +29,7 @@ public class StreamCssTokenizerTest {
     /**
      * Test of nextChar method, of class CssScanner.
      */
-    public static void testTokenizer(@NonNull String inputData, String expectedValue) throws Exception {
+    public static void testTokenizer(String inputData, String expectedValue) throws Exception {
         StreamCssTokenizer tt = new StreamCssTokenizer(new StringReader(inputData));
         //
         StringBuilder buf = new StringBuilder();
@@ -60,7 +59,6 @@ public class StreamCssTokenizerTest {
         assertEquals(expectedValue, actualValue);
     }
 
-    @NonNull
     @TestFactory
     public List<DynamicTest> dynamicTestsTokenizer() {
         return Arrays.asList(

@@ -7,8 +7,7 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -37,7 +36,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
      */
     private @Nullable ArrayList<Point2D> points;
 
-    private final @NonNull Point2DListStyleableKey key;
+    private final Point2DListStyleableKey key;
 
     public PolyCreationTool(String name, Resources rsrc, Point2DListStyleableKey key, Supplier<Figure> factory) {
         this(name, rsrc, key, factory, LayerFigure::new);
@@ -58,7 +57,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
         if (event.getClickCount() != 1) {
             return;
         }
@@ -95,14 +94,14 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseMoved(MouseEvent event, DrawingView dv) {
         if (createdFigure != null) {
             onMouseDragged(event, dv);
         }
     }
 
     @Override
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
         if (createdFigure != null && points != null) {
             double x2 = event.getX();
             double y2 = event.getY();
@@ -116,7 +115,7 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseClicked(MouseEvent event, DrawingView dv) {
         if (event.getClickCount() > 1) {
             if (createdFigure != null && points != null) {
                 for (int i = points.size() - 1; i > 0; i--) {
@@ -142,14 +141,14 @@ public class PolyCreationTool extends AbstractCreationTool<Figure> {
 
 
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         requestFocus();
         super.activate(editor);
         createdFigure = null;
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public String getHelpText() {
         return """
                PolyCreationTool
                  Click on the drawing view. The tool will create a new polygon with a point at that location.

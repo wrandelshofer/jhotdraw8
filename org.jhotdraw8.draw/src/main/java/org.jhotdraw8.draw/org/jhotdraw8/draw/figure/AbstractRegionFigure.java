@@ -15,8 +15,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.VLineTo;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.key.CssRectangle2DStyleableMapAccessor;
@@ -32,6 +30,7 @@ import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -43,15 +42,15 @@ import java.awt.geom.PathIterator;
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {
-    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
-    public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    public static final @NonNull NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape",
+    public static final CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    public static final CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
+    public static final NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape",
             VectorList.of(new MoveTo(0, 0), new HLineTo(1), new VLineTo(1), new HLineTo(0), new ClosePath()));
-    public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
-    public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
+    public static final CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
+    public static final CssSizeStyleableKey X = RectangleFigure.X;
+    public static final CssSizeStyleableKey Y = RectangleFigure.Y;
 
-    public static final @NonNull NonNullBooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new NonNullBooleanStyleableKey("ShapePreserveRatio", false);
+    public static final NonNullBooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new NonNullBooleanStyleableKey("ShapePreserveRatio", false);
 
     private transient ImmutableList<PathElement> pathElements;
 
@@ -66,24 +65,24 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
         }
     }
 
-    public AbstractRegionFigure(@NonNull Rectangle2D rect) {
+    public AbstractRegionFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Path n = new Path();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (pathElements == null) {
             pathElements = VectorList.of();
         }
@@ -91,12 +90,12 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         layoutPath();
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         set(X, width.getValue() < 0 ? x.add(width) : x);
         set(Y, height.getValue() < 0 ? y.add(height) : y);
         set(WIDTH, width.abs());
@@ -104,12 +103,12 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
     }
 
 
-    protected void updatePathNode(@NonNull RenderContext ctx, @NonNull Path path) {
+    protected void updatePathNode(RenderContext ctx, Path path) {
         path.getElements().setAll(this.pathElements.asCollection());
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Path path = (Path) node;
         updatePathNode(ctx, path);
     }

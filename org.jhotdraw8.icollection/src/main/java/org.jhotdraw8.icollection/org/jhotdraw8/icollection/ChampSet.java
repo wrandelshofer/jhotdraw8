@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChampIterator;
@@ -15,6 +13,7 @@ import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -89,11 +88,11 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
-    static final @NonNull int SALT = new Random().nextInt();
-    private static final @NonNull ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
+    static final int SALT = new Random().nextInt();
+    private static final ChampSet<?> EMPTY = new ChampSet<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    final transient @NonNull BitmapIndexedNode<E> root;
+    final transient BitmapIndexedNode<E> root;
     final int size;
 
     /**
@@ -105,7 +104,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
      * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected ChampSet(@NonNull PrivateData privateData) {
+    protected ChampSet(PrivateData privateData) {
         this(((Map.Entry<BitmapIndexedNode<E>, ?>) privateData.get()).getKey(), ((Map.Entry<?, Integer>) privateData.get()).getValue());
     }
 
@@ -117,14 +116,15 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
      * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull ChampSet<E> newInstance(@NonNull PrivateData privateData) {
+    protected ChampSet<E> newInstance(PrivateData privateData) {
         return new ChampSet<>(privateData);
     }
 
-    private @NonNull ChampSet<E> newInstance(@NonNull BitmapIndexedNode<E> root, int size) {
+    private ChampSet<E> newInstance(BitmapIndexedNode<E> root, int size) {
         return new ChampSet<>(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(root, size)));
     }
-    ChampSet(@NonNull BitmapIndexedNode<E> root, int size) {
+
+    ChampSet(BitmapIndexedNode<E> root, int size) {
         this.root = root;
         this.size = size;
     }
@@ -138,7 +138,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampSet<E> copyOf(@NonNull Iterable<? extends E> c) {
+    public static <E> ChampSet<E> copyOf(Iterable<? extends E> c) {
         return ChampSet.<E>of().addAll(c);
     }
 
@@ -149,7 +149,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
      * @return an empty immutable set
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampSet<E> of() {
+    public static <E> ChampSet<E> of() {
         return ((ChampSet<E>) ChampSet.EMPTY);
     }
 
@@ -166,7 +166,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
-    public static <E> @NonNull ChampSet<E> of(@NonNull E @Nullable ... elements) {
+    public static <E> ChampSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
         return ChampSet.<E>of().addAll(Arrays.asList(elements));
     }
@@ -188,7 +188,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull ChampSet<E> add(@Nullable E element) {
+    public ChampSet<E> add(@Nullable E element) {
         int keyHash = keyHash(element);
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = root.put(null, element, keyHash, 0, details, ChampSet::updateElement, Objects::equals, ChampSet::keyHash);
@@ -200,7 +200,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ChampSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    public ChampSet<E> addAll(Iterable<? extends E> c) {
         var m = toMutable();
         return m.addAll(c) ? m.toImmutable() : this;
     }
@@ -209,7 +209,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
      * {@inheritDoc}
      */
     @Override
-    public <T> @NonNull ChampSet<T> empty() {
+    public <T> ChampSet<T> empty() {
         return of();
     }
 
@@ -239,7 +239,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new ChampIterator<>(root, null);
     }
 
@@ -249,7 +249,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull ChampSet<E> remove(@NonNull E key) {
+    public ChampSet<E> remove(E key) {
         int keyHash = keyHash(key);
         ChangeEvent<E> details = new ChangeEvent<>();
         BitmapIndexedNode<E> newRootNode = root.remove(null, key, keyHash, 0, details, Objects::equals);
@@ -261,7 +261,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampSet<E> removeAll(@NonNull Iterable<?> c) {
+    public ChampSet<E> removeAll(Iterable<?> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toImmutable() : this;
     }
@@ -269,7 +269,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampSet<E> retainAll(@NonNull Iterable<?> c) {
+    public ChampSet<E> retainAll(Iterable<?> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toImmutable() : this;
     }
@@ -279,22 +279,22 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         return size;
     }
 
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return new ChampSpliterator<>(root, null, size, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
     @Override
-    public @NonNull MutableChampSet<E> toMutable() {
+    public MutableChampSet<E> toMutable() {
         return new MutableChampSet<>(this);
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return ReadOnlyCollection.iterableToString(this);
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new SerializationProxy<>(this.toMutable());
     }
 
@@ -302,13 +302,13 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         @Serial
         private static final long serialVersionUID = 0L;
 
-        protected SerializationProxy(@NonNull Set<E> target) {
+        protected SerializationProxy(Set<E> target) {
             super(target);
         }
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return ChampSet.copyOf(deserializedElements);
         }
     }

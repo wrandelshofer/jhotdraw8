@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -26,7 +25,7 @@ public class NullableObjectKey<T> extends AbstractKey<T> implements NullableKey<
      * @param name The name of the name.
      * @param type The type of the value.
      */
-    public NullableObjectKey(@NonNull String name, @NonNull Type type) {
+    public NullableObjectKey(String name, Type type) {
         super(name, type, true, false, null);
     }
 
@@ -38,7 +37,7 @@ public class NullableObjectKey<T> extends AbstractKey<T> implements NullableKey<
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public NullableObjectKey(@NonNull String name, @NonNull Type type, @Nullable T defaultValue) {
+    public NullableObjectKey(String name, Type type, @Nullable T defaultValue) {
         super(name, type, true, false, defaultValue);
     }
 
@@ -49,7 +48,7 @@ public class NullableObjectKey<T> extends AbstractKey<T> implements NullableKey<
      * @param name The name of the key.
      * @param type The type of the value.
      */
-    public NullableObjectKey(@NonNull String name, @NonNull TypeToken<T> type) {
+    public NullableObjectKey(String name, TypeToken<T> type) {
         this(name, type.getType(), null);
     }
 
@@ -61,7 +60,7 @@ public class NullableObjectKey<T> extends AbstractKey<T> implements NullableKey<
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public NullableObjectKey(@NonNull String name, @NonNull TypeToken<T> type, @Nullable T defaultValue) {
+    public NullableObjectKey(String name, TypeToken<T> type, @Nullable T defaultValue) {
         this(name, type.getType(), defaultValue);
     }
 
@@ -72,7 +71,7 @@ public class NullableObjectKey<T> extends AbstractKey<T> implements NullableKey<
      * @param name  The name of the key.
      * @param clazz The type of the value.
      */
-    public NullableObjectKey(@NonNull String name, @NonNull Class<?> clazz) {
+    public NullableObjectKey(String name, Class<?> clazz) {
         super(name, clazz, true, false, null);
     }
 
@@ -84,7 +83,7 @@ public class NullableObjectKey<T> extends AbstractKey<T> implements NullableKey<
      * @param clazz        The type of the value.
      * @param defaultValue The default value.
      */
-    public NullableObjectKey(@NonNull String name, @NonNull Class<?> clazz, @Nullable T defaultValue) {
+    public NullableObjectKey(String name, Class<?> clazz, @Nullable T defaultValue) {
         super(name, clazz, true, false, defaultValue);
     }
 

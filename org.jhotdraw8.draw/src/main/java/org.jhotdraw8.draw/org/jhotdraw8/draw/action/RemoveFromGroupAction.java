@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -27,14 +26,14 @@ import java.util.List;
  */
 public class RemoveFromGroupAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.removeFromGroup";
+    public static final String ID = "edit.removeFromGroup";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public RemoveFromGroupAction(@NonNull DrawingEditor editor) {
+    public RemoveFromGroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -42,13 +41,13 @@ public class RemoveFromGroupAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
-        final @NonNull List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
+        final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
         removeFromGroup(drawingView, figures);
 
     }
 
-    public void removeFromGroup(@NonNull DrawingView view, @NonNull List<Figure> figures) {
+    public void removeFromGroup(DrawingView view, List<Figure> figures) {
         List<Figure> reparentableFigures = new ArrayList<>();
         for (Figure f : figures) {
             Layer layer = f.getAncestor(Layer.class);

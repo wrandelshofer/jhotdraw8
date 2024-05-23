@@ -10,8 +10,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -23,6 +21,7 @@ import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.key.StringOrIdentStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A figure which supports font attributes.
@@ -55,7 +54,7 @@ public interface TextFontableFigure extends Figure {
      * @param ctx  RenderContext, can be null
      * @param text a text node
      */
-    default void applyTextFontableFigureProperties(@Nullable RenderContext ctx, @NonNull Text text) {
+    default void applyTextFontableFigureProperties(@Nullable RenderContext ctx, Text text) {
         String family = getStyledNonNull(FONT_FAMILY);
         FontPosture style = getStyledNonNull(FONT_STYLE);
         FontWeight weight = getStyledNonNull(FONT_WEIGHT);
@@ -91,7 +90,7 @@ public interface TextFontableFigure extends Figure {
      * @param ctx  context
      * @param text a text node
      */
-    default void applyTextFontableFigureProperties(@Nullable RenderContext ctx, @NonNull Labeled text) {
+    default void applyTextFontableFigureProperties(@Nullable RenderContext ctx, Labeled text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         Font font = getStyledNonNull(FONT).getFont();
         if (!text.getFont().equals(font)) {

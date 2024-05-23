@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -20,7 +19,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
         NonNullKey<Point2D> {
 
 
-    private final @NonNull Converter<Point2D> converter = new Point2DConverter(false);
+    private final Converter<Point2D> converter = new Point2DConverter(false);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -28,7 +27,7 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
      *
      * @param name The name of the key.
      */
-    public Point2DStyleableKey(@NonNull String name) {
+    public Point2DStyleableKey(String name) {
         this(name, Point2D.ZERO);
     }
 
@@ -40,12 +39,12 @@ public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implement
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public Point2DStyleableKey(@NonNull String key, @NonNull Point2D defaultValue) {
+    public Point2DStyleableKey(String key, Point2D defaultValue) {
         super(key, Point2D.class, defaultValue);
     }
 
     @Override
-    public @NonNull Converter<Point2D> getCssConverter() {
+    public Converter<Point2D> getCssConverter() {
         return converter;
     }
 }

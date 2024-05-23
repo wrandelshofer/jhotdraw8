@@ -5,8 +5,7 @@
 package org.jhotdraw8.draw.model;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.event.SimpleWeakListener;
@@ -24,18 +23,18 @@ import java.lang.ref.WeakReference;
  */
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 
-    private final @NonNull DrawingModel model;
+    private final DrawingModel model;
     protected final @Nullable WeakReference<Figure> figure;
     private final @Nullable Key<T> key;
     private final @Nullable Listener<DrawingModelEvent> modelListener;
     private final @Nullable SimpleWeakListener<DrawingModelEvent> weakListener;
     private final boolean isDeclaredKey;
 
-    public DrawingModelFigureProperty(@NonNull DrawingModel model, Figure figure, Key<T> key) {
+    public DrawingModelFigureProperty(DrawingModel model, Figure figure, Key<T> key) {
         this(model, figure, key, false);
     }
 
-    public DrawingModelFigureProperty(@NonNull DrawingModel model, @Nullable Figure figure, @Nullable Key<T> key, boolean allKeys) {
+    public DrawingModelFigureProperty(DrawingModel model, @Nullable Figure figure, @Nullable Key<T> key, boolean allKeys) {
         this.model = model;
         this.key = key;
         this.figure = new WeakReference<>(figure);

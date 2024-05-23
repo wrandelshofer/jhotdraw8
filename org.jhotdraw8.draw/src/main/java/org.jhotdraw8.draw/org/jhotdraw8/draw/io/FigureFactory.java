@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Node;
 
 import javax.xml.stream.XMLStreamException;
@@ -43,7 +42,7 @@ public interface FigureFactory {
      * @return the figure
      * @throws IOException if the factory does not support this name
      */
-    @NonNull Figure createFigureByElementName(String elementName) throws IOException;
+    Figure createFigureByElementName(String elementName) throws IOException;
 
     /**
      * Maps a key to a XML attribute name. The name used for persistent storage
@@ -105,7 +104,7 @@ public interface FigureFactory {
      * @throws IOException if the factory does not support a mapping for
      *                             the specified key
      */
-    @NonNull <T> String valueToString(MapAccessor<T> key, T value) throws IOException;
+    <T> String valueToString(MapAccessor<T> key, T value) throws IOException;
 
     /**
      * Maps a value to a XML node list.
@@ -166,7 +165,7 @@ public interface FigureFactory {
      * @param value the value
      * @return true if the value is the default value
      */
-    default <T> boolean isDefaultValue(Figure f, @NonNull MapAccessor<T> key, @Nullable T value) {
+    default <T> boolean isDefaultValue(Figure f, MapAccessor<T> key, @Nullable T value) {
         T defaultValue = key.getDefaultValue();
         return Objects.equals(defaultValue, value);
     }
@@ -178,7 +177,7 @@ public interface FigureFactory {
      * @param f The figure
      * @return an immutable set
      */
-    @NonNull Set<MapAccessor<?>> figureAttributeKeys(Figure f);
+    Set<MapAccessor<?>> figureAttributeKeys(Figure f);
 
     /**
      * Returns all keys for the specified figure which should be converted into
@@ -187,7 +186,7 @@ public interface FigureFactory {
      * @param f The figure
      * @return an immutable set
      */
-    @NonNull Set<MapAccessor<?>> figureNodeListKeys(Figure f);
+    Set<MapAccessor<?>> figureNodeListKeys(Figure f);
 
     /**
      * Creates an external representation of the drawing.

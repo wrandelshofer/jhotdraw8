@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.value;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Objects;
 
@@ -83,7 +82,7 @@ public interface UnitConverter {
         return 100.0;
     }
 
-    default double getFactor(@NonNull String unit) {
+    default double getFactor(String unit) {
         final double factor = switch (unit) {
             case PERCENTAGE -> getPercentageFactor();
             case CENTIMETERS -> 2.54 / getDpi();
@@ -129,7 +128,7 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert(double value, @NonNull String inputUnit, @NonNull String outputUnit) {
+    default double convert(double value, String inputUnit, String outputUnit) {
         if (value == 0.0 || Objects.equals(inputUnit, outputUnit)) {
             return value;
         }
@@ -137,7 +136,7 @@ public interface UnitConverter {
         return value * getFactor(outputUnit) / getFactor(inputUnit);
     }
 
-    default @NonNull CssSize convertSize(double value, @NonNull String inputUnit, @NonNull String outputUnit) {
+    default CssSize convertSize(double value, String inputUnit, String outputUnit) {
         return CssSize.of(convert(value, inputUnit, outputUnit), outputUnit);
     }
 
@@ -148,11 +147,11 @@ public interface UnitConverter {
      * @param outputUnit the desired output unit
      * @return converted value
      */
-    default double convert(@NonNull CssSize value, @NonNull String outputUnit) {
+    default double convert(CssSize value, String outputUnit) {
         return convert(value.getValue(), value.getUnits(), outputUnit);
     }
 
-    default @NonNull CssSize convertSize(@NonNull CssSize value, @NonNull String outputUnit) {
+    default CssSize convertSize(CssSize value, String outputUnit) {
         return CssSize.of(convert(value.getValue(), value.getUnits(), outputUnit), outputUnit);
     }
 

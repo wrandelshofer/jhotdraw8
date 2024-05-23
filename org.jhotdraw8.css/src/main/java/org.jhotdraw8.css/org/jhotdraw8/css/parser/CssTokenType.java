@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.parser;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Defines CSS 3 token types.
@@ -20,7 +19,7 @@ public class CssTokenType {
     /**
      * This identifier is used to denote that a value is absent or that a list is empty.
      */
-    public static final @NonNull String IDENT_NONE = "none";
+    public static final String IDENT_NONE = "none";
 
     /**
      * The 'initial' keyword is used to indicate that the property's
@@ -29,7 +28,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#initial">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public static final @NonNull String IDENT_INITIAL = "initial";
+    public static final String IDENT_INITIAL = "initial";
     /**
      * The 'inherit' keyword is used to indicate that the property's
      * specified and computed values are the inherited value.
@@ -37,7 +36,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#inherit">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public static final @NonNull String IDENT_INHERIT = "inherit";
+    public static final String IDENT_INHERIT = "inherit";
     /**
      * The 'unset' keyword is used to indicate that the property's
      * specified value should be taken from the previous origin level.
@@ -45,7 +44,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#revert">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public static final @NonNull String IDENT_REVERT = "revert";
+    public static final String IDENT_REVERT = "revert";
     /**
      * The 'revert' keyword is used to indicate 'inherit' if the property
      * is inherited, and 'initial' if not.
@@ -53,7 +52,7 @@ public class CssTokenType {
      * <a href="https://www.w3.org/TR/css-cascade-4/#unset">Resetting a
      * Property: the 'initial' keyword.</a>
      */
-    public static final @NonNull String IDENT_UNSET = "unset";
+    public static final String IDENT_UNSET = "unset";
 
     /**
      * Defines an at-keyword-token.

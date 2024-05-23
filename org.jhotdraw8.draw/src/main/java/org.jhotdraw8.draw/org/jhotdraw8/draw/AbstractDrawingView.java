@@ -14,8 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -46,16 +45,16 @@ import java.util.logging.Logger;
  * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingView extends AbstractPropertyBean implements DrawingView {
-    private final @NonNull ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
-    private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, EDITOR_PROPERTY, null);
-    private final @NonNull ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
+    private final ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
+    private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, EDITOR_PROPERTY, null);
+    private final ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
     /**
      * The selectedFiguresProperty holds the list of selected figures in the
      * sequence they were selected by the user.
      */
-    private final @NonNull ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
+    private final ReadOnlySetProperty<Figure> selectedFigures = new ReadOnlySetWrapper<>(this, SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<Figure>())).getReadOnlyProperty();
 
-    private final @NonNull ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
+    private final ObjectProperty<Tool> tool = new SimpleObjectProperty<>(this, TOOL_PROPERTY);
 
     {
         tool.addListener(this::onToolChanged);
@@ -70,30 +69,30 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
         selectedFigures.addListener(listener);
     }
 
-    private final @NonNull ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
+    private final ObjectProperty<Handle> activeHandle = new SimpleObjectProperty<>(this, ACTIVE_HANDLE_PROPERTY);
 
     public AbstractDrawingView() {
     }
 
 
     @Override
-    public @NonNull ObjectProperty<DrawingEditor> editorProperty() {
+    public ObjectProperty<DrawingEditor> editorProperty() {
         return editor;
     }
 
     @Override
-    public @NonNull ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
+    public ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty() {
         return clipboardInputFormat;
     }
 
     @Override
-    public @NonNull ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
+    public ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty() {
         return clipboardOutputFormat;
     }
 
     public void cut() {
         copy();
-        final @NonNull List<Figure> selectedFigures = new ArrayList<>(getSelectedFigures());
+        final List<Figure> selectedFigures = new ArrayList<>(getSelectedFigures());
         DrawingModel m = getModel();
         for (Figure f : selectedFigures) {
             if (f.isDeletable()) {
@@ -164,18 +163,18 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
     }
 
     @Override
-    public @NonNull ObjectProperty<Tool> toolProperty() {
+    public ObjectProperty<Tool> toolProperty() {
         return tool;
     }
 
     @Override
-    public @NonNull ObjectProperty<Handle> activeHandleProperty() {
+    public ObjectProperty<Handle> activeHandleProperty() {
         return activeHandle;
     }
 
 
     @Override
-    public @NonNull ReadOnlySetProperty<Figure> selectedFiguresProperty() {
+    public ReadOnlySetProperty<Figure> selectedFiguresProperty() {
         return selectedFigures;
     }
 
@@ -183,10 +182,10 @@ public abstract class AbstractDrawingView extends AbstractPropertyBean implement
 
     protected abstract void repaint();
 
-    protected abstract void onToolChanged(@NonNull Observable observable, @Nullable Tool oldValue, @Nullable Tool newValue);
+    protected abstract void onToolChanged(Observable observable, @Nullable Tool oldValue, @Nullable Tool newValue);
 
     @Override
-    public <T> void set(@NonNull MapAccessor<T> key, @Nullable T value) {
+    public <T> void set(MapAccessor<T> key, @Nullable T value) {
         key.set(properties, value);
     }
 }

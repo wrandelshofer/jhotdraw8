@@ -9,8 +9,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Provides a set of parameters to a {@link Theme}.
@@ -23,7 +22,7 @@ public interface ThemeParameters {
      *
      * @return accent color property
      */
-    @NonNull ObjectProperty<Color> accentColorProperty();
+    ObjectProperty<Color> accentColorProperty();
 
     /**
      * Application specific CSS.
@@ -32,7 +31,7 @@ public interface ThemeParameters {
      *
      * @return application specific CSS property
      */
-    @NonNull StringProperty applicationSpecificCssProperty();
+    StringProperty applicationSpecificCssProperty();
 
     /**
      * The base font size.
@@ -41,7 +40,7 @@ public interface ThemeParameters {
      *
      * @return font size property
      */
-    @NonNull DoubleProperty fontSizeProperty();
+    DoubleProperty fontSizeProperty();
 
     default @Nullable Color getAccentColor() {
         return accentColorProperty().get();

@@ -6,7 +6,6 @@ package org.jhotdraw8.fxbase.concurrent;
 
 import javafx.application.Platform;
 import javafx.concurrent.Worker;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.concurrent.CheckedFunction;
 import org.jhotdraw8.base.concurrent.CheckedRunnable;
 
@@ -36,7 +35,7 @@ public class FXWorker {
      * @param runnable the runnable
      * @return the CompletableFuture
      */
-    public static @NonNull CompletableFuture<Void> run(@NonNull CheckedRunnable runnable) {
+    public static CompletableFuture<Void> run(CheckedRunnable runnable) {
         return run(ForkJoinPool.commonPool(), runnable);
     }
 
@@ -48,7 +47,7 @@ public class FXWorker {
      * @param executor the executor, if null then a new thread is created
      * @return the CompletableFuture
      */
-    public static @NonNull CompletableFuture<Void> run(@NonNull Executor executor, @NonNull CheckedRunnable runnable) {
+    public static CompletableFuture<Void> run(Executor executor, CheckedRunnable runnable) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Runnable worker = () -> {
             try {
@@ -70,7 +69,7 @@ public class FXWorker {
      * @param supplier the supplier
      * @return the CompletableFuture
      */
-    public static @NonNull <T> CompletableFuture<T> supply(@NonNull Callable<T> supplier) {
+    public static <T> CompletableFuture<T> supply(Callable<T> supplier) {
         return supply(ForkJoinPool.commonPool(), supplier);
     }
 
@@ -83,7 +82,7 @@ public class FXWorker {
      * @param executor the executor
      * @return the {@link CompletableFuture}
      */
-    public static @NonNull <T> CompletableFuture<T> supply(@NonNull Executor executor, @NonNull Callable<T> supplier) {
+    public static <T> CompletableFuture<T> supply(Executor executor, Callable<T> supplier) {
         CompletableFuture<T> f = new CompletableFuture<>();
         executor.execute(() -> {
             try {
@@ -105,7 +104,7 @@ public class FXWorker {
      * @param executor the executor
      * @return the {@link CompletableWorker}
      */
-    public static @NonNull <T> CompletableWorker<T> work(@NonNull Executor executor, @NonNull CheckedFunction<WorkState<T>, T> supplier, @NonNull WorkState<T> workState) {
+    public static <T> CompletableWorker<T> work(Executor executor, CheckedFunction<WorkState<T>, T> supplier, WorkState<T> workState) {
         SimpleCompletableWorker<T> w = new SimpleCompletableWorker<>(workState);
 
         w.updateState(Worker.State.SCHEDULED);

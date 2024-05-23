@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLink;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
@@ -77,14 +76,14 @@ public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A, C extends Number & Comp
      */
     @Override
     public @Nullable ArcBackLinkWithCost<V, A, C> search(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth,
-            @NonNull C zero,
-            @NonNull C costLimit,
-            @NonNull Function3<V, V, A, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
+            C zero,
+            C costLimit,
+            Function3<V, V, A, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
         AlgoArguments.checkZero(zero);
         return ArcBackLink.toArcBackLinkWithCost(
                 search(startVertices, goalPredicate, nextArcsFunction, maxDepth),
@@ -103,9 +102,9 @@ public class UniqueOnAcyclicGraphArcPathSearchAlgo<V, A, C extends Number & Comp
      * @return
      */
     public @Nullable ArcBackLink<V, A> search(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth) {
         AlgoArguments.checkMaxDepth(maxDepth);
 

@@ -6,11 +6,10 @@ package org.jhotdraw8.application.action.view;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.application.resources.Resources;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This action toggles the state of its boolean property.
@@ -18,10 +17,10 @@ import org.jhotdraw8.application.resources.Resources;
  * @author Werner Randelshofer
  */
 public class ToggleBooleanAction extends AbstractActivityAction<Activity> {
-    private final @NonNull BooleanProperty value;
+    private final BooleanProperty value;
 
     @SuppressWarnings("this-escape")
-    public ToggleBooleanAction(@NonNull Activity activity, @Nullable String id, @Nullable Resources labels, @NonNull BooleanProperty value) {
+    public ToggleBooleanAction(Activity activity, @Nullable String id, @Nullable Resources labels, BooleanProperty value) {
         super(activity);
         if (labels != null && id != null) {
             labels.configureAction(this, id);
@@ -31,7 +30,7 @@ public class ToggleBooleanAction extends AbstractActivityAction<Activity> {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Activity activity) {
+    protected void onActionPerformed(ActionEvent event, Activity activity) {
         value.set(!value.get());
     }
 }

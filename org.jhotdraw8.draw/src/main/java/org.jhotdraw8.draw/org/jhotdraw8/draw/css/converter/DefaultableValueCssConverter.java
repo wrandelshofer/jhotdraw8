@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssDefaulting;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -23,15 +22,15 @@ import java.util.function.Consumer;
 public class DefaultableValueCssConverter<T> implements CssConverter<CssDefaultableValue<T>> {
 
 
-    private final @NonNull CssConverter<T> valueConverter;
+    private final CssConverter<T> valueConverter;
 
-    public DefaultableValueCssConverter(@NonNull CssConverter<T> valueConverter) {
+    public DefaultableValueCssConverter(CssConverter<T> valueConverter) {
         this.valueConverter = valueConverter;
     }
 
 
     @Override
-    public @Nullable CssDefaultableValue<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable CssDefaultableValue<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonNull()) {
             case CssTokenType.IDENT_INHERIT:
@@ -49,7 +48,7 @@ public class DefaultableValueCssConverter<T> implements CssConverter<CssDefaulta
     }
 
     @Override
-    public <TT extends CssDefaultableValue<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    public <TT extends CssDefaultableValue<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;

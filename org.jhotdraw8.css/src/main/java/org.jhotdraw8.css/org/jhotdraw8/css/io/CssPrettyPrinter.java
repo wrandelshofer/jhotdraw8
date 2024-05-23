@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.io;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
@@ -20,19 +19,19 @@ public class CssPrettyPrinter implements Appendable {
         STYLESHEET, SELECTOR, DECLARATION_KEY, DECLARATION_VALUE, ROUND_BLOCK, SQUARE_BLOCK, CURLY_BLOCK
     }
 
-    private final @NonNull Deque<Syntax> stack = new ArrayDeque<>();
+    private final Deque<Syntax> stack = new ArrayDeque<>();
     int indentation = 0;
     private String indenter = "\t";
-    private final @NonNull Appendable w;
+    private final Appendable w;
     private boolean mustIndent = false;
 
-    public CssPrettyPrinter(@NonNull Appendable w) {
+    public CssPrettyPrinter(Appendable w) {
         this.w = w;
         stack.push(Syntax.STYLESHEET);
     }
 
     @Override
-    public @NonNull CssPrettyPrinter append(@NonNull CharSequence str) {
+    public CssPrettyPrinter append(CharSequence str) {
         try {
             print(str);
         } catch (IOException e) {
@@ -42,13 +41,13 @@ public class CssPrettyPrinter implements Appendable {
     }
 
     @Override
-    public @NonNull CssPrettyPrinter append(@NonNull CharSequence csq, int start, int end) {
+    public CssPrettyPrinter append(CharSequence csq, int start, int end) {
         append(csq.subSequence(start, end));
         return this;
     }
 
     @Override
-    public @NonNull CssPrettyPrinter append(char c) {
+    public CssPrettyPrinter append(char c) {
         return append("" + c);
     }
 
@@ -65,7 +64,7 @@ public class CssPrettyPrinter implements Appendable {
         print(tt);
     }
 
-    public void print(@NonNull CssTokenizer tt) throws IOException {
+    public void print(CssTokenizer tt) throws IOException {
 
         while (tt.nextNoSkip() != CssTokenType.TT_EOF) {
             CssToken token = tt.getToken();
@@ -140,7 +139,7 @@ public class CssPrettyPrinter implements Appendable {
         }
     }
 
-    private void parseToken(@NonNull CssToken token) {
+    private void parseToken(CssToken token) {
         switch (token.getType()) {
             case CssTokenType.TT_S, CssTokenType.TT_AT_KEYWORD, CssTokenType.TT_BAD_COMMENT, CssTokenType.TT_BAD_STRING, CssTokenType.TT_BAD_URI, CssTokenType.TT_CDC, CssTokenType.TT_CDO, CssTokenType.TT_COLUMN, CssTokenType.TT_COMMA, CssTokenType.TT_COMMENT, CssTokenType.TT_DASH_MATCH, CssTokenType.TT_DIMENSION, CssTokenType.TT_EOF, CssTokenType.TT_HASH, CssTokenType.TT_INCLUDE_MATCH, CssTokenType.TT_NUMBER, CssTokenType.TT_PERCENT_DELIM, CssTokenType.TT_PERCENTAGE, CssTokenType.TT_PLUS, CssTokenType.TT_PREFIX_MATCH, CssTokenType.TT_SLASH, CssTokenType.TT_STRING, CssTokenType.TT_SUBSTRING_MATCH, CssTokenType.TT_SUFFIX_MATCH, CssTokenType.TT_UNICODE_RANGE, CssTokenType.TT_URL, CssTokenType.TT_VERTICAL_LINE:
             break;

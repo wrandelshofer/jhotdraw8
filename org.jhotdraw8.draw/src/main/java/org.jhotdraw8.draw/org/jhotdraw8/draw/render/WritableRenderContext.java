@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.draw.render;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 
 /**
@@ -14,5 +13,5 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
  * @author Werner Randelshofer
  */
 public interface WritableRenderContext extends RenderContext {
-    <T> void set(@NonNull MapAccessor<T> key, @Nullable T value);
+    <T> void set(MapAccessor<T> key, @Nullable T value);
 }

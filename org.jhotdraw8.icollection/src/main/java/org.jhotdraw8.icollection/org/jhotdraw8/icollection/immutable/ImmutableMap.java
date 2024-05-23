@@ -5,10 +5,9 @@
 
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,7 +31,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this set instance if it is already empty, or a different set
      * instance that is empty.
      */
-    @NonNull ImmutableMap<K, V> clear();
+    ImmutableMap<K, V> clear();
 
     /**
      * Returns a copy of this map that contains all entries
@@ -43,7 +42,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entry, or
      * a different map instance with the entry added or updated
      */
-    @NonNull ImmutableMap<K, V> put(@NonNull K key, @Nullable V value);
+    ImmutableMap<K, V> put(K key, @Nullable V value);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -53,7 +52,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already contains the same entries, or
      * a different map instance with the entries added or updated
      */
-    default @NonNull ImmutableMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
+    default ImmutableMap<K, V> putAll(Map<? extends K, ? extends V> m) {
         return putAll(m.entrySet());
     }
 
@@ -66,7 +65,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * a different map instance with the entries added or updated
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    default ImmutableMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         if (c instanceof Collection<?> co && co.isEmpty()
                 || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
             return this;
@@ -90,7 +89,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * a different map instance with the entries added or updated
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableMap<K, V> putKeyValues(@NonNull Object @NonNull ... kv) {
+    default ImmutableMap<K, V> putKeyValues(Object... kv) {
         ImmutableMap<K, V> that = this;
         for (int i = 0; i < kv.length; i += 2) {
             that = that.put((K) kv[i], (V) kv[i + 1]);
@@ -107,7 +106,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already does not contain the entry, or
      * a different map instance with the entry removed
      */
-    @NonNull ImmutableMap<K, V> remove(@NonNull K key);
+    ImmutableMap<K, V> remove(K key);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -118,7 +117,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it already does not contain the entries, or
      * a different map instance with the entries removed
      */
-    default @NonNull ImmutableMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
+    default ImmutableMap<K, V> removeAll(Iterable<? extends K> c) {
         if (isEmpty()
                 || c instanceof Collection<?> co && co.isEmpty()
                 || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
@@ -140,7 +139,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * a different map instance with entries removed
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
+    default ImmutableMap<K, V> retainAll(Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -186,7 +185,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      * @return this map instance if it has not changed, or
      * a different map instance with entries removed
      */
-    default @NonNull ImmutableMap<K, V> retainAll(@NonNull ReadOnlyCollection<? extends K> c) {
+    default ImmutableMap<K, V> retainAll(ReadOnlyCollection<? extends K> c) {
         return retainAll(c.asCollection());
     }
 
@@ -195,7 +194,7 @@ public interface ImmutableMap<K, V> extends ReadOnlyMap<K, V> {
      *
      * @return a mutable copy.
      */
-    @NonNull Map<K, V> toMutable();
+    Map<K, V> toMutable();
 
     /**
      * Returns the maximal number of entries that this map type can

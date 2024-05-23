@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
@@ -46,7 +45,7 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
      * @param index index of vertex
      * @return vertex data
      */
-    @NonNull V getVertex(int index);
+    V getVertex(int index);
 
     /**
      * Returns the index of the vertex.
@@ -85,7 +84,7 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
      * @return a collection view on the direct successor vertices of vertex
      * with the arrow pointing to the vertex
      */
-    default @NonNull Collection<Map.Entry<Integer, A>> getNextIntEntries(int vertexIndex) {
+    default Collection<Map.Entry<Integer, A>> getNextIntEntries(int vertexIndex) {
         class NextVertexAndArrowIterator implements Iterator<Map.Entry<Integer, A>> {
 
             private int index;
@@ -103,7 +102,7 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
             }
 
             @Override
-            public Map.@NonNull Entry<Integer, A> next() {
+            public Map.Entry<Integer, A> next() {
                 int i = index++;
                 return new AbstractMap.SimpleEntry<>(
                         getNextAsInt(vertex, i),
@@ -114,7 +113,7 @@ public interface AttributedIndexedDirectedGraph<V, A> extends IndexedDirectedGra
 
         return new AbstractCollection<>() {
             @Override
-            public @NonNull Iterator<Map.Entry<Integer, A>> iterator() {
+            public Iterator<Map.Entry<Integer, A>> iterator() {
                 return new NextVertexAndArrowIterator(vertexIndex);
             }
 

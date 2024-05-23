@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.jmh;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * A key with an integer value and a masked hash code.
@@ -16,7 +15,7 @@ public class Key implements Comparable<Key> {
     }
 
     @Override
-    public int compareTo(@NonNull Key o) {
+    public int compareTo(Key o) {
         return Integer.compare(o.value, this.value);
     }
 

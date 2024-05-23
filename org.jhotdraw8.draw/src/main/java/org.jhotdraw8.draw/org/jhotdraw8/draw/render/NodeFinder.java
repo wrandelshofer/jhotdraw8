@@ -14,8 +14,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.Region;
 import javafx.scene.shape.Shape;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
@@ -42,7 +41,7 @@ public class NodeFinder {
      *                      from the node, in local coordinates
      * @return a distance if the node contains the point, null otherwise
      */
-    public @Nullable Double contains(@NonNull Node node, @NonNull Point2D pointInLocal, double radiusInLocal) {
+    public @Nullable Double contains(Node node, Point2D pointInLocal, double radiusInLocal) {
         double toleranceInLocal = radiusInLocal / FXTransforms.deltaTransform(node.getLocalToSceneTransform(), LINE45DEG, LINE45DEG).magnitude();
 
         if (!node.isVisible()) {
@@ -120,7 +119,7 @@ public class NodeFinder {
         }
     }
 
-    private @Nullable Double childContains(final @NonNull Parent node, final @NonNull Point2D pointInLocal, final double tolerance) {
+    private @Nullable Double childContains(final Parent node, final Point2D pointInLocal, final double tolerance) {
         double minDistance = Double.POSITIVE_INFINITY;
         for (Node child : node.getChildrenUnmodifiable()) {
             Double distance = contains(child, child.parentToLocal(pointInLocal), tolerance);
@@ -131,7 +130,7 @@ public class NodeFinder {
         return Double.isFinite(minDistance) ? minDistance : null;
     }
 
-    public @Nullable Node findNodeRecursive(@NonNull Node n, double vx, double vy, double radius) {
+    public @Nullable Node findNodeRecursive(Node n, double vx, double vy, double radius) {
         if (contains(n, new Point2D(vx, vy), radius) != null) {
             if (n instanceof Shape) {
                 return n;

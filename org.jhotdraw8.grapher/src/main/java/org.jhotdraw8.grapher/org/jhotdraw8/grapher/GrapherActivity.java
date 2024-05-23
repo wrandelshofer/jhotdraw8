@@ -17,7 +17,6 @@ import javafx.scene.input.DataFormat;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractFileBasedActivity;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.Action;
@@ -166,17 +165,17 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
  */
 public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 
-    private static final @NonNull String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
-    private static final @NonNull String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
+    private static final String GRAPHER_NAMESPACE_URI = "http://jhotdraw.org/samples/grapher";
+    private static final String VIEWTOGGLE_PROPERTIES = "view.toggleProperties";
     /**
      * Counter for incrementing layer names.
      */
-    private final @NonNull Map<String, Integer> counters = new HashMap<>();
+    private final Map<String, Integer> counters = new HashMap<>();
     @FXML
     private ScrollPane detailsScrollPane;
     @FXML
     private VBox detailsVBox;
-    private final @NonNull BooleanProperty detailsVisible = new SimpleBooleanProperty(this, "detailsVisible", true);
+    private final BooleanProperty detailsVisible = new SimpleBooleanProperty(this, "detailsVisible", true);
 
     private DrawingView drawingView;
 
@@ -188,9 +187,9 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     private ToolBar toolsToolBar;
     private DockRoot dockRoot;
 
-    private final @NonNull FXUndoManager undoManager = new FXUndoManager();
+    private final FXUndoManager undoManager = new FXUndoManager();
 
-    private @NonNull Dockable addInspector(@NonNull Inspector<DrawingView> inspector, String id, Priority grow) {
+    private Dockable addInspector(Inspector<DrawingView> inspector, String id, Priority grow) {
         Resources r = InspectorLabels.getResources();
         Dockable dockable = new SimpleDockable(r.getString(id + ".toolbar"), inspector.getNode());
         inspector.showingProperty().bind(dockable.showingProperty());
@@ -200,7 +199,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<Void> clear() {
+    public CompletionStage<Void> clear() {
         Drawing d = new SimpleLayeredDrawing();
         d.set(StyleableFigure.ID, "drawing1");
         LayerFigure layer = new LayerFigure();
@@ -222,7 +221,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
      * @param supplier the supplier
      * @return the created figure
      */
-    public <T extends Figure> T createFigure(@NonNull Supplier<T> supplier) {
+    public <T extends Figure> T createFigure(Supplier<T> supplier) {
         T created = supplier.get();
         String prefix = created.getTypeSelector().toLowerCase();
         Integer counter = counters.get(prefix);
@@ -257,7 +256,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    protected void initActions(@NonNull ObservableMap<String, Action> map) {
+    protected void initActions(ObservableMap<String, Action> map) {
         super.initActions(map);
         map.put(PrintFileAction.ID, new PrintFileAction(this));
         map.put(ExportFileAction.ID, new ExportFileAction(this, SvgDrawingExportOptionsPane::createDialog));
@@ -290,7 +289,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         map.put(RedoAction.ID, new RedoAction(this, undoManager));
     }
 
-    private @NonNull Supplier<Layer> initToolBar() throws MissingResourceException {
+    private Supplier<Layer> initToolBar() throws MissingResourceException {
         //drawingView.setConstrainer(new GridConstrainer(0,0,10,10,45));
         ToolsToolbar ttbar = new ToolsToolbar(editor);
         Resources labels = GrapherLabels.getResources();
@@ -464,7 +463,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState<Void> workState) {
+    public CompletionStage<Void> print(PrinterJob job, WorkState<Void> workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(() -> {
             try {
@@ -478,7 +477,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<DataFormat> read(@NonNull URI uri, DataFormat format, @NonNull ImmutableMap<Key<?>, Object> options, boolean insert, @NonNull WorkState<Void> workState) {
+    public CompletionStage<DataFormat> read(URI uri, DataFormat format, ImmutableMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState) {
         return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
             IdFactory idFactory = new SimpleFigureIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
@@ -495,7 +494,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public @NonNull CompletionStage<Void> write(@NonNull URI uri, DataFormat format, @NonNull ImmutableMap<Key<?>, Object> options, @NonNull WorkState<Void> workState) {
+    public CompletionStage<Void> write(URI uri, DataFormat format, ImmutableMap<Key<?>, Object> options, WorkState<Void> workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(Executors.newSingleThreadExecutor(), () -> {
             if (registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {
@@ -531,7 +530,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         });
     }
 
-    private void applyUserAgentStylesheet(final @NonNull Drawing d) {
+    private void applyUserAgentStylesheet(final Drawing d) {
         try {
             d.set(Drawing.USER_AGENT_STYLESHEETS,
                     VectorList.of(

@@ -6,7 +6,6 @@ package org.jhotdraw8.application.controls.urichooser;
 
 import javafx.scene.input.DataFormat;
 import javafx.stage.FileChooser;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.clipboard.DataFormats;
 
 import java.util.List;
@@ -18,27 +17,27 @@ import java.util.List;
  */
 public class URIExtensionFilter {
 
-    private final @NonNull DataFormat format;
+    private final DataFormat format;
 
-    private final FileChooser.@NonNull ExtensionFilter extensionFilter;
+    private final FileChooser.ExtensionFilter extensionFilter;
 
-    public URIExtensionFilter(@NonNull String description, @NonNull String mimeType, String... extensions) {
+    public URIExtensionFilter(String description, String mimeType, String... extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
         this.format = DataFormats.registerDataFormat(mimeType);
     }
 
-    public URIExtensionFilter(@NonNull String description, @NonNull DataFormat format, String... extensions) {
+    public URIExtensionFilter(String description, DataFormat format, String... extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
         this.format = format;
     }
 
-    public URIExtensionFilter(final @NonNull String description, DataFormat format,
+    public URIExtensionFilter(final String description, DataFormat format,
                               final List<String> extensions) {
         extensionFilter = new FileChooser.ExtensionFilter(description, extensions);
         this.format = format;
     }
 
-    public FileChooser.@NonNull ExtensionFilter getFileChooserExtensionFilter() {
+    public FileChooser.ExtensionFilter getFileChooserExtensionFilter() {
         return extensionFilter;
     }
 

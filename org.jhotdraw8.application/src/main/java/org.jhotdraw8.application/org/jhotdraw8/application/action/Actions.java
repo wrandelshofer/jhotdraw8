@@ -11,7 +11,6 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.RadioMenuItem;
 import javafx.scene.input.KeyCombination;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Actions.
@@ -26,7 +25,7 @@ public class Actions {
      * @param control The menu control
      * @param action  The action
      */
-    public static void bindButton(@NonNull Button control, @NonNull Action action) {
+    public static void bindButton(Button control, Action action) {
         // create a strong reference to name binding:
         Binding<String> nameBinding = Action.LABEL.valueAt(action.getProperties());
         control.getProperties().put("ActionsNameBinding", nameBinding);
@@ -42,7 +41,7 @@ public class Actions {
      * @param control The menu control
      * @param action  The action
      */
-    public static void bindMenuItem(@NonNull MenuItem control, @NonNull Action action) {
+    public static void bindMenuItem(MenuItem control, Action action) {
         bindMenuItem(control, action, true);
 
     }
@@ -55,7 +54,7 @@ public class Actions {
      * @param bindLabel whether the the text of the menu item should be bound to
      *                  the label of the action
      */
-    public static void bindMenuItem(@NonNull MenuItem control, @NonNull Action action, boolean bindLabel) {
+    public static void bindMenuItem(MenuItem control, Action action, boolean bindLabel) {
 
         // create a strong reference to name binding:
         if (bindLabel) {

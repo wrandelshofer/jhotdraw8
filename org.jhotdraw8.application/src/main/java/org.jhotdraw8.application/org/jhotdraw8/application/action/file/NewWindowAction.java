@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application.action.file;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Application;
 
 /**
@@ -14,7 +13,7 @@ import org.jhotdraw8.application.Application;
  */
 public class NewWindowAction extends NewFileAction {
 
-    public static final @NonNull String ID = "file.newWindow";
+    public static final String ID = "file.newWindow";
 
     /**
      * Creates a new instance.

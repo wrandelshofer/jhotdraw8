@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -24,7 +23,7 @@ public class UniversalSelector extends SimpleSelector {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "Universal:*";
     }
 
@@ -39,7 +38,7 @@ public class UniversalSelector extends SimpleSelector {
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_ASTERISK));
     }
 

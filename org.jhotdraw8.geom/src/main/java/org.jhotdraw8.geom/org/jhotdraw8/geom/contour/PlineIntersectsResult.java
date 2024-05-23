@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +21,8 @@ import java.util.List;
  * </dl>
  */
 class PlineIntersectsResult {
-    final @NonNull List<PlineIntersect> intersects = new ArrayList<>();
-    final @NonNull List<PlineCoincidentIntersect> coincidentIntersects = new ArrayList<>();
+    final List<PlineIntersect> intersects = new ArrayList<>();
+    final List<PlineCoincidentIntersect> coincidentIntersects = new ArrayList<>();
 
     PlineIntersectsResult() {
     }

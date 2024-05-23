@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
@@ -38,8 +37,8 @@ public class Solvers {
      *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
      * </dl>
      */
-    public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> polynomialApprox3(@NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
-                                                                                           @NonNull ToDoubleFunction<Double> fp,
+    public static OrderedPair<ToDoubleFunction<Double>, Double> polynomialApprox3(Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+                                                                                  ToDoubleFunction<Double> fp,
                                                                                            double xmin, double xmax) {
         double y1 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) / 3.0);
         double y2 = quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) / 1.5);
@@ -79,9 +78,9 @@ public class Solvers {
      *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
      * </dl>
      */
-    public static @NonNull OrderedPair<ToDoubleFunction<Double>, Double> invPolynomialApprox3(
-            @NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
-            @NonNull ToDoubleFunction<Double> fp,
+    public static OrderedPair<ToDoubleFunction<Double>, Double> invPolynomialApprox3(
+            Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+            ToDoubleFunction<Double> fp,
             double xmin, double xmax) {
         ToDoubleFunction<Double> f = (t) -> Math.abs(quadratureFunction.apply(fp, xmin, xmin + (xmax - xmin) * t));
         double f3 = f.applyAsDouble(1.0);
@@ -129,7 +128,7 @@ public class Solvers {
      * @param tolerance
      * @return x the estimated x value
      */
-    public static double bisectionMethod(@NonNull ToDoubleFunction<Double> f, double y, double xmin, double xmax, double tolerance) {
+    public static double bisectionMethod(ToDoubleFunction<Double> f, double y, double xmin, double xmax, double tolerance) {
         final int maxIterations = 100;
 
         int n = 0;
@@ -182,8 +181,8 @@ public class Solvers {
      * @return x the estimated x value
      */
     public static double hybridNewtonBisectionMethod(
-            @NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
-            @NonNull ToDoubleFunction<Double> f, double y, double xmin, double xmax, double x0, double epsilon) {
+            Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+            ToDoubleFunction<Double> f, double y, double xmin, double xmax, double x0, double epsilon) {
 
         return hybridNewtonBisectionMethod(x -> quadratureFunction.apply(f, 0.0, x), f, y, xmin, xmax, x0, epsilon);
     }
@@ -216,8 +215,8 @@ public class Solvers {
      * @return x the estimated x value
      */
     public static double hybridNewtonBisectionMethod(
-            @NonNull ToDoubleFunction<Double> f,
-            @NonNull ToDoubleFunction<Double> df, double y, double xmin, double xmax, double x0, double epsilon) {
+            ToDoubleFunction<Double> f,
+            ToDoubleFunction<Double> df, double y, double xmin, double xmax, double x0, double epsilon) {
         final int maxIterations = 100;
 
         double x = x0;
@@ -269,10 +268,10 @@ public class Solvers {
      * @param tmax
      * @return
      */
-    public static @NonNull SimpleOrderedPair<ToDoubleFunction<Double>, Double> invPolynomialChebyshevApprox(
+    public static SimpleOrderedPair<ToDoubleFunction<Double>, Double> invPolynomialChebyshevApprox(
             int N,
-            @NonNull Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
-            @NonNull ToDoubleFunction<Double> fp,
+            Function3<ToDoubleFunction<Double>, Double, Double, Double> quadratureFunction,
+            ToDoubleFunction<Double> fp,
             double tmin, double tmax) {
         // TODO: find better way to determine N. For Arc 10 seems fine, for some Quads 10 is too low,
         //  for Cube depending on inflection points is maybe not the best indicator
@@ -292,9 +291,9 @@ public class Solvers {
      *     <dd><a href="https://github.com/tdewolff/canvas/blob/master/util.go#L609">github.com</a></dd>
      * </dl>
      */
-    public static @NonNull ToDoubleFunction<Double> polynomialChebyshevApprox(
+    public static ToDoubleFunction<Double> polynomialChebyshevApprox(
             int N,
-            @NonNull ToDoubleFunction<Double> f,
+            ToDoubleFunction<Double> f,
             double xmin, double xmax, double ymin, double ymax) {
         double[] fs = new double[N];
         for (int k = 0; k < N; k++) {

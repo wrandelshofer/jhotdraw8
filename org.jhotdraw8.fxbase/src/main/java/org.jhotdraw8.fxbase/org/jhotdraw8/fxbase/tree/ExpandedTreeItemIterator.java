@@ -5,7 +5,6 @@
 package org.jhotdraw8.fxbase.tree;
 
 import javafx.scene.control.TreeItem;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayDeque;
 import java.util.Collections;
@@ -21,7 +20,7 @@ import java.util.NoSuchElementException;
  */
 public class ExpandedTreeItemIterator<T> implements Iterator<TreeItem<T>> {
 
-    private final @NonNull Deque<Iterator<TreeItem<T>>> stack = new ArrayDeque<>(16);
+    private final Deque<Iterator<TreeItem<T>>> stack = new ArrayDeque<>(16);
 
     public ExpandedTreeItemIterator(TreeItem<T> root) {
         stack.push(Collections.singleton(root).iterator());

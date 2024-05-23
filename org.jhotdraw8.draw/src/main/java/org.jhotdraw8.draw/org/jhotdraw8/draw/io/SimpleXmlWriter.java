@@ -6,8 +6,6 @@ package org.jhotdraw8.draw.io;
 
 import javafx.css.StyleOrigin;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.figure.Clipping;
 import org.jhotdraw8.draw.figure.ClippingFigure;
@@ -23,6 +21,7 @@ import org.jhotdraw8.icollection.ChampMap;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -72,7 +71,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     final protected IdFactory idFactory;
     final protected String namespaceQualifier;
     protected String namespaceURI;
-    private @NonNull ImmutableMap<Key<?>, Object> options = ChampMap.of();
+    private ImmutableMap<Key<?>, Object> options = ChampMap.of();
 
     /**
      * Specifies the number of characters that should be used for indentation.
@@ -90,7 +89,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         this.namespaceQualifier = namespaceQualifier;
     }
 
-    private @NonNull DataFormat getDataFormat() {
+    private DataFormat getDataFormat() {
         String mimeType = "application/xml";
         DataFormat df = DataFormat.lookupMimeType(mimeType);
         if (df == null) {
@@ -111,7 +110,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         this.namespaceURI = namespaceURI;
     }
 
-    public Document toDocument(@Nullable URI documentHome, @NonNull Drawing internal, @NonNull Collection<Figure> selection) throws IOException {
+    public Document toDocument(@Nullable URI documentHome, Drawing internal, Collection<Figure> selection) throws IOException {
         if (selection.isEmpty() || selection.contains(internal)) {
             return toDocument(documentHome, internal);
         }
@@ -138,7 +137,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
 
     }
 
-    public Document toDocument(@Nullable URI documentHome, @NonNull Drawing internal) throws IOException {
+    public Document toDocument(@Nullable URI documentHome, Drawing internal) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setNamespaceAware(true);
@@ -157,22 +156,22 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     @Override
-    public void setOptions(@NonNull ImmutableMap<Key<?>, Object> newValue) {
+    public void setOptions(ImmutableMap<Key<?>, Object> newValue) {
         options = newValue;
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> getOptions() {
+    public ImmutableMap<Key<?>, Object> getOptions() {
         return options;
     }
 
     @Override
-    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    public void write(OutputStream out, @Nullable URI documentHome, Drawing drawing, WorkState<Void> workState) throws IOException {
         write(documentHome, new BufferedWriter(new OutputStreamWriter(out, StandardCharsets.UTF_8)),
                 drawing, workState);
     }
 
-    protected void write(@Nullable URI documentHome, @NonNull Writer out, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    protected void write(@Nullable URI documentHome, Writer out, Drawing drawing, WorkState<Void> workState) throws IOException {
         XMLStreamWriter w = createXmlStreamWriter(out);
         workState.updateProgress(0.0);
         try {
@@ -184,7 +183,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     @Override
-    public void write(@NonNull Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
+    public void write(Map<DataFormat, Object> out, Drawing drawing, Collection<Figure> selection) throws IOException {
         StringWriter sw = new StringWriter();
         XMLStreamWriter w = createXmlStreamWriter(sw);
         URI documentHome = null;
@@ -202,13 +201,13 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
 
-    private @NonNull XMLStreamWriter createXmlStreamWriter(@NonNull Writer sw) {
+    private XMLStreamWriter createXmlStreamWriter(Writer sw) {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(sw);
         w.setIndentation(" ".repeat(INDENT_AMOUNT.get(options)));
         return w;
     }
 
-    protected void writeClipping(@NonNull XMLStreamWriter w, @NonNull Drawing internal, @NonNull Collection<Figure> selection, @Nullable URI documentHome) throws IOException, XMLStreamException {
+    protected void writeClipping(XMLStreamWriter w, Drawing internal, Collection<Figure> selection, @Nullable URI documentHome) throws IOException, XMLStreamException {
         // bring selection in z-order
         Set<Figure> s = new HashSet<>(selection);
         ArrayList<Figure> ordered = new ArrayList<>(selection.size());
@@ -232,7 +231,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         w.writeEndDocument();
     }
 
-    protected void writeDocument(@NonNull XMLStreamWriter w, @Nullable URI documentHome, @NonNull Drawing internal) throws XMLStreamException {
+    protected void writeDocument(XMLStreamWriter w, @Nullable URI documentHome, Drawing internal) throws XMLStreamException {
         try {
             Drawing external = figureFactory.toExternalDrawing(internal);
             idFactory.reset();
@@ -254,7 +253,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         }
     }
 
-    private void writeElementAttribute(@NonNull XMLStreamWriter w, @NonNull Figure figure, MapAccessor<Object> k) throws IOException, XMLStreamException {
+    private void writeElementAttribute(XMLStreamWriter w, Figure figure, MapAccessor<Object> k) throws IOException, XMLStreamException {
         Object value = figure.get(k);
         if (!k.isTransient() && !figureFactory.isDefaultValue(figure, k, value)) {
             String name = figureFactory.getAttributeNameByKey(figure, k);
@@ -272,7 +271,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         }
     }
 
-    protected void writeElementAttributes(@NonNull XMLStreamWriter w, @NonNull Figure figure) throws IOException, XMLStreamException {
+    protected void writeElementAttributes(XMLStreamWriter w, Figure figure) throws IOException, XMLStreamException {
         String id = idFactory.createId(figure);
         String objectIdAttribute = figureFactory.getObjectIdAttribute();
         w.writeAttribute(objectIdAttribute, id);
@@ -298,7 +297,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         }
     }
 
-    private void writeElementNodeList(@NonNull XMLStreamWriter w, @NonNull Figure figure) throws IOException, XMLStreamException {
+    private void writeElementNodeList(XMLStreamWriter w, Figure figure) throws IOException, XMLStreamException {
         for (MapAccessor<?> k : figureFactory.figureNodeListKeys(figure)) {
             @SuppressWarnings("unchecked")
             MapAccessor<Object> key = (MapAccessor<Object>) k;
@@ -309,7 +308,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
         }
     }
 
-    protected void writeNodeRecursively(@NonNull XMLStreamWriter w, @NonNull Figure figure, int depth) throws IOException {
+    protected void writeNodeRecursively(XMLStreamWriter w, Figure figure, int depth) throws IOException {
         try {
             String elementName = figureFactory.getElementNameByFigure(figure);
             if (elementName == null) {
@@ -331,7 +330,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     // XXX maybe this should not be in SimpleXmlIO?
-    protected void writeProcessingInstructions(@NonNull XMLStreamWriter w, @NonNull Drawing external) throws XMLStreamException {
+    protected void writeProcessingInstructions(XMLStreamWriter w, Drawing external) throws XMLStreamException {
         if (figureFactory.getStylesheetsKey() != null) {
             ImmutableList<URI> stylesheets = external.get(figureFactory.getStylesheetsKey());
             if (stylesheets != null) {

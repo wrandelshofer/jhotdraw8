@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.biarc;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
@@ -12,7 +11,7 @@ import org.jhotdraw8.geom.Points2D;
 import java.awt.geom.Point2D;
 
 
-public record BiArc(@NonNull Arc a1, @NonNull Arc a2) {
+public record BiArc(Arc a1, Arc a2) {
 
     /**
      * Creates a new instance.

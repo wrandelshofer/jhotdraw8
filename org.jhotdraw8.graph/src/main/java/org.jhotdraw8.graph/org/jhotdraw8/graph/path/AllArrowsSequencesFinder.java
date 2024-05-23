@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 
@@ -31,9 +30,9 @@ public interface AllArrowsSequencesFinder<V, A, C extends Number & Comparable<C>
      * @param costLimit     the algorithm-specific cost limit
      * @return all paths
      */
-    @NonNull Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            int maxDepth, @NonNull C costLimit);
+    Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            int maxDepth, C costLimit);
 
 }

@@ -10,7 +10,6 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -27,7 +26,7 @@ public class DefaultConverterTest {
     public DefaultConverterTest() {
     }
 
-    public static void testFromString(String expectedOutput, @NonNull String input) throws Exception {
+    public static void testFromString(String expectedOutput, String input) throws Exception {
         DefaultConverter c = new DefaultConverter();
 
         Object actualOutput = c.fromString(input);
@@ -44,7 +43,7 @@ public class DefaultConverterTest {
         assertEquals(actualOutput, expectedOutput);
     }
 
-    public static @NonNull Object[][] textData() {
+    public static Object[][] textData() {
         return new Object[][]{
                 {"hello world", "hello world"},
         };
@@ -52,7 +51,7 @@ public class DefaultConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString("hello", "hello"))
         );
@@ -60,7 +59,7 @@ public class DefaultConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsToString() {
+    public List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString("hello", "hello"))
         );

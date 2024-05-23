@@ -5,9 +5,8 @@
 package org.jhotdraw8.fxbase.tree;
 
 import javafx.scene.control.TreeItem;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The {@code TreePresentationModel} can be used to present a {@code TreeModel}
@@ -27,17 +26,17 @@ public interface TreePresentationModel<N> {
      */
     String MODEL_PROPERTY = "model";
 
-    default @NonNull TreeModel<N> getTreeModel() {
+    default TreeModel<N> getTreeModel() {
         return treeModelProperty().get();
     }
 
-    default void setTreeModel(@NonNull TreeModel<N> newValue) {
+    default void setTreeModel(TreeModel<N> newValue) {
         treeModelProperty().set(newValue);
     }
 
-    @NonNull NonNullObjectProperty<TreeModel<N>> treeModelProperty();
+    NonNullObjectProperty<TreeModel<N>> treeModelProperty();
 
-    @NonNull TreeItem<N> getRoot();
+    TreeItem<N> getRoot();
 
     boolean isUpdating();
 

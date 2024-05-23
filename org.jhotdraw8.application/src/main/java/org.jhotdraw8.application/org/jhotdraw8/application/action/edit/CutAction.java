@@ -6,7 +6,6 @@ package org.jhotdraw8.application.action.edit;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.EditableComponent;
@@ -18,14 +17,14 @@ import org.jhotdraw8.application.EditableComponent;
  */
 public class CutAction extends AbstractSelectionAction {
 
-    public static final @NonNull String ID = "edit.cut";
+    public static final String ID = "edit.cut";
 
     /**
      * Creates a new instance which acts on the currently focused component.
      *
      * @param app the application
      */
-    public CutAction(@NonNull Application app) {
+    public CutAction(Application app) {
         this(app, null);
     }
 
@@ -37,13 +36,13 @@ public class CutAction extends AbstractSelectionAction {
      *               focused component.
      */
     @SuppressWarnings("this-escape")
-    public CutAction(@NonNull Application app, Node target) {
+    public CutAction(Application app, Node target) {
         super(app, target);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(ActionEvent event, @NonNull EditableComponent c) {
+    protected void onActionPerformed(ActionEvent event, EditableComponent c) {
         c.cut();
     }
 

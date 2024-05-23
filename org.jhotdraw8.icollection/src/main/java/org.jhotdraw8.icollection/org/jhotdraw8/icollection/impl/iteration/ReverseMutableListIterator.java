@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.impl.iteration;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ConcurrentModificationException;
 import java.util.List;
@@ -10,7 +9,7 @@ import java.util.Objects;
 import java.util.function.IntSupplier;
 
 public class ReverseMutableListIterator<E> implements ListIterator<E> {
-    private final @NonNull List<E> src;
+    private final List<E> src;
     /**
      * Index of next element to return.
      */
@@ -19,7 +18,7 @@ public class ReverseMutableListIterator<E> implements ListIterator<E> {
      * Index of last element returned; negative if none.
      */
     int lastReturned = -1;
-    private final @NonNull IntSupplier modCount;
+    private final IntSupplier modCount;
     private int expectedCount;
 
     /**
@@ -28,7 +27,7 @@ public class ReverseMutableListIterator<E> implements ListIterator<E> {
      * @param src   the underlying source list
      * @param index the next index of the iterator
      */
-    public ReverseMutableListIterator(@NonNull List<E> src, int index, @NonNull IntSupplier modCount) {
+    public ReverseMutableListIterator(List<E> src, int index, IntSupplier modCount) {
         Objects.checkIndex(index, src.size() + 1);
         this.src = src;
         this.index = index;

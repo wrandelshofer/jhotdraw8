@@ -6,7 +6,6 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.BoundingBox;
 import javafx.scene.shape.Rectangle;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Rectangle2D;
 
@@ -68,14 +67,14 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
         addToBounds(x2, y2);
     }
 
-    public @NonNull Rectangle buildRectangle() {
+    public Rectangle buildRectangle() {
         if (Double.isNaN(minx)) {
             return new Rectangle(0, 0, 0, 0);
         }
         return new Rectangle(minx, miny, maxx - minx, maxy - miny);
     }
 
-    public Rectangle2D.@NonNull Double buildRectangle2D() {
+    public Rectangle2D.Double buildRectangle2D() {
         if (Double.isNaN(minx)) {
             return new Rectangle2D.Double(0, 0, 0, 0);
         }
@@ -83,7 +82,7 @@ public class BoundingBoxBuilder extends AbstractPathBuilder<BoundingBox> {
     }
 
     @Override
-    public @NonNull BoundingBox build() {
+    public BoundingBox build() {
         if (Double.isNaN(minx)) {
             return new BoundingBox(0, 0, 0, 0);
         }

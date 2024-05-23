@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
@@ -14,6 +12,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
 import org.jhotdraw8.css.value.UnitConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -49,7 +48,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.
      */
-    public static final @NonNull String NAME = "attr";
+    public static final String NAME = "attr";
 
     /**
      * Creates a new instance with the function name {@value #NAME}.
@@ -68,10 +67,10 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
     }
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt,
-                        @NonNull SelectorModel<T> model,
-                        @NonNull CssFunctionProcessor<T> functionProcessor,
-                        @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
+    public void process(T element, CssTokenizer tt,
+                        SelectorModel<T> model,
+                        CssFunctionProcessor<T> functionProcessor,
+                        Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "():  function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
             throw tt.createParseException(getName() + "():  function " + getName() + "() expected.");
@@ -111,7 +110,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         applyFunction(element, model, functionProcessor, out, recursionStack, line, start, attrName, typeOrUnit, attrFallback, end);
     }
 
-    private void applyFunction(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack, int line, int start, QualifiedName attrName, String typeOrUnit, List<CssToken> attrFallback, int end) throws IOException, ParseException {
+    private void applyFunction(T element, SelectorModel<T> model, CssFunctionProcessor<T> functionProcessor, Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack, int line, int start, QualifiedName attrName, String typeOrUnit, List<CssToken> attrFallback, int end) throws IOException, ParseException {
         @Nullable List<CssToken> tokenizedValue = model.getAttribute(element, null, attrName.namespace(), attrName.name());
         if (tokenizedValue != null) {
             switch (typeOrUnit == null ? "string" : typeOrUnit) {
@@ -337,7 +336,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
      * @param tokenizedValue the input tokens
      * @return true on success
      */
-    private boolean applyAsLengthInTheGivenUnits(@NonNull Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, @NonNull List<CssToken> tokenizedValue) {
+    private boolean applyAsLengthInTheGivenUnits(Consumer<CssToken> out, int line, int start, String typeOrUnit, int end, List<CssToken> tokenizedValue) {
         final ListCssTokenizer t2 = new ListCssTokenizer(tokenizedValue);
         if (t2.next() == CssTokenType.TT_EOF) {
             out.accept(new CssToken(CssTokenType.TT_DIMENSION, 0, typeOrUnit));
@@ -384,7 +383,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
      * @param end      the end position to be stated in the location info of the output tokens
      * @return true on success
      */
-    private boolean applyAsString(@NonNull T element, @NonNull SelectorModel<T> model, @NonNull Consumer<CssToken> out, int line, int start, QualifiedName attrName, int end) {
+    private boolean applyAsString(T element, SelectorModel<T> model, Consumer<CssToken> out, int line, int start, QualifiedName attrName, int end) {
         String attributeAsString = model.getAttributeAsString(element, null, attrName.namespace(), attrName.name());
         if (attributeAsString == null) {
             return false;
@@ -394,7 +393,7 @@ public class AttrCssFunction<T> extends AbstractCssFunction<T> {
         }
     }
 
-    private @NonNull QualifiedName parseAttrName(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private QualifiedName parseAttrName(CssTokenizer tt) throws IOException, ParseException {
         String name;
         if (tt.next() == CssTokenType.TT_IDENT) {
             name = tt.currentStringNonNull();

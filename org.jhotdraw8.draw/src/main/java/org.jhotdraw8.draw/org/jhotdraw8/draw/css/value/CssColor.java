@@ -6,11 +6,10 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jspecify.annotations.Nullable;
 
 import java.text.ParseException;
 import java.util.Objects;
@@ -30,13 +29,13 @@ import java.util.Objects;
  */
 public class CssColor implements Paintable {
 
-    private static final @NonNull DoubleCssConverter num = new DoubleCssConverter(false);
+    private static final DoubleCssConverter num = new DoubleCssConverter(false);
 
-    private final @NonNull String name;
-    private final @NonNull Color color;
+    private final String name;
+    private final Color color;
 
 
-    public CssColor(@NonNull Color color) {
+    public CssColor(Color color) {
         this(null, color);
     }
 
@@ -55,34 +54,34 @@ public class CssColor implements Paintable {
         this.name = name == null ? toName(computedColor) : name;
     }
 
-    public CssColor(@Nullable String name, @NonNull Color color) {
+    public CssColor(@Nullable String name, Color color) {
         this.name = name == null ? toName(color) : name;
         this.color = color;
     }
 
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
-    public @NonNull Color getColor(SystemColorConverter converter) {
+    public Color getColor(SystemColorConverter converter) {
         return converter.convert(this);
     }
 
-    public @NonNull Color getColor() {
+    public Color getColor() {
         return color;
     }
 
     @Override
-    public @NonNull Color getPaint() {
+    public Color getPaint() {
         return color;
     }
 
     @Override
-    public @Nullable Paint getPaint(@NonNull RenderContext ctx) {
+    public @Nullable Paint getPaint(RenderContext ctx) {
         return color;
     }
 
-    public static @NonNull String toName(@NonNull Color c) {
+    public static String toName(Color c) {
         if (c.getOpacity() == 1.0) {
             int r = (int) Math.round(c.getRed() * 255.0);
             int g = (int) Math.round(c.getGreen() * 255.0);
@@ -124,15 +123,15 @@ public class CssColor implements Paintable {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssColor{" + getName() + ","
                 + color.getRed() + "," + color.getGreen() + "," + color.getBlue() + "," + color.getOpacity()
                 + "}";
     }
 
-    private static final @NonNull ColorCssConverter converter = new ColorCssConverter();
+    private static final ColorCssConverter converter = new ColorCssConverter();
 
-    public static @NonNull CssColor valueOf(@NonNull String value) {
+    public static CssColor valueOf(String value) {
         try {
             return converter.fromString(value);
         } catch (ParseException e) {

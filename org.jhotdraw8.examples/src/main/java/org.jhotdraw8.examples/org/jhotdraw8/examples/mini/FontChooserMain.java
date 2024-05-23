@@ -11,7 +11,6 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcontrols.fontchooser.FontDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilyDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
@@ -24,7 +23,7 @@ import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
 public class FontChooserMain extends Application {
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         Label fontChooserLabel = new Label("No font selected");
         Button fontChooserButton = new Button("Open FontChooser");
         fontChooserButton.setOnAction(event -> {
@@ -60,7 +59,7 @@ public class FontChooserMain extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(@NonNull String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 

@@ -10,8 +10,7 @@ import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.KeyMapEntryProperty;
 
@@ -23,19 +22,19 @@ import org.jhotdraw8.fxcollection.typesafekey.KeyMapEntryProperty;
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 
-    private final @NonNull WritableStyleableMapAccessor<T> key;
+    private final WritableStyleableMapAccessor<T> key;
     private final CssMetaData<?, T> metaData;
-    private final @NonNull ObservableMap<Key<?>, Object> mapp;
-    private final @NonNull String name;
-    private final @NonNull StyleableMap<Key<?>, Object> map;
-    private final @NonNull Object bean;
+    private final ObservableMap<Key<?>, Object> mapp;
+    private final String name;
+    private final StyleableMap<Key<?>, Object> map;
+    private final Object bean;
 
-    public KeyMapEntryStyleableProperty(@NonNull ReadOnlyMapProperty<Key<?>, Object> mapp, @NonNull WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(ReadOnlyMapProperty<Key<?>, Object> mapp, WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         this(mapp.getBean(), mapp, key, name, metaData);
     }
 
     @SuppressWarnings("this-escape")
-    public KeyMapEntryStyleableProperty(Object bean, @NonNull ObservableMap<Key<?>, Object> mapp, @NonNull WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
+    public KeyMapEntryStyleableProperty(Object bean, ObservableMap<Key<?>, Object> mapp, WritableStyleableMapAccessor<T> key, String name, CssMetaData<?, T> metaData) {
         @SuppressWarnings("unchecked")
         StyleableMap<Key<?>, Object> m = (StyleableMap<Key<?>, Object>) mapp;
         this.map = m;

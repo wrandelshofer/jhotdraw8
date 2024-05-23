@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.fxbase.lang;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class Exceptions {
     /**
@@ -20,7 +19,7 @@ public class Exceptions {
      * @param t a throwable
      * @return the error message
      */
-    public static @Nullable String getLocalizedMessage(@NonNull Throwable t) {
+    public static @Nullable String getLocalizedMessage(Throwable t) {
         String message = null;
         for (Throwable tt = t; tt != null; tt = tt.getCause()) {
             String msg = tt.getLocalizedMessage();

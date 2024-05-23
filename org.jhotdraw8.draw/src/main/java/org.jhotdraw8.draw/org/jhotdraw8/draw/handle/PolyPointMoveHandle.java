@@ -17,8 +17,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -28,6 +26,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -45,15 +44,15 @@ public class PolyPointMoveHandle extends AbstractHandle {
 
     private static final @Nullable Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
     private static final @Nullable Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
-    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private @Nullable Set<Figure> groupReshapeableFigures;
-    private final @NonNull Region node;
+    private final Region node;
     private @Nullable Point2D oldPoint;
     private @Nullable Point2D pickLocation;
     private final int pointIndex;
-    private final @NonNull MapAccessor<ImmutableList<Point2D>> pointKey;
+    private final MapAccessor<ImmutableList<Point2D>> pointKey;
 
-    public PolyPointMoveHandle(@NonNull Figure figure, @NonNull MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
+    public PolyPointMoveHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -87,7 +86,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         node.resize(size, size);
         CssColor color = view.getEditor().getHandleColor();
@@ -97,7 +96,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -131,7 +130,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
         // determine which figures can be reshaped together as a group
@@ -146,7 +145,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fireDrawingModelEvent undoable edit
     }
 
@@ -156,7 +155,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = owner;
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
@@ -182,7 +181,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
      * @param newPoint newPoint in world coordinates
      * @param model    the drawing model
      */
-    public static void translateFigure(@NonNull Figure f, @NonNull Point2D oldPoint, @NonNull Point2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(Figure f, Point2D oldPoint, Point2D newPoint, @Nullable DrawingModel model) {
         Point2D npl = f.worldToParent(newPoint);
         Point2D opl = f.worldToParent(oldPoint);
         Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlySet;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
@@ -25,19 +24,19 @@ import java.util.function.Supplier;
  */
 public class ReadOnlySetFacade<E> extends AbstractReadOnlySet<E> {
 
-    protected final @NonNull Supplier<Iterator<E>> iteratorFunction;
-    protected final @NonNull IntSupplier sizeFunction;
-    protected final @NonNull Predicate<Object> containsFunction;
+    protected final Supplier<Iterator<E>> iteratorFunction;
+    protected final IntSupplier sizeFunction;
+    protected final Predicate<Object> containsFunction;
     /**
      * Characteristics of the spliterator.
      */
     protected final int characteristics;
 
-    public ReadOnlySetFacade(@NonNull ReadOnlyCollection<E> backingSet) {
+    public ReadOnlySetFacade(ReadOnlyCollection<E> backingSet) {
         this(backingSet::iterator, backingSet::size, backingSet::contains, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
-    public ReadOnlySetFacade(@NonNull Collection<E> backingSet) {
+    public ReadOnlySetFacade(Collection<E> backingSet) {
         this(backingSet::iterator, backingSet::size, backingSet::contains, Spliterator.SIZED | Spliterator.IMMUTABLE | Spliterator.DISTINCT);
     }
 
@@ -59,7 +58,7 @@ public class ReadOnlySetFacade<E> extends AbstractReadOnlySet<E> {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new Iterator<>() {
             private final Iterator<? extends E> i = iteratorFunction.get();
 

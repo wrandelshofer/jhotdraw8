@@ -6,8 +6,7 @@ package org.jhotdraw8.fxbase.beans;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
@@ -30,17 +29,17 @@ public abstract class AbstractPropertyBean implements PropertyBean {
     }
 
     @Override
-    public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 
     @Override
-    public <T> @Nullable T get(@NonNull MapAccessor<T> key) {
+    public <T> @Nullable T get(MapAccessor<T> key) {
         return PropertyBean.super.get(key);
     }
 
     @Override
-    public <T> @NonNull T getNonNull(@NonNull NonNullMapAccessor<T> key) {
+    public <T> T getNonNull(NonNullMapAccessor<T> key) {
         return PropertyBean.super.getNonNull(key);
     }
 

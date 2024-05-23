@@ -5,12 +5,11 @@
 package org.jhotdraw8.fxcollection.indexedset;
 
 import javafx.collections.ObservableListBase;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.spliterator.ReverseListSpliterator;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,7 +48,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     /**
      * The underlying list.
      */
-    private Object @NonNull [] data = EMPTY_ARRAY;
+    private Object[] data = EMPTY_ARRAY;
     private int size;
 
     /**
@@ -64,12 +63,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
      *
      * @param col A collection.
      */
-    public AbstractIndexedArrayObservableSet(@NonNull Collection<? extends E> col) {
+    public AbstractIndexedArrayObservableSet(Collection<? extends E> col) {
         setAll(col);
     }
 
     @Override
-    public boolean setAll(@NonNull Collection<? extends E> col) {
+    public boolean setAll(Collection<? extends E> col) {
         beginChange();
         try {
             clear();
@@ -82,7 +81,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean addAll(@NonNull Collection<? extends E> c) {
+    public boolean addAll(Collection<? extends E> c) {
         boolean changed = false;
         beginChange();
         try {
@@ -97,7 +96,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean addAll(int index, @NonNull Collection<? extends E> c) {
+    public boolean addAll(int index, Collection<? extends E> c) {
         boolean changed = false;
         beginChange();
         try {
@@ -114,7 +113,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public boolean removeAll(@NonNull Collection<?> c) {
+    public boolean removeAll(Collection<?> c) {
         beginChange();
         try {
             return super.removeAll(c);
@@ -124,7 +123,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public boolean retainAll(@NonNull Collection<?> c) {
+    public boolean retainAll(Collection<?> c) {
         beginChange();
         try {
             return super.retainAll(c);
@@ -134,7 +133,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public void add(int index, @NonNull E element) {
+    public void add(int index, E element) {
         doAdd(index, element);
     }
 
@@ -166,19 +165,18 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull
     E elementData(int index) {
         return (E) data[index];
     }
 
-    private @NonNull E doSet(int index, E newValue) {
+    private E doSet(int index, E newValue) {
         Objects.checkIndex(index, size);
         E oldValue = elementData(index);
         data[index] = newValue;
         return oldValue;
     }
 
-    protected boolean doAdd(int index, @NonNull E element) {
+    protected boolean doAdd(int index, E element) {
         if (!mayBeAdded(element)) {
             return false;
         }
@@ -262,7 +260,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
     }
 
-    private @NonNull E arrayDoRemove(int index) {
+    private E arrayDoRemove(int index) {
         Objects.checkIndex(index, size);
         E oldValue = elementData(index);
         System.arraycopy(data, index + 1, data, index, size - index - 1);
@@ -271,7 +269,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull List<E> dataDoRemoveRange(int fromIndex, int toIndex) {
+    private List<E> dataDoRemoveRange(int fromIndex, int toIndex) {
         Objects.checkFromToIndex(fromIndex, toIndex, size);
         int removedCount = toIndex - fromIndex;
         ArrayList<E> removed = new ArrayList<>(removedCount);
@@ -307,7 +305,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public @NonNull E remove(int index) {
+    public E remove(int index) {
         E old = arrayDoRemove(index);
         beginChange();
         nextRemove(index, old);
@@ -330,16 +328,16 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public @NonNull List<E> subList(int fromIndex, int toIndex) {
+    public List<E> subList(int fromIndex, int toIndex) {
         return new SubObservableList(super.subList(fromIndex, toIndex));
     }
 
     @Override
-    public @NonNull E get(int index) {
+    public E get(int index) {
         return doGet(index);
     }
 
-    private @NonNull E doGet(int index) {
+    private E doGet(int index) {
         Objects.checkIndex(index, size);
         return elementData(index);
     }
@@ -350,12 +348,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public boolean add(@NonNull E e) {
+    public boolean add(E e) {
         return doAdd(size(), e);
     }
 
     @Override
-    public @NonNull ListIterator<E> listIterator(int index) {
+    public ListIterator<E> listIterator(int index) {
         return new ObservableListIterator(index);
     }
 
@@ -396,7 +394,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
 
     private class ObservableDescendingIterator implements ListIterator<E> {
 
-        private final @NonNull ObservableListIterator iter;
+        private final ObservableListIterator iter;
 
         public ObservableDescendingIterator(int index) {
             this.iter = new ObservableListIterator(index);
@@ -443,7 +441,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public void add(@NonNull E e) {
+        public void add(E e) {
             iter.add(e);
         }
 
@@ -499,7 +497,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             return lastReturned;
         }
 
-        private @NonNull E iterGet(int index) {
+        private E iterGet(int index) {
             checkModCount();
             if (index < from || index >= to) {
                 throw new NoSuchElementException("index out of bounds:" + index);
@@ -539,7 +537,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public void add(@NonNull E e) {
+        public void add(E e) {
             checkModCount();
             if (contains(e)) {
                 throw new UnsupportedOperationException("Can not permute element in iterator");
@@ -577,12 +575,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public final @NonNull E getFirst() {
+    public final E getFirst() {
         return doGet(0);
     }
 
     @Override
-    public @NonNull E getLast() {
+    public E getLast() {
         return doGet(size - 1);
     }
 
@@ -592,7 +590,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
             this.sublist = sublist;
         }
 
-        private final @NonNull List<E> sublist;
+        private final List<E> sublist;
 
         @Override
         public int size() {
@@ -610,17 +608,17 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public @NonNull Iterator<E> iterator() {
+        public Iterator<E> iterator() {
             return sublist.iterator();
         }
 
         @Override
-        public @NonNull Object @NonNull [] toArray() {
+        public Object[] toArray() {
             return sublist.toArray();
         }
 
         @Override
-        public @NonNull <T> T @NonNull [] toArray(@NonNull T @NonNull [] a) {
+        public <T> T[] toArray(T[] a) {
             return sublist.toArray(a);
         }
 
@@ -635,13 +633,13 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public boolean containsAll(@NonNull Collection<?> c) {
+        public boolean containsAll(Collection<?> c) {
             //noinspection SlowListContainsAll
             return sublist.containsAll(c);
         }
 
         @Override
-        public boolean addAll(@NonNull Collection<? extends E> c) {
+        public boolean addAll(Collection<? extends E> c) {
             beginChange();
             try {
                 return sublist.addAll(c);
@@ -651,7 +649,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public boolean addAll(int index, @NonNull Collection<? extends E> c) {
+        public boolean addAll(int index, Collection<? extends E> c) {
             beginChange();
             try {
                 return sublist.addAll(index, c);
@@ -661,7 +659,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public boolean removeAll(@NonNull Collection<?> c) {
+        public boolean removeAll(Collection<?> c) {
             beginChange();
             try {
                 return sublist.removeAll(c);
@@ -671,7 +669,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public boolean retainAll(@NonNull Collection<?> c) {
+        public boolean retainAll(Collection<?> c) {
             beginChange();
             try {
                 return sublist.retainAll(c);
@@ -721,17 +719,17 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
         }
 
         @Override
-        public @NonNull ListIterator<E> listIterator() {
+        public ListIterator<E> listIterator() {
             return sublist.listIterator();
         }
 
         @Override
-        public @NonNull ListIterator<E> listIterator(int index) {
+        public ListIterator<E> listIterator(int index) {
             return sublist.listIterator(index);
         }
 
         @Override
-        public @NonNull List<E> subList(int fromIndex, int toIndex) {
+        public List<E> subList(int fromIndex, int toIndex) {
             return new SubObservableList(sublist.subList(fromIndex, toIndex));
         }
 
@@ -752,7 +750,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return Spliterators.spliterator(this, Spliterator.ORDERED);
     }
 
@@ -782,7 +780,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
      * @param e an object
      * @return true if the object may be added to this set
      */
-    protected abstract boolean mayBeAdded(@NonNull E e);
+    protected abstract boolean mayBeAdded(E e);
 
 
     public boolean equals(Object o) {
@@ -819,12 +817,12 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return super.iterator();
     }
 
     @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+    public ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(
                 () -> new ReverseListSpliterator<>(this, 0, size),
                 this::iterator,

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -13,10 +12,10 @@ import java.util.Collections;
 import java.util.List;
 
 public class IntersectionResultEx {
-    private final @NonNull ImmutableList<IntersectionPointEx> intersections;
-    private final @NonNull IntersectionStatus status;
+    private final ImmutableList<IntersectionPointEx> intersections;
+    private final IntersectionStatus status;
 
-    public IntersectionResultEx(@NonNull List<IntersectionPointEx> intersections) {
+    public IntersectionResultEx(List<IntersectionPointEx> intersections) {
         this(intersections.isEmpty() ? IntersectionStatus.NO_INTERSECTION : IntersectionStatus.INTERSECTION, intersections);
     }
 
@@ -24,13 +23,13 @@ public class IntersectionResultEx {
         this(status, Collections.emptyList());
     }
 
-    public IntersectionResultEx(@NonNull IntersectionStatus status, @NonNull List<IntersectionPointEx> intersections) {
+    public IntersectionResultEx(IntersectionStatus status, List<IntersectionPointEx> intersections) {
         this.intersections = VectorList.copyOf(intersections);
         this.status = status;
     }
 
 
-    public @NonNull IntersectionStatus getStatus() {
+    public IntersectionStatus getStatus() {
         return status;
     }
 

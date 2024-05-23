@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class IntersectCirclePathIterator {
     private IntersectCirclePathIterator() {
     }
 
-    public static @NonNull IntersectionResultEx intersectPathIteratorCircleEx(@NonNull PathIterator pit, double cx, double cy, double r) {
+    public static IntersectionResultEx intersectPathIteratorCircleEx(PathIterator pit, double cx, double cy, double r) {
         List<IntersectionPointEx> result = new ArrayList<>();
         IntersectionStatus status = IntersectionStatus.NO_INTERSECTION;
         final double[] seg = new double[6];

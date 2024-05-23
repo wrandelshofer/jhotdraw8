@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.CollectionFacade;
 
 import java.util.Arrays;
@@ -44,7 +43,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
         return size() == 0;
     }
 
-    default Object @NonNull [] toArray() {
+    default Object[] toArray() {
         return toArray(new Object[size()]);
     }
 
@@ -55,7 +54,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @param a   a template array
      * @return an array
      */
-    default @NonNull <T> T @NonNull [] toArray(@NonNull T @NonNull [] a) {
+    default <T> T[] toArray(T[] a) {
         // Estimate size of array; be prepared to see more or fewer elements
         int size = size();
         @SuppressWarnings("unchecked")
@@ -100,7 +99,6 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @return an iterator
      */
     @Override
-    @NonNull
     Iterator<E> iterator();
 
     /**
@@ -109,7 +107,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @param c another collection
      * @return true if this collection contains all of c
      */
-    default boolean containsAll(@NonNull Iterable<?> c) {
+    default boolean containsAll(Iterable<?> c) {
         for (Object e : c) {
             if (!contains(e)) {
                 return false;
@@ -123,7 +121,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      *
      * @return the wrapped collection
      */
-    default @NonNull Collection<E> asCollection() {
+    default Collection<E> asCollection() {
         return new CollectionFacade<>(this);
     }
 
@@ -139,7 +137,7 @@ public interface ReadOnlyCollection<E> extends Iterable<E> {
      * @param <E> the element type
      * @return a string representation of the iterable
      */
-    static <E> @NonNull String iterableToString(final @NonNull Iterable<E> c) {
+    static <E> String iterableToString(final Iterable<E> c) {
         Iterator<E> it = c.iterator();
         if (!it.hasNext()) {
             return "[]";

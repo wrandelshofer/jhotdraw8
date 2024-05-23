@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -200,11 +199,11 @@ public class CubicCurveCharacteristics {
     /**
      * Computes the inflection points of the given cubic curve.
      */
-    public static @NonNull DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
+    public static DoubleArrayList inflectionPoints(CubicCurve2D.Double c) {
         return inflectionPoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
     }
 
-    public static @NonNull DoubleArrayList inflectionPoints(double[] b, int o) {
+    public static DoubleArrayList inflectionPoints(double[] b, int o) {
         return inflectionPoints(b[o], b[o + 1],
                 b[o + 2], b[o + 3],
                 b[o + 4], b[o + 5],
@@ -242,7 +241,7 @@ public class CubicCurveCharacteristics {
      *    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>
      * </dl>
      */
-    public static @NonNull DoubleArrayList inflectionPoints(double x0, double y0,
+    public static DoubleArrayList inflectionPoints(double x0, double y0,
                                                             double x1, double y1,
                                                             double x2, double y2,
                                                             double x3, double y3) {
@@ -322,7 +321,7 @@ public class CubicCurveCharacteristics {
     /**
      * Computes the extreme points of the given cubic curve.
      */
-    public static @NonNull DoubleArrayList extremePoints(CubicCurve2D.Double c) {
+    public static DoubleArrayList extremePoints(CubicCurve2D.Double c) {
         return extremePoints(c.x1, c.y1, c.ctrlx1, c.ctrly1, c.ctrlx2, c.ctrly2, c.x2, c.y2);
     }
 
@@ -335,7 +334,7 @@ public class CubicCurveCharacteristics {
      *     <dd><a href="https://github.polettix.it/ETOOBUSY/2020/07/09/bezier-extremes/">github.polettix.it</a></dd>
      * </dl>
      */
-    public static @NonNull DoubleArrayList extremePoints(double x0, double y0,
+    public static DoubleArrayList extremePoints(double x0, double y0,
                                                          double x1, double y1,
                                                          double x2, double y2,
                                                          double x3, double y3) {

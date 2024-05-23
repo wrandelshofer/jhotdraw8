@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application.action.file;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
@@ -20,7 +19,7 @@ import java.util.concurrent.CompletionStage;
  */
 public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
 
-    public static final @NonNull String ID = "file.clear";
+    public static final String ID = "file.clear";
 
     /**
      * Creates a new instance.
@@ -29,14 +28,14 @@ public class ClearFileAction extends AbstractSaveUnsavedChangesAction {
      * @param view the view
      */
     @SuppressWarnings("this-escape")
-    public ClearFileAction(@NonNull Application app, FileBasedActivity view) {
+    public ClearFileAction(Application app, FileBasedActivity view) {
         super(view);
         Resources labels = ApplicationLabels.getResources();
         labels.configureAction(this, "file.clear");
     }
 
     @Override
-    public CompletionStage<Void> doIt(final @NonNull FileBasedActivity view) {
+    public CompletionStage<Void> doIt(final FileBasedActivity view) {
         return view.clear();
     }
 }

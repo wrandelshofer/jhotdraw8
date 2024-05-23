@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Abstract base class for back links.

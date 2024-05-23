@@ -7,7 +7,6 @@ package org.jhotdraw8.fxcollection.facade;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.ListFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
@@ -23,7 +22,7 @@ import java.util.Collection;
  * @author Werner Randelshofer
  */
 public class ObservableListFacade<E> extends ListFacade<E> implements ObservableList<E> {
-    public ObservableListFacade(@NonNull ReadOnlyList<E> backingList) {
+    public ObservableListFacade(ReadOnlyList<E> backingList) {
         super(backingList);
     }
 

@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.fxbase.text;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.Enumeration;
@@ -15,11 +14,11 @@ import java.util.ResourceBundle;
  * This resource bundle can be used as a stub.
  */
 public class ResourceBundleStub extends ResourceBundle {
-    public @NonNull Enumeration<String> getKeys() {
+    public Enumeration<String> getKeys() {
         return Collections.emptyEnumeration();
     }
 
-    protected Object handleGetObject(@NonNull String key) {
+    protected Object handleGetObject(String key) {
         return key;
     }
 

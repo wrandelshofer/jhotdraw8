@@ -22,7 +22,6 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 import java.util.ArrayList;
@@ -39,12 +38,12 @@ import static java.lang.Double.max;
  */
 public class TabbedAccordionTrack extends AbstractDockParent implements Track {
 
-    private final @NonNull BooleanProperty rotated = new SimpleBooleanProperty(false);
-    private final @NonNull TabPane tabPane = new TabPane();
-    private final @NonNull Accordion accordion = new Accordion();
-    private final @NonNull TitledPane titlePane = new TitledPane();
-    private final @NonNull ResizePane resizePane = new ResizePane();
-    private final @NonNull StackPane stackPane = new StackPane() {
+    private final BooleanProperty rotated = new SimpleBooleanProperty(false);
+    private final TabPane tabPane = new TabPane();
+    private final Accordion accordion = new Accordion();
+    private final TitledPane titlePane = new TitledPane();
+    private final ResizePane resizePane = new ResizePane();
+    private final StackPane stackPane = new StackPane() {
         @Override
         protected void layoutChildren() {
             if (!isRotated()) {
@@ -92,7 +91,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         CustomBinding.bind(tabPane.getSelectionModel().selectedItemProperty(), t -> ((TabPaneTrack.MyTab) t).showingProperty(), expandedAndShowing, false);
     }
 
-    private TabPaneTrack.@NonNull MyTab makeTab(DockChild c) {
+    private TabPaneTrack.MyTab makeTab(DockChild c) {
         if (c instanceof Dockable k) {
             TabPaneTrack.MyTab tab = new TabPaneTrack.MyTab(c, k.getText(), k.getNode());
             tab.graphicProperty().bind(CustomBinding.compute(k::getGraphic, k.graphicProperty(), editableProperty()));
@@ -102,7 +101,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
         }
     }
 
-    protected @NonNull ChangeListener<DockParent> onParentChanged() {
+    protected ChangeListener<DockParent> onParentChanged() {
         return (o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
             resizePane.setResizeAxis(newv == null ? TrackAxis.Y : newv.getDockAxis());
@@ -171,7 +170,7 @@ public class TabbedAccordionTrack extends AbstractDockParent implements Track {
 
 
     @Override
-    public @NonNull TrackAxis getDockAxis() {
+    public TrackAxis getDockAxis() {
         return TrackAxis.Z;
     }
 

@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
@@ -13,6 +11,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -27,13 +26,13 @@ import java.util.Objects;
 public abstract class AbstractStyleableMapAccessor<T>
         implements WritableStyleableMapAccessor<T>, CompositeMapAccessor<T> {
 
-    private final @NonNull String cssName;
+    private final String cssName;
 
 
     /**
      * Holds a String representation of the name.
      */
-    private final @NonNull String name;
+    private final String name;
     /**
      * Holds the default value.
      */
@@ -42,9 +41,9 @@ public abstract class AbstractStyleableMapAccessor<T>
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    private final @NonNull Type type;
+    private final Type type;
 
-    private final @NonNull ImmutableSequencedSet<MapAccessor<?>> subAccessors;
+    private final ImmutableSequencedSet<MapAccessor<?>> subAccessors;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -55,7 +54,7 @@ public abstract class AbstractStyleableMapAccessor<T>
      * @param subAccessors sub accessors which are used by this accessor
      * @param defaultValue The default value.
      */
-    public AbstractStyleableMapAccessor(@NonNull String name, @NonNull Class<T> type, @NonNull MapAccessor<?>[] subAccessors, T defaultValue) {
+    public AbstractStyleableMapAccessor(String name, Class<T> type, MapAccessor<?>[] subAccessors, T defaultValue) {
         this(name, type, null, subAccessors, defaultValue);
     }
 
@@ -70,8 +69,8 @@ public abstract class AbstractStyleableMapAccessor<T>
      * @param subAccessors   sub accessors which are used by this accessor
      * @param defaultValue   The default value.
      */
-    public AbstractStyleableMapAccessor(@NonNull String name, @NonNull Class<?> type, @Nullable Class<?>[] typeParameters,
-                                        @NonNull MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
+    public AbstractStyleableMapAccessor(String name, Class<?> type, @Nullable Class<?>[] typeParameters,
+                                        MapAccessor<?>[] subAccessors, @Nullable T defaultValue) {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(type, "clazz");
 
@@ -84,7 +83,7 @@ public abstract class AbstractStyleableMapAccessor<T>
     }
 
     @Override
-    public boolean containsKey(@NonNull Map<Key<?>, Object> map) {
+    public boolean containsKey(Map<Key<?>, Object> map) {
         return CompositeMapAccessor.super.containsKey(map);
     }
 
@@ -94,12 +93,12 @@ public abstract class AbstractStyleableMapAccessor<T>
      * @return name string.
      */
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public @NonNull Type getValueType() {
+    public Type getValueType() {
         return type;
     }
 
@@ -115,7 +114,7 @@ public abstract class AbstractStyleableMapAccessor<T>
     }
 
     @Override
-    public final @Nullable T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
+    public final @Nullable T put(Map<? super Key<?>, Object> a, @Nullable T value) {
         T oldValue = get(a);
         set(a, value);
         return oldValue;
@@ -125,13 +124,13 @@ public abstract class AbstractStyleableMapAccessor<T>
      * Returns the name string.
      */
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "{name:" + name + " type:" + getValueType() + "}";
     }
 
     @Override
-    public @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
+    public ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 
@@ -142,7 +141,7 @@ public abstract class AbstractStyleableMapAccessor<T>
     }
 
     @Override
-    public @NonNull String getCssName() {
+    public String getCssName() {
         return cssName;
     }
 }

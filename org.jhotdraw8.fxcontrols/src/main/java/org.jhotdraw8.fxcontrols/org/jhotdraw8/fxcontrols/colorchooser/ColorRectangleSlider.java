@@ -14,11 +14,10 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.NamedColorSpace;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.IntBuffer;
 import java.util.Objects;
@@ -36,33 +35,33 @@ public class ColorRectangleSlider extends AbstractColorSlider {
      * The index of the color space component that is displayed along the x-axis of the rectangle.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
+    private final IntegerProperty xComponentIndex = new SimpleIntegerProperty(this, "xComponentIndex", 1);
     /**
      * The index of the color space component that is displayed along the y-axis of the rectangle.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
+    private final IntegerProperty yComponentIndex = new SimpleIntegerProperty(this, "yComponentIndex", 2);
 
     /**
      * The minor unit distance between tick marks on the x-axis.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull DoubleProperty xMinorTickUnit = new SimpleDoubleProperty(this, "xMinorTickUnit", 1f / 255);
+    private final DoubleProperty xMinorTickUnit = new SimpleDoubleProperty(this, "xMinorTickUnit", 1f / 255);
     /**
      * The minor unit distance between tick marks on the y-axis.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull DoubleProperty yMinorTickUnit = new SimpleDoubleProperty(this, "yMinorTickUnit", 1f / 255);
+    private final DoubleProperty yMinorTickUnit = new SimpleDoubleProperty(this, "yMinorTickUnit", 1f / 255);
     /**
      * The major unit distance between tick marks on the x-axis.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull DoubleProperty xMajorTickUnit = new SimpleDoubleProperty(this, "xMajorTickUnit", 1f / 255);
+    private final DoubleProperty xMajorTickUnit = new SimpleDoubleProperty(this, "xMajorTickUnit", 1f / 255);
     /**
      * The major unit distance between tick marks on the y-axis.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull DoubleProperty yMajorTickUnit = new SimpleDoubleProperty(this, "yMajorTickUnit", 1f / 255);
+    private final DoubleProperty yMajorTickUnit = new SimpleDoubleProperty(this, "yMajorTickUnit", 1f / 255);
 
     public ColorRectangleSlider() {
         load();
@@ -111,7 +110,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     }
 
     @Override
-    protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+    protected @Nullable AbstractFillTask createFillTask(PixelBuffer<IntBuffer> pixelBuffer) {
         if (getDisplayColorSpace() == null || getSourceColorSpace() == null || getTargetColorSpace() == null) {
             return null;
         }
@@ -143,17 +142,17 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     /**
      * The slider x-value.
      */
-    private final @NonNull FloatProperty xValue = new SimpleFloatProperty(this, "xValue", 0);
+    private final FloatProperty xValue = new SimpleFloatProperty(this, "xValue", 0);
     /**
      * The slider y-value.
      */
-    private final @NonNull FloatProperty yValue = new SimpleFloatProperty(this, "yValue", 0);
+    private final FloatProperty yValue = new SimpleFloatProperty(this, "yValue", 0);
 
     public float getXValue() {
         return xValue.get();
     }
 
-    public @NonNull FloatProperty xValueProperty() {
+    public FloatProperty xValueProperty() {
         return xValue;
     }
 
@@ -165,7 +164,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return yValue.get();
     }
 
-    public @NonNull FloatProperty yValueProperty() {
+    public FloatProperty yValueProperty() {
         return yValue;
     }
 
@@ -174,7 +173,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
     }
 
     static class FillTask extends AbstractFillTask {
-        public FillTask(@NonNull FillTaskRecord record) {
+        public FillTask(FillTaskRecord record) {
             super(record);
         }
 
@@ -283,7 +282,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return xComponentIndex.get();
     }
 
-    public @NonNull IntegerProperty xComponentIndexProperty() {
+    public IntegerProperty xComponentIndexProperty() {
         return xComponentIndex;
     }
 
@@ -295,7 +294,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return yComponentIndex.get();
     }
 
-    public @NonNull IntegerProperty yComponentIndexProperty() {
+    public IntegerProperty yComponentIndexProperty() {
         return yComponentIndex;
     }
 
@@ -307,7 +306,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return xMinorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty xMinorTickUnitProperty() {
+    public DoubleProperty xMinorTickUnitProperty() {
         return xMinorTickUnit;
     }
 
@@ -319,7 +318,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return yMinorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty yMinorTickUnitProperty() {
+    public DoubleProperty yMinorTickUnitProperty() {
         return yMinorTickUnit;
     }
 
@@ -331,7 +330,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return xMajorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty xMajorTickUnitProperty() {
+    public DoubleProperty xMajorTickUnitProperty() {
         return xMajorTickUnit;
     }
 
@@ -343,7 +342,7 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         return yMajorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty yMajorTickUnitProperty() {
+    public DoubleProperty yMajorTickUnitProperty() {
         return yMajorTickUnit;
     }
 

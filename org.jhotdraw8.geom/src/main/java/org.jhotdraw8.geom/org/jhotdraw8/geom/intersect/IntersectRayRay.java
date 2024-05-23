@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.Points;
 
@@ -39,10 +38,10 @@ public class IntersectRayRay {
      * @param bd directoin of ray 'b'
      * @return computed intersection
      */
-    public static @NonNull IntersectionResultEx intersectRayRayEx(@NonNull Point2D ao,
-                                                                  @NonNull Point2D ad,
-                                                                  @NonNull Point2D bo,
-                                                                  @NonNull Point2D bd) {
+    public static IntersectionResultEx intersectRayRayEx(Point2D ao,
+                                                         Point2D ad,
+                                                         Point2D bo,
+                                                         Point2D bd) {
         return intersectRayRayEx(ao.getX(), ao.getY(), ad.getX(), ad.getY(), bo.getX(), bo.getY(), bd.getX(), bd.getY());
 
     }

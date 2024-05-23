@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.io.GraphvizWriter;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.DynamicTest;
@@ -27,10 +26,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public abstract class AbstractMutableIndexedBidiGraphTest {
-    protected abstract @NonNull MutableIndexedBidiGraph newInstance(int maxArity);
+    protected abstract MutableIndexedBidiGraph newInstance(int maxArity);
 
-    protected void assertEqualGraphInt(@NonNull BidiGraph<Integer, Integer> expected,
-                                       @NonNull IndexedBidiGraph actual) {
+    protected void assertEqualGraphInt(BidiGraph<Integer, Integer> expected,
+                                       IndexedBidiGraph actual) {
         for (Integer v : expected.getVertices()) {
             List<Integer> actualNextList =
                     StreamSupport.stream(actual.nextVerticesEnumerator(v), false).collect(Collectors.toList());
@@ -42,7 +41,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    protected void assertEqualSortedGraphInt(@NonNull BidiGraph<Integer, Integer> expected, @NonNull IndexedBidiGraph actual) {
+    protected void assertEqualSortedGraphInt(BidiGraph<Integer, Integer> expected, IndexedBidiGraph actual) {
         for (Integer v : expected.getVertices()) {
             Set<Integer> actualNextList =
                     StreamSupport.stream(actual.nextVerticesEnumerator(v), false).collect(Collectors.toCollection(LinkedHashSet::new));
@@ -54,7 +53,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    protected void assertEqualGraph(@NonNull BidiGraph<Integer, Integer> expected, @NonNull BidiGraph<Integer, Integer> actual) throws IOException {
+    protected void assertEqualGraph(BidiGraph<Integer, Integer> expected, BidiGraph<Integer, Integer> actual) throws IOException {
         assertEquals(expected.getVertexCount(), actual.getVertexCount());
         assertEquals(expected.getVertices(), actual.getVertices());
         assertEquals(expected.getArrowCount(), actual.getArrowCount());
@@ -87,8 +86,8 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    private void assertEqualSortedGraph(@NonNull BidiGraph<Integer, Integer> expected,
-                                        @NonNull BidiGraph<Integer, Integer> actual) throws IOException {
+    private void assertEqualSortedGraph(BidiGraph<Integer, Integer> expected,
+                                        BidiGraph<Integer, Integer> actual) throws IOException {
         assertEquals(expected.getVertexCount(), actual.getVertexCount());
         assertEquals(expected.getVertices(), actual.getVertices());
         assertEquals(expected.getArrowCount(), actual.getArrowCount());
@@ -122,7 +121,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRandomGraph() {
+    public List<DynamicTest> dynamicTestsRandomGraph() {
         return Arrays.asList(
                 dynamicTest("arity0", () -> testCreateRandomGraph(8, 0)),
                 dynamicTest("arity1", () -> testCreateRandomGraph(8, 1)),
@@ -132,7 +131,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRandomSortedGraph() {
+    public List<DynamicTest> dynamicTestsRandomSortedGraph() {
         return Arrays.asList(
                 dynamicTest("arity0", () -> testCreateRandomSortedGraph(8, 0)),
                 dynamicTest("arity1", () -> testCreateRandomSortedGraph(8, 1)),
@@ -142,7 +141,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRandomMultiGraph() {
+    public List<DynamicTest> dynamicTestsRandomMultiGraph() {
         return Arrays.asList(
                 dynamicTest("arity0", () -> testCreateRandomMultiGraph(8, 0)),
                 dynamicTest("arity1", () -> testCreateRandomMultiGraph(8, 1)),
@@ -152,7 +151,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRandomGraphWithArrowData() {
+    public List<DynamicTest> dynamicTestsRandomGraphWithArrowData() {
         return Arrays.asList(
                 dynamicTest("arity1", () -> testCreateRandomGraphWithArrowData(8, 1)),
                 dynamicTest("arity7", () -> testCreateRandomGraphWithArrowData(8, 7))
@@ -160,7 +159,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRandomSortedGraphWithArrowData() {
+    public List<DynamicTest> dynamicTestsRandomSortedGraphWithArrowData() {
         return Arrays.asList(
                 dynamicTest("arity1", () -> testCreateRandomSortedGraphWithArrowData(8, 1)),
                 dynamicTest("arity7", () -> testCreateRandomSortedGraphWithArrowData(8, 7))
@@ -271,7 +270,7 @@ public abstract class AbstractMutableIndexedBidiGraphTest {
         }
     }
 
-    private int findSortedIndex(@NonNull Collection<Integer> vertices, int v) {
+    private int findSortedIndex(Collection<Integer> vertices, int v) {
         final Integer[] a = vertices.toArray(new Integer[0]);
         Arrays.sort(a);
         return Arrays.binarySearch(a, v);

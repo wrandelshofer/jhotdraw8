@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 
 import java.io.Serial;
@@ -38,6 +37,6 @@ public interface CompositeMapAccessor<T> extends MapAccessor<T> {
      * Gets all {@link MapAccessor}s that this accessor is composing.
      * @return the sub-accessors
      */
-    @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors();
+    ImmutableSequencedSet<MapAccessor<?>> getSubAccessors();
 
 }

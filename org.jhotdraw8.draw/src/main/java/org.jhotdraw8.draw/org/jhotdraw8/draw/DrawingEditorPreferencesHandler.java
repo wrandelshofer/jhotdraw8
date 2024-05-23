@@ -7,7 +7,6 @@ package org.jhotdraw8.draw;
 
 import javafx.beans.property.Property;
 import javafx.beans.value.ChangeListener;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.value.CssColor;
 
 import java.util.prefs.Preferences;
@@ -16,10 +15,10 @@ import java.util.prefs.Preferences;
  * Handles preferences for a drawing editor.
  */
 public class DrawingEditorPreferencesHandler {
-    private static final @NonNull String DRAWING_EDITOR = "DrawingEditor.";
-    private final @NonNull DrawingEditor editor;
-    private final @NonNull Preferences prefs;
-    private final @NonNull String prefix;
+    private static final String DRAWING_EDITOR = "DrawingEditor.";
+    private final DrawingEditor editor;
+    private final Preferences prefs;
+    private final String prefix;
 
     /**
      * Creates a new handler for the specified editor. All preferences
@@ -28,7 +27,7 @@ public class DrawingEditorPreferencesHandler {
      * @param editor the editor
      * @param prefs  the preferences
      */
-    public DrawingEditorPreferencesHandler(@NonNull DrawingEditor editor, @NonNull Preferences prefs) {
+    public DrawingEditorPreferencesHandler(DrawingEditor editor, Preferences prefs) {
         this(editor, prefs, DRAWING_EDITOR);
     }
 
@@ -40,7 +39,7 @@ public class DrawingEditorPreferencesHandler {
      * @param prefs  the preferences
      * @param prefix the prefix
      */
-    public DrawingEditorPreferencesHandler(@NonNull DrawingEditor editor, @NonNull Preferences prefs, @NonNull String prefix) {
+    public DrawingEditorPreferencesHandler(DrawingEditor editor, Preferences prefs, String prefix) {
         this.editor = editor;
         this.prefs = prefs;
         this.prefix = prefix;

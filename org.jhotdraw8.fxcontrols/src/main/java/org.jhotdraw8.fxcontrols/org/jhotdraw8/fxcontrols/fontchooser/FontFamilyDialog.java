@@ -12,10 +12,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -88,7 +87,7 @@ public class FontFamilyDialog extends Dialog<String> {
         controller.setFontName(fontName);
     }
 
-    public final @NonNull Optional<String> showAndWait(@Nullable String fontFamily) {
+    public final Optional<String> showAndWait(@Nullable String fontFamily) {
         if (fontFamily != null) {
             selectFontName(fontFamily);
         }

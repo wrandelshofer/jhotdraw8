@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -26,26 +25,26 @@ import java.util.List;
  */
 public class AddToGroupAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.addToGroup";
+    public static final String ID = "edit.addToGroup";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public AddToGroupAction(@NonNull DrawingEditor editor) {
+    public AddToGroupAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();
         labels.configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
-        final @NonNull List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
+        final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
         addToGroup(drawingView, figures);
     }
 
-    public static void addToGroup(@NonNull DrawingView view, @NonNull List<Figure> figures) {
+    public static void addToGroup(DrawingView view, List<Figure> figures) {
         if (figures.size() < 2) {
             // FIXME internationalize me
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "You must select the figures and a group to which the figures should be added");

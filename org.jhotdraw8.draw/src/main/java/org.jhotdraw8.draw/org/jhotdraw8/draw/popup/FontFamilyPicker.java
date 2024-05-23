@@ -5,8 +5,7 @@
 package org.jhotdraw8.draw.popup;
 
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilyDialog;
 
 import java.util.Optional;
@@ -26,7 +25,7 @@ public class FontFamilyPicker extends AbstractPicker<String> {
 
     @Override
     public void show(Node anchor, double screenX, double screenY,
-                     @Nullable String initialValue, @NonNull BiConsumer<Boolean, String> callback) {
+                     @Nullable String initialValue, BiConsumer<Boolean, String> callback) {
         String initial = initialValue == null
                 ? "Arial"
                 : initialValue;

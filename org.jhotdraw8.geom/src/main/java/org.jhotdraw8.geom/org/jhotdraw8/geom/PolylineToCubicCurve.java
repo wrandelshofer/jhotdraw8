@@ -5,7 +5,6 @@
 package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.intersect.IntersectLinePoint;
 import org.jhotdraw8.geom.shape.BezierNode;
@@ -46,7 +45,7 @@ public class PolylineToCubicCurve {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder<?> builder, Point2D[] digitizedPoints, double error) {
+    public static void fitBezierPath(PathBuilder<?> builder, Point2D[] digitizedPoints, double error) {
         fitBezierPath(builder, Arrays.asList(digitizedPoints), error);
     }
 
@@ -58,7 +57,7 @@ public class PolylineToCubicCurve {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull List<Point2D> digitizedPoints, double error) {
+    public static void fitBezierPath(PathBuilder<?> builder, List<Point2D> digitizedPoints, double error) {
         // Split into segments at corners
         ArrayList<ArrayList<Point2D>> segments;
         segments = splitAtCorners(digitizedPoints, 44 / 180d * Math.PI, error * error);
@@ -131,7 +130,7 @@ public class PolylineToCubicCurve {
      * @param error           the maximal allowed error between the bezier path and the
      *                        digitized points.
      */
-    public static void fitBezierPath(@NonNull PathBuilder<?> builder, @NonNull BezierPath digitizedPoints, double error) {
+    public static void fitBezierPath(PathBuilder<?> builder, BezierPath digitizedPoints, double error) {
         List<Point2D> d = new ArrayList<>();
         for (BezierNode n : digitizedPoints) {
             d.add(new Point2D(n.pointX(), n.pointY()));
@@ -159,7 +158,7 @@ public class PolylineToCubicCurve {
      *                        0, this method only removes sequences of coincident points.
      * @return Digitized points with a minimal distance.
      */
-    public static @NonNull ArrayList<Point2D> removeClosePoints(@NonNull List<Point2D> digitizedPoints, double minDistance) {
+    public static ArrayList<Point2D> removeClosePoints(List<Point2D> digitizedPoints, double minDistance) {
         if (minDistance == 0) {
             return removeCoincidentPoints(digitizedPoints);
         } else {
@@ -196,7 +195,7 @@ public class PolylineToCubicCurve {
      * @param digitizedPoints Digitized points
      * @return Digitized points without subsequent duplicates.
      */
-    private static @NonNull ArrayList<Point2D> removeCoincidentPoints(@NonNull List<Point2D> digitizedPoints) {
+    private static ArrayList<Point2D> removeCoincidentPoints(List<Point2D> digitizedPoints) {
         ArrayList<Point2D> cleaned = new ArrayList<>();
         if (!digitizedPoints.isEmpty()) {
             Point2D prev = digitizedPoints.getFirst();
@@ -225,7 +224,7 @@ public class PolylineToCubicCurve {
      * @return Segments of digitized points, each segment having less than
      * maximal angle between points.
      */
-    public static @NonNull ArrayList<ArrayList<Point2D>> splitAtCorners(@NonNull List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
+    public static ArrayList<ArrayList<Point2D>> splitAtCorners(List<Point2D> digitizedPoints, double maxAngle, double minDistance) {
         IntArrayList cornerIndices = findCorners(digitizedPoints, maxAngle, minDistance);
         ArrayList<ArrayList<Point2D>> segments = new ArrayList<>(cornerIndices.size() + 1);
 
@@ -251,7 +250,7 @@ public class PolylineToCubicCurve {
      *                        for corner detection
      * @return list of corner indices.
      */
-    public static @NonNull IntArrayList findCorners(@NonNull List<Point2D> digitizedPoints, double minAngle, double minDistance) {
+    public static IntArrayList findCorners(List<Point2D> digitizedPoints, double minAngle, double minDistance) {
         IntArrayList cornerIndices = new IntArrayList();
 
         double squaredDistance = minDistance * minDistance;
@@ -317,7 +316,7 @@ public class PolylineToCubicCurve {
      * @param weight          Weight of the current point
      * @return Digitized points with reduced noise.
      */
-    public static @NonNull ArrayList<Point2D> reduceNoise(@NonNull List<Point2D> digitizedPoints, double weight) {
+    public static ArrayList<Point2D> reduceNoise(List<Point2D> digitizedPoints, double weight) {
         ArrayList<Point2D> cleaned = new ArrayList<>();
         if (!digitizedPoints.isEmpty()) {
             Point2D prev = digitizedPoints.getFirst();
@@ -352,7 +351,7 @@ public class PolylineToCubicCurve {
      * @param errorSquared User-defined errorSquared squared.
      * @param builder      Path to which the bezier curve segments are added.
      */
-    private static void fitCubic(@NonNull PathBuilder<?> builder, @NonNull ArrayList<Point2D> d, int first, int last,
+    private static void fitCubic(PathBuilder<?> builder, ArrayList<Point2D> d, int first, int last,
                                  Point2D tHat1, Point2D tHat2,
                                  double errorSquared) {
 
@@ -451,7 +450,7 @@ public class PolylineToCubicCurve {
      * @param bezCurve
      * @param builder
      */
-    private static void addCurveTo(@NonNull PathBuilder<?> builder, Point2D[] bezCurve, double errorSquared, boolean connectsCorners) {
+    private static void addCurveTo(PathBuilder<?> builder, Point2D[] bezCurve, double errorSquared, boolean connectsCorners) {
         java.awt.geom.Point2D.Double lastNode = builder.getLastPoint();
         double error = Math.sqrt(errorSquared);
         if (connectsCorners && IntersectLinePoint.lineContainsPoint(lastNode.getX(), lastNode.getY(), bezCurve[3].getX(), bezCurve[3].getY(), bezCurve[1].getX(), bezCurve[1].getY(), error)
@@ -473,7 +472,7 @@ public class PolylineToCubicCurve {
      * @param d   Digitized points.
      * @param end Index to "left" end of region.
      */
-    private static Point2D computeLeftTangent(@NonNull ArrayList<Point2D> d, int end) {
+    private static Point2D computeLeftTangent(ArrayList<Point2D> d, int end) {
         Point2D tHat1;
         tHat1 = v2SubII(d.get(end + 1), d.get(end));
         tHat1 = v2Normalize(tHat1);
@@ -486,7 +485,7 @@ public class PolylineToCubicCurve {
      * @param d   Digitized points.
      * @param end Index to "right" end of region.
      */
-    private static Point2D computeRightTangent(@NonNull ArrayList<Point2D> d, int end) {
+    private static Point2D computeRightTangent(ArrayList<Point2D> d, int end) {
         Point2D tHat2;
         tHat2 = v2SubII(d.get(end - 1), d.get(end));
         tHat2 = v2Normalize(tHat2);
@@ -499,7 +498,7 @@ public class PolylineToCubicCurve {
      * @param d      Digitized points.
      * @param center Index to "center" end of region.
      */
-    private static Point2D computeCenterTangent(@NonNull ArrayList<Point2D> d, int center) {
+    private static Point2D computeCenterTangent(ArrayList<Point2D> d, int center) {
         Point2D V1, V2,
                 tHatCenter;
 
@@ -519,7 +518,7 @@ public class PolylineToCubicCurve {
      * @param first Indice of first point of region in d.
      * @param last  Indice of last point of region in d.
      */
-    private static double[] chordLengthParameterize(@NonNull ArrayList<Point2D> d, int first, int last) {
+    private static double[] chordLengthParameterize(ArrayList<Point2D> d, int first, int last) {
         int i;
         double[] u;
         /*  Parameterization		*/
@@ -549,7 +548,7 @@ public class PolylineToCubicCurve {
      * @param u        Current parameter values.
      * @param bezCurve Current fitted curve.
      */
-    private static double[] reparameterize(@NonNull ArrayList<Point2D> d, int first, int last, double[] u, Point2D[] bezCurve) {
+    private static double[] reparameterize(ArrayList<Point2D> d, int first, int last, double[] u, Point2D[] bezCurve) {
         int nPts = last - first + 1;
         int i;
         double[] uPrime;
@@ -569,7 +568,7 @@ public class PolylineToCubicCurve {
      * @param P Digitized point.
      * @param u Parameter value for P.
      */
-    private static double newtonRaphsonRootFind(Point2D[] Q, @NonNull Point2D P, double u) {
+    private static double newtonRaphsonRootFind(Point2D[] Q, Point2D P, double u) {
         double numerator, denominator;
         Point2D[] Q1 = new Point2D[3], Q2 = new Point2D[2];
         /*  Q' and Q''			*/
@@ -621,7 +620,7 @@ public class PolylineToCubicCurve {
      * @param splitPoint Point of maximum error (input/output parameter, must be
      *                   an array of 1)
      */
-    private static double computeMaxError(@NonNull ArrayList<Point2D> d, int first, int last, Point2D[] bezCurve, double[] u, int[] splitPoint) {
+    private static double computeMaxError(ArrayList<Point2D> d, int first, int last, Point2D[] bezCurve, double[] u, int[] splitPoint) {
         int i;
         double maxDist;
         /*  Maximum error */
@@ -657,7 +656,7 @@ public class PolylineToCubicCurve {
      * @param tHat2  Unit tangent vector at end point.
      * @return A cubic bezier curve consisting of 4 control points.
      */
-    private static Point2D[] generateBezier(@NonNull ArrayList<Point2D> d, int first, int last, double[] uPrime, @NonNull Point2D tHat1, @NonNull Point2D tHat2) {
+    private static Point2D[] generateBezier(ArrayList<Point2D> d, int first, int last, double[] uPrime, Point2D tHat1, Point2D tHat2) {
         Point2D[] bezCurve;
 
         bezCurve = new Point2D[4];
@@ -711,14 +710,14 @@ public class PolylineToCubicCurve {
     /**
      * Return the distance between two points
      */
-    private static double v2DistanceBetween2Points(@NonNull Point2D a, @NonNull Point2D b) {
+    private static double v2DistanceBetween2Points(Point2D a, Point2D b) {
         return Math.sqrt(v2SquaredDistanceBetween2Points(a, b));
     }
 
     /**
      * Return the distance between two points
      */
-    private static double v2SquaredDistanceBetween2Points(@NonNull Point2D a, @NonNull Point2D b) {
+    private static double v2SquaredDistanceBetween2Points(Point2D a, Point2D b) {
         double dx = a.getX() - b.getX();
         double dy = a.getY() - b.getY();
         return (dx * dx) + (dy * dy);
@@ -727,7 +726,7 @@ public class PolylineToCubicCurve {
     /**
      * Scales the input vector to the new length and returns it.
      */
-    private static @NonNull Point2D v2Scale(@NonNull Point2D v, double newlen) {
+    private static Point2D v2Scale(Point2D v, double newlen) {
         double len = v2Length(v);
         double x = v.getX(), y = v.getY();
         if (len != 0.0) {
@@ -742,21 +741,21 @@ public class PolylineToCubicCurve {
     /**
      * Returns length of input vector.
      */
-    private static double v2Length(@NonNull Point2D a) {
+    private static double v2Length(Point2D a) {
         return Math.sqrt(v2SquaredLength(a));
     }
 
     /**
      * Returns squared length of input vector.
      */
-    private static double v2SquaredLength(@NonNull Point2D a) {
+    private static double v2SquaredLength(Point2D a) {
         return (a.getX() * a.getX()) + (a.getY() * a.getY());
     }
 
     /**
      * Return vector sum c = a+b.
      */
-    private static @NonNull Point2D v2Add(@NonNull Point2D a, @NonNull Point2D b) {
+    private static Point2D v2Add(Point2D a, Point2D b) {
         return new Point2D(a.getX() + b.getX(),
                 a.getY() + b.getY());
     }
@@ -764,7 +763,7 @@ public class PolylineToCubicCurve {
     /**
      * Negates the input vector and returns it.
      */
-    private static @NonNull Point2D v2Negate(@NonNull Point2D v) {
+    private static Point2D v2Negate(Point2D v) {
         return new Point2D(-v.getX(),
                 -v.getY());
     }
@@ -773,7 +772,7 @@ public class PolylineToCubicCurve {
     /**
      * Normalizes the input vector and returns it.
      */
-    private static @NonNull Point2D v2Normalize(@NonNull Point2D v) {
+    private static Point2D v2Normalize(Point2D v) {
         double len = v2Length(v);
         if (len != 0.0) {
             return new Point2D(v.getX() / len,
@@ -790,7 +789,7 @@ public class PolylineToCubicCurve {
      * @param b Vector b - the value is not changed by this method
      * @return Vector a subtracted by Vector v.
      */
-    private static @NonNull Point2D v2SubII(@NonNull Point2D a, @NonNull Point2D b) {
+    private static Point2D v2SubII(Point2D a, Point2D b) {
         Point2D c = new Point2D(a.getX() - b.getX(),
                 a.getY() - b.getY());
         return (c);

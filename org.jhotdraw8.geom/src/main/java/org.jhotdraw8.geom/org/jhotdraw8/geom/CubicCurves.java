@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.DoubleConsumer6;
 import org.jhotdraw8.base.function.DoubleConsumer8;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.CubicCurve2D;
 import java.awt.geom.Point2D;
@@ -37,7 +36,7 @@ public class CubicCurves {
      * @param t       the time
      * @return the point at time t
      */
-    public static @NonNull PointAndDerivative eval(double[] a, int offsetA, double t) {
+    public static PointAndDerivative eval(double[] a, int offsetA, double t) {
         return eval(
                 a[offsetA], a[offsetA + 1],
                 a[offsetA + 2], a[offsetA + 3],
@@ -60,7 +59,7 @@ public class CubicCurves {
      * @param t  the time
      * @return the point at time t
      */
-    public static @NonNull PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
+    public static PointAndDerivative eval(double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
                                                    double t) {
 
         final double x01, y01, x12, y12, x23, y23, x012, y012, x123, y123, x0123, y0123;
@@ -371,9 +370,9 @@ public class CubicCurves {
      * @param segmentOffset the index of the first curve parameter in segment
      */
 
-    public static void subCurve(double @NonNull [] q, int qOffset,
+    public static void subCurve(double[] q, int qOffset,
                                 double ta, double tb,
-                                double @NonNull [] segment, int segmentOffset) {
+                                double[] segment, int segmentOffset) {
         double tab = ta / tb;
         split(q, qOffset,
                 tb, null, 0, segment, segmentOffset);
@@ -440,7 +439,7 @@ public class CubicCurves {
      * @param epsilon
      * @return the arc length
      */
-    public static double arcLength(double @NonNull [] p, int offset, double epsilon) {
+    public static double arcLength(double[] p, int offset, double epsilon) {
         return arcLength(p, offset, 1, epsilon);
     }
 
@@ -455,7 +454,7 @@ public class CubicCurves {
      * @param epsilon the error tolerance
      * @return the arc length
      */
-    public static double arcLength(double @NonNull [] p, int offset, double t, double epsilon) {
+    public static double arcLength(double[] p, int offset, double t, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Integrals.rombergQuadrature(f, 0, t, epsilon);
     }
@@ -472,7 +471,7 @@ public class CubicCurves {
      * @param epsilon
      * @return t at s
      */
-    public static double invArcLength(double @NonNull [] p, int offset, double s, double epsilon) {
+    public static double invArcLength(double[] p, int offset, double s, double epsilon) {
         return invArcLength(p, offset, s, arcLength(p, offset, 1, epsilon), epsilon);
     }
 
@@ -486,7 +485,7 @@ public class CubicCurves {
      * @param epsilon
      * @return t at s
      */
-    public static double invArcLength(double @NonNull [] p, int offset, double s, double totalArcLength, double epsilon) {
+    public static double invArcLength(double[] p, int offset, double s, double totalArcLength, double epsilon) {
         ToDoubleFunction<Double> f = getArcLengthIntegrand(p, offset);
         return Solvers.hybridNewtonBisectionMethod(Integrals::rombergQuadrature, f, s, 0, 1, s / totalArcLength, epsilon);
     }

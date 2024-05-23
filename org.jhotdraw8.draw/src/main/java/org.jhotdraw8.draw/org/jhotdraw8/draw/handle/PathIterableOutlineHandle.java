@@ -11,8 +11,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -21,6 +19,7 @@ import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +31,9 @@ import java.util.List;
  */
 public class PathIterableOutlineHandle extends AbstractHandle {
 
-    private final @NonNull Group node;
-    private final @NonNull Path path2;
-    private final @NonNull Path path1;
+    private final Group node;
+    private final Path path2;
+    private final Path path1;
     private final boolean selectable;
 
     public PathIterableOutlineHandle(PathIterableFigure figure, boolean selectable) {
@@ -57,7 +56,7 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         path1.setStroke(Color.WHITE);
         path2.setStroke(Paintable.getPaint(color));
@@ -78,12 +77,12 @@ public class PathIterableOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull PathIterableFigure getOwner() {
+    public PathIterableFigure getOwner() {
         return (PathIterableFigure) super.getOwner();
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         PathIterableFigure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         List<PathElement> elements = new ArrayList<>();

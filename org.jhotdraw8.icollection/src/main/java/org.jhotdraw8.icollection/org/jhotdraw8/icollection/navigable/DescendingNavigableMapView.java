@@ -1,7 +1,6 @@
 package org.jhotdraw8.icollection.navigable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -21,15 +20,15 @@ import java.util.function.IntSupplier;
  * @param <V> the value type
  */
 public class DescendingNavigableMapView<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V> {
-    private final @NonNull NavigableMap<K, V> src;
-    private final @NonNull IntSupplier modCount;
+    private final NavigableMap<K, V> src;
+    private final IntSupplier modCount;
 
     /**
      * Constructs a new instance.
      *
      * @param src the source map
      */
-    public DescendingNavigableMapView(@NonNull NavigableMap<K, V> src, @NonNull IntSupplier modCount) {
+    public DescendingNavigableMapView(NavigableMap<K, V> src, IntSupplier modCount) {
         this.src = src;
         this.modCount = modCount;
     }
@@ -74,7 +73,6 @@ public class DescendingNavigableMapView<K, V> extends AbstractMap<K, V> implemen
         return src.remove(key);
     }
 
-    @NonNull
     @Override
     public Set<Entry<K, V>> entrySet() {
         return src.sequencedEntrySet().reversed();
@@ -101,35 +99,33 @@ public class DescendingNavigableMapView<K, V> extends AbstractMap<K, V> implemen
         src.clear();
     }
 
-    @NonNull
     @Override
     public Set<K> keySet() {
         return src.sequencedKeySet().reversed();
     }
 
-    @NonNull
     @Override
     public Collection<V> values() {
         return src.sequencedValues().reversed();
     }
 
     @Override
-    public @NonNull NavigableMap<K, V> reversed() {
+    public NavigableMap<K, V> reversed() {
         return src;
     }
 
     @Override
-    public @NonNull SequencedSet<K> sequencedKeySet() {
+    public SequencedSet<K> sequencedKeySet() {
         return src.sequencedKeySet().reversed();
     }
 
     @Override
-    public @NonNull SequencedCollection<V> sequencedValues() {
+    public SequencedCollection<V> sequencedValues() {
         return src.sequencedValues().reversed();
     }
 
     @Override
-    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
+    public SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return src.sequencedEntrySet().reversed();
     }
 
@@ -231,17 +227,17 @@ public class DescendingNavigableMapView<K, V> extends AbstractMap<K, V> implemen
     }
 
     @Override
-    public @NonNull SortedMap<K, V> subMap(K fromKey, K toKey) {
+    public SortedMap<K, V> subMap(K fromKey, K toKey) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public @NonNull SortedMap<K, V> headMap(K toKey) {
+    public SortedMap<K, V> headMap(K toKey) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public @NonNull SortedMap<K, V> tailMap(K fromKey) {
+    public SortedMap<K, V> tailMap(K fromKey) {
         throw new UnsupportedOperationException();
     }
 

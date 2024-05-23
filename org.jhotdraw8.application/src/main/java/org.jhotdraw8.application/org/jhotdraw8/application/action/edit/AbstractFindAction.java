@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application.action.edit;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
@@ -19,7 +18,7 @@ import org.jhotdraw8.application.action.AbstractActivityAction;
  */
 public abstract class AbstractFindAction<A extends Activity> extends AbstractActivityAction<A> {
 
-    public static final @NonNull String ID = "edit.find";
+    public static final String ID = "edit.find";
 
     /**
      * Creates a new instance.
@@ -29,7 +28,7 @@ public abstract class AbstractFindAction<A extends Activity> extends AbstractAct
      * @param viewClass the class of the view
      */
     @SuppressWarnings("this-escape")
-    public AbstractFindAction(@NonNull Application app, A view, Class<A> viewClass) {
+    public AbstractFindAction(Application app, A view, Class<A> viewClass) {
         super(view);
         ApplicationLabels.getResources().configureAction(this, ID);
     }

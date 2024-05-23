@@ -5,7 +5,6 @@
 package org.jhotdraw8.application.action.file;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
@@ -24,7 +23,7 @@ import java.beans.PropertyChangeListener;
  */
 public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 
-    public static final @NonNull String ID = "file.clearRecentFiles";
+    public static final String ID = "file.clearRecentFiles";
 
     private PropertyChangeListener applicationListener;
 
@@ -39,7 +38,7 @@ public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent event, Application app) {
         app.getRecentUris().clear();
     }
 }

@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.draw.css.converter.Point2DConverter;
@@ -20,11 +19,11 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
  *
  * @author Werner Randelshofer
  */
-public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull ImmutableList<@NonNull Point2D>>
-        implements WritableStyleableMapAccessor<@NonNull ImmutableList<@NonNull Point2D>>, NonNullKey<ImmutableList<@NonNull Point2D>> {
+public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<Point2D>>
+        implements WritableStyleableMapAccessor<ImmutableList<Point2D>>, NonNullKey<ImmutableList<Point2D>> {
 
 
-    private final @NonNull Converter<ImmutableList<@NonNull Point2D>> converter;
+    private final Converter<ImmutableList<Point2D>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -32,7 +31,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
      *
      * @param name The name of the key.
      */
-    public Point2DListStyleableKey(@NonNull String name) {
+    public Point2DListStyleableKey(String name) {
         this(name, VectorList.of());
     }
 
@@ -42,7 +41,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableKey(@NonNull String name, @NonNull ImmutableList<@NonNull Point2D> defaultValue) {
+    public Point2DListStyleableKey(String name, ImmutableList<Point2D> defaultValue) {
         super(name, new SimpleParameterizedType(ImmutableList.class, Point2D.class), defaultValue);
 
         this.converter = new ListCssConverter<>(
@@ -50,7 +49,7 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<@NonNull Immut
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<Point2D>> getCssConverter() {
+    public Converter<ImmutableList<Point2D>> getCssConverter() {
         return converter;
     }
 

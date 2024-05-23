@@ -8,8 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This builder slices the input path into 9 regions, and scales them by the
@@ -40,8 +39,8 @@ import org.jhotdraw8.annotation.Nullable;
 public class NineRegionsScalingBuilder<T> extends AbstractPathBuilder<T> {
 
     private final double minX, minY, maxX, maxY;
-    private final @NonNull Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
-    private final @NonNull PathBuilder<T> target;
+    private final Transform topLeft, topRight, bottomRight, bottomLeft, top, right, bottom, left, center;
+    private final PathBuilder<T> target;
 
     /**
      * Creates a new instance.
@@ -51,7 +50,7 @@ public class NineRegionsScalingBuilder<T> extends AbstractPathBuilder<T> {
      * @param srcInsets  The nine regions in the bounds of the source image.
      * @param destBounds The bounds of the destination image.
      */
-    public NineRegionsScalingBuilder(@NonNull PathBuilder<T> dest, @NonNull Bounds srcBounds, @NonNull Insets srcInsets, @NonNull Bounds destBounds) {
+    public NineRegionsScalingBuilder(PathBuilder<T> dest, Bounds srcBounds, Insets srcInsets, Bounds destBounds) {
         this.target = dest;
 
         double it = srcInsets.getTop(), ib = srcInsets.getBottom(), ir = srcInsets.getRight(), il = srcInsets.getLeft();

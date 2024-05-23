@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
@@ -17,6 +15,7 @@ import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
@@ -93,14 +92,14 @@ import java.util.Spliterator;
 @SuppressWarnings("exports")
 public class ChampMap<K, V>
         implements ImmutableMap<K, V>, Serializable {
-    private static final @NonNull ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
+    private static final ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
-    static final @NonNull int SALT = new Random().nextInt();
-    final transient @NonNull BitmapIndexedNode<K, V> root;
+    static final int SALT = new Random().nextInt();
+    final transient BitmapIndexedNode<K, V> root;
     final int size;
 
     /**
@@ -112,7 +111,7 @@ public class ChampMap<K, V>
      * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected ChampMap(@NonNull PrivateData privateData) {
+    protected ChampMap(PrivateData privateData) {
         this(((Map.Entry<BitmapIndexedNode<K, V>, ?>) privateData.get()).getKey(), ((Map.Entry<?, Integer>) privateData.get()).getValue());
     }
 
@@ -124,14 +123,15 @@ public class ChampMap<K, V>
      * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull ChampMap<K, V> newInstance(@NonNull PrivateData privateData) {
+    protected ChampMap<K, V> newInstance(PrivateData privateData) {
         return new ChampMap<>(privateData);
     }
 
-    private @NonNull ChampMap<K, V> newInstance(@NonNull BitmapIndexedNode<K, V> root, int size) {
+    private ChampMap<K, V> newInstance(BitmapIndexedNode<K, V> root, int size) {
         return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(root, size)));
     }
-    ChampMap(@NonNull BitmapIndexedNode<K, V> root, int size) {
+
+    ChampMap(BitmapIndexedNode<K, V> root, int size) {
         this.root = root;
         this.size = size;
     }
@@ -150,7 +150,7 @@ public class ChampMap<K, V>
      * @return an immutable copy
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ChampMap<K, V> copyOf(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public static <K, V> ChampMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         return ChampMap.<K, V>of().putAll(c);
     }
 
@@ -162,7 +162,7 @@ public class ChampMap<K, V>
      * @param <V> the value type
      * @return an immutable copy
      */
-    public static <K, V> @NonNull ChampMap<K, V> copyOf(@NonNull Map<? extends K, ? extends V> map) {
+    public static <K, V> ChampMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return ChampMap.<K, V>of().putAll(map);
     }
 
@@ -186,7 +186,7 @@ public class ChampMap<K, V>
      * @return an empty immutable map
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> @NonNull ChampMap<K, V> of() {
+    public static <K, V> ChampMap<K, V> of() {
         return (ChampMap<K, V>) ChampMap.EMPTY;
     }
 
@@ -194,7 +194,7 @@ public class ChampMap<K, V>
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ChampMap<K, V> clear() {
+    public ChampMap<K, V> clear() {
         return isEmpty() ? this : of();
     }
 
@@ -251,7 +251,7 @@ public class ChampMap<K, V>
     }
 
     @Override
-    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
+    public Iterator<Map.Entry<K, V>> iterator() {
         return new EntryIterator<>(root, null, null);
     }
 
@@ -261,7 +261,7 @@ public class ChampMap<K, V>
     }
 
     @Override
-    public @NonNull ChampMap<K, V> put(@NonNull K key, @Nullable V value) {
+    public ChampMap<K, V> put(K key, @Nullable V value) {
         var details = new ChangeEvent<V>();
         var newRootNode = root.put(null, key, value,
                 keyHash(key), 0, details, ChampMap::keyHash);
@@ -272,19 +272,19 @@ public class ChampMap<K, V>
     }
 
     @Override
-    public @NonNull ChampMap<K, V> putAll(@NonNull Map<? extends K, ? extends V> m) {
+    public ChampMap<K, V> putAll(Map<? extends K, ? extends V> m) {
         return (ChampMap<K, V>) ImmutableMap.super.putAll(m);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public ChampMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
         return m.putAll(c) ? m.toImmutable() : this;
     }
 
     @Override
-    public @NonNull ChampMap<K, V> remove(@NonNull K key) {
+    public ChampMap<K, V> remove(K key) {
         int keyHash = keyHash(key);
         var details = new ChangeEvent<V>();
         var newRootNode = root.remove(null, key, keyHash, 0, details);
@@ -296,20 +296,20 @@ public class ChampMap<K, V>
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampMap<K, V> removeAll(@NonNull Iterable<? extends K> c) {
+    public ChampMap<K, V> removeAll(Iterable<? extends K> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toImmutable() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampMap<K, V> retainAll(@NonNull Iterable<? extends K> c) {
+    public ChampMap<K, V> retainAll(Iterable<? extends K> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toImmutable() : this;
     }
 
     @Override
-    public @NonNull ReadOnlySet<K> readOnlyKeySet() {
+    public ReadOnlySet<K> readOnlyKeySet() {
         return new ReadOnlySetFacade<>(
                 () -> new MappedIterator<>(new EntryIterator<>(root, null, null), Map.Entry::getKey),
                 this::size,
@@ -322,7 +322,7 @@ public class ChampMap<K, V>
         return size;
     }
 
-    public @NonNull Spliterator<Map.Entry<K, V>> spliterator() {
+    public Spliterator<Map.Entry<K, V>> spliterator() {
         return new IteratorSpliterator<>(iterator(), size(), characteristics(), null);
     }
 
@@ -332,12 +332,12 @@ public class ChampMap<K, V>
      * @return a mutable CHAMP map
      */
     @Override
-    public @NonNull MutableChampMap<K, V> toMutable() {
+    public MutableChampMap<K, V> toMutable() {
         return new MutableChampMap<>(this);
     }
 
     @Override
-    public @NonNull MutableChampMap<K, V> asMap() {
+    public MutableChampMap<K, V> asMap() {
         return new MutableChampMap<>(this);
     }
 
@@ -350,12 +350,12 @@ public class ChampMap<K, V>
      * @return a string representation
      */
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return ReadOnlyMap.mapToString(this);
     }
 
     @Serial
-    private @NonNull Object writeReplace() throws ObjectStreamException {
+    private Object writeReplace() throws ObjectStreamException {
         return new SerializationProxy<>(this.toMutable());
     }
 
@@ -369,7 +369,7 @@ public class ChampMap<K, V>
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return ChampMap.of().putAll(deserializedEntries);
         }
     }

@@ -13,8 +13,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -35,6 +33,7 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -51,18 +50,18 @@ public class BezierPathFigure extends AbstractLeafFigure
         StyleableFigure, LockableFigure, CompositableFigure, ResizableFigure, ConnectableFigure,
         PathIterableFigure {
 
-    public static final @NonNull NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(false), BezierPath.of());
+    public static final NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(false), BezierPath.of());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Bezier";
+    public static final String TYPE_SELECTOR = "Bezier";
 
     public BezierPathFigure() {
         setStyled(StyleOrigin.USER_AGENT, FILL, null);
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PathIterableOutlineHandle(this, true));
         } else if (handleType == HandleType.POINT) {
@@ -80,25 +79,25 @@ public class BezierPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+    public Node createNode(RenderContext ctx) {
         Path n = new Path();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(Point2D p, Figure prototype, double tolerance) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         Rectangle2D b = getNonNull(PATH).getBounds2D();
         return new BoundingBox(b.getX(), b.getY(), b.getWidth(), b.getHeight());
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
@@ -107,25 +106,25 @@ public class BezierPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         return new BezierPath(getStyledNonNull(PATH), getStyled(FILL_RULE)).getPathIterator(tx);
     }
 
-    public @NonNull Point2D getPoint(int index, int coord) {
+    public Point2D getPoint(int index, int coord) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    public @NonNull Point2D getPointOnPath(float f, int i) {
+    public Point2D getPointOnPath(float f, int i) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         reshapeInLocal(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
     }
 
@@ -135,7 +134,7 @@ public class BezierPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         BezierPath newP = getNonNull(PATH);
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP = newP.set(i, newP.get(i).transform(transform));
@@ -144,14 +143,14 @@ public class BezierPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D t) {
+    public void translateInLocal(CssPoint2D t) {
         Transform transform = new Translate(t.getX().getConvertedValue(), t.getY().getConvertedValue());
         reshapeInLocal(transform);
     }
 
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Path pathNode = (Path) node;
 
         applyHideableFigureProperties(ctx, node);

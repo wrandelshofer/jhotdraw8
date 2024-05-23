@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
@@ -73,7 +72,7 @@ public class IntersectPointQuadCurve {
      * @param r  the tolerance radius
      * @return the intersection
      */
-    public static @NonNull IntersectionResult intersectQuadCurvePoint(
+    public static IntersectionResult intersectQuadCurvePoint(
             double x0, double y0, double x1, double y1, double x2, double y2,
             double cx, double cy, double r) {
 
@@ -97,7 +96,7 @@ public class IntersectPointQuadCurve {
         final double[] roots = new Polynomial(4 * a, 3 * b, 2 * c, d).getRoots();
 
         // Select roots with closest distance to point
-        final @NonNull List<IntersectionPoint> result = new ArrayList<>();
+        final List<IntersectionPoint> result = new ArrayList<>();
         final Point2D.Double p1, p2, p3;
         p1 = new Point2D.Double(x0, y0);
         p2 = new Point2D.Double(x1, y1);
@@ -134,7 +133,7 @@ public class IntersectPointQuadCurve {
                 result);
     }
 
-    public static @NonNull IntersectionResultEx intersectQuadCurvePointEx(
+    public static IntersectionResultEx intersectQuadCurvePointEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double cx, double cy, double epsilon) {
         IntersectionResult result = intersectQuadCurvePoint(a0x, a0y, a1x, a1y, a2x, a2y, cx, cy, epsilon);

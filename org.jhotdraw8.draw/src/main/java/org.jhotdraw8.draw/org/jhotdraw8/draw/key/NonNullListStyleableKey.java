@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -13,6 +11,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -35,7 +34,7 @@ public class NonNullListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * @param elementType      the class of the type
      * @param elementConverter String converter for a list element
      */
-    public NonNullListStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter) {
+    public NonNullListStyleableKey(String name, Type elementType, CssConverter<T> elementConverter) {
         super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), VectorList.of());
     }
 
@@ -48,21 +47,21 @@ public class NonNullListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * @param elementConverter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public NonNullListStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter, @NonNull ImmutableList<T> defaultValue) {
+    public NonNullListStyleableKey(String name, Type elementType, CssConverter<T> elementConverter, ImmutableList<T> defaultValue) {
         super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), defaultValue);
     }
 
-    public NonNullListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter, @NonNull ImmutableList<T> defaultValue) {
+    public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter, ImmutableList<T> defaultValue) {
         super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), defaultValue);
     }
 
-    public NonNullListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter,
-                                   @Nullable String delimiter, @NonNull ImmutableList<T> defaultValue) {
+    public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter,
+                                   @Nullable String delimiter, ImmutableList<T> defaultValue) {
         super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter, delimiter), defaultValue);
     }
 
-    public NonNullListStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter,
-                                   @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, @NonNull ImmutableList<T> defaultValue) {
+    public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter,
+                                   @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, ImmutableList<T> defaultValue) {
         super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter, delimiter, prefix, suffix), defaultValue);
     }
 

@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serializable;
 
@@ -30,7 +29,7 @@ public class Key implements Serializable, Cloneable, Comparable<Key> {
     }
 
     @Override
-    public int compareTo(@NonNull Key o) {
+    public int compareTo(Key o) {
         return Integer.compare(o.value, this.value);
     }
 

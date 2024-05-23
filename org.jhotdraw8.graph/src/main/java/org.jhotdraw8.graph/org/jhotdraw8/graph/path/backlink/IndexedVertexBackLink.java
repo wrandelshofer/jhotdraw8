@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -47,9 +46,9 @@ public class IndexedVertexBackLink extends AbstractBackLink<IndexedVertexBackLin
      */
     public static <CC extends Number & Comparable<CC>> @Nullable IndexedVertexBackLinkWithCost<CC>
     toIndexedVertexBackLinkWithCost(@Nullable IndexedVertexBackLink node,
-                                    @NonNull CC zero,
-                                    @NonNull BiFunction<Integer, Integer, CC> costFunction,
-                                    @NonNull BiFunction<CC, CC, CC> sumFunction) {
+                                    CC zero,
+                                    BiFunction<Integer, Integer, CC> costFunction,
+                                    BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;
         }

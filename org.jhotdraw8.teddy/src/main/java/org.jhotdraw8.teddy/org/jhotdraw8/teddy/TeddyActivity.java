@@ -13,7 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.DataFormat;
 import javafx.scene.text.Font;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractFileBasedActivity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.FileBasedActivity;
@@ -50,10 +49,10 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @FXML
     private TextArea textArea;
 
-    final private @NonNull FXUndoManager undoManager = new FXUndoManager();
+    final private FXUndoManager undoManager = new FXUndoManager();
 
     @Override
-    public @NonNull CompletionStage<Void> clear() {
+    public CompletionStage<Void> clear() {
         textArea.setText(null);
         return CompletableFuture.completedFuture(null);
     }
@@ -64,7 +63,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    protected void initActions(@NonNull ObservableMap<String, Action> map) {
+    protected void initActions(ObservableMap<String, Action> map) {
         super.initActions(map);
         final Application app = getApplication();
         map.put(FontAction.ID, new FontAction(app, this));
@@ -89,14 +88,14 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState<Void> workState) {
+    public CompletionStage<Void> print(PrinterJob job, WorkState<Void> workState) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public @NonNull CompletionStage<DataFormat> read(
-            @NonNull URI uri, DataFormat format,
-            @NonNull ImmutableMap<Key<?>, Object> options,
+    public CompletionStage<DataFormat> read(
+            URI uri, DataFormat format,
+            ImmutableMap<Key<?>, Object> options,
             boolean insert,
             WorkState<Void> workState) {
         return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
@@ -124,10 +123,10 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     }
 
     @Override
-    public @NonNull CompletionStage<Void> write(
-            @NonNull URI uri, DataFormat format,
-            @NonNull ImmutableMap<Key<?>, Object> options,
-            @NonNull WorkState<Void> workState) {
+    public CompletionStage<Void> write(
+            URI uri, DataFormat format,
+            ImmutableMap<Key<?>, Object> options,
+            WorkState<Void> workState) {
         final String text = textArea.getText();
         return FXWorker.run(Executors.newSingleThreadExecutor(), () -> {
             try (Writer out = Files.newBufferedWriter(Paths.get(uri))) {

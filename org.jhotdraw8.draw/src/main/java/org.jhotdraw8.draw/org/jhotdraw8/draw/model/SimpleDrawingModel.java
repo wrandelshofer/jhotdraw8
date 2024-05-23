@@ -10,8 +10,7 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -64,7 +63,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         private @Nullable Figure figure = null;
 
         @Override
-        public @NonNull Set<Entry<Key<?>, Object>> entrySet() {
+        public Set<Entry<Key<?>, Object>> entrySet() {
             // FIXME should listen on changes of the entry set!
             return target == null ? Collections.emptySet() : target.entrySet();
         }
@@ -102,14 +101,14 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
 
     }
 
-    private final @NonNull MapProxy mapProxy = new MapProxy();
+    private final MapProxy mapProxy = new MapProxy();
 
 
     private boolean valid = true;
-    private final @NonNull Set<Figure> dirties = Collections.newSetFromMap(new IdentityHashMap<>());
-    private final @NonNull Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
+    private final Set<Figure> dirties = Collections.newSetFromMap(new IdentityHashMap<>());
+    private final Listener<FigurePropertyChangeEvent> propertyChangeHandler = this::onPropertyChanged;
 
-    private final @NonNull ObjectProperty<Drawing> root = new SimpleObjectProperty<>(this, ROOT_PROPERTY) {
+    private final ObjectProperty<Drawing> root = new SimpleObjectProperty<>(this, ROOT_PROPERTY) {
         @Override
         public void set(@Nullable Drawing newValue) {
             Drawing oldValue = get();
@@ -120,7 +119,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             onRootChanged(oldValue, newValue);
         }
     };
-    private final @NonNull BiFunction<? super DirtyMask, ? super DirtyMask, ? extends DirtyMask> mergeDirtyMask
+    private final BiFunction<? super DirtyMask, ? super DirtyMask, ? extends DirtyMask> mergeDirtyMask
             = DirtyMask::add;
 
     private void invalidate() {
@@ -144,35 +143,35 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         fireTreeModelEvent(TreeModelEvent.rootChanged(this, oldValue, newValue));
     }
 
-    private void onPropertyChanged(@NonNull FigurePropertyChangeEvent event) {
+    private void onPropertyChanged(FigurePropertyChangeEvent event) {
             fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, event.getSource(),
                     event.getKey(), event.getOldValue(),
                     event.getNewValue(), event.wasAdded(), event.wasRemoved()));
             fireTreeModelEvent(TreeModelEvent.nodeChanged(this, event.getSource()));
     }
 
-    private void markDirty(@NonNull Figure figure) {
+    private void markDirty(Figure figure) {
         dirties.add(figure);
     }
 
 
-    private void removeDirty(@NonNull Figure figure) {
+    private void removeDirty(Figure figure) {
         dirties.remove(figure);
     }
 
     @Override
-    public @NonNull ObjectProperty<Drawing> drawingProperty() {
+    public ObjectProperty<Drawing> drawingProperty() {
         return root;
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull ObjectProperty<Figure> rootProperty() {
+    public ObjectProperty<Figure> rootProperty() {
         return (ObjectProperty<Figure>) (ObjectProperty<?>) root;
     }
 
     @Override
-    public void removeFromParent(@NonNull Figure child) {
+    public void removeFromParent(Figure child) {
         final Figure oldRoot = child.getRoot();
         for (Figure f : child.preorderIterable()) {
             fireTreeModelEvent(TreeModelEvent.nodeRemovedFromTree(this, oldRoot, f));
@@ -189,7 +188,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public Figure removeFromParent(@NonNull Figure parent, int index) {
+    public Figure removeFromParent(Figure parent, int index) {
         Figure child = parent.getChild(index);
         final Figure oldRoot = child.getRoot();
         for (Figure f : child.preorderIterable()) {
@@ -202,7 +201,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void insertChildAt(@NonNull Figure child, @NonNull Figure parent, int index) {
+    public void insertChildAt(Figure child, Figure parent, int index) {
         if (!parent.isSuitableChild(child) || !child.isSuitableParent(parent)) {
             return;
         }
@@ -233,13 +232,13 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public @NonNull <T> T setNonNull(@NonNull Figure figure, @NonNull NonNullMapAccessor<T> key, @NonNull T newValue) {
+    public <T> T setNonNull(Figure figure, NonNullMapAccessor<T> key, T newValue) {
         T v = set(figure, key, newValue);
         return Objects.requireNonNull(v, "oldValue");
     }
 
     @Override
-    public <T> T set(@NonNull Figure figure, @NonNull MapAccessor<T> key, @Nullable T newValue) {
+    public <T> T set(Figure figure, MapAccessor<T> key, @Nullable T newValue) {
         if (key instanceof Key<?>) {
             return figure.put(key, newValue);
         } else {
@@ -255,7 +254,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> T remove(@NonNull Figure figure, @NonNull MapAccessor<T> key) {
+    public <T> T remove(Figure figure, MapAccessor<T> key) {
         if (key instanceof Key<?>) {
             boolean wasRemoved = figure.getProperties().containsKey(key);
             T oldValue = figure.remove((Key<T>) key);
@@ -277,7 +276,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public <T> T remove(@NonNull Figure figure, @NonNull Key<T> key) {
+    public <T> T remove(Figure figure, Key<T> key) {
         boolean wasRemoved = figure.getProperties().containsKey(key);
         T oldValue = figure.remove(key);
         // event will be fired by method handlePropertyChanged
@@ -286,61 +285,61 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public @NonNull <T> Property<T> propertyAt(Figure f, Key<T> key) {
+    public <T> Property<T> propertyAt(Figure f, Key<T> key) {
         return new DrawingModelFigureProperty<>(this, f, key);
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Figure f, Transform transform) {
+    public void reshapeInLocal(Figure f, Transform transform) {
         f.reshapeInLocal(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
-    public void reshapeInParent(@NonNull Figure f, Transform transform) {
+    public void reshapeInParent(Figure f, Transform transform) {
         f.reshapeInParent(transform);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
-    public void translateInParent(@NonNull Figure f, CssPoint2D delta) {
+    public void translateInParent(Figure f, CssPoint2D delta) {
         f.translateInParent(delta);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
-    public void transformInParent(@NonNull Figure f, Transform transform) {
+    public void transformInParent(Figure f, Transform transform) {
         f.transformInParent(transform);
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
-    public void transformInLocal(@NonNull Figure f, Transform transform) {
+    public void transformInLocal(Figure f, Transform transform) {
         f.transformInLocal(transform);
         fireDrawingModelEvent(DrawingModelEvent.transformChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Figure f, double x, double y, double width, double height) {
+    public void reshapeInLocal(Figure f, double x, double y, double width, double height) {
         f.reshapeInLocal(x, y, width, height);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Figure f, @NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(Figure f, CssSize x, CssSize y, CssSize width, CssSize height) {
         f.reshapeInLocal(x, y, width, height);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
     @Override
-    public void layout(@NonNull Figure f, @NonNull RenderContext ctx) {
+    public void layout(Figure f, RenderContext ctx) {
         validating.set(true);
         f.layoutChanged(ctx);
         fireDrawingModelEvent(DrawingModelEvent.layoutChanged(this, f));
@@ -348,7 +347,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         validating.set(false);
     }
 
-    private final @NonNull ReadOnlyBooleanWrapper validating = new ReadOnlyBooleanWrapper(this, "layoutIsInProgress");
+    private final ReadOnlyBooleanWrapper validating = new ReadOnlyBooleanWrapper(this, "layoutIsInProgress");
 
     public boolean isValidating() {
         return validating.get();
@@ -359,17 +358,17 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void disconnect(@NonNull Figure f) {
+    public void disconnect(Figure f) {
         f.disconnect();
     }
 
     @Override
-    public void updateCss(@NonNull Figure figure) {
+    public void updateCss(Figure figure) {
         figure.stylesheetChanged(new SimpleRenderContext());
     }
 
     @Override
-    public void validate(@NonNull RenderContext ctx) {
+    public void validate(RenderContext ctx) {
         if (!valid) {
             validating.set(true);
 
@@ -443,18 +442,18 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
     }
 
     @Override
-    public void fireDrawingModelEvent(@NonNull DrawingModelEvent event) {
+    public void fireDrawingModelEvent(DrawingModelEvent event) {
         super.fireDrawingModelEvent(event);
         onDrawingModelEvent(event);
     }
 
     @Override
-    public void fireTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
+    public void fireTreeModelEvent(TreeModelEvent<Figure> event) {
         super.fireTreeModelEvent(event);
         onTreeModelEvent(event);
     }
 
-    protected void onDrawingModelEvent(@NonNull DrawingModelEvent event) {
+    protected void onDrawingModelEvent(DrawingModelEvent event) {
         if (isValidating()) {
             return;
         }
@@ -482,7 +481,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         }
     }
 
-    protected void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
+    protected void onTreeModelEvent(TreeModelEvent<Figure> event) {
         if (isValidating()) {
             return;
         }

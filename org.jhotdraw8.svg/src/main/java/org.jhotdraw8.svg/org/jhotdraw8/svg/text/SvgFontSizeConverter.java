@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.svg.text;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.base.converter.MappedConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -35,7 +34,7 @@ import static org.jhotdraw8.icollection.MapEntries.ofEntries;
  */
 public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
-    private final @NonNull MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
+    private final MappedConverter<SvgFontSize.SizeKeyword> mappedConverter =
             new MappedConverter<>(linkedHashMap(ofEntries(
                     entry("xx-small", SvgFontSize.SizeKeyword.XX_SMALL),
                     entry("x-small", SvgFontSize.SizeKeyword.X_SMALL),
@@ -47,7 +46,7 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
                     entry("smaller", SvgFontSize.SizeKeyword.SMALLER),
                     entry("larger", SvgFontSize.SizeKeyword.LARGER)
             )));
-    private final @NonNull SizeCssConverter sizeConverter = new SizeCssConverter(false);
+    private final SizeCssConverter sizeConverter = new SizeCssConverter(false);
 
     public SvgFontSizeConverter() {
         super(false);
@@ -55,7 +54,7 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
 
 
     @Override
-    public @NonNull SvgFontSize parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public SvgFontSize parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         SvgFontSize.SizeKeyword sizeKeyword;
         CssSize cssSize;
         if (tt.next() == CssTokenType.TT_IDENT) {
@@ -75,7 +74,7 @@ public class SvgFontSizeConverter extends AbstractCssConverter<SvgFontSize> {
     }
 
     @Override
-    protected <TT extends SvgFontSize> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends SvgFontSize> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         if (value.keyword() != null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, mappedConverter.toString(value.keyword())));
         } else if (value.length() != null) {

@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Spliterator;
@@ -55,7 +54,7 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
     }
 
     @Override
-    public void forEachRemaining(@NonNull ByteConsumer action) {
+    public void forEachRemaining(ByteConsumer action) {
         byte[] a;
         int i, hi; // hoist accesses and checks from loop
         if (action == null) {
@@ -70,7 +69,7 @@ public class ByteArraySpliterator implements SpliteratorOfByte {
     }
 
     @Override
-    public boolean tryAdvance(@NonNull ByteConsumer action) {
+    public boolean tryAdvance(ByteConsumer action) {
         if (action == null) {
             throw new NullPointerException();
         }

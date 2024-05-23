@@ -5,7 +5,6 @@
 package org.jhotdraw8.fxbase.beans;
 
 import javafx.beans.InvalidationListener;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -16,13 +15,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SimpleObservable implements ObservableMixin {
 
-    private final @NonNull CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
     public SimpleObservable() {
     }
 
     @Override
-    public @NonNull CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
+    public CopyOnWriteArrayList<InvalidationListener> getInvalidationListeners() {
         return invalidationListeners;
     }
 }

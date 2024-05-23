@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.algo.StronglyConnectedComponentsAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -23,14 +22,14 @@ public class StronglyConnectedComponentsAlgoTest extends AbstractGraphAlgoTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSearchStronglyConnectedComponents() {
+    public List<DynamicTest> dynamicTestsSearchStronglyConnectedComponents() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSearchStronglyConnectedComponents(createDisjointGraph(), 4)),
                 dynamicTest("2", () -> testSearchStronglyConnectedComponents(createLoopGraph(), 1))
         );
     }
 
-    void testSearchStronglyConnectedComponents(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
+    void testSearchStronglyConnectedComponents(DirectedGraph<String, Integer> graph, int expectedSetCount) {
 
         List<List<String>> actualSets = new StronglyConnectedComponentsAlgo().findStronglyConnectedComponents(graph);
 

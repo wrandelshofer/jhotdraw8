@@ -5,8 +5,7 @@
 package org.jhotdraw8.fxbase.beans;
 
 import javafx.beans.property.SimpleObjectProperty;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -49,7 +48,7 @@ public class NonNullObjectProperty<T> extends SimpleObjectProperty<T> {
         return super.get();
     }
 
-    public void setNonNull(@NonNull T newValue) {
+    public void setNonNull(T newValue) {
         Objects.requireNonNull(newValue, "newValue");
         super.set(newValue);
     }

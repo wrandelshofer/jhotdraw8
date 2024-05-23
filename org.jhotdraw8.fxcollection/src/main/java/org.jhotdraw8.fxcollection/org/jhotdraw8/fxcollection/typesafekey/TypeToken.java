@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -23,7 +22,7 @@ import java.lang.reflect.Type;
  * @param <T> The type that this type token captures
  */
 public class TypeToken<T> {
-    private final @NonNull Type runtimeType;
+    private final Type runtimeType;
 
     public TypeToken() {
         this.runtimeType = capture();
@@ -44,7 +43,7 @@ public class TypeToken<T> {
     /**
      * Returns the represented type.
      */
-    public final @NonNull Type getType() {
+    public final Type getType() {
         return runtimeType;
     }
 }

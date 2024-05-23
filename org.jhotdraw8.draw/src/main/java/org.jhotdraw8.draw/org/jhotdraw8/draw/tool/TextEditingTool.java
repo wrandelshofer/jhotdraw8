@@ -10,8 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -32,7 +31,7 @@ public class TextEditingTool extends AbstractTool {
 
     private double defaultWidth = 100;
     private double defaultHeight = 100;
-    private final @NonNull TextArea textArea = new TextArea();
+    private final TextArea textArea = new TextArea();
     private TextEditableFigure.@Nullable TextEditorData editorData;
 
     /**
@@ -90,7 +89,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
     @Override
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
         event.consume();
         if (editorData != null) {
             stopEditing();
@@ -110,7 +109,7 @@ public class TextEditingTool extends AbstractTool {
     }
 
 
-    private void startEditing(TextEditableFigure.@NonNull TextEditorData data, @NonNull DrawingView dv) {
+    private void startEditing(TextEditableFigure.TextEditorData data, DrawingView dv) {
         dv.getSelectedFigures().clear();
         dv.getEditor().setHandleType(HandleType.SELECT);
         dv.getSelectedFigures().add(data.figure());
@@ -125,20 +124,20 @@ public class TextEditingTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (editorData != null) {
         }
     }
 
     @Override
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
         event.consume();
         if (editorData != null) {
         }
     }
 
     @Override
-    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseMoved(MouseEvent event, DrawingView view) {
         if (editorData != null) {
             return;
         }
@@ -159,13 +158,13 @@ public class TextEditingTool extends AbstractTool {
      * This implementation is empty.
      */
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         requestFocus();
         super.activate(editor);
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public String getHelpText() {
         return """
                CreationTool
                  Click on the drawing view. The tool will create a new figure with default size at the clicked location.

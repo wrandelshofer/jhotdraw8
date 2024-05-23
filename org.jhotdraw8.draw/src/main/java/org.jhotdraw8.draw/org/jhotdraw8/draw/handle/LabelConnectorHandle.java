@@ -17,8 +17,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -31,6 +29,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.PointAndDerivative;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -46,28 +45,28 @@ import static java.lang.Math.PI;
  */
 public class LabelConnectorHandle extends AbstractConnectorHandle {
 
-    protected @NonNull Background regionBackgroundConnected = new Background(new BackgroundFill(Color.BLUE, null, null));
-    protected final @NonNull Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
-    private static final @NonNull Function<Color, Border> REGION_BORDER = color -> new Border(
+    protected Background regionBackgroundConnected = new Background(new BackgroundFill(Color.BLUE, null, null));
+    protected final Background REGION_BACKGROUND_DISCONNECTED = new Background(new BackgroundFill(Color.WHITE, null, null));
+    private static final Function<Color, Border> REGION_BORDER = color -> new Border(
             new BorderStroke(Color.WHITE, BorderStrokeStyle.SOLID, null, new BorderWidths(2)),
             new BorderStroke(color, BorderStrokeStyle.SOLID, null, null)
     );
-    protected static final @NonNull Circle REGION_SHAPE = new Circle(4);
+    protected static final Circle REGION_SHAPE = new Circle(4);
 
-    protected final @NonNull Group groupNode;
-    protected final @NonNull Region targetNode;
-    protected final @NonNull Line lineNode;
+    protected final Group groupNode;
+    protected final Region targetNode;
+    protected final Line lineNode;
 
-    protected final @NonNull NonNullMapAccessor<CssPoint2D> originKey;
+    protected final NonNullMapAccessor<CssPoint2D> originKey;
 
     protected @Nullable Point2D connectorDerivative;
 
 
-    public LabelConnectorHandle(@NonNull ConnectingFigure figure,
-                                @NonNull NonNullMapAccessor<CssPoint2D> originKey,
-                                @NonNull NonNullMapAccessor<CssPoint2D> pointKey,
-                                @NonNull MapAccessor<Connector> connectorKey,
-                                @NonNull MapAccessor<Figure> targetKey) {
+    public LabelConnectorHandle(ConnectingFigure figure,
+                                NonNullMapAccessor<CssPoint2D> originKey,
+                                NonNullMapAccessor<CssPoint2D> pointKey,
+                                MapAccessor<Connector> connectorKey,
+                                MapAccessor<Figure> targetKey) {
         super(figure, pointKey,
                 connectorKey, targetKey);
 
@@ -90,7 +89,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
 
 
     @Override
-    public @NonNull Group getNode(@NonNull DrawingView view) {
+    public Group getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (targetNode.getWidth() != size) {
             targetNode.resize(size, size);
@@ -105,7 +104,7 @@ public class LabelConnectorHandle extends AbstractConnectorHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Point2D p = f.getNonNull(pointKey).getConvertedValue();

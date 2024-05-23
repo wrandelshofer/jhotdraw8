@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -14,6 +12,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.Path2D;
@@ -36,7 +35,7 @@ public class AwtPathCssConverter extends AbstractCssConverter<Path2D.Double> {
     }
 
     @Override
-    public Path2D.@NonNull Double parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Path2D.Double parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_STRING, "⟨SvgPath⟩: String expected.");
         final String svgPathString = tt.currentStringNonNull();
 
@@ -57,7 +56,7 @@ public class AwtPathCssConverter extends AbstractCssConverter<Path2D.Double> {
     }
 
     @Override
-    protected <TT extends Path2D.Double> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Path2D.Double> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_STRING, SvgPaths.awtPathIteratorToDoubleSvgString(((Shape) value).getPathIterator(null))));
     }
 

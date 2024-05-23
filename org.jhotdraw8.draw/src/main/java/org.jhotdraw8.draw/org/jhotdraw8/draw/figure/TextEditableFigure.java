@@ -7,17 +7,16 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Interface for figures that support text editing at one or more
  * locations on the figure.
  */
 public interface TextEditableFigure extends Figure {
-    record TextEditorData(@NonNull TextEditableFigure figure, @NonNull Bounds boundsInLocal,
-                          @NonNull MapAccessor<String> textKey) {
+    record TextEditorData(TextEditableFigure figure, Bounds boundsInLocal,
+                          MapAccessor<String> textKey) {
     }
 
     /**

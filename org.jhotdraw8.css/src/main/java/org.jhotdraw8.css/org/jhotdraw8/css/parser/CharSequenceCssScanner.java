@@ -5,12 +5,11 @@
 
 package org.jhotdraw8.css.parser;
 
-import org.jhotdraw8.annotation.NonNull;
 
 public class CharSequenceCssScanner extends AbstractCssScanner {
-    private final @NonNull CharSequence seq;
+    private final CharSequence seq;
 
-    public CharSequenceCssScanner(@NonNull CharSequence seq) {
+    public CharSequenceCssScanner(CharSequence seq) {
         this.seq = seq;
     }
 

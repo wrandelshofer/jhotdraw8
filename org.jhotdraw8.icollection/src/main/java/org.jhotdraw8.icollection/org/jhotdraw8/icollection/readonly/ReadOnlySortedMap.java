@@ -1,8 +1,7 @@
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -40,7 +39,7 @@ public interface ReadOnlySortedMap<K, V> extends ReadOnlySequencedMap<K, V> {
      * @return {@code true} if the object is equal to the map
      */
     @SuppressWarnings("unchecked")
-    static <K, V> boolean sortedMapEquals(@NonNull ReadOnlySortedMap<K, V> map, Object o) {
+    static <K, V> boolean sortedMapEquals(ReadOnlySortedMap<K, V> map, Object o) {
         if (o instanceof ReadOnlySortedMap<?, ?> r && Objects.equals(map.comparator(), r.comparator())) {
             if (map.size() != r.size()) {
                 return false;
@@ -65,7 +64,6 @@ public interface ReadOnlySortedMap<K, V> extends ReadOnlySequencedMap<K, V> {
      *
      * @return a spliterator
      */
-    @NonNull
     @Override
     default Spliterator<Map.Entry<K, V>> spliterator() {
         return new IteratorSpliterator<>(

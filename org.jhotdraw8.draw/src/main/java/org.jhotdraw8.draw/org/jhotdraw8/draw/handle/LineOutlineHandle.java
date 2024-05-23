@@ -12,14 +12,13 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Draws the {@code wireframe} of a {@code LineFigure}, but does not provide any
@@ -28,9 +27,9 @@ import org.jhotdraw8.geom.FXTransforms;
  * @author Werner Randelshofer
  */
 public class LineOutlineHandle extends AbstractHandle {
-    private final @NonNull Group node;
-    private final @NonNull Polyline polyline2;
-    private final @NonNull Polyline polyline1;
+    private final Group node;
+    private final Polyline polyline2;
+    private final Polyline polyline1;
     private final double[] points;
 
     public LineOutlineHandle(Figure figure) {
@@ -53,7 +52,7 @@ public class LineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         polyline1.setStroke(Color.WHITE);
         polyline2.setStroke(Paintable.getPaint(color));
@@ -70,7 +69,7 @@ public class LineOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = getOwner().getLayoutBounds();

@@ -22,7 +22,6 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polyline;
 import javafx.scene.shape.QuadCurveTo;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CubicCurveCharacteristics;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.Points;
@@ -39,20 +38,20 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class BiArcApproExampleMain extends Application {
-    private final @NonNull Polyline polyline = new Polyline(
+    private final Polyline polyline = new Polyline(
             110, 200,
             160, 180,
             210, 120,
             260, 180
     );
-    private final @NonNull Path bezierPath = new Path();
-    private final @NonNull Path approxPath = new Path();
-    private final @NonNull Path inflectionPointsPath = new Path();
-    private final @NonNull Path inflectionPointsPath2 = new Path();
+    private final Path bezierPath = new Path();
+    private final Path approxPath = new Path();
+    private final Path inflectionPointsPath = new Path();
+    private final Path inflectionPointsPath2 = new Path();
     StackPane canvas = new StackPane();
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         BorderPane borderPane = new BorderPane();
         canvas = new StackPane();
         borderPane.setCenter(canvas);

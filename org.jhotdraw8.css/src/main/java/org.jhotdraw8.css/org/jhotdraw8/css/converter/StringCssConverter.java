@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,7 +23,7 @@ import java.util.function.Consumer;
 public class StringCssConverter extends AbstractCssConverter<String> {
     private final @Nullable String helpText;
     private final char quoteChar;
-    private final @NonNull String defaultValue;
+    private final String defaultValue;
 
     public StringCssConverter() {
         this(false, '\"', null);
@@ -48,7 +47,7 @@ public class StringCssConverter extends AbstractCssConverter<String> {
     }
 
     @Override
-    public @NonNull String parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public String parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_STRING) {
             throw tt.createParseException("Could not convert \"" + tt.getToken() + "\" to a string value.");
         }
@@ -56,12 +55,12 @@ public class StringCssConverter extends AbstractCssConverter<String> {
     }
 
     @Override
-    protected <TT extends String> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends String> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_STRING, value, quoteChar));
     }
 
     @Override
-    public @NonNull String getDefaultValue() {
+    public String getDefaultValue() {
         return defaultValue;
     }
 

@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.SequencedCollection;
 
@@ -52,11 +51,11 @@ public interface IntSequencedCollection extends SequencedCollection<Integer> {
         return removeLastAsInt();
     }
 
-    default void addLastAllAsInt(int @NonNull [] array) {
+    default void addLastAllAsInt(int[] array) {
         addLastAllAsInt(array, 0, array.length);
     }
 
-    default void addLastAllAsInt(int @NonNull [] array, int offset, int length) {
+    default void addLastAllAsInt(int[] array, int offset, int length) {
         for (int i = offset, limit = offset + length; i < limit; i++) {
             addLastAsInt(array[i]);
         }

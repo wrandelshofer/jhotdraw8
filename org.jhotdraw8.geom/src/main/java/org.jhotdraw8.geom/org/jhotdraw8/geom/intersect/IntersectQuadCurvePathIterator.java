@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
 
@@ -43,7 +42,7 @@ public class IntersectQuadCurvePathIterator {
      * @param pit the path iterator
      * @return the intersection result
      */
-    public static @NonNull IntersectionResultEx intersectQuadCurvePathIteratorEx(double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, @NonNull PathIterator pit) {
+    public static IntersectionResultEx intersectQuadCurvePathIteratorEx(double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, PathIterator pit) {
         List<IntersectionPointEx> lineIntersections = new ArrayList<>();
         List<IntersectionPointEx> insideIntersections = new ArrayList<>();
         final double[] seg = new double[6];

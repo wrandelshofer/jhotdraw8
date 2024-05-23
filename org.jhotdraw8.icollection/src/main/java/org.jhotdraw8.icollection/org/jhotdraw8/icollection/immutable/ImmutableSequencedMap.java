@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
 
 import java.util.Map;
@@ -24,10 +23,10 @@ import java.util.NoSuchElementException;
  */
 public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnlySequencedMap<K, V> {
     @Override
-    @NonNull ImmutableSequencedMap<K, V> clear();
+    ImmutableSequencedMap<K, V> clear();
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> put(@NonNull K key, @Nullable V value);
+    ImmutableSequencedMap<K, V> put(K key, @Nullable V value);
 
     /**
      * Creates an entry for the specified key and value and adds it to the front
@@ -40,7 +39,7 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * @return this map instance if no changes are needed, or a different map
      * instance with the applied changes.
      */
-    @NonNull ImmutableSequencedMap<K, V> putFirst(@NonNull K key, @Nullable V value);
+    ImmutableSequencedMap<K, V> putFirst(K key, @Nullable V value);
 
     /**
      * Creates an entry for the specified key and value and adds it to the end
@@ -53,23 +52,22 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * @return this map instance if no changes are needed, or a different map
      * instance with the applied changes.
      */
-    @NonNull ImmutableSequencedMap<K, V> putLast(@NonNull K key, @Nullable V value);
+    ImmutableSequencedMap<K, V> putLast(K key, @Nullable V value);
 
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c);
+    ImmutableSequencedMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c);
 
     @Override
-    @NonNull
-    default ImmutableSequencedMap<K, V> putKeyValues(@NonNull Object @NonNull ... kv) {
+    default ImmutableSequencedMap<K, V> putKeyValues(Object... kv) {
         return (ImmutableSequencedMap<K, V>) ImmutableMap.super.putKeyValues(kv);
     }
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> remove(@NonNull K key);
+    ImmutableSequencedMap<K, V> remove(K key);
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> removeAll(@NonNull Iterable<? extends K> c);
+    ImmutableSequencedMap<K, V> removeAll(Iterable<? extends K> c);
 
     /**
      * Returns a copy of this map that contains all entries
@@ -78,7 +76,7 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * @return a new map instance with the first element removed
      * @throws NoSuchElementException if this map is empty
      */
-    default @NonNull ImmutableSequencedMap<K, V> removeFirst() {
+    default ImmutableSequencedMap<K, V> removeFirst() {
         Map.Entry<K, V> e = firstEntry();
         return e == null ? this : remove(e.getKey());
     }
@@ -90,16 +88,16 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      * @return a new map instance with the last element removed
      * @throws NoSuchElementException if this set is empty
      */
-    default @NonNull ImmutableSequencedMap<K, V> removeLast() {
+    default ImmutableSequencedMap<K, V> removeLast() {
         Map.Entry<K, V> e = lastEntry();
         return e == null ? this : remove(e.getKey());
     }
 
     @Override
-    @NonNull ImmutableSequencedMap<K, V> retainAll(@NonNull Iterable<? extends K> c);
+    ImmutableSequencedMap<K, V> retainAll(Iterable<? extends K> c);
 
     @Override
-    @NonNull Map<K, V> toMutable();
+    Map<K, V> toMutable();
 
     /**
      * Returns a reversed copy of this map.
@@ -111,7 +109,7 @@ public interface ImmutableSequencedMap<K, V> extends ImmutableMap<K, V>, ReadOnl
      *
      * @return a reversed copy of this set.
      */
-    default @NonNull ImmutableSequencedMap<K, V> reverse() {
+    default ImmutableSequencedMap<K, V> reverse() {
         if (size() < 2) {
             return this;
         }

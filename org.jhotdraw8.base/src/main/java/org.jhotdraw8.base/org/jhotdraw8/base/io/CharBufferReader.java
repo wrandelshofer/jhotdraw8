@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.base.io;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -17,9 +16,9 @@ import java.nio.CharBuffer;
  */
 public class CharBufferReader extends Reader {
 
-    private final @NonNull CharBuffer buf;
+    private final CharBuffer buf;
 
-    public CharBufferReader(@NonNull CharBuffer buf) {
+    public CharBufferReader(CharBuffer buf) {
         this.buf = buf;
     }
 
@@ -32,12 +31,12 @@ public class CharBufferReader extends Reader {
     }
 
     @Override
-    public int read(@NonNull CharBuffer target) throws IOException {
+    public int read(CharBuffer target) throws IOException {
         return buf.read(target);
     }
 
     @Override
-    public int read(char @NonNull [] cbuf, int off, int len) {
+    public int read(char[] cbuf, int off, int len) {
         len = Math.min(len, buf.remaining());
         buf.get(cbuf, off, len);
         return len;

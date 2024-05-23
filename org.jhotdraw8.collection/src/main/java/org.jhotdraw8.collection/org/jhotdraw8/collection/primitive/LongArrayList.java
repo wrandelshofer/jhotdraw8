@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.util.ListHelper;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -56,7 +55,7 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @param collection a collection of integers
      */
-    public LongArrayList(@NonNull Collection<Long> collection) {
+    public LongArrayList(Collection<Long> collection) {
         this.size = collection.size();
         this.items = new long[size];
 
@@ -68,7 +67,7 @@ public class LongArrayList extends AbstractList<Long> {
         }
     }
 
-    private LongArrayList(long @NonNull [] items) {
+    private LongArrayList(long[] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -80,7 +79,7 @@ public class LongArrayList extends AbstractList<Long> {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull LongArrayList of(long @NonNull ... items) {
+    public static LongArrayList of(long... items) {
         return new LongArrayList(items);
     }
 
@@ -112,7 +111,7 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @param that another list
      */
-    public void addAllAsLong(@NonNull LongArrayList that) {
+    public void addAllAsLong(LongArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -128,7 +127,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @param out the output collection
      * @return out
      */
-    public @NonNull <T extends Collection<Long>> T addAllInto(@NonNull T out) {
+    public <T extends Collection<Long>> T addAllInto(T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -150,7 +149,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(long @NonNull [] a, int offset) {
+    public void copyInto(long[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -361,7 +360,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @return an iterator over the elements of this list
      */
     @Override
-    public PrimitiveIterator.@NonNull OfLong iterator() {
+    public PrimitiveIterator.OfLong iterator() {
         return Spliterators.iterator(spliterator());
     }
 
@@ -371,7 +370,7 @@ public class LongArrayList extends AbstractList<Long> {
      * @return a spliterator over the elements of this list
      */
     @Override
-    public Spliterator.@NonNull OfLong spliterator() {
+    public Spliterator.OfLong spliterator() {
         //FIXME implement a fail-fast spliterator for long arrays
         return Spliterators.spliterator(items, 0, size, Spliterator.SIZED | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
@@ -381,7 +380,7 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @return a stream
      */
-    public @NonNull LongStream longStream() {
+    public LongStream longStream() {
         return (size == 0) ? LongStream.empty() : Arrays.stream(items, 0, size);
     }
 
@@ -390,7 +389,7 @@ public class LongArrayList extends AbstractList<Long> {
      *
      * @return array
      */
-    public long @NonNull [] toLongArray() {
+    public long[] toLongArray() {
         long[] result = new long[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
@@ -419,7 +418,7 @@ public class LongArrayList extends AbstractList<Long> {
 
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; i < size; i++) {
@@ -446,7 +445,7 @@ public class LongArrayList extends AbstractList<Long> {
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIfAsLong(@NonNull LongPredicate filter) {
+    public boolean removeIfAsLong(LongPredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {

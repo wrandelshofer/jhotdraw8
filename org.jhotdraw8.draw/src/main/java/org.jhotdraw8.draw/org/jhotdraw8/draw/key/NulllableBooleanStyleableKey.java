@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.BooleanCssConverter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -29,7 +28,7 @@ public class NulllableBooleanStyleableKey extends NullableObjectStyleableKey<Boo
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key), null);
     }
 
-    public NulllableBooleanStyleableKey(String key, @NonNull String cssName, Boolean defaultValue) {
+    public NulllableBooleanStyleableKey(String key, String cssName, Boolean defaultValue) {
         super(key, Boolean.class, new BooleanCssConverter(true), defaultValue);
     }
 

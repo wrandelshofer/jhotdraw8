@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class IntersectEllipseRectangle {
      * @param r2 corner point 2 of the rectangle
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectEllipseRectangle(@NonNull Point2D c, double rx, double ry, @NonNull Point2D r1, @NonNull Point2D r2) {
+    public static IntersectionResult intersectEllipseRectangle(Point2D c, double rx, double ry, Point2D r1, Point2D r2) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r1, r2);
         bottomRight = Intersections.bottomRight(r1, r2);
@@ -47,7 +46,7 @@ public class IntersectEllipseRectangle {
         return new IntersectionResult(result);
     }
 
-    public static IntersectionResultEx intersectEllipseRectangleEx(@NonNull Point2D c, double rx, double ry, @NonNull Point2D r1, @NonNull Point2D r2) {
+    public static IntersectionResultEx intersectEllipseRectangleEx(Point2D c, double rx, double ry, Point2D r1, Point2D r2) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r1, r2);
         bottomRight = Intersections.bottomRight(r1, r2);

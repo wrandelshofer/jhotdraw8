@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -19,10 +18,10 @@ import java.lang.reflect.Type;
  * @author Werner Randelshofer
  */
 public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
-    private final @NonNull String cssName;
+    private final String cssName;
 
 
-    protected final @NonNull Converter<T> converter;
+    protected final Converter<T> converter;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -32,7 +31,7 @@ public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> imp
      * @param clazz     The type of the value.
      * @param converter the converter
      */
-    public AbstractReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz, @NonNull Converter<T> converter) {
+    public AbstractReadOnlyStyleableKey(String key, Type clazz, Converter<T> converter) {
         this(key, clazz, converter, null);
     }
 
@@ -46,8 +45,8 @@ public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> imp
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public AbstractReadOnlyStyleableKey(@NonNull String key, @NonNull Type clazz,
-                                        @NonNull Converter<T> converter,
+    public AbstractReadOnlyStyleableKey(String key, Type clazz,
+                                        Converter<T> converter,
                                         @Nullable T defaultValue) {
         this(key, ReadOnlyStyleableMapAccessor.toCssName(key), clazz, converter, defaultValue);
 
@@ -62,8 +61,8 @@ public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> imp
      * @param converter the CSS converter for the value
      * @param defaultValue the default value
      */
-    public AbstractReadOnlyStyleableKey(@NonNull String name, @NonNull String cssName, @NonNull Type clazz,
-                                        @NonNull Converter<T> converter,
+    public AbstractReadOnlyStyleableKey(String name, String cssName, Type clazz,
+                                        Converter<T> converter,
                                         @Nullable T defaultValue) {
         super(name, clazz, defaultValue == null, defaultValue);
         this.converter = converter;
@@ -71,13 +70,13 @@ public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> imp
     }
 
     @Override
-    public @NonNull Converter<T> getCssConverter() {
+    public Converter<T> getCssConverter() {
         return converter;
     }
 
 
     @Override
-    public @NonNull String getCssName() {
+    public String getCssName() {
         return cssName;
     }
 

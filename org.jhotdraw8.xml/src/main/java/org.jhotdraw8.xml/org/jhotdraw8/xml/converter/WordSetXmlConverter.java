@@ -4,14 +4,13 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -82,7 +81,7 @@ public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) {
+    public ImmutableSet<String> fromString(CharBuffer buf, @Nullable IdResolver idResolver) {
         String[] strings = buf.toString().split("\\s+");
 
         // If there is a comparator, we do not need to use a sequenced set,

@@ -39,12 +39,11 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 import org.jhotdraw8.geom.FXPathElementsBuilder;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.color.ColorSpace;
 import java.io.IOException;
@@ -65,47 +64,47 @@ import java.util.logging.Logger;
 public abstract class AbstractColorSlider extends Pane {
     public static final int BLOCK_SIZE_COARSE = 32;
     public static final int BLOCK_SIZE_FINE = 2;
-    protected final @NonNull DoubleProperty thumbTranslateX = new SimpleDoubleProperty(this, "thumbTranslateX", 0);
-    protected final @NonNull DoubleProperty thumbTranslateY = new SimpleDoubleProperty(this, "thumbTranslateY", -1);
+    protected final DoubleProperty thumbTranslateX = new SimpleDoubleProperty(this, "thumbTranslateX", 0);
+    protected final DoubleProperty thumbTranslateY = new SimpleDoubleProperty(this, "thumbTranslateY", -1);
     /**
      * Set this value to true when the user is adjusting a value in another control.
      * <p>
      * For example, when the user is pressing the mouse button in a slider in another control.
      */
-    protected final @NonNull BooleanProperty adjusting = new SimpleBooleanProperty(this, "adjusting");
+    protected final BooleanProperty adjusting = new SimpleBooleanProperty(this, "adjusting");
     /**
      * The value of the color component with index 0.
      */
-    protected final @NonNull FloatProperty c0 = new SimpleFloatProperty(this, "c0");
+    protected final FloatProperty c0 = new SimpleFloatProperty(this, "c0");
     /**
      * The value of the color component with index 1.
      */
-    protected final @NonNull FloatProperty c1 = new SimpleFloatProperty(this, "c1");
+    protected final FloatProperty c1 = new SimpleFloatProperty(this, "c1");
     /**
      * The value of the color component with index 2.
      */
-    protected final @NonNull FloatProperty c2 = new SimpleFloatProperty(this, "c2");
+    protected final FloatProperty c2 = new SimpleFloatProperty(this, "c2");
     /**
      * The value of the color component with index 3.
      */
-    protected final @NonNull FloatProperty c3 = new SimpleFloatProperty(this, "c3");
-    protected final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
+    protected final FloatProperty c3 = new SimpleFloatProperty(this, "c3");
+    protected final FloatProperty alpha = new SimpleFloatProperty(this, "alpha");
     /**
      * The color space of the components.
      */
-    protected final @NonNull ObjectProperty<NamedColorSpace> targetColorSpace = new SimpleObjectProperty<>(this, "targetColorSpace");
-    protected final @NonNull ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty<>(this, "sourceColorSpace");
+    protected final ObjectProperty<NamedColorSpace> targetColorSpace = new SimpleObjectProperty<>(this, "targetColorSpace");
+    protected final ObjectProperty<NamedColorSpace> sourceColorSpace = new SimpleObjectProperty<>(this, "sourceColorSpace");
     /**
      * The color space of the display.
      */
-    protected final @NonNull ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(this, "displayColorSpace");
-    protected final @NonNull ObjectProperty<ToIntFunction<Integer>> rgbFilter = new SimpleObjectProperty<>(this, "rgbFilter",
+    protected final ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(this, "displayColorSpace");
+    protected final ObjectProperty<ToIntFunction<Integer>> rgbFilter = new SimpleObjectProperty<>(this, "rgbFilter",
             i -> i
     );
     /**
      * Indicates whether the value of the slider should always be aligned with the tick marks.
      */
-    protected final @NonNull BooleanProperty snapToTicks = new SimpleBooleanProperty(this, "snapToTicks", true);
+    protected final BooleanProperty snapToTicks = new SimpleBooleanProperty(this, "snapToTicks", true);
     @FXML // fx:id="sliderThumb"
     protected Region thumb; // Value injected by FXMLLoader
     @Nullable
@@ -125,36 +124,36 @@ public abstract class AbstractColorSlider extends Pane {
 
     }
 
-    public static @NonNull URL getFxml() {
+    public static URL getFxml() {
         String name = "AbstractColorSlider.fxml";
         return Objects.requireNonNull(AbstractColorSlider.class.getResource(name), name);
     }
 
-    public @NonNull BooleanProperty adjustingProperty() {
+    public BooleanProperty adjustingProperty() {
         return adjusting;
     }
 
-    public @NonNull FloatProperty c0Property() {
+    public FloatProperty c0Property() {
         return c0;
     }
 
-    public @NonNull FloatProperty c1Property() {
+    public FloatProperty c1Property() {
         return c1;
     }
 
-    public @NonNull FloatProperty c2Property() {
+    public FloatProperty c2Property() {
         return c2;
     }
 
-    public @NonNull FloatProperty c3Property() {
+    public FloatProperty c3Property() {
         return c3;
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> targetColorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> targetColorSpaceProperty() {
         return targetColorSpace;
     }
 
-    protected abstract @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer);
+    protected abstract @Nullable AbstractFillTask createFillTask(PixelBuffer<IntBuffer> pixelBuffer);
 
     protected void drawColorRect() {
         int width = Math.max(1, (int) getWidth());
@@ -397,11 +396,11 @@ public abstract class AbstractColorSlider extends Pane {
 
     protected abstract void onMousePressedOrDragged(MouseEvent mouseEvent);
 
-    public @NonNull ObjectProperty<ToIntFunction<Integer>> rgbFilterProperty() {
+    public ObjectProperty<ToIntFunction<Integer>> rgbFilterProperty() {
         return rgbFilter;
     }
 
-    public @NonNull BooleanProperty snapToTicksProperty() {
+    public BooleanProperty snapToTicksProperty() {
         return snapToTicks;
     }
 
@@ -415,7 +414,7 @@ public abstract class AbstractColorSlider extends Pane {
         return displayColorSpace.get();
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> displayColorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> displayColorSpaceProperty() {
         return displayColorSpace;
     }
 
@@ -423,19 +422,19 @@ public abstract class AbstractColorSlider extends Pane {
         this.displayColorSpace.set(displayColorSpace);
     }
 
-    public record FillTaskRecord(@NonNull PixelBuffer<IntBuffer> pixelBuffer,
-                          @NonNull NamedColorSpace sourceColorSpace, @NonNull NamedColorSpace targetColorSpace,
-                          @NonNull NamedColorSpace displayColorSpace,
+    public record FillTaskRecord(PixelBuffer<IntBuffer> pixelBuffer,
+                                 NamedColorSpace sourceColorSpace, NamedColorSpace targetColorSpace,
+                                 NamedColorSpace displayColorSpace,
                           float c0, float c1, float c2, float c3,
                           int xIndex, int yIndex,
-                          float alpha, @NonNull ToIntFunction<Integer> rgbFilter
+                                 float alpha, ToIntFunction<Integer> rgbFilter
     ) {
     }
 
     public abstract static class AbstractFillTask implements Consumer<TileTask.Tile> {
-        protected final @NonNull FillTaskRecord record;
+        protected final FillTaskRecord record;
 
-        public AbstractFillTask(@NonNull FillTaskRecord record) {
+        public AbstractFillTask(FillTaskRecord record) {
             this.record = record;
         }
     }
@@ -444,7 +443,7 @@ public abstract class AbstractColorSlider extends Pane {
         return thumbTranslateX.get();
     }
 
-    public @NonNull DoubleProperty thumbTranslateXProperty() {
+    public DoubleProperty thumbTranslateXProperty() {
         return thumbTranslateX;
     }
 
@@ -546,7 +545,7 @@ public abstract class AbstractColorSlider extends Pane {
         return thumbTranslateY.get();
     }
 
-    public @NonNull DoubleProperty thumbTranslateYProperty() {
+    public DoubleProperty thumbTranslateYProperty() {
         return thumbTranslateY;
     }
 
@@ -558,7 +557,7 @@ public abstract class AbstractColorSlider extends Pane {
         return sourceColorSpace.get();
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> sourceColorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> sourceColorSpaceProperty() {
         return sourceColorSpace;
     }
 
@@ -570,7 +569,7 @@ public abstract class AbstractColorSlider extends Pane {
         return alpha.get();
     }
 
-    public @NonNull FloatProperty alphaProperty() {
+    public FloatProperty alphaProperty() {
         return alpha;
     }
 

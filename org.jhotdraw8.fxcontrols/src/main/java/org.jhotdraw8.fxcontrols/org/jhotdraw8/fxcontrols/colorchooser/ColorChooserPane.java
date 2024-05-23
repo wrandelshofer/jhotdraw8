@@ -28,7 +28,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.NamedColor;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.fxbase.binding.Via;
@@ -82,9 +81,9 @@ public class ColorChooserPane extends VBox {
      * The current value of this color chooser pane.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<NamedColor> value = new SimpleObjectProperty<>(this, "value");
+    private final ObjectProperty<NamedColor> value = new SimpleObjectProperty<>(this, "value");
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model", new ColorChooserPaneModel());
+    private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model", new ColorChooserPaneModel());
 
 
     public ColorChooserPane() {
@@ -188,7 +187,7 @@ public class ColorChooserPane extends VBox {
         return model.get();
     }
 
-    public @NonNull ObjectProperty<ColorChooserPaneModel> modelProperty() {
+    public ObjectProperty<ColorChooserPaneModel> modelProperty() {
         return model;
     }
 

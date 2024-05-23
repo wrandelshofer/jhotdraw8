@@ -5,8 +5,6 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.paint.CycleMethod;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssLinearGradient;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -44,8 +43,8 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGradient> {
-    private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
-    public static final @NonNull String LINEAR_GRADIENT_FUNCTION = "linear-gradient";
+    private static final ColorCssConverter colorConverter = new ColorCssConverter(false);
+    public static final String LINEAR_GRADIENT_FUNCTION = "linear-gradient";
 
     public LinearGradientCssConverter(boolean nullable) {
         super(nullable);
@@ -56,7 +55,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
     }
 
     @Override
-    protected <TT extends CssLinearGradient> void produceTokensNonNull(@NonNull TT lg, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssLinearGradient> void produceTokensNonNull(TT lg, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_FUNCTION, LINEAR_GRADIENT_FUNCTION));
         final boolean proportional = lg.isProportional();
         final double startX = lg.getStartX();
@@ -212,7 +211,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
     }
 
     @Override
-    public @NonNull CssLinearGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssLinearGradient parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨LinearGradient⟩: \"linear-gradient(\"  expected");
         switch (tt.currentStringNonNull()) {
         case LINEAR_GRADIENT_FUNCTION:
@@ -272,7 +271,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
 
     }
 
-    private @NonNull PointToPoint parsePointToPoint(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private PointToPoint parsePointToPoint(CssTokenizer tt) throws IOException, ParseException {
         double startX, startY, endX, endY;
         Boolean isProportional = null;
         switch (tt.next()) {
@@ -377,7 +376,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
         return new PointToPoint(startX, startY, endX, endY, isProportional);
     }
 
-    private @NonNull PointToPoint parseSideOrCorner(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private PointToPoint parseSideOrCorner(CssTokenizer tt) throws IOException, ParseException {
         double startX = 0.0, startY = 0.0, endX = 0.0, endY = 1.0;
         boolean isProportional = true;
         String h = null;
@@ -441,7 +440,7 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
         return new PointToPoint(startX, startY, endX, endY, isProportional);
     }
 
-    private @NonNull CssStop parseColorStop(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private CssStop parseColorStop(CssTokenizer tt) throws IOException, ParseException {
         CssColor color = colorConverter.parse(tt, null);
         Double offset = null;
         switch (tt.next()) {

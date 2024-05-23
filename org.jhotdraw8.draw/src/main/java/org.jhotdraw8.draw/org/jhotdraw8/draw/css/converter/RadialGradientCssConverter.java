@@ -5,8 +5,6 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.paint.CycleMethod;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssRadialGradient;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -47,15 +46,15 @@ import java.util.function.Consumer;
  */
 public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGradient> {
 
-    private static final @NonNull ColorCssConverter colorConverter = new ColorCssConverter(false);
-    public static final @NonNull String RADIAL_GRADIENT_FUNCTION = "radial-gradient";
+    private static final ColorCssConverter colorConverter = new ColorCssConverter(false);
+    public static final String RADIAL_GRADIENT_FUNCTION = "radial-gradient";
 
     public RadialGradientCssConverter(boolean nullable) {
         super(nullable);
     }
 
     @Override
-    protected <TT extends CssRadialGradient> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssRadialGradient> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_FUNCTION, RADIAL_GRADIENT_FUNCTION));
         CssRadialGradient lg = value;
         final boolean proportional = lg.isProportional();
@@ -155,7 +154,7 @@ public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGr
     }
 
     @Override
-    public @NonNull CssRadialGradient parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssRadialGradient parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨RadialGradient⟩: \"radial-gradient(\"  expected");
         switch (tt.currentStringNonNull()) {
         case RADIAL_GRADIENT_FUNCTION:
@@ -307,7 +306,7 @@ public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGr
         return new CssRadialGradient(focusAngle, focusDistance, centerX, centerY, radius, isProportional, cycleMethod, stops.toArray(new CssStop[0]));
     }
 
-    private @NonNull CssStop parseColorStop(@NonNull CssTokenizer tt, IdResolver idResolver) throws IOException, ParseException {
+    private CssStop parseColorStop(CssTokenizer tt, IdResolver idResolver) throws IOException, ParseException {
         CssColor color = colorConverter.parse(tt, idResolver);
         Double offset = null;
         switch (tt.next()) {

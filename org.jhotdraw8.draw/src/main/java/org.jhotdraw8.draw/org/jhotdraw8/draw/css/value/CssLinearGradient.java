@@ -8,9 +8,8 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.converter.CssStop;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -30,12 +29,12 @@ public class CssLinearGradient implements Paintable {
     private final double endX;
     private final double endY;
     private final boolean proportional;
-    private final @NonNull CycleMethod cycleMethod;
-    private final CssStop @NonNull [] cstops;
+    private final CycleMethod cycleMethod;
+    private final CssStop[] cstops;
 
     public CssLinearGradient(double startX, double startY, double endX, double endY, boolean proportional,
-                             @NonNull CycleMethod cycleMethod,
-                             CssStop @NonNull ... stops) {
+                             CycleMethod cycleMethod,
+                             CssStop... stops) {
         this.startX = startX;
         this.startY = startY;
         this.endX = endX;
@@ -50,7 +49,7 @@ public class CssLinearGradient implements Paintable {
         this(startX, startY, endX, endY, proportional, cycleMethod, stops.toArray(new CssStop[0]));
     }
 
-    public CssLinearGradient(@NonNull LinearGradient linearGradient) {
+    public CssLinearGradient(LinearGradient linearGradient) {
         this.linearGradient = linearGradient;
         this.startX = linearGradient.getStartX();
         this.startY = linearGradient.getStartY();
@@ -104,7 +103,7 @@ public class CssLinearGradient implements Paintable {
         return getLinearGradient();
     }
 
-    public @NonNull Iterable<CssStop> getStops() {
+    public Iterable<CssStop> getStops() {
         return Arrays.asList(cstops);
     }
 
@@ -175,7 +174,7 @@ public class CssLinearGradient implements Paintable {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssLinearGradient{" + "startX=" + startX + ", startY=" + startY + ", endX=" + endX + ", endY=" + endY + ", proportional=" + proportional + ", " + cycleMethod + ", stops=" + Arrays.toString(cstops) + '}';
     }
 }

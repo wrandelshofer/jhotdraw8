@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
@@ -51,7 +50,7 @@ public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, Attr
      * @return a collection view on the direct predecessor vertices of vertex
      * with the arrow pointing away from the vertex
      */
-    default @NonNull Collection<Map.Entry<Integer, A>> getPrevIntEntries(int vertexIndex) {
+    default Collection<Map.Entry<Integer, A>> getPrevIntEntries(int vertexIndex) {
         class PrevVertexAndArrowIterator implements Iterator<Map.Entry<Integer, A>> {
 
             private int index;
@@ -69,7 +68,7 @@ public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, Attr
             }
 
             @Override
-            public Map.@NonNull Entry<Integer, A> next() {
+            public Map.Entry<Integer, A> next() {
                 int i = index++;
                 return new AbstractMap.SimpleEntry<>(
                         getPrevAsInt(vertex, i),
@@ -80,7 +79,7 @@ public interface AttributedIndexedBidiGraph<V, A> extends IndexedBidiGraph, Attr
         }
         return new AbstractCollection<>() {
             @Override
-            public @NonNull Iterator<Map.Entry<Integer, A>> iterator() {
+            public Iterator<Map.Entry<Integer, A>> iterator() {
                 return new PrevVertexAndArrowIterator(vertexIndex);
             }
 

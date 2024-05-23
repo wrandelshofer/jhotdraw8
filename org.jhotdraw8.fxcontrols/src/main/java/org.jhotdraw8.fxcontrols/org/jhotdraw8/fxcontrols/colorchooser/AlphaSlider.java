@@ -16,10 +16,9 @@ import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.color.NamedColorSpace;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -36,22 +35,22 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
 public class AlphaSlider extends AbstractColorSlider {
 
 
-    private final @NonNull ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
+    private final ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
     /**
      * The value of the alpha component.
      */
-    private final @NonNull FloatProperty alpha = new SimpleFloatProperty(this, "alpha", 1.0f);
-    private final @NonNull FloatProperty alphaMaxValue = new SimpleFloatProperty(this, "alphaMaxValue", 1.0f);
-    private final @NonNull FloatProperty alphaMinValue = new SimpleFloatProperty(this, "alphaMinValue", 0.0f);
+    private final FloatProperty alpha = new SimpleFloatProperty(this, "alpha", 1.0f);
+    private final FloatProperty alphaMaxValue = new SimpleFloatProperty(this, "alphaMaxValue", 1.0f);
+    private final FloatProperty alphaMinValue = new SimpleFloatProperty(this, "alphaMinValue", 0.0f);
 
     /**
      * The minor unit distance between tick marks.
      */
-    private final @NonNull DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 0.001);
+    private final DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 0.001);
     /**
      * The major unit distance between tick marks.
      */
-    private final @NonNull DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 0.01);
+    private final DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 0.01);
 
 
     public AlphaSlider() {
@@ -96,7 +95,7 @@ public class AlphaSlider extends AbstractColorSlider {
     }
 
     @Override
-    protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+    protected @Nullable AbstractFillTask createFillTask(PixelBuffer<IntBuffer> pixelBuffer) {
         if (getDisplayColorSpace() == null || getTargetColorSpace() == null) {
             return null;
         }
@@ -126,18 +125,18 @@ public class AlphaSlider extends AbstractColorSlider {
     }
 
     static class FillTask extends AbstractFillTask {
-        private final @NonNull Orientation orientation;
+        private final Orientation orientation;
         private final float alphaMin;
         private final float alphaMax;
 
-        public FillTask(@NonNull FillTaskRecord record, @NonNull Orientation orientation, float alphaMin, float alphaMax) {
+        public FillTask(FillTaskRecord record, Orientation orientation, float alphaMin, float alphaMax) {
             super(record);
             this.orientation = orientation;
             this.alphaMin = alphaMin;
             this.alphaMax = alphaMax;
         }
 
-        public void accept(TileTask.@NonNull Tile tile) {
+        public void accept(TileTask.Tile tile) {
             if (orientation == Orientation.HORIZONTAL) {
                 fillFineHorizontal(tile);
             } else {
@@ -146,7 +145,7 @@ public class AlphaSlider extends AbstractColorSlider {
         }
 
 
-        public void fillFineHorizontal(TileTask.@NonNull Tile tile) {
+        public void fillFineHorizontal(TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
@@ -188,7 +187,7 @@ public class AlphaSlider extends AbstractColorSlider {
         }
 
 
-        public void fillFineVertical(TileTask.@NonNull Tile tile) {
+        public void fillFineVertical(TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
@@ -229,15 +228,15 @@ public class AlphaSlider extends AbstractColorSlider {
     }
 
 
-    public @NonNull Orientation getOrientation() {
+    public Orientation getOrientation() {
         return orientation.get();
     }
 
-    public @NonNull ObjectProperty<Orientation> orientationProperty() {
+    public ObjectProperty<Orientation> orientationProperty() {
         return orientation;
     }
 
-    public void setOrientation(@NonNull Orientation orientation) {
+    public void setOrientation(Orientation orientation) {
         this.orientation.set(orientation);
     }
 
@@ -245,7 +244,7 @@ public class AlphaSlider extends AbstractColorSlider {
         return minorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty minorTickUnitProperty() {
+    public DoubleProperty minorTickUnitProperty() {
         return minorTickUnit;
     }
 
@@ -257,7 +256,7 @@ public class AlphaSlider extends AbstractColorSlider {
         return alpha.get();
     }
 
-    public @NonNull FloatProperty alphaProperty() {
+    public FloatProperty alphaProperty() {
         return alpha;
     }
 
@@ -269,7 +268,7 @@ public class AlphaSlider extends AbstractColorSlider {
         return alphaMaxValue.get();
     }
 
-    public @NonNull FloatProperty alphaMaxValueProperty() {
+    public FloatProperty alphaMaxValueProperty() {
         return alphaMaxValue;
     }
 
@@ -281,7 +280,7 @@ public class AlphaSlider extends AbstractColorSlider {
         return alphaMinValue.get();
     }
 
-    public @NonNull FloatProperty alphaMinValueProperty() {
+    public FloatProperty alphaMinValueProperty() {
         return alphaMinValue;
     }
 
@@ -325,7 +324,7 @@ public class AlphaSlider extends AbstractColorSlider {
         return majorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty majorTickUnitProperty() {
+    public DoubleProperty majorTickUnitProperty() {
         return majorTickUnit;
     }
 

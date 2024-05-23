@@ -4,14 +4,13 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.draw.css.converter.DefaultableValueCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -21,12 +20,12 @@ import java.lang.reflect.Type;
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull CssDefaultableValue<T>>
-        implements WritableStyleableMapAccessor<@NonNull CssDefaultableValue<T>>,
+public class DefaultableStyleableKey<T> extends AbstractStyleableKey<CssDefaultableValue<T>>
+        implements WritableStyleableMapAccessor<CssDefaultableValue<T>>,
         DefaultableStyleableMapAccessor<T>, NonNullKey<CssDefaultableValue<T>> {
 
 
-    private final @NonNull Converter<@NonNull CssDefaultableValue<T>> converter;
+    private final Converter<CssDefaultableValue<T>> converter;
     private final T initialValue;
 
 
@@ -38,8 +37,8 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
      * @param converter              String converter for a list element
      * @param initialDefaultingValue The default value.
      */
-    public DefaultableStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<T> converter,
-                                   @NonNull CssDefaultableValue<T> initialDefaultingValue,
+    public DefaultableStyleableKey(String name, Type type, CssConverter<T> converter,
+                                   CssDefaultableValue<T> initialDefaultingValue,
                                    @Nullable T initialValue) {
         super(name, type, initialDefaultingValue);
         this.initialValue = initialValue;
@@ -48,7 +47,7 @@ public class DefaultableStyleableKey<T> extends AbstractStyleableKey<@NonNull Cs
     }
 
     @Override
-    public @NonNull Converter<CssDefaultableValue<T>> getCssConverter() {
+    public Converter<CssDefaultableValue<T>> getCssConverter() {
         return converter;
     }
 

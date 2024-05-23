@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 
@@ -56,7 +55,7 @@ import java.util.Objects;
  */
 
 public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGraph {
-    private Node @NonNull [] nodes = new Node[0];
+    private Node[] nodes = new Node[0];
     private int vertexCount;
     private int arrowCount;
 
@@ -67,7 +66,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
         buildAddVertices(vertexCount);
     }
 
-    public AbstractMutableIndexedBidiGraph(@NonNull IndexedDirectedGraph g) {
+    public AbstractMutableIndexedBidiGraph(IndexedDirectedGraph g) {
         buildAddVertices(g.getVertexCount());
         for (int v = 0; v < vertexCount; v++) {
             for (Enumerator.OfInt it = g.nextVerticesEnumerator(v); it.moveNext(); ) {
@@ -236,8 +235,8 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
      * Performance: node.next is node.this. This saves 1 object per node.
      */
     private static class Node extends IntArrayList {
-        private final @NonNull IntArrayList next = this;
-        private final @NonNull IntArrayList prev = new IntArrayList();
+        private final IntArrayList next = this;
+        private final IntArrayList prev = new IntArrayList();
 
         private boolean isNodeEmpty() {
             return next.isEmpty() && prev.isEmpty();

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 
@@ -50,7 +49,8 @@ public interface IdFactory extends IdResolver, IdSupplier {
      * @param suggestedId the suggested id
      * @return the id
      */
-    @Nullable String createId(@NonNull Object object, @Nullable String prefix, String suggestedId);
+    @Nullable
+    String createId(Object object, @Nullable String prefix, String suggestedId);
 
     /**
      * Puts the id and the object for mapping between them.
@@ -62,7 +62,7 @@ public interface IdFactory extends IdResolver, IdSupplier {
      * @return the object that previously was assigned to this id
      */
     @Nullable
-    Object putIdAndObject(@NonNull String id, @NonNull Object object);
+    Object putIdAndObject(String id, Object object);
 
     /**
      * Puts the id for mapping to the specified object.
@@ -72,7 +72,7 @@ public interface IdFactory extends IdResolver, IdSupplier {
      * @return the object that previously was assigned to this id
      */
     @Nullable
-    Object putIdToObject(@NonNull String id, @NonNull Object object);
+    Object putIdToObject(String id, Object object);
 
     /**
      * Clears all ids.

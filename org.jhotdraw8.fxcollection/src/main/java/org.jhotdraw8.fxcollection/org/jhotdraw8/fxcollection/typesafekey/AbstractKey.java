@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 import java.util.Objects;
@@ -38,7 +37,7 @@ public abstract class AbstractKey<T> implements Key<T> {
     /**
      * Holds a String representation of the name.
      */
-    private final @NonNull String name;
+    private final String name;
     /**
      * Holds the default value.
      */
@@ -47,7 +46,7 @@ public abstract class AbstractKey<T> implements Key<T> {
      * This variable is used as a "type token" so that we can check for
      * assignability of attribute values at runtime.
      */
-    private final @NonNull Type type;
+    private final Type type;
 
 
     /**
@@ -63,11 +62,11 @@ public abstract class AbstractKey<T> implements Key<T> {
      * @param name  The name of the key.
      * @param clazz The type of the value.
      */
-    public AbstractKey(@NonNull String name, @NonNull Type clazz) {
+    public AbstractKey(String name, Type clazz) {
         this(name, clazz, null);
     }
 
-    public AbstractKey(@NonNull String name, @NonNull TypeToken<T> clazz, T initialValue) {
+    public AbstractKey(String name, TypeToken<T> clazz, T initialValue) {
         this(name, clazz.getType(), initialValue);
     }
 
@@ -79,7 +78,7 @@ public abstract class AbstractKey<T> implements Key<T> {
      * @param clazz        The type of the value.
      * @param initialValue The default value.
      */
-    public AbstractKey(@NonNull String name, @NonNull Type clazz, @Nullable T initialValue) {
+    public AbstractKey(String name, Type clazz, @Nullable T initialValue) {
         this(name, clazz, true, initialValue);
     }
 
@@ -92,16 +91,16 @@ public abstract class AbstractKey<T> implements Key<T> {
      * @param isNullable   Whether the value may be set to null
      * @param initialValue The default value.
      */
-    public AbstractKey(@NonNull String name, @NonNull Type clazz, boolean isNullable, @Nullable T initialValue) {
+    public AbstractKey(String name, Type clazz, boolean isNullable, @Nullable T initialValue) {
         this(name, clazz, isNullable, false, initialValue);
     }
 
-    public AbstractKey(@NonNull String name, @NonNull Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T initialValue) {
+    public AbstractKey(String name, Type clazz, @Nullable Class<?>[] typeParameters, boolean isNullable, @Nullable T initialValue) {
         this(name, clazz, isNullable, false, initialValue);
     }
 
 
-    public AbstractKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T initialValue) {
+    public AbstractKey(@Nullable String name, Type clazz, boolean isNullable, boolean isTransient, @Nullable T initialValue) {
         Objects.requireNonNull(name, "name");
         Objects.requireNonNull(clazz, "clazz");
         if (!isNullable && initialValue == null) {
@@ -121,12 +120,12 @@ public abstract class AbstractKey<T> implements Key<T> {
      * @return name string.
      */
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public @NonNull Type getValueType() {
+    public Type getValueType() {
         return type;
     }
 
@@ -149,7 +148,7 @@ public abstract class AbstractKey<T> implements Key<T> {
      * Returns the name string.
      */
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
     }

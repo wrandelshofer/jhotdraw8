@@ -8,7 +8,6 @@ import javafx.scene.shape.ClosePath;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.List;
  */
 public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> {
 
-    private final @NonNull List<PathElement> elements;
+    private final List<PathElement> elements;
     private boolean needsSquareAtLastPoint;
     private double squareSize = 5;
 
@@ -28,11 +27,11 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
         this(5, new ArrayList<>());
     }
 
-    public FXPathPointsBuilder(@NonNull List<PathElement> elements) {
+    public FXPathPointsBuilder(List<PathElement> elements) {
         this(5, elements);
     }
 
-    public FXPathPointsBuilder(double squareSize, @NonNull List<PathElement> elements) {
+    public FXPathPointsBuilder(double squareSize, List<PathElement> elements) {
         this.elements = elements;
         this.squareSize = squareSize;
     }
@@ -47,7 +46,7 @@ public class FXPathPointsBuilder extends AbstractPathBuilder<List<PathElement>> 
     }
 
     @Override
-    public @NonNull List<PathElement> build() {
+    public List<PathElement> build() {
         if (needsSquareAtLastPoint) {
             addSquare(getLastX(), getLastY());
             needsSquareAtLastPoint = false;

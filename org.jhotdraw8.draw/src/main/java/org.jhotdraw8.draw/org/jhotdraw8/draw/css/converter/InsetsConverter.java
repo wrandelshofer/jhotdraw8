@@ -5,14 +5,13 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.geometry.Insets;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -41,7 +40,7 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
     }
 
     @Override
-    public @NonNull Insets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Insets parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<Number> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
@@ -81,7 +80,7 @@ public class InsetsConverter extends AbstractCssConverter<Insets> {
     }
 
     @Override
-    protected <TT extends Insets> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Insets> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         if (value.getRight() == value.getLeft()) {
             if (value.getTop() == value.getBottom()) {
                 if (value.getTop() == value.getLeft()) {

@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
@@ -14,6 +12,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -55,21 +54,21 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
      */
     private final @Nullable Comparator<T> comparatorForSorting;
 
-    private final @NonNull CssConverter<T> elementConverter;
-    private final @NonNull ImmutableList<CssToken> delimiter;
-    private final @NonNull ImmutableList<CssToken> prefix;
-    private final @NonNull ImmutableList<CssToken> suffix;
-    private final @NonNull Set<Integer> delimiterChars;
+    private final CssConverter<T> elementConverter;
+    private final ImmutableList<CssToken> delimiter;
+    private final ImmutableList<CssToken> prefix;
+    private final ImmutableList<CssToken> suffix;
+    private final Set<Integer> delimiterChars;
 
-    public ListCssConverter(@NonNull CssConverter<T> elementConverter) {
+    public ListCssConverter(CssConverter<T> elementConverter) {
         this(elementConverter, ", ");
     }
 
-    public ListCssConverter(@NonNull CssConverter<T> elementConverter, @Nullable String delimiter) {
+    public ListCssConverter(CssConverter<T> elementConverter, @Nullable String delimiter) {
         this(elementConverter, delimiter, null, null);
     }
 
-    public ListCssConverter(@NonNull CssConverter<T> elementConverter, @Nullable String delimiter,
+    public ListCssConverter(CssConverter<T> elementConverter, @Nullable String delimiter,
                             @Nullable String prefix, @Nullable String suffix) {
         this(elementConverter, parseDelim(delimiter == null ? " " : delimiter), parseDelim(prefix), parseDelim(suffix));
     }
@@ -82,7 +81,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
      * @param suffix               the suffix of the list, for example a right bracket
      * @param comparatorForSorting if this value is non-null, then it is used to sort the list
      */
-    public ListCssConverter(@NonNull CssConverter<T> elementConverter, @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, @Nullable Comparator<T> comparatorForSorting) {
+    public ListCssConverter(CssConverter<T> elementConverter, @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, @Nullable Comparator<T> comparatorForSorting) {
         this(elementConverter, parseDelim(delimiter), parseDelim(prefix), parseDelim(suffix), comparatorForSorting);
     }
 
@@ -103,10 +102,10 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
      * @param prefix           white-space tokens for pretty printing that are used when producing tokens or a String
      * @param suffix           white-space tokens for pretty printing that are used when producing tokens or a String
      */
-    public ListCssConverter(@NonNull CssConverter<T> elementConverter,
-                            @NonNull Iterable<CssToken> delimiter,
-                            @NonNull Iterable<CssToken> prefix,
-                            @NonNull Iterable<CssToken> suffix
+    public ListCssConverter(CssConverter<T> elementConverter,
+                            Iterable<CssToken> delimiter,
+                            Iterable<CssToken> prefix,
+                            Iterable<CssToken> suffix
     ) {
         this(elementConverter, delimiter, prefix, suffix, null);
     }
@@ -120,10 +119,10 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
      * @param suffix               white-space tokens for pretty printing that are used when producing tokens or a String
      * @param comparatorForSorting optional comparator for sorting; null means no sorting
      */
-    public ListCssConverter(@NonNull CssConverter<T> elementConverter,
-                            @NonNull Iterable<CssToken> delimiter,
-                            @NonNull Iterable<CssToken> prefix,
-                            @NonNull Iterable<CssToken> suffix,
+    public ListCssConverter(CssConverter<T> elementConverter,
+                            Iterable<CssToken> delimiter,
+                            Iterable<CssToken> prefix,
+                            Iterable<CssToken> suffix,
                             @Nullable Comparator<T> comparatorForSorting
     ) {
         this.elementConverter = elementConverter;
@@ -141,7 +140,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     @Override
-    public ImmutableList<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public ImmutableList<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
             return VectorList.of();
         } else {
@@ -188,7 +187,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public <TT extends ImmutableList<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    public <TT extends ImmutableList<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else if (value.isEmpty()) {

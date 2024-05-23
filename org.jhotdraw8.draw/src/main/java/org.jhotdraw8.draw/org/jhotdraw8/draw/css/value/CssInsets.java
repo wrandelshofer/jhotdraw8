@@ -5,11 +5,10 @@
 package org.jhotdraw8.draw.css.value;
 
 import javafx.geometry.Insets;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,14 +19,14 @@ import java.util.Objects;
  */
 public class CssInsets {
 
-    public static final @NonNull CssInsets ZERO = new CssInsets();
+    public static final CssInsets ZERO = new CssInsets();
 
-    private final @NonNull CssSize bottom;
-    private final @NonNull CssSize left;
-    private final @NonNull CssSize right;
-    private final @NonNull CssSize top;
+    private final CssSize bottom;
+    private final CssSize left;
+    private final CssSize right;
+    private final CssSize top;
 
-    public CssInsets(@NonNull CssSize top, @NonNull CssSize right, @NonNull CssSize bottom, @NonNull CssSize left) {
+    public CssInsets(CssSize top, CssSize right, CssSize bottom, CssSize left) {
         this.top = top;
         this.right = right;
         this.bottom = bottom;
@@ -80,24 +79,24 @@ public class CssInsets {
      *               insets
      * @return the converted value
      */
-    public @NonNull Insets getConvertedValue(double width, double height) {
+    public Insets getConvertedValue(double width, double height) {
         final UnitConverter heightConverter = new DefaultUnitConverter(72.0, height);
         final UnitConverter widthConverter = new DefaultUnitConverter(72.0, width);
         return new Insets(heightConverter.convert(top, UnitConverter.DEFAULT), widthConverter.convert(right, UnitConverter.DEFAULT),
                 heightConverter.convert(bottom, UnitConverter.DEFAULT), widthConverter.convert(left, UnitConverter.DEFAULT));
     }
 
-    public @NonNull Insets getConvertedValue() {
+    public Insets getConvertedValue() {
         return new Insets(top.getConvertedValue(), right.getConvertedValue(),
                 bottom.getConvertedValue(), left.getConvertedValue());
     }
 
-    public @NonNull Insets getConvertedValue(UnitConverter converter, @NonNull String units) {
+    public Insets getConvertedValue(UnitConverter converter, String units) {
         return new Insets(top.getConvertedValue(converter, units), right.getConvertedValue(converter, units),
                 bottom.getConvertedValue(converter, units), left.getConvertedValue(converter, units));
     }
 
-    public @NonNull Insets getConvertedValue(@NonNull UnitConverter converter) {
+    public Insets getConvertedValue(UnitConverter converter) {
         return getConvertedValue(converter, UnitConverter.DEFAULT);
     }
 
@@ -124,7 +123,7 @@ public class CssInsets {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssInsets{" + bottom +
                 ", " + left +
                 ", " + right +

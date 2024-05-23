@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.algo.AddToSet;
 
 import java.util.function.Predicate;
@@ -30,9 +29,9 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param visited       the visited function
      * @return true if a sequence was found.
      */
-    boolean isReachable(@NonNull Iterable<V> startVertices,
-                        @NonNull Predicate<V> goalPredicate,
-                        int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited);
+    boolean isReachable(Iterable<V> startVertices,
+                        Predicate<V> goalPredicate,
+                        int maxDepth, C costLimit, AddToSet<V> visited);
 
     /**
      * Checks if a vertex sequence from a start vertex to a vertex
@@ -46,9 +45,9 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param visited       the visited function
      * @return true if a sequence was found.
      */
-    boolean isReachable(@NonNull V start,
-                        @NonNull Predicate<V> goalPredicate,
-                        int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited);
+    boolean isReachable(V start,
+                        Predicate<V> goalPredicate,
+                        int maxDepth, C costLimit, AddToSet<V> visited);
 
     /**
      * Checks if a vertex sequence from start to goal exists.
@@ -61,7 +60,7 @@ public interface ReachabilityChecker<V, C extends Number & Comparable<C>> {
      * @param visited   the visited function
      * @return true if a sequence was found.
      */
-    boolean isReachable(@NonNull V start, @NonNull V goal, int maxDepth, @NonNull C costLimit, @NonNull AddToSet<V> visited);
+    boolean isReachable(V start, V goal, int maxDepth, C costLimit, AddToSet<V> visited);
 
 
 }

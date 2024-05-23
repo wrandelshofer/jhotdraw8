@@ -11,8 +11,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -21,6 +19,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXShapes;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -33,14 +32,14 @@ public class TextAreaFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "TextArea";
+    public static final String TYPE_SELECTOR = "TextArea";
     private Path path;
 
     public TextAreaFigure() {
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+    public Node createNode(RenderContext ctx) {
         Group n = new Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);
@@ -51,12 +50,12 @@ public class TextAreaFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, Node node) {
+    public TextEditorData getTextEditorDataFor(@Nullable Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         Path p = (Path) g.getChildren().get(0);
         Text text = (Text) g.getChildren().get(1);
@@ -92,13 +91,13 @@ public class TextAreaFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         if (path == null) {
             path = new Path();
         }
@@ -106,12 +105,12 @@ public class TextAreaFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure, double tolerance) {
+    public @Nullable Connector findConnector(Point2D pointInLocal, Figure connectingFigure, double tolerance) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), pointInLocal));
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (path == null) {
             layout(new SimpleRenderContext());
         }

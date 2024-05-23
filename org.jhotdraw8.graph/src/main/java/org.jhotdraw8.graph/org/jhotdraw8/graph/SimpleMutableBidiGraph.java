@@ -5,11 +5,10 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.util.ListHelper;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -74,7 +73,7 @@ import java.util.Set;
  */
 public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
 
-    private final @NonNull Map<V, Node<V, A>> nodeMap;
+    private final Map<V, Node<V, A>> nodeMap;
     private @Nullable List<V> cachedVertices = null;
     private int arrowCount = 0;
 
@@ -100,7 +99,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
      *
      * @param g a graph
      */
-    public SimpleMutableBidiGraph(final @NonNull DirectedGraph<V, A> g) {
+    public SimpleMutableBidiGraph(final DirectedGraph<V, A> g) {
         nodeMap = new LinkedHashMap<>(g.getVertexCount() * 2);
         for (V v : g.getVertices()) {
             addVertex(v);
@@ -113,7 +112,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public void addVertex(@NonNull V v) {
+    public void addVertex(V v) {
         if (nodeMap.containsKey(v)) {
             return;
         }
@@ -122,7 +121,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public void removeVertex(@NonNull V v) {
+    public void removeVertex(V v) {
         Node<V, A> node = nodeMap.remove(v);
         if (node == null) {
             return;
@@ -148,7 +147,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public void addArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
+    public void addArrow(V v, V u, @Nullable A a) {
         Node<V, A> vNode = getNodeNonNull(v);
         Node<V, A> uNode = getNodeNonNull(u);
         vNode.next.add(uNode, a);
@@ -157,7 +156,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a) {
+    public void removeArrow(V v, V u, @Nullable A a) {
         Node<V, A> vNode = getNodeNonNull(v);
         Node<V, A> uNode = getNodeNonNull(u);
         if (!vNode.next.remove(uNode, a)) {
@@ -170,7 +169,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public void removeArrow(@NonNull V v, @NonNull V u) {
+    public void removeArrow(V v, V u) {
         Node<V, A> vNode = getNodeNonNull(v);
         Node<V, A> uNode = getNodeNonNull(u);
         if (!vNode.next.remove(uNode)) {
@@ -182,7 +181,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
         arrowCount--;
     }
 
-    private @NonNull Node<V, A> getNodeNonNull(@NonNull V v) {
+    private Node<V, A> getNodeNonNull(V v) {
         final Node<V, A> node = nodeMap.get(v);
         if (node == null) {
             throw new IllegalArgumentException("vertex " + v + " is not in graph");
@@ -191,7 +190,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public void removeNext(@NonNull V v, int k) {
+    public void removeNext(V v, int k) {
         Node<V, A> vNode = getNodeNonNull(v);
         Node<V, A> uNode = vNode.next.getNode(k);
         A uArrow = vNode.next.getArrow(k);
@@ -203,25 +202,25 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public @NonNull V getNext(@NonNull V v, int index) {
+    public V getNext(V v, int index) {
         Node<V, A> vNode = getNodeNonNull(v);
         return vNode.next.getVertex(index);
     }
 
     @Override
-    public @Nullable A getNextArrow(@NonNull V v, int index) {
+    public @Nullable A getNextArrow(V v, int index) {
         Node<V, A> vNode = getNodeNonNull(v);
         return vNode.next.getArrow(index);
     }
 
     @Override
-    public int getNextCount(@NonNull V v) {
+    public int getNextCount(V v) {
         Node<V, A> vNode = getNodeNonNull(v);
         return vNode.next.size();
     }
 
     @Override
-    public @NonNull V getVertex(int index) {
+    public V getVertex(int index) {
         if (cachedVertices == null) {
             cachedVertices = List.copyOf(nodeMap.keySet());
         }
@@ -230,7 +229,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public @NonNull Set<V> getVertices() {
+    public Set<V> getVertices() {
         return Collections.unmodifiableSet(nodeMap.keySet());
     }
 
@@ -245,19 +244,19 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
     }
 
     @Override
-    public @NonNull V getPrev(@NonNull V vertex, int index) {
+    public V getPrev(V vertex, int index) {
         Node<V, A> node = getNodeNonNull(vertex);
         return node.prev.getVertex(index);
     }
 
     @Override
-    public @NonNull A getPrevArrow(@NonNull V vertex, int index) {
+    public A getPrevArrow(V vertex, int index) {
         Node<V, A> node = getNodeNonNull(vertex);
         return node.prev.getArrow(index);
     }
 
     @Override
-    public int getPrevCount(@NonNull V vertex) {
+    public int getPrevCount(V vertex) {
         Node<V, A> node = getNodeNonNull(vertex);
         return node.prev.size();
     }
@@ -302,11 +301,11 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
          * contains a {@code A}.
          */
         private static final int ITEM_ARROW_OFFSET = 1;
-        private static final @NonNull Object[] EMPTY_ARRAY = new Object[0];
+        private static final Object[] EMPTY_ARRAY = new Object[0];
         /**
          * Item array.
          */
-        private @NonNull Object[] items = EMPTY_ARRAY;
+        private Object[] items = EMPTY_ARRAY;
         /**
          * Holds the size of the list. Invariant: size >= 0.
          */
@@ -337,7 +336,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
          * @param index an index
          * @return the node at the index
          */
-        public @NonNull Node<V, A> getNode(int index) {
+        public Node<V, A> getNode(int index) {
             rangeCheck(index, size);
 
             @SuppressWarnings("unchecked")
@@ -355,7 +354,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
          * @param index an index
          * @return the node at the index
          */
-        public @NonNull A getArrow(int index) {
+        public A getArrow(int index) {
             rangeCheck(index, size);
 
             @SuppressWarnings("unchecked")
@@ -363,7 +362,7 @@ public class SimpleMutableBidiGraph<V, A> implements MutableBidiGraph<V, A> {
             return unchecked;
         }
 
-        private @NonNull Enumerator<Node<V, A>> nodesEnumerator() {
+        private Enumerator<Node<V, A>> nodesEnumerator() {
             // We must use explicit type arguments in Java 8!
             return new AbstractEnumerator<>(size, 0) {
                 int index = 0;

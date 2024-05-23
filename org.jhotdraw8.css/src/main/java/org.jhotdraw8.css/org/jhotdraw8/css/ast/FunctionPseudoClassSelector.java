@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -21,30 +20,30 @@ import java.util.function.Consumer;
  */
 public class FunctionPseudoClassSelector extends PseudoClassSelector {
 
-    private final @NonNull String functionIdentifier;
+    private final String functionIdentifier;
 
-    public FunctionPseudoClassSelector(@Nullable SourceLocator sourceLocator, @NonNull String functionIdentifier) {
+    public FunctionPseudoClassSelector(@Nullable SourceLocator sourceLocator, String functionIdentifier) {
         super(sourceLocator);
         this.functionIdentifier = functionIdentifier;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "FunctionPseudoClass:" + functionIdentifier + "(" + ")";
     }
 
     @Override
-    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasPseudoClass(element, functionIdentifier)) //
                 ? element : null;
     }
 
-    public @NonNull String getFunctionIdentifier() {
+    public String getFunctionIdentifier() {
         return functionIdentifier;
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_COLON));
         consumer.accept(new CssToken(CssTokenType.TT_FUNCTION, functionIdentifier));
         consumer.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));

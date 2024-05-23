@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.BulkChangeEvent;
@@ -18,6 +16,7 @@ import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.Collection;
@@ -88,7 +87,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * @param c an iterable
      */
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableChampSet(@NonNull Iterable<? extends E> c) {
+    public MutableChampSet(Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?>) {
             c = ((MutableChampSet<? extends E>) c).toImmutable();
         }
@@ -123,7 +122,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * @return {@code true} if this set changed
      */
     @SuppressWarnings("unchecked")
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
+    public boolean addAll(Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?> m) {
             c = (Iterable<? extends E>) m.toImmutable();
         }
@@ -147,13 +146,13 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     }
 
     @Override
-    public boolean removeAll(@NonNull Collection<?> c) {
+    public boolean removeAll(Collection<?> c) {
         return removeAll((Iterable<?>) c);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean removeAll(@NonNull Iterable<?> c) {
+    public boolean removeAll(Iterable<?> c) {
         if (isEmpty()
                 || (c instanceof Collection<?> cc) && cc.isEmpty()
                 || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
@@ -182,7 +181,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean retainAll(@NonNull Collection<?> c) {
+    public boolean retainAll(Collection<?> c) {
         if (isEmpty()) {
             return false;
         }
@@ -207,7 +206,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
 
 
     @SuppressWarnings("unchecked")
-    public boolean retainAll(@NonNull Iterable<?> c) {
+    public boolean retainAll(Iterable<?> c) {
         if (c == this || isEmpty()) {
             return false;
         }
@@ -252,18 +251,18 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      * Returns a shallow copy of this set.
      */
     @Override
-    public @NonNull MutableChampSet<E> clone() {
+    public MutableChampSet<E> clone() {
         return (MutableChampSet<E>) super.clone();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean contains(@Nullable final @NonNull Object o) {
+    public boolean contains(@Nullable final Object o) {
         return Node.NO_DATA != root.find((E) o, ChampSet.keyHash(o), 0, Objects::equals);
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new FailFastIterator<>(
                 new ChampIterator<>(root, null),
                 this::iteratorRemove, this::getModCount
@@ -299,7 +298,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
      *
      * @return an immutable copy
      */
-    public @NonNull ChampSet<E> toImmutable() {
+    public ChampSet<E> toImmutable() {
         owner = null;
         return size == 0
                 ? ChampSet.of()
@@ -307,7 +306,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
@@ -315,13 +314,13 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
         @Serial
         private static final long serialVersionUID = 0L;
 
-        protected SerializationProxy(@NonNull Set<E> target) {
+        protected SerializationProxy(Set<E> target) {
             super(target);
         }
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return new MutableChampSet<>(deserializedElements);
         }
     }

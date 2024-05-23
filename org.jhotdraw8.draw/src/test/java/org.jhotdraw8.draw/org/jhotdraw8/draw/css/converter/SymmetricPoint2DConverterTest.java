@@ -6,7 +6,6 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -30,7 +29,7 @@ public class SymmetricPoint2DConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
-    public static void doTestFromString(Point2D expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(Point2D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SymmetricPoint2DConverter instance = new SymmetricPoint2DConverter(false);
@@ -41,7 +40,7 @@ public class SymmetricPoint2DConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
-    public static void doTestFromIllegalString(@NonNull String string) throws Exception {
+    public static void doTestFromIllegalString(String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SymmetricPoint2DConverter instance = new SymmetricPoint2DConverter(false);
@@ -54,7 +53,7 @@ public class SymmetricPoint2DConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new Point2D(10, 20), "10 20")),
                 dynamicTest("2", () -> doTestFromString(new Point2D(10, 20), "10 20 ")),
@@ -65,7 +64,7 @@ public class SymmetricPoint2DConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromIllegalString() {
+    public List<DynamicTest> dynamicTestsFromIllegalString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromIllegalString("")),
                 dynamicTest("2", () -> doTestFromIllegalString(",")),

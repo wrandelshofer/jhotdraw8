@@ -22,7 +22,6 @@ import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
@@ -57,42 +56,42 @@ public class PageFigure extends AbstractCompositeFigure
         implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
         FillableFigure, StrokableFigure {
 
-    public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
+    public static final CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
     /**
      * The computed number of pages along the x-axis.
      */
-    public static final @NonNull DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-x", 1.0);
+    public static final DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-x", 1.0);
     /** The computed number of pages along the y-axis. */
-    public static final @NonNull DoubleStyleableKey NUM_PAGES_Y = new DoubleStyleableKey("num-pages-y", 1.0);
-    public static final @NonNull Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
-    public static final @NonNull CssSizeStyleableKey PAGE_INSETS_BOTTOM = new CssSizeStyleableKey("page-insets-bottom", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey PAGE_INSETS_LEFT = new CssSizeStyleableKey("page-insets-left", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey PAGE_INSETS_RIGHT = new CssSizeStyleableKey("page-insets-right", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey PAGE_INSETS_TOP = new CssSizeStyleableKey("page-insets-top", CssSize.ZERO);
-    public static final @NonNull CssInsetsStyleableMapAccessor PAGE_INSETS = new CssInsetsStyleableMapAccessor("page-insets", PAGE_INSETS_TOP, PAGE_INSETS_RIGHT, PAGE_INSETS_BOTTOM, PAGE_INSETS_LEFT);
-    public static final @NonNull CssSizeStyleableKey PAGE_OVERLAP_X = new CssSizeStyleableKey("page-overlap-x", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey PAGE_OVERLAP_Y = new CssSizeStyleableKey("page-overlap-y", CssSize.ZERO);
-    public static final @NonNull CssPoint2DStyleableMapAccessor PAGE_OVERLAP = new CssPoint2DStyleableMapAccessor("page-overlap", PAGE_OVERLAP_X, PAGE_OVERLAP_Y);
-    public static final @NonNull CssSizeStyleableKey PAPER_HEIGHT = new CssSizeStyleableKey("paper-size-height", CssSize.of(297.0, "mm"));
-    public static final @NonNull CssSizeStyleableKey PAPER_WIDTH = new CssSizeStyleableKey("paper-size-width", CssSize.of(210.0, "mm"));
-    public static final @NonNull PaperSizeStyleableMapAccessor PAPER_SIZE = new PaperSizeStyleableMapAccessor("paper-size", PAPER_WIDTH, PAPER_HEIGHT);
+    public static final DoubleStyleableKey NUM_PAGES_Y = new DoubleStyleableKey("num-pages-y", 1.0);
+    public static final Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
+    public static final CssSizeStyleableKey PAGE_INSETS_BOTTOM = new CssSizeStyleableKey("page-insets-bottom", CssSize.ZERO);
+    public static final CssSizeStyleableKey PAGE_INSETS_LEFT = new CssSizeStyleableKey("page-insets-left", CssSize.ZERO);
+    public static final CssSizeStyleableKey PAGE_INSETS_RIGHT = new CssSizeStyleableKey("page-insets-right", CssSize.ZERO);
+    public static final CssSizeStyleableKey PAGE_INSETS_TOP = new CssSizeStyleableKey("page-insets-top", CssSize.ZERO);
+    public static final CssInsetsStyleableMapAccessor PAGE_INSETS = new CssInsetsStyleableMapAccessor("page-insets", PAGE_INSETS_TOP, PAGE_INSETS_RIGHT, PAGE_INSETS_BOTTOM, PAGE_INSETS_LEFT);
+    public static final CssSizeStyleableKey PAGE_OVERLAP_X = new CssSizeStyleableKey("page-overlap-x", CssSize.ZERO);
+    public static final CssSizeStyleableKey PAGE_OVERLAP_Y = new CssSizeStyleableKey("page-overlap-y", CssSize.ZERO);
+    public static final CssPoint2DStyleableMapAccessor PAGE_OVERLAP = new CssPoint2DStyleableMapAccessor("page-overlap", PAGE_OVERLAP_X, PAGE_OVERLAP_Y);
+    public static final CssSizeStyleableKey PAPER_HEIGHT = new CssSizeStyleableKey("paper-size-height", CssSize.of(297.0, "mm"));
+    public static final CssSizeStyleableKey PAPER_WIDTH = new CssSizeStyleableKey("paper-size-width", CssSize.of(210.0, "mm"));
+    public static final PaperSizeStyleableMapAccessor PAPER_SIZE = new PaperSizeStyleableMapAccessor("paper-size", PAPER_WIDTH, PAPER_HEIGHT);
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Page";
-    public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
-    public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
-    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
-    private static final @NonNull Object CONTENT_BOUNDS_PROPERTY = new Object();
-    private static final @NonNull Object PAGE_INSETS_PROPERTY = new Object();
-    private static final @NonNull Object PAGE_BOUNDS_PROPERTY = new Object();
-    private static final @NonNull Object CURRENT_PAGE_PROPERTY = new Object();
+    public static final String TYPE_SELECTOR = "Page";
+    public static final CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
+    public static final CssSizeStyleableKey X = RectangleFigure.X;
+    public static final CssSizeStyleableKey Y = RectangleFigure.Y;
+    public static final CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    private static final Object CONTENT_BOUNDS_PROPERTY = new Object();
+    private static final Object PAGE_INSETS_PROPERTY = new Object();
+    private static final Object PAGE_BOUNDS_PROPERTY = new Object();
+    private static final Object CURRENT_PAGE_PROPERTY = new Object();
 
     public PageFigure() {
     }
 
-    private void addBounds(final @NonNull List<PathElement> pbList, @NonNull Bounds b) {
+    private void addBounds(final List<PathElement> pbList, Bounds b) {
         double x = b.getMinX();
         double y = b.getMinY();
         double w = b.getWidth();
@@ -135,7 +134,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+    public Node createNode(RenderContext ctx) {
         Group n = new Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);
@@ -164,17 +163,17 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createPageNode(int internalPageNumber) {
+    public Node createPageNode(int internalPageNumber) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getNonNull(X),
                 getNonNull(Y),
                 getNonNull(WIDTH),
@@ -189,7 +188,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Bounds getPageBounds(int internalPageNumber) {
+    public Bounds getPageBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue();
         CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
@@ -210,7 +209,7 @@ public class PageFigure extends AbstractCompositeFigure
         return new BoundingBox(x, y, pageW, pageH);
     }
 
-    private @NonNull Bounds getContentBounds(int internalPageNumber) {
+    private Bounds getContentBounds(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue();
         CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
@@ -234,7 +233,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Shape getPageClip(int internalPageNumber) {
+    public Shape getPageClip(int internalPageNumber) {
         double contentAreaFactor = computeContentAreaFactor();
         Insets insets = getStyledNonNull(PAGE_INSETS).getConvertedValue();
         CssPoint2D overlap = getStyledNonNull(PAGE_OVERLAP);
@@ -268,7 +267,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Transform getPageTransform(int internalPageNumber) {
+    public Transform getPageTransform(int internalPageNumber) {
         int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
         int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
 
@@ -293,7 +292,7 @@ public class PageFigure extends AbstractCompositeFigure
         return FXTransforms.concat(new Translate(x, y), new Scale(contentAreaFactor, contentAreaFactor));
     }
 
-    private @NonNull Translate getPageTranslate(int internalPageNumber) {
+    private Translate getPageTranslate(int internalPageNumber) {
         int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
         int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
 
@@ -319,7 +318,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -329,12 +328,12 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
+    public boolean isSuitableChild(Figure newChild) {
         return true;
     }
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         final CssSize width = get(WIDTH);
         final CssSize height = get(HEIGHT);
         final CssDimension2D paperSize = getPaperSize();
@@ -366,7 +365,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         set(X, width.getValue() < 0 ? x.add(width) : x);
         set(Y, height.getValue() < 0 ? y.add(height) : y);
         set(WIDTH, width.abs());
@@ -374,7 +373,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         Bounds newBounds = transform.transform(getLayoutBounds());
         set(X, CssSize.of(newBounds.getMinX()));
         set(Y, CssSize.of(newBounds.getMinY()));
@@ -383,7 +382,7 @@ public class PageFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group groupNode = (Group) node;
         // We can't use #applyTransformableFigureProperties(node) because
         // this will rotate around an unpredictable center!
@@ -420,8 +419,8 @@ public class PageFigure extends AbstractCompositeFigure
         int numPagesX = Math.max(1, getStyledNonNull(NUM_PAGES_X).intValue());
         int numPagesY = Math.max(1, getStyledNonNull(NUM_PAGES_Y).intValue());
         final int n = numPagesX * numPagesY;
-        final @NonNull List<PathElement> pbList = new ArrayList<>(n * 4);
-        final @NonNull List<PathElement> pmList = new ArrayList<>(n * 4);
+        final List<PathElement> pbList = new ArrayList<>(n * 4);
+        final List<PathElement> pmList = new ArrayList<>(n * 4);
         for (int i = 0; i < n; i++) {
             addBounds(pbList, getPageBounds(i));
             addBounds(pmList, getContentBounds(i));

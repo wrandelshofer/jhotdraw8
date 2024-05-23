@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -21,7 +20,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class ChampAddOnlySetTest {
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTests() {
+    public List<DynamicTest> dynamicTests() {
         return Arrays.asList(
                 dynamicTest("32-bits hash", () -> doTest(-1)),
                 dynamicTest("3-bits hash", () -> doTest(7)),

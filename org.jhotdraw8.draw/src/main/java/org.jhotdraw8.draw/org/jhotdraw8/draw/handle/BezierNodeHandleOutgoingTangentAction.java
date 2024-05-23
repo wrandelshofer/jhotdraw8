@@ -1,7 +1,6 @@
 package org.jhotdraw8.draw.handle;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -20,7 +19,7 @@ public class BezierNodeHandleOutgoingTangentAction extends AbstractBezierNodeHan
     public final static String ID = "handle.bezierNode.outgoingTangent";
 
     @SuppressWarnings("this-escape")
-    public BezierNodeHandleOutgoingTangentAction(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int nodeIndex, @NonNull DrawingView view) {
+    public BezierNodeHandleOutgoingTangentAction(Figure figure, MapAccessor<BezierPath> pathKey, int nodeIndex, DrawingView view) {
         super(ID, figure, pathKey, nodeIndex, view);
 
         BezierPath path = figure.get(pathKey);
@@ -31,7 +30,7 @@ public class BezierNodeHandleOutgoingTangentAction extends AbstractBezierNodeHan
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event) {
+    protected void onActionPerformed(ActionEvent event) {
         BezierPath path = owner.get(pathKey);
         if (path == null || path.size() <= nodeIndex) {
             return;

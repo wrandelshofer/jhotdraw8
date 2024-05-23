@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
@@ -21,7 +20,7 @@ public class IntersectCubicCurveRay {
     private IntersectCubicCurveRay() {
     }
 
-    public static @NonNull IntersectionResult intersectCubicCurveRay(
+    public static IntersectionResult intersectCubicCurveRay(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double box, double boy, double bdx, double bdy,
             double maxT,
@@ -42,7 +41,7 @@ public class IntersectCubicCurveRay {
      * @param bd direction of ray 'b'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectCubicCurveRay(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D bo, @NonNull Point2D bd) {
+    public static IntersectionResult intersectCubicCurveRay(Point2D a0, Point2D a1, Point2D a2, Point2D a3, Point2D bo, Point2D bd) {
         return intersectCubicCurveRay(a0, a1, a2, a3, bo, bd, Double.MAX_VALUE, Rectangles.REAL_THRESHOLD);
     }
 
@@ -58,8 +57,8 @@ public class IntersectCubicCurveRay {
      * @return
      */
 
-    public static IntersectionResult intersectCubicCurveRay(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
-                                                            @NonNull Point2D ao, @NonNull Point2D ad, double maxT, double epsilon) {
+    public static IntersectionResult intersectCubicCurveRay(Point2D p0, Point2D p1, Point2D p2, Point2D p3,
+                                                            Point2D ao, Point2D ad, double maxT, double epsilon) {
         final Point2D.Double topLeft = Intersections.topLeft(ao, Points2D.add(ao, ad)); // used to determine if point is on line segment
         final Point2D.Double bottomRight = Intersections.bottomRight(ao, Points2D.add(ao, ad)); // used to determine if point is on line segment
         List<IntersectionPoint> result = new ArrayList<>();

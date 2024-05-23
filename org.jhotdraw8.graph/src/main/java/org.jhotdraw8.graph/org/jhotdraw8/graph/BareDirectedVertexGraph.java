@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Set;
 
@@ -26,7 +25,7 @@ public interface BareDirectedVertexGraph<V> {
      * @return the next vertex
      * @see #getNextCount
      */
-    @NonNull V getNext(@NonNull V v, int index);
+    V getNext(V v, int index);
 
     /**
      * Returns the number of next vertices at the specified vertex.
@@ -37,13 +36,13 @@ public interface BareDirectedVertexGraph<V> {
      * @param v a vertex
      * @return the number of next vertices
      */
-    int getNextCount(@NonNull V v);
+    int getNextCount(V v);
 
     /**
      * Returns all vertices.
      *
      * @return a set view on all vertices
      */
-    @NonNull Set<V> getVertices();
+    Set<V> getVertices();
 
 }

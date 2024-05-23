@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Polynomial;
 
 import java.awt.geom.Point2D;
@@ -24,7 +23,7 @@ class Intersections {
     private Intersections() {
     }
 
-    private static double @NonNull [] addZeroAndOne(double @NonNull [] clampedRoots) {
+    private static double[] addZeroAndOne(double[] clampedRoots) {
         double[] roots = new double[clampedRoots.length + 2];
         int numRoots = 0;
         Arrays.sort(clampedRoots);
@@ -47,7 +46,7 @@ class Intersections {
      * @param e2 polynomial e2 of degree 5
      * @return the Bézout determinant polynomial
      */
-    public static @NonNull Polynomial bezout(double[] e1, double[] e2) {
+    public static Polynomial bezout(double[] e1, double[] e2) {
         double AB = e1[0] * e2[1] - e2[0] * e1[1];
         double AC = e1[0] * e2[2] - e2[0] * e1[2];
         double AD = e1[0] * e2[3] - e2[0] * e1[3];
@@ -80,11 +79,11 @@ class Intersections {
      * @param b corner point b
      * @return the bottom right corner
      */
-    public static Point2D.@NonNull Double bottomRight(@NonNull Point2D a, @NonNull Point2D b) {
+    public static Point2D.Double bottomRight(Point2D a, Point2D b) {
         return new Point2D.Double(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()));
     }
 
-    public static Point2D.@NonNull Double bottomRight(double ax, double ay, double bx, double by) {
+    public static Point2D.Double bottomRight(double ax, double ay, double bx, double by) {
         return new Point2D.Double(Math.max(ax, bx), Math.max(ay, by));
     }
 
@@ -96,7 +95,7 @@ class Intersections {
      * @param b point b
      * @return true if a is greater or equal b
      */
-    static boolean gte(@NonNull Point2D a, @NonNull Point2D b) {
+    static boolean gte(Point2D a, Point2D b) {
         return a.getX() >= b.getX() && a.getY() >= b.getY();
     }
 
@@ -109,7 +108,7 @@ class Intersections {
      * @param b point b
      * @return true if a is less or equal b
      */
-    static boolean lte(@NonNull Point2D a, @NonNull Point2D b) {
+    static boolean lte(Point2D a, Point2D b) {
         return a.getX() <= b.getX() && a.getY() <= b.getY();
     }
 
@@ -121,11 +120,11 @@ class Intersections {
      * @param b corner point b
      * @return the top left corner
      */
-    public static Point2D.@NonNull Double topLeft(@NonNull Point2D a, @NonNull Point2D b) {
+    public static Point2D.Double topLeft(Point2D a, Point2D b) {
         return new Point2D.Double(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()));
     }
 
-    public static Point2D.@NonNull Double topLeft(double ax, double ay, double bx, double by) {
+    public static Point2D.Double topLeft(double ax, double ay, double bx, double by) {
         return new Point2D.Double(Math.min(ax, bx), Math.min(ay, by));
     }
 

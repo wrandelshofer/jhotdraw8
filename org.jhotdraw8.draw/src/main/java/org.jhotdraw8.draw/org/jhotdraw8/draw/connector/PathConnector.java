@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.connector;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.PathIterableFigure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
@@ -38,7 +37,7 @@ public class PathConnector extends LocatorConnector {
 
 
     @Override
-    public IntersectionPointEx intersect(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    public IntersectionPointEx intersect(RenderContext ctx, Figure connection, Figure target, Point2D start, Point2D end) {
         if (!(target instanceof PathIterableFigure pif)) {
             return super.intersect(ctx, connection, target, start, end);
         }

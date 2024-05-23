@@ -12,8 +12,6 @@ import javafx.scene.shape.FillRule;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
@@ -30,6 +28,7 @@ import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -49,11 +48,11 @@ public class SvgPathFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "path";
-    public static final @NonNull StringStyleableKey D = new StringStyleableKey("d");
+    public static final String TYPE_SELECTOR = "path";
+    public static final StringStyleableKey D = new StringStyleableKey("d");
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+    public Node createNode(RenderContext ctx) {
         Group g = new Group();
         Path n0 = new Path();
         Path n1 = new Path();
@@ -64,7 +63,7 @@ public class SvgPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         AwtPathBuilder b = new AwtPathBuilder();
         String d = get(D);
         if (d != null) {
@@ -79,7 +78,7 @@ public class SvgPathFigure extends AbstractLeafFigure
 
 
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         AwtPathBuilder b = new AwtPathBuilder();
         String d = get(D);
         if (d != null) {
@@ -94,14 +93,14 @@ public class SvgPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         Bounds b = getBoundsInLocal();
         return new CssRectangle2D(b);
     }
 
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         FXPathElementsBuilder bb = new FXPathElementsBuilder();
         FXTransformPathBuilder<List<PathElement>> b = new FXTransformPathBuilder<>(bb);
         b.setTransform(transform);
@@ -119,7 +118,7 @@ public class SvgPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         reshapeInLocal(x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue());
     }
 
@@ -129,7 +128,7 @@ public class SvgPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         Path n0 = (Path) g.getChildren().get(0);
         Path n1 = (Path) g.getChildren().get(1);
@@ -159,7 +158,7 @@ public class SvgPathFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

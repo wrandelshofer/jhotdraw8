@@ -5,11 +5,10 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -57,7 +56,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     protected transient int modCount;
 
     @Override
-    public boolean addAll(@NonNull Collection<? extends E> c) {
+    public boolean addAll(Collection<? extends E> c) {
         return addAll((Iterable<? extends E>) c);
     }
 
@@ -68,7 +67,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
      * @return {@code true} if this set changed
      */
     @SuppressWarnings("unchecked")
-    public boolean addAll(@NonNull Iterable<? extends E> c) {
+    public boolean addAll(Iterable<? extends E> c) {
         boolean added = false;
         for (E e : c) {
             added |= add(e);
@@ -82,7 +81,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
      * @param c an iterable of elements
      * @return {@code true} if this set changed
      */
-    public boolean retainAll(@NonNull Iterable<?> c) {
+    public boolean retainAll(Iterable<?> c) {
         if (c == this || isEmpty()) {
             return false;
         }
@@ -143,7 +142,6 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
      *
      * @return a new unique id or the existing unique id.
      */
-    @NonNull
     protected IdentityObject makeOwner() {
         if (owner == null) {
             owner = new IdentityObject();
@@ -152,7 +150,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     }
 
     @Override
-    public boolean removeAll(@NonNull Collection<?> c) {
+    public boolean removeAll(Collection<?> c) {
         return removeAll((Iterable<?>) c);
     }
 
@@ -162,7 +160,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
      * @param c an iterable of elements
      * @return {@code true} if this set changed
      */
-    public boolean removeAll(@NonNull Iterable<?> c) {
+    public boolean removeAll(Iterable<?> c) {
         if (isEmpty()) {
             return false;
         }
@@ -184,7 +182,7 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull AbstractMutableChampSet<E, D> clone() {
+    public AbstractMutableChampSet<E, D> clone() {
         try {
             owner = null;
             return (AbstractMutableChampSet<E, D>) super.clone();
@@ -194,5 +192,5 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
     }
 
     @Override
-    public abstract @NonNull Iterator<E> iterator();
+    public abstract Iterator<E> iterator();
 }

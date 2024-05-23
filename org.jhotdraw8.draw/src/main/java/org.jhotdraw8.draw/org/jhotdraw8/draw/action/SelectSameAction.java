@@ -6,8 +6,6 @@ package org.jhotdraw8.draw.action;
 
 import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
@@ -15,6 +13,7 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +26,14 @@ import java.util.Objects;
  */
 public class SelectSameAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.selectSame";
+    public static final String ID = "edit.selectSame";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public SelectSameAction(@NonNull DrawingEditor editor) {
+    public SelectSameAction(DrawingEditor editor) {
         super(editor);
         Resources labels = DrawLabels.getResources();
         set(Action.ID_KEY, ID);
@@ -42,13 +41,13 @@ public class SelectSameAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
+    protected void onActionPerformed(ActionEvent e, DrawingView dview) {
         ObservableSet<Figure> selection = dview.getSelectedFigures();
         selectSame(dview, selection.isEmpty() ? null : selection.iterator().next());
 
     }
 
-    public static void selectSame(@NonNull DrawingView view, @Nullable Figure prototype) {
+    public static void selectSame(DrawingView view, @Nullable Figure prototype) {
         if (prototype == null) {
             return;
         }

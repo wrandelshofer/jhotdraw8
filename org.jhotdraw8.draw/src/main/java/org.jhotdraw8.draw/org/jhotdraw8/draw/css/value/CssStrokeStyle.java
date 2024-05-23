@@ -7,29 +7,28 @@ package org.jhotdraw8.draw.css.value;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
 public class CssStrokeStyle {
-    private final @NonNull CssSize dashOffset;
-    private final @NonNull ImmutableList<CssSize> dashArray;
-    private final @NonNull StrokeType type;
-    private final @NonNull StrokeLineJoin lineJoin;
-    private final @NonNull StrokeLineCap lineCap;
-    private final @NonNull CssSize miterLimit;
+    private final CssSize dashOffset;
+    private final ImmutableList<CssSize> dashArray;
+    private final StrokeType type;
+    private final StrokeLineJoin lineJoin;
+    private final StrokeLineCap lineCap;
+    private final CssSize miterLimit;
 
     public CssStrokeStyle() {
         this(StrokeType.CENTERED, StrokeLineCap.BUTT, StrokeLineJoin.MITER, CssSize.of(4.0),
                 CssSize.ZERO, VectorList.of());
     }
 
-    public CssStrokeStyle(@NonNull StrokeType type, @NonNull StrokeLineCap lineCap, @NonNull StrokeLineJoin lineJoin, @NonNull CssSize miterLimit,
-                          @NonNull CssSize dashOffset,
+    public CssStrokeStyle(StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,
+                          CssSize dashOffset,
                           ImmutableList<CssSize> dashArray) {
         this.dashOffset = dashOffset;
         this.dashArray = dashArray;
@@ -39,7 +38,7 @@ public class CssStrokeStyle {
         this.miterLimit = miterLimit;
     }
 
-    public @NonNull CssSize getDashOffset() {
+    public CssSize getDashOffset() {
         return dashOffset;
     }
 
@@ -47,19 +46,19 @@ public class CssStrokeStyle {
         return dashArray;
     }
 
-    public @NonNull StrokeType getType() {
+    public StrokeType getType() {
         return type;
     }
 
-    public @NonNull StrokeLineJoin getLineJoin() {
+    public StrokeLineJoin getLineJoin() {
         return lineJoin;
     }
 
-    public @NonNull StrokeLineCap getLineCap() {
+    public StrokeLineCap getLineCap() {
         return lineCap;
     }
 
-    public @NonNull CssSize getMiterLimit() {
+    public CssSize getMiterLimit() {
         return miterLimit;
     }
 
@@ -86,7 +85,7 @@ public class CssStrokeStyle {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssStrokeStyle{" +
                 ", type=" + type +
                 ", lineJoin=" + lineJoin +

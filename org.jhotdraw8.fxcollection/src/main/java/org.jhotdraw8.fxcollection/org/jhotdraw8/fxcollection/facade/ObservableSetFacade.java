@@ -7,7 +7,6 @@ package org.jhotdraw8.fxcollection.facade;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.SetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
@@ -21,7 +20,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlySet;
  * @author Werner Randelshofer
  */
 public class ObservableSetFacade<E> extends SetFacade<E> implements ObservableSet<E> {
-    public ObservableSetFacade(@NonNull ReadOnlySet<E> backingSet) {
+    public ObservableSetFacade(ReadOnlySet<E> backingSet) {
         super(backingSet);
     }
 

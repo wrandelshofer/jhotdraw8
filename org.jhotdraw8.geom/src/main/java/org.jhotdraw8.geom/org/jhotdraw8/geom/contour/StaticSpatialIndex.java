@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 
@@ -482,8 +481,8 @@ public class StaticSpatialIndex {
      * the query stops early, otherwise the query continues. This overload accepts an existing vector
      * to use as a stack and takes care of clearing the stack before use.
      */
-    public void visitQuery(double minX, double minY, double maxX, double maxY, @NonNull IntPredicate visitor,
-                           @NonNull IntArrayDeque stack) {
+    public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor,
+                           IntArrayDeque stack) {
         if (m_pos != 4 * m_numNodes) {
             throw new IllegalStateException("data not yet indexed - call Finish() before querying");
         }

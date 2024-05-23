@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 
@@ -34,19 +33,19 @@ import java.awt.color.ColorSpace;
  * @author Werner Randelshofer
  */
 public class OKHlsColorSpace extends AbstractNamedColorSpace {
-    private final static @NonNull OKLabColorSpace oklab = new OKLabColorSpace();
+    private final static OKLabColorSpace oklab = new OKLabColorSpace();
 
     public OKHlsColorSpace() {
         super(ColorSpace.TYPE_HLS, 3);
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return "OKHLS";
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] hls, float @NonNull [] rgb) {
+    public float[] toRGB(float[] hls, float[] rgb) {
         double h = hls[0];
         double l = hls[1];
         double s = hls[2];
@@ -121,7 +120,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
     }
 
 
-    private static @NonNull Cs get_Cs(double L, double a_, double b_) {
+    private static Cs get_Cs(double L, double a_, double b_) {
         LC cusp = find_cusp(a_, b_);
 
         double C_max = find_gamut_intersection(a_, b_, L, 1, L, cusp);
@@ -262,7 +261,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
 
     @SuppressWarnings("UnnecessaryLocalVariable")
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] hls) {
+    public float[] fromRGB(float[] rgb, float[] hls) {
         float[] lab = oklab.fromRGB(rgb, hls);
         double labL = lab[0];
         double laba = lab[1];

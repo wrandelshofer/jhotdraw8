@@ -9,7 +9,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -30,19 +29,19 @@ public abstract class AbstractViewBoxDrawing extends AbstractDrawing implements 
     }
 
     @Override
-    public @NonNull Transform getLocalToParent() {
+    public Transform getLocalToParent() {
         return Transform.translate(-getStyledNonNull(VIEW_BOX_X).getConvertedValue(),
                 -getStyledNonNull(VIEW_BOX_Y).getConvertedValue());
     }
 
     @Override
-    public @NonNull Transform getParentToLocal() {
+    public Transform getParentToLocal() {
         return Transform.translate(getStyledNonNull(VIEW_BOX_X).getConvertedValue(),
                 getStyledNonNull(VIEW_BOX_Y).getConvertedValue());
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
         super.updateNode(ctx, n);
         final UnitConverter unitConverter = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         final double x = getStyledNonNull(VIEW_BOX_X).getConvertedValue(unitConverter);

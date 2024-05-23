@@ -16,8 +16,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -29,8 +28,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CssColorDialog {
-    private final @NonNull ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
-    private final @NonNull ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(NamedCssColor.TRANSPARENT);
+    private final ObjectProperty<CssColor> currentColor = new SimpleObjectProperty<>(NamedCssColor.WHITE);
+    private final ObjectProperty<CssColor> customColor = new SimpleObjectProperty<>(NamedCssColor.TRANSPARENT);
     final @Nullable ButtonType chooseButtonType;
     final @Nullable ButtonType cancelButtonType;
     private CssColorChooserController controller;

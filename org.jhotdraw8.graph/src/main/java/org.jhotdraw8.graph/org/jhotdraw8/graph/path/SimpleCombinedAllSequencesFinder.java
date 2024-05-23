@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
@@ -28,10 +27,10 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  */
 public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparable<C>> implements CombinedAllSequencesFinder<V, A, C> {
-    private final @NonNull C zero;
-    private final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
-    private final @NonNull Function3<V, V, A, C> costFunction;
-    private final @NonNull BiFunction<C, C, C> sumFunction;
+    private final C zero;
+    private final Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
+    private final Function3<V, V, A, C> costFunction;
+    private final BiFunction<C, C, C> sumFunction;
 
     /**
      * Creates a new instance.
@@ -41,10 +40,10 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
      * @param costFunction     the cost function
      * @param sumFunction      the sum function
      */
-    public SimpleCombinedAllSequencesFinder(@NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-                                            @NonNull C zero,
-                                            @NonNull Function3<V, V, A, C> costFunction,
-                                            @NonNull BiFunction<C, C, C> sumFunction) {
+    public SimpleCombinedAllSequencesFinder(Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+                                            C zero,
+                                            Function3<V, V, A, C> costFunction,
+                                            BiFunction<C, C, C> sumFunction) {
         this.zero = zero;
         this.nextArcsFunction = nextArcsFunction;
         this.costFunction = costFunction;
@@ -53,11 +52,11 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
 
 
     @Override
-    public @NonNull Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
+    public Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C costLimit) {
+            C costLimit) {
 
         return new SpliteratorIterable<>(() -> new AllWalksSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
@@ -67,11 +66,11 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
 
 
     @Override
-    public @NonNull Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
+    public Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C costLimit) {
+            C costLimit) {
 
         return new SpliteratorIterable<>(() -> new AllWalksSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,
@@ -81,11 +80,11 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
 
 
     @Override
-    public @NonNull Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
+    public Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C costLimit) {
+            C costLimit) {
 
         return new SpliteratorIterable<>(() -> new AllWalksSpliterator<>(
                 startVertices, goalPredicate, nextArcsFunction,

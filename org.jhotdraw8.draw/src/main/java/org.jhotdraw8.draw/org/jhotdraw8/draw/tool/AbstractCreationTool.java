@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.draw.tool;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
@@ -57,7 +56,7 @@ public abstract class AbstractCreationTool<F extends Figure> extends AbstractToo
      * @param newFigure the figure
      * @return a suitable parent for the figure
      */
-    protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, Figure newFigure) {
+    protected @Nullable Figure getOrCreateParent(DrawingView dv, Figure newFigure) {
         Drawing drawing = dv.getDrawing();
         if (drawing == null) {
             return null;

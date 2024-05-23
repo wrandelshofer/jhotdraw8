@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.util;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -35,7 +34,7 @@ public class ListHelper {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyComponentAdd(@NonNull T @NonNull [] src, int index, int numComponents) {
+    public static <T> T[] copyComponentAdd(T[] src, int index, int numComponents) {
         if (index == src.length) {
             return Arrays.copyOf(src, src.length + numComponents);
         }
@@ -54,7 +53,7 @@ public class ListHelper {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyComponentRemove(@NonNull T @NonNull [] src, int index, int numComponents) {
+    public static <T> T[] copyComponentRemove(T[] src, int index, int numComponents) {
         if (index == src.length - numComponents) {
             return Arrays.copyOf(src, src.length - numComponents);
         }
@@ -73,7 +72,7 @@ public class ListHelper {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copySet(@NonNull T @NonNull [] src, int index, T value) {
+    public static <T> T[] copySet(T[] src, int index, T value) {
         final T[] dst = Arrays.copyOf(src, src.length);
         dst[index] = value;
         return dst;

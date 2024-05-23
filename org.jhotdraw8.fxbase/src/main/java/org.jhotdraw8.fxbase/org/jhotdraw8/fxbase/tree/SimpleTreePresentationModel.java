@@ -5,9 +5,8 @@
 package org.jhotdraw8.fxbase.tree;
 
 import javafx.scene.control.TreeItem;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -43,9 +42,9 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
      * an equality-based map.
      */
     private final Map<N, TreeItem<N>> items;
-    private final @NonNull Listener<TreeModelEvent<N>> modelHandler = new Listener<>() {
+    private final Listener<TreeModelEvent<N>> modelHandler = new Listener<>() {
         @Override
-        public void handle(@NonNull TreeModelEvent<N> event) {
+        public void handle(TreeModelEvent<N> event) {
             updating++;
             try {
                 N f = event.getNode();
@@ -93,12 +92,12 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     }
 
     private final boolean reversed = true;
-    private final @NonNull TreeItem<N> root = new LazyTreeItem<>(null);
+    private final TreeItem<N> root = new LazyTreeItem<>(null);
 
     protected int updating;
 
     @Override
-    public @NonNull TreeItem<N> getRoot() {
+    public TreeItem<N> getRoot() {
         return root;
     }
 
@@ -107,11 +106,11 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
         return items.get(f);
     }
 
-    public N getValue(@NonNull TreeItem<N> item) {
+    public N getValue(TreeItem<N> item) {
         return item.getValue();
     }
 
-    protected void onNodeAdded(@NonNull N node, @NonNull N parentE, int index) {
+    protected void onNodeAdded(N node, N parentE, int index) {
         TreeItem<N> item = items.computeIfAbsent(node, TreeItem::new);
         TreeItem<N> parentItem = items.get(parentE);
         if (parentItem == null) {
@@ -187,7 +186,7 @@ public class SimpleTreePresentationModel<N> extends AbstractTreePresentationMode
     }
 
     @Override
-    protected void onTreeModelChanged(@Nullable TreeModel<N> oldValue, @NonNull TreeModel<N> newValue) {
+    protected void onTreeModelChanged(@Nullable TreeModel<N> oldValue, TreeModel<N> newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(modelHandler);
         }

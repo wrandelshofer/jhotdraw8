@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Function3;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -20,7 +19,7 @@ import java.util.function.BiFunction;
  * @param <A> the arrow type
  */
 public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
-    private final @NonNull V vertex;
+    private final V vertex;
     private final @Nullable A arrow;
 
     /**
@@ -30,7 +29,7 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
      * @param arrow  the arrow data
      * @param parent the parent back link
      */
-    public ArcBackLink(@NonNull V vertex, @Nullable A arrow, @Nullable ArcBackLink<V, A> parent) {
+    public ArcBackLink(V vertex, @Nullable A arrow, @Nullable ArcBackLink<V, A> parent) {
         super(parent);
         this.vertex = vertex;
         this.arrow = arrow;
@@ -41,12 +40,12 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
         return arrow;
     }
 
-    public @NonNull V getVertex() {
+    public V getVertex() {
         return vertex;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "ArcBackLink{" +
                 "depth=" + depth +
                 ", vertex=" + vertex +
@@ -67,9 +66,9 @@ public class ArcBackLink<V, A> extends AbstractBackLink<ArcBackLink<V, A>> {
      * @return the converted {@link ArcBackLinkWithCost}
      */
     public static <VV, AA, CC extends Number & Comparable<CC>> @Nullable ArcBackLinkWithCost<VV, AA, CC> toArcBackLinkWithCost(@Nullable ArcBackLink<VV, AA> node,
-                                                                                                                               @NonNull CC zero,
-                                                                                                                               @NonNull Function3<VV, VV, AA, CC> costFunction,
-                                                                                                                               @NonNull BiFunction<CC, CC, CC> sumFunction) {
+                                                                                                                               CC zero,
+                                                                                                                               Function3<VV, VV, AA, CC> costFunction,
+                                                                                                                               BiFunction<CC, CC, CC> sumFunction) {
         if (node == null) {
             return null;
         }

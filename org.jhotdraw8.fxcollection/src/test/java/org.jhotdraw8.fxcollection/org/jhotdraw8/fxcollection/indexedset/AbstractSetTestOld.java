@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.fxcollection.indexedset;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -31,12 +30,12 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 @SuppressWarnings({"SlowAbstractSetRemoveAll", "unchecked", "EqualsWithItself", "SimplifiableAssertion"})
 public abstract class AbstractSetTestOld {
 
-    public static final @NonNull HashCollider ZERO = new HashCollider(0, -1);
-    public static final @NonNull HashCollider THREE = new HashCollider(3, -1);
-    public static final @NonNull HashCollider FIVE = new HashCollider(5, -1);
-    public static final @NonNull HashCollider SIX = new HashCollider(6, -1);
-    public static final @NonNull HashCollider SEVEN = new HashCollider(7, -1);
-    public static final @NonNull HashCollider EIGHT = new HashCollider(8, -1);
+    public static final HashCollider ZERO = new HashCollider(0, -1);
+    public static final HashCollider THREE = new HashCollider(3, -1);
+    public static final HashCollider FIVE = new HashCollider(5, -1);
+    public static final HashCollider SIX = new HashCollider(6, -1);
+    public static final HashCollider SEVEN = new HashCollider(7, -1);
+    public static final HashCollider EIGHT = new HashCollider(8, -1);
 
     protected void assertEqualSets(Set<HashCollider> expected, Set<HashCollider> instance) {
         assertEquals(expected.size(), instance.size());
@@ -51,7 +50,7 @@ public abstract class AbstractSetTestOld {
         assertEquals(instance, copy);
     }
 
-    protected abstract <T> @NonNull Set<T> create(int expectedMaxSize, float maxLoadFactor);
+    protected abstract <T> Set<T> create(int expectedMaxSize, float maxLoadFactor);
 
     public void doTest(int mask, int... elements) throws Exception {
         List<HashCollider> list = new ArrayList<>(elements.length);
@@ -351,7 +350,7 @@ public abstract class AbstractSetTestOld {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTests() {
+    public List<DynamicTest> dynamicTests() {
         return Arrays.asList(
                 dynamicTest("full mask", () -> doTest(-1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),
                 dynamicTest("some collisions", () -> doTest(1, 4, 34, 3, 2, 1, 0, 4, 34, 3, 2, 1)),

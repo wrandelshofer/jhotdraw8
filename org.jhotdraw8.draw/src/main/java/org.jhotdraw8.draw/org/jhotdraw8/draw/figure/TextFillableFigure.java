@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.control.Labeled;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
@@ -32,7 +31,7 @@ public interface TextFillableFigure extends Figure {
      * @param ctx  the render context
      * @param text a text node
      */
-    default void applyTextFillableFigureProperties(@NonNull RenderContext ctx, @NonNull Text text) {
+    default void applyTextFillableFigureProperties(RenderContext ctx, Text text) {
         text.setFill(Paintable.getPaint(getStyled(TEXT_FILL), ctx));
     }
 
@@ -42,7 +41,7 @@ public interface TextFillableFigure extends Figure {
      * @param ctx  the render context
      * @param text a text node
      */
-    default void applyTextFillableFigureProperties(@NonNull RenderContext ctx, @NonNull Labeled text) {
+    default void applyTextFillableFigureProperties(RenderContext ctx, Labeled text) {
         text.setTextFill(Paintable.getPaint(getStyled(TEXT_FILL), ctx));
     }
 }

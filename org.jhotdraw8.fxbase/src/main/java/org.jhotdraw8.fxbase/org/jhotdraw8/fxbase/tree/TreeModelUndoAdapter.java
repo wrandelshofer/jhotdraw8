@@ -5,12 +5,11 @@
 
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.text.ResourceBundleStub;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
@@ -32,9 +31,9 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * @param <E> the element type of the tree
  */
 public class TreeModelUndoAdapter<E> {
-    public static final @NonNull String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
-    private final @NonNull CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
-    private final @NonNull Listener<TreeModelEvent<E>> treeModelListener = event -> {
+    public static final String RESOURCE_BUNDLE_PROPERTY = "resourceBundle";
+    private final CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
+    private final Listener<TreeModelEvent<E>> treeModelListener = event -> {
         UndoableEdit edit = switch (event.getEventType()) {
             case ROOT_CHANGED -> new RootChangedEdit<>(event.getSource(), event.getOldRoot(), event.getNewRoot());
             case SUBTREE_NODES_CHANGED,
@@ -58,20 +57,20 @@ public class TreeModelUndoAdapter<E> {
     }
 
     @SuppressWarnings("this-escape")
-    public TreeModelUndoAdapter(@NonNull TreeModel<E> model) {
+    public TreeModelUndoAdapter(TreeModel<E> model) {
         bind(model);
     }
 
-    public void addUndoEditListener(@NonNull UndoableEditListener listener) {
+    public void addUndoEditListener(UndoableEditListener listener) {
         listeners.add(listener);
     }
 
-    public void bind(@NonNull TreeModel<E> model) {
+    public void bind(TreeModel<E> model) {
         unbind(model);
         model.addTreeModelListener(treeModelListener);
     }
 
-    protected void fireUndoableEdit(@NonNull Object source, @NonNull UndoableEdit edit) {
+    protected void fireUndoableEdit(Object source, UndoableEdit edit) {
         final UndoableEditEvent editEvent = new UndoableEditEvent(source, edit);
         listeners.forEach(e -> e.undoableEditHappened(editEvent));
     }
@@ -84,7 +83,7 @@ public class TreeModelUndoAdapter<E> {
         this.resourceBundle.set(resourceBundle);
     }
 
-    public void removeUndoEditListener(@NonNull UndoableEditListener listener) {
+    public void removeUndoEditListener(UndoableEditListener listener) {
         listeners.remove(listener);
     }
 
@@ -92,17 +91,17 @@ public class TreeModelUndoAdapter<E> {
         return resourceBundle;
     }
 
-    public void unbind(@NonNull TreeModel<E> model) {
+    public void unbind(TreeModel<E> model) {
         model.removeTreeModelListener(treeModelListener);
     }
 
     @SuppressWarnings({"serial", "RedundantSuppression"})
     class RootChangedEdit<EE> extends AbstractUndoableEdit {
-        private final @NonNull TreeModel<EE> model;
+        private final TreeModel<EE> model;
         private final @Nullable EE oldRoot;
         private final @Nullable EE newRoot;
 
-        public RootChangedEdit(@NonNull TreeModel<EE> model, @Nullable EE oldRoot, @Nullable EE newRoot) {
+        public RootChangedEdit(TreeModel<EE> model, @Nullable EE oldRoot, @Nullable EE newRoot) {
             this.model = model;
             this.oldRoot = oldRoot;
             this.newRoot = newRoot;
@@ -128,12 +127,12 @@ public class TreeModelUndoAdapter<E> {
 
     @SuppressWarnings({"serial", "RedundantSuppression"})
     class NodeAddedEdit<EE> extends AbstractUndoableEdit {
-        private final @NonNull TreeModel<EE> model;
-        private final @NonNull EE parent;
+        private final TreeModel<EE> model;
+        private final EE parent;
         private final int childIndex;
-        private final @NonNull EE child;
+        private final EE child;
 
-        public NodeAddedEdit(@NonNull TreeModel<EE> model, @NonNull EE parent, int childIndex, @NonNull EE child) {
+        public NodeAddedEdit(TreeModel<EE> model, EE parent, int childIndex, EE child) {
             this.model = model;
             this.parent = parent;
             this.childIndex = childIndex;
@@ -160,12 +159,12 @@ public class TreeModelUndoAdapter<E> {
 
     @SuppressWarnings({"serial", "RedundantSuppression"})
     class NodeRemovedEdit<EE> extends AbstractUndoableEdit {
-        private final @NonNull TreeModel<EE> model;
-        private final @NonNull EE parent;
+        private final TreeModel<EE> model;
+        private final EE parent;
         private final int childIndex;
-        private final @NonNull EE child;
+        private final EE child;
 
-        public NodeRemovedEdit(@NonNull TreeModel<EE> model, @NonNull EE parent, int childIndex, @NonNull EE child) {
+        public NodeRemovedEdit(TreeModel<EE> model, EE parent, int childIndex, EE child) {
             this.model = model;
             this.parent = parent;
             this.childIndex = childIndex;

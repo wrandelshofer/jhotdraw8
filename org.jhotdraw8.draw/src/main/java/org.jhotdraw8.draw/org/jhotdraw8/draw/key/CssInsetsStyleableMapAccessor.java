@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.InsetsCssConverter;
@@ -13,6 +11,7 @@ import org.jhotdraw8.draw.css.value.CssInsets;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -22,14 +21,14 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class CssInsetsStyleableMapAccessor
-        extends AbstractStyleableMapAccessor<@NonNull CssInsets>
-        implements NonNullMapAccessor<@NonNull CssInsets> {
+        extends AbstractStyleableMapAccessor<CssInsets>
+        implements NonNullMapAccessor<CssInsets> {
 
 
-    private final @NonNull NonNullMapAccessor<CssSize> topKey;
-    private final @NonNull NonNullMapAccessor<CssSize> rightKey;
-    private final @NonNull NonNullMapAccessor<CssSize> bottomKey;
-    private final @NonNull NonNullMapAccessor<CssSize> leftKey;
+    private final NonNullMapAccessor<CssSize> topKey;
+    private final NonNullMapAccessor<CssSize> rightKey;
+    private final NonNullMapAccessor<CssSize> bottomKey;
+    private final NonNullMapAccessor<CssSize> leftKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -40,7 +39,7 @@ public class CssInsetsStyleableMapAccessor
      * @param bottomKey the insets bottom key
      * @param leftKey   the insets left key
      */
-    public CssInsetsStyleableMapAccessor(@NonNull String name, @NonNull NonNullMapAccessor<CssSize> topKey, @NonNull NonNullMapAccessor<CssSize> rightKey, @NonNull NonNullMapAccessor<CssSize> bottomKey, @NonNull NonNullMapAccessor<CssSize> leftKey) {
+    public CssInsetsStyleableMapAccessor(String name, NonNullMapAccessor<CssSize> topKey, NonNullMapAccessor<CssSize> rightKey, NonNullMapAccessor<CssSize> bottomKey, NonNullMapAccessor<CssSize> leftKey) {
         super(name, CssInsets.class, new NonNullMapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new CssInsets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         this.topKey = topKey;
@@ -49,15 +48,15 @@ public class CssInsetsStyleableMapAccessor
         this.leftKey = leftKey;
     }
 
-    private final @NonNull Converter<CssInsets> converter = new InsetsCssConverter(false);
+    private final Converter<CssInsets> converter = new InsetsCssConverter(false);
 
     @Override
-    public @NonNull Converter<CssInsets> getCssConverter() {
+    public Converter<CssInsets> getCssConverter() {
         return converter;
     }
 
     @Override
-    public @Nullable CssInsets get(@NonNull Map<? super Key<?>, Object> a) {
+    public @Nullable CssInsets get(Map<? super Key<?>, Object> a) {
         final CssSize top = topKey.get(a);
         final CssSize right = rightKey.get(a);
         final CssSize bottom = bottomKey.get(a);
@@ -75,7 +74,7 @@ public class CssInsetsStyleableMapAccessor
 
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
+    public void set(Map<? super Key<?>, Object> a, @Nullable CssInsets value) {
         if (value == null) {
             remove(a);
         } else {
@@ -87,7 +86,7 @@ public class CssInsetsStyleableMapAccessor
     }
 
     @Override
-    public @Nullable CssInsets remove(@NonNull Map<? super Key<?>, Object> a) {
+    public @Nullable CssInsets remove(Map<? super Key<?>, Object> a) {
         CssInsets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);
@@ -97,7 +96,7 @@ public class CssInsetsStyleableMapAccessor
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable CssInsets value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable CssInsets value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -109,7 +108,7 @@ public class CssInsetsStyleableMapAccessor
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = topKey.remove(a);
         a = rightKey.remove(a);
         a = bottomKey.remove(a);

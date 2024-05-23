@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntArrayEnumerator;
 
@@ -67,8 +66,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * {@code offset = nextOffset[vi]}
      * {@code count = nextOffset.length - offset}
      */
-    protected final int @NonNull [] next;
-    protected final int @NonNull [] prev;
+    protected final int[] next;
+    protected final int[] prev;
 
     /**
      * Holds offsets into the {@link #next} table and the
@@ -86,8 +85,8 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * {@code nextOffset.length - nextOffset[vi]} yields the
      * number of outgoing arrows of that vertex.
      */
-    protected final int @NonNull [] nextOffset;
-    protected final int @NonNull [] prevOffset;
+    protected final int[] nextOffset;
+    protected final int[] prevOffset;
 
     /**
      * Holds the arrow objects.
@@ -97,29 +96,29 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      * <p>
      * See {@link #next}.
      */
-    protected final @NonNull A @NonNull [] nextArrows;
-    protected final @NonNull A @NonNull [] prevArrows;
+    protected final A[] nextArrows;
+    protected final A[] prevArrows;
     /**
      * Holds the vertex objects.
      * <p>
      * Given vertex index {@code vi},<br>
      * {@code vertices[vi|} yields the vertex {@code v}.
      */
-    protected final @NonNull V @NonNull [] vertices;
+    protected final V[] vertices;
     /**
      * Maps vertices the vertex indices.
      * <p>
      * Given vertex {@code v},<br>
      * {@code vertexToIndexMap.get(v)} yields the vertex index {@code vi}.
      */
-    protected final @NonNull Map<V, Integer> vertexToIndexMap;
+    protected final Map<V, Integer> vertexToIndexMap;
 
     /**
      * Creates a new instance from the specified graph.
      *
      * @param graph a graph
      */
-    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull AttributedIndexedBidiGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedBidiGraph(AttributedIndexedBidiGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -165,7 +164,7 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
      *
      * @param graph a graph
      */
-    public ImmutableAttributed32BitIndexedBidiGraph(@NonNull BidiGraph<V, A> graph) {
+    public ImmutableAttributed32BitIndexedBidiGraph(BidiGraph<V, A> graph) {
 
         final int arrowCount = graph.getArrowCount();
         final int vertexCount = graph.getVertexCount();
@@ -217,11 +216,11 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
 
 
     @Override
-    public @NonNull A getArrow(int index) {
+    public A getArrow(int index) {
         return nextArrows[index];
     }
 
-    public @NonNull A getArrow(int vertex, int index) {
+    public A getArrow(int vertex, int index) {
         return nextArrows[getArrowIndex(vertex, index)];
     }
 
@@ -238,19 +237,19 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull V getNext(@NonNull V v, int i) {
+    public V getNext(V v, int i) {
         return vertices[getNextAsInt(vertexToIndexMap.get(v), i)];
     }
 
     @Override
-    public @NonNull A getNextArrow(int v, int i) {
+    public A getNextArrow(int v, int i) {
         int length = getNextCount(v);
         Objects.checkIndex(i, length);
         return nextArrows[nextOffset[v] + i];
     }
 
     @Override
-    public @NonNull A getNextArrow(@NonNull V v, int i) {
+    public A getNextArrow(V v, int i) {
         return getNextArrow(getVertexIndex(v), i);
     }
 
@@ -274,12 +273,12 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getNextCount(@NonNull V v) {
+    public int getNextCount(V v) {
         return getNextCount(vertexToIndexMap.get(v));
     }
 
     @Override
-    public @NonNull V getPrev(@NonNull V vertex, int i) {
+    public V getPrev(V vertex, int i) {
         return vertices[getPrevAsInt(vertexToIndexMap.get(vertex), i)];
     }
 
@@ -291,7 +290,7 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull A getPrevArrow(@NonNull V v, int i) {
+    public A getPrevArrow(V v, int i) {
         return getPrevArrow(getVertexIndex(v), i);
     }
 
@@ -308,7 +307,7 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public int getPrevCount(@NonNull V vertex) {
+    public int getPrevCount(V vertex) {
         return getPrevCount(vertexToIndexMap.get(vertex));
     }
 
@@ -320,7 +319,7 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull V getVertex(int index) {
+    public V getVertex(int index) {
         return vertices[index];
     }
 
@@ -336,13 +335,13 @@ public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements Attribute
     }
 
     @Override
-    public @NonNull Set<V> getVertices() {
+    public Set<V> getVertices() {
         return Collections.unmodifiableSet(vertexToIndexMap.keySet());
 
     }
 
     @Override
-    public Enumerator.@NonNull OfInt nextVerticesEnumerator(int v) {
+    public Enumerator.OfInt nextVerticesEnumerator(int v) {
         final int offset = nextOffset[v];
         final int nextOffset = (v == this.nextOffset.length - 1) ? this.next.length : this.nextOffset[v + 1];
         return new IntArrayEnumerator(this.next, offset, nextOffset);

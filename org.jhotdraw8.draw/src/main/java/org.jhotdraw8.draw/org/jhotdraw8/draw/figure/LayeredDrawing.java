@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * A layered drawing only accepts {@link Layer}s as children.
@@ -17,7 +16,7 @@ public interface LayeredDrawing extends Drawing {
      * @return true if instanceof Layer
      */
     @Override
-    default boolean isSuitableChild(@NonNull Figure newChild) {
+    default boolean isSuitableChild(Figure newChild) {
         return newChild instanceof Layer;
     }
 }

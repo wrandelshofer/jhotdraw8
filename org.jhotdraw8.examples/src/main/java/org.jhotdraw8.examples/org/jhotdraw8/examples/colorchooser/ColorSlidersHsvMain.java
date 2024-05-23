@@ -17,7 +17,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.DisplayP3ColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.ParametricHsvColorSpace;
@@ -46,7 +45,7 @@ public class ColorSlidersHsvMain extends AbstractColorSlidersMain {
 
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         VBox vbox = new VBox();
 
         vbox.setBorder(new Border(new BorderStroke(null, null, null, new BorderWidths(12))));
@@ -97,7 +96,7 @@ public class ColorSlidersHsvMain extends AbstractColorSlidersMain {
     /**
      * @param args the command line arguments
      */
-    public static void main(@NonNull String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 

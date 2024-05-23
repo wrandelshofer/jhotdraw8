@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * An interface to an immutable set that only provides an
@@ -22,6 +21,6 @@ public interface ImmutableAddOnlySet<E> {
      * @return this set if it already contains the element, or
      * a different set with the element added
      */
-    @NonNull ImmutableAddOnlySet<E> add(@NonNull E element);
+    ImmutableAddOnlySet<E> add(E element);
 
 }

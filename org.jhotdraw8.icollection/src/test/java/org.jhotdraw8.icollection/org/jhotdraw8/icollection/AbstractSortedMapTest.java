@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.Map;
@@ -14,18 +13,18 @@ public abstract class AbstractSortedMapTest extends AbstractMapTest {
     /**
      * Creates a new empty instance.
      */
-    protected abstract <K, V> @NonNull SortedMap<K, V> newInstance();
+    protected abstract <K, V> SortedMap<K, V> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract <K, V> @NonNull SortedMap<K, V> newInstance(int numElements, float loadFactor);
+    protected abstract <K, V> SortedMap<K, V> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <K, V> @NonNull SortedMap<K, V> newInstance(@NonNull Map<K, V> m);
+    protected abstract <K, V> SortedMap<K, V> newInstance(Map<K, V> m);
 
 
     @Test

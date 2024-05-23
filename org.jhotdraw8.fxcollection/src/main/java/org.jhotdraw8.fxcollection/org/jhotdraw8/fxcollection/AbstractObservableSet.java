@@ -7,9 +7,8 @@ package org.jhotdraw8.fxcollection;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -28,7 +27,7 @@ import java.util.stream.Stream;
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E>, ReadOnlySet<E> {
 
     private final List<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArrayList<>();
-    private final @NonNull List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
+    private final List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();
 
     public AbstractObservableSet() {
     }
@@ -47,7 +46,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     protected abstract boolean backingSetAdd(E e);
 
     @Override
-    public boolean addAll(@NonNull Collection<? extends E> c) {
+    public boolean addAll(Collection<? extends E> c) {
         boolean modified = false;
         for (E e : c) {
             boolean added = backingSetAdd(e);
@@ -104,7 +103,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     protected abstract boolean backingSetContains(Object o);
 
     @Override
-    public boolean containsAll(@NonNull Collection<?> c) {
+    public boolean containsAll(Collection<?> c) {
         return backingSetContainsAll(c);
     }
 
@@ -161,7 +160,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     protected abstract boolean backingSetIsEmpty();
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new Iterator<>() {
             private final Iterator<? extends E> i = backingSetIterator();
             private @Nullable E current;
@@ -201,7 +200,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     protected abstract boolean backingSetRemove(Object o);
 
     @Override
-    public boolean removeAll(@NonNull Collection<?> c) {
+    public boolean removeAll(Collection<?> c) {
         boolean modified = false;
         for (Object o : c) {
             @SuppressWarnings("unchecked") final E e = (E) o;
@@ -228,7 +227,7 @@ public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements
     }
 
     @Override
-    public boolean retainAll(@NonNull Collection<?> c) {
+    public boolean retainAll(Collection<?> c) {
         boolean modified = false;
         Iterator<E> it = backingSetIterator();
         while (it.hasNext()) {

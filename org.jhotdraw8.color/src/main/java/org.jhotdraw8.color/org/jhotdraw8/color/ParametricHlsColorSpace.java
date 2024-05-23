@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 import java.io.Serial;
@@ -37,8 +36,8 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final @NonNull NamedColorSpace rgbColorSpace;
-    private final @NonNull String name;
+    private final NamedColorSpace rgbColorSpace;
+    private final String name;
 
     /**
      * Creates a new instance that is based on the provided RGB color space.
@@ -47,14 +46,14 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
      * @param rgbColorSpace the base RGB color space
      * @throws IllegalArgumentException if {@code rgbColorSpace} has not type {@link ColorSpace#TYPE_RGB}.
      */
-    public ParametricHlsColorSpace(@NonNull String name, @NonNull NamedColorSpace rgbColorSpace) {
+    public ParametricHlsColorSpace(String name, NamedColorSpace rgbColorSpace) {
         super(TYPE_HLS, 3);
         assert (rgbColorSpace.getType() == TYPE_RGB);
         this.name = name;
         this.rgbColorSpace = rgbColorSpace;
     }
 
-    public @NonNull NamedColorSpace getRgbColorSpace() {
+    public NamedColorSpace getRgbColorSpace() {
         return rgbColorSpace;
     }
 
@@ -65,12 +64,12 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
      * @return LCH color value.
      */
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
+    public float[] fromCIEXYZ(float[] xyz, float[] lch) {
         return rgbToHls(rgbColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
+    public float[] fromRGB(float[] rgb, float[] lch) {
         return rgbToHls(rgbColorSpace.fromRGB(rgb, lch), lch);
     }
 
@@ -80,11 +79,11 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
-    protected float @NonNull [] hlsToRgb(float[] hls, float[] rgb) {
+    protected float[] hlsToRgb(float[] hls, float[] rgb) {
         double hue = hls[0] / 360.0;
         double saturation = hls[2];
         double lightness = hls[1];
@@ -212,12 +211,12 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
      * @return CIEXYZ color value.
      */
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return rgbColorSpace.toCIEXYZ(hlsToRgb(colorvalue, xyz), xyz);
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
+    public float[] toRGB(float[] lch, float[] rgb) {
         return rgbColorSpace.toRGB(hlsToRgb(lch, rgb), rgb);
     }
 

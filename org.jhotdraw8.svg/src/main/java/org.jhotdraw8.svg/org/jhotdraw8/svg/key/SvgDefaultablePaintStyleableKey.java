@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.svg.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -13,6 +11,7 @@ import org.jhotdraw8.draw.key.AbstractStyleableKey;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -21,12 +20,12 @@ import java.lang.reflect.Type;
  *
  * @author Werner Randelshofer
  */
-public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends AbstractStyleableKey<@NonNull SvgDefaultablePaint<T>>
-        implements WritableStyleableMapAccessor<@NonNull SvgDefaultablePaint<T>>,
+public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends AbstractStyleableKey<SvgDefaultablePaint<T>>
+        implements WritableStyleableMapAccessor<SvgDefaultablePaint<T>>,
         SvgDefaultablePaintStyleableMapAccessor<T> {
 
 
-    private final @NonNull Converter<@NonNull SvgDefaultablePaint<T>> converter;
+    private final Converter<SvgDefaultablePaint<T>> converter;
     private final @Nullable T initialValue;
 
 
@@ -38,8 +37,8 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
      * @param converter              String converter for a list element
      * @param initialDefaultingValue The default value.
      */
-    public SvgDefaultablePaintStyleableKey(@NonNull String name, @NonNull Type type, @NonNull CssConverter<T> converter,
-                                           @NonNull SvgDefaultablePaint<T> initialDefaultingValue,
+    public SvgDefaultablePaintStyleableKey(String name, Type type, CssConverter<T> converter,
+                                           SvgDefaultablePaint<T> initialDefaultingValue,
                                            @Nullable T initialValue) {
         super(name, type, initialDefaultingValue);
         this.initialValue = initialValue;
@@ -48,7 +47,7 @@ public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends Abstra
     }
 
     @Override
-    public @NonNull Converter<SvgDefaultablePaint<T>> getCssConverter() {
+    public Converter<SvgDefaultablePaint<T>> getCssConverter() {
         return converter;
     }
 

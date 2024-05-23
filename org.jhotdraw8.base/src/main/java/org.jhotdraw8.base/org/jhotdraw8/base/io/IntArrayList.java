@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -55,7 +54,7 @@ class IntArrayList extends AbstractList<Integer> {
      *
      * @param collection a collection of integers
      */
-    public IntArrayList(@NonNull Collection<Integer> collection) {
+    public IntArrayList(Collection<Integer> collection) {
         this.size = collection.size();
         this.items = new int[size];
 
@@ -67,7 +66,7 @@ class IntArrayList extends AbstractList<Integer> {
         }
     }
 
-    private IntArrayList(int @NonNull [] items) {
+    private IntArrayList(int[] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -79,7 +78,7 @@ class IntArrayList extends AbstractList<Integer> {
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull IntArrayList of(int @NonNull ... items) {
+    public static IntArrayList of(int... items) {
         return new IntArrayList(items);
     }
 
@@ -111,7 +110,7 @@ class IntArrayList extends AbstractList<Integer> {
      *
      * @param that another list
      */
-    public void addAllAsInt(@NonNull IntArrayList that) {
+    public void addAllAsInt(IntArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -127,7 +126,7 @@ class IntArrayList extends AbstractList<Integer> {
      * @param out the output collection
      * @return out
      */
-    public @NonNull <T extends Collection<Integer>> T addAllInto(@NonNull T out) {
+    public <T extends Collection<Integer>> T addAllInto(T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -149,7 +148,7 @@ class IntArrayList extends AbstractList<Integer> {
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(int @NonNull [] a, int offset) {
+    public void copyInto(int[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -353,7 +352,7 @@ class IntArrayList extends AbstractList<Integer> {
      * @return an iterator over the elements of this list
      */
     @Override
-    public PrimitiveIterator.@NonNull OfInt iterator() {
+    public PrimitiveIterator.OfInt iterator() {
         return new PrimitiveIterator.OfInt() {
             private int index = 0;
             private final int size = IntArrayList.this.size;
@@ -380,7 +379,7 @@ class IntArrayList extends AbstractList<Integer> {
      * @return a spliterator over the elements of this list
      */
     @Override
-    public Spliterator.@NonNull OfInt spliterator() {
+    public Spliterator.OfInt spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
@@ -389,7 +388,7 @@ class IntArrayList extends AbstractList<Integer> {
      *
      * @return a stream
      */
-    public @NonNull IntStream intStream() {
+    public IntStream intStream() {
         return (size == 0) ? IntStream.empty() : Arrays.stream(items, 0, size);
     }
 
@@ -398,7 +397,7 @@ class IntArrayList extends AbstractList<Integer> {
      *
      * @return array
      */
-    public int @NonNull [] toIntArray() {
+    public int[] toIntArray() {
         int[] result = new int[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
@@ -425,7 +424,7 @@ class IntArrayList extends AbstractList<Integer> {
 
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; i < size; i++) {
@@ -452,7 +451,7 @@ class IntArrayList extends AbstractList<Integer> {
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIfAsInt(@NonNull IntPredicate filter) {
+    public boolean removeIfAsInt(IntPredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {

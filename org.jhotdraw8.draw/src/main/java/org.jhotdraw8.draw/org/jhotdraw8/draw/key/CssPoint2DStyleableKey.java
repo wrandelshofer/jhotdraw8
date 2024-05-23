@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.css.converter.Point2DCssConverter;
@@ -17,11 +16,11 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
  *
  * @author Werner Randelshofer
  */
-public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoint2D>
-        implements WritableStyleableMapAccessor<@NonNull CssPoint2D>, NonNullKey<@NonNull CssPoint2D> {
+public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
+        implements WritableStyleableMapAccessor<CssPoint2D>, NonNullKey<CssPoint2D> {
 
 
-    private final Converter<@NonNull CssPoint2D> converter;
+    private final Converter<CssPoint2D> converter;
 
     /**
      * Creates a new instance with the specified name and with 0,0 as the
@@ -29,7 +28,7 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoi
      *
      * @param name The name of the key.
      */
-    public CssPoint2DStyleableKey(@NonNull String name) {
+    public CssPoint2DStyleableKey(String name) {
         this(name, CssPoint2D.ZERO);
     }
 
@@ -42,18 +41,18 @@ public class CssPoint2DStyleableKey extends AbstractStyleableKey<@NonNull CssPoi
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public CssPoint2DStyleableKey(@NonNull String key, @NonNull CssPoint2D defaultValue) {
+    public CssPoint2DStyleableKey(String key, CssPoint2D defaultValue) {
         this(key, defaultValue, new Point2DCssConverter(false));
     }
 
-    public CssPoint2DStyleableKey(@NonNull String key, @NonNull CssPoint2D defaultValue, @NonNull CssConverter<CssPoint2D> converter) {
+    public CssPoint2DStyleableKey(String key, CssPoint2D defaultValue, CssConverter<CssPoint2D> converter) {
         super(key, CssPoint2D.class, defaultValue);
         this.converter = converter;
     }
 
 
     @Override
-    public @NonNull Converter<CssPoint2D> getCssConverter() {
+    public Converter<CssPoint2D> getCssConverter() {
         return converter;
     }
 

@@ -6,12 +6,11 @@ package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
@@ -24,8 +23,8 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
     protected @Nullable DrawingModel drawingModel;
     protected @Nullable Drawing drawing;
 
-    private final @NonNull ChangeListener<Drawing> drawingListener = this::onDrawingChanged;
-    private final @NonNull ChangeListener<DrawingModel> modelListener = this::onDrawingModelChanged;
+    private final ChangeListener<Drawing> drawingListener = this::onDrawingChanged;
+    private final ChangeListener<DrawingModel> modelListener = this::onDrawingModelChanged;
 
     {
         subject.addListener(this::onDrawingViewChanged);
@@ -87,13 +86,13 @@ public abstract class AbstractDrawingInspector extends AbstractInspector<Drawing
 
     }
 
-    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEditEvent);
+    protected final UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEditEvent);
 
-    protected void forwardUndoableEditEvent(@NonNull UndoableEditEvent undoableEditEvent) {
+    protected void forwardUndoableEditEvent(UndoableEditEvent undoableEditEvent) {
 
     }
 
-    public @NonNull UndoableEditHelper getUndoHelper() {
+    public UndoableEditHelper getUndoHelper() {
         return undoHelper;
     }
 }

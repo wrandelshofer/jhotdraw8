@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Defines a <i>layer</i> of a {@link Drawing}.
@@ -33,7 +32,7 @@ public interface Layer extends Figure {
     }
 
     @Override
-    default @NonNull String getTypeSelector() {
+    default String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -43,7 +42,7 @@ public interface Layer extends Figure {
     }
 
     @Override
-    default boolean isSuitableParent(@NonNull Figure newParent) {
+    default boolean isSuitableParent(Figure newParent) {
         return (newParent instanceof LayeredDrawing) || (newParent instanceof Clipping);
     }
 }

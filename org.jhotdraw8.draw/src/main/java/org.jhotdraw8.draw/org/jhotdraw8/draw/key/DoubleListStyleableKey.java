@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
@@ -20,7 +19,7 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WritableStyleableMapAccessor<ImmutableList<Double>> {
 
 
-    private final @NonNull Converter<ImmutableList<Double>> converter;
+    private final Converter<ImmutableList<Double>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -28,7 +27,7 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      *
      * @param name The name of the key.
      */
-    public DoubleListStyleableKey(@NonNull String name) {
+    public DoubleListStyleableKey(String name) {
         this(name, null);
     }
 
@@ -38,14 +37,14 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableKey(@NonNull String name, ImmutableList<Double> defaultValue) {
+    public DoubleListStyleableKey(String name, ImmutableList<Double> defaultValue) {
         super(name, new SimpleParameterizedType(ImmutableList.class, Double.class), defaultValue);
 
         converter = new ListCssConverter<>(new DoubleCssConverter(false));
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<Double>> getCssConverter() {
+    public Converter<ImmutableList<Double>> getCssConverter() {
         return converter;
     }
 

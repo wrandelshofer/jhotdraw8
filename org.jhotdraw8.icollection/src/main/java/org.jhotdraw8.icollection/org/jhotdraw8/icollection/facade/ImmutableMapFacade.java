@@ -5,12 +5,11 @@
 
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.impl.iteration.Iterators;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlyMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -28,16 +27,16 @@ import java.util.function.Function;
  */
 public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implements ImmutableMap<K, V> {
 
-    private final @NonNull Map<K, V> target;
-    private final @NonNull Function<Map<K, V>, Map<K, V>> cloneFunction;
+    private final Map<K, V> target;
+    private final Function<Map<K, V>, Map<K, V>> cloneFunction;
 
-    public ImmutableMapFacade(@NonNull Map<K, V> target, @NonNull Function<Map<K, V>, Map<K, V>> cloneFunction) {
+    public ImmutableMapFacade(Map<K, V> target, Function<Map<K, V>, Map<K, V>> cloneFunction) {
         this.target = target;
         this.cloneFunction = cloneFunction;
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> clear() {
+    public ImmutableMapFacade<K, V> clear() {
         if (isEmpty()) {
             return this;
         }
@@ -47,7 +46,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> put(@NonNull K key, @Nullable V value) {
+    public ImmutableMapFacade<K, V> put(K key, @Nullable V value) {
         if (containsKey(key) && Objects.equals(get(key), value)) {
             return this;
         }
@@ -58,7 +57,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
 
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> putAll(@NonNull Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
+    public ImmutableMapFacade<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         Map<K, V> clone = cloneFunction.apply(target);
         for (Map.Entry<? extends K, ? extends V> e : c) {
             clone.put(e.getKey(), e.getValue());
@@ -70,7 +69,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull ImmutableMapFacade<K, V> remove(@NonNull K key) {
+    public ImmutableMapFacade<K, V> remove(K key) {
         if (!containsKey(key)) {
             return this;
         }
@@ -81,7 +80,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
 
     @SuppressWarnings("SuspiciousMethodCalls")
     @Override
-    public @NonNull ImmutableMapFacade<K, V> removeAll(@NonNull Iterable<? extends K> c) {
+    public ImmutableMapFacade<K, V> removeAll(Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -106,7 +105,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableMapFacade<K, V> retainAll(@NonNull Iterable<? extends K> c) {
+    public ImmutableMapFacade<K, V> retainAll(Iterable<? extends K> c) {
         if (isEmpty()) {
             return this;
         }
@@ -129,7 +128,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
+    public Iterator<Map.Entry<K, V>> iterator() {
         return Iterators.unmodifiableIterator(target.entrySet().iterator());
     }
 
@@ -156,7 +155,7 @@ public class ImmutableMapFacade<K, V> extends AbstractReadOnlyMap<K, V> implemen
     }
 
     @Override
-    public @NonNull Map<K, V> toMutable() {
+    public Map<K, V> toMutable() {
         return cloneFunction.apply(target);
     }
 

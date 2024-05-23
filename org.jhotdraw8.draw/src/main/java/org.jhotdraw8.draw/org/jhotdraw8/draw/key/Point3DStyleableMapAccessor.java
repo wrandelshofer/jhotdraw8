@@ -5,14 +5,13 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point3D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.Point3DConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -21,14 +20,14 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  */
-public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull Point3D>
-        implements NonNullMapAccessor<@NonNull Point3D> {
+public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point3D>
+        implements NonNullMapAccessor<Point3D> {
 
 
-    private final @NonNull MapAccessor<Double> xKey;
-    private final @NonNull MapAccessor<Double> yKey;
-    private final @NonNull MapAccessor<Double> zKey;
-    private final @NonNull Converter<Point3D> converter;
+    private final MapAccessor<Double> xKey;
+    private final MapAccessor<Double> yKey;
+    private final MapAccessor<Double> zKey;
+    private final Converter<Point3D> converter;
 
     /**
      * Creates a new instance with the specified name.
@@ -38,11 +37,11 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
      * @param yKey the key for the y coordinate of the point
      * @param zKey the key for the u coordinate of the point
      */
-    public Point3DStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> zKey) {
+    public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey) {
         this(name, xKey, yKey, zKey, new Point3DConverter(false));
     }
 
-    public Point3DStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> zKey, Converter<Point3D> converter) {
+    public Point3DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> zKey, Converter<Point3D> converter) {
         super(name, Point3D.class, new MapAccessor<?>[]{xKey, yKey, zKey}, new Point3D(xKey.getDefaultValue(), yKey.getDefaultValue(), zKey.getDefaultValue()));
         this.converter = converter;
         this.xKey = xKey;
@@ -51,12 +50,12 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @NonNull Converter<Point3D> getCssConverter() {
+    public Converter<Point3D> getCssConverter() {
         return converter;
     }
 
     @Override
-    public @NonNull Point3D get(@NonNull Map<? super Key<?>, Object> a) {
+    public Point3D get(Map<? super Key<?>, Object> a) {
         Double x = xKey.get(a);
         Double y = yKey.get(a);
         Double z = zKey.get(a);
@@ -64,7 +63,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Point3D value) {
+    public void set(Map<? super Key<?>, Object> a, @Nullable Point3D value) {
         if (value == null) {
             remove(a);
         } else {
@@ -75,7 +74,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @NonNull Point3D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public Point3D remove(Map<? super Key<?>, Object> a) {
         Point3D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);
@@ -84,7 +83,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Point3D value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable Point3D value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -95,7 +94,7 @@ public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<@N
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         a = yKey.remove(a);
         return zKey.remove(a);

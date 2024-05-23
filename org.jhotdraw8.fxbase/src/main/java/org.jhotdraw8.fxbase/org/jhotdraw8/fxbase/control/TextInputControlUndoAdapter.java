@@ -8,8 +8,7 @@ package org.jhotdraw8.fxbase.control;
 import javafx.scene.control.IndexRange;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.control.TextInputControl;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
 
 import javax.swing.event.UndoableEditEvent;
@@ -30,30 +29,30 @@ import java.util.function.UnaryOperator;
  * only once as a listener.
  */
 public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.Change> {
-    private final @NonNull CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<UndoableEditListener> listeners = new CopyOnWriteArrayList<>();
 
     public TextInputControlUndoAdapter() {
     }
 
     @SuppressWarnings("this-escape")
-    public TextInputControlUndoAdapter(@NonNull TextInputControl control) {
+    public TextInputControlUndoAdapter(TextInputControl control) {
         bind(control);
     }
 
-    public void bind(@NonNull TextInputControl control) {
+    public void bind(TextInputControl control) {
         control.setTextFormatter(new TextFormatter<>(this));
     }
 
-    public void unbind(@NonNull TextInputControl control) {
+    public void unbind(TextInputControl control) {
         control.setTextFormatter(null);
     }
 
-    public void addUndoEditListener(@NonNull UndoableEditListener listener) {
+    public void addUndoEditListener(UndoableEditListener listener) {
         listeners.add(listener);
     }
 
     @Override
-    public TextFormatter.@NonNull Change apply(TextFormatter.@NonNull Change change) {
+    public TextFormatter.Change apply(TextFormatter.Change change) {
         if (!listeners.isEmpty()) {
             String deletedText = change.isDeleted() ? change.getControlText().substring(change.getRangeStart(), change.getRangeEnd()) : null;
             String addedText = change.isAdded() ? change.getText() : null;
@@ -72,7 +71,7 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
         return change;
     }
 
-    public void removeUndoEditListener(@NonNull UndoableEditListener listener) {
+    public void removeUndoEditListener(UndoableEditListener listener) {
         listeners.remove(listener);
     }
 
@@ -80,8 +79,8 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
     @SuppressWarnings({"serial", "RedundantSuppression"})
     static class UndoableTextEdit extends AbstractUndoableEdit {
         private @Nullable TextInputControl control;
-        private @NonNull String addedText;
-        private @NonNull String deletedText;
+        private String addedText;
+        private String deletedText;
         private int start;
         private int end;
 
@@ -91,7 +90,7 @@ public class TextInputControlUndoAdapter implements UnaryOperator<TextFormatter.
         private final int oldAnchor;
         private final int oldCaret;
 
-        public UndoableTextEdit(@NonNull TextInputControl control, @Nullable String addedText, @Nullable String deletedText, int start, int end, int newAnchor, int newCaret, int oldAnchor, int oldCaret) {
+        public UndoableTextEdit(TextInputControl control, @Nullable String addedText, @Nullable String deletedText, int start, int end, int newAnchor, int newCaret, int oldAnchor, int oldCaret) {
             this.control = control;
             this.addedText = addedText == null ? "" : addedText;
             this.deletedText = deletedText == null ? "" : deletedText;

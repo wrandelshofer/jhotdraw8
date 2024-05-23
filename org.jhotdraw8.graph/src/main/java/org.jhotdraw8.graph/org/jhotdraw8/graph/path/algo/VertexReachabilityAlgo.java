@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.algo.AddToSet;
 
 import java.util.function.BiFunction;
@@ -36,12 +35,12 @@ public interface VertexReachabilityAlgo<V, C extends Number & Comparable<C>> {
      * @return true on success
      */
     boolean tryToReach(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C zero,
-            @NonNull C costLimit,
-            @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-            @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited);
+            C zero,
+            C costLimit,
+            Function<V, Iterable<V>> nextVerticesFunction,
+            BiFunction<V, V, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToSet<V> visited);
 }

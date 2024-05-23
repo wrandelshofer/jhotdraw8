@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom.shape;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.ByteArrayList;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.collection.primitive.IntArrayList;
@@ -18,8 +17,8 @@ import java.awt.geom.PathIterator;
 import java.util.DoubleSummaryStatistics;
 
 public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
-    protected final @NonNull DoubleArrayList lengths = new DoubleArrayList();
-    private final @NonNull DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
+    protected final DoubleArrayList lengths = new DoubleArrayList();
+    private final DoubleSummaryStatistics acc = new DoubleSummaryStatistics();
     private final double epsilon;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
@@ -138,7 +137,7 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     }
 
     @Override
-    public @NonNull SimplePathMetrics build() {
+    public SimplePathMetrics build() {
         return new SimplePathMetrics(commands.toByteArray(),
                 offsets.toIntArray(),
                 coords.toDoubleArray(),

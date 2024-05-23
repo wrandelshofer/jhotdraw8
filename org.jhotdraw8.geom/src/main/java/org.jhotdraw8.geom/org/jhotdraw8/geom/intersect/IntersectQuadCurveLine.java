@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
@@ -36,7 +35,7 @@ public class IntersectQuadCurveLine {
      * @param a1 point 1 of 'a'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1) {
+    public static IntersectionResult intersectQuadCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D a0, Point2D a1) {
         return intersectQuadCurveLine(p0, p1, p2, a0, a1, Rectangles.REAL_THRESHOLD);
     }
 
@@ -58,7 +57,7 @@ public class IntersectQuadCurveLine {
      * @param epsilon the desired precision
      * @return the intersection result
      */
-    public static IntersectionResult intersectQuadCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D a0, @NonNull Point2D a1,
+    public static IntersectionResult intersectQuadCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D a0, Point2D a1,
                                                             double epsilon) {
 
         // Bezier curve:
@@ -134,7 +133,7 @@ public class IntersectQuadCurveLine {
     }
 
 
-    public static @NonNull IntersectionResult intersectQuadCurveLine(
+    public static IntersectionResult intersectQuadCurveLine(
             double ax0, double ay0, double ax1, double ay1, double ax2, double ay2,
             double bx0, double by0, double bx1, double by1, double epsilon) {
         return intersectQuadCurveLine(new Point2D.Double(ax0, ay0), new Point2D.Double(ax1, ay1), new Point2D.Double(ax2, ay2),

@@ -20,8 +20,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.color.CieLabColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
@@ -122,7 +121,6 @@ public class ColorSpaceMain extends Application {
         stage.show();
     }
 
-    @NonNull
     private static ObjectBinding<String> createColorLabelBinding(ComboBox<NamedColorSpace> colorSpace1ComboBox, ColorPicker fromPicker) {
         ObjectProperty<NamedColorSpace> colorSpaceProperty = colorSpace1ComboBox.valueProperty();
         return Bindings.createObjectBinding(() -> {

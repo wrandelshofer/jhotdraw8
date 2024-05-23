@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.io;
 
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -23,6 +21,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.xml.XmlUtil;
+import org.jspecify.annotations.Nullable;
 
 import javax.xml.stream.Location;
 import javax.xml.stream.XMLStreamException;
@@ -52,20 +51,20 @@ import java.util.regex.Pattern;
  * This reader does not support {@link FigureFactory#nodeListToValue(MapAccessor, List)}.
  */
 public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInputFormat {
-    private static final @NonNull Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
-    private final @NonNull IdFactory idFactory;
+    private static final Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
+    private final IdFactory idFactory;
     private @Nullable String namespaceURI;
-    private @NonNull FigureFactory figureFactory;
-    private final @NonNull String idAttribute = "id";
+    private FigureFactory figureFactory;
+    private final String idAttribute = "id";
     private Supplier<Layer> layerFactory;
 
-    public SimpleXmlReader(@NonNull FigureFactory figureFactory, @NonNull IdFactory idFactory, @Nullable String namespaceURI) {
+    public SimpleXmlReader(FigureFactory figureFactory, IdFactory idFactory, @Nullable String namespaceURI) {
         this.idFactory = idFactory;
         this.figureFactory = figureFactory;
         this.namespaceURI = namespaceURI;
     }
 
-    private @NonNull Figure createFigure(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) throws IOException {
+    private Figure createFigure(XMLStreamReader r, Deque<Figure> stack) throws IOException {
         Figure figure;
         try {
             figure = figureFactory.createFigureByElementName(r.getLocalName());
@@ -94,7 +93,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         return df;
     }
 
-    public @NonNull IdFactory getIdFactory() {
+    public IdFactory getIdFactory() {
         return idFactory;
     }
 
@@ -107,7 +106,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
     }
 
     @Override
-    public @NonNull Figure read(@NonNull InputStream in, @Nullable Drawing drawing, @Nullable URI documentHome, @NonNull WorkState<Void> workState) throws IOException {
+    public Figure read(InputStream in, @Nullable Drawing drawing, @Nullable URI documentHome, WorkState<Void> workState) throws IOException {
         return read((AutoCloseable) in, drawing, documentHome, workState);
     }
 
@@ -161,11 +160,11 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         return stack;
     }
 
-    public @Nullable Figure read(@NonNull Reader in, @Nullable Drawing drawing, @Nullable URI documentHome, @NonNull WorkState<Void> workState) throws IOException {
+    public @Nullable Figure read(Reader in, @Nullable Drawing drawing, @Nullable URI documentHome, WorkState<Void> workState) throws IOException {
         return read((AutoCloseable) in, drawing, documentHome, workState);
     }
 
-    private @NonNull Figure read(@NonNull AutoCloseable in, @Nullable Drawing drawing, @Nullable URI documentHome, @NonNull WorkState<Void> workState) throws IOException {
+    private Figure read(AutoCloseable in, @Nullable Drawing drawing, @Nullable URI documentHome, WorkState<Void> workState) throws IOException {
         workState.updateProgress(0.0);
         idFactory.setDocumentHome(documentHome);
         Deque<Figure> stack = doRead(in);
@@ -220,7 +219,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
 
     }
 
-    private void readAttributes(@NonNull XMLStreamReader r, @NonNull Figure figure, @NonNull List<Runnable> secondPass, @NonNull List<Runnable> parallelPass) throws IOException {
+    private void readAttributes(XMLStreamReader r, Figure figure, List<Runnable> secondPass, List<Runnable> parallelPass) throws IOException {
         for (int i = 0, n = r.getAttributeCount(); i < n; i++) {
             String ns = r.getAttributeNamespace(i);
             if (namespaceURI != null && ns != null && !namespaceURI.equals(ns)) {
@@ -254,14 +253,14 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         }
     }
 
-    private void readEndElement(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack) {
+    private void readEndElement(XMLStreamReader r, Deque<Figure> stack) {
         stack.removeFirst();
     }
 
-    private void readNode(XMLStreamReader r, int next, @NonNull Deque<Figure> stack,
-                          @NonNull List<Consumer<Figure>> processingInstructions,
-                          @NonNull List<Runnable> secondPass, @NonNull List<Runnable> parallelPass,
-                          @NonNull List<FutureTask<Void>> futures) throws IOException {
+    private void readNode(XMLStreamReader r, int next, Deque<Figure> stack,
+                          List<Consumer<Figure>> processingInstructions,
+                          List<Runnable> secondPass, List<Runnable> parallelPass,
+                          List<FutureTask<Void>> futures) throws IOException {
         switch (next) {
         case XMLStreamReader.START_ELEMENT:
             readStartElement(r, stack, secondPass, parallelPass);
@@ -316,7 +315,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         futures.add(task);
     }
 
-    private @Nullable Consumer<Figure> readProcessingInstruction(XMLStreamReader r, @NonNull Deque<Figure> stack, List<Runnable> secondPass) {
+    private @Nullable Consumer<Figure> readProcessingInstruction(XMLStreamReader r, Deque<Figure> stack, List<Runnable> secondPass) {
         if (figureFactory.getStylesheetsKey() != null) {
             String piTarget = r.getPITarget();
             String piData = r.getPIData();
@@ -340,8 +339,8 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         return null;
     }
 
-    private void readStartElement(@NonNull XMLStreamReader r, @NonNull Deque<Figure> stack,
-                                  @NonNull List<Runnable> secondPass, @NonNull List<Runnable> parallelPass) throws IOException {
+    private void readStartElement(XMLStreamReader r, Deque<Figure> stack,
+                                  List<Runnable> secondPass, List<Runnable> parallelPass) throws IOException {
         if (namespaceURI != null && !namespaceURI.equals(r.getNamespaceURI())) {
             stack.push(new GroupFigure());// push a dummy figure
             return;
@@ -351,11 +350,11 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         readAttributes(r, figure, secondPass, parallelPass);
     }
 
-    public void setFigureFactory(@NonNull FigureFactory figureFactory) {
+    public void setFigureFactory(FigureFactory figureFactory) {
         this.figureFactory = figureFactory;
     }
 
-    protected void setId(@NonNull Figure figure, String id) {
+    protected void setId(Figure figure, String id) {
         figure.set(StyleableFigure.ID, id);
     }
 

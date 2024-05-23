@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.connector;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
@@ -17,6 +15,7 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.intersect.IntersectLineRectangle;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.Rectangle2D;
 
@@ -37,8 +36,8 @@ public interface Connector {
      * @return A point and derivative on the target figure in local coordinates of the target
      * figure.
      */
-    @NonNull PointAndDerivative getPointAndDerivativeInLocal(@NonNull Figure connection,
-                                                             @NonNull Figure target);
+    PointAndDerivative getPointAndDerivativeInLocal(Figure connection,
+                                                    Figure target);
 
     /**
      * Returns a point and derivative on the target figure for the specified
@@ -48,7 +47,7 @@ public interface Connector {
      * @param target     the target
      * @return A point and derivative on the target figure in world coordinates
      */
-    default @NonNull PointAndDerivative getPointAndDerivativeInWorld(Figure connection, Figure target) {
+    default PointAndDerivative getPointAndDerivativeInWorld(Figure connection, Figure target) {
         PointAndDerivative inLocal = getPointAndDerivativeInLocal(connection, target);
         Transform localToWorld = target.getLocalToWorld();
         Point2D pointInWorld = FXTransforms.transform(localToWorld, inLocal.getPoint(Point2D::new));
@@ -70,7 +69,7 @@ public interface Connector {
      * @param ey         y-coordinate at the end of the line
      * @return the new start point in world coordinates
      */
-    default IntersectionPointEx chopStart(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, double sx, double sy, double ex, double ey) {
+    default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, Figure target, double sx, double sy, double ex, double ey) {
         return chopStart(ctx, connection, target, new Point2D(sx, sy), new Point2D(ex, ey));
     }
 
@@ -86,7 +85,7 @@ public interface Connector {
      * @param end        the end of the line, should be outside the target figure
      * @return the new start point in world coordinates
      */
-    default IntersectionPointEx chopStart(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    default IntersectionPointEx chopStart(RenderContext ctx, Figure connection, Figure target, Point2D start, Point2D end) {
         IntersectionPointEx ip = intersect(ctx, connection, target, start, end);
         Point2D derivative = end.subtract(start);
         return ip == null ? new IntersectionPointEx(start.getX(), start.getY(), 0, derivative.getX(), derivative.getY(), 0, derivative.getX(), derivative.getY()) :
@@ -107,7 +106,7 @@ public interface Connector {
      * @return the intersection in the interval [0,1], null if no intersection.
      * In case of multiple intersections returns the largest value.
      */
-    default @Nullable IntersectionPointEx intersect(@NonNull RenderContext ctx, Figure connection, @NonNull Figure target, @NonNull Point2D start, @NonNull Point2D end) {
+    default @Nullable IntersectionPointEx intersect(RenderContext ctx, Figure connection, Figure target, Point2D start, Point2D end) {
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
         Bounds b = target.getLayoutBounds();

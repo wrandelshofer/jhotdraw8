@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
@@ -13,6 +11,7 @@ import org.jhotdraw8.icollection.impl.iteration.MutableListIterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedListView;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.Iterator;
@@ -29,10 +28,10 @@ import java.util.stream.Stream;
  * @author Werner Randelshofer
  */
 public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyList<E>, List<E> {
-    private @NonNull ImmutableList<E> backingList;
+    private ImmutableList<E> backingList;
     private int modCount;
 
-    public MutableListFacade(@NonNull ImmutableList<E> backingList) {
+    public MutableListFacade(ImmutableList<E> backingList) {
         this.backingList = backingList;
     }
 
@@ -49,7 +48,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull List<E> reversed() {
+    public List<E> reversed() {
         return new ReversedListView<>(this, this::getModCount);
     }
 
@@ -58,7 +57,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+    public ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlyListFacade<>(
                 () -> backingList.size(),
                 index -> get(backingList.size() - 1 - index),
@@ -94,12 +93,12 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return new FailFastSpliterator<>(backingList.spliterator(), () -> this.modCount, null);
     }
 
     @Override
-    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         int length = size();
         Objects.checkFromToIndex(fromIndex, toIndex, length);
         return new ReadOnlyListFacade<>(
@@ -114,13 +113,13 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         Iterator<E> it = new MyIterator<>(backingList.iterator());
         return new FailFastIterator<>(it, () -> this.modCount);
     }
 
 
-    public @NonNull Iterator<E> reverseIterator() {
+    public Iterator<E> reverseIterator() {
         Iterator<E> it = new MyIterator<>(backingList.readOnlyReversed().iterator());
         return new FailFastIterator<>(it, () -> this.modCount);
     }
@@ -137,11 +136,11 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     class MyIterator<EE> implements Iterator<EE> {
-        final @NonNull Iterator<EE> b;
+        final Iterator<EE> b;
         @Nullable EE current;
         boolean canRemove;
 
-        MyIterator(@NonNull Iterator<EE> b) {
+        MyIterator(Iterator<EE> b) {
             this.b = b;
         }
 
@@ -208,7 +207,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public @NonNull ListIterator<E> listIterator(int index) {
+    public ListIterator<E> listIterator(int index) {
         return new MutableListIterator<>(this, index, this::getModCount);
     }
 }

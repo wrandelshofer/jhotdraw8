@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcollection.indexedset;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -21,18 +20,18 @@ public class IndexedHashObservableSet<E> extends AbstractIndexedArrayObservableS
     /**
      * The hash set.
      */
-    private final @NonNull Set<E> set = new HashSet<>();
+    private final Set<E> set = new HashSet<>();
 
     public IndexedHashObservableSet() {
     }
 
-    public IndexedHashObservableSet(@NonNull Collection<? extends E> col) {
+    public IndexedHashObservableSet(Collection<? extends E> col) {
         setAll(col);
     }
 
 
     @Override
-    protected void onAdded(@NonNull E e) {
+    protected void onAdded(E e) {
         set.add(e);
     }
 
@@ -42,12 +41,12 @@ public class IndexedHashObservableSet<E> extends AbstractIndexedArrayObservableS
     }
 
     @Override
-    protected boolean mayBeAdded(@NonNull E e) {
+    protected boolean mayBeAdded(E e) {
         return true;
     }
 
     @Override
-    protected void onRemoved(@NonNull E e) {
+    protected void onRemoved(E e) {
         set.remove(e);
     }
 }

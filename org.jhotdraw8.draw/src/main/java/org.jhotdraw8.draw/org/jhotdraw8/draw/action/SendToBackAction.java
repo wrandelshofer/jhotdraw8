@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -23,14 +22,14 @@ import java.util.LinkedList;
  */
 public class SendToBackAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.sendToBack";
+    public static final String ID = "edit.sendToBack";
 
     /**
      * Creates a new instance.
      *
      * @param editor the drawing editor
      */
-    public SendToBackAction(@NonNull DrawingEditor editor) {
+    public SendToBackAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -38,12 +37,12 @@ public class SendToBackAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView dview) {
-        final @NonNull LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
+    protected void onActionPerformed(ActionEvent e, DrawingView dview) {
+        final LinkedList<Figure> figures = new LinkedList<>(dview.getSelectedFigures());
         sendToBack(dview, figures);
     }
 
-    public void sendToBack(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
+    public void sendToBack(DrawingView view, Collection<Figure> figures) {
         DrawingModel model = view.getModel();
         for (Figure child : figures) {
             Figure parent = child.getParent();

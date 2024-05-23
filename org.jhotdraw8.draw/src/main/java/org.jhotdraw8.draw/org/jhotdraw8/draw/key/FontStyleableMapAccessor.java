@@ -6,8 +6,6 @@ package org.jhotdraw8.draw.key;
 
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.FontCssConverter;
@@ -16,6 +14,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -24,15 +23,15 @@ import java.util.Map;
  *
  * @author Werner Randelshofer
  */
-public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonNull CssFont>
-        implements NonNullMapAccessor<@NonNull CssFont> {
+public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<CssFont>
+        implements NonNullMapAccessor<CssFont> {
 
 
-    private final @NonNull MapAccessor<String> familyKey;
-    private final @NonNull MapAccessor<FontWeight> weightKey;
-    private final @NonNull MapAccessor<FontPosture> postureKey;
-    private final @NonNull MapAccessor<@NonNull CssSize> sizeKey;
-    private final @NonNull Converter<CssFont> converter = new FontCssConverter(false);
+    private final MapAccessor<String> familyKey;
+    private final MapAccessor<FontWeight> weightKey;
+    private final MapAccessor<FontPosture> postureKey;
+    private final MapAccessor<CssSize> sizeKey;
+    private final Converter<CssFont> converter = new FontCssConverter(false);
 
     /**
      * Creates a new instance with the specified name.
@@ -43,9 +42,9 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
      * @param postureKey the font posture key
      * @param sizeKey    the font size key
      */
-    public FontStyleableMapAccessor(@NonNull String name,
-                                    @NonNull MapAccessor<String> familyKey, @NonNull MapAccessor<FontWeight> weightKey,
-                                    @NonNull MapAccessor<FontPosture> postureKey, @NonNull MapAccessor<@NonNull CssSize> sizeKey) {
+    public FontStyleableMapAccessor(String name,
+                                    MapAccessor<String> familyKey, MapAccessor<FontWeight> weightKey,
+                                    MapAccessor<FontPosture> postureKey, MapAccessor<CssSize> sizeKey) {
         super(name, CssFont.class, new MapAccessor<?>[]{familyKey, sizeKey, weightKey, postureKey},
                 CssFont.font(familyKey.getDefaultValue(), weightKey.getDefaultValue(), postureKey.getDefaultValue(),
                         sizeKey.getDefaultValue()));
@@ -57,18 +56,18 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     }
 
     @Override
-    public CssFont get(@NonNull Map<? super Key<?>, Object> a) {
+    public CssFont get(Map<? super Key<?>, Object> a) {
         CssFont f = CssFont.font(familyKey.get(a), weightKey.get(a), postureKey.get(a), sizeKey.get(a));
         return f;
     }
 
     @Override
-    public @NonNull Converter<CssFont> getCssConverter() {
+    public Converter<CssFont> getCssConverter() {
         return converter;
     }
 
     @Override
-    public CssFont remove(@NonNull Map<? super Key<?>, Object> a) {
+    public CssFont remove(Map<? super Key<?>, Object> a) {
         CssFont oldValue = get(a);
         familyKey.remove(a);
         weightKey.remove(a);
@@ -78,7 +77,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssFont value) {
+    public void set(Map<? super Key<?>, Object> a, @Nullable CssFont value) {
         if (value == null) {
             remove(a);
         } else {
@@ -90,7 +89,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, CssFont value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, CssFont value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -102,7 +101,7 @@ public class FontStyleableMapAccessor extends AbstractStyleableMapAccessor<@NonN
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = familyKey.remove(a);
         a = weightKey.remove(a);
         a = postureKey.remove(a);

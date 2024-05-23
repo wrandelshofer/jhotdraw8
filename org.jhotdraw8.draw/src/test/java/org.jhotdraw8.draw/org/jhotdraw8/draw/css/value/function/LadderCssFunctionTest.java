@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.css.value.function;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.function.VarCssFunction;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
@@ -35,7 +34,7 @@ public class LadderCssFunctionTest extends AbstractCssFunctionProcessorTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsLadderCssFunctionTest() {
+    public List<DynamicTest> dynamicTestsLadderCssFunctionTest() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestProcess("foo", "foo")),
                 dynamicTest("black on white, default", () -> doTestProcess("ladder(white, white 0.49, black 0.5)", "black")),

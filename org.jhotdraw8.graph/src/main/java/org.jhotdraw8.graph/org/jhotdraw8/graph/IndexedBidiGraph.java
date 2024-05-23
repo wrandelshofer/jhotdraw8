@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
 
@@ -56,7 +55,7 @@ public interface IndexedBidiGraph extends IndexedDirectedGraph {
      * @param v index of vertex v
      * @return a collection view on the direct successor vertices of vertex
      */
-    default Enumerator.@NonNull OfInt prevVerticesEnumerator(int v) {
+    default Enumerator.OfInt prevVerticesEnumerator(int v) {
         return new IntRangeEnumerator(i -> getPrevAsInt(v, i), 0, getPrevCount(v));
     }
 

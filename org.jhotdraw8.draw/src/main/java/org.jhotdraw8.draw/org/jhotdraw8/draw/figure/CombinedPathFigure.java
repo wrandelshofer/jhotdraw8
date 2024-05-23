@@ -9,8 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Path;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssTransforms;
@@ -23,6 +21,7 @@ import org.jhotdraw8.geom.ConcatenatedPathIterator;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -46,28 +45,28 @@ public class CombinedPathFigure extends AbstractCompositeFigure
         CompositableFigure, FillRulableFigure,
         ConnectableFigure, PathIterableFigure {
 
-    public static final @NonNull NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, null);
+    public static final NullableEnumStyleableKey<CagOperation> CAG_OPERATION = new NullableEnumStyleableKey<>("cag-operation", CagOperation.class, null);
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "CombinedPath";
+    public static final String TYPE_SELECTOR = "CombinedPath";
 
     public CombinedPathFigure() {
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Path n = new Path();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D pointInLocal, Figure connectingFigure, double tolerance) {
+    public @Nullable Connector findConnector(Point2D pointInLocal, Figure connectingFigure, double tolerance) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body ofCollection generated methods, choose Tools | Templates.
     }
 
-    private PathIterator getStyledPathIteratorInParent(@NonNull RenderContext ctx, @NonNull PathIterableFigure f, @Nullable AffineTransform tx) {
+    private PathIterator getStyledPathIteratorInParent(RenderContext ctx, PathIterableFigure f, @Nullable AffineTransform tx) {
         AffineTransform childTx = tx;
         final Transform localToParent = f.getLocalToParent();
         AffineTransform ltpTx = FXTransforms.toAwt(localToParent);
@@ -113,7 +112,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         CagOperation op = getStyled(CAG_OPERATION);
         if (op != null) {
             return getPathIteratorCAG(ctx, tx, op);
@@ -129,7 +128,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
     }
 
-    private @NonNull PathIterator getPathIteratorCAG(@NonNull RenderContext ctx, AffineTransform tx, @NonNull CagOperation op) {
+    private PathIterator getPathIteratorCAG(RenderContext ctx, AffineTransform tx, CagOperation op) {
         Area area = null;
         boolean first = true;
         for (Figure child : getChildren()) {
@@ -163,7 +162,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -188,7 +187,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         // XXX if one ofCollection the children is non-transformable, we should not reshapeInLocal at all!
         flattenTransforms();
         Transform localTransform = CssTransforms.createReshapeTransform(getCssLayoutBounds(), x, y, width, height);
@@ -198,7 +197,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Path n = (Path) node;
         applyHideableFigureProperties(ctx, n);
         applyTransformableFigureProperties(ctx, n);
@@ -221,7 +220,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
 
 
     @Override
-    public boolean isSuitableParent(@NonNull Figure newParent) {
+    public boolean isSuitableParent(Figure newParent) {
         return true;
     }
 
@@ -232,7 +231,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
      * @return true if instanceof PathIterableFigure.
      */
     @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
+    public boolean isSuitableChild(Figure newChild) {
         return newChild instanceof PathIterableFigure;
     }
 }

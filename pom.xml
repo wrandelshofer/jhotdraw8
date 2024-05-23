@@ -38,7 +38,6 @@
   <name>*Parent Project JHotDraw8</name>
 
   <modules>
-    <module>org.jhotdraw8.annotation</module>
     <module>org.jhotdraw8.application</module>
     <module>org.jhotdraw8.base</module>
     <module>org.jhotdraw8.fxbase</module>
@@ -75,17 +74,17 @@
         <plugin>
           <groupId>io.github.git-commit-id</groupId>
           <artifactId>git-commit-id-maven-plugin</artifactId>
-          <version>8.0.1</version>
+          <version>8.0.2</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-artifact-plugin</artifactId>
-          <version>3.5.0</version>
+          <version>3.5.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-compiler-plugin</artifactId>
-          <version>3.12.1</version>
+          <version>3.13.0</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -105,12 +104,12 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
-          <version>4.0.0-M13</version>
+          <version>4.0.0-M14</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-source-plugin</artifactId>
-          <version>3.3.0</version>
+          <version>3.3.1</version>
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
@@ -130,7 +129,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-deploy-plugin</artifactId>
-          <version>3.1.1</version>
+          <version>3.1.2</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -200,7 +199,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-jar-plugin</artifactId>
-        <version>3.3.0</version>
+        <version>3.4.1</version>
         <configuration>
           <archive>
             <manifest>
@@ -374,12 +373,12 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava-testlib</artifactId>
-        <version>33.1.0-jre</version>
+        <version>33.2.0-jre</version>
       </dependency>
       <dependency>
         <groupId>de.sandec</groupId>
         <artifactId>JMemoryBuddy</artifactId>
-        <version>0.5.3</version>
+        <version>0.5.4</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -394,10 +393,11 @@
         <version>1.37</version>
         <scope>test</scope>
       </dependency>
+      <!-- https://mvnrepository.com/artifact/org.jspecify/jspecify -->
       <dependency>
-        <groupId>ch.randelshofer</groupId>
-        <artifactId>org.jhotdraw8.annotation</artifactId>
-        <version>${revision}</version>
+        <groupId>org.jspecify</groupId>
+        <artifactId>jspecify</artifactId>
+        <version>0.3.0</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
@@ -512,7 +512,7 @@
       <dependency>
         <groupId>org.scala-lang</groupId>
         <artifactId>scala-library</artifactId>
-        <version>2.13.13</version>
+        <version>2.13.14</version>
       </dependency>
       <dependency>
         <groupId>org.jetbrains.kotlinx</groupId>

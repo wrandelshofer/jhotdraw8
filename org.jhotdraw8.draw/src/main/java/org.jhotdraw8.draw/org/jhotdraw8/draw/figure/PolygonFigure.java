@@ -10,8 +10,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.PathConnector;
@@ -28,6 +26,7 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -47,9 +46,9 @@ public class PolygonFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Polygon";
+    public static final String TYPE_SELECTOR = "Polygon";
 
-    public static final @NonNull Point2DListStyleableKey POINTS = PolylineFigure.POINTS;
+    public static final Point2DListStyleableKey POINTS = PolylineFigure.POINTS;
 
     public PolygonFigure() {
         this(0, 0, 1, 1);
@@ -64,7 +63,7 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
@@ -79,17 +78,17 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         return FXShapes.fxPointsToAwtPathIterator(getNonNull(POINTS).asList(), true, PathIterator.WIND_EVEN_ODD, tx);
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         List<Point2D> newP = getNonNull(POINTS).toMutable();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, FXTransforms.transform(transform, newP.get(i)));
@@ -98,7 +97,7 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D t) {
+    public void translateInLocal(CssPoint2D t) {
         List<Point2D> newP = getNonNull(POINTS).toMutable();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
@@ -107,14 +106,14 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Polygon n = new Polygon();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Polygon lineNode = (Polygon) node;
         applyHideableFigureProperties(ctx, node);
         applyFillableFigureProperties(ctx, lineNode);
@@ -135,12 +134,12 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(Point2D p, Figure prototype, double tolerance) {
         return new PathConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PolygonOutlineHandle(this, POINTS, false));
         /*} else if (handleType == HandleType.MOVE) {
@@ -159,13 +158,13 @@ public class PolygonFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         reshapeInLocal(FXTransforms.createReshapeTransform(getLayoutBounds(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
 
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

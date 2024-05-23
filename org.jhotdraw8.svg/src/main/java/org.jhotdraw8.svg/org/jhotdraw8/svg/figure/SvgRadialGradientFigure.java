@@ -8,8 +8,6 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -17,6 +15,7 @@ import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -30,10 +29,10 @@ public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "radialGradient";
-    public static final @NonNull CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", CssSize.of(0.5));
-    public static final @NonNull CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", CssSize.of(0.5));
-    public static final @NonNull CssSizeStyleableKey R = new CssSizeStyleableKey("r", CssSize.of(0.5));
+    public static final String TYPE_SELECTOR = "radialGradient";
+    public static final CssSizeStyleableKey CX = new CssSizeStyleableKey("cx", CssSize.of(0.5));
+    public static final CssSizeStyleableKey CY = new CssSizeStyleableKey("cy", CssSize.of(0.5));
+    public static final CssSizeStyleableKey R = new CssSizeStyleableKey("r", CssSize.of(0.5));
 
     @Override
     public @Nullable Paint getPaint(@Nullable RenderContext ctx) {
@@ -61,7 +60,7 @@ public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 

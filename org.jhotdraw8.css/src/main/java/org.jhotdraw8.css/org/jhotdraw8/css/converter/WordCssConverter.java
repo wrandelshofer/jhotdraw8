@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -25,7 +24,7 @@ public class WordCssConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable String value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable String value) throws IOException {
         if (value == null) {
             out.append("none");
             return;
@@ -39,7 +38,7 @@ public class WordCssConverter implements Converter<String> {
     }
 
     @Override
-    public @NonNull String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public String fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         int pos = in.position();
         StringBuilder out = new StringBuilder();
         while (in.remaining() > 0 && !Character.isWhitespace(in.charAt(0))) {

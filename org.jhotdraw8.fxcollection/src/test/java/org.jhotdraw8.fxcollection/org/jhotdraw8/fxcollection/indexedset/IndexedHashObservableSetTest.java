@@ -5,13 +5,12 @@
 
 package org.jhotdraw8.fxcollection.indexedset;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Set;
 
 public class IndexedHashObservableSetTest extends AbstractSetTestOld {
     @Override
-    protected @NonNull <T> Set<T> create(int expectedMaxSize, float maxLoadFactor) {
+    protected <T> Set<T> create(int expectedMaxSize, float maxLoadFactor) {
         return new IndexedHashObservableSet<>();
     }
 }

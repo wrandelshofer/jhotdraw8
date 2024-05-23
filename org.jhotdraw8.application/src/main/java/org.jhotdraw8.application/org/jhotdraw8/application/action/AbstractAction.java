@@ -9,7 +9,6 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 
@@ -23,9 +22,9 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     /**
      * Holds the properties.
      */
-    protected final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
 
-    private final @NonNull BooleanProperty selected = new SimpleBooleanProperty(this, SELECTED_PROPERTY);
+    private final BooleanProperty selected = new SimpleBooleanProperty(this, SELECTED_PROPERTY);
 
     /**
      * Creates a new instance. Binds {@code disabled} to {@code disable}.
@@ -46,7 +45,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
     }
 
     @Override
-    public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 
@@ -58,7 +57,7 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      * @param event the action event
      */
     @Override
-    public final void handle(@NonNull ActionEvent event) {
+    public final void handle(ActionEvent event) {
         if (!isDisabled() && !event.isConsumed()) {
             onActionPerformed(event);
             event.consume();
@@ -71,10 +70,10 @@ public abstract class AbstractAction extends AbstractDisableable implements Acti
      *
      * @param event the action event
      */
-    protected abstract void onActionPerformed(@NonNull ActionEvent event);
+    protected abstract void onActionPerformed(ActionEvent event);
 
     @Override
-    public @NonNull BooleanProperty selectedProperty() {
+    public BooleanProperty selectedProperty() {
         return selected;
     }
 }

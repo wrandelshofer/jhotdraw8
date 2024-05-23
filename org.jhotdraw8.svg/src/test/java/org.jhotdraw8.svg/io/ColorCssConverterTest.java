@@ -6,7 +6,6 @@
 package io;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.junit.jupiter.api.DynamicTest;
@@ -20,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ColorCssConverterTest {
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSvgColor() throws IOException {
+    public List<DynamicTest> dynamicTestsSvgColor() throws IOException {
         return List.of(
                 DynamicTest.dynamicTest("reddish", () -> testSvgColor(
                         "#cfffff", Color.web("#cfffff"))),

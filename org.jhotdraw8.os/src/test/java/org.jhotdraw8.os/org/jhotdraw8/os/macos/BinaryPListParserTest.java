@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.os.macos;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
@@ -25,7 +24,7 @@ import java.io.StringReader;
 import java.util.Properties;
 
 public class BinaryPListParserTest {
-    private static final @NonNull Properties INDENT_XML_PROPERTIES = new Properties();
+    private static final Properties INDENT_XML_PROPERTIES = new Properties();
 
     static {
         INDENT_XML_PROPERTIES.put(OutputKeys.INDENT, "yes");
@@ -33,7 +32,7 @@ public class BinaryPListParserTest {
         INDENT_XML_PROPERTIES.put("{http://xml.apache.org/xslt}indent-amount", "2");
     }
 
-    private static final @NonNull Properties NO_INDENT_XML_PROPERTIES = new Properties();
+    private static final Properties NO_INDENT_XML_PROPERTIES = new Properties();
 
     static {
         NO_INDENT_XML_PROPERTIES.put(OutputKeys.ENCODING, "UTF-8");
@@ -77,7 +76,7 @@ public class BinaryPListParserTest {
         // writeDocument(System.out, docFromBinary, INDENT_XML_PROPERTIES);
     }
 
-    private static Document readXmlPropertyList(@NonNull File file) throws Exception {
+    private static Document readXmlPropertyList(File file) throws Exception {
         InputSource inputSource = new InputSource(file.toString());
         Assertions.assertTrue(file.exists(), "file does not exist, file=" + file);
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -89,7 +88,7 @@ public class BinaryPListParserTest {
         return doc;
     }
 
-    private static Document readBinaryPropertyList(@NonNull File file) throws Exception {
+    private static Document readBinaryPropertyList(File file) throws Exception {
         return new BinaryPListParser().parse(file);
     }
 

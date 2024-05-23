@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -26,7 +25,7 @@ public abstract class AbstractStringCssFunction<T> extends AbstractCssFunction<T
         super(name);
     }
 
-    protected @NonNull String evalString(@NonNull T element, @NonNull CssTokenizer tt, String expressionName, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected String evalString(T element, CssTokenizer tt, String expressionName, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         StringBuilder buf = new StringBuilder();
         List<CssToken> temp = new ArrayList<>();
 

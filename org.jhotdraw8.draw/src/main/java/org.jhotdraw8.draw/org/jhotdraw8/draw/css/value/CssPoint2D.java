@@ -6,10 +6,9 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,17 +19,17 @@ import java.util.Objects;
  */
 public class CssPoint2D {
 
-    public static final @NonNull CssPoint2D ZERO = new CssPoint2D();
+    public static final CssPoint2D ZERO = new CssPoint2D();
 
-    private final @NonNull CssSize x;
-    private final @NonNull CssSize y;
+    private final CssSize x;
+    private final CssSize y;
 
-    public CssPoint2D(@NonNull CssSize x, @NonNull CssSize y) {
+    public CssPoint2D(CssSize x, CssSize y) {
         this.x = x;
         this.y = y;
     }
 
-    public CssPoint2D(double x, double y, @NonNull String units) {
+    public CssPoint2D(double x, double y, String units) {
         this(CssSize.of(x, units), CssSize.of(y, units));
     }
 
@@ -42,7 +41,7 @@ public class CssPoint2D {
         this(x, y, UnitConverter.DEFAULT);
     }
 
-    public CssPoint2D(@NonNull Point2D p) {
+    public CssPoint2D(Point2D p) {
         this(p.getX(), p.getY());
     }
 
@@ -64,11 +63,11 @@ public class CssPoint2D {
         return Objects.equals(this.y, other.y);
     }
 
-    public @NonNull CssSize getX() {
+    public CssSize getX() {
         return x;
     }
 
-    public @NonNull CssSize getY() {
+    public CssSize getY() {
         return y;
     }
 
@@ -81,22 +80,22 @@ public class CssPoint2D {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssPoint2D{" + x +
                 ", " + y +
                 '}';
     }
 
-    public @NonNull Point2D getConvertedValue() {
+    public Point2D getConvertedValue() {
         return new Point2D(x.getConvertedValue(), y.getConvertedValue());
 
     }
 
-    public @NonNull CssPoint2D subtract(@NonNull CssPoint2D that) {
+    public CssPoint2D subtract(CssPoint2D that) {
         return new CssPoint2D(x.subtract(that.x), y.subtract(that.y));
     }
 
-    public @NonNull CssPoint2D add(@NonNull CssPoint2D that) {
+    public CssPoint2D add(CssPoint2D that) {
         return new CssPoint2D(x.add(that.x), y.add(that.y));
     }
 

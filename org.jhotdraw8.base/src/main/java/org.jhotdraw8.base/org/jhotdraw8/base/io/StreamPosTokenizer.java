@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -36,9 +35,9 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * Start and end position of the current token. rlw
      */
     private int startpos = -1, endpos = -1;
-    private final @NonNull IntArrayList unread = new IntArrayList();
+    private final IntArrayList unread = new IntArrayList();
 
-    private char @NonNull [] buf = new char[20];
+    private char[] buf = new char[20];
 
     /**
      * The next character to be considered by the next method. May also be
@@ -64,11 +63,11 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private boolean slashStarCommentsP = false;
 
     // rlw
-    private char @NonNull [] slashSlash = new char[]{'/', '/'};
-    private char @NonNull [] slashStar = new char[]{'/', '*'};
-    private char @NonNull [] starSlash = new char[]{'*', '/'};
+    private char[] slashSlash = new char[]{'/', '/'};
+    private char[] slashStar = new char[]{'/', '*'};
+    private char[] starSlash = new char[]{'*', '/'};
 
-    private final byte @NonNull [] ctype = new byte[256];
+    private final byte[] ctype = new byte[256];
     private static final byte CT_WHITESPACE = 1;
     private static final byte CT_DIGIT = 2;
     private static final byte CT_ALPHA = 4;
@@ -175,7 +174,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param r the reader
      */
-    public StreamPosTokenizer(@NonNull Reader r) {
+    public StreamPosTokenizer(Reader r) {
         this();
         reader = r;
     }
@@ -195,7 +194,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param r The reader
      */
-    public void setReader(@NonNull Reader r) {
+    public void setReader(Reader r) {
         this.reader = r;
         readpos = 0;
         unread.clear();
@@ -1006,7 +1005,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @param slashStar token
      * @param starSlash token
      */
-    public void setSlashStarTokens(@NonNull String slashStar, @NonNull String starSlash) {
+    public void setSlashStarTokens(String slashStar, String starSlash) {
         if (slashStar.length() != starSlash.length()) {
             throw new IllegalArgumentException("SlashStar and StarSlash tokens must be of same length: '" + slashStar + "' '" + starSlash + "'");
         }
@@ -1024,7 +1023,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param slashSlash token
      */
-    public void setSlashSlashToken(@NonNull String slashSlash) {
+    public void setSlashSlashToken(String slashSlash) {
         if (slashSlash.isEmpty() || slashSlash.length() > 2) {
             throw new IllegalArgumentException("SlashSlash token must be of length 1 or 2: '" + slashSlash + "'");
         }
@@ -1092,7 +1091,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      *
      * @param greedyToken the token to be consumed
      */
-    public void consumeGreedy(@NonNull String greedyToken) {
+    public void consumeGreedy(String greedyToken) {
         if (greedyToken.length() < sval.length()) {
             pushBack();
             setStartPosition(getStartPosition() + greedyToken.length());
@@ -1110,7 +1109,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      * @see java.io.StreamTokenizer#ttype
      */
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         String ret;
         switch (ttype) {
         case TT_EOF:

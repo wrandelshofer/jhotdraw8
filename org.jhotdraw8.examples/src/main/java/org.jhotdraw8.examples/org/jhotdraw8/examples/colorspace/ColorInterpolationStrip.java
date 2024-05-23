@@ -13,7 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.FXColorInterpolator;
 import org.jhotdraw8.color.FXColorUtil;
 import org.jhotdraw8.color.NamedColorSpace;
@@ -22,10 +21,10 @@ import org.jhotdraw8.color.SrgbColorSpace;
 
 
 public class ColorInterpolationStrip extends HBox {
-    private final @NonNull ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", new SrgbColorSpace()));
-    private final @NonNull ObjectProperty<Color> fromColor = new SimpleObjectProperty<>(Color.BLACK);
-    private final @NonNull ObjectProperty<Color> toColor = new SimpleObjectProperty<>(Color.WHITE);
-    private final @NonNull Canvas canvas = new Canvas();
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", new SrgbColorSpace()));
+    private final ObjectProperty<Color> fromColor = new SimpleObjectProperty<>(Color.BLACK);
+    private final ObjectProperty<Color> toColor = new SimpleObjectProperty<>(Color.WHITE);
+    private final Canvas canvas = new Canvas();
 
     @SuppressWarnings("this-escape")
     public ColorInterpolationStrip() {

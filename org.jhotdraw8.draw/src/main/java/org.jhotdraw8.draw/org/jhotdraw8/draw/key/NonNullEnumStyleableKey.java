@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.KebabCaseEnumCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -29,7 +28,7 @@ public class NonNullEnumStyleableKey<T extends Enum<T>> extends NonNullObjectSty
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public NonNullEnumStyleableKey(@NonNull String xmlName, @NonNull Class<T> clazz, @NonNull T defaultValue) {
+    public NonNullEnumStyleableKey(String xmlName, Class<T> clazz, T defaultValue) {
         super(xmlName, clazz, new KebabCaseEnumCssConverter<>(clazz, false), defaultValue);
     }
     /**
@@ -40,7 +39,7 @@ public class NonNullEnumStyleableKey<T extends Enum<T>> extends NonNullObjectSty
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public NonNullEnumStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Class<T> clazz, @NonNull T defaultValue) {
+    public NonNullEnumStyleableKey(String xmlName, String cssName, Class<T> clazz, T defaultValue) {
         super(xmlName, cssName, clazz, new KebabCaseEnumCssConverter<>(clazz, false), defaultValue);
     }
     /**
@@ -52,9 +51,9 @@ public class NonNullEnumStyleableKey<T extends Enum<T>> extends NonNullObjectSty
      * @param converter    The CSS converter
      * @param defaultValue The default value.
      */
-    public NonNullEnumStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Class<T> clazz,
-                                   @NonNull Converter<T> converter,
-                                   @NonNull T defaultValue) {
+    public NonNullEnumStyleableKey(String xmlName, String cssName, Class<T> clazz,
+                                   Converter<T> converter,
+                                   T defaultValue) {
         super(xmlName,cssName, clazz, converter, defaultValue);
     }
 }

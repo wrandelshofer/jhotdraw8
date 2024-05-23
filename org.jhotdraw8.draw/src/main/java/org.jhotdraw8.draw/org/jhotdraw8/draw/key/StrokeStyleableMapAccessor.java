@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.key;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.StrokeStyleCssConverter;
@@ -17,6 +15,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -28,21 +27,21 @@ import java.util.Map;
 public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStrokeStyle> {
 
 
-    private final @NonNull MapAccessor<CssSize> dashOffsetKey;
-    private final @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey;
-    private final @NonNull MapAccessor<StrokeType> typeKey;
-    private final @NonNull MapAccessor<StrokeLineJoin> lineJoinKey;
-    private final @NonNull MapAccessor<StrokeLineCap> lineCapKey;
-    private final @NonNull MapAccessor<CssSize> miterLimitKey;
-    private final @NonNull Converter<CssStrokeStyle> converter = new StrokeStyleCssConverter(false);
+    private final MapAccessor<CssSize> dashOffsetKey;
+    private final MapAccessor<ImmutableList<CssSize>> dashArrayKey;
+    private final MapAccessor<StrokeType> typeKey;
+    private final MapAccessor<StrokeLineJoin> lineJoinKey;
+    private final MapAccessor<StrokeLineCap> lineCapKey;
+    private final MapAccessor<CssSize> miterLimitKey;
+    private final Converter<CssStrokeStyle> converter = new StrokeStyleCssConverter(false);
 
     public StrokeStyleableMapAccessor(String name,
-                                      @NonNull MapAccessor<StrokeType> typeKey,
-                                      @NonNull MapAccessor<StrokeLineCap> lineCapKey,
-                                      @NonNull MapAccessor<StrokeLineJoin> lineJoinKey,
-                                      @NonNull MapAccessor<CssSize> miterLimitKey,
-                                      @NonNull MapAccessor<CssSize> dashOffsetKey,
-                                      @NonNull MapAccessor<ImmutableList<CssSize>> dashArrayKey
+                                      MapAccessor<StrokeType> typeKey,
+                                      MapAccessor<StrokeLineCap> lineCapKey,
+                                      MapAccessor<StrokeLineJoin> lineJoinKey,
+                                      MapAccessor<CssSize> miterLimitKey,
+                                      MapAccessor<CssSize> dashOffsetKey,
+                                      MapAccessor<ImmutableList<CssSize>> dashArrayKey
     ) {
         super(name, CssStrokeStyle.class, new MapAccessor<?>[]{
                         typeKey,
@@ -68,7 +67,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public CssStrokeStyle get(@NonNull Map<? super Key<?>, Object> a) {
+    public CssStrokeStyle get(Map<? super Key<?>, Object> a) {
         return new CssStrokeStyle(
                 typeKey.get(a),
                 lineCapKey.get(a),
@@ -80,7 +79,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public @NonNull Converter<CssStrokeStyle> getCssConverter() {
+    public Converter<CssStrokeStyle> getCssConverter() {
         return converter;
     }
 
@@ -96,7 +95,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public CssStrokeStyle remove(@NonNull Map<? super Key<?>, Object> a) {
+    public CssStrokeStyle remove(Map<? super Key<?>, Object> a) {
         CssStrokeStyle oldValue = get(a);
         typeKey.remove(a);
         lineJoinKey.remove(a);
@@ -108,7 +107,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable CssStrokeStyle value) {
+    public void set(Map<? super Key<?>, Object> a, @Nullable CssStrokeStyle value) {
         if (value == null) {
             remove(a);
         } else {
@@ -122,7 +121,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable CssStrokeStyle value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable CssStrokeStyle value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -136,7 +135,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = typeKey.remove(a);
         a = lineJoinKey.remove(a);
         a = lineCapKey.remove(a);

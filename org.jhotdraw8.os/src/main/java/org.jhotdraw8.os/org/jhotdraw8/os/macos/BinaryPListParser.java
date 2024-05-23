@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.os.macos;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
@@ -60,7 +59,7 @@ public class BinaryPListParser {
     /**
      * Time interval based dates are measured in seconds from 2001-01-01.
      */
-    private static final @NonNull long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001,
+    private static final long TIMER_INTERVAL_TIMEBASE = new GregorianCalendar(2001,
             Calendar.JANUARY, 1, 1, 0, 0).getTimeInMillis();
     /**
      * Factory for generating XML data types.
@@ -198,7 +197,7 @@ public class BinaryPListParser {
         }
 
         @Override
-        public @NonNull String toString() {
+        public String toString() {
             StringBuilder buf = new StringBuilder("Array{");
             for (int i = 0; i < objref.length; i++) {
                 if (i > 0) {
@@ -234,7 +233,7 @@ public class BinaryPListParser {
         }
 
         @Override
-        public @NonNull String toString() {
+        public String toString() {
             StringBuilder buf = new StringBuilder("BPLDict{");
             for (int i = 0; i < keyref.length; i++) {
                 if (i > 0) {
@@ -277,7 +276,7 @@ public class BinaryPListParser {
      * @param file A file containing a binary PList.
      * @return Returns the parsed Element.
      */
-    public Document parse(@NonNull File file) throws IOException {
+    public Document parse(File file) throws IOException {
         long fileLength;
         byte[] buf;
         try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
@@ -354,7 +353,7 @@ public class BinaryPListParser {
 
     private static class PosByteArrayInputStream extends ByteArrayInputStream {
 
-        public PosByteArrayInputStream(byte @NonNull [] buf) {
+        public PosByteArrayInputStream(byte[] buf) {
             super(buf);
         }
 
@@ -377,7 +376,7 @@ public class BinaryPListParser {
      *                           recursions than the length of the file..
      * @throws IOException
      */
-    private void convertObjectTableToXML(@NonNull Document doc, @NonNull Element parent, Object object, int remainingRecursion)
+    private void convertObjectTableToXML(Document doc, Element parent, Object object, int remainingRecursion)
             throws IOException {
         if (remainingRecursion < 0) {
             throw new IOException("recursion limit reached");
@@ -466,7 +465,7 @@ public class BinaryPListParser {
      * 1111 xxxx			// unused
      * </pre>
      */
-    private void parseObjectTable(@NonNull DataInputStream in) throws IOException {
+    private void parseObjectTable(DataInputStream in) throws IOException {
         int marker;
         while ((marker = in.read()) != -1) {
             //System.err.println("parseObjectTable marker=" + Integer.toBinaryString(marker) + " 0x" + Integer.toHexString(marker) + " @0x" + Long.toHexString(getPosition()));
@@ -555,7 +554,7 @@ public class BinaryPListParser {
      * <p>
      * int	0001 nnnn   ...     // # of bytes is 2^nnnn, big-endian bytes
      */
-    private int readCount(@NonNull DataInputStream in) throws IOException {
+    private int readCount(DataInputStream in) throws IOException {
         int marker = in.read();
         if (marker == -1) {
             throw new IOException("variableLengthInt: Illegal EOF in marker");
@@ -581,7 +580,7 @@ public class BinaryPListParser {
      * bool	0000 1001			// true
      * fill	0000 1111			// fill byte
      */
-    private void parsePrimitive(@NonNull DataInputStream in, int primitive) throws IOException {
+    private void parsePrimitive(DataInputStream in, int primitive) throws IOException {
         switch (primitive) {
             case 0 -> objectTable.add(null);
             case 8 -> objectTable.add(Boolean.FALSE);
@@ -596,7 +595,7 @@ public class BinaryPListParser {
     /**
      * array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
      */
-    private void parseByteArray(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseByteArray(DataInputStream in, int count) throws IOException {
         BPLArray arr = new BPLArray();
         arr.objectTable = objectTable;
         arr.objref = new int[count];
@@ -614,7 +613,7 @@ public class BinaryPListParser {
     /**
      * array	1010 nnnn	[int]	objref*	// nnnn is count, unless '1111', then int count follows
      */
-    private void parseShortArray(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseShortArray(DataInputStream in, int count) throws IOException {
         BPLArray arr = new BPLArray();
         arr.objectTable = objectTable;
         arr.objref = new int[count];
@@ -632,7 +631,7 @@ public class BinaryPListParser {
      * data	0100 nnnn	[int]	...	// nnnn is number of bytes unless 1111 then int count follows, followed by bytes
      */
 
-    private void parseData(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseData(DataInputStream in, int count) throws IOException {
         byte[] data = new byte[count];
         in.readFully(data);
         objectTable.add(data);
@@ -641,7 +640,7 @@ public class BinaryPListParser {
     /**
      * byte dict	1101 nnnn keyref* objref*	// nnnn is less than '1111'
      */
-    private void parseByteDict(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseByteDict(DataInputStream in, int count) throws IOException {
         BPLDict dict = new BPLDict();
         dict.objectTable = objectTable;
         dict.keyref = new int[count];
@@ -661,7 +660,7 @@ public class BinaryPListParser {
      * short dict	1101 ffff int keyref* objref*	// int is count
      * </pre>
      */
-    private void parseShortDict(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseShortDict(DataInputStream in, int count) throws IOException {
         BPLDict dict = new BPLDict();
         dict.objectTable = objectTable;
         dict.keyref = new int[count];
@@ -679,14 +678,14 @@ public class BinaryPListParser {
     /**
      * string	0101 nnnn	[int]	...	// ASCII string, nnnn is # of chars, else 1111 then int count, then bytes
      */
-    private void parseAsciiString(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseAsciiString(DataInputStream in, int count) throws IOException {
         byte[] buf = new byte[count];
         in.readFully(buf);
         String str = new String(buf, StandardCharsets.US_ASCII);
         objectTable.add(str);
     }
 
-    private void parseUID(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseUID(DataInputStream in, int count) throws IOException {
         if (count > 4) {
             throw new IOException("parseUID: unsupported byte count: " + count);
         }
@@ -698,7 +697,7 @@ public class BinaryPListParser {
     /**
      * int	0001 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
      */
-    private void parseInteger(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseInteger(DataInputStream in, int count) throws IOException {
         byte[] bytes = new byte[count];
         in.readFully(bytes);
         BigInteger bigInteger = new BigInteger(bytes);
@@ -714,7 +713,7 @@ public class BinaryPListParser {
     /**
      * real	0010 nnnn	...		// # of bytes is 2^nnnn, big-endian bytes
      */
-    private void parseReal(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseReal(DataInputStream in, int count) throws IOException {
         switch (count) {
             case 4 -> objectTable.add(in.readFloat());
             case 8 -> objectTable.add(in.readDouble());
@@ -725,7 +724,7 @@ public class BinaryPListParser {
     /**
      * unknown	0011 0000	...		// 8 byte float follows, big-endian bytes
      */
-    private void parseUnknown(@NonNull DataInputStream in) throws IOException {
+    private void parseUnknown(DataInputStream in) throws IOException {
         in.skipBytes(1);
         objectTable.add("unknown");
     }
@@ -733,14 +732,14 @@ public class BinaryPListParser {
     /**
      * date	0011 0011	...		// 8 byte float follows, big-endian bytes
      */
-    private void parseDate(@NonNull DataInputStream in) throws IOException {
+    private void parseDate(DataInputStream in) throws IOException {
         objectTable.add(fromTimerInterval(in.readDouble()));
     }
 
     /**
      * string	0110 nnnn	[int]	...	// Unicode string, nnnn is # of chars, else 1111 then int count, then big-endian 2-byte shorts
      */
-    private void parseUnicodeString(@NonNull DataInputStream in, int count) throws IOException {
+    private void parseUnicodeString(DataInputStream in, int count) throws IOException {
         char[] buf = new char[count];
         for (int i = 0; i < count; i++) {
             buf[i] = in.readChar();

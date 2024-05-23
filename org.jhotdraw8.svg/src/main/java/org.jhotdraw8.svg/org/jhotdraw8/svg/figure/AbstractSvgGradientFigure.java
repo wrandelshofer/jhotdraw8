@@ -10,8 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.MappedConverter;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssSize;
@@ -35,6 +33,7 @@ import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -52,7 +51,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     /**
      * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementGradientUnitsAttribute">w3.org</a>
      */
-    public static final @NonNull NonNullObjectStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
+    public static final NonNullObjectStyleableKey<SvgGradientUnits> GRADIENT_UNITS =
             new NonNullObjectStyleableKey<>("gradientUnits", SvgGradientUnits.class,
                     new MappedConverter<>(Map.of(
                             "userSpaceOnUse", SvgGradientUnits.USER_SPACE_ON_USE,
@@ -64,7 +63,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     /**
      * <a href="https://www.w3.org/TR/SVG11/pservers.html#LinearGradientElementSpreadMethodAttribute">w3.org</a>
      */
-    public static final @NonNull NonNullObjectStyleableKey<CycleMethod> SPREAD_METHOD =
+    public static final NonNullObjectStyleableKey<CycleMethod> SPREAD_METHOD =
             new NonNullObjectStyleableKey<>("spreadMethod", CycleMethod.class,
                     new MappedConverter<>(Map.of(
                             "pad", CycleMethod.NO_CYCLE,
@@ -75,7 +74,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
             );
 
 
-    public static final @NonNull NonNullKey<ImmutableList<SvgStop>> STOPS = new NonNullObjectKey<>("stops",
+    public static final NonNullKey<ImmutableList<SvgStop>> STOPS = new NonNullObjectKey<>("stops",
             new SimpleParameterizedType(ImmutableList.class, SvgStop.class), VectorList.of());
 
     public AbstractSvgGradientFigure() {
@@ -83,7 +82,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setAutoSizeChildren(false);
         g.setManaged(false);
@@ -97,7 +96,6 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     }
 
 
-    @NonNull
     protected ArrayList<Stop> getStops(ImmutableList<SvgStop> cssStops) {
         ArrayList<Stop> stops = new ArrayList<>(cssStops.size());
         double maxOffset = 0;
@@ -140,22 +138,22 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
 
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
     }
 
     @Override
-    public boolean isSuitableParent(@NonNull Figure newParent) {
+    public boolean isSuitableParent(Figure newParent) {
         return true;
     }
 
 
     @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
+    public boolean isSuitableChild(Figure newChild) {
         return true;
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         // does nothing
     }
 }

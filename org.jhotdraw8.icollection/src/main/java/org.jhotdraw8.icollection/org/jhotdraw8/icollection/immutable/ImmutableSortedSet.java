@@ -1,7 +1,6 @@
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySortedSet;
 
 import java.util.Comparator;
@@ -15,15 +14,15 @@ import java.util.NoSuchElementException;
  */
 public interface ImmutableSortedSet<E> extends ReadOnlySortedSet<E>, ImmutableSet<E> {
     @Override
-    @NonNull ImmutableSortedSet<E> add(E element);
+    ImmutableSortedSet<E> add(E element);
 
     @Override
-    default @NonNull ImmutableSortedSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    default ImmutableSortedSet<E> addAll(Iterable<? extends E> c) {
         return (ImmutableSortedSet<E>) ImmutableSet.super.addAll(c);
     }
 
     @Override
-    @NonNull <T> ImmutableSortedSet<T> empty();
+    <T> ImmutableSortedSet<T> empty();
 
     /**
      * Returns a copy of this collection that is empty, and has the specified
@@ -34,13 +33,13 @@ public interface ImmutableSortedSet<E> extends ReadOnlySortedSet<E>, ImmutableSe
      * @param <T>        the element type of the collection
      * @return an empty collection of the specified type and comparator
      */
-    @NonNull <T> ImmutableCollection<T> empty(@Nullable Comparator<T> comparator);
+    <T> ImmutableCollection<T> empty(@Nullable Comparator<T> comparator);
 
     @Override
-    @NonNull ImmutableSortedSet<E> remove(E element);
+    ImmutableSortedSet<E> remove(E element);
 
     @Override
-    default @NonNull ImmutableSortedSet<E> removeAll(@NonNull Iterable<?> c) {
+    default ImmutableSortedSet<E> removeAll(Iterable<?> c) {
         return (ImmutableSortedSet<E>) ImmutableSet.super.removeAll(c);
     }
 
@@ -67,14 +66,14 @@ public interface ImmutableSortedSet<E> extends ReadOnlySortedSet<E>, ImmutableSe
     }
 
     @Override
-    default @NonNull ImmutableSortedSet<E> retainAll(@NonNull Iterable<?> c) {
+    default ImmutableSortedSet<E> retainAll(Iterable<?> c) {
         return (ImmutableSortedSet<E>) ImmutableSet.super.retainAll(c);
     }
 
     @Override
-    @NonNull NavigableSet<E> toMutable();
+    NavigableSet<E> toMutable();
 
-    default @NonNull ImmutableSortedSet<E> reversed() {
+    default ImmutableSortedSet<E> reversed() {
         if (size() < 2) {
             return this;
         }

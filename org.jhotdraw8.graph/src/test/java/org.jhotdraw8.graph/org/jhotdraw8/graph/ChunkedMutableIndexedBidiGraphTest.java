@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.DynamicTest;
@@ -31,24 +30,24 @@ public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBi
     }
 
     @Override
-    public @NonNull List<DynamicTest> dynamicTestsRandomGraph() {
+    public List<DynamicTest> dynamicTestsRandomGraph() {
         return List.of();
     }
 
     @Override
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRandomMultiGraph() {
+    public List<DynamicTest> dynamicTestsRandomMultiGraph() {
         return Collections.emptyList();
     }
 
     @Override
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRandomGraphWithArrowData() {
+    public List<DynamicTest> dynamicTestsRandomGraphWithArrowData() {
         return Collections.emptyList();
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsRemoveAll() {
+    public List<DynamicTest> dynamicTestsRemoveAll() {
         return Arrays.asList(
                 dynamicTest("arity0", () -> testGraphRemoveAll(8, 0)),
                 dynamicTest("arity1", () -> testGraphRemoveAll(8, 1)),

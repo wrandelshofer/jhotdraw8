@@ -8,11 +8,10 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.tool.HandleTracker;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Handle.
@@ -50,14 +49,14 @@ public interface Handle {
      * @param view the drawing view
      * @return the node
      */
-    Node getNode(@NonNull DrawingView view);
+    Node getNode(DrawingView view);
 
     /**
      * Updates the node.
      *
      * @param drawingView the drawing view
      */
-    void updateNode(@NonNull DrawingView drawingView);
+    void updateNode(DrawingView drawingView);
 
     /**
      * Whether the handle is selectable.
@@ -74,25 +73,25 @@ public interface Handle {
     // ---
     // Event handlers
     // ----
-    default void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    default void onMouseDragged(MouseEvent event, DrawingView dv) {
     }
 
-    default void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    default void onMouseReleased(MouseEvent event, DrawingView dv) {
     }
 
-    default void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    default void onMousePressed(MouseEvent event, DrawingView dv) {
     }
 
-    default void onKeyPressed(@NonNull KeyEvent event, @NonNull DrawingView dv) {
+    default void onKeyPressed(KeyEvent event, DrawingView dv) {
     }
 
-    default void onKeyReleased(@NonNull KeyEvent event, @NonNull DrawingView dv) {
+    default void onKeyReleased(KeyEvent event, DrawingView dv) {
     }
 
-    default void onKeyTyped(@NonNull KeyEvent event, @NonNull DrawingView dv) {
+    default void onKeyTyped(KeyEvent event, DrawingView dv) {
     }
 
-    default void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    default void onMouseClicked(MouseEvent event, DrawingView dv) {
 
     }
 

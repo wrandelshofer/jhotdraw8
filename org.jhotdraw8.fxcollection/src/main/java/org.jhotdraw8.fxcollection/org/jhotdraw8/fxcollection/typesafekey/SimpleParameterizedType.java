@@ -1,7 +1,6 @@
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -9,10 +8,10 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public record SimpleParameterizedType(@NonNull Type rawType,
-                                      @NonNull Type... actualTypeArguments) implements ParameterizedType {
+public record SimpleParameterizedType(Type rawType,
+                                      Type... actualTypeArguments) implements ParameterizedType {
 
-    public @NonNull Type getTypeArgument(int i) {
+    public Type getTypeArgument(int i) {
         return actualTypeArguments[i];
     }
 
@@ -21,7 +20,7 @@ public record SimpleParameterizedType(@NonNull Type rawType,
     }
 
     @Override
-    public @NonNull String getTypeName() {
+    public String getTypeName() {
         StringBuilder b = new StringBuilder();
         b.append(rawType.getTypeName());
         b.append('<');
@@ -37,12 +36,12 @@ public record SimpleParameterizedType(@NonNull Type rawType,
     }
 
     @Override
-    public Type @NonNull [] getActualTypeArguments() {
+    public Type[] getActualTypeArguments() {
         return actualTypeArguments.clone();
     }
 
     @Override
-    public @NonNull Type getRawType() {
+    public Type getRawType() {
         return rawType;
     }
 

@@ -8,7 +8,6 @@ package org.jhotdraw8.examples.fxml;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.AbstractActivity;
 import org.jhotdraw8.application.action.Action;
 
@@ -35,7 +34,7 @@ public class SimpleActivityController extends AbstractActivity {
     }
 
     @Override
-    protected void initActions(@NonNull ObservableMap<String, Action> actionMap) {
+    protected void initActions(ObservableMap<String, Action> actionMap) {
 
     }
 

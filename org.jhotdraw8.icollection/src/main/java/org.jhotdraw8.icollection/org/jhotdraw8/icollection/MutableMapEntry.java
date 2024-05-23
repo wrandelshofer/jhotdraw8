@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serial;
 import java.util.AbstractMap;
@@ -21,9 +20,9 @@ public class MutableMapEntry<K, V> extends AbstractMap.SimpleEntry<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings({"serial", "RedundantSuppression"})//This field is conditionally serializable
-    private final @NonNull BiConsumer<K, V> putFunction;
+    private final BiConsumer<K, V> putFunction;
 
-    public MutableMapEntry(@NonNull BiConsumer<K, V> putFunction, K key, V value) {
+    public MutableMapEntry(BiConsumer<K, V> putFunction, K key, V value) {
         super(key, value);
         this.putFunction = putFunction;
     }

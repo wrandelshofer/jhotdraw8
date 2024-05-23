@@ -7,8 +7,7 @@ package org.jhotdraw8.fxbase.binding;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -17,10 +16,10 @@ import java.util.function.Function;
  * Binds the content of a list to a set.
  */
 class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
-    private final @NonNull ObservableList<D> dest;
-    private final @NonNull ObservableSet<S> source;
+    private final ObservableList<D> dest;
+    private final ObservableSet<S> source;
     private final Function<S, D> toDest;
-    private final @NonNull Consumer<D> disposeDest;
+    private final Consumer<D> disposeDest;
 
 
     /**
@@ -28,7 +27,7 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
      * @param source
      * @param toDest may only be null, if this instance is used for unbinding!
      */
-    ListToSetTransformContentBinding(@NonNull ObservableList<D> dest, @NonNull ObservableSet<S> source, @Nullable Function<S, D> toDest) {
+    ListToSetTransformContentBinding(ObservableList<D> dest, ObservableSet<S> source, @Nullable Function<S, D> toDest) {
         this(dest, source, toDest, null);
     }
 
@@ -37,7 +36,7 @@ class ListToSetTransformContentBinding<D, S> implements SetChangeListener<S> {
      * @param source
      * @param toDest may only be null, if this instance is used for unbinding!
      */
-    ListToSetTransformContentBinding(@NonNull ObservableList<D> dest, @NonNull ObservableSet<S> source,
+    ListToSetTransformContentBinding(ObservableList<D> dest, ObservableSet<S> source,
                                      @Nullable Function<S, D> toDest,
                                      @Nullable Consumer<D> disposeDest) {
         this.dest = dest;

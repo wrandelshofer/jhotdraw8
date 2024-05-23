@@ -8,12 +8,11 @@ import javafx.geometry.Insets;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 public class VBoxTrack extends AbstractDockParent implements Track {
-    private final @NonNull ScrollPane scrollPane = new ScrollPane();
-    private final @NonNull VBox vbox = new VBox();
+    private final ScrollPane scrollPane = new ScrollPane();
+    private final VBox vbox = new VBox();
 
     @SuppressWarnings("this-escape")
     public VBoxTrack() {
@@ -33,7 +32,7 @@ public class VBoxTrack extends AbstractDockParent implements Track {
     }
 
     @Override
-    public @NonNull TrackAxis getDockAxis() {
+    public TrackAxis getDockAxis() {
         return TrackAxis.Y;
     }
 

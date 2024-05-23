@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points;
@@ -22,7 +21,7 @@ public class IntersectCubicCurveLine {
     private IntersectCubicCurveLine() {
     }
 
-    public static @NonNull IntersectionResult intersectCubicCurveLine(
+    public static IntersectionResult intersectCubicCurveLine(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y,
             double epsilon) {
@@ -42,7 +41,7 @@ public class IntersectCubicCurveLine {
      * @param b1 point 1 of 'a'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectCubicCurveLine(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D a2, @NonNull Point2D a3, @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static IntersectionResult intersectCubicCurveLine(Point2D a0, Point2D a1, Point2D a2, Point2D a3, Point2D b0, Point2D b1) {
         return intersectCubicCurveLine(a0, a1, a2, a3, b0, b1, Rectangles.REAL_THRESHOLD);
     }
 
@@ -56,8 +55,8 @@ public class IntersectCubicCurveLine {
      * @param epsilon
      * @return
      */
-    public static IntersectionResult intersectCubicCurveLine(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
-                                                             @NonNull Point2D a0, @NonNull Point2D a1, double epsilon) {
+    public static IntersectionResult intersectCubicCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D p3,
+                                                             Point2D a0, Point2D a1, double epsilon) {
         final Point2D.Double topLeft = Intersections.topLeft(a0, a1); // used to determine if point is on line segment
         final Point2D.Double bottomRight = Intersections.bottomRight(a0, a1); // used to determine if point is on line segment
         List<IntersectionPoint> result = new ArrayList<>();

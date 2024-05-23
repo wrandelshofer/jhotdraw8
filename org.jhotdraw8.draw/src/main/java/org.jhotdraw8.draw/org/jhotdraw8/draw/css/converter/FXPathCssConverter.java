@@ -9,8 +9,6 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -18,6 +16,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.geom.FXSvgPaths;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -39,7 +38,7 @@ public class FXPathCssConverter extends AbstractCssConverter<Path> {
     }
 
     @Override
-    public @NonNull Path parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Path parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_STRING, "⟨SvgPath⟩: String expected.");
         final String svgPathString = tt.currentStringNonNull();
 
@@ -61,7 +60,7 @@ public class FXPathCssConverter extends AbstractCssConverter<Path> {
     }
 
     @Override
-    protected <TT extends Path> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Path> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_STRING, FXSvgPaths.pathElementsToDoubleSvgString(value.getElements())));
     }
 

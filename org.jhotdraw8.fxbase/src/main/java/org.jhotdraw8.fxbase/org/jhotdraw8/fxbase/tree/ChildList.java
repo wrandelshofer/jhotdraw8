@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcollection.indexedset.AbstractIndexedArrayObservableSet;
 
 /**
@@ -31,7 +30,7 @@ public class ChildList<E extends TreeNode<E>> extends AbstractIndexedArrayObserv
     }
 
     @Override
-    protected void onAdded(@NonNull E e) {
+    protected void onAdded(E e) {
         E oldParent = e.getParent();
         if (oldParent != null && oldParent != parent) {
             oldParent.getChildren().remove(e);
@@ -40,13 +39,13 @@ public class ChildList<E extends TreeNode<E>> extends AbstractIndexedArrayObserv
     }
 
     @Override
-    protected void onRemoved(@NonNull E e) {
+    protected void onRemoved(E e) {
         e.setParent(null);
     }
 
 
     @Override
-    protected boolean mayBeAdded(@NonNull E element) {
+    protected boolean mayBeAdded(E element) {
         return parent.isSuitableChild(element) &&
                 element.isSuitableParent(parent);
     }

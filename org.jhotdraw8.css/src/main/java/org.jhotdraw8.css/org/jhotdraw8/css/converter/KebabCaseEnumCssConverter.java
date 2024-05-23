@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -28,15 +27,15 @@ import java.util.function.Consumer;
  */
 public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverter<E> {
 
-    private final @NonNull Class<E> enumClass;
-    private final @NonNull String name;
+    private final Class<E> enumClass;
+    private final String name;
     private final boolean nullable;
 
-    public KebabCaseEnumCssConverter(@NonNull Class<E> enumClass) {
+    public KebabCaseEnumCssConverter(Class<E> enumClass) {
         this(enumClass, false);
     }
 
-    public KebabCaseEnumCssConverter(@NonNull Class<E> enumClass, boolean nullable) {
+    public KebabCaseEnumCssConverter(Class<E> enumClass, boolean nullable) {
         this.enumClass = enumClass;
         this.name = enumClass.getName().substring(enumClass.getName().lastIndexOf('.') + 1);
         this.nullable = nullable;
@@ -44,7 +43,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
 
 
     @Override
-    public @Nullable E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable E parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException(name + ": identifier expected", tt.getStartPosition());
         }
@@ -84,7 +83,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
     }
 
     @Override
-    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> consumer) {
+    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("Could not convert the enum value=null to a string.");
@@ -102,7 +101,7 @@ public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverte
         }
     }
 
-    public @NonNull String toString(@Nullable E value) {
+    public String toString(@Nullable E value) {
         StringBuilder out = new StringBuilder();
         produceTokens(value, null, token -> out.append(token.fromToken()));
         return out.toString();

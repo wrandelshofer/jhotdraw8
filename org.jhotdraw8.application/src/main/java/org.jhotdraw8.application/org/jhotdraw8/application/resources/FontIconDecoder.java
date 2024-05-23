@@ -7,7 +7,6 @@ package org.jhotdraw8.application.resources;
 import javafx.scene.Node;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,9 +26,9 @@ import java.util.regex.Pattern;
  */
 public class FontIconDecoder implements ResourceDecoder {
 
-    private final @NonNull Pattern keyPattern;
-    private final @NonNull String valuePrefix;
-    private final @NonNull Font font;
+    private final Pattern keyPattern;
+    private final String valuePrefix;
+    private final Font font;
 
     /**
      * Creates a new instance.
@@ -37,7 +36,7 @@ public class FontIconDecoder implements ResourceDecoder {
      * @param keyRegex the regex used on the property key
      * @param font     The font
      */
-    public FontIconDecoder(@NonNull String keyRegex, @NonNull Font font) {
+    public FontIconDecoder(String keyRegex, Font font) {
         this(keyRegex, "fonticon:", font);
     }
 
@@ -48,7 +47,7 @@ public class FontIconDecoder implements ResourceDecoder {
      * @param valuePrefix the prefix for the value.
      * @param font        The font
      */
-    public FontIconDecoder(@NonNull String keyRegex, @NonNull String valuePrefix, @NonNull Font font) {
+    public FontIconDecoder(String keyRegex, String valuePrefix, Font font) {
         this.keyPattern = Pattern.compile(keyRegex);
         this.valuePrefix = valuePrefix;
         this.font = font;
@@ -64,7 +63,7 @@ public class FontIconDecoder implements ResourceDecoder {
      * @param baseClass        The base class for loading the font
      * @throws IOException if the font resource can not be read
      */
-    public FontIconDecoder(@NonNull String keyRegex, String valuePrefix, @NonNull String fontResourceName, float fontSize, @NonNull Class<?> baseClass) throws IOException {
+    public FontIconDecoder(String keyRegex, String valuePrefix, String fontResourceName, float fontSize, Class<?> baseClass) throws IOException {
         keyPattern = Pattern.compile(keyRegex);
         this.valuePrefix = valuePrefix;
         try (InputStream in = baseClass.getResourceAsStream(fontResourceName)) {
@@ -73,14 +72,14 @@ public class FontIconDecoder implements ResourceDecoder {
     }
 
     @Override
-    public boolean canDecodeValue(@NonNull String key, @NonNull String propertyValue, @NonNull Class<?> type) {
+    public boolean canDecodeValue(String key, String propertyValue, Class<?> type) {
         return keyPattern.matcher(key).matches() //
                 && propertyValue.startsWith(valuePrefix)
                 && (Node.class.isAssignableFrom(type));
     }
 
     @Override
-    public @NonNull <T> T decode(String key, @NonNull String propertyValue, Class<T> type, Class<?> baseClass) {
+    public <T> T decode(String key, String propertyValue, Class<T> type, Class<?> baseClass) {
 
         // We must set the font before we set the text, so that JavaFx does not need to retrieve
         // the system default font, which on Windows requires that the JavaFx Toolkit is launched.
@@ -90,7 +89,7 @@ public class FontIconDecoder implements ResourceDecoder {
         return type.cast(txt);
     }
 
-    private @NonNull String decodeValue(String key, @NonNull String propertyValue) {
+    private String decodeValue(String key, String propertyValue) {
         String str = propertyValue.substring(valuePrefix.length()).trim();
         if (!str.startsWith("U+")) {
             throw new InternalError("illegal property value \"" + propertyValue + "\" for key " + key);

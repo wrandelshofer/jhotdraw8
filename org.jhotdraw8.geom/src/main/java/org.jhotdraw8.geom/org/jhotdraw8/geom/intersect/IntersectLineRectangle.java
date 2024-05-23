@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
@@ -25,7 +24,7 @@ public class IntersectLineRectangle {
      * @param r1 corner point 1 of the rectangle
      * @return computed intersection
      */
-    public static @NonNull IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D r0, @NonNull Point2D r1) {
+    public static IntersectionResultEx intersectLineRectangleEx(Point2D a0, Point2D a1, Point2D r0, Point2D r1) {
         return IntersectAABBLine.intersectLineAABBEx(a0, a1,
                 Math.min(r0.getX(), r1.getX()),
                 Math.min(r0.getY(), r1.getY()),
@@ -33,11 +32,11 @@ public class IntersectLineRectangle {
                 Math.max(r0.getY(), r1.getY()));
     }
 
-    public static @NonNull IntersectionResultEx intersectLineRectangleEx(@NonNull Point2D a0, @NonNull Point2D a1, Rectangle2D.@NonNull Double r) {
+    public static IntersectionResultEx intersectLineRectangleEx(Point2D a0, Point2D a1, Rectangle2D.Double r) {
         return IntersectAABBLine.intersectLineAABBEx(a0, a1, r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY());
     }
 
-    public static @NonNull IntersectionResultEx intersectRectangleLineEx(Rectangle2D.@NonNull Double r, @NonNull Point2D a0, @NonNull Point2D a1) {
+    public static IntersectionResultEx intersectRectangleLineEx(Rectangle2D.Double r, Point2D a0, Point2D a1) {
         return IntersectAABBLine.intersectAABBLineEx(r.getMinX(), r.getMinY(), r.getMaxX(), r.getMaxY(), a0, a1);
     }
 }

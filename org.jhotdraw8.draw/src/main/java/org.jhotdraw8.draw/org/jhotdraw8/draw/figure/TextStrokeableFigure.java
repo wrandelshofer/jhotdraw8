@@ -9,8 +9,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
@@ -24,6 +22,7 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -46,7 +45,6 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     CssSizeStyleableKey TEXT_STROKE_DASH_OFFSET = new CssSizeStyleableKey("text-stroke-dashoffset", CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
@@ -57,7 +55,6 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     NonNullEnumStyleableKey<StrokeLineCap> TEXT_STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("text-stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
@@ -69,7 +66,6 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     NonNullEnumStyleableKey<StrokeLineJoin> TEXT_STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("text-stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style. Default
@@ -81,7 +77,6 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     CssSizeStyleableKey TEXT_STROKE_MITER_LIMIT = new CssSizeStyleableKey("text-stroke-miterlimit", CssSize.of(10.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
@@ -93,14 +88,12 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     NullablePaintableStyleableKey TEXT_STROKE = new NullablePaintableStyleableKey("text-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.OUTSIDE}.
      */
-    @NonNull
     NonNullEnumStyleableKey<StrokeType> TEXT_STROKE_TYPE = new NonNullEnumStyleableKey<>("text-stroke-type", StrokeType.class, StrokeType.OUTSIDE);
     /**
      * Defines the width of the outline of the figure.
@@ -113,7 +106,6 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     CssSizeStyleableKey TEXT_STROKE_WIDTH = new CssSizeStyleableKey("text-stroke-width", CssSize.ONE);
 
     /**
@@ -125,7 +117,6 @@ public interface TextStrokeableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     NonNullListStyleableKey<CssSize> TEXT_STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("text-stroke-dasharray",
             CssSize.class,
             new SizeCssConverter(false), VectorList.of());
@@ -134,7 +125,6 @@ public interface TextStrokeableFigure extends Figure {
      * Combined map accessor for all stroke style properties.
      */
     @SuppressWarnings("unused")//Field is accessed by CSS using Reflection
-    @NonNull
     StrokeStyleableMapAccessor TEXT_STROKE_STYLE = new StrokeStyleableMapAccessor("text-stroke-style",
             TEXT_STROKE_TYPE, TEXT_STROKE_LINE_CAP, TEXT_STROKE_LINE_JOIN, TEXT_STROKE_MITER_LIMIT, TEXT_STROKE_DASH_OFFSET, TEXT_STROKE_DASH_ARRAY);
 
@@ -144,7 +134,7 @@ public interface TextStrokeableFigure extends Figure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
+    default void applyTextStrokeableFigureProperties(@Nullable RenderContext ctx, Shape shape) {
         Paint paint = Paintable.getPaint(getStyled(TEXT_STROKE), ctx);
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
@@ -179,7 +169,7 @@ public interface TextStrokeableFigure extends Figure {
     }
 
 
-    default void applyTextStrokeDashProperties(@NonNull Shape shape) {
+    default void applyTextStrokeDashProperties(Shape shape) {
         double d = getStyledNonNull(TEXT_STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);

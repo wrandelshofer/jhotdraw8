@@ -21,8 +21,6 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -32,6 +30,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
 
@@ -48,12 +47,12 @@ public class PolyPointEditHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
-    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(7, 7);
-    private final @NonNull Region node;
+    private static final Rectangle REGION_SHAPE = new Rectangle(7, 7);
+    private final Region node;
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final @NonNull NonNullMapAccessor<ImmutableList<Point2D>> pointKey;
+    private final NonNullMapAccessor<ImmutableList<Point2D>> pointKey;
 
     public PolyPointEditHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
         super(figure);
@@ -84,7 +83,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         if (node.getWidth() != size) {
             node.resize(size, size);
@@ -96,7 +95,7 @@ public class PolyPointEditHandle extends AbstractHandle {
 
 
     @Override
-    public void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseClicked(MouseEvent event, DrawingView dv) {
         if (pointKey != null && event.getClickCount() == 2) {
             if (owner.get(pointKey).size() > 2) {
                 removePoint(dv);
@@ -104,13 +103,13 @@ public class PolyPointEditHandle extends AbstractHandle {
         }
     }
 
-    private void removePoint(@NonNull DrawingView dv) {
+    private void removePoint(DrawingView dv) {
         dv.getModel().set(owner, pointKey, owner.getNonNull(pointKey).removeAt(pointIndex));
         dv.recreateHandles();
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -123,13 +122,13 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMousePressed(MouseEvent event, DrawingView dv) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, dv);
         }
     }
 
-    protected void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onPopupTriggered(MouseEvent event, DrawingView dv) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.removePoint.text"));
         addPoint.setOnAction(actionEvent -> removePoint(dv));
@@ -139,7 +138,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, dv);
         }
@@ -151,7 +150,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         ImmutableList<Point2D> list = f.get(pointKey);

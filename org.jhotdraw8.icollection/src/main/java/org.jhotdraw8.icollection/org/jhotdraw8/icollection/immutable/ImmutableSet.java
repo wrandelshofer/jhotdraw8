@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
@@ -30,7 +29,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @param <T> the element type of the returned set
      */
     @Override
-    @NonNull <T> ImmutableSet<T> empty();
+    <T> ImmutableSet<T> empty();
 
     /**
      * Returns a copy of this set that contains all elements
@@ -40,7 +39,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return this set instance if it already contains the element, or
      * a different set instance with the element added
      */
-    @NonNull ImmutableSet<E> add(E element);
+    ImmutableSet<E> add(E element);
 
     /**
      * Returns a copy of this set that contains all elements
@@ -52,7 +51,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * a different set instance with the elements added
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    default ImmutableSet<E> addAll(Iterable<? extends E> c) {
         if (c instanceof Collection<?> co && co.isEmpty()
                 || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
             return this;
@@ -75,7 +74,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * @return this set instance if it already does not contain the element, or
      * a different set instance with the element removed
      */
-    @NonNull ImmutableSet<E> remove(E element);
+    ImmutableSet<E> remove(E element);
 
     /**
      * Returns a copy of this set that contains all elements
@@ -87,7 +86,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * a different set instance with the elements removed
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableSet<E> removeAll(@NonNull Iterable<?> c) {
+    default ImmutableSet<E> removeAll(Iterable<?> c) {
         if (isEmpty()
                 || c instanceof Collection<?> co && co.isEmpty()
                 || c instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
@@ -109,7 +108,7 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      * a different set instance with elements removed
      */
     @SuppressWarnings("unchecked")
-    default @NonNull ImmutableSet<E> retainAll(@NonNull Iterable<?> c) {
+    default ImmutableSet<E> retainAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
@@ -146,6 +145,6 @@ public interface ImmutableSet<E> extends ReadOnlySet<E>, ImmutableCollection<E> 
      *
      * @return a mutable copy.
      */
-    @NonNull Set<E> toMutable();
+    Set<E> toMutable();
 
 }

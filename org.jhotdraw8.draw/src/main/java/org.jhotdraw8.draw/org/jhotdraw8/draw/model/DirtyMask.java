@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.model;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Represents a bitmask of {@code DirtyBits}.
@@ -18,8 +17,8 @@ public class DirtyMask {
      */
     private final int bitmask;
 
-    public static final @NonNull DirtyMask EMPTY = new DirtyMask(0);
-    public static final @NonNull DirtyMask ALL = new DirtyMask(~0);
+    public static final DirtyMask EMPTY = new DirtyMask(0);
+    public static final DirtyMask ALL = new DirtyMask(~0);
 
     /**
      * Prevent instantiation.
@@ -28,7 +27,7 @@ public class DirtyMask {
         this.bitmask = bitmask;
     }
 
-    public static @NonNull DirtyMask of(@NonNull DirtyBits... bits) {
+    public static DirtyMask of(DirtyBits... bits) {
         int mask = 0;
         for (DirtyBits bit : bits) {
             mask |= bit.getMask();
@@ -43,7 +42,7 @@ public class DirtyMask {
         return bitmask;
     }
 
-    public boolean containsOneOf(@NonNull DirtyBits... bits) {
+    public boolean containsOneOf(DirtyBits... bits) {
         for (DirtyBits bit : bits) {
             if ((bitmask & bit.getMask()) == bit.getMask()) {
                 return true;
@@ -56,7 +55,7 @@ public class DirtyMask {
         return intersects(of(bits));
     }
 
-    public boolean intersects(@NonNull DirtyMask that) {
+    public boolean intersects(DirtyMask that) {
         return (this.bitmask & that.bitmask) != 0;
     }
 
@@ -70,16 +69,16 @@ public class DirtyMask {
      * @param that that mask
      * @return a new mask
      */
-    public @NonNull DirtyMask add(@NonNull DirtyMask that) {
+    public DirtyMask add(DirtyMask that) {
         return new DirtyMask(this.bitmask | that.bitmask);
     }
 
-    public @NonNull DirtyMask add(@NonNull DirtyBits bits) {
+    public DirtyMask add(DirtyBits bits) {
         return new DirtyMask(this.bitmask | bits.getMask());
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "DirtyMask{" + "bitmask=" + Integer.toBinaryString(bitmask) + '}';
     }
 

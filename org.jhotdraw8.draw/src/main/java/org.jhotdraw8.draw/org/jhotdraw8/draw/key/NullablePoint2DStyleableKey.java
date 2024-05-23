@@ -5,11 +5,10 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.Point2DConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Point2DStyleableKey.
@@ -19,7 +18,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 public class NullablePoint2DStyleableKey extends AbstractStyleableKey<Point2D> implements WritableStyleableMapAccessor<Point2D> {
 
 
-    private final @NonNull Converter<Point2D> converter = new Point2DConverter(true);
+    private final Converter<Point2D> converter = new Point2DConverter(true);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -27,7 +26,7 @@ public class NullablePoint2DStyleableKey extends AbstractStyleableKey<Point2D> i
      *
      * @param name The name of the key.
      */
-    public NullablePoint2DStyleableKey(@NonNull String name) {
+    public NullablePoint2DStyleableKey(String name) {
         this(name, null);
     }
 
@@ -39,12 +38,12 @@ public class NullablePoint2DStyleableKey extends AbstractStyleableKey<Point2D> i
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullablePoint2DStyleableKey(@NonNull String key, @Nullable Point2D defaultValue) {
+    public NullablePoint2DStyleableKey(String key, @Nullable Point2D defaultValue) {
         super(key, Point2D.class, defaultValue);
     }
 
     @Override
-    public @NonNull Converter<Point2D> getCssConverter() {
+    public Converter<Point2D> getCssConverter() {
         return converter;
     }
 }

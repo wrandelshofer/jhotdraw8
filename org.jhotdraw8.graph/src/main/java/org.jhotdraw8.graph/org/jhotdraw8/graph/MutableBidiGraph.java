@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Interface for a mutable directed graph that allows to follow arrows in
@@ -24,7 +23,7 @@ public interface MutableBidiGraph<V, A> extends BidiGraph<V, A>, MutableDirected
      * @param arrow the arrow data
      */
     @SuppressWarnings("unused")
-    default void addBidiArrow(@NonNull V va, @NonNull V vb, @Nullable A arrow) {
+    default void addBidiArrow(V va, V vb, @Nullable A arrow) {
         addArrow(va, vb, arrow);
         addArrow(vb, va, arrow);
     }

@@ -11,7 +11,6 @@ import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.QuadCurveTo;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +21,19 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>> {
-    public static final @NonNull ClosePath CLOSE_PATH = new ClosePath();
-    private final @NonNull List<PathElement> elements;
+    public static final ClosePath CLOSE_PATH = new ClosePath();
+    private final List<PathElement> elements;
 
     public FXPathElementsBuilder() {
         this(new ArrayList<>());
     }
 
-    public FXPathElementsBuilder(@NonNull List<PathElement> elements) {
+    public FXPathElementsBuilder(List<PathElement> elements) {
         this.elements = elements;
     }
 
     @Override
-    public @NonNull List<PathElement> build() {
+    public List<PathElement> build() {
         return elements;
     }
 

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
@@ -23,10 +22,10 @@ import java.util.stream.Stream;
  * @author Werner Randelshofer
  */
 public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
-    private @NonNull ImmutableSet<E> backingSet;
+    private ImmutableSet<E> backingSet;
     private int modCount;
 
-    public MutableSetFacade(@NonNull ImmutableSet<E> backingSet) {
+    public MutableSetFacade(ImmutableSet<E> backingSet) {
         this.backingSet = backingSet;
     }
 
@@ -63,7 +62,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         Iterator<E> it = new Iterator<>() {
             final Iterator<E> b = backingSet.iterator();
             E current;

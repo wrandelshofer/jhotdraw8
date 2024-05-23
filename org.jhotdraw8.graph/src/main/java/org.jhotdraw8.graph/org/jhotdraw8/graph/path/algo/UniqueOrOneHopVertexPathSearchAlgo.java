@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.HashSet;
@@ -34,7 +33,7 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
     }
 
     @Override
-    public @Nullable VertexBackLinkWithCost<V, C> search(@NonNull Iterable<V> startVertices, @NonNull Predicate<V> goalPredicate, @NonNull Function<V, Iterable<V>> nextVerticesFunction, int maxDepth, @NonNull C zero, @NonNull C costLimit, @NonNull BiFunction<V, V, C> costFunction, @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
+    public @Nullable VertexBackLinkWithCost<V, C> search(Iterable<V> startVertices, Predicate<V> goalPredicate, Function<V, Iterable<V>> nextVerticesFunction, int maxDepth, C zero, C costLimit, BiFunction<V, V, C> costFunction, BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
         return search(startVertices, goalPredicate, nextVerticesFunction, new HashSet<>(16)::add, maxDepth, zero, costFunction, sumFunction);
     }
 
@@ -51,14 +50,14 @@ public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable
      * @param sumFunction          the sum function for adding two cost values
      * @return on success: a back link, otherwise: null
      */
-    public @Nullable VertexBackLinkWithCost<V, C> search(@NonNull Iterable<V> startVertices,
-                                                         @NonNull Predicate<V> goalPredicate,
-                                                         @NonNull Function<V, Iterable<V>> nextVerticesFunction,
-                                                         @NonNull AddToSet<V> visited,
+    public @Nullable VertexBackLinkWithCost<V, C> search(Iterable<V> startVertices,
+                                                         Predicate<V> goalPredicate,
+                                                         Function<V, Iterable<V>> nextVerticesFunction,
+                                                         AddToSet<V> visited,
                                                          int maxDepth,
-                                                         @NonNull C zero,
-                                                         @NonNull BiFunction<V, V, C> costFunction,
-                                                         @NonNull BiFunction<C, C, C> sumFunction) {
+                                                         C zero,
+                                                         BiFunction<V, V, C> costFunction,
+                                                         BiFunction<C, C, C> sumFunction) {
         AlgoArguments.checkZero(zero);
         AlgoArguments.checkMaxDepth(maxDepth);
         Queue<VertexBackLinkWithCost<V, C>> queue = new ArrayDeque<>(16);

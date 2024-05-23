@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Abstract base class for back links.
@@ -19,7 +18,7 @@ public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T, C>, 
     /**
      * The cost for reaching this back link from the root ancestor.
      */
-    private final @NonNull C cost;
+    private final C cost;
 
 
     /**
@@ -28,7 +27,7 @@ public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T, C>, 
      * @param parent the parent back link
      * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
      */
-    public AbstractBackLinkWithCost(@Nullable T parent, @NonNull C cost) {
+    public AbstractBackLinkWithCost(@Nullable T parent, C cost) {
         super(parent);
         this.cost = cost;
     }
@@ -38,7 +37,7 @@ public class AbstractBackLinkWithCost<T extends AbstractBackLinkWithCost<T, C>, 
      *
      * @return cost
      */
-    public @NonNull C getCost() {
+    public C getCost() {
         return cost;
     }
 }

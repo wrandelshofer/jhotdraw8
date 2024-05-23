@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 
 import java.util.Spliterator;
@@ -34,13 +33,13 @@ public interface IndexedVertexReachabilityAlgo<C extends Number & Comparable<C>>
      * @param visited              the visited function
      * @return true on success
      */
-    boolean tryToReach(@NonNull Iterable<Integer> startVertices,
-                       @NonNull IntPredicate goalPredicate,
-                       @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+    boolean tryToReach(Iterable<Integer> startVertices,
+                       IntPredicate goalPredicate,
+                       Function<Integer, Spliterator.OfInt> nextVerticesFunction,
                        int maxDepth,
-                       @NonNull C zero,
-                       @NonNull C costLimit,
-                       @NonNull BiFunction<Integer, Integer, C> costFunction,
-                       @NonNull BiFunction<C, C, C> sumFunction,
-                       @NonNull AddToIntSet visited);
+                       C zero,
+                       C costLimit,
+                       BiFunction<Integer, Integer, C> costFunction,
+                       BiFunction<C, C, C> sumFunction,
+                       AddToIntSet visited);
 }

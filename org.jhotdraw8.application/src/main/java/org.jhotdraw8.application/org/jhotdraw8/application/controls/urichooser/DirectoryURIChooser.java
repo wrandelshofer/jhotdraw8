@@ -6,8 +6,7 @@ package org.jhotdraw8.application.controls.urichooser;
 
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.net.URI;
@@ -22,12 +21,12 @@ public class DirectoryURIChooser implements URIChooser {
     /**
      * The associated file chooser object.
      */
-    private final @NonNull DirectoryChooser chooser = new DirectoryChooser();
+    private final DirectoryChooser chooser = new DirectoryChooser();
 
     public DirectoryURIChooser() {
     }
 
-    public @NonNull DirectoryChooser getDirectoryChooser() {
+    public DirectoryChooser getDirectoryChooser() {
         return chooser;
     }
 

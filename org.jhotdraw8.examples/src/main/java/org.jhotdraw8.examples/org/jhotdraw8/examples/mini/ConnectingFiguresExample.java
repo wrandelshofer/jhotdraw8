@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.examples.mini;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
@@ -14,7 +13,7 @@ import org.jhotdraw8.draw.render.SimpleRenderContext;
 
 public class ConnectingFiguresExample {
 
-    public @NonNull Drawing createDrawing() {
+    public Drawing createDrawing() {
         RectangleFigure a = new RectangleFigure(100, 80, 150, 100);  // 1
         RectangleFigure b = new RectangleFigure(300, 230, 150, 100);
         LineConnectionFigure c = new LineConnectionFigure();

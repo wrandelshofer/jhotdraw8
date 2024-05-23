@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableSet;
 
 import java.util.NavigableSet;
@@ -13,21 +12,21 @@ import java.util.NoSuchElementException;
  */
 public interface ImmutableNavigableSet<E> extends ReadOnlyNavigableSet<E>, ImmutableSortedSet<E> {
     @Override
-    @NonNull ImmutableNavigableSet<E> add(E element);
+    ImmutableNavigableSet<E> add(E element);
 
     @Override
-    default @NonNull ImmutableNavigableSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    default ImmutableNavigableSet<E> addAll(Iterable<? extends E> c) {
         return (ImmutableNavigableSet<E>) ImmutableSortedSet.super.addAll(c);
     }
 
     @Override
-    @NonNull <T> ImmutableNavigableSet<T> empty();
+    <T> ImmutableNavigableSet<T> empty();
 
     @Override
-    @NonNull ImmutableNavigableSet<E> remove(E element);
+    ImmutableNavigableSet<E> remove(E element);
 
     @Override
-    default @NonNull ImmutableNavigableSet<E> removeAll(@NonNull Iterable<?> c) {
+    default ImmutableNavigableSet<E> removeAll(Iterable<?> c) {
         return (ImmutableNavigableSet<E>) ImmutableSortedSet.super.removeAll(c);
     }
 
@@ -56,14 +55,14 @@ public interface ImmutableNavigableSet<E> extends ReadOnlyNavigableSet<E>, Immut
     }
 
     @Override
-    default @NonNull ImmutableNavigableSet<E> retainAll(@NonNull Iterable<?> c) {
+    default ImmutableNavigableSet<E> retainAll(Iterable<?> c) {
         return (ImmutableNavigableSet<E>) ImmutableSortedSet.super.retainAll(c);
     }
 
     @Override
-    @NonNull NavigableSet<E> toMutable();
+    NavigableSet<E> toMutable();
 
-    default @NonNull ImmutableNavigableSet<E> reversed() {
+    default ImmutableNavigableSet<E> reversed() {
         if (size() < 2) {
             return this;
         }

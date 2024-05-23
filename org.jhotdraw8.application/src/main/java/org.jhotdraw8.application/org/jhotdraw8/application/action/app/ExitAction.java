@@ -11,8 +11,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
@@ -25,6 +23,7 @@ import org.jhotdraw8.base.net.UriUtil;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.icollection.ChampMap;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_
  */
 public class ExitAction extends AbstractApplicationAction {
 
-    public static final @NonNull String ID = "application.exit";
+    public static final String ID = "application.exit";
     private Node oldFocusOwner;
     private @Nullable FileBasedActivity unsavedView;
 
@@ -59,7 +58,7 @@ public class ExitAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent event, Application app) {
 
         WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         app.addDisabler(workState);
@@ -227,7 +226,7 @@ public class ExitAction extends AbstractApplicationAction {
         }
     }
 
-    protected void saveToFile(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
+    protected void saveToFile(final URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
         if (v == null) {
             return;
@@ -260,7 +259,7 @@ public class ExitAction extends AbstractApplicationAction {
         });
     }
 
-    protected void saveToFileAndReviewNext(final @NonNull URI uri, final DataFormat format, WorkState<Void> workState) {
+    protected void saveToFileAndReviewNext(final URI uri, final DataFormat format, WorkState<Void> workState) {
         final FileBasedActivity v = unsavedView;
         if (v == null) {
             return;

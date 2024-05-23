@@ -6,7 +6,6 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.stream.Collector;
 
@@ -47,7 +46,7 @@ public class BoundsCalculator {
      *
      * @param value the input value
      */
-    public void accept(@NonNull Bounds value) {
+    public void accept(Bounds value) {
         minX = Math.min(minX, value.getMinX());
         maxX = Math.max(maxX, value.getMaxX());
         minY = Math.min(minY, value.getMinY());
@@ -61,7 +60,7 @@ public class BoundsCalculator {
      * @param other another {@code BoundsCalculator}
      * @throws NullPointerException if {@code other} is null
      */
-    public void combine(@NonNull BoundsCalculator other) {
+    public void combine(BoundsCalculator other) {
         minX = Math.min(minX, other.minX);
         maxX = Math.max(maxX, other.maxX);
         minY = Math.min(minY, other.minY);
@@ -73,7 +72,7 @@ public class BoundsCalculator {
      *
      * @return the calculated bounds
      */
-    public @NonNull Bounds getBounds() {
+    public Bounds getBounds() {
         return new BoundingBox(minX, minY, maxX - minX, maxY - minY);
     }
 }

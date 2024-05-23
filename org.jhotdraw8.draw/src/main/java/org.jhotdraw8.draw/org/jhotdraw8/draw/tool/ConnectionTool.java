@@ -6,8 +6,7 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -38,25 +37,25 @@ public class ConnectionTool extends AbstractTool {
      */
     private @Nullable ConnectingFigure figure;
 
-    private @NonNull Supplier<ConnectingFigure> figureFactory;
-    private final @NonNull Supplier<Layer> layerFactory;
+    private Supplier<ConnectingFigure> figureFactory;
+    private final Supplier<Layer> layerFactory;
 
     private @Nullable HandleType handleType = null;
 
-    public ConnectionTool(@NonNull String name, @Nullable Resources rsrc, @NonNull Supplier<ConnectingFigure> figureFactory) {
+    public ConnectionTool(String name, @Nullable Resources rsrc, Supplier<ConnectingFigure> figureFactory) {
         this(name, rsrc, figureFactory, LayerFigure::new);
     }
 
-    public ConnectionTool(@NonNull String name, @Nullable Resources rsrc,
-                          @NonNull Supplier<ConnectingFigure> figureFactory,
-                          @NonNull Supplier<Layer> layerFactory) {
+    public ConnectionTool(String name, @Nullable Resources rsrc,
+                          Supplier<ConnectingFigure> figureFactory,
+                          Supplier<Layer> layerFactory) {
         this(name, rsrc, null, figureFactory, layerFactory);
 
     }
 
-    public ConnectionTool(@NonNull String name, @Nullable Resources rsrc, @Nullable HandleType handleType,
-                          @NonNull Supplier<ConnectingFigure> figureFactory,
-                          @NonNull Supplier<Layer> layerFactory) {
+    public ConnectionTool(String name, @Nullable Resources rsrc, @Nullable HandleType handleType,
+                          Supplier<ConnectingFigure> figureFactory,
+                          Supplier<Layer> layerFactory) {
         super(name, rsrc);
         this.handleType = handleType;
         this.figureFactory = figureFactory;
@@ -75,7 +74,7 @@ public class ConnectionTool extends AbstractTool {
      * @param newFigure the figure
      * @return a suitable layer for the figure
      */
-    protected @Nullable Figure getOrCreateParent(@NonNull DrawingView dv, @NonNull Figure newFigure) {
+    protected @Nullable Figure getOrCreateParent(DrawingView dv, Figure newFigure) {
         // try to use the active layer
         Drawing drawing = dv.getDrawing();
         if (drawing == null) {
@@ -107,7 +106,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseDragged(MouseEvent event, DrawingView view) {
         if (figure != null) {
             Point2D pointInViewCoordinates = new Point2D(event.getX(), event.getY());
             Point2D unconstrainedPoint = view.viewToWorld(pointInViewCoordinates);
@@ -152,7 +151,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
         requestFocus();
         figure = figureFactory.get();
         if (figure == null) {
@@ -205,7 +204,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseReleased(MouseEvent event, DrawingView view) {
         if (figure != null) {
             onMouseDragged(event, view);
             view.getSelectedFigures().clear();
@@ -221,7 +220,7 @@ public class ConnectionTool extends AbstractTool {
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public String getHelpText() {
         return "ConnectionTool"
                 + "\n  Press the mouse on a figure in the drawing view, and drag the mouse to another figure."
                 + " The tool will create a new figure which connects the two figures."

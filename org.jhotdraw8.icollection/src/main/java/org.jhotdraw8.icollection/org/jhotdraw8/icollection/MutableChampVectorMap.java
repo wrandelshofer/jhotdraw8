@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedSetFacade;
@@ -22,6 +20,7 @@ import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedMapView;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.Collection;
@@ -93,7 +92,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     /**
      * In this vector we store the elements in the order in which they were inserted.
      */
-    private @NonNull VectorList<Object> vector;
+    private VectorList<Object> vector;
 
 
     /**
@@ -111,7 +110,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
      * @param c a map
      */
     @SuppressWarnings("unchecked")
-    public MutableChampVectorMap(@NonNull Map<? extends K, ? extends V> c) {
+    public MutableChampVectorMap(Map<? extends K, ? extends V> c) {
         this((c instanceof MutableChampVectorMap<?, ?> mvm)
                 ? ((MutableChampVectorMap<K, V>) mvm).toImmutable()
                 : c.entrySet());
@@ -124,7 +123,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
      * @param c an iterable
      */
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableChampVectorMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
+    public MutableChampVectorMap(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c instanceof ChampVectorMap<?, ?>) {
             ChampVectorMap<K, V> that = (ChampVectorMap<K, V>) c;
             this.root = that.root;
@@ -156,7 +155,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
      * Returns a shallow copy of this map.
      */
     @Override
-    public @NonNull MutableChampVectorMap<K, V> clone() {
+    public MutableChampVectorMap<K, V> clone() {
         return (MutableChampVectorMap<K, V>) super.clone();
     }
 
@@ -169,18 +168,18 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
+    public Iterator<Map.Entry<K, V>> iterator() {
         return new FailFastIterator<>(Spliterators.iterator(spliterator()),
                 this::iteratorRemove, () -> modCount);
     }
 
-    private @NonNull Iterator<Map.Entry<K, V>> reverseIterator() {
+    private Iterator<Map.Entry<K, V>> reverseIterator() {
         return new FailFastIterator<>(Spliterators.iterator(reverseSpliterator()),
                 this::iteratorRemove, () -> modCount);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull Spliterator<Entry<K, V>> reverseSpliterator() {
+    private Spliterator<Entry<K, V>> reverseSpliterator() {
         return new ReverseTombSkippingVectorSpliterator<>(vector,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
@@ -189,7 +188,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull Spliterator<Entry<K, V>> spliterator() {
+    public Spliterator<Entry<K, V>> spliterator() {
         return new TombSkippingVectorSpliterator<>(vector.trie,
                 e -> new MutableMapEntry<>(this::iteratorPutIfPresent,
                         ((SequencedEntry<K, V>) e).getKey(), ((SequencedEntry<K, V>) e).getValue()),
@@ -198,17 +197,17 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
 
 
     @Override
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public Set<Entry<K, V>> entrySet() {
         return sequencedEntrySet();
     }
 
     @Override
-    public @NonNull Set<K> keySet() {
+    public Set<K> keySet() {
         return sequencedKeySet();
     }
 
     @Override
-    public @NonNull Collection<V> values() {
+    public Collection<V> values() {
         return sequencedValues();
     }
 
@@ -218,7 +217,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
      * @return a view of the entries contained in this map
      */
     @Override
-    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
+    public SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return new SequencedSetFacade<>(
                 this::iterator,
                 this::spliterator,
@@ -256,7 +255,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
 
-    private void iteratorPutIfPresent(@NonNull K k, V v) {
+    private void iteratorPutIfPresent(K k, V v) {
         if (containsKey(k)) {
             owner = null;
             put(k, v);
@@ -269,7 +268,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public @NonNull SequencedSet<K> sequencedKeySet() {
+    public SequencedSet<K> sequencedKeySet() {
         return SequencedMapFacade.createKeySet(this);
     }
 
@@ -312,7 +311,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return oldData == null ? null : oldData.getValue();
     }
 
-    private @NonNull ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val, boolean moveToFirst) {
+    private ChangeEvent<SequencedEntry<K, V>> putFirst(K key, V val, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, val, -offset - 1);
         root = root.put(getOrCreateOwner(), newEntry,
@@ -343,7 +342,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
 
     @SuppressWarnings("unchecked")
     @Override
-    public boolean putAll(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
+    public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c instanceof MutableChampVectorMap<?, ?> that) {
             c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toImmutable();
         }
@@ -367,7 +366,6 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return oldData == null ? null : oldData.getValue();
     }
 
-    @NonNull
     ChangeEvent<SequencedEntry<K, V>> putLast(final K key, V value, boolean moveToLast) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         var newEntry = new SequencedEntry<>(key, value, vector.size() - offset);
@@ -396,7 +394,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
+    public ReadOnlySequencedMap<K, V> readOnlyReversed() {
         return new ReadOnlySequencedMapFacade<>(
                 this::iterator,
                 this::reverseIterator,
@@ -418,7 +416,6 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
         return null;
     }
 
-    @NonNull
     ChangeEvent<SequencedEntry<K, V>> removeAndGiveDetails(K key) {
         var details = new ChangeEvent<SequencedEntry<K, V>>();
         root = root.remove(getOrCreateOwner(),
@@ -453,7 +450,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public @NonNull SequencedMap<K, V> reversed() {
+    public SequencedMap<K, V> reversed() {
         return new ReversedSequencedMapView<>(this);
     }
 
@@ -462,19 +459,19 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
      *
      * @return an immutable copy
      */
-    public @NonNull ChampVectorMap<K, V> toImmutable() {
+    public ChampVectorMap<K, V> toImmutable() {
         owner = null;
         return size == 0 ? ChampVectorMap.of()
                 : new ChampVectorMap<>(root, vector, size, offset);
     }
 
     @Override
-    public @NonNull SequencedCollection<V> sequencedValues() {
+    public SequencedCollection<V> sequencedValues() {
         return SequencedMapFacade.createValues(this);
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
@@ -488,7 +485,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return new MutableChampVectorMap<>(deserializedEntries);
         }
     }

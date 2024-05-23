@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -51,17 +50,17 @@ public final class Empty<K, V> implements RedBlackTree<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> ceiling(K e, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> ceiling(K e, Comparator<? super K> comparator) {
         return this;
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> floor(K e, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> floor(K e, Comparator<? super K> comparator) {
         return this;
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> higher(K e, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> higher(K e, Comparator<? super K> comparator) {
         return this;
     }
 
@@ -71,7 +70,7 @@ public final class Empty<K, V> implements RedBlackTree<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> lower(K e, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> lower(K e, Comparator<? super K> comparator) {
         return this;
     }
 
@@ -86,7 +85,7 @@ public final class Empty<K, V> implements RedBlackTree<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> right() {
+    public RedBlackTree<K, V> right() {
         throw new UnsupportedOperationException("right on empty");
     }
 
@@ -116,7 +115,7 @@ public final class Empty<K, V> implements RedBlackTree<K, V> {
     }
 
     @Override
-    public <E> @Nullable E mapOrNull(@NonNull BiFunction<K, V, E> f) {
+    public <E> @Nullable E mapOrNull(BiFunction<K, V, E> f) {
         return null;
     }
 

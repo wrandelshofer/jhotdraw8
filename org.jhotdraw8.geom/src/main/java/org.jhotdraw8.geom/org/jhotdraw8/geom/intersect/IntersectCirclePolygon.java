@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class IntersectCirclePolygon {
      * @param points the points of the polygon
      * @return computed intersection
      */
-    public static @NonNull IntersectionResultEx intersectCirclePolygonEx(@NonNull Point2D c, double r, @NonNull List<Point2D.Double> points) {
+    public static IntersectionResultEx intersectCirclePolygonEx(Point2D c, double r, List<Point2D.Double> points) {
         List<IntersectionPointEx> result = new ArrayList<>();
         int length = points.size();
         IntersectionResultEx inter = null;

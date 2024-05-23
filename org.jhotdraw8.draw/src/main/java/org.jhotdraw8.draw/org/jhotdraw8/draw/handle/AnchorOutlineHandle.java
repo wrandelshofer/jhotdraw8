@@ -11,8 +11,6 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -20,6 +18,7 @@ import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -32,7 +31,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
     private static final double invsqrt2 = 1 / Math.sqrt(2);
     private final double growInView = 8.0;
 
-    private final @NonNull Polygon node;
+    private final Polygon node;
     private final double[] points;
 
     @SuppressWarnings("this-escape")
@@ -55,7 +54,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         DrawingEditor editor = view.getEditor();
         if (editor == null) {
             return node;
@@ -66,7 +65,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
         return node;
     }
 
-    protected void initNode(@NonNull Polygon r) {
+    protected void initNode(Polygon r) {
         r.setFill(null);
     }
 
@@ -76,7 +75,7 @@ public class AnchorOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Transform tinv = FXTransforms.concat(f.getWorldToLocal(), view.getViewToWorld());

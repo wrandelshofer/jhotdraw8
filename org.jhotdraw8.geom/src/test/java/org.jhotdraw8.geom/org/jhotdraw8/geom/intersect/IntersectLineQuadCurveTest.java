@@ -6,7 +6,6 @@ package org.jhotdraw8.geom.intersect;
 
 import javafx.scene.shape.Line;
 import javafx.scene.shape.QuadCurve;
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class IntersectLineQuadCurveTest {
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsIntersectLineQuadraticCurve_5args() {
+    public List<DynamicTest> dynamicTestsIntersectLineQuadraticCurve_5args() {
         return Arrays.asList(
                 dynamicTest("1", () -> testIntersectLineQuadCurve(new Line(10, 40, 210, 175), new QuadCurve(125, 200, 250, 225, 275, 100), new double[]{}))
         );
@@ -34,7 +33,7 @@ public class IntersectLineQuadCurveTest {
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectLineQuadCurve(@NonNull Line a, @NonNull QuadCurve b, @NonNull double[] expected) {
+    public static void testIntersectLineQuadCurve(Line a, QuadCurve b, double[] expected) {
         Point2D b1 = new Point2D.Double(b.getStartX(), b.getEndX());
         Point2D b2 = new Point2D.Double(b.getControlX(), b.getControlY());
         Point2D b3 = new Point2D.Double(b.getEndX(), b.getEndX());

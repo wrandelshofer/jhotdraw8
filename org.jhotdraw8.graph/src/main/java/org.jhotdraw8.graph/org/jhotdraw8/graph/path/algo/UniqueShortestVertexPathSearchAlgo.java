@@ -5,10 +5,9 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -51,14 +50,14 @@ public class UniqueShortestVertexPathSearchAlgo<V, C extends Number & Comparable
      */
     @Override
     public @Nullable VertexBackLinkWithCost<V, C> search(
-            final @NonNull Iterable<V> startVertices,
-            final @NonNull Predicate<V> goalPredicate,
-            final @NonNull Function<V, Iterable<V>> nextVertices,
+            final Iterable<V> startVertices,
+            final Predicate<V> goalPredicate,
+            final Function<V, Iterable<V>> nextVertices,
             int maxDepth,
-            final @NonNull C zero,
-            final @NonNull C costLimit,
-            final @NonNull BiFunction<V, V, C> costFunction,
-            final @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
+            final C zero,
+            final C costLimit,
+            final BiFunction<V, V, C> costFunction,
+            final BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
 
         AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
         CheckedNonNegativeVertexCostFunction<V, C> costf = new CheckedNonNegativeVertexCostFunction<>(zero, costFunction);

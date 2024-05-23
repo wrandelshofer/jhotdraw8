@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.tree;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.tree.PostorderSpliterator;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.jhotdraw8.fxbase.tree.SimpleTreeNode;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
   */
 public class TreeTraversalTest {
 
-    private static @NonNull SimpleTreeNode<String> createTree() {
+    private static SimpleTreeNode<String> createTree() {
         //       F
         //     ↙︎  ↘︎
         //    B     G

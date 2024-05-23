@@ -13,8 +13,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingView;
@@ -26,6 +24,7 @@ import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,11 +43,11 @@ public class DrawingInspector extends AbstractDrawingInspector {
     @FXML
     private ColorPicker backgroundColorPicker;
 
-    private final @NonNull Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
+    private final Property<CssColor> myBackgroundProperty = new SimpleObjectProperty<>();
     private @Nullable Property<CssColor> boundBackgroundProperty;
 
-    private final @NonNull ChangeListener<CssSize> sizeCommitHandler = (o, oldv, newv) -> commitEdits();
-    private final @NonNull ChangeListener<CssColor> colorCommitHandler = (o, oldv, newv) -> commitEdits();
+    private final ChangeListener<CssSize> sizeCommitHandler = (o, oldv, newv) -> commitEdits();
+    private final ChangeListener<CssColor> colorCommitHandler = (o, oldv, newv) -> commitEdits();
     @FXML
     private TextField xField;
     @FXML
@@ -68,7 +67,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         this(LayersInspector.class.getResource("DrawingInspector.fxml"));
     }
 
-    public DrawingInspector(@NonNull URL fxmlUrl) {
+    public DrawingInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -82,7 +81,7 @@ public class DrawingInspector extends AbstractDrawingInspector {
         return node;
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {

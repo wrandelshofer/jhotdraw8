@@ -13,8 +13,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
@@ -65,17 +64,17 @@ public class FigureTest {
         }
 
         @Override
-        public @NonNull ObjectProperty<Figure> parentProperty() {
+        public ObjectProperty<Figure> parentProperty() {
             return null;
         }
 
         @Override
-        public @NonNull Bounds getLayoutBounds() {
+        public Bounds getLayoutBounds() {
             return null;
         }
 
         @Override
-        public @NonNull CssRectangle2D getCssLayoutBounds() {
+        public CssRectangle2D getCssLayoutBounds() {
             return new CssRectangle2D(getLayoutBounds());
         }
 
@@ -84,17 +83,17 @@ public class FigureTest {
         }
 
         @Override
-        public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+        public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
             // empty
         }
 
         @Override
-        public @NonNull Node createNode(@NonNull RenderContext ctx) {
+        public Node createNode(RenderContext ctx) {
             return null;
         }
 
         @Override
-        public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+        public void updateNode(RenderContext ctx, Node node) {
         }
 
         @Override
@@ -103,12 +102,12 @@ public class FigureTest {
         }
 
         @Override
-        public boolean isSuitableParent(@NonNull Figure newParent) {
+        public boolean isSuitableParent(Figure newParent) {
             return false;
         }
 
         @Override
-        public boolean isSuitableChild(@NonNull Figure newChild) {
+        public boolean isSuitableChild(Figure newChild) {
             return false;
         }
 
@@ -132,11 +131,11 @@ public class FigureTest {
         }
 
         @Override
-        public void updateCss(@NonNull RenderContext ctx) {
+        public void updateCss(RenderContext ctx) {
         }
 
         @Override
-        public void addedToDrawing(@NonNull Drawing drawing) {
+        public void addedToDrawing(Drawing drawing) {
         }
 
         @Override
@@ -144,52 +143,52 @@ public class FigureTest {
         }
 
         @Override
-        public @NonNull ObservableList<Figure> getChildren() {
+        public ObservableList<Figure> getChildren() {
             return FXCollections.emptyObservableList();
         }
 
         @Override
-        public @NonNull Set<Figure> getLayoutObservers() {
+        public Set<Figure> getLayoutObservers() {
             return Collections.emptySet();
         }
 
         @Override
-        public @NonNull ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
+        public ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
             return ChampSet.of();
         }
 
         @Override
-        public @NonNull Transform getParentToLocal() {
+        public Transform getParentToLocal() {
             return FXTransforms.IDENTITY;
         }
 
         @Override
-        public @NonNull Bounds getBoundsInLocal() {
+        public Bounds getBoundsInLocal() {
             return getLayoutBounds();
         }
 
         @Override
-        public @NonNull Transform getLocalToParent() {
+        public Transform getLocalToParent() {
             return FXTransforms.IDENTITY;
         }
 
         @Override
-        public @NonNull Transform getWorldToLocal() {
+        public Transform getWorldToLocal() {
             return FXTransforms.IDENTITY;
         }
 
         @Override
-        public @NonNull Transform getWorldToParent() {
+        public Transform getWorldToParent() {
             return FXTransforms.IDENTITY;
         }
 
         @Override
-        public @NonNull Transform getLocalToWorld() {
+        public Transform getLocalToWorld() {
             return FXTransforms.IDENTITY;
         }
 
         @Override
-        public @NonNull Transform getParentToWorld() {
+        public Transform getParentToWorld() {
             return FXTransforms.IDENTITY;
         }
 
@@ -209,57 +208,57 @@ public class FigureTest {
         }
 
         @Override
-        public <T> T getStyled(@NonNull MapAccessor<T> key) {
+        public <T> T getStyled(MapAccessor<T> key) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public <T> T setStyled(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key, T value) {
+        public <T> T setStyled(StyleOrigin origin, MapAccessor<T> key, T value) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public <T> T remove(@NonNull StyleOrigin origin, @NonNull MapAccessor<T> key) {
+        public <T> T remove(StyleOrigin origin, MapAccessor<T> key) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void removeAll(@NonNull StyleOrigin origin) {
+        public void removeAll(StyleOrigin origin) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull String getTypeSelector() {
+        public String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull String getId() {
+        public String getId() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull ReadOnlyProperty<String> idProperty() {
+        public ReadOnlyProperty<String> idProperty() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull ReadOnlySet<String> getStyleClasses() {
+        public ReadOnlySet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull String getStyle() {
+        public String getStyle() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull StyleableBean getStyleableParent() {
+        public StyleableBean getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public @NonNull ReadOnlySet<String> getPseudoClassStates() {
+        public ReadOnlySet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -269,17 +268,17 @@ public class FigureTest {
         }
 
         @Override
-        public void reshapeInParent(@NonNull Transform transform) {
+        public void reshapeInParent(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void transformInParent(@NonNull Transform transform) {
+        public void transformInParent(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
         @Override
-        public void transformInLocal(@NonNull Transform transform) {
+        public void transformInLocal(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
     }

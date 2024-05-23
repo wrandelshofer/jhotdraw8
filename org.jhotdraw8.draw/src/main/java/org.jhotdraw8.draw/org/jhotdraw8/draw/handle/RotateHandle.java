@@ -25,8 +25,6 @@ import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
@@ -36,6 +34,7 @@ import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -56,8 +55,8 @@ public class RotateHandle extends AbstractHandle {
     private static final @Nullable Background HANDLE_REGION_BACKGROUND = new Background(new BackgroundFill(Color.WHITE, null, null));
     private static final @Nullable Border HANDLE_REGION_BORDER = new Border(new BorderStroke(Color.PURPLE, BorderStrokeStyle.SOLID, null, null));
 
-    private static final @NonNull Circle PICK_NODE_SHAPE = new Circle(3);
-    private static final @NonNull SVGPath PIVOT_NODE_SHAPE = new SVGPath();
+    private static final Circle PICK_NODE_SHAPE = new Circle(3);
+    private static final SVGPath PIVOT_NODE_SHAPE = new SVGPath();
 
     private static final @Nullable Background PIVOT_REGION_BACKGROUND = new Background(new BackgroundFill(Color.PURPLE, null, null));
     private static final @Nullable Border PIVOT_REGION_BORDER = null;
@@ -66,14 +65,14 @@ public class RotateHandle extends AbstractHandle {
         PIVOT_NODE_SHAPE.setContent("M-5,-1 L -1,-1 -1,-5 1,-5 1,-1 5,-1 5 1 1,1 1,5 -1,5 -1,1 -5,1 Z");
     }
 
-    private final @NonNull Group group;
+    private final Group group;
 
     private Set<Figure> groupReshapeableFigures;
-    private final @NonNull Line line;
+    private final Line line;
     private double lineLength = 10.0;
     private Point2D pickLocation;
-    private final @NonNull Region pickNode;
-    private final @NonNull Region pivotNode;
+    private final Region pickNode;
+    private final Region pivotNode;
 
     public RotateHandle(TransformableFigure figure) {
         super(figure);
@@ -123,7 +122,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Group getNode(@NonNull DrawingView view) {
+    public Group getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         lineLength = size * 1.5;
         if (pickNode.getWidth() != size) {
@@ -143,7 +142,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull TransformableFigure getOwner() {
+    public TransformableFigure getOwner() {
         return (TransformableFigure) super.getOwner();
     }
 
@@ -178,7 +177,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         TransformableFigure o = getOwner();
         Point2D center = FXRectangles.center(o.getLayoutBounds());
         Transform t = FXTransforms.concat(getWorldToRotate(), view.getViewToWorld());
@@ -212,7 +211,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         pivotNode.setVisible(true);
         // determine which figures can be reshaped together as a group
         Set<Figure> selectedFigures = view.getSelectedFigures();
@@ -226,7 +225,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         pivotNode.setVisible(false);
         // FIXME fireDrawingModelEvent undoable edit event
     }
@@ -237,7 +236,7 @@ public class RotateHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         TransformableFigure o = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), getRotateToWorld());
         Bounds b = o.getLayoutBounds();

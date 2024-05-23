@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.impl;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -35,8 +34,8 @@ public class ArrayHelper {
      * @return true if the two sub-arrays have the same length and
      * if the elements are equal to one another in the same order
      */
-    public static <T> boolean equals(T @NonNull [] a, int aFrom, int aTo,
-                                     T @NonNull [] b, int bFrom, int bTo) {
+    public static <T> boolean equals(T[] a, int aFrom, int aTo,
+                                     T[] b, int bFrom, int bTo) {
         return equals(a, aFrom, aTo, b, bFrom, bTo, Objects::equals);
     }
 
@@ -54,9 +53,9 @@ public class ArrayHelper {
      * @return true if the two sub-arrays have the same length and
      * if the elements are equal to one another in the same order
      */
-    public static <T> boolean equals(T @NonNull [] a, int aFrom, int aTo,
-                                     T @NonNull [] b, int bFrom, int bTo,
-                                     @NonNull BiPredicate<T, T> cmp) {
+    public static <T> boolean equals(T[] a, int aFrom, int aTo,
+                                     T[] b, int bFrom, int bTo,
+                                     BiPredicate<T, T> cmp) {
         Objects.checkFromToIndex(aFrom, aTo, a.length);
         Objects.checkFromToIndex(bFrom, bTo, b.length);
         int aLength = aTo - aFrom;
@@ -83,7 +82,7 @@ public class ArrayHelper {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyAdd(@NonNull T @NonNull [] src, int index, T value) {
+    public static <T> T[] copyAdd(T[] src, int index, T value) {
         final T[] dst = copyComponentAdd(src, index, 1);
         dst[index] = value;
         return dst;
@@ -98,7 +97,7 @@ public class ArrayHelper {
      * @param <T>    the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyAddAll(@NonNull T @NonNull [] src, int index, @NonNull T @NonNull [] values) {
+    public static <T> T[] copyAddAll(T[] src, int index, T[] values) {
         final T[] dst = copyComponentAdd(src, index, values.length);
         System.arraycopy(values, 0, dst, index, values.length);
         return dst;
@@ -115,7 +114,7 @@ public class ArrayHelper {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyComponentAdd(@NonNull T @NonNull [] src, int index, int numComponents) {
+    public static <T> T[] copyComponentAdd(T[] src, int index, int numComponents) {
         if (index == src.length) {
             return Arrays.copyOf(src, src.length + numComponents);
         }
@@ -134,7 +133,7 @@ public class ArrayHelper {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyComponentRemove(@NonNull T @NonNull [] src, int index, int numComponents) {
+    public static <T> T[] copyComponentRemove(T[] src, int index, int numComponents) {
         if (index == src.length - numComponents) {
             return Arrays.copyOf(src, src.length - numComponents);
         }
@@ -152,7 +151,7 @@ public class ArrayHelper {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyRemove(@NonNull T @NonNull [] src, int index) {
+    public static <T> T[] copyRemove(T[] src, int index) {
         return copyComponentRemove(src, index, 1);
     }
 
@@ -165,7 +164,7 @@ public class ArrayHelper {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copySet(@NonNull T @NonNull [] src, int index, T value) {
+    public static <T> T[] copySet(T[] src, int index, T value) {
         final T[] dst = Arrays.copyOf(src, src.length);
         dst[index] = value;
         return dst;

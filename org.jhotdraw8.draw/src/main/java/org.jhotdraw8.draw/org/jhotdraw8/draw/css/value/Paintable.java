@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Paint;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jspecify.annotations.Nullable;
 //import org.jhotdraw8.draw.render.RenderContext;
 
 /**

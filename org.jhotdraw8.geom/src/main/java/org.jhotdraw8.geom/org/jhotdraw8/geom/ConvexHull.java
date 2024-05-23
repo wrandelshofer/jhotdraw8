@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.*;
 import java.awt.geom.Point2D;
@@ -29,7 +28,7 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    public static @NonNull List<Point2D.Double> getConvexHull2D(@NonNull List<Point2D.Double> points) {
+    public static List<Point2D.Double> getConvexHull2D(List<Point2D.Double> points) {
         return Arrays.asList(getConvexHull2D(points.toArray(new Point2D.Double[0])));
     }
 
@@ -39,7 +38,7 @@ public class ConvexHull {
      * @param points the points
      * @return convex hull of the points
      */
-    public static Point2D.Double[] getConvexHull2D(Point2D.@NonNull Double[] points) {
+    public static Point2D.Double[] getConvexHull2D(Point2D.Double[] points) {
         // Quickly return if no work is needed
         if (points.length < 3) {
             return points.clone();
@@ -92,7 +91,7 @@ public class ConvexHull {
      * @param p3 third point
      * @return true if right turn.
      */
-    public static boolean isRightTurn2D(Point.@NonNull Double p1, Point.@NonNull Double p2, Point.@NonNull Double p3) {
+    public static boolean isRightTurn2D(Point.Double p1, Point.Double p2, Point.Double p3) {
         if (p1.equals(p2) || p2.equals(p3)) {
             // no right turn if points are at same location
             return false;

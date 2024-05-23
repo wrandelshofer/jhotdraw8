@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.collection.spliterator;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -18,9 +17,9 @@ public class ReverseListSpliterator<E> extends AbstractListIteratorSpliterator<E
     private final int fromInclusive;
     private final int toExclusive;
     private E current;
-    private final @NonNull List<E> list;
+    private final List<E> list;
 
-    public ReverseListSpliterator(@NonNull List<E> list, int fromInclusive, int toExclusive) {
+    public ReverseListSpliterator(List<E> list, int fromInclusive, int toExclusive) {
         this.index = toExclusive - 1;
         this.fromInclusive = fromInclusive;
         this.toExclusive = toExclusive;
@@ -73,7 +72,7 @@ public class ReverseListSpliterator<E> extends AbstractListIteratorSpliterator<E
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
+    public boolean tryAdvance(Consumer<? super E> action) {
         if (hasNext()) {
             action.accept(next());
             return true;

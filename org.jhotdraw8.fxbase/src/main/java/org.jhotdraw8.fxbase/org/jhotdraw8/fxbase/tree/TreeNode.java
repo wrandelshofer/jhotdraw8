@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Iterator;
@@ -32,7 +31,7 @@ import java.util.Spliterator;
  * <pre>{@literal
  *     public class MyTree implements TreeNode<MyTree> {
  *        private @Nullable MyTree parent;
- *        private @NonNull ChildList<MyTree> children=new ChildList<>(this);
+ *        private ChildList<MyTree> children=new ChildList<>(this);
  *
  *        @Override
  *        public @Nullable MyTree getParent() { return parent; }
@@ -56,7 +55,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default @NonNull Iterable<T> ancestorIterable() {
+    default Iterable<T> ancestorIterable() {
         @SuppressWarnings("unchecked")
         Iterable<T> i = () -> new TreeNode.AncestorIterator<>((T) this);
         return i;
@@ -68,7 +67,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default @NonNull Iterable<T> breadthFirstIterable() {
+    default Iterable<T> breadthFirstIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked")
@@ -95,7 +94,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @param depth the indentation depth
      * @throws IOException from appendable
      */
-    default void dumpTree(@NonNull Appendable out, int depth) throws IOException {
+    default void dumpTree(Appendable out, int depth) throws IOException {
         for (int i = 0; i < depth; i++) {
             out.append('.');
         }
@@ -115,7 +114,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * this type is present. Returns {@code this} if this object is of type
      * {@literal <T>}.
      */
-    default @Nullable <TT> TT getAncestor(@NonNull Class<TT> ancestorType) {
+    default @Nullable <TT> TT getAncestor(Class<TT> ancestorType) {
         @SuppressWarnings("unchecked")
         T ancestor = (T) this;
         while (ancestor != null && !ancestorType.isInstance(ancestor)) {
@@ -156,7 +155,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the children
      */
-    @NonNull List<T> getChildren();
+    List<T> getChildren();
 
     /**
      * Gets the first child.
@@ -206,7 +205,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @return path including this node
      */
     @SuppressWarnings("unchecked")
-    default @NonNull List<T> getPath() {
+    default List<T> getPath() {
         LinkedList<T> path = new LinkedList<>();
         for (T node = (T) this; node != null; node = node.getParent()) {
             path.addFirst(node);
@@ -233,7 +232,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default @NonNull Iterable<T> postorderIterable() {
+    default Iterable<T> postorderIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
@@ -248,7 +247,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default @NonNull Iterable<T> depthFirstIterable() {
+    default Iterable<T> depthFirstIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked")
@@ -263,7 +262,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      *
      * @return the iterable
      */
-    default @NonNull Iterable<T> preorderIterable() {
+    default Iterable<T> preorderIterable() {
         return new SpliteratorIterable<>(
                 () -> {
                     @SuppressWarnings("unchecked") T t = (T) this;
@@ -280,7 +279,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @return the iterable
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
-    default @NonNull Spliterator<T> preorderSpliterator() {
+    default Spliterator<T> preorderSpliterator() {
         T t = (T) this;
         return new PreorderSpliterator<>(TreeNode::getChildren, t);
     }
@@ -339,7 +338,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @param newParent The new parent node.
      * @return true if {@code newParent} is an acceptable parent
      */
-    default boolean isSuitableParent(@NonNull T newParent) {
+    default boolean isSuitableParent(T newParent) {
         return true;
     }
 
@@ -352,7 +351,7 @@ public interface TreeNode<T extends TreeNode<T>> {
      * @param newChild The new child node.
      * @return true if {@code newChild} is an acceptable child
      */
-    default boolean isSuitableChild(@NonNull T newChild) {
+    default boolean isSuitableChild(T newChild) {
         return true;
     }
 

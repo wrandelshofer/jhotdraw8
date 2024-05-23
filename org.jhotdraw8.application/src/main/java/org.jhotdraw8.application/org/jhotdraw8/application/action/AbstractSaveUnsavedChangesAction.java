@@ -14,8 +14,6 @@ import javafx.scene.input.DataFormat;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
@@ -27,6 +25,7 @@ import org.jhotdraw8.base.net.UriUtil;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.icollection.ChampMap;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.concurrent.CancellationException;
@@ -55,7 +54,7 @@ import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<FileBasedActivity> {
 
-    private final @NonNull Logger LOGGER = Logger.getLogger(AbstractSaveUnsavedChangesAction.class.getName());
+    private final Logger LOGGER = Logger.getLogger(AbstractSaveUnsavedChangesAction.class.getName());
 
 
     private @Nullable Node oldFocusOwner = null;
@@ -65,12 +64,12 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
      *
      * @param activity the view
      */
-    public AbstractSaveUnsavedChangesAction(@NonNull FileBasedActivity activity) {
+    public AbstractSaveUnsavedChangesAction(FileBasedActivity activity) {
         super(activity);
     }
 
     @Override
-    protected final void onActionPerformed(@NonNull ActionEvent evt, @NonNull FileBasedActivity activity) {
+    protected final void onActionPerformed(ActionEvent evt, FileBasedActivity activity) {
         onActionOnViewPerformed(activity);
     }
 
@@ -84,7 +83,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         return chooser;
     }
 
-    public void onActionOnViewPerformed(@NonNull FileBasedActivity v) {
+    public void onActionOnViewPerformed(FileBasedActivity v) {
         if (!v.isDisabled()) {
             final Resources labels = ApplicationLabels.getResources();
             /* Window wAncestor = v.getNode().getScene().getWindow(); */
@@ -157,13 +156,13 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    protected @Nullable Node getFocusOwner(@NonNull Node node) {
+    protected @Nullable Node getFocusOwner(Node node) {
 
         Scene scene = node.getScene();
         return scene == null ? null : scene.getFocusOwner();
     }
 
-    protected void saveView(final @NonNull FileBasedActivity v, WorkState<Void> workState) {
+    protected void saveView(final FileBasedActivity v, WorkState<Void> workState) {
         if (v.getURI() == null) {
             URIChooser chooser = getChooser(v);
             //int option = fileChooser.showSaveDialog(this);
@@ -201,7 +200,7 @@ public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityA
         }
     }
 
-    protected void saveViewToURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState<Void> workState) {
+    protected void saveViewToURI(final FileBasedActivity v, final URI uri, final @Nullable URIChooser chooser, final DataFormat dataFormat, WorkState<Void> workState) {
         v.write(uri, dataFormat, ChampMap.of(), workState).handle((result, exception) -> {
             if (exception instanceof CancellationException) {
                 v.removeDisabler(workState);

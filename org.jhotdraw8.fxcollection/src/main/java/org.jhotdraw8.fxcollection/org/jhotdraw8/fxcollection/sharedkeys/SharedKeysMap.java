@@ -7,8 +7,7 @@ package org.jhotdraw8.fxcollection.sharedkeys;
 import javafx.beans.InvalidationListener;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractCollection;
 import java.util.AbstractMap;
@@ -31,13 +30,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 
-    private static final @NonNull Object NULL_VALUE = new Object();
+    private static final Object NULL_VALUE = new Object();
     private CopyOnWriteArrayList<MapChangeListener<? super K, ? super V>> changeListenerList;
     private CopyOnWriteArrayList<InvalidationListener> invalidationListenerList;
-    private final @NonNull Map<K, Integer> keyMap;
+    private final Map<K, Integer> keyMap;
     private int size;
 
-    private final Object @NonNull [] values;
+    private final Object[] values;
 
     /**
      * Creates a new instance.
@@ -47,7 +46,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
      *               <p>
      *               This map must be immutable.
      */
-    public SharedKeysMap(@NonNull Map<K, Integer> keyMap) {
+    public SharedKeysMap(Map<K, Integer> keyMap) {
         this.keyMap = keyMap;
         this.values = new Object[keyMap.size()];
     }
@@ -120,7 +119,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     @Override
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public Set<Entry<K, V>> entrySet() {
         return new EntrySet();
     }
 
@@ -147,7 +146,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     @Override
-    public @NonNull Set<K> keySet() {
+    public Set<K> keySet() {
         return new KeySet();
     }
 
@@ -227,7 +226,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
     }
 
     @Override
-    public @NonNull Collection<V> values() {
+    public Collection<V> values() {
         return new ValueCollection();
     }
 
@@ -250,7 +249,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         @Override
-        public @NonNull String toString() {
+        public String toString() {
             return "ChangeEvent{" + "key=" + key + ", old=" + old + ", added=" + added + ", wasAdded=" + wasAdded + ", wasRemoved=" + wasRemoved + '}';
         }
 
@@ -310,9 +309,9 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         @Override
-        public @NonNull Iterator<Entry<K, V>> iterator() {
+        public Iterator<Entry<K, V>> iterator() {
             return new Iterator<>() {
-                private final @NonNull Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
+                private final Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K lastKey;
@@ -342,7 +341,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
                 }
 
                 @Override
-                public @NonNull Entry<K, V> next() {
+                public Entry<K, V> next() {
                     lastKey = nextKey;
                     lastValue = nextValue;
                     advance();
@@ -358,7 +357,7 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         @Override
-        public boolean add(@NonNull Entry<K, V> e) {
+        public boolean add(Entry<K, V> e) {
             boolean added = !SharedKeysMap.this.containsKey(e.getKey())
                     || Objects.equals(SharedKeysMap.this.get(e.getKey()), e.getValue());
             if (added) {
@@ -402,9 +401,9 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         @Override
-        public @NonNull Iterator<K> iterator() {
+        public Iterator<K> iterator() {
             return new Iterator<>() {
-                private final @NonNull Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
+                private final Iterator<Entry<K, Integer>> entryIt = SharedKeysMap.this.keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K currentKey;
@@ -538,10 +537,10 @@ public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements Observable
         }
 
         @Override
-        public @NonNull Iterator<V> iterator() {
+        public Iterator<V> iterator() {
             return new Iterator<>() {
 
-                private final @NonNull Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
+                private final Iterator<Entry<K, Integer>> entryIt = keyMap.entrySet().iterator();
                 private boolean hasNext;
                 private K nextKey;
                 private K currentKey;

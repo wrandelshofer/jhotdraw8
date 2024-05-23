@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.iterator;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.AbstractIntEnumerator;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.DenseIntSet8Bit;
@@ -22,9 +21,9 @@ import java.util.function.Function;
  */
 public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
 
-    private final @NonNull Function<Integer, Enumerator.OfInt> nextFunction;
-    private final @NonNull IntArrayDeque deque;
-    private final @NonNull AddToIntSet visited;
+    private final Function<Integer, Enumerator.OfInt> nextFunction;
+    private final IntArrayDeque deque;
+    private final AddToIntSet visited;
     private final boolean dfs;
 
     /**
@@ -35,7 +34,7 @@ public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
      * @param vertexCount  the vertex count
      * @param dfs          whether to perform depth-first-search instead of breadth-first-search
      */
-    public BfsDfsIndexedVertexSpliterator(@NonNull Function<Integer, Enumerator.OfInt> nextFunction,
+    public BfsDfsIndexedVertexSpliterator(Function<Integer, Enumerator.OfInt> nextFunction,
                                           int root,
                                           int vertexCount, boolean dfs) {
         this(nextFunction, root, new DenseIntSet8Bit(vertexCount)::addAsInt, dfs);
@@ -48,7 +47,7 @@ public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
      * @param root         the root vertex
      * @param dfs          whether to perform depth-first-search instead of breadth-first-search
      */
-    public BfsDfsIndexedVertexSpliterator(@NonNull Function<Integer, Enumerator.OfInt> nextFunction, int root, @NonNull AddToIntSet visited, boolean dfs) {
+    public BfsDfsIndexedVertexSpliterator(Function<Integer, Enumerator.OfInt> nextFunction, int root, AddToIntSet visited, boolean dfs) {
         super(Long.MAX_VALUE, NONNULL | ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");

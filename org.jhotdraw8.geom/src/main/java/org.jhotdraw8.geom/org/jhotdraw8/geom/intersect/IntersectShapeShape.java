@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.*;
 
@@ -46,7 +45,7 @@ public class IntersectShapeShape {
      * @param b shape 'b'
      * @return the intersection result
      */
-    public static @NonNull IntersectionResultEx intersectShapeShapeEx(@NonNull Shape a, @NonNull Shape b) {
+    public static IntersectionResultEx intersectShapeShapeEx(Shape a, Shape b) {
         return IntersectPathIteratorShape.intersectPathIteratorShapeEx(a.getPathIterator(null), b);
     }
 }

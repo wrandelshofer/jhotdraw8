@@ -14,8 +14,6 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.figure.Figure;
@@ -24,6 +22,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -36,13 +35,13 @@ public class BezierNodeTangentHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.DASHED, null, null));
-    private final @NonNull Polyline node;
+    private final Polyline node;
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final @NonNull MapAccessor<BezierPath> pathKey;
+    private final MapAccessor<BezierPath> pathKey;
 
-    public BezierNodeTangentHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int pointIndex) {
+    public BezierNodeTangentHandle(Figure figure, MapAccessor<BezierPath> pathKey, int pointIndex) {
         super(figure);
         this.pathKey = pathKey;
         this.pointIndex = pointIndex;
@@ -67,7 +66,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
         return null;
     }
 
-    private @NonNull Point2D getLocation() {
+    private Point2D getLocation() {
         return getBezierNode().getPoint(Point2D::new);
 
     }
@@ -77,7 +76,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Polyline getNode(@NonNull DrawingView view) {
+    public Polyline getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         node.setStroke(color.getColor());
         return node;
@@ -89,7 +88,7 @@ public class BezierNodeTangentHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         BezierPath list = f.get(pathKey);

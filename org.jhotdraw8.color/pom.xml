@@ -52,8 +52,8 @@
 
   <dependencies>
     <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.annotation</artifactId>
+      <groupId>org.jspecify</groupId>
+      <artifactId>jspecify</artifactId>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>

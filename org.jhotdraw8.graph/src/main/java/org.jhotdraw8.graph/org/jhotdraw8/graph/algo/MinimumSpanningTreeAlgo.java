@@ -5,14 +5,13 @@
 
 package org.jhotdraw8.graph.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,7 +29,7 @@ public class MinimumSpanningTreeAlgo {
 
     }
 
-    public static @NonNull <VV> Map<VV, List<VV>> createForest(@NonNull Collection<VV> vertices) {
+    public static <VV> Map<VV, List<VV>> createForest(Collection<VV> vertices) {
         // Create initial forest.
         SequencedMap<VV, List<VV>> forest = new LinkedHashMap<>(vertices.size());
         for (VV v : vertices) {
@@ -41,7 +40,7 @@ public class MinimumSpanningTreeAlgo {
         return forest;
     }
 
-    public static <VV> void union(@NonNull List<VV> uset, @NonNull List<VV> vset, @NonNull Map<VV, List<VV>> forest) {
+    public static <VV> void union(List<VV> uset, List<VV> vset, Map<VV, List<VV>> forest) {
         if (uset != vset) {
             if (uset.size() < vset.size()) {
                 for (VV uu : uset) {
@@ -71,7 +70,7 @@ public class MinimumSpanningTreeAlgo {
      *                      list, if it is provided.
      * @return the arrows that are part of the minimum spanning tree.
      */
-    public @NonNull <V, A, C extends Number & Comparable<C>, P extends OrderedPair<V, V>> List<P> findMinimumSpanningTree(@NonNull Collection<V> vertices, @NonNull List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
+    public <V, A, C extends Number & Comparable<C>, P extends OrderedPair<V, V>> List<P> findMinimumSpanningTree(Collection<V> vertices, List<P> orderedEdges, @Nullable List<P> rejectedEdges) {
         List<P> minimumSpanningTree = new ArrayList<>(orderedEdges.size());
         if (rejectedEdges == null) {
             rejectedEdges = new ArrayList<>(orderedEdges.size());
@@ -105,7 +104,7 @@ public class MinimumSpanningTreeAlgo {
      * @param costf the cost function
      * @return the graph builder
      */
-    public @NonNull <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(@NonNull DirectedGraph<V, A> graph, @NonNull Function<A, C> costf) {
+    public <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(DirectedGraph<V, A> graph, Function<A, C> costf) {
         return findMinimumSpanningTreeGraph(graph, (u, v, a) -> costf.apply(a));
 
     }
@@ -120,7 +119,7 @@ public class MinimumSpanningTreeAlgo {
      * @param costf the cost function
      * @return the graph builder
      */
-    public @NonNull <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(@NonNull DirectedGraph<V, A> graph, @NonNull Function3<V, V, A, C> costf) {
+    public <V, A, C extends Number & Comparable<C>> SimpleMutableDirectedGraph<V, A> findMinimumSpanningTreeGraph(DirectedGraph<V, A> graph, Function3<V, V, A, C> costf) {
         Collection<V> vertices = graph.getVertices();
         Set<V> done = new HashSet<>();
         List<ArrowWithCost<V, A, C>> arrowWithCosts = new ArrayList<>();
@@ -163,7 +162,7 @@ public class MinimumSpanningTreeAlgo {
      *                       list, if it is provided.
      * @return the graph builder
      */
-    public @NonNull <V, A, C extends Number & Comparable<C>, P extends OrderedPair<V, V>> SimpleMutableDirectedGraph<V, P> findMinimumSpanningTreeGraph(@NonNull Collection<V> vertices, @NonNull List<P> orderedArrows, @Nullable List<P> includedArrows, List<P> rejectedArrows) {
+    public <V, A, C extends Number & Comparable<C>, P extends OrderedPair<V, V>> SimpleMutableDirectedGraph<V, P> findMinimumSpanningTreeGraph(Collection<V> vertices, List<P> orderedArrows, @Nullable List<P> includedArrows, List<P> rejectedArrows) {
         List<P> includedArrowList = findMinimumSpanningTree(vertices, orderedArrows, rejectedArrows);
         if (includedArrows != null) {
             includedArrows.addAll(includedArrowList);

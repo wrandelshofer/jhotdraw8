@@ -13,8 +13,6 @@ import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
@@ -35,6 +33,7 @@ import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -58,13 +57,13 @@ import static java.lang.Math.signum;
 public abstract class AbstractElbowLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {
 
-    private final @NonNull Polyline path = new Polyline();
+    private final Polyline path = new Polyline();
 
     public AbstractElbowLineConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
     }
 
-    public AbstractElbowLineConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
+    public AbstractElbowLineConnectionWithMarkersFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -73,7 +72,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         final Polyline line = new Polyline();
         final Path startMarker = new Path();
@@ -83,7 +82,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -120,7 +119,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Polyline node) {
+    protected void updateLineNode(RenderContext ctx, Polyline node) {
 
     }
 
@@ -131,7 +130,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateStartMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 
@@ -142,12 +141,12 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      * @param ctx  the context
      * @param node the node
      */
-    protected void updateEndMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         // empty
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         Polyline lineNode = (Polyline) g.getChildren().get(0);
         final Path startMarkerNode = (Path) g.getChildren().get(1);
@@ -195,9 +194,9 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         updateEndMarkerNode(ctx, endMarkerNode);
     }
 
-    protected void updateMarkerNode(@NonNull RenderContext ctx, @NonNull Group group,
-                                    @NonNull Path markerNode,
-                                    @NonNull PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
+    protected void updateMarkerNode(RenderContext ctx, Group group,
+                                    Path markerNode,
+                                    PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
         if (svgString != null) {
             try {
                 // Note: we must not add individual elements to the ObservableList
@@ -224,13 +223,13 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         return path == null ? AwtShapes.emptyPathIterator() : AwtShapes.pointCoordsToPathIterator(path.getPoints(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
-    public abstract double getStrokeCutStart(@NonNull RenderContext ctx);
+    public abstract double getStrokeCutStart(RenderContext ctx);
 
-    public abstract double getStrokeCutEnd(@NonNull RenderContext ctx);
+    public abstract double getStrokeCutEnd(RenderContext ctx);
 
     public abstract @Nullable String getMarkerStartShape();
 
@@ -251,7 +250,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         Point2D start = getNonNull(START).getConvertedValue();
         Point2D end = getNonNull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);

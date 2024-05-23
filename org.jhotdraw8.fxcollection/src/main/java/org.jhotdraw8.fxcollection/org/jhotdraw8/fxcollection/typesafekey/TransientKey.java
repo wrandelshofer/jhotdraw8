@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -18,15 +17,15 @@ import java.lang.reflect.Type;
 public class TransientKey<T> extends AbstractKey<T> implements NullableKey<T> {
 
 
-    public TransientKey(@NonNull String name, @NonNull Class<T> clazz) {
+    public TransientKey(String name, Class<T> clazz) {
         super(name, clazz);
     }
 
-    public TransientKey(@NonNull String name, @NonNull Class<T> clazz, T defaultValue) {
+    public TransientKey(String name, Class<T> clazz, T defaultValue) {
         super(name, clazz, defaultValue);
     }
 
-    public TransientKey(@Nullable String name, @NonNull Type clazz, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
+    public TransientKey(@Nullable String name, Type clazz, boolean isNullable, boolean isTransient, @Nullable T defaultValue) {
         super(name, clazz, isNullable, isTransient, defaultValue);
     }
 

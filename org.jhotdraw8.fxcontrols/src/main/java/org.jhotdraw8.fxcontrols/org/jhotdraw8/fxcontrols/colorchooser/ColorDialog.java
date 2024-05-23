@@ -13,16 +13,15 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 public class ColorDialog extends HBox {
-    private final @NonNull Stage dialog = new Stage();
+    private final Stage dialog = new Stage();
     private Runnable onSave;
     private Runnable onUse;
     private Runnable onCancel;
-    private final @NonNull ObjectProperty<ColorSpaceColor> currentColor = new SimpleObjectProperty<>(ColorSpaceColor.WHITE);
-    private final @NonNull ObjectProperty<ColorSpaceColor> customColor = new SimpleObjectProperty<>(ColorSpaceColor.TRANSPARENT);
+    private final ObjectProperty<ColorSpaceColor> currentColor = new SimpleObjectProperty<>(ColorSpaceColor.WHITE);
+    private final ObjectProperty<ColorSpaceColor> customColor = new SimpleObjectProperty<>(ColorSpaceColor.TRANSPARENT);
 
     public ColorDialog() {
     }
@@ -37,7 +36,7 @@ public class ColorDialog extends HBox {
         dialog.addEventHandler(KeyEvent.ANY, keyEventListener);
     }
 
-    private final @NonNull EventHandler<KeyEvent> keyEventListener = e -> {
+    private final EventHandler<KeyEvent> keyEventListener = e -> {
         switch (e.getCode()) {
         case ESCAPE:
             dialog.setScene(null);
@@ -76,7 +75,7 @@ public class ColorDialog extends HBox {
         return currentColor.get();
     }
 
-    public @NonNull ObjectProperty<ColorSpaceColor> currentColorProperty() {
+    public ObjectProperty<ColorSpaceColor> currentColorProperty() {
         return currentColor;
     }
 
@@ -88,7 +87,7 @@ public class ColorDialog extends HBox {
         return customColor.get();
     }
 
-    public @NonNull ObjectProperty<ColorSpaceColor> customColorProperty() {
+    public ObjectProperty<ColorSpaceColor> customColorProperty() {
         return customColor;
     }
 

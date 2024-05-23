@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class IntersectPolygonRectangle {
      * @param r1     corner point 1 of the rectangle
      * @return computed intersection
      */
-    public static @NonNull IntersectionResultEx intersectPolygonRectangleEx(@NonNull List<Point2D.Double> points, @NonNull Point2D r0, @NonNull Point2D r1) {
+    public static IntersectionResultEx intersectPolygonRectangleEx(List<Point2D.Double> points, Point2D r0, Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);
         bottomRight = Intersections.bottomRight(r0, r1);

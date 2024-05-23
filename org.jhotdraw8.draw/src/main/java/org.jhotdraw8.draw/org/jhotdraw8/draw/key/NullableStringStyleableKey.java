@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -18,7 +17,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WritableStyleableMapAccessor<String> {
 
     private static final long serialVersionUID = 1L;
-    private final @NonNull StringCssConverter converter;
+    private final StringCssConverter converter;
 
     /**
      * Creates a new instance with the specified name and with a null String
@@ -26,7 +25,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
      *
      * @param name The name of the key.
      */
-    public NullableStringStyleableKey(@NonNull String name) {
+    public NullableStringStyleableKey(String name) {
         this(null, name, null);
     }
 
@@ -35,17 +34,17 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
      *
      * @param name The name of the key.
      */
-    public NullableStringStyleableKey(String namespace, @NonNull String name) {
+    public NullableStringStyleableKey(String namespace, String name) {
         this(namespace, name, null);
     }
 
-    public NullableStringStyleableKey(String namespace, @NonNull String name, String helpText) {
+    public NullableStringStyleableKey(String namespace, String name, String helpText) {
         super(namespace, name, String.class, true, null);
         converter = new StringCssConverter(true, '\'', helpText);
     }
 
     @Override
-    public @NonNull Converter<String> getCssConverter() {
+    public Converter<String> getCssConverter() {
         return converter;
     }
 }

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.converter.SizeCssConverter;
@@ -49,7 +48,7 @@ public class DimensionConverterTest {
     /**
      * Test of fromString method, of class CssDoubleConverter.
      */
-    public static void testFromString(@Nullable Double expected, @NonNull String string) throws Exception {
+    public static void testFromString(@Nullable Double expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
         SizeCssConverter instance = new SizeCssConverter(true);
@@ -65,7 +64,7 @@ public class DimensionConverterTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("2", () -> testFromString(1.0, "1")),
@@ -96,7 +95,7 @@ public class DimensionConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsToString() {
+    public List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString(null, "none")),
                 dynamicTest("2", () -> testToString(1.0, "1")),

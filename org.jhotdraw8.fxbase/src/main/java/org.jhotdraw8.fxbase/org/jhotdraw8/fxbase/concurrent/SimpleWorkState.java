@@ -12,8 +12,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -29,32 +28,32 @@ import static org.jhotdraw8.fxbase.concurrent.PlatformUtil.update;
  */
 public class SimpleWorkState<V> implements WorkState<V> {
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
-    private final @NonNull AtomicReference<Object> titleUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
+    private final AtomicReference<Object> titleUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, MESSAGE_PROPERTY, null);
+    private final ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, MESSAGE_PROPERTY, null);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
-    private final @NonNull AtomicReference<Object> messageUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
+    private final AtomicReference<Object> messageUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, VALUE_PROPERTY, null);
+    private final ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, VALUE_PROPERTY, null);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(this, STATE_PROPERTY, State.READY);
-    private final @NonNull AtomicReference<Object> stateUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
-    private final @NonNull AtomicReference<Object> runningUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
-    private final @NonNull AtomicReference<Object> exceptionUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(this, STATE_PROPERTY, State.READY);
+    private final AtomicReference<Object> stateUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final AtomicReference<Object> runningUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final AtomicReference<Object> exceptionUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyObjectWrapper<Throwable> exception = new ReadOnlyObjectWrapper<>(this, EXCEPTION_PROPERTY, null);
-    private final @NonNull AtomicReference<Object> valueUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyObjectWrapper<Throwable> exception = new ReadOnlyObjectWrapper<>(this, EXCEPTION_PROPERTY, null);
+    private final AtomicReference<Object> valueUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
-    private final @NonNull AtomicReference<Object> workDoneUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
+    private final AtomicReference<Object> workDoneUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, TOTAL_WORK_PROPERTY, -1.0);
-    private final @NonNull AtomicReference<Object> totalWorkUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, TOTAL_WORK_PROPERTY, -1.0);
+    private final AtomicReference<Object> totalWorkUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, PROGRESS_PROPERTY, -1.0);
-    private final @NonNull AtomicReference<Object> progressUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
+    private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, PROGRESS_PROPERTY, -1.0);
+    private final AtomicReference<Object> progressUpdate = new AtomicReference<>(NO_UPDATE_IS_IN_PROGRESS);
     private volatile boolean isCancelled;
 
     /**
@@ -89,7 +88,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyObjectProperty<V> valueProperty() {
+    public ReadOnlyObjectProperty<V> valueProperty() {
         return value;
     }
 
@@ -108,7 +107,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyDoubleProperty workDoneProperty() {
+    public ReadOnlyDoubleProperty workDoneProperty() {
         return workDone.getReadOnlyProperty();
     }
 
@@ -128,7 +127,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
 
 
     @Override
-    public @NonNull ReadOnlyDoubleProperty totalWorkProperty() {
+    public ReadOnlyDoubleProperty totalWorkProperty() {
         return totalWork.getReadOnlyProperty();
     }
 
@@ -148,7 +147,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyDoubleProperty progressProperty() {
+    public ReadOnlyDoubleProperty progressProperty() {
         return progress.getReadOnlyProperty();
     }
 
@@ -158,7 +157,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyStringProperty messageProperty() {
+    public ReadOnlyStringProperty messageProperty() {
         return message.getReadOnlyProperty();
     }
 
@@ -168,7 +167,7 @@ public class SimpleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyStringProperty titleProperty() {
+    public ReadOnlyStringProperty titleProperty() {
         return title.getReadOnlyProperty();
     }
 

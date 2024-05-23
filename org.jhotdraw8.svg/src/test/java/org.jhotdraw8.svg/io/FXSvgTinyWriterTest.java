@@ -9,7 +9,6 @@ import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
 import org.jhotdraw8.xml.XmlUtil;
 import org.junit.jupiter.api.DynamicTest;
@@ -28,7 +27,7 @@ public class FXSvgTinyWriterTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsExportToWriter() {
+    public List<DynamicTest> dynamicTestsExportToWriter() {
         return Arrays.asList(
                 dynamicTest("rect", () -> testExportToWriter(new Rectangle(10, 20, 100, 200),
                         """
@@ -60,7 +59,7 @@ public class FXSvgTinyWriterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsExportToDOM() {
+    public List<DynamicTest> dynamicTestsExportToDOM() {
         return Arrays.asList(
                 dynamicTest("rect", () -> testExportToDOM(new Rectangle(10, 20, 100, 200),
                         """

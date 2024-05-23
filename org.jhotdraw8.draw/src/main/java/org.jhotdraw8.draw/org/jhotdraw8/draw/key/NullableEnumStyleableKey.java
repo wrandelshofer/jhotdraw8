@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.KebabCaseEnumCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * NullableEnumStyleableKey.
@@ -52,8 +51,8 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends NullableObjectS
      * @param converter    The CSS converter
      * @param defaultValue The default value.
      */
-    public NullableEnumStyleableKey(@NonNull String xmlName, @NonNull String cssName, @NonNull Class<T> clazz,
-                            @NonNull Converter<T> converter,
+    public NullableEnumStyleableKey(String xmlName, String cssName, Class<T> clazz,
+                                    Converter<T> converter,
                             @Nullable T defaultValue) {
         super(xmlName,cssName, clazz, converter, defaultValue);
     }

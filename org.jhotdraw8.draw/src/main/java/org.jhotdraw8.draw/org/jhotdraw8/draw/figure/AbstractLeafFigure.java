@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * This base class can be used to implement figures which do not support child
@@ -20,7 +19,7 @@ public abstract class AbstractLeafFigure extends AbstractFigure {
     }
 
     @Override
-    public final @NonNull ObservableList<Figure> getChildren() {
+    public final ObservableList<Figure> getChildren() {
         return FXCollections.emptyObservableList();
     }
 
@@ -35,7 +34,7 @@ public abstract class AbstractLeafFigure extends AbstractFigure {
     }
 
     @Override
-    public boolean isSuitableParent(@NonNull Figure newParent) {
+    public boolean isSuitableParent(Figure newParent) {
         return true;
     }
 
@@ -46,7 +45,7 @@ public abstract class AbstractLeafFigure extends AbstractFigure {
      * @return false
      */
     @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
+    public boolean isSuitableChild(Figure newChild) {
         return false;
     }
 }

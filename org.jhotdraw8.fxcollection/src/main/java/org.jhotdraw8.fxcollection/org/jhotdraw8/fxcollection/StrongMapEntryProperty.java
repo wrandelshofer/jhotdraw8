@@ -7,8 +7,7 @@ package org.jhotdraw8.fxcollection;
 import javafx.beans.property.ObjectPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -30,7 +29,7 @@ public class StrongMapEntryProperty<K, V, T extends V> extends ObjectPropertyBas
      */
     private char changing;
 
-    public StrongMapEntryProperty(@NonNull ObservableMap<K, V> map, @NonNull K key, @NonNull Class<T> tClazz) {
+    public StrongMapEntryProperty(ObservableMap<K, V> map, K key, Class<T> tClazz) {
         this.map = map;
         this.key = key;
 
@@ -55,7 +54,7 @@ public class StrongMapEntryProperty<K, V, T extends V> extends ObjectPropertyBas
     }
 
     @Override
-    public void onChanged(@NonNull Change<? extends K, ? extends V> change) {
+    public void onChanged(Change<? extends K, ? extends V> change) {
         if (changing++ == 0) {
             if (this.key.equals(change.getKey())) {
                 if (change.wasAdded()) {// was added, or removed and then added

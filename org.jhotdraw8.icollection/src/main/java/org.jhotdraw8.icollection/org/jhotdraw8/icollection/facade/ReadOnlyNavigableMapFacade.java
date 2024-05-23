@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -28,17 +27,17 @@ import java.util.function.Supplier;
  */
 public class ReadOnlyNavigableMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
         implements ReadOnlyNavigableMap<K, V> {
-    private final @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction;
-    private final @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction;
-    private final @NonNull Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction;
+    private final Supplier<Map.Entry<K, V>> firstEntryFunction;
+    private final Supplier<Map.Entry<K, V>> lastEntryFunction;
+    private final Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction;
     private final int characteristics;
-    final @NonNull Function<K, Map.Entry<K, V>> ceilingFunction;
-    final @NonNull Function<K, Map.Entry<K, V>> floorFunction;
-    final @NonNull Function<K, Map.Entry<K, V>> higherFunction;
-    final @NonNull Function<K, Map.Entry<K, V>> lowerFunction;
-    private final @NonNull Supplier<Comparator<? super K>> comparatorSupplier;
+    final Function<K, Map.Entry<K, V>> ceilingFunction;
+    final Function<K, Map.Entry<K, V>> floorFunction;
+    final Function<K, Map.Entry<K, V>> higherFunction;
+    final Function<K, Map.Entry<K, V>> lowerFunction;
+    private final Supplier<Comparator<? super K>> comparatorSupplier;
 
-    public ReadOnlyNavigableMapFacade(@NonNull NavigableMap<K, V> target) {
+    public ReadOnlyNavigableMapFacade(NavigableMap<K, V> target) {
         super(target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;
@@ -52,17 +51,17 @@ public class ReadOnlyNavigableMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
     }
 
     public ReadOnlyNavigableMapFacade(
-            @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
-            @NonNull Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction,
-            @NonNull IntSupplier sizeFunction,
-            @NonNull Predicate<Object> containsKeyFunction,
-            @NonNull Function<K, V> getFunction,
-            @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction,
-            @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction,
-            final @NonNull Function<K, Map.Entry<K, V>> ceilingFunction,
-            final @NonNull Function<K, Map.Entry<K, V>> floorFunction,
-            final @NonNull Function<K, Map.Entry<K, V>> higherFunction,
-            final @NonNull Function<K, Map.Entry<K, V>> lowerFunction,
+            Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
+            Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction,
+            IntSupplier sizeFunction,
+            Predicate<Object> containsKeyFunction,
+            Function<K, V> getFunction,
+            Supplier<Map.Entry<K, V>> firstEntryFunction,
+            Supplier<Map.Entry<K, V>> lastEntryFunction,
+            final Function<K, Map.Entry<K, V>> ceilingFunction,
+            final Function<K, Map.Entry<K, V>> floorFunction,
+            final Function<K, Map.Entry<K, V>> higherFunction,
+            final Function<K, Map.Entry<K, V>> lowerFunction,
             int characteristics, @Nullable Supplier<Comparator<? super K>> comparator) {
         super(iteratorFunction, sizeFunction, containsKeyFunction, getFunction);
         this.firstEntryFunction = firstEntryFunction;
@@ -97,7 +96,7 @@ public class ReadOnlyNavigableMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
     }
 
     @Override
-    public @NonNull ReadOnlyNavigableMap<K, V> readOnlyReversed() {
+    public ReadOnlyNavigableMap<K, V> readOnlyReversed() {
         return new ReadOnlyNavigableMapFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

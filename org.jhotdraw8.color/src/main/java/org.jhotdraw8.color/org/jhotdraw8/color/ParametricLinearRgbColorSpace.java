@@ -7,7 +7,6 @@ package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.math.Matrix3;
 import org.jhotdraw8.color.math.Matrix3Double;
 
@@ -67,55 +66,55 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * <p>
      * <a href="http://www.brucelindbloom.com/index.html?Eqn_ChromAdapt.html">brucelindbloom.com</a>.
      */
-    public static final @NonNull Matrix3Double FROM_D65_TO_D50 = FROM_D50_XYZ_TO_D65_XYZ.inv();
+    public static final Matrix3Double FROM_D65_TO_D50 = FROM_D50_XYZ_TO_D65_XYZ.inv();
 
     /**
      * The XYZ coordinates of the D50 white illuminant.
      */
-    public final static @NonNull Point3D ILLUMINANT_D50_XYZ = new Point3D(0.96422, 1.00000, 0.82521);
+    public final static Point3D ILLUMINANT_D50_XYZ = new Point3D(0.96422, 1.00000, 0.82521);
     /**
      * The XYZ coordinates of the D65 white illuminant.
      */
-    public final static @NonNull Point3D ILLUMINANT_D65_XYZ = new Point3D(0.95047, 1.00000, 1.08883);
+    public final static Point3D ILLUMINANT_D65_XYZ = new Point3D(0.95047, 1.00000, 1.08883);
     /**
      * The XYZ coordinates of the E white illuminant.
      */
-    public final static @NonNull Point3D ILLUMINANT_E_XYZ = new Point3D(1.0, 1.0, 1.0);
+    public final static Point3D ILLUMINANT_E_XYZ = new Point3D(1.0, 1.0, 1.0);
     /**
      * The XYZ coordinates of the C white illuminant.
      */
-    public final static @NonNull Point3D ILLUMINANT_C_XYZ = new Point3D(0.98074, 1.00000, 1.18232);
+    public final static Point3D ILLUMINANT_C_XYZ = new Point3D(0.98074, 1.00000, 1.18232);
     /**
      * The chromaticity coordinates (x,y) of the D65 white illuminant.
      */
-    public final static @NonNull Point2D ILLUMINANT_D65 = new Point2D(0.3127, 0.3290);
+    public final static Point2D ILLUMINANT_D65 = new Point2D(0.3127, 0.3290);
 
-    private static final @NonNull Matrix3Double FROM_LINEAR_SRGB_TO_D65_XYZ_MATRIX = computeToXyzMatrix(new Point2D(0.64, 0.33),
+    private static final Matrix3Double FROM_LINEAR_SRGB_TO_D65_XYZ_MATRIX = computeToXyzMatrix(new Point2D(0.64, 0.33),
             new Point2D(0.3, 0.6),
             new Point2D(0.15, 0.06),
             ParametricLinearRgbColorSpace.ILLUMINANT_D65);
-    private static final @NonNull Matrix3Double FROM_D65_XYZ_TO_LINEAR_SRGB_MATRIX = FROM_LINEAR_SRGB_TO_D65_XYZ_MATRIX.inv();
+    private static final Matrix3Double FROM_D65_XYZ_TO_LINEAR_SRGB_MATRIX = FROM_LINEAR_SRGB_TO_D65_XYZ_MATRIX.inv();
 
     /**
      * The matrix for converting from linear RGB to XYZ.
      */
-    private final @NonNull Matrix3 toXyzMatrix;
+    private final Matrix3 toXyzMatrix;
     /**
      * The matrix for converting from XYZ to linear RGB.
      */
-    private final @NonNull Matrix3 fromXyzMatrix;
+    private final Matrix3 fromXyzMatrix;
     /**
      * The matrix for converting from linear RGB to sRGB.
      */
-    private final @NonNull Matrix3 toLinearSrgbMatrix;
+    private final Matrix3 toLinearSrgbMatrix;
     /**
      * The matrix for converting from sRGB to linear RGB.
      */
-    private final @NonNull Matrix3 fromLinearSrgbMatrix;
+    private final Matrix3 fromLinearSrgbMatrix;
     /**
      * The name of the color space.
      */
-    private final @NonNull String name;
+    private final String name;
     private final float maxValue;
     private final float minValue;
 
@@ -128,9 +127,9 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * @param minValue
      * @param maxValue
      */
-    public ParametricLinearRgbColorSpace(@NonNull String name,
-                                         @NonNull Matrix3 toXyzMatrix,
-                                         @NonNull Matrix3 fromXyzMatrix,
+    public ParametricLinearRgbColorSpace(String name,
+                                         Matrix3 toXyzMatrix,
+                                         Matrix3 fromXyzMatrix,
                                          float minValue, float maxValue) {
         super(ColorSpace.TYPE_RGB, 3);
         this.name = name;
@@ -151,17 +150,17 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * @param blue           the CIE chroma (x,y) blue primary
      * @param whitePoint_XYZ the white point (XYZ)
      */
-    public ParametricLinearRgbColorSpace(@NonNull String name,
-                                         @NonNull Point2D red,
-                                         @NonNull Point2D green,
-                                         @NonNull Point2D blue,
-                                         @NonNull Point3D whitePoint_XYZ) {
+    public ParametricLinearRgbColorSpace(String name,
+                                         Point2D red,
+                                         Point2D green,
+                                         Point2D blue,
+                                         Point3D whitePoint_XYZ) {
         super(ColorSpace.TYPE_RGB, 3);
         this.name = name;
         this.minValue = 0;
         this.maxValue = 1;
 
-        @NonNull Point2D whitePoint_xy = convertXYZToxy(whitePoint_XYZ);
+        Point2D whitePoint_xy = convertXYZToxy(whitePoint_XYZ);
 
         Matrix3Double toXyzMatrixDouble = computeToXyzMatrix(red, green, blue, whitePoint_xy);
 
@@ -212,8 +211,7 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
      * @param blue       the CIE chroma (x,y) blue primary
      * @param whitePoint the white point (x,y)
      */
-    @NonNull
-    public static Matrix3Double computeToXyzMatrix(@NonNull Point2D red, @NonNull Point2D green, @NonNull Point2D blue, @NonNull Point2D whitePoint) {
+    public static Matrix3Double computeToXyzMatrix(Point2D red, Point2D green, Point2D blue, Point2D whitePoint) {
         // matrix M
         // [xr xg xb]
         // [yr yg yb]
@@ -245,50 +243,48 @@ public class ParametricLinearRgbColorSpace extends AbstractNamedColorSpace {
         return M;
     }
 
-    @NonNull
     private static Point3D computeWhitePointCorrection(Point3D xyz) {
         return new Point3D(xyz.getX() / xyz.getY(), 1, xyz.getZ() / xyz.getY());
     }
 
-    @NonNull
     private static Point3D computeWhitePointCorrection(Point2D xy) {
         return computeWhitePointCorrection(new Point3D(xy.getX(), xy.getY(),
                 1 - xy.getX() - xy.getY()));
     }
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
+    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
         return fromXyzMatrix.mul(xyz, colorvalue);
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
+    public float[] fromRGB(float[] rgb, float[] colorvalue) {
         return fromLinearSrgbMatrix.mul(LinearSrgbColorSpace.toLinear(rgb, colorvalue), colorvalue);
 
 
         // return fromCIEXYZ(SRGB_COLOR_SPACE.toCIEXYZ(rgb, colorvalue), colorvalue);
     }
 
-    public @NonNull Matrix3 getToXyzMatrix() {
+    public Matrix3 getToXyzMatrix() {
         return toXyzMatrix;
     }
 
-    protected @NonNull Matrix3 getFromXyzMatrix() {
+    protected Matrix3 getFromXyzMatrix() {
         return fromXyzMatrix;
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return toXyzMatrix.mul(colorvalue, xyz);
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
+    public float[] toRGB(float[] colorvalue, float[] rgb) {
         return LinearSrgbColorSpace.fromLinear(toLinearSrgbMatrix.mul(colorvalue, rgb), rgb);
         // return SRGB_COLOR_SPACE.fromCIEXYZ(toCIEXYZ(colorvalue, rgb), rgb);
     }

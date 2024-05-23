@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
@@ -42,7 +41,7 @@ public class IntersectLineCubicCurve {
      * @param a1y point 2 of 'a'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectLineCubicCurve(
+    public static IntersectionResult intersectLineCubicCurve(
             double a0x, double a0y, double a1x, double a1y,
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y, double p3x, double p3y,
             double epsilon) {
@@ -69,7 +68,7 @@ public class IntersectLineCubicCurve {
      * @param epsilon
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectLineCubicCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, double epsilon) {
+    public static IntersectionResult intersectLineCubicCurve(Point2D a0, Point2D a1, Point2D p0, Point2D p1, Point2D p2, Point2D p3, double epsilon) {
         final double a0x, a0y, a1x, a1y;
         a0x = a0.getX();
         a0y = a0.getY();

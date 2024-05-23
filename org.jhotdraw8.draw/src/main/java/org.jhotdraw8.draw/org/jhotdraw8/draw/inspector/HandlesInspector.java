@@ -15,8 +15,6 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.util.converter.NumberStringConverter;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -25,6 +23,7 @@ import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -35,9 +34,9 @@ import java.util.logging.Logger;
 
 public class HandlesInspector extends AbstractDrawingViewInspector {
 
-    private final @NonNull NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", NamedCssColor.BLUE);
-    private final @NonNull IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
-    private final @NonNull IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
+    private final NonNullObjectProperty<CssColor> handleColorProperty = new NonNullObjectProperty<>(this, "handleColor", NamedCssColor.BLUE);
+    private final IntegerProperty handleSizeProperty = new SimpleIntegerProperty(this, "handleSize", 11);
+    private final IntegerProperty handleStrokeWidthProperty = new SimpleIntegerProperty(this, "handleStrokeWidth", 1);
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
     @FXML // URL location of the FXML file that was given to the FXMLLoader
@@ -60,7 +59,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
         this(GridInspector.class.getResource("HandlesInspector.fxml"));
     }
 
-    public HandlesInspector(@NonNull URL fxmlUrl) {
+    public HandlesInspector(URL fxmlUrl) {
         init(fxmlUrl);
     }
 
@@ -69,7 +68,7 @@ public class HandlesInspector extends AbstractDrawingViewInspector {
         return node;
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(URL fxmlUrl) {
         // We must use invoke and wait here, because we instantiate Tooltips
         // which immediately instanciate a Window and a Scene.
         PlatformUtil.invokeAndWait(() -> {

@@ -5,11 +5,10 @@
 
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -47,7 +46,7 @@ public class ListXmlConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type.
      */
-    public void testDoubleFromString(List<Double> expected, @NonNull String string) throws Exception {
+    public void testDoubleFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<Double> instance = new ListXmlConverter<>(new DoubleXmlConverter(false));
@@ -58,7 +57,7 @@ public class ListXmlConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type.
      */
-    public void testIllegalDoubleFromString(@NonNull String string) throws Exception {
+    public void testIllegalDoubleFromString(String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<Double> instance = new ListXmlConverter<>(new DoubleXmlConverter(false));
@@ -68,7 +67,7 @@ public class ListXmlConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type and "=>" delimiter.
      */
-    public void testDoubleArrowFromString(List<Double> expected, @NonNull String string) throws Exception {
+    public void testDoubleArrowFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<Double> instance = new ListXmlConverter<>(new DoubleXmlConverter(false), "=>");
@@ -79,7 +78,7 @@ public class ListXmlConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type and "=>" delimiter.
      */
-    public void testIllegalDoubleArrowFromString(@NonNull String string) throws Exception {
+    public void testIllegalDoubleArrowFromString(String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<Double> instance = new ListXmlConverter<>(new DoubleXmlConverter(false), "=>");
@@ -91,7 +90,7 @@ public class ListXmlConverterTest {
     /**
      * Test of fromString method with a {@code String} element type.
      */
-    public void testStringFromString(List<String> expected, @NonNull String string) throws Exception {
+    public void testStringFromString(List<String> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<String> instance = new ListXmlConverter<>(new StringXmlConverter());
@@ -102,7 +101,7 @@ public class ListXmlConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsDoubleFromString() {
+    public List<DynamicTest> dynamicTestsDoubleFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleFromString(Collections.emptyList(), "")),
                 dynamicTest("2", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
@@ -122,7 +121,7 @@ public class ListXmlConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsDoubleArrowFromString() {
+    public List<DynamicTest> dynamicTestsDoubleArrowFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleArrowFromString(Collections.emptyList(), "")),
                 dynamicTest("2", () -> testIllegalDoubleArrowFromString("1 2 3")),
@@ -142,7 +141,7 @@ public class ListXmlConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsStringFromString() {
+    public List<DynamicTest> dynamicTestsStringFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testStringFromString(Collections.emptyList(), "")),
                 dynamicTest("2", () -> testStringFromString(Arrays.asList("a", "b", "c"), "a b c")),
@@ -154,7 +153,7 @@ public class ListXmlConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsToString() {
+    public List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString(null, "")),
                 dynamicTest("2", () -> testToString(Collections.emptyList(), "")),

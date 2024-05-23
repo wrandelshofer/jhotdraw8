@@ -6,7 +6,6 @@
 package org.jhotdraw8.fxcontrols.dock;
 
 import javafx.beans.property.BooleanProperty;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Represents a dock item that can be docked to a {@code DockParent}.
@@ -27,7 +26,6 @@ public interface DockChild extends DockNode {
      *
      * @return true if this dock child is showing.
      */
-    @NonNull
     BooleanProperty showingProperty();
 
 

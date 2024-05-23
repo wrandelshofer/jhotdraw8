@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Objects;
 import java.util.PrimitiveIterator;
@@ -16,7 +15,7 @@ public interface PrimitiveIteratorOfByte extends PrimitiveIterator<Byte, ByteCon
     byte nextByte();
 
     @Override
-    default void forEachRemaining(@NonNull ByteConsumer action) {
+    default void forEachRemaining(ByteConsumer action) {
         Objects.requireNonNull(action);
         while (hasNext()) {
             action.accept(nextByte());
@@ -29,7 +28,7 @@ public interface PrimitiveIteratorOfByte extends PrimitiveIterator<Byte, ByteCon
     }
 
     @Override
-    default void forEachRemaining(@NonNull Consumer<? super Byte> action) {
+    default void forEachRemaining(Consumer<? super Byte> action) {
         if (action instanceof ByteConsumer) {
             forEachRemaining((ByteConsumer) action);
         } else {

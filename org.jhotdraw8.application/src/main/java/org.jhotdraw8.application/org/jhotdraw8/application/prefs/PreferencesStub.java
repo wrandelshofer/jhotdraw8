@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.application.prefs;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.OutputStream;
 import java.util.HashMap;
@@ -23,7 +22,7 @@ import java.util.prefs.Preferences;
 public class PreferencesStub
         extends Preferences {
 
-    private final @NonNull HashMap<String, Object> map = new HashMap<>();
+    private final HashMap<String, Object> map = new HashMap<>();
     private final boolean isUserNode;
 
     public PreferencesStub(boolean isUserNode) {
@@ -36,7 +35,7 @@ public class PreferencesStub
     }
 
     @Override
-    public @NonNull String get(String key, String def) {
+    public String get(String key, String def) {
         return (String) (map.getOrDefault(key, def));
     }
 
@@ -106,17 +105,17 @@ public class PreferencesStub
     }
 
     @Override
-    public byte @NonNull [] getByteArray(String key, byte[] def) {
+    public byte[] getByteArray(String key, byte[] def) {
         return (byte[]) (map.getOrDefault(key, def));
     }
 
     @Override
-    public @NonNull String[] keys() {
+    public String[] keys() {
         return map.keySet().toArray(new String[0]);
     }
 
     @Override
-    public @NonNull String[] childrenNames() {
+    public String[] childrenNames() {
         return new String[0];
     }
 
@@ -141,12 +140,12 @@ public class PreferencesStub
     }
 
     @Override
-    public @NonNull String name() {
+    public String name() {
         return "Stub";
     }
 
     @Override
-    public @NonNull String absolutePath() {
+    public String absolutePath() {
         return "Stub";
     }
 
@@ -156,7 +155,7 @@ public class PreferencesStub
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "Stub";
     }
 

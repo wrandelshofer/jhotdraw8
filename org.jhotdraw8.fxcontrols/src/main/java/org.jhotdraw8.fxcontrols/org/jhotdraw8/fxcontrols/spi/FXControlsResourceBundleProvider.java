@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcontrols.spi;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -16,7 +15,7 @@ public class FXControlsResourceBundleProvider extends AbstractResourceBundleProv
     }
 
     @Override
-    public ResourceBundle getBundle(@NonNull String baseName, @NonNull Locale locale) {
+    public ResourceBundle getBundle(String baseName, Locale locale) {
         return ResourceBundle.getBundle(baseName, locale);
     }
 }

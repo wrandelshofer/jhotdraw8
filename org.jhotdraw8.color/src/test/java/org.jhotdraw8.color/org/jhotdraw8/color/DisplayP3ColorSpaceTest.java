@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.math.Matrix3;
 import org.jhotdraw8.color.math.Matrix3Float;
 import org.junit.jupiter.api.Disabled;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 public class DisplayP3ColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     @Override
-    protected @NonNull DisplayP3ColorSpace getInstance() {
+    protected DisplayP3ColorSpace getInstance() {
         return new DisplayP3ColorSpace();
     }
 

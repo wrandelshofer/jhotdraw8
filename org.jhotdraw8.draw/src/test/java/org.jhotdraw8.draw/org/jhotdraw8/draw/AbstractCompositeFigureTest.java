@@ -8,7 +8,6 @@ import javafx.beans.property.ReadOnlyProperty;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.figure.AbstractCompositeFigure;
 import org.jhotdraw8.draw.figure.Figure;
@@ -119,87 +118,87 @@ public class AbstractCompositeFigureTest {
         private static final long serialVersionUID = 1L;
 
         @Override
-        public @NonNull Bounds getLayoutBounds() {
+        public Bounds getLayoutBounds() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull Transform getWorldToLocal() {
+        public Transform getWorldToLocal() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull Transform getWorldToParent() {
+        public Transform getWorldToParent() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void reshapeInLocal(@NonNull Transform transform) {
+        public void reshapeInLocal(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+        public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull Node createNode(@NonNull RenderContext renderer) {
+        public Node createNode(RenderContext renderer) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void reshapeInParent(@NonNull Transform transform) {
+        public void reshapeInParent(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void transformInLocal(@NonNull Transform transform) {
+        public void transformInLocal(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void transformInParent(@NonNull Transform transform) {
+        public void transformInParent(Transform transform) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public void updateNode(@NonNull RenderContext renderer, @NonNull Node node) {
+        public void updateNode(RenderContext renderer, Node node) {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull String getTypeSelector() {
+        public String getTypeSelector() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull String getId() {
+        public String getId() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull ReadOnlyProperty<String> idProperty() {
+        public ReadOnlyProperty<String> idProperty() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull ReadOnlySet<String> getStyleClasses() {
+        public ReadOnlySet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull String getStyle() {
+        public String getStyle() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull StyleableBean getStyleableParent() {
+        public StyleableBean getStyleableParent() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
         @Override
-        public @NonNull ReadOnlySet<String> getPseudoClassStates() {
+        public ReadOnlySet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -219,12 +218,12 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public boolean isSuitableChild(@NonNull Figure newChild) {
+        public boolean isSuitableChild(Figure newChild) {
             return true;
         }
 
         @Override
-        public boolean isSuitableParent(@NonNull Figure newChild) {
+        public boolean isSuitableParent(Figure newChild) {
             return true;
         }
 

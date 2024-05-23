@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
@@ -21,6 +19,7 @@ import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.Iterator;
@@ -91,7 +90,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     /**
      * In this vector we store the elements in the order in which they were inserted.
      */
-    private @NonNull VectorList<Object> vector;
+    private VectorList<Object> vector;
 
     /**
      * Constructs a new empty set.
@@ -206,13 +205,13 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
      * Returns a shallow copy of this set.
      */
     @Override
-    public @NonNull MutableChampVectorSet<E> clone() {
+    public MutableChampVectorSet<E> clone() {
         return (MutableChampVectorSet<E>) super.clone();
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public boolean contains(@Nullable final @NonNull Object o) {
+    public boolean contains(@Nullable final Object o) {
         return Node.NO_DATA != root.find(new SequencedElement<>((E) o),
                 SequencedElement.keyHash(o), 0, Objects::equals);
     }
@@ -232,14 +231,14 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
 
     @Override
     @SuppressWarnings("unchecked")
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new FailFastIterator<>(Spliterators.iterator(new TombSkippingVectorSpliterator<>(vector.trie,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size, vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
                 this::iteratorRemove, () -> modCount);
     }
 /*
-    public boolean removeAll(@NonNull Iterable<?> c) {
+    public boolean removeAll(Iterable<?> c) {
         if (isEmpty()
                 || (c instanceof Collection<?> cc && cc.isEmpty())
                 || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
@@ -262,7 +261,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         return filterAll(predicate.negate());
     }
 /*
-    public boolean retainAll(@NonNull Iterable<?> c) {
+    public boolean retainAll(Iterable<?> c) {
         if(c==this||isEmpty()) {
             return false;
         }
@@ -283,7 +282,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         }
         return filterAll(predicate);
     }
-    boolean filterAll(@NonNull Predicate<E> predicate) {
+    boolean filterAll(Predicate<E> predicate) {
         class VectorPredicate implements Predicate<SequencedElement<E>> {
             SimpleImmutableList<Object> newVector = vector;
             int newOffset = offset;
@@ -315,7 +314,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
 */
 
     @SuppressWarnings("unchecked")
-    private @NonNull Iterator<E> reverseIterator() {
+    private Iterator<E> reverseIterator() {
         return new FailFastIterator<>(Spliterators.iterator(new ReverseTombSkippingVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(), size(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED)),
@@ -323,7 +322,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull Spliterator<E> reverseSpliterator() {
+    private Spliterator<E> reverseSpliterator() {
         return new FailFastSpliterator<>(new ReverseTombSkippingVectorSpliterator<>(vector,
                 (Object o) -> ((SequencedElement<E>) o).getElement(), size(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
@@ -331,7 +330,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return new FailFastSpliterator<>(new TombSkippingVectorSpliterator<>(vector.trie,
                 (Object o) -> ((SequencedElement<E>) o).getElement(),
                 0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED), () -> modCount, null);
@@ -343,7 +342,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
 
     @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+    public ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(this.reversed());
     }
 
@@ -395,7 +394,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
 
     @Override
-    public @NonNull SequencedSet<E> reversed() {
+    public SequencedSet<E> reversed() {
         return new ReversedSequencedSetView<>(this, this::reverseIterator,
                 this::reverseSpliterator);
     }
@@ -405,7 +404,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
      *
      * @return an immutable copy
      */
-    public @NonNull ChampVectorSet<E> toImmutable() {
+    public ChampVectorSet<E> toImmutable() {
         owner = null;
         return size == 0
                 ? ChampVectorSet.of()
@@ -413,7 +412,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
@@ -427,7 +426,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return new MutableChampVectorSet<>(deserializedElements);
         }
     }

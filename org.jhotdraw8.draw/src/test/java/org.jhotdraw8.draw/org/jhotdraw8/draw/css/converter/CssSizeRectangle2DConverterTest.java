@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.value.CssSize;
@@ -34,7 +33,7 @@ public class CssSizeRectangle2DConverterTest {
     /**
      * Test of fromString method, of class CssDoubleConverter.
      */
-    public static void testFromString(CssRectangle2D expected, @NonNull String string) throws Exception {
+    public static void testFromString(CssRectangle2D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = new SimpleIdFactory();
         Rectangle2DCssConverter instance = new Rectangle2DCssConverter(false);
@@ -46,7 +45,7 @@ public class CssSizeRectangle2DConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(new CssRectangle2D(11, 22, 33, 44), "11 22 33 44")),
                 dynamicTest("2", () -> testFromString(new CssRectangle2D(CssSize.of(0, "cm"),

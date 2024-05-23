@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.collection.pair;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An implementation of the {@link OrderedPair} interface, which has non-null
@@ -18,25 +17,25 @@ import org.jhotdraw8.annotation.Nullable;
  * @author Werner Randelshofer
  */
 public class NonNullOrderedPair<U, V> implements OrderedPair<U, V> {
-    private final @NonNull U a;
-    private final @NonNull V b;
+    private final U a;
+    private final V b;
     /**
      * Cached hash-value for faster hashing.
      */
     private int hash;
 
-    public NonNullOrderedPair(@NonNull U a, @NonNull V b) {
+    public NonNullOrderedPair(U a, V b) {
         this.a = a;
         this.b = b;
     }
 
     @Override
-    public @NonNull U first() {
+    public U first() {
         return a;
     }
 
     @Override
-    public @NonNull V second() {
+    public V second() {
         return b;
     }
 

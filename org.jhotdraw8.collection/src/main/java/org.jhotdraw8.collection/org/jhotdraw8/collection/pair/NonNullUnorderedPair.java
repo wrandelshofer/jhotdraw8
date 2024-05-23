@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.collection.pair;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A simple implementation of the {@link UnorderedPair} interface.
@@ -17,25 +16,25 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public class NonNullUnorderedPair<V> implements UnorderedPair<V> {
 
-    private final @NonNull V a;
-    private final @NonNull V b;
+    private final V a;
+    private final V b;
     /**
      * Cached hash-value for faster hashing.
      */
     private int hash;
 
-    public NonNullUnorderedPair(@NonNull V a, @NonNull V b) {
+    public NonNullUnorderedPair(V a, V b) {
         this.a = a;
         this.b = b;
     }
 
     @Override
-    public @NonNull V either() {
+    public V either() {
         return a;
     }
 
     @Override
-    public @NonNull V other() {
+    public V other() {
         return b;
     }
 
@@ -53,7 +52,7 @@ public class NonNullUnorderedPair<V> implements UnorderedPair<V> {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "UnorderedPair{" + "a=" + a + ", b=" + b + '}';
     }
 

@@ -5,12 +5,11 @@
 
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedCollectionFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -38,7 +37,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
      *
      * @return a reversed-order view of this map
      */
-    @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed();
+    ReadOnlySequencedMap<K, V> readOnlyReversed();
 
     /**
      * Gets the first entry in this map or {@code null} if this map is empty.
@@ -67,7 +66,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
      * @return a {@link ReadOnlySequencedSet} view of the entries
      */
     @Override
-    default @NonNull ReadOnlySequencedSet<Map.Entry<K, V>> readOnlyEntrySet() {
+    default ReadOnlySequencedSet<Map.Entry<K, V>> readOnlyEntrySet() {
         return new ReadOnlySequencedSetFacade<>(
                 this::iterator,
                 () -> readOnlyReversed().readOnlyEntrySet().iterator(),
@@ -93,7 +92,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
      * @return a {@link ReadOnlySequencedSet} view of the keys
      */
     @Override
-    default @NonNull ReadOnlySequencedSet<K> readOnlyKeySet() {
+    default ReadOnlySequencedSet<K> readOnlyKeySet() {
         return new ReadOnlySequencedSetFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getKey),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getKey),
@@ -123,7 +122,7 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
      * @return a {@link ReadOnlySequencedCollection} view of the values
      */
     @Override
-    default @NonNull ReadOnlySequencedCollection<V> readOnlyValues() {
+    default ReadOnlySequencedCollection<V> readOnlyValues() {
         return new ReadOnlySequencedCollectionFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getValue),
                 () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getValue),
@@ -147,7 +146,6 @@ public interface ReadOnlySequencedMap<K, V> extends ReadOnlyMap<K, V> {
     }
 
     @Override
-    @NonNull
     default SequencedMap<K, V> asMap() {
         return new SequencedMapFacade<>(this);
     }

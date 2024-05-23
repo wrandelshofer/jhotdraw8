@@ -14,8 +14,6 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -32,6 +30,7 @@ import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.svg.text.SvgFontSize;
 import org.jhotdraw8.svg.text.SvgTextAnchor;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -50,9 +49,9 @@ public class SvgTextFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "text";
-    public static final @NonNull CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
+    public static final String TYPE_SELECTOR = "text";
+    public static final CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
+    public static final CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
 
     private @Nullable Bounds cachedLayoutBounds;
 
@@ -60,7 +59,7 @@ public class SvgTextFigure extends AbstractLeafFigure
         this(0, 0);
     }
 
-    public SvgTextFigure(@NonNull Point2D position) {
+    public SvgTextFigure(Point2D position) {
         this(position.getX(), position.getY());
     }
 
@@ -75,7 +74,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         g.setManaged(false);
         g.setAutoSizeChildren(false);
@@ -94,7 +93,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -105,18 +104,18 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         Bounds boundsInLocal = getCachedLayoutBounds();
         return boundsInLocal == null ? computeLayoutBounds() : boundsInLocal;
     }
 
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
@@ -126,11 +125,11 @@ public class SvgTextFigure extends AbstractLeafFigure
      *
      * @return the layout bounds
      */
-    public @NonNull Bounds computeLayoutBounds() {
+    public Bounds computeLayoutBounds() {
         return computeLayoutBounds(new SimpleRenderContext(), new Text());
     }
 
-    protected @NonNull Bounds computeLayoutBounds(@NonNull RenderContext ctx, Text textNode) {
+    protected Bounds computeLayoutBounds(RenderContext ctx, Text textNode) {
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
         Insets i = new Insets(0, 0, 0, 0);
@@ -149,7 +148,7 @@ public class SvgTextFigure extends AbstractLeafFigure
      * @param ctx the render context
      * @return the layout bounds of the text
      */
-    protected @NonNull Bounds getTextBounds(@Nullable RenderContext ctx) {
+    protected Bounds getTextBounds(@Nullable RenderContext ctx) {
         Text textNode = new Text();
         updateTextNode(ctx, textNode);
         Bounds b = textNode.getLayoutBounds();
@@ -157,7 +156,7 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         Text tn = new Text();
         tn.setX(getStyledNonNull(X).getConvertedValue());
         tn.setY(getStyledNonNull(Y).getConvertedValue());
@@ -172,19 +171,19 @@ public class SvgTextFigure extends AbstractLeafFigure
         return FXShapes.fxShapeToAwtShape(tn).getPathIterator(tx);
     }
 
-    protected @Nullable String getText(@NonNull RenderContext ctx) {
+    protected @Nullable String getText(RenderContext ctx) {
         return get(TEXT);
     }
 
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         Bounds b = computeLayoutBounds(ctx, new Text());
         setCachedLayoutBounds(b);
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         Bounds lb = computeLayoutBounds();
         Insets i = new Insets(0, 0, 0, 0);
         set(X, CssSize.of(x.getConvertedValue() + i.getLeft()));
@@ -192,20 +191,20 @@ public class SvgTextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D delta) {
+    public void translateInLocal(CssPoint2D delta) {
         CssSize x = get(X);
         CssSize y = get(Y);
         set(X, x.add(delta.getX()));
         set(Y, y.add(delta.getY()));
     }
 
-    protected void updateGroupNode(@NonNull RenderContext ctx, Group node) {
+    protected void updateGroupNode(RenderContext ctx, Group node) {
         applySvgDefaultableCompositingProperties(ctx, node);
 
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         Text n0 = (Text) g.getProperties().get("fillNode");
         Text n1 = (Text) g.getProperties().get("strokeNode");
@@ -224,7 +223,7 @@ public class SvgTextFigure extends AbstractLeafFigure
         }
     }
 
-    protected void updateTextNode(@NonNull RenderContext ctx, @NonNull Text tn) {
+    protected void updateTextNode(RenderContext ctx, Text tn) {
         applySvgDefaultableFillProperties(ctx, tn);
         SvgTextAnchor textAnchor = getDefaultableStyledNonNull(TEXT_ANCHOR_KEY);
         switch (textAnchor) {

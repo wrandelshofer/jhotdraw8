@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Rule;
 import org.jhotdraw8.css.ast.SelectorGroup;
@@ -39,14 +38,14 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class CssParserTest {
 
-    private static final @NonNull String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+    private static final String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 
     /**
      * Test of CSS syntax.
      * <p>
      * Takes a stylesheet and applies it to the given XML document.
      */
-    public static void testCssSyntax(boolean valid, @NonNull String stylesheet, @NonNull String xml, String expectedValue) throws Exception {
+    public static void testCssSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
@@ -95,7 +94,7 @@ public class CssParserTest {
      * @return examples
      */
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsCssSyntax() {
+    public List<DynamicTest> dynamicTestsCssSyntax() {
         return Arrays.asList(
                 dynamicTest("1", () -> testCssSyntax(true, ":nth-child(3n + 1) {}", //
                         "<xml/>",//
@@ -212,7 +211,7 @@ public class CssParserTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsAtRule() {
+    public List<DynamicTest> dynamicTestsAtRule() {
         return Arrays.asList(
                 // at rules
                 dynamicTest("1", () -> testAtRule(false, "@charset \"UTF-8\"; AB {x:y}", //
@@ -253,7 +252,7 @@ public class CssParserTest {
     /**
      * Tests parsing of at rules.
      */
-    public static void testAtRule(boolean valid, @NonNull String stylesheetStr, @NonNull String before, String expectedValue) throws Exception {
+    public static void testAtRule(boolean valid, String stylesheetStr, String before, String expectedValue) throws Exception {
         testCssSyntax(valid, stylesheetStr, before, expectedValue);
 
         CssParser p = new CssParser();
@@ -266,7 +265,7 @@ public class CssParserTest {
      * <p>
      * Takes a stylesheet and applies it to the given XML document.
      */
-    public static void testSelectorSyntax(boolean valid, @NonNull String stylesheet, @NonNull String xml, String expectedValue) throws Exception {
+    public static void testSelectorSyntax(boolean valid, String stylesheet, String xml, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
@@ -313,7 +312,7 @@ public class CssParserTest {
      * Tests selectors.
      */
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSelectorSyntax() {
+    public List<DynamicTest> dynamicTestsSelectorSyntax() {
         return Arrays.asList(
                 dynamicTest("type selector", () -> testSelectorSyntax(true, "a {x:1;}", //
                         "<xml><a/><b/></xml>",//
@@ -339,7 +338,7 @@ public class CssParserTest {
     /**
      * Test of selectors.
      */
-    public static void testSelector(boolean valid, @NonNull String stylesheet, @NonNull String before, String expectedValue) throws Exception {
+    public static void testSelector(boolean valid, String stylesheet, String before, String expectedValue) throws Exception {
         testSelectorSyntax(valid, stylesheet, before, expectedValue);
     }
 
@@ -347,7 +346,7 @@ public class CssParserTest {
      * Test selectors with name space.
      */
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSelectorSyntaxNS() {
+    public List<DynamicTest> dynamicTestsSelectorSyntaxNS() {
         return Arrays.asList(
                 dynamicTest("type selector not ns aware", () -> testSelectorSyntaxNS(true, "a {x:1;}", //
                         "<xml xmlns:n1=\"http://n1.com\"><a/><n1:a/><b/></xml>",//
@@ -389,7 +388,7 @@ public class CssParserTest {
     /**
      * Test of selectors with namespace.
      */
-    public static void testSelectorSyntaxNS(boolean valid, @NonNull String stylesheet, @NonNull String before, String expectedValue) throws Exception {
+    public static void testSelectorSyntaxNS(boolean valid, String stylesheet, String before, String expectedValue) throws Exception {
         testSelectorSyntax(valid, stylesheet, before, expectedValue);
     }
 }

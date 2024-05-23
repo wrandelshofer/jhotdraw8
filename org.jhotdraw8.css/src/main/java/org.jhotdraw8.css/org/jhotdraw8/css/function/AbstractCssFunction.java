@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Abstract base class for CSS functions.
@@ -12,14 +11,14 @@ import org.jhotdraw8.annotation.NonNull;
  * @param <T> the element type of the DOM
  */
 public abstract class AbstractCssFunction<T> implements CssFunction<T> {
-    private final @NonNull String name;
+    private final String name;
 
-    public AbstractCssFunction(@NonNull String name) {
+    public AbstractCssFunction(String name) {
         this.name = name;
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 

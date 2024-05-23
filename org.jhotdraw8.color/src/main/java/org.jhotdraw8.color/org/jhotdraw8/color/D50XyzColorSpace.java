@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 
@@ -19,36 +18,36 @@ import java.awt.color.ColorSpace;
  * </dl>
  */
 public class D50XyzColorSpace extends AbstractNamedColorSpace {
-    private final static @NonNull SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private final static SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
 
     public D50XyzColorSpace() {
         super(ColorSpace.TYPE_XYZ, 3);
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         System.arraycopy(colorvalue, 0, xyz, 0, 3);
         return xyz;
     }
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
+    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
         System.arraycopy(xyz, 0, colorvalue, 0, 3);
         return colorvalue;
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue) {
+    public float[] fromRGB(float[] rgb, float[] colorvalue) {
         return SRGB_COLOR_SPACE.toCIEXYZ(rgb, colorvalue);
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return "D50 XYZ";
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
+    public float[] toRGB(float[] colorvalue, float[] rgb) {
         return SRGB_COLOR_SPACE.fromCIEXYZ(colorvalue, rgb);
     }
 }

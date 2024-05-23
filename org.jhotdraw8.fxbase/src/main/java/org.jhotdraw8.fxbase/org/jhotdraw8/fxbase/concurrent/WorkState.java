@@ -8,8 +8,7 @@ import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.concurrent.Worker;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Work state can be used to report the current state
@@ -67,7 +66,7 @@ public interface WorkState<V> extends Worker<V> {
      *
      * @param value the new value
      */
-    void updateState(@NonNull State value);
+    void updateState(State value);
 
     /**
      * Asynchronously updates the current exception of the work state.
@@ -76,7 +75,7 @@ public interface WorkState<V> extends Worker<V> {
      *
      * @param value the new value
      */
-    void updateException(@NonNull Throwable value);
+    void updateException(Throwable value);
 
     /**
      * Asynchronously updates the current running state of the work state.
@@ -131,7 +130,7 @@ public interface WorkState<V> extends Worker<V> {
      * @see Worker#valueProperty()
      */
     @Override
-    @NonNull ReadOnlyObjectProperty<V> valueProperty();
+    ReadOnlyObjectProperty<V> valueProperty();
 
 
     /**
@@ -144,7 +143,7 @@ public interface WorkState<V> extends Worker<V> {
      * @see Worker#workDoneProperty()
      */
     @Override
-    @NonNull ReadOnlyDoubleProperty workDoneProperty();
+    ReadOnlyDoubleProperty workDoneProperty();
 
 
     /**
@@ -158,7 +157,7 @@ public interface WorkState<V> extends Worker<V> {
      * @see Worker#totalWorkProperty()
      */
     @Override
-    @NonNull ReadOnlyDoubleProperty totalWorkProperty();
+    ReadOnlyDoubleProperty totalWorkProperty();
 
 
     /**
@@ -171,7 +170,7 @@ public interface WorkState<V> extends Worker<V> {
      * @see Worker#progressProperty()
      */
     @Override
-    @NonNull ReadOnlyDoubleProperty progressProperty();
+    ReadOnlyDoubleProperty progressProperty();
 
     /**
      * @see Worker#getMessage()
@@ -183,7 +182,7 @@ public interface WorkState<V> extends Worker<V> {
      * @see Worker#messageProperty()
      */
     @Override
-    @NonNull ReadOnlyStringProperty messageProperty();
+    ReadOnlyStringProperty messageProperty();
 
     /**
      * @see Worker#getTitle()
@@ -195,6 +194,6 @@ public interface WorkState<V> extends Worker<V> {
      * @see Worker#titleProperty()
      */
     @Override
-    @NonNull ReadOnlyStringProperty titleProperty();
+    ReadOnlyStringProperty titleProperty();
 
 }

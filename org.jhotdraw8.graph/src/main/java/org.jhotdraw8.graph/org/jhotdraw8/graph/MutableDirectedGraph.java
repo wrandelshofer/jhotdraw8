@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Interface for a mutable directed graph.
@@ -20,14 +19,14 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      *
      * @param v vertex data
      */
-    void addVertex(@NonNull V v);
+    void addVertex(V v);
 
     /**
      * Removes a vertex from the graph if it is in the graph.
      *
      * @param v vertex data
      */
-    void removeVertex(@NonNull V v);
+    void removeVertex(V v);
 
     /**
      * Adds an arrow from vertex v to vertex u.
@@ -38,7 +37,7 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @param u vertex data u
      * @param a arrow data
      */
-    void addArrow(@NonNull V v, @NonNull V u, @Nullable A a);
+    void addArrow(V v, V u, @Nullable A a);
 
     /**
      * Removes the first arrow from vertex v to vertex u that has
@@ -48,7 +47,7 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @param u vertex data u
      * @param a arrow data
      */
-    void removeArrow(@NonNull V v, @NonNull V u, @Nullable A a);
+    void removeArrow(V v, V u, @Nullable A a);
 
     /**
      * Removes the first arrow from vertex v to vertex u.
@@ -56,7 +55,7 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @param v vertex data v
      * @param u vertex data u
      */
-    void removeArrow(@NonNull V v, @NonNull V u);
+    void removeArrow(V v, V u);
 
     /**
      * Removes the k-th next arrow from vertex v.
@@ -64,5 +63,5 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
      * @param v vertex data v
      * @param k index of arrow to be removed
      */
-    void removeNext(@NonNull V v, int k);
+    void removeNext(V v, int k);
 }

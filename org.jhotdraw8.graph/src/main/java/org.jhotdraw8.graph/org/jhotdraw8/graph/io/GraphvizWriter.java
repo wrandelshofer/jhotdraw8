@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.graph.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.DirectedGraph;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -60,7 +59,7 @@ public class GraphvizWriter {
      * @param graph the graph
      * @throws IOException if writing fails
      */
-    public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph) throws IOException {
+    public <V, A> void write(Appendable w, DirectedGraph<V, A> graph) throws IOException {
         write(w, graph, v -> "\"" + v + '"', null, null, null);
     }
 
@@ -76,8 +75,8 @@ public class GraphvizWriter {
      *                       use as vertex name
      * @throws IOException if writing fails
      */
-    public <V, A> void write(@NonNull Appendable w, @NonNull DirectedGraph<V, A> graph,
-                             @NonNull Function<V, String> vertexToString) throws IOException {
+    public <V, A> void write(Appendable w, DirectedGraph<V, A> graph,
+                             Function<V, String> vertexToString) throws IOException {
         write(w, graph, vertexToString, null, null, "G");
     }
 
@@ -96,10 +95,10 @@ public class GraphvizWriter {
      *                         use as arrow attributes
      * @return the "dot" string
      */
-    public <V, A> String write(@NonNull DirectedGraph<V, A> graph,
-                               @NonNull Function<V, String> vertexToString,
-                               @NonNull Function<V, String> vertexAttributes,
-                               @NonNull Function<A, String> arrowAttributes) {
+    public <V, A> String write(DirectedGraph<V, A> graph,
+                               Function<V, String> vertexToString,
+                               Function<V, String> vertexAttributes,
+                               Function<A, String> arrowAttributes) {
         StringWriter w = new StringWriter();
         try {
             write(w, graph, vertexToString, vertexAttributes, arrowAttributes, "G");
@@ -126,9 +125,9 @@ public class GraphvizWriter {
      * @param graphId          the id of the graph
      * @throws IOException if writing fails
      */
-    public <V, A> void write(final @NonNull Appendable w,
-                             final @NonNull DirectedGraph<V, A> graph,
-                             final @NonNull Function<V, String> vertexToString,
+    public <V, A> void write(final Appendable w,
+                             final DirectedGraph<V, A> graph,
+                             final Function<V, String> vertexToString,
                              final @Nullable Function<V, String> vertexAttributes,
                              final @Nullable Function<A, String> arrowAttributes,
                              final @Nullable String graphId) throws IOException {
@@ -193,7 +192,7 @@ public class GraphvizWriter {
      * @param graph the graph to be dumped
      * @return the dump
      */
-    public <V, A> String write(@NonNull DirectedGraph<V, A> graph) {
+    public <V, A> String write(DirectedGraph<V, A> graph) {
         StringWriter w = new StringWriter();
         try {
             write(w, graph, Object::toString);

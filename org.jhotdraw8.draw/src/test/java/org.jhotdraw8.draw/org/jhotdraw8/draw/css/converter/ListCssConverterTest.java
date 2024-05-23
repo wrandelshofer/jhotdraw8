@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
@@ -49,7 +48,7 @@ public class ListCssConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type.
      */
-    public void testDoubleFromString(List<Double> expected, @NonNull String string) throws Exception {
+    public void testDoubleFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListCssConverter<Double> instance = new ListCssConverter<>(new DoubleCssConverter(false));
@@ -60,7 +59,7 @@ public class ListCssConverterTest {
     /**
      * Test of fromString method with a {@code Double} element type and "=>" delimiter.
      */
-    public void testDoubleArrowFromString(List<Double> expected, @NonNull String string) throws Exception {
+    public void testDoubleArrowFromString(List<Double> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListCssConverter<Double> instance = new ListCssConverter<>(new DoubleCssConverter(false), "=>");
@@ -72,7 +71,7 @@ public class ListCssConverterTest {
     /**
      * Test of fromString method with a {@code String} element type.
      */
-    public void testStringFromString(List<String> expected, @NonNull String string) throws Exception {
+    public void testStringFromString(List<String> expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListCssConverter<String> instance = new ListCssConverter<>(new StringCssConverter(false));
@@ -81,7 +80,7 @@ public class ListCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsDoubleFromString() {
+    public List<DynamicTest> dynamicTestsDoubleFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleFromString(Collections.emptyList(), "none")),
                 dynamicTest("2", () -> testDoubleFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
@@ -101,7 +100,7 @@ public class ListCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsDoubleArrowFromString() {
+    public List<DynamicTest> dynamicTestsDoubleArrowFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testDoubleArrowFromString(Collections.emptyList(), "none")),
                 dynamicTest("2", () -> testDoubleArrowFromString(Arrays.asList(1.0, 2.0, 3.0), "1 2 3")),
@@ -121,7 +120,7 @@ public class ListCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsStringFromString() {
+    public List<DynamicTest> dynamicTestsStringFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testStringFromString(Collections.emptyList(), "none")),
                 dynamicTest("2", () -> testStringFromString(Arrays.asList("a", "b", "c"), "'a' 'b' 'c'")),
@@ -133,7 +132,7 @@ public class ListCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsToString() {
+    public List<DynamicTest> dynamicTestsToString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testToString(null, "none")),
                 dynamicTest("2", () -> testToString(Collections.emptyList(), "none")),

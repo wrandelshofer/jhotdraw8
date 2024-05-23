@@ -5,9 +5,8 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
+import org.jspecify.annotations.Nullable;
 
 /**
  * ConnectableFigure.
@@ -27,7 +26,7 @@ public interface ConnectableFigure extends Figure {
      * the given location.
      */
     @Nullable
-    Connector findConnector(@NonNull Point2D pointInLocal, @Nullable Figure connectingFigure, double tolerance);
+    Connector findConnector(Point2D pointInLocal, @Nullable Figure connectingFigure, double tolerance);
 
     /**
      * Gets a connector for this figure at the given location.

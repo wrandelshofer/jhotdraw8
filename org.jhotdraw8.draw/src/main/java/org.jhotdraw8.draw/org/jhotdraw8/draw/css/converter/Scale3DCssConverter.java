@@ -5,14 +5,13 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.geometry.Point3D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -43,7 +42,7 @@ public class Scale3DCssConverter extends AbstractCssConverter<Point3D> {
     }
 
     @Override
-    public @NonNull Point3D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Point3D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y, z;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale3D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
@@ -68,7 +67,7 @@ public class Scale3DCssConverter extends AbstractCssConverter<Point3D> {
     }
 
     @Override
-    protected <TT extends Point3D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Point3D> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         double x = value.getX();
         double y = value.getY();
         double z = value.getZ();
@@ -83,7 +82,7 @@ public class Scale3DCssConverter extends AbstractCssConverter<Point3D> {
         }
     }
 
-    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
+    private void produceDelimiter(Consumer<CssToken> out) {
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }

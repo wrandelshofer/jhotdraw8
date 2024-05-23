@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
@@ -17,11 +16,11 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
  * @author Werner Randelshofer
  */
 public class DoubleStyleableKey
-        extends AbstractStyleableKey<@NonNull Double>
-        implements WritableStyleableMapAccessor<@NonNull Double>,
-        NonNullKey<@NonNull Double> {
+        extends AbstractStyleableKey<Double>
+        implements WritableStyleableMapAccessor<Double>,
+        NonNullKey<Double> {
 
-    private final Converter<@NonNull Double> converter;
+    private final Converter<Double> converter;
 
     /**
      * Creates a new instance with the specified name and with 0.0 as the
@@ -29,7 +28,7 @@ public class DoubleStyleableKey
      *
      * @param name The name of the key.
      */
-    public DoubleStyleableKey(@NonNull String name) {
+    public DoubleStyleableKey(String name) {
         this(name, 0.0);
     }
 
@@ -40,19 +39,19 @@ public class DoubleStyleableKey
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleStyleableKey(@NonNull String name, double defaultValue) {
+    public DoubleStyleableKey(String name, double defaultValue) {
         this(name, defaultValue, new DoubleCssConverter(false));
     }
 
 
-    public DoubleStyleableKey(@NonNull String name, double defaultValue, @NonNull CssConverter<@NonNull Double> converter) {
+    public DoubleStyleableKey(String name, double defaultValue, CssConverter<Double> converter) {
         super(name, Double.class, defaultValue);
 
         this.converter = converter;
     }
 
     @Override
-    public @NonNull Converter<@NonNull Double> getCssConverter() {
+    public Converter<Double> getCssConverter() {
         return converter;
     }
 }

@@ -5,8 +5,7 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -36,7 +35,7 @@ public class ColorCssConverterTest {
     /**
      * Test of fromString method, of class CssColorConverter.
      */
-    static void testFromString(@Nullable CssColor expected, @NonNull String string) throws Exception {
+    static void testFromString(@Nullable CssColor expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         Converter<CssColor> instance = new ColorCssConverter(true);
@@ -65,7 +64,7 @@ public class ColorCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, CssTokenType.IDENT_NONE)),
                 dynamicTest("2", () -> testFromString(new CssColor("white", Color.WHITE), "white")),

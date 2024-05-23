@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -32,18 +31,18 @@ public class NumberConverter implements Converter<Number> {
      */
     private final boolean allowsNullValue;
     @SuppressWarnings("rawtypes")
-    private final @NonNull Number min;
+    private final Number min;
     @SuppressWarnings("rawtypes")
-    private final @NonNull Number max;
+    private final Number max;
     private final @Nullable String unit;
-    private final @NonNull DecimalFormat decimalFormat;
-    private final @NonNull DecimalFormat scientificFormat;
+    private final DecimalFormat decimalFormat;
+    private final DecimalFormat scientificFormat;
     private final double factor;
 
     private final int minNegativeExponent = -3;
     private final int minPositiveExponent = 7;
     private final boolean usesScientificNotation = true;
-    private final @NonNull Class<? extends Number> valueClass;
+    private final Class<? extends Number> valueClass;
 
     /**
      * Creates a <code>NumberFormatter</code> with the a default
@@ -103,9 +102,9 @@ public class NumberConverter implements Converter<Number> {
                 new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
     }
 
-    public NumberConverter(@NonNull Class<? extends Number> valueClass, @NonNull Number min, @NonNull Number max, double multiplier, boolean allowsNullValue, @Nullable String unit,
-                           @NonNull DecimalFormat decimalFormat,
-                           @NonNull DecimalFormat scientificFormat
+    public NumberConverter(Class<? extends Number> valueClass, Number min, Number max, double multiplier, boolean allowsNullValue, @Nullable String unit,
+                           DecimalFormat decimalFormat,
+                           DecimalFormat scientificFormat
     ) {
         super();
         this.valueClass = valueClass;
@@ -129,7 +128,7 @@ public class NumberConverter implements Converter<Number> {
      * @return Minimum legal value that can be input
      */
     @SuppressWarnings({"rawtypes", "unused"})
-    public @NonNull Number getMinimum() {
+    public Number getMinimum() {
         return min;
     }
 
@@ -140,7 +139,7 @@ public class NumberConverter implements Converter<Number> {
      * @return Maximum legal value that can be input
      */
     @SuppressWarnings({"rawtypes", "unused"})
-    public @NonNull Number getMaximum() {
+    public Number getMaximum() {
         return max;
     }
 
@@ -165,7 +164,7 @@ public class NumberConverter implements Converter<Number> {
 
 
     @Override
-    public void toString(@NonNull Appendable buf, @Nullable IdSupplier idSupplier, @Nullable Number value) throws IOException {
+    public void toString(Appendable buf, @Nullable IdSupplier idSupplier, @Nullable Number value) throws IOException {
         if (value == null) {
             buf.append((allowsNullValue) ? "none" : "NaN");
             return;
@@ -269,7 +268,7 @@ public class NumberConverter implements Converter<Number> {
     }
 
     @Override
-    public @Nullable Number fromString(@NonNull CharBuffer str, @Nullable IdResolver idResolver) throws
+    public @Nullable Number fromString(CharBuffer str, @Nullable IdResolver idResolver) throws
             ParseException {
         if ((str.isEmpty()) && getAllowsNullValue()) {
             return null;
@@ -427,7 +426,7 @@ public class NumberConverter implements Converter<Number> {
      *                 the values, the exception is consumed and false is returned.
      */
     @SuppressWarnings({"unchecked", "WeakerAccess"})
-    private boolean isValidValue(@NonNull Number value, boolean wantsCCE) {
+    private boolean isValidValue(Number value, boolean wantsCCE) {
         try {
             if (((Comparable<Number>) min).compareTo(value) > 0) {
                 return false;
@@ -490,7 +489,7 @@ public class NumberConverter implements Converter<Number> {
      *
      * @return the value class
      */
-    public @NonNull Class<? extends Number> getValueClass() {
+    public Class<? extends Number> getValueClass() {
         return valueClass;
     }
 

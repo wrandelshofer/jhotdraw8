@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
@@ -19,7 +18,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         implements WritableStyleableMapAccessor<CssColor> {
 
 
-    private final @NonNull Converter<CssColor> converter = new ColorCssConverter(true);
+    private final Converter<CssColor> converter = new ColorCssConverter(true);
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -27,7 +26,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
      *
      * @param name The name of the key.
      */
-    public NullableCssColorStyleableKey(@NonNull String name) {
+    public NullableCssColorStyleableKey(String name) {
         this(name, null);
     }
 
@@ -39,12 +38,12 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableCssColorStyleableKey(@NonNull String key, CssColor defaultValue) {
+    public NullableCssColorStyleableKey(String key, CssColor defaultValue) {
         super(key, CssColor.class, defaultValue);
     }
 
     @Override
-    public @NonNull Converter<CssColor> getCssConverter() {
+    public Converter<CssColor> getCssConverter() {
         return converter;
     }
 }

@@ -5,11 +5,10 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Rectangle2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -22,10 +21,10 @@ import static java.lang.Double.max;
  */
 public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
 
-    private final @NonNull MapAccessor<Double> xKey;
-    private final @NonNull MapAccessor<Double> yKey;
-    private final @NonNull MapAccessor<Double> widthKey;
-    private final @NonNull MapAccessor<Double> heightKey;
+    private final MapAccessor<Double> xKey;
+    private final MapAccessor<Double> yKey;
+    private final MapAccessor<Double> widthKey;
+    private final MapAccessor<Double> heightKey;
 
     /**
      * Creates a new instance with the specified name.
@@ -36,7 +35,7 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
      * @param widthKey  the key for the width of the rectangle
      * @param heightKey the key for the height of the rectangle
      */
-    public Rectangle2DMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey, @NonNull MapAccessor<Double> widthKey, @NonNull MapAccessor<Double> heightKey) {
+    public Rectangle2DMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey, MapAccessor<Double> widthKey, MapAccessor<Double> heightKey) {
         super(name, Rectangle2D.class, new MapAccessor<?>[]{xKey, yKey, widthKey, heightKey}, new Rectangle2D(xKey.getDefaultValue(), yKey.getDefaultValue(), widthKey.getDefaultValue(), heightKey.getDefaultValue()));
 
         this.xKey = xKey;
@@ -47,12 +46,12 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
 
 
     @Override
-    public @NonNull Rectangle2D get(@NonNull Map<? super Key<?>, Object> a) {
+    public Rectangle2D get(Map<? super Key<?>, Object> a) {
         return new Rectangle2D(xKey.get(a), yKey.get(a), max(0.0, widthKey.get(a)), max(0.0, heightKey.get(a)));
     }
 
     @Override
-    public @NonNull Rectangle2D put(@NonNull Map<? super Key<?>, Object> a, @Nullable Rectangle2D value) {
+    public Rectangle2D put(Map<? super Key<?>, Object> a, @Nullable Rectangle2D value) {
         Rectangle2D oldValue = get(a);
         if (value == null) {
             remove(a);
@@ -67,7 +66,7 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
     }
 
     @Override
-    public @NonNull Rectangle2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public Rectangle2D remove(Map<? super Key<?>, Object> a) {
         Rectangle2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);
@@ -77,7 +76,7 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Rectangle2D value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable Rectangle2D value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -89,7 +88,7 @@ public class Rectangle2DMapAccessor extends AbstractMapAccessor<Rectangle2D> {
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         a = yKey.remove(a);
         a = widthKey.remove(a);

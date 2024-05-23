@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.os.macos;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.MapEntries;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
@@ -20,7 +19,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public class MacOSPreferencesTest {
-    @NonNull
     @TestFactory
     public List<DynamicTest> dynamicTestsPreferences() {
         List<DynamicTest> list = new ArrayList<>();
@@ -50,7 +48,7 @@ public class MacOSPreferencesTest {
 
     }
 
-    private void testPreferences(String filename, @NonNull String key, Object expectedValue) throws URISyntaxException {
+    private void testPreferences(String filename, String key, Object expectedValue) throws URISyntaxException {
         URL resource = getClass().getResource(filename);
         if (resource == null) {
             throw new IllegalArgumentException("Could not find resource with filename=\"" + filename + "\" for class=" + getClass() + ".");

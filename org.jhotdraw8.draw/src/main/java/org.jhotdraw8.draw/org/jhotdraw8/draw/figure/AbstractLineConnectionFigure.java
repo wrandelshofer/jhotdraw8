@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.geometry.Point2D;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -18,6 +16,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
 import java.util.SequencedSet;
@@ -30,13 +29,13 @@ import java.util.SequencedSet;
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         implements NonTransformableFigure, LineConnectingFigure {
 
-    private final @NonNull ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
+    private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
     public AbstractLineConnectionFigure() {
         this(0, 0, 0, 0);
     }
 
-    public AbstractLineConnectionFigure(@NonNull Point2D start, @NonNull Point2D end) {
+    public AbstractLineConnectionFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -91,7 +90,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void doAddedToDrawing(final @NonNull Drawing drawing) {
+    public void doAddedToDrawing(final Drawing drawing) {
         final Figure startTarget = get(START_TARGET);
         if (startTarget != null) {
             startTarget.getLayoutObservers().add(this);
@@ -103,7 +102,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    protected void doRemovedFromDrawing(final @NonNull Drawing drawing) {
+    protected void doRemovedFromDrawing(final Drawing drawing) {
         final Figure startTarget = get(START_TARGET);
         if (startTarget != null) {
             startTarget.getLayoutObservers().remove(this);
@@ -115,7 +114,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         CssPoint2D start = getNonNull(START);
         CssPoint2D end = getNonNull(END);
         return new CssRectangle2D(//
@@ -133,7 +132,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      * @return an unmodifiable set of connected figures
      */
     @Override
-    public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
+    public ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
@@ -176,7 +175,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         if (get(START_TARGET) == null) {
             set(START, new CssPoint2D(
                     FXTransforms.transform(transform, getNonNull(START).getConvertedValue())));
@@ -188,7 +187,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         if (get(START_TARGET) == null) {
             set(START, new CssPoint2D(x, y));
         }
@@ -212,7 +211,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
                 && get(START_TARGET) != null && get(END_CONNECTOR) != null && get(END_TARGET) != null);
     }
 
-    public @NonNull ReadOnlyBooleanWrapper connectedProperty() {
+    public ReadOnlyBooleanWrapper connectedProperty() {
         return connected;
     }
 }

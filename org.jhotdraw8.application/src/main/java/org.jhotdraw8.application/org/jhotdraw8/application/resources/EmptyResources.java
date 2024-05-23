@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.application.resources;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -18,7 +17,7 @@ import java.util.ResourceBundle;
 
 public class EmptyResources implements Resources {
     private @Nullable Resources parent;
-    private final @NonNull ResourceBundle emptyResourceBundle;
+    private final ResourceBundle emptyResourceBundle;
 
     {
         try {
@@ -32,7 +31,7 @@ public class EmptyResources implements Resources {
     }
 
     @Override
-    public @NonNull ResourceBundle asResourceBundle() {
+    public ResourceBundle asResourceBundle() {
         return emptyResourceBundle;
     }
 
@@ -42,7 +41,7 @@ public class EmptyResources implements Resources {
     }
 
     @Override
-    public @NonNull Class<?> getBaseClass() {
+    public Class<?> getBaseClass() {
         return getClass();
     }
 
@@ -52,18 +51,18 @@ public class EmptyResources implements Resources {
     }
 
     @Override
-    public @NonNull String getBaseName() {
+    public String getBaseName() {
         return "empty";
     }
 
 
     @Override
-    public @NonNull Locale getLocale() {
+    public Locale getLocale() {
         return Locale.getDefault();
     }
 
     @Override
-    public @NonNull String getString(String key) {
+    public String getString(String key) {
         throw new MissingResourceException("Could not find a resource with key=\"" + key + "\".",
                 this.getClass().getName(),
                 key);
@@ -75,12 +74,12 @@ public class EmptyResources implements Resources {
     }
 
     @Override
-    public @Nullable Object handleGetObjectRecursively(@NonNull String key) {
+    public @Nullable Object handleGetObjectRecursively(String key) {
         return null;
     }
 
     @Override
-    public @NonNull Enumeration<String> getKeys() {
+    public Enumeration<String> getKeys() {
         return Collections.emptyEnumeration();
     }
 

@@ -15,8 +15,7 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -68,51 +67,51 @@ public interface DrawingView extends WritableRenderContext {
     /**
      * The name of the model property.
      */
-    @NonNull String MODEL_PROPERTY = "model";
+    String MODEL_PROPERTY = "model";
     /**
      * The name of the tool property.
      */
-    @NonNull String TOOL_PROPERTY = "tool";
+    String TOOL_PROPERTY = "tool";
     /**
      * The name of the focused property.
      */
-    @NonNull String FOCUSED_PROPERTY = "focused";
+    String FOCUSED_PROPERTY = "focused";
     /**
      * The name of the scale factor property.
      */
-    @NonNull String ZOOM_FACTOR_PROPERTY = "zoomFactor";
+    String ZOOM_FACTOR_PROPERTY = "zoomFactor";
     /**
      * The name of the constrainer property.
      */
-    @NonNull String CONSTRAINER_PROPERTY = "constrainer";
+    String CONSTRAINER_PROPERTY = "constrainer";
     /**
      * The name of the selection property.
      */
-    @NonNull String SELECTED_FIGURES_PROPERTY = "selectedFigures";
+    String SELECTED_FIGURES_PROPERTY = "selectedFigures";
     /**
      * The name of the active handle property.
      */
-    @NonNull String ACTIVE_HANDLE_PROPERTY = "activeHandle";
+    String ACTIVE_HANDLE_PROPERTY = "activeHandle";
     /**
      * The name of the active layer property.
      */
-    @NonNull String ACTIVE_PARENT_PROPERTY = "activeLayer";
+    String ACTIVE_PARENT_PROPERTY = "activeLayer";
     /**
      * The name of the clipboardInputFormat property.
      */
-    @NonNull String CLIPBOARD_INPUT_FORMAT_PROPERTY = "clipboardInputFormat";
+    String CLIPBOARD_INPUT_FORMAT_PROPERTY = "clipboardInputFormat";
     /**
      * The name of the clibpoardOutputFormat property.
      */
-    @NonNull String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
+    String CLIPBOARD_OUTPUT_FORMAT_PROPERTY = "clibpoardOutputFormat";
     /**
      * The name of the drawing property.
      */
-    @NonNull String DRAWING_PROPERTY = "drawing";
+    String DRAWING_PROPERTY = "drawing";
     /**
      * The name of the editor property.
      */
-    @NonNull String EDITOR_PROPERTY = "editor";
+    String EDITOR_PROPERTY = "editor";
 
 
     // ---
@@ -125,21 +124,21 @@ public interface DrawingView extends WritableRenderContext {
      * @return the drawing model property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code DRAWING_PROPERTY}.
      */
-    @NonNull NonNullObjectProperty<DrawingModel> modelProperty();
+    NonNullObjectProperty<DrawingModel> modelProperty();
 
     /**
      * The drawing model.
      *
      * @return the drawing model property
      */
-    @NonNull ReadOnlyObjectProperty<Drawing> drawingProperty();
+    ReadOnlyObjectProperty<Drawing> drawingProperty();
 
     /**
      * The drawing editor.
      *
      * @return the editor property
      */
-    @NonNull ObjectProperty<DrawingEditor> editorProperty();
+    ObjectProperty<DrawingEditor> editorProperty();
 
     /**
      * The active layer of the drawing.
@@ -147,7 +146,7 @@ public interface DrawingView extends WritableRenderContext {
      * @return the active layer of the drawing. Returns null if the drawing has
      * no layers or no layer has been activated.
      */
-    @NonNull ObjectProperty<Figure> activeParentProperty();
+    ObjectProperty<Figure> activeParentProperty();
 
     default void scrollSelectedFiguresToVisible() {
         final ObservableSet<Figure> selectedFigures = getSelectedFigures();
@@ -170,7 +169,7 @@ public interface DrawingView extends WritableRenderContext {
      * @return the tool property, with {@code getBean()} returning this drawing
      * view, and {@code getName()} returning {@code TOOL_PROPERTY}.
      */
-    @NonNull ObjectProperty<Tool> toolProperty();
+    ObjectProperty<Tool> toolProperty();
 
     /**
      * The scale factor of the drawing view.
@@ -179,7 +178,7 @@ public interface DrawingView extends WritableRenderContext {
      * larger than 1 cause a magnification. Values between 0 and 1 causes a
      * minification.
      */
-    @NonNull DoubleProperty zoomFactorProperty();
+    DoubleProperty zoomFactorProperty();
 
     /**
      * The constrainer.
@@ -188,7 +187,7 @@ public interface DrawingView extends WritableRenderContext {
      * drawing view, and {@code getName()} returning
      * {@code CONSTRAINER_PROPERTY}.
      */
-    @NonNull NonNullObjectProperty<Constrainer> constrainerProperty();
+    NonNullObjectProperty<Constrainer> constrainerProperty();
 
     /**
      * The focused property is set to true, when the DrawingView has input
@@ -197,7 +196,7 @@ public interface DrawingView extends WritableRenderContext {
      * @return the focused property, with {@code getBean()} returning this
      * drawing view, and {@code getName()} returning {@code FOCUSED_PROPERTY}.
      */
-    @NonNull ReadOnlyBooleanProperty focusedProperty();
+    ReadOnlyBooleanProperty focusedProperty();
 
     /**
      * The selected figures.
@@ -214,7 +213,7 @@ public interface DrawingView extends WritableRenderContext {
      *
      * @return the currently selected figures
      */
-    @NonNull ReadOnlySetProperty<Figure> selectedFiguresProperty();
+    ReadOnlySetProperty<Figure> selectedFiguresProperty();
 
     /**
      * The handles.
@@ -225,7 +224,7 @@ public interface DrawingView extends WritableRenderContext {
      * @return the handles that are currently being displayed on this drawing
      * view.
      */
-    @NonNull ReadOnlySetProperty<Handle> handlesProperty();
+    ReadOnlySetProperty<Handle> handlesProperty();
 
     /**
      * The active handle.
@@ -237,7 +236,7 @@ public interface DrawingView extends WritableRenderContext {
      *
      * @return the active handle if present
      */
-    @NonNull ObjectProperty<Handle> activeHandleProperty();
+    ObjectProperty<Handle> activeHandleProperty();
 
 
     /**
@@ -245,14 +244,14 @@ public interface DrawingView extends WritableRenderContext {
      *
      * @return the clipboard output format handle if present
      */
-    @NonNull ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
+    ObjectProperty<ClipboardOutputFormat> clipboardOutputFormatProperty();
 
     /**
      * The clipboard input format.
      *
      * @return the clipboard output format handle if present
      */
-    @NonNull ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
+    ObjectProperty<ClipboardInputFormat> clipboardInputFormatProperty();
 
     // ---
     // methods
@@ -351,7 +350,7 @@ public interface DrawingView extends WritableRenderContext {
      * @return A node or null
      */
     @Nullable
-    Node findFigureNode(@NonNull Figure figure, double vx, double vy);
+    Node findFigureNode(Figure figure, double vx, double vy);
 
     /**
      * Finds the figure at the given view coordinates behind the given figure.
@@ -365,7 +364,7 @@ public interface DrawingView extends WritableRenderContext {
      * Each entry contains the figure and the distance of the figure to vx,vy.
      * Distance 0 means that vx,vy is inside the figure.
      */
-    default @NonNull List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose) {
+    default List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose) {
         return findFigures(vx, vy, decompose, Figure::isSelectable);
     }
 
@@ -380,8 +379,7 @@ public interface DrawingView extends WritableRenderContext {
      * Each entry contains the figure and the distance of the figure to vx,vy.
      * Distance 0 means that vx,vy is inside the figure.
      */
-    @NonNull
-    List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, @NonNull Predicate<Figure> predicate);
+    List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, Predicate<Figure> predicate);
 
     /**
      * Returns all figures that lie within the specified bounds given in view
@@ -397,7 +395,7 @@ public interface DrawingView extends WritableRenderContext {
      * Each entry contains the figure and the distance of the figure to vx,vy.
      * Distance 0 means that vx,vy is inside the figure.
      */
-    @NonNull List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
+    List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose);
 
     /**
      * Returns all figures that intersect the specified bounds given in view
@@ -411,7 +409,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param decompose whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
+    default List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose) {
         return findFiguresIntersecting(vx, vy, vwidth, vheight, decompose, f -> true);
     }
 
@@ -428,7 +426,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param predicate predicate for filtering figures
      * @return A list of figures from front to back
      */
-    @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate);
+    List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate);
 
     // Handles
 
@@ -439,14 +437,13 @@ public interface DrawingView extends WritableRenderContext {
      * @param handle  a handle
      * @return A collection containing the figures with compatible handles.
      */
-    @NonNull Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
+    Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle handle);
 
     /**
      * Returns the world to view transformation.
      *
      * @return the transformation
      */
-    @NonNull
     Transform getWorldToView();
 
     /**
@@ -454,7 +451,6 @@ public interface DrawingView extends WritableRenderContext {
      *
      * @return the transformation;
      */
-    @NonNull
     Transform getViewToWorld();
 
     // ---
@@ -469,7 +465,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param pointInView point in view coordinates
      * @return A figure or empty
      */
-    default @Nullable Figure findFigure(@NonNull Point2D pointInView) {
+    default @Nullable Figure findFigure(Point2D pointInView) {
         return findFigure(pointInView.getX(), pointInView.getY());
     }
 
@@ -484,7 +480,7 @@ public interface DrawingView extends WritableRenderContext {
      * Each entry contains the figure and the distance of the figure to vx,vy.
      * Distance 0 means that pointInView is inside the figure.
      */
-    default @NonNull List<Map.Entry<Figure, Double>> findFigures(@NonNull Point2D pointInView, boolean decompose) {
+    default List<Map.Entry<Figure, Double>> findFigures(Point2D pointInView, boolean decompose) {
         return findFigures(pointInView.getX(), pointInView.getY(), decompose);
     }
 
@@ -499,7 +495,7 @@ public interface DrawingView extends WritableRenderContext {
      * Each entry contains the figure and the distance of the figure to vx,vy.
      * Distance 0 means that pointInView is inside the figure.
      */
-    default @NonNull List<Map.Entry<Figure, Double>> findFiguresInside(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default List<Map.Entry<Figure, Double>> findFiguresInside(Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresInside(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose);
     }
 
@@ -512,7 +508,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param decompose       whether to decompose the figures
      * @return A list of figures from front to back
      */
-    default @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(@NonNull Rectangle2D rectangleInView, boolean decompose) {
+    default List<Map.Entry<Figure, Double>> findFiguresIntersecting(Rectangle2D rectangleInView, boolean decompose) {
         return findFiguresIntersecting(rectangleInView.getMinX(), rectangleInView.getMinY(), rectangleInView.getWidth(), rectangleInView.getHeight(), decompose, Figure::isSelectable);
     }
 
@@ -533,11 +529,11 @@ public interface DrawingView extends WritableRenderContext {
         return editorProperty().get();
     }
 
-    default void setConstrainer(@NonNull Constrainer newValue) {
+    default void setConstrainer(Constrainer newValue) {
         constrainerProperty().set(newValue);
     }
 
-    default @NonNull Constrainer getConstrainer() {
+    default Constrainer getConstrainer() {
         return constrainerProperty().get();
     }
 
@@ -597,7 +593,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param view a point in view coordinates
      * @return the corresponding point in world coordinates
      */
-    default Point2D viewToWorld(@NonNull Point2D view) {
+    default Point2D viewToWorld(Point2D view) {
         return FXTransforms.transform(getViewToWorld(), view);
     }
 
@@ -607,7 +603,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param view a rectangle in view coordinates
      * @return the corresponding point in world coordinates
      */
-    default Bounds viewToWorld(@NonNull Bounds view) {
+    default Bounds viewToWorld(Bounds view) {
         return getViewToWorld().transform(view);
     }
 
@@ -617,7 +613,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param world a point in world coordinates
      * @return the corresponding point in view coordinates
      */
-    default Point2D worldToView(@NonNull Point2D world) {
+    default Point2D worldToView(Point2D world) {
         return FXTransforms.transform(getWorldToView(), world);
     }
 
@@ -627,7 +623,7 @@ public interface DrawingView extends WritableRenderContext {
      * @param world a box in world coordinates
      * @return the corresponding box in view coordinates
      */
-    default Bounds worldToView(@NonNull Bounds world) {
+    default Bounds worldToView(Bounds world) {
         return getWorldToView().transform(world);
     }
 
@@ -699,7 +695,7 @@ public interface DrawingView extends WritableRenderContext {
      *
      * @param f A figure in the drawing of this DrawingView.
      */
-    default void scrollFigureToVisible(@NonNull Figure f) {
+    default void scrollFigureToVisible(Figure f) {
         Bounds boundsInView = worldToView(f.getLayoutBoundsInWorld());
         scrollRectToVisible(boundsInView);
     }

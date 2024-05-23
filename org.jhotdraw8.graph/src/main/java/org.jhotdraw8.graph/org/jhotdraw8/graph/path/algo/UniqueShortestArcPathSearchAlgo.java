@@ -5,12 +5,11 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.HashMap;
@@ -79,13 +78,13 @@ public class UniqueShortestArcPathSearchAlgo<V, A, C extends Number & Comparable
      */
     @Override
     public @Nullable ArcBackLinkWithCost<V, A, C> search(
-            final @NonNull Iterable<V> startVertices,
-            final @NonNull Predicate<V> goalPredicate,
-            final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
-            int maxDepth, final @NonNull C zero,
-            final @NonNull C costLimit,
-            final @NonNull Function3<V, V, A, C> costFunction,
-            final @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
+            final Iterable<V> startVertices,
+            final Predicate<V> goalPredicate,
+            final Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            int maxDepth, final C zero,
+            final C costLimit,
+            final Function3<V, V, A, C> costFunction,
+            final BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
 
         AlgoArguments.checkMaxDepthMaxCostArguments(maxDepth, zero, costLimit);
         CheckedNonNegativeArcCostFunction3<V, A, C> costf = new CheckedNonNegativeArcCostFunction3<>(zero, costFunction);

@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
@@ -24,20 +23,20 @@ import java.util.function.Consumer;
  */
 public class SelectorGroup extends Selector {
 
-    private final @NonNull ReadOnlyList<Selector> selectors;
+    private final ReadOnlyList<Selector> selectors;
 
-    public SelectorGroup(@Nullable SourceLocator sourceLocator, @NonNull Selector selector) {
+    public SelectorGroup(@Nullable SourceLocator sourceLocator, Selector selector) {
         super(sourceLocator);
         this.selectors = VectorList.of(selector);
     }
 
-    public SelectorGroup(@Nullable SourceLocator sourceLocator, @NonNull List<Selector> selectors) {
+    public SelectorGroup(@Nullable SourceLocator sourceLocator, List<Selector> selectors) {
         super(sourceLocator);
         this.selectors = VectorList.copyOf(selectors);
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder buf = new StringBuilder("( ");
         boolean first = true;
         for (Selector s : selectors) {
@@ -99,7 +98,7 @@ public class SelectorGroup extends Selector {
      * @return the last selector with highest specificity that matches the specified element,
      * returns null if no selector matches
      */
-    public @Nullable <T> Selector matchSelector(@NonNull SelectorModel<T> model, @NonNull T element) {
+    public @Nullable <T> Selector matchSelector(SelectorModel<T> model, T element) {
         int maxSpecificity = 0;
         Selector found = null;// selector with maxSpecificity or last
 
@@ -118,7 +117,7 @@ public class SelectorGroup extends Selector {
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         boolean first = true;
         for (Selector s : selectors) {
             if (first) {

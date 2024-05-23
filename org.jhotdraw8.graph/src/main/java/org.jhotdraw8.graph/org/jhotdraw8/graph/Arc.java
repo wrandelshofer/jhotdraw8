@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -20,11 +19,11 @@ import java.util.Objects;
  * @param <A> the arrow data type
  */
 public class Arc<V, A> {
-    private final @NonNull V start;
-    private final @NonNull V end;
+    private final V start;
+    private final V end;
     private final @Nullable A data;
 
-    public Arc(@NonNull V start, @NonNull V end, @Nullable A data) {
+    public Arc(V start, V end, @Nullable A data) {
         Objects.requireNonNull(start, "start");
         Objects.requireNonNull(end, "end");
         this.start = start;
@@ -36,16 +35,16 @@ public class Arc<V, A> {
         return data;
     }
 
-    public @NonNull V getEnd() {
+    public V getEnd() {
         return end;
     }
 
-    public @NonNull V getStart() {
+    public V getStart() {
         return start;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "Arc{" + start +
                 "->" + end +
                 ", " + data +

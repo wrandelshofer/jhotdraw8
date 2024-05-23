@@ -5,13 +5,12 @@
 
 package org.jhotdraw8.graph.path;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -45,11 +44,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C costLimit,
-            @NonNull AddToSet<V> visited);
+            C costLimit,
+            AddToSet<V> visited);
 
     /**
      * Finds a vertex sequence from a set of start vertices to a vertex
@@ -64,10 +63,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C costLimit) {
+            C costLimit) {
         return findVertexSequence(startVertices, goalPredicate, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -82,9 +81,9 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull C costLimit) {
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            C costLimit) {
         return findVertexSequence(startVertices, goalPredicate, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -102,10 +101,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull V start,
-            @NonNull Predicate<V> goalPredicate,
+            V start,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C costLimit, @NonNull AddToSet<V> visited) {
+            C costLimit, AddToSet<V> visited) {
         return findVertexSequence(Collections.singletonList(start), goalPredicate, maxDepth, costLimit, visited);
     }
 
@@ -122,10 +121,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull V start,
-            @NonNull Predicate<V> goalPredicate,
+            V start,
+            Predicate<V> goalPredicate,
             int maxDepth,
-            @NonNull C costLimit) {
+            C costLimit) {
         return findVertexSequence(Collections.singletonList(start), goalPredicate, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -140,9 +139,9 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull V start,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull C costLimit) {
+            V start,
+            Predicate<V> goalPredicate,
+            C costLimit) {
         return findVertexSequence(Collections.singletonList(start), goalPredicate, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -160,11 +159,11 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      */
     @SuppressWarnings("unchecked")
     default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull V start,
-            @NonNull V goal,
+            V start,
+            V goal,
             int maxDepth,
-            @NonNull C costLimit,
-            @NonNull AddToSet<V> visited) {
+            C costLimit,
+            AddToSet<V> visited) {
         return findVertexSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, visited);
     }
 
@@ -181,10 +180,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      */
     @SuppressWarnings("unchecked")
     default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull V start,
-            @NonNull V goal,
+            V start,
+            V goal,
             int maxDepth,
-            @NonNull C costLimit) {
+            C costLimit) {
         return findVertexSequence(VectorList.of(start), goal::equals, maxDepth, costLimit, new HashSet<>()::add);
     }
 
@@ -199,9 +198,9 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      */
     @SuppressWarnings("unchecked")
     default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
-            @NonNull V start,
-            @NonNull V goal,
-            @NonNull C costLimit) {
+            V start,
+            V goal,
+            C costLimit) {
         return findVertexSequence(VectorList.of(start), goal::equals, Integer.MAX_VALUE, costLimit, new HashSet<>()::add);
     }
 
@@ -217,10 +216,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(
-            @NonNull Iterable<V> waypoints,
+            Iterable<V> waypoints,
             int maxDepth,
-            @NonNull C costLimit,
-            @NonNull Supplier<AddToSet<V>> visitedSetFactory);
+            C costLimit,
+            Supplier<AddToSet<V>> visitedSetFactory);
 
 
     /**
@@ -234,9 +233,9 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(
-            @NonNull Iterable<V> waypoints,
+            Iterable<V> waypoints,
             int maxDepth,
-            @NonNull C costLimit) {
+            C costLimit) {
         return findVertexSequenceOverWaypoints(waypoints, maxDepth, costLimit, () -> new HashSet<>()::add);
     }
 
@@ -249,8 +248,8 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(
-            @NonNull Iterable<V> waypoints,
-            @NonNull C costLimit) {
+            Iterable<V> waypoints,
+            C costLimit) {
         return findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
     }
 
@@ -268,10 +267,10 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
 
     @SuppressWarnings("unchecked")
     static <VV, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<ImmutableList<VV>, CC> findVertexSequenceOverWaypoints(
-            @NonNull Iterable<VV> waypoints,
-            @NonNull BiFunction<VV, VV, OrderedPair<ImmutableList<VV>, CC>> findVertexSequenceFunction,
-            @NonNull CC zero,
-            @NonNull BiFunction<CC, CC, CC> sumFunction) {
+            Iterable<VV> waypoints,
+            BiFunction<VV, VV, OrderedPair<ImmutableList<VV>, CC>> findVertexSequenceFunction,
+            CC zero,
+            BiFunction<CC, CC, CC> sumFunction) {
         List<VV> sequence = new ArrayList<>();
         VV prev = null;
         CC sum = zero;

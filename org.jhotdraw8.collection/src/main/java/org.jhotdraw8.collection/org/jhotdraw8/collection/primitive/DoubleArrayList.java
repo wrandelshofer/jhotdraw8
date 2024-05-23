@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.util.ListHelper;
 import org.jhotdraw8.icollection.facade.ListFacade;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.Arrays;
@@ -58,7 +57,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      *
      * @param collection a collection of integers
      */
-    public DoubleArrayList(@NonNull Collection<Double> collection) {
+    public DoubleArrayList(Collection<Double> collection) {
         this.size = collection.size();
         this.items = new double[size];
 
@@ -70,7 +69,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
         }
     }
 
-    private DoubleArrayList(double @NonNull [] items) {
+    private DoubleArrayList(double[] items) {
         this.items = items;
         this.size = items.length;
     }
@@ -82,7 +81,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      *              provided array)
      * @return the new instance
      */
-    public static @NonNull DoubleArrayList of(double @NonNull ... items) {
+    public static DoubleArrayList of(double... items) {
         return new DoubleArrayList(items);
     }
 
@@ -116,7 +115,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      *
      * @param that another list
      */
-    public void addAllAsDouble(@NonNull DoubleArrayList that) {
+    public void addAllAsDouble(DoubleArrayList that) {
         if (that.isEmpty()) {
             return;
         }
@@ -132,7 +131,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      * @param out the output collection
      * @return out
      */
-    public @NonNull <T extends Collection<Double>> T addAllInto(@NonNull T out) {
+    public <T extends Collection<Double>> T addAllInto(T out) {
         for (int i = 0, n = size; i < n; i++) {
             out.add(items[i]);
         }
@@ -154,7 +153,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      * @param a      an array
      * @param offset the offset into the array
      */
-    public void copyInto(double @NonNull [] a, int offset) {
+    public void copyInto(double[] a, int offset) {
         System.arraycopy(items, 0, a, offset, size);
     }
 
@@ -380,7 +379,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      * @return an iterator over the elements of this list
      */
     @Override
-    public PrimitiveIterator.@NonNull OfDouble iterator() {
+    public PrimitiveIterator.OfDouble iterator() {
         return new PrimitiveIterator.OfDouble() {
             private int index = 0;
             private final int size = DoubleArrayList.this.size;
@@ -407,7 +406,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      * @return a spliterator over the elements of this list
      */
     @Override
-    public Spliterator.@NonNull OfDouble spliterator() {
+    public Spliterator.OfDouble spliterator() {
         return Spliterators.spliterator(items, 0, size, Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
@@ -416,7 +415,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      *
      * @return a stream
      */
-    public @NonNull DoubleStream doubleStream() {
+    public DoubleStream doubleStream() {
         return (size == 0) ? DoubleStream.empty() : Arrays.stream(items, 0, size);
     }
 
@@ -425,7 +424,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      *
      * @return array
      */
-    public double @NonNull [] toDoubleArray() {
+    public double[] toDoubleArray() {
         double[] result = new double[size];
         System.arraycopy(items, 0, result, 0, size);
         return result;
@@ -452,7 +451,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
 
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder b = new StringBuilder();
         b.append('[');
         for (int i = 0; i < size; i++) {
@@ -479,7 +478,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
      *               removed
      * @return {@code true} if any elements were removed
      */
-    public boolean removeIfAsDouble(@NonNull DoublePredicate filter) {
+    public boolean removeIfAsDouble(DoublePredicate filter) {
         boolean hasRemoved = false;
         Objects.requireNonNull(filter, "filter");
         for (int i = size - 1; i >= 0; i--) {
@@ -520,7 +519,7 @@ public class DoubleArrayList extends AbstractList<Double> implements DoubleList 
     }
 
     @Override
-    public @NonNull List<Double> reversed() {
+    public List<Double> reversed() {
         return new ListFacade<>(
                 this::size,
                 i -> get(size() - i)

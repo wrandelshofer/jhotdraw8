@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableSet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -26,33 +25,33 @@ import java.util.function.Supplier;
 public class ReadOnlyNavigableSetFacade<E> extends ReadOnlySetFacade<E>
         implements ReadOnlyNavigableSet<E> {
 
-    final @NonNull Supplier<E> getFirstFunction;
-    final @NonNull Function<E, E> ceilingFunction;
-    final @NonNull Function<E, E> floorFunction;
-    final @NonNull Function<E, E> higherFunction;
-    final @NonNull Function<E, E> lowerFunction;
-    final @NonNull Supplier<E> getLastFunction;
-    final @NonNull Supplier<Comparator<? super E>> comparatorSupplier;
-    final @NonNull Supplier<Iterator<E>> reverseIteratorFunction;
+    final Supplier<E> getFirstFunction;
+    final Function<E, E> ceilingFunction;
+    final Function<E, E> floorFunction;
+    final Function<E, E> higherFunction;
+    final Function<E, E> lowerFunction;
+    final Supplier<E> getLastFunction;
+    final Supplier<Comparator<? super E>> comparatorSupplier;
+    final Supplier<Iterator<E>> reverseIteratorFunction;
 
-    public ReadOnlyNavigableSetFacade(@NonNull NavigableSet<E> s) {
+    public ReadOnlyNavigableSetFacade(NavigableSet<E> s) {
         this(s::iterator, () -> s.reversed().iterator(), s::size,
                 s::contains, s::getFirst, s::getLast,
                 s::ceiling, s::floor, s::higher, s::lower, s::comparator,
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
-    public ReadOnlyNavigableSetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                      @NonNull Supplier<Iterator<E>> reverseIteratorFunction,
-                                      @NonNull IntSupplier sizeFunction,
-                                      @NonNull Predicate<Object> containsFunction,
-                                      @NonNull Supplier<E> getFirstFunction,
-                                      @NonNull Supplier<E> getLastFunction,
-                                      final @NonNull Function<E, E> ceilingFunction,
-                                      final @NonNull Function<E, E> floorFunction,
-                                      final @NonNull Function<E, E> higherFunction,
-                                      final @NonNull Function<E, E> lowerFunction,
-                                      final @NonNull Supplier<Comparator<? super E>> comparatorSupplier,
+    public ReadOnlyNavigableSetFacade(Supplier<Iterator<E>> iteratorFunction,
+                                      Supplier<Iterator<E>> reverseIteratorFunction,
+                                      IntSupplier sizeFunction,
+                                      Predicate<Object> containsFunction,
+                                      Supplier<E> getFirstFunction,
+                                      Supplier<E> getLastFunction,
+                                      final Function<E, E> ceilingFunction,
+                                      final Function<E, E> floorFunction,
+                                      final Function<E, E> higherFunction,
+                                      final Function<E, E> lowerFunction,
+                                      final Supplier<Comparator<? super E>> comparatorSupplier,
                                       int characteristics) {
         super(iteratorFunction, sizeFunction, containsFunction, characteristics);
         this.getFirstFunction = getFirstFunction;
@@ -102,7 +101,7 @@ public class ReadOnlyNavigableSetFacade<E> extends ReadOnlySetFacade<E>
     }
 
     @Override
-    public @NonNull ReadOnlyNavigableSet<E> readOnlyReversed() {
+    public ReadOnlyNavigableSet<E> readOnlyReversed() {
         return new ReadOnlyNavigableSetFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

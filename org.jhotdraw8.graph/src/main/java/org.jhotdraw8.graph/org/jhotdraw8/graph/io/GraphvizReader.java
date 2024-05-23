@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.io;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.MutableDirectedGraph;
@@ -61,47 +60,47 @@ import java.util.function.Supplier;
  * @param <A> the arrow data type
  */
 public class GraphvizReader<V, A> {
-    private final @NonNull BiFunction<String, Map<String, String>, V> vertexFactory;
-    private final @NonNull Function<Map<String, String>, A> arrowFactory;
+    private final BiFunction<String, Map<String, String>, V> vertexFactory;
+    private final Function<Map<String, String>, A> arrowFactory;
 
-    private final @NonNull Supplier<MutableDirectedGraph<V, A>> graphFactory;
+    private final Supplier<MutableDirectedGraph<V, A>> graphFactory;
 
-    public GraphvizReader(@NonNull final Function<String, V> vertexFactory,
-                          @NonNull final Function<Map<String, String>, A> arrowFactory) {
+    public GraphvizReader(final Function<String, V> vertexFactory,
+                          final Function<Map<String, String>, A> arrowFactory) {
         this.vertexFactory = (id, map) -> vertexFactory.apply(id);
         this.arrowFactory = arrowFactory;
         this.graphFactory = () -> new SimpleMutableBidiGraph<>(16, 16);
     }
 
-    public GraphvizReader(@NonNull final BiFunction<String, Map<String, String>, V> vertexFactory,
-                          @NonNull final Function<Map<String, String>, A> arrowFactory,
-                          @NonNull final Supplier<MutableDirectedGraph<V, A>> graphFactory) {
+    public GraphvizReader(final BiFunction<String, Map<String, String>, V> vertexFactory,
+                          final Function<Map<String, String>, A> arrowFactory,
+                          final Supplier<MutableDirectedGraph<V, A>> graphFactory) {
         this.vertexFactory = vertexFactory;
         this.arrowFactory = arrowFactory;
         this.graphFactory = graphFactory;
     }
 
-    public static @NonNull GraphvizReader<String, String> newInstance() {
+    public static GraphvizReader<String, String> newInstance() {
         return new GraphvizReader<>(
                 (id, map) -> id,
                 Object::toString,
                 () -> new SimpleMutableBidiGraph<>(16, 16));
     }
 
-    public MutableDirectedGraph<V, A> read(@NonNull Path file) throws IOException {
+    public MutableDirectedGraph<V, A> read(Path file) throws IOException {
         try (Reader r = Files.newBufferedReader(file)) {
             return read(r);
         }
     }
 
-    public MutableDirectedGraph<V, A> read(@NonNull Reader r) throws IOException {
+    public MutableDirectedGraph<V, A> read(Reader r) throws IOException {
         final MutableDirectedGraph<V, A> g = graphFactory.get();
         parseGraph(new StreamTokenizer(r), g, new LinkedHashMap<>());
 
         return g;
     }
 
-    public MutableDirectedGraph<V, A> read(@NonNull String str) throws IOException {
+    public MutableDirectedGraph<V, A> read(String str) throws IOException {
         final MutableDirectedGraph<V, A> g = graphFactory.get();
         try (StringReader r = new StringReader(str)) {
             StreamTokenizer tt = new StreamTokenizer(r);
@@ -124,7 +123,7 @@ public class GraphvizReader<V, A> {
     /**
      * Parses the graph production.
      */
-    private void parseGraph(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g, @NonNull Map<String, V> vertices) throws IOException {
+    private void parseGraph(StreamTokenizer tt, MutableDirectedGraph<V, A> g, Map<String, V> vertices) throws IOException {
         if (tt.nextToken() != StreamTokenizer.TT_WORD) {
             throwException(tt, "graph: `strict`, `graph` or expected `digraph`");
         }
@@ -161,7 +160,7 @@ public class GraphvizReader<V, A> {
     /**
      * Parses the stmtList production.
      */
-    private void parseStmtLst(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g, @NonNull Map<String, V> vertexMap) throws IOException {
+    private void parseStmtLst(StreamTokenizer tt, MutableDirectedGraph<V, A> g, Map<String, V> vertexMap) throws IOException {
         do {
             tt.pushBack();
             parseStmt(tt, g, vertexMap);
@@ -175,7 +174,7 @@ public class GraphvizReader<V, A> {
     /**
      * Parses the stmt production.
      */
-    private void parseStmt(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g, @NonNull Map<String, V> vertexMap) throws IOException {
+    private void parseStmt(StreamTokenizer tt, MutableDirectedGraph<V, A> g, Map<String, V> vertexMap) throws IOException {
         if (tt.nextToken() != '"' && tt.ttype != StreamTokenizer.TT_WORD) {
             throwException(tt, "stmt: expected `node_id`");
         }
@@ -205,7 +204,7 @@ public class GraphvizReader<V, A> {
         }
     }
 
-    private void parseEdgeRhs(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g, @NonNull String node_id, @NonNull Map<String, V> vertexMap) throws IOException {
+    private void parseEdgeRhs(StreamTokenizer tt, MutableDirectedGraph<V, A> g, String node_id, Map<String, V> vertexMap) throws IOException {
         List<OrderedPair<String, String>> arrows = new ArrayList<>();
         do {
             tt.pushBack();
@@ -251,7 +250,7 @@ public class GraphvizReader<V, A> {
 
     }
 
-    private @NonNull Map<String, String> parseAttrList(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g) throws IOException {
+    private Map<String, String> parseAttrList(StreamTokenizer tt, MutableDirectedGraph<V, A> g) throws IOException {
         SequencedMap<String, String> attrList = new LinkedHashMap<>();
         if (tt.nextToken() != '[') {
             throwException(tt, "attr_list: expected `[`");
@@ -262,7 +261,7 @@ public class GraphvizReader<V, A> {
         return attrList;
     }
 
-    private void parseAList(@NonNull StreamTokenizer tt, @NonNull MutableDirectedGraph<V, A> g, @NonNull Map<String, String> attrList) throws IOException {
+    private void parseAList(StreamTokenizer tt, MutableDirectedGraph<V, A> g, Map<String, String> attrList) throws IOException {
         do {
             tt.pushBack();
             if (tt.nextToken() != '"' && tt.ttype != StreamTokenizer.TT_WORD) {

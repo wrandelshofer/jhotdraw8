@@ -5,8 +5,7 @@
 package org.jhotdraw8.draw.xml.converter;
 
 import javafx.scene.shape.SVGPath;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -25,7 +24,7 @@ public class SvgPathXmlConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public @Nullable SVGPath fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) {
+    public @Nullable SVGPath fromString(CharBuffer buf, @Nullable IdResolver idResolver) {
         final String string = buf.toString();
         buf.position(buf.length());
         if (string.isEmpty()) {
@@ -37,7 +36,7 @@ public class SvgPathXmlConverter implements Converter<SVGPath> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable SVGPath value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable SVGPath value) throws IOException {
         final String content = value == null ? null : value.getContent();
         out.append(content == null ? "" : content);
     }

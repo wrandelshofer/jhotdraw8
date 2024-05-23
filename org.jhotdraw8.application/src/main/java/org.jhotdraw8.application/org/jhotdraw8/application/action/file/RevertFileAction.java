@@ -8,14 +8,13 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.icollection.ChampMap;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.Optional;
@@ -31,7 +30,7 @@ import java.util.logging.Logger;
  */
 public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> {
 
-    public static final @NonNull String ID = "file.revert";
+    public static final String ID = "file.revert";
 
     /**
      * Creates a new instance.
@@ -39,13 +38,13 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
      * @param view the view
      */
     @SuppressWarnings("this-escape")
-    public RevertFileAction(@NonNull FileBasedActivity view) {
+    public RevertFileAction(FileBasedActivity view) {
         super(view);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull FileBasedActivity activity) {
+    protected void onActionPerformed(ActionEvent event, FileBasedActivity activity) {
         if (isDisabled()) {
             return;
         }
@@ -64,7 +63,7 @@ public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> 
         }
     }
 
-    private void doIt(@NonNull FileBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
+    private void doIt(FileBasedActivity view, @Nullable URI uri, DataFormat dataFormat) {
         WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         view.addDisabler(workState);
 

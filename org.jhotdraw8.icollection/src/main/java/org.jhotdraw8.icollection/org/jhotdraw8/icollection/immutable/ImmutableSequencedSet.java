@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 
 import java.util.NoSuchElementException;
@@ -23,27 +22,27 @@ import java.util.SequencedSet;
  */
 public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySequencedSet<E>, ImmutableSequencedCollection<E> {
     @Override
-    @NonNull ImmutableSequencedSet<E> add(E element);
+    ImmutableSequencedSet<E> add(E element);
 
     @Override
-    default @NonNull ImmutableSequencedSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    default ImmutableSequencedSet<E> addAll(Iterable<? extends E> c) {
         return (ImmutableSequencedSet<E>) ImmutableSet.super.addAll(c);
     }
 
     @Override
-    @NonNull ImmutableSequencedSet<E> addFirst(final @Nullable E element);
+    ImmutableSequencedSet<E> addFirst(final @Nullable E element);
 
     @Override
-    @NonNull ImmutableSequencedSet<E> addLast(final @Nullable E element);
+    ImmutableSequencedSet<E> addLast(final @Nullable E element);
 
     @Override
-    <T> @NonNull ImmutableSequencedSet<T> empty();
+    <T> ImmutableSequencedSet<T> empty();
 
     @Override
-    @NonNull ImmutableSequencedSet<E> remove(E element);
+    ImmutableSequencedSet<E> remove(E element);
 
     @Override
-    default @NonNull ImmutableSequencedSet<E> removeAll(@NonNull Iterable<?> c) {
+    default ImmutableSequencedSet<E> removeAll(Iterable<?> c) {
         return (ImmutableSequencedSet<E>) ImmutableSet.super.removeAll(c);
     }
 
@@ -72,12 +71,12 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
     }
 
     @Override
-    default @NonNull ImmutableSequencedSet<E> retainAll(@NonNull Iterable<?> c) {
+    default ImmutableSequencedSet<E> retainAll(Iterable<?> c) {
         return (ImmutableSequencedSet<E>) ImmutableSet.super.retainAll(c);
     }
 
     @Override
-    @NonNull SequencedSet<E> toMutable();
+    SequencedSet<E> toMutable();
 
     /**
      * Returns a reversed copy of this set.
@@ -89,7 +88,7 @@ public interface ImmutableSequencedSet<E> extends ImmutableSet<E>, ReadOnlySeque
      *
      * @return a reversed copy of this set.
      */
-    default @NonNull ImmutableSequencedSet<E> reverse() {
+    default ImmutableSequencedSet<E> reverse() {
         if (size() < 2) {
             return this;
         }

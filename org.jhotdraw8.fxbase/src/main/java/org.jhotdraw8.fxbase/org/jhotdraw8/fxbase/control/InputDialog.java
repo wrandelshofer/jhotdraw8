@@ -11,7 +11,6 @@ import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.function.Supplier;
 
@@ -34,7 +33,7 @@ public class InputDialog<R> extends Dialog<R> {
      * @param inputForm      the input form
      * @param resultSupplier the result supplier
      */
-    public InputDialog(String title, String headerText, Node inputForm, @NonNull Supplier<R> resultSupplier) {
+    public InputDialog(String title, String headerText, Node inputForm, Supplier<R> resultSupplier) {
         final DialogPane dialogPane = getDialogPane();
 
         // -- textfield
@@ -62,7 +61,7 @@ public class InputDialog<R> extends Dialog<R> {
      *
      * @return the input form
      */
-    public final @NonNull Node getInputForm() {
+    public final Node getInputForm() {
         return inputForm;
     }
 

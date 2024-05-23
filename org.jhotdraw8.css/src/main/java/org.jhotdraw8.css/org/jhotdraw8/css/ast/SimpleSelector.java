@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Abstract superclass for "simple selector"s.

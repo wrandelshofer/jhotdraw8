@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.action;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -24,7 +23,7 @@ import java.util.List;
  */
 public class BringToFrontAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.bringToFront";
+    public static final String ID = "edit.bringToFront";
 
     /**
      * Creates a new instance.
@@ -32,7 +31,7 @@ public class BringToFrontAction extends AbstractDrawingViewAction {
      * @param editor the drawing editor
      */
     @SuppressWarnings("this-escape")
-    public BringToFrontAction(@NonNull DrawingEditor editor) {
+    public BringToFrontAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -40,12 +39,12 @@ public class BringToFrontAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
-        final @NonNull List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
+        final List<Figure> figures = new ArrayList<>(drawingView.getSelectedFigures());
         bringToFront(drawingView, figures);
     }
 
-    public void bringToFront(@NonNull DrawingView view, @NonNull Collection<Figure> figures) {
+    public void bringToFront(DrawingView view, Collection<Figure> figures) {
         DrawingModel model = view.getModel();
         for (Figure child : figures) {
             Figure parent = child.getParent();

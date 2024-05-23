@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -23,7 +22,7 @@ public class IntersectEllipsePolygon {
      * @param points the points of the polygon
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectEllipsePolygon(@NonNull Point2D c, double rx, double ry, @NonNull List<Point2D.Double> points) {
+    public static IntersectionResult intersectEllipsePolygon(Point2D c, double rx, double ry, List<Point2D.Double> points) {
         List<IntersectionPoint> result = new ArrayList<>();
         int length = points.size();
 

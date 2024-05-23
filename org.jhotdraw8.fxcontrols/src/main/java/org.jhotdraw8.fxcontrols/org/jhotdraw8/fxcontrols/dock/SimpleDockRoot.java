@@ -17,10 +17,9 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.transition.RectangleTransition;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.function.Supplier;
@@ -35,18 +34,18 @@ import java.util.function.Supplier;
 public class SimpleDockRoot
         extends AbstractDockRoot {
 
-    private static final @NonNull Insets rootDrawnDropZoneInsets = new Insets(10);
-    private static final @NonNull Insets dockSensedDropZoneInsets = new Insets(30);
-    private static final @NonNull Insets rootSensedDropZoneInsets = new Insets(20);
-    private static final @NonNull Insets dockDrawnDropZoneInsets = new Insets(20);
-    private final @NonNull Rectangle dropRect = new Rectangle(0, 0, 0, 0);
-    private final @NonNull BorderPane contentPane = new BorderPane();
+    private static final Insets rootDrawnDropZoneInsets = new Insets(10);
+    private static final Insets dockSensedDropZoneInsets = new Insets(30);
+    private static final Insets rootSensedDropZoneInsets = new Insets(20);
+    private static final Insets dockDrawnDropZoneInsets = new Insets(20);
+    private final Rectangle dropRect = new Rectangle(0, 0, 0, 0);
+    private final BorderPane contentPane = new BorderPane();
     private @Nullable RectangleTransition transition;
-    private @NonNull Supplier<Track> rootXSupplier = () -> new SplitPaneTrack(Orientation.HORIZONTAL);
-    private @NonNull Supplier<Track> rootYSupplier = () -> new SplitPaneTrack(Orientation.VERTICAL);
-    private @NonNull Supplier<Track> subXSupplier = HBoxTrack::new;
-    private @NonNull Supplier<Track> subYSupplier = VBoxTrack::new;
-    private @NonNull Supplier<Track> zSupplier = TabPaneTrack::new;
+    private Supplier<Track> rootXSupplier = () -> new SplitPaneTrack(Orientation.HORIZONTAL);
+    private Supplier<Track> rootYSupplier = () -> new SplitPaneTrack(Orientation.VERTICAL);
+    private Supplier<Track> subXSupplier = HBoxTrack::new;
+    private Supplier<Track> subYSupplier = VBoxTrack::new;
+    private Supplier<Track> zSupplier = TabPaneTrack::new;
 
     public SimpleDockRoot() {
         getChildren().add(contentPane);
@@ -64,7 +63,7 @@ public class SimpleDockRoot
         setOnDragDropped(this::onDragDrop);
     }
 
-    private static @NonNull Bounds subtractInsets(@NonNull Bounds b, @NonNull Insets i) {
+    private static Bounds subtractInsets(Bounds b, Insets i) {
         return new BoundingBox(
                 b.getMinX() + i.getLeft(),
                 b.getMinY() + i.getTop(),
@@ -73,7 +72,7 @@ public class SimpleDockRoot
         );
     }
 
-    private Track createDock(@NonNull TrackAxis zoneAxis, @Nullable DockParent parent, boolean isRootPicked) {
+    private Track createDock(TrackAxis zoneAxis, @Nullable DockParent parent, boolean isRootPicked) {
         Supplier<Track> supplier = switch (zoneAxis) {
             case X -> isRootPicked ? rootXSupplier : subXSupplier;
             case Y -> isRootPicked ? rootYSupplier : subYSupplier;
@@ -83,7 +82,7 @@ public class SimpleDockRoot
     }
 
 
-    private boolean addToParent(@NonNull Dockable dockable, @NonNull DockParent parent, @NonNull DropZone zone, boolean isRootPicked) {
+    private boolean addToParent(Dockable dockable, DockParent parent, DropZone zone, boolean isRootPicked) {
         DockChild child;
         TrackAxis zoneAxis = getZoneAxis(zone);
 
@@ -122,7 +121,7 @@ public class SimpleDockRoot
         return true;
     }
 
-    private void addToZoneInParent(DockChild child, @NonNull DockParent parent, @NonNull DropZone zone, int insertionIndex) {
+    private void addToZoneInParent(DockChild child, DockParent parent, DropZone zone, int insertionIndex) {
         DockParent oldParent = child.getDockParent();
         if (oldParent != null) {
             oldParent.getDockChildren().remove(child);
@@ -141,7 +140,7 @@ public class SimpleDockRoot
         }
     }
 
-    private DragData computeDragData(@NonNull DragEvent e) {
+    private DragData computeDragData(DragEvent e) {
         Bounds bounds = getBoundsInLocal();
 
         DockParent pickedDock;
@@ -191,11 +190,11 @@ public class SimpleDockRoot
     }
 
     @Override
-    public @NonNull TrackAxis getDockAxis() {
+    public TrackAxis getDockAxis() {
         return TrackAxis.Z;
     }
 
-    private @Nullable DropZone getZone(double x, double y, @NonNull Bounds b, @NonNull Insets insets) {
+    private @Nullable DropZone getZone(double x, double y, Bounds b, Insets insets) {
         if (y - b.getMinY() < insets.getTop() && b.getHeight() > insets.getTop() + insets.getBottom()) {
             return DropZone.TOP;
         } else if (b.getMaxY() - y < insets.getBottom() && b.getHeight() > insets.getTop() + insets.getBottom()) {
@@ -217,7 +216,7 @@ public class SimpleDockRoot
         };
     }
 
-    private boolean isAcceptable(@NonNull DragEvent e) {
+    private boolean isAcceptable(DragEvent e) {
         Dockable draggedItem = DockRoot.getDraggedDockable();
         return e.getDragboard().getContentTypes().contains(DockRoot.DOCKABLE_DATA_FORMAT)
                 //    && e.getGestureSource() != null
@@ -230,7 +229,7 @@ public class SimpleDockRoot
         return true;
     }
 
-    private void onDockableDropped(@NonNull Dockable dropped, DragData dragData) {
+    private void onDockableDropped(Dockable dropped, DragData dragData) {
         DockRoot droppedRoot = dropped.getDockRoot();
         DockParent dragSource = dropped.getDockParent();
         if (dragSource == null
@@ -248,7 +247,7 @@ public class SimpleDockRoot
         }
     }
 
-    private void onDragDrop(@NonNull DragEvent e) {
+    private void onDragDrop(DragEvent e) {
         dropRect.setVisible(false);
         getChildren().remove(dropRect);
         if (!isAcceptable(e)) {
@@ -269,7 +268,7 @@ public class SimpleDockRoot
         dropRect.setVisible(false);
     }
 
-    private void onDragOver(@NonNull DragEvent e) {
+    private void onDragOver(DragEvent e) {
         if (!isAcceptable(e)) {
             return;
         }
@@ -364,8 +363,8 @@ public class SimpleDockRoot
         }
     }
 
-    private record DragData(@NonNull DockParent pickedDock, @NonNull DropZone zone, @NonNull Bounds bounds,
-                            @NonNull Insets insets, boolean isRootPicked) {
+    private record DragData(DockParent pickedDock, DropZone zone, Bounds bounds,
+                            Insets insets, boolean isRootPicked) {
     }
 
     public Supplier<Track> getZSupplier() {
@@ -376,35 +375,35 @@ public class SimpleDockRoot
         this.zSupplier = zSupplier;
     }
 
-    public @NonNull Supplier<Track> getRootXSupplier() {
+    public Supplier<Track> getRootXSupplier() {
         return rootXSupplier;
     }
 
-    public void setRootXSupplier(@NonNull Supplier<Track> rootXSupplier) {
+    public void setRootXSupplier(Supplier<Track> rootXSupplier) {
         this.rootXSupplier = rootXSupplier;
     }
 
-    public @NonNull Supplier<Track> getRootYSupplier() {
+    public Supplier<Track> getRootYSupplier() {
         return rootYSupplier;
     }
 
-    public void setRootYSupplier(@NonNull Supplier<Track> rootYSupplier) {
+    public void setRootYSupplier(Supplier<Track> rootYSupplier) {
         this.rootYSupplier = rootYSupplier;
     }
 
-    public @NonNull Supplier<Track> getSubXSupplier() {
+    public Supplier<Track> getSubXSupplier() {
         return subXSupplier;
     }
 
-    public void setSubXSupplier(@NonNull Supplier<Track> subXSupplier) {
+    public void setSubXSupplier(Supplier<Track> subXSupplier) {
         this.subXSupplier = subXSupplier;
     }
 
-    public @NonNull Supplier<Track> getSubYSupplier() {
+    public Supplier<Track> getSubYSupplier() {
         return subYSupplier;
     }
 
-    public void setSubYSupplier(@NonNull Supplier<Track> subYSupplier) {
+    public void setSubYSupplier(Supplier<Track> subYSupplier) {
         this.subYSupplier = subYSupplier;
     }
 }

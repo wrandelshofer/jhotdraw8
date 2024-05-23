@@ -3,12 +3,16 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Defines primitive collections, and various utility classes for collections and iterators.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.collection {
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.icollection;
     requires java.logging;
     exports org.jhotdraw8.collection.enumerator;

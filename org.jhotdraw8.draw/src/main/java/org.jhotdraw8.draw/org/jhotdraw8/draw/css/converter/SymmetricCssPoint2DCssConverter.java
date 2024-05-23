@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -47,7 +46,7 @@ public class SymmetricCssPoint2DCssConverter extends AbstractCssConverter<CssPoi
     }
 
     @Override
-    public @NonNull CssPoint2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssPoint2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y;
         x = SizeCssConverter.parseSize(tt, "x");
         if (tt.next() == CssTokenType.TT_EOF) {
@@ -62,7 +61,7 @@ public class SymmetricCssPoint2DCssConverter extends AbstractCssConverter<CssPoi
     }
 
     @Override
-    protected <TT extends CssPoint2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssPoint2D> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         CssSize x = value.getX();
         CssSize y = value.getY();
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, x.getValue(), x.getUnits()));

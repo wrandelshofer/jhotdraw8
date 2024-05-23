@@ -24,8 +24,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
@@ -35,6 +33,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,9 +50,9 @@ public class BezierNodeMoveHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    private static final @NonNull Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
-    private static final @NonNull Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
-    private static final @NonNull Path REGION_SHAPE_QUADRATIC = new Path();
+    private static final Circle REGION_SHAPE_CUBIC = new Circle(0, 0, 4);
+    private static final Rectangle REGION_SHAPE_LINEAR = new Rectangle(7, 7);
+    private static final Path REGION_SHAPE_QUADRATIC = new Path();
 
     static {
         final ObservableList<PathElement> elements = REGION_SHAPE_QUADRATIC.getElements();
@@ -65,14 +64,14 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     private Set<Figure> groupReshapeableFigures;
-    private final @NonNull Region node;
+    private final Region node;
     private Point2D oldPoint;
     private Point2D pickLocation;
     private final int pointIndex;
-    private final @NonNull MapAccessor<BezierPath> pathKey;
+    private final MapAccessor<BezierPath> pathKey;
 
 
-    public BezierNodeMoveHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pathKey, int pointIndex) {
+    public BezierNodeMoveHandle(Figure figure, MapAccessor<BezierPath> pathKey, int pointIndex) {
         super(figure);
         this.pathKey = pathKey;
         this.pointIndex = pointIndex;
@@ -104,7 +103,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
         return Cursor.OPEN_HAND;
     }
 
-    private @NonNull Point2D getLocation() {
+    private Point2D getLocation() {
         BezierNode bezierNode = getBezierNode();
         return bezierNode == null ? Point2D.ZERO : bezierNode.getPoint(Point2D::new);
 
@@ -115,12 +114,12 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         return node;
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -154,7 +153,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
         // determine which figures can be reshaped together as a group
@@ -169,7 +168,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fireDrawingModelEvent undoable edit
     }
 
@@ -179,7 +178,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = owner;
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
@@ -216,7 +215,7 @@ public class BezierNodeMoveHandle extends AbstractHandle {
      * @param newPoint newPoint in world coordinates
      * @param model    the drawing model
      */
-    public static void translateFigure(@NonNull Figure f, @NonNull Point2D oldPoint, @NonNull Point2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(Figure f, Point2D oldPoint, Point2D newPoint, @Nullable DrawingModel model) {
         Point2D npl = f.worldToParent(newPoint);
         Point2D opl = f.worldToParent(oldPoint);
         Transform tx = Transform.translate(npl.getX() - opl.getX(), npl.getY() - opl.getY());

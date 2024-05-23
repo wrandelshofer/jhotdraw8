@@ -23,8 +23,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.util.Duration;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -49,43 +48,43 @@ import java.util.SequencedMap;
 import java.util.Set;
 
 public class InteractiveHandleRenderer {
-    private static final @NonNull String DRAWING_VIEW = "drawingView";
-    private final @NonNull Group handlesPane = new Group();
-    private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
+    private static final String DRAWING_VIEW = "drawingView";
+    private final Group handlesPane = new Group();
+    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
     /**
      * This is the set of handles which are out of sync with their JavaFX node.
      */
-    private final @NonNull Set<Figure> dirtyHandles = new HashSet<>();
+    private final Set<Figure> dirtyHandles = new HashSet<>();
     /**
      * The selectedFiguresProperty holds the list of selected figures in the
      * sequence they were selected by the user.
      */
-    private final @NonNull SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>()));
-    private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
+    private final SetProperty<Figure> selectedFigures = new SimpleSetProperty<>(this, DrawingView.SELECTED_FIGURES_PROPERTY, FXCollections.observableSet(new LinkedHashSet<>()));
+    private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
     /**
      * Maps each JavaFX node to a handle in the drawing view.
      */
-    private final @NonNull SequencedMap<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
-    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
+    private final SequencedMap<Node, Handle> nodeToHandleMap = new LinkedHashMap<>();
+    private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
     /**
      * The set of all handles which were produced by selected figures.
      */
-    private final @NonNull SequencedMap<Figure, List<Handle>> handles = new LinkedHashMap<>();
-    private final @NonNull ObservableSet<Handle> handlesView = FXCollections.observableSet(new LinkedHashSet<>());
+    private final SequencedMap<Figure, List<Handle>> handles = new LinkedHashMap<>();
+    private final ObservableSet<Handle> handlesView = FXCollections.observableSet(new LinkedHashSet<>());
 
     /**
      * Provides a read-only view on the current set of handles.
      */
-    private final @NonNull ReadOnlySetWrapper<Handle> handlesProperty = new ReadOnlySetWrapper<>(this, "handles", FXCollections.unmodifiableObservableSet(handlesView));
+    private final ReadOnlySetWrapper<Handle> handlesProperty = new ReadOnlySetWrapper<>(this, "handles", FXCollections.unmodifiableObservableSet(handlesView));
 
     /**
      * The set of all secondary handles. One handle at a time may create
      * secondary handles.
      */
-    private final @NonNull ArrayList<Handle> secondaryHandles = new ArrayList<>();
-    private final @NonNull ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
+    private final ArrayList<Handle> secondaryHandles = new ArrayList<>();
+    private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
-    private final @NonNull NonNullObjectProperty<DrawingModel> model //
+    private final NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, "model", new SimpleDrawingModel());
     private boolean recreateHandles;
     private boolean handlesAreValid;
@@ -100,7 +99,7 @@ public class InteractiveHandleRenderer {
 
     }
 
-    private void onDrawingModelChanged(@NonNull Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
+    private void onDrawingModelChanged(Observable o, @Nullable DrawingModel oldValue, @Nullable DrawingModel newValue) {
         if (oldValue != null) {
             oldValue.removeTreeModelListener(treeModelListener);
         }
@@ -116,7 +115,7 @@ public class InteractiveHandleRenderer {
      *
      * @param handles The provided list
      */
-    protected void createHandles(@NonNull Map<Figure, List<Handle>> handles) {
+    protected void createHandles(Map<Figure, List<Handle>> handles) {
         List<Figure> selection = new ArrayList<>(getSelectedFigures());
         if (selection.size() > 1) {
             if (getEditor().getAnchorHandleType() != null) {
@@ -144,13 +143,13 @@ public class InteractiveHandleRenderer {
     }
 
 
-    public @NonNull ObjectProperty<DrawingEditor> editorProperty() {
+    public ObjectProperty<DrawingEditor> editorProperty() {
         return editor;
     }
 
 
     @SuppressWarnings("unused")
-    public @NonNull ObjectProperty<DrawingView> drawingViewProperty() {
+    public ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
@@ -173,7 +172,7 @@ public class InteractiveHandleRenderer {
         return null;
     }
 
-    private @NonNull DrawingView getDrawingViewNonNull() {
+    private DrawingView getDrawingViewNonNull() {
         return Objects.requireNonNull(drawingView.get(), "drawingView");
     }
 
@@ -181,7 +180,7 @@ public class InteractiveHandleRenderer {
         return editorProperty().get();
     }
 
-    public @NonNull Set<Figure> getFiguresWithCompatibleHandle(@NonNull Collection<Figure> figures, Handle master) {
+    public Set<Figure> getFiguresWithCompatibleHandle(Collection<Figure> figures, Handle master) {
         validateHandles();
         Map<Figure, Figure> result = new HashMap<>();
         for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
@@ -197,11 +196,11 @@ public class InteractiveHandleRenderer {
         return result.keySet();
     }
 
-    public @NonNull Node getNode() {
+    public Node getNode() {
         return handlesPane;
     }
 
-    @NonNull ObservableSet<Figure> getSelectedFigures() {
+    ObservableSet<Figure> getSelectedFigures() {
         return selectedFiguresProperty().get();
     }
 
@@ -244,16 +243,16 @@ public class InteractiveHandleRenderer {
         flash.play();
     }
 
-    public @NonNull Property<DrawingModel> modelProperty() {
+    public Property<DrawingModel> modelProperty() {
         return model;
     }
 
-    private void onClipBoundsChanged(@NonNull Observable observable) {
+    private void onClipBoundsChanged(Observable observable) {
         invalidateHandles();
         repaint();
     }
 
-    private void onFigureRemoved(@NonNull Figure figure) {
+    private void onFigureRemoved(Figure figure) {
         invalidateHandles();
     }
 
@@ -262,13 +261,13 @@ public class InteractiveHandleRenderer {
         repaint();
     }
 
-    private void onSubtreeNodesChanged(@NonNull Figure figure) {
+    private void onSubtreeNodesChanged(Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             dirtyHandles.add(f);
         }
     }
 
-    private void onTreeModelEvent(@NonNull TreeModelEvent<Figure> event) {
+    private void onTreeModelEvent(TreeModelEvent<Figure> event) {
         Figure f = event.getNode();
         switch (event.getEventType()) {
             case NODE_ADDED_TO_PARENT, NODE_REMOVED_FROM_TREE, NODE_ADDED_TO_TREE:
@@ -323,11 +322,11 @@ public class InteractiveHandleRenderer {
      *
      * @return a list of the selected figures
      */
-    @NonNull ReadOnlySetProperty<Figure> selectedFiguresProperty() {
+    ReadOnlySetProperty<Figure> selectedFiguresProperty() {
         return selectedFigures;
     }
 
-    public void setDrawingView(@NonNull DrawingView newValue) {
+    public void setDrawingView(DrawingView newValue) {
         drawingView.set(newValue);
     }
 
@@ -394,11 +393,11 @@ public class InteractiveHandleRenderer {
         }
     }
 
-    public void setSelectedFigures(@NonNull ObservableSet<Figure> selectedFigures) {
+    public void setSelectedFigures(ObservableSet<Figure> selectedFigures) {
         this.selectedFigures.set(selectedFigures);
     }
 
-    public @NonNull ReadOnlySetProperty<Handle> handlesProperty() {
+    public ReadOnlySetProperty<Handle> handlesProperty() {
         return handlesProperty.getReadOnlyProperty();
     }
 }

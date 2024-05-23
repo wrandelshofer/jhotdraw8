@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -25,20 +24,20 @@ import java.util.Objects;
  */
 public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
 
-    private final @NonNull SimpleSelector selector;
+    private final SimpleSelector selector;
 
-    public NegationPseudoClassSelector(@Nullable SourceLocator sourceLocator, @NonNull String functionIdentifier, @NonNull SimpleSelector selector) {
+    public NegationPseudoClassSelector(@Nullable SourceLocator sourceLocator, String functionIdentifier, SimpleSelector selector) {
         super(sourceLocator, functionIdentifier);
         this.selector = selector;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "FunctionPseudoClass:" + getFunctionIdentifier() + "(" + ")";
     }
 
     @Override
-    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(SelectorModel<T> model, @Nullable T element) {
         final T match = selector.match(model, element);
         return match == null ? element : null;
     }

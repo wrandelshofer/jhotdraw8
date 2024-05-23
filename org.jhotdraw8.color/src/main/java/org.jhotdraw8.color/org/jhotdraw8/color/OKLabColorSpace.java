@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.math.Matrix3Double;
 
 import java.awt.color.ColorSpace;
@@ -74,7 +73,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
      *    [ s ]          [ Z ]
      * </pre>
      */
-    private static final @NonNull Matrix3Double M1_RGB = new Matrix3Double(
+    private static final Matrix3Double M1_RGB = new Matrix3Double(
             0.4122214708, +0.5363325363, +0.0514459929,
             0.2119034982, +0.6806995451, +0.1073969566,
             0.0883024619, +0.2817188376, +0.6299787005
@@ -82,7 +81,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     /**
      * The M2 matrix.
      */
-    private static final @NonNull Matrix3Double M2 = new Matrix3Double(
+    private static final Matrix3Double M2 = new Matrix3Double(
             0.2104542553, 0.7936177850, -0.0040720468,
             1.9779984951, -2.4285922050, +0.4505937099,
             0.0259040371, +0.7827717662, -0.8086757660
@@ -90,7 +89,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     /**
      * The inverse of the M2 matrix.
      */
-    private static final @NonNull Matrix3Double M2_INV = new Matrix3Double(
+    private static final Matrix3Double M2_INV = new Matrix3Double(
             1, +0.3963377774, +0.2158037573,
             1, -0.1055613458, -0.0638541728,
             1, -0.0894841775, -1.2914855480
@@ -110,13 +109,12 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
      *    [ B ]                        [ Z ]
      * </pre>
      */
-    private static final @NonNull Matrix3Double RGB_INV_M1_INV = new Matrix3Double(
+    private static final Matrix3Double RGB_INV_M1_INV = new Matrix3Double(
             4.0767416621, -3.3077115913, +0.2309699292,
             -1.2684380046, +2.6097574011, -0.3413193965,
             -0.0041960863, -0.7034186147, +1.7076147010
     );
-    private static @NonNull
-    final NamedColorSpace linearSrgb = new SrgbColorSpace().getLinearColorSpace();
+    private static final NamedColorSpace linearSrgb = new SrgbColorSpace().getLinearColorSpace();
     @Serial
     private static final long serialVersionUID = 1L;
 
@@ -127,7 +125,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
 
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
+    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
         return fromLinearRGB(linearSrgb.fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
@@ -153,7 +151,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] srgbvalue, float @NonNull [] colorvalue) {
+    public float[] fromRGB(float[] srgbvalue, float[] colorvalue) {
         return fromLinearRGB(toLinear(srgbvalue, colorvalue), colorvalue);
     }
 
@@ -176,12 +174,12 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return "OKLAB";
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return linearSrgb.toCIEXYZ(toLinearRGB(colorvalue, xyz), xyz);
     }
 
@@ -212,7 +210,7 @@ public class OKLabColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb) {
+    public float[] toRGB(float[] colorvalue, float[] rgb) {
         return fromLinear(toLinearRGB(colorvalue, rgb), rgb);
     }
 }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application.action.file;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.FileBasedApplication;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
@@ -20,7 +19,7 @@ import java.util.Map;
  */
 public class OpenFileAction extends AbstractOpenFileAction {
 
-    public static final @NonNull String ID = "file.open";
+    public static final String ID = "file.open";
     private final boolean reuseEmptyViews = true;
 
     /**
@@ -41,7 +40,7 @@ public class OpenFileAction extends AbstractOpenFileAction {
     }
 
     @Override
-    protected @NonNull Map<Key<?>, Object> getReadOptions() {
+    protected Map<Key<?>, Object> getReadOptions() {
         return new LinkedHashMap<>();
     }
 }

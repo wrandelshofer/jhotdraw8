@@ -6,7 +6,6 @@
 package org.jhotdraw8.theme.atlantafx;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.OKLchColorSpace;
 import org.jhotdraw8.theme.AbstractTheme;
 import org.jhotdraw8.theme.Theme;
@@ -25,7 +24,7 @@ import static org.jhotdraw8.color.FXColorUtil.toWebColor;
  * </dl>
  */
 public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
-    private final @NonNull String uaStylesheetUrl;
+    private final String uaStylesheetUrl;
 
     protected AbstractAtlantaFXTheme(String name, String appearance, String uaStylesheetUrl) {
         super(name, appearance);
@@ -33,7 +32,7 @@ public abstract class AbstractAtlantaFXTheme extends AbstractTheme {
     }
 
     @Override
-    public String createUserAgentStylesheet(@NonNull ThemeParameters params) {
+    public String createUserAgentStylesheet(ThemeParameters params) {
         StringBuilder buf = new StringBuilder();
         buf.append("@import \"").append(uaStylesheetUrl).append("\";\n");
         buf.append(".root {\n");

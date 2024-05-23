@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.SetFacade;
 import org.jhotdraw8.icollection.impl.champmap.AbstractMutableChampMap;
 import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
@@ -16,6 +14,7 @@ import org.jhotdraw8.icollection.impl.champmap.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.Iterator;
@@ -85,7 +84,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
      * @param m a map
      */
     @SuppressWarnings("this-escape")
-    public MutableChampMap(@NonNull Map<? extends K, ? extends V> m) {
+    public MutableChampMap(Map<? extends K, ? extends V> m) {
         if (m instanceof MutableChampMap) {
             @SuppressWarnings("unchecked")
             MutableChampMap<K, V> that = (MutableChampMap<K, V>) m;
@@ -105,7 +104,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
      * @param m an iterable
      */
     @SuppressWarnings("this-escape")
-    public MutableChampMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public MutableChampMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
         if (m instanceof ChampMap) {
             @SuppressWarnings("unchecked")
             ChampMap<K, V> that = (ChampMap<K, V>) m;
@@ -133,7 +132,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
      * Returns a shallow copy of this map.
      */
     @Override
-    public @NonNull MutableChampMap<K, V> clone() {
+    public MutableChampMap<K, V> clone() {
         return (MutableChampMap<K, V>) super.clone();
     }
 
@@ -146,7 +145,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     }
 
     @Override
-    public @NonNull Iterator<Entry<K, V>> iterator() {
+    public Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
                 new EntryIterator<>(root,
                         this::iteratorRemoveKey, this::iteratorPutIfPresent), this::getModCount
@@ -154,7 +153,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     }
 
     @Override
-    public @NonNull Spliterator<Entry<K, V>> spliterator() {
+    public Spliterator<Entry<K, V>> spliterator() {
         return new IteratorSpliterator<>(iterator(), size(), Spliterator.NONNULL | characteristics(), null);
     }
 
@@ -164,7 +163,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
      * @return a view of the entries contained in this map
      */
     @Override
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
                 this::iterator,
                 this::spliterator,
@@ -208,7 +207,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     /*
     @Override
     @SuppressWarnings("unchecked")
-    public boolean putAll(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> c) {
+    public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c instanceof MutableChampMap<?, ?> m) {
             c = (Iterable<? extends Entry<? extends K, ? extends V>>) m.toImmutable();
         }
@@ -236,7 +235,6 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         return super.putAll(c);
     }*/
 
-    @NonNull
     ChangeEvent<V> putEntry(@Nullable K key, @Nullable V val) {
         int keyHash = ChampMap.keyHash(key);
         ChangeEvent<V> details = new ChangeEvent<>();
@@ -255,14 +253,14 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     }
 
     @Override
-    public boolean removeAll(@NonNull Iterable<?> c) {
+    public boolean removeAll(Iterable<?> c) {
         return super.removeAll(c);
     }
 
     /*
     @SuppressWarnings("unchecked")
     @Override
-    public boolean retainAll(@NonNull Iterable<?> c) {
+    public boolean retainAll(Iterable<?> c) {
         if (isEmpty()) {
             return false;
         }
@@ -291,7 +289,6 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         return true;
     }*/
 
-    @NonNull
     ChangeEvent<V> removeKey(K key) {
         int keyHash = ChampMap.keyHash(key);
         ChangeEvent<V> details = new ChangeEvent<>();
@@ -330,14 +327,14 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
      *
      * @return an immutable copy
      */
-    public @NonNull ChampMap<K, V> toImmutable() {
+    public ChampMap<K, V> toImmutable() {
         owner = null;
         return isEmpty() ? ChampMap.of()
                 : new ChampMap<>(root, size);
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new SerializationProxy<>(this);
     }
 
@@ -351,7 +348,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return new MutableChampMap<>(deserializedEntries);
         }
     }

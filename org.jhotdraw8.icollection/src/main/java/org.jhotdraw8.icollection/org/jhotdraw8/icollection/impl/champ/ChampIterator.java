@@ -1,7 +1,6 @@
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -23,7 +22,7 @@ import java.util.function.Function;
  * @param <E> the element type of the iterator
  */
 public class ChampIterator<K, E> implements Iterator<E> {
-    private final @NonNull Function<K, E> mappingFunction;
+    private final Function<K, E> mappingFunction;
     private static final int MAX_DEPTH = 7;
 
     protected int currentValueCursor;
@@ -37,7 +36,7 @@ public class ChampIterator<K, E> implements Iterator<E> {
     final Node<K>[] nodes = new Node[MAX_DEPTH];
 
     @SuppressWarnings("unchecked")
-    public ChampIterator(@NonNull Node<K> rootNode, @Nullable Function<K, E> mappingFunction) {
+    public ChampIterator(Node<K> rootNode, @Nullable Function<K, E> mappingFunction) {
         this.mappingFunction = mappingFunction == null ? k -> (E) k : mappingFunction;
         if (rootNode.hasNodes()) {
             currentStackLevel = 0;

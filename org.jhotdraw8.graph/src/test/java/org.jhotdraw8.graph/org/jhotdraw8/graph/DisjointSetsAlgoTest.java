@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.algo.DisjointSetsAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -21,14 +20,14 @@ public class DisjointSetsAlgoTest extends AbstractGraphAlgoTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindDisjointSets() {
+    public List<DynamicTest> dynamicTestsFindDisjointSets() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFindDisjointSets(createDisjointGraph(), 2)),
                 dynamicTest("2", () -> testFindDisjointSets(createLoopGraph(), 1))
         );
     }
 
-    void testFindDisjointSets(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
+    void testFindDisjointSets(DirectedGraph<String, Integer> graph, int expectedSetCount) {
 
         List<Set<String>> actualSets = new DisjointSetsAlgo().findDisjointSets(graph);
 

@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
@@ -27,21 +26,21 @@ import javax.swing.event.UndoableEditEvent;
 import javax.swing.undo.CompoundEdit;
 
 public class BezierPathEditHandle extends BezierPathOutlineHandle {
-    private final @NonNull MapAccessor<BezierPath> pointKey;
+    private final MapAccessor<BezierPath> pointKey;
 
-    public BezierPathEditHandle(@NonNull Figure figure, @NonNull MapAccessor<BezierPath> pointKey) {
+    public BezierPathEditHandle(Figure figure, MapAccessor<BezierPath> pointKey) {
         super(figure, pointKey, true);
         this.pointKey = pointKey;
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }
     }
 
-    private void onPopupTriggered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void onPopupTriggered(MouseEvent event, DrawingView view) {
         ContextMenu contextMenu = new ContextMenu();
         MenuItem addPoint = new MenuItem(DrawLabels.getResources().getString("handle.addPoint.text"));
 
@@ -51,7 +50,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
         event.consume();
     }
 
-    private void addPoint(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    private void addPoint(MouseEvent event, DrawingView view) {
         BezierPath path = owner.get(pointKey);
         if (path == null) {
             path = BezierPath.of();
@@ -113,7 +112,7 @@ public class BezierPathEditHandle extends BezierPathOutlineHandle {
 
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseReleased(MouseEvent event, DrawingView view) {
         if (event.isPopupTrigger()) {
             onPopupTriggered(event, view);
         }

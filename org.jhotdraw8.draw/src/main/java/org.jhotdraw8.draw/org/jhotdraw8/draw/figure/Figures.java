@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.iterator.Iterators;
 import org.jhotdraw8.geom.BoundsCalculator;
 
@@ -24,14 +23,14 @@ public class Figures {
 
     }
 
-    public static @NonNull Bounds getBoundsInWorld(Iterable<? extends Figure> figures) {
+    public static Bounds getBoundsInWorld(Iterable<? extends Figure> figures) {
         return Iterators.toList(figures).stream().parallel().map(Figure::getLayoutBoundsInWorld)
                 .filter(b -> Double.isFinite(b.getMaxX()) && Double.isFinite(b.getMaxY()))
                 .collect(BoundsCalculator::new, BoundsCalculator::accept,
                         BoundsCalculator::combine).getBounds();
     }
 
-    public static @NonNull Bounds getCenterBounds(@NonNull Iterable<? extends Figure> figures) {
+    public static Bounds getCenterBounds(Iterable<? extends Figure> figures) {
         double minx = Double.MAX_VALUE, miny = Double.MAX_VALUE,
                 maxx = Double.MIN_VALUE, maxy = Double.MIN_VALUE;
         for (Figure f : figures) {

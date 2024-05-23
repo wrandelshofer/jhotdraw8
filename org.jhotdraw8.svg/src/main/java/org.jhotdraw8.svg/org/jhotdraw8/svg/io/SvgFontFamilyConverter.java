@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.svg.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -15,6 +13,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -48,17 +47,17 @@ import java.util.function.Consumer;
  */
 public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String>> {
 
-    public static final @NonNull String GENERIC_FONT_FAMILY_SERIF = "serif";
-    public static final @NonNull String GENERIC_FONT_FAMILY_SANS_SERIF = "sans-serif";
-    public static final @NonNull String GENERIC_FONT_FAMILY_CURSIVE = "cursive";
-    public static final @NonNull String GENERIC_FONT_FAMILY_FANTASY = "fantasy";
-    public static final @NonNull String GENERIC_FONT_FAMILY_MONOSPACE = "monospace";
+    public static final String GENERIC_FONT_FAMILY_SERIF = "serif";
+    public static final String GENERIC_FONT_FAMILY_SANS_SERIF = "sans-serif";
+    public static final String GENERIC_FONT_FAMILY_CURSIVE = "cursive";
+    public static final String GENERIC_FONT_FAMILY_FANTASY = "fantasy";
+    public static final String GENERIC_FONT_FAMILY_MONOSPACE = "monospace";
 
     public SvgFontFamilyConverter() {
     }
 
     @Override
-    public @Nullable ImmutableList<String> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable ImmutableList<String> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<String> list = new ArrayList<>();
         StringBuilder buf = new StringBuilder();
         Loop:
@@ -95,7 +94,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public <TT extends ImmutableList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    public <TT extends ImmutableList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         boolean first = true;
         for (String s : value) {
             if (first) {

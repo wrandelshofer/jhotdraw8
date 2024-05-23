@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 
@@ -27,7 +26,7 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
     }
 
 
-    private void init(@NonNull BiConsumer<Boolean, Boolean> callback) {
+    private void init(BiConsumer<Boolean, Boolean> callback) {
         Resources labels = DrawLabels.getResources();
         contextMenu = new ContextMenu();
         MenuItem unsetItem;
@@ -52,14 +51,14 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
         );
     }
 
-    private void update(@NonNull BiConsumer<Boolean, Boolean> callback) {
+    private void update(BiConsumer<Boolean, Boolean> callback) {
         init(callback);
         noneItem.setVisible(nullable);
     }
 
     @Override
     public void show(Node anchor, double screenX, double screenY,
-                     Boolean initialValue, @NonNull BiConsumer<Boolean, Boolean> callback) {
+                     Boolean initialValue, BiConsumer<Boolean, Boolean> callback) {
         update(callback);
         contextMenu.show(anchor, screenX, screenY);
     }

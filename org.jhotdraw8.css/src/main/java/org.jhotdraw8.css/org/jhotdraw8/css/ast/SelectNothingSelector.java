@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A "select nothing selector" matches nothing.
@@ -23,7 +22,7 @@ public class SelectNothingSelector extends SimpleSelector {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "SelectNothing";
     }
 

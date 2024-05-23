@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -29,14 +28,14 @@ public class UrlXmlConverter implements Converter<URL> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable URL value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable URL value) throws IOException {
         if (value != null) {
             out.append(value.toString());
         }
     }
 
     @Override
-    public @Nullable URL fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable URL fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (str.isEmpty()) {
             return null;

@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.geom.shape;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.AbstractPathBuilder;
 import org.jhotdraw8.geom.Points;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
 
-    private final @NonNull List<BezierNode> nodes = new ArrayList<>();
+    private final List<BezierNode> nodes = new ArrayList<>();
     private int moveIndex;
 
     public BezierPathBuilder() {
@@ -114,12 +113,12 @@ public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
         return nodes.isEmpty() ? null : nodes.getLast();
     }
 
-    private void setLast(@NonNull BezierNode newValue) {
+    private void setLast(BezierNode newValue) {
         nodes.set(nodes.size() - 1, newValue);
     }
 
     @Override
-    public @NonNull BezierPath build() {
+    public BezierPath build() {
         return new BezierPath(nodes);
     }
 }

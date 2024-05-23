@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 import java.io.Serial;
@@ -37,8 +36,8 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final @NonNull NamedColorSpace rgbColorSpace;
-    private final @NonNull String name;
+    private final NamedColorSpace rgbColorSpace;
+    private final String name;
 
     /**
      * Creates a new instance that is based on the provided RGB color space.
@@ -47,7 +46,7 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
      * @param rgbColorSpace the base RGB color space
      * @throws IllegalArgumentException if {@code rgbColorSpace} has not type {@link ColorSpace#TYPE_RGB}.
      */
-    public ParametricHsvColorSpace(@NonNull String name, @NonNull NamedColorSpace rgbColorSpace) {
+    public ParametricHsvColorSpace(String name, NamedColorSpace rgbColorSpace) {
         super(TYPE_HSV, 3);
         assert (rgbColorSpace.getType() == TYPE_RGB);
         this.name = name;
@@ -61,12 +60,12 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
      * @return LCH color value.
      */
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
+    public float[] fromCIEXYZ(float[] xyz, float[] lch) {
         return rgbToHsv(rgbColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
+    public float[] fromRGB(float[] rgb, float[] lch) {
         return rgbToHsv(rgbColorSpace.fromRGB(rgb, lch), lch);
     }
 
@@ -76,11 +75,11 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
-    protected float @NonNull [] hsvToRgb(float[] hsv, float[] rgb) {
+    protected float[] hsvToRgb(float[] hsv, float[] rgb) {
         float hue = ((hsv[0] % 360f) + 360f) % 360f / 360f;
         float saturation = hsv[1];
         float value = hsv[2];
@@ -186,12 +185,12 @@ public class ParametricHsvColorSpace extends AbstractNamedColorSpace {
      * @return CIEXYZ color value.
      */
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return rgbColorSpace.toCIEXYZ(hsvToRgb(colorvalue, xyz), xyz);
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
+    public float[] toRGB(float[] lch, float[] rgb) {
         return rgbColorSpace.toRGB(hsvToRgb(lch, rgb), rgb);
     }
 

@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -25,7 +24,7 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
 
 
     @Override
-    public final @Nullable T parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public final @Nullable T parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (isNullable()) {
             if (tt.nextIsIdentNone()) {
                 return null;
@@ -36,7 +35,7 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
     }
 
     @Override
-    public final <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    public final <TT extends T> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else {
@@ -45,9 +44,9 @@ public abstract class AbstractCssConverter<T> implements CssConverter<T> {
     }
 
     @Override
-    public abstract @NonNull T parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException;
+    public abstract T parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException;
 
-    protected abstract <TT extends T> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException;
+    protected abstract <TT extends T> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException;
 
     @Override
     public @Nullable T getDefaultValue() {

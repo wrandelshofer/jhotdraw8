@@ -11,8 +11,6 @@ import javafx.scene.Parent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.NumberConverter;
@@ -37,6 +35,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.TransformFlattener;
 import org.jhotdraw8.xml.XmlUtil;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -62,13 +61,13 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
  */
 public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
-    private static final @NonNull Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
 
-    public static final @NonNull NonNullObjectKey<Boolean> RELATIVIZE_PATHS = new NonNullObjectKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
+    public static final NonNullObjectKey<Boolean> RELATIVIZE_PATHS = new NonNullObjectKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
 
-    public static final @NonNull DataFormat SVG_FORMAT;
-    public static final @NonNull String SVG_MIME_TYPE = "image/svg+xml";
-    private static final @NonNull String SKIP_KEY = "skip";
+    public static final DataFormat SVG_FORMAT;
+    public static final String SVG_MIME_TYPE = "image/svg+xml";
+    private static final String SKIP_KEY = "skip";
 
     static {
         DataFormat fmt = DataFormat.lookupMimeType(SVG_MIME_TYPE);
@@ -78,10 +77,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         SVG_FORMAT = fmt;
     }
 
-    private final @NonNull NumberConverter nb = new NumberConverter();
-    private final @NonNull SizeCssConverter sc = new SizeCssConverter(false);
-    private final @NonNull Converter<CssSize> sznb = new SizeCssConverter(false);
-    private final @NonNull IdFactory idFactory = new SimpleIdFactory();
+    private final NumberConverter nb = new NumberConverter();
+    private final SizeCssConverter sc = new SizeCssConverter(false);
+    private final Converter<CssSize> sznb = new SizeCssConverter(false);
+    private final IdFactory idFactory = new SimpleIdFactory();
 
     private BiFunction<Object, Object, AbstractFXSvgWriter> exporterFactory = FXSvgFullWriter::new;
 
@@ -92,7 +91,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         this.exporterFactory = exporterFactory;
     }
 
-    private @NonNull AbstractFXSvgWriter createExporter() {
+    private AbstractFXSvgWriter createExporter() {
         AbstractFXSvgWriter exporter = exporterFactory.apply(ImageFigure.IMAGE_URI, SKIP_KEY);
         exporter.setExportInvisibleElements(
                 SvgSceneGraphWriter.EXPORT_INVISIBLE_ELEMENTS_KEY.getNonNull(getOptions()));
@@ -100,7 +99,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    protected @NonNull String getExtension() {
+    protected String getExtension() {
         return "svg";
     }
 
@@ -110,7 +109,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
 
-    private void markNodesOutsideBoundsWithSkip(@NonNull Node node, Bounds sceneBounds) {
+    private void markNodesOutsideBoundsWithSkip(Node node, Bounds sceneBounds) {
         boolean intersects = node.intersects(node.sceneToLocal(sceneBounds));
         if (intersects) {
             node.getProperties().put(SKIP_KEY, false);
@@ -125,7 +124,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
 
-    public Document toDocument(@Nullable URI documentHome, @NonNull Drawing external, @NonNull Collection<Figure> selection) throws IOException {
+    public Document toDocument(@Nullable URI documentHome, Drawing external, Collection<Figure> selection) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         idFactory.setDocumentHome(documentHome);
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
@@ -141,7 +140,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    public void write(@NonNull Map<DataFormat, Object> clipboard, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
+    public void write(Map<DataFormat, Object> clipboard, Drawing drawing, Collection<Figure> selection) throws IOException {
         idFactory.reset();
         idFactory.setDocumentHome(null);
         StringWriter out = new StringWriter();
@@ -159,7 +158,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    public void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    public void write(Path file, Drawing drawing, WorkState<Void> workState) throws IOException {
         idFactory.reset();
         idFactory.setDocumentHome(null);
         if (isExportDrawing()) {
@@ -187,11 +186,11 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    public void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    public void write(OutputStream out, @Nullable URI documentHome, Drawing drawing, WorkState<Void> workState) throws IOException {
         write(documentHome, out, drawing, drawing.getChildren());
     }
 
-    protected void write(@Nullable URI documentHome, @NonNull OutputStream out, @NonNull Drawing drawing, @NonNull Collection<Figure> selection) throws IOException {
+    protected void write(@Nullable URI documentHome, OutputStream out, Drawing drawing, Collection<Figure> selection) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         idFactory.reset();
         idFactory.setDocumentHome(documentHome);
@@ -209,13 +208,13 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         return RELATIVIZE_PATHS.getNonNull(getOptions());
     }
 
-    private void writeDrawingElementAttributes(@NonNull Element docElement, @NonNull Drawing drawing) {
+    private void writeDrawingElementAttributes(Element docElement, Drawing drawing) {
         docElement.setAttribute("width", sc.toString(drawing.get(Drawing.WIDTH)));
         docElement.setAttribute("height", sc.toString(drawing.get(Drawing.HEIGHT)));
     }
 
     @Override
-    protected void writePage(@NonNull Path file, @NonNull Page page, @NonNull Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
         CssSize pw = page.getNonNull(PageFigure.PAPER_WIDTH);
         CssSize ph = page.getNonNull(PageFigure.PAPER_HEIGHT);
         markNodesOutsideBoundsWithSkip(node, FXTransforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
@@ -227,7 +226,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         XmlUtil.write(file, doc);
     }
 
-    private void writePageElementAttributes(@NonNull Element docElement, @NonNull Page page, int internalPageNumber) {
+    private void writePageElementAttributes(Element docElement, Page page, int internalPageNumber) {
         Bounds pb = page.getPageBounds(internalPageNumber);
         docElement.setAttribute("width", sznb.toString(page.get(PageFigure.PAPER_WIDTH)));
         docElement.setAttribute("height", sznb.toString(page.get(PageFigure.PAPER_HEIGHT)));
@@ -237,7 +236,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    protected boolean writeSlice(@NonNull Path file, @NonNull Slice slice, @NonNull Node node, double dpi) throws IOException {
+    protected boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException {
         LOGGER.info("Writing slice " + file);
         markNodesOutsideBoundsWithSkip(node, slice.getLayoutBounds());
         Transform worldToLocal = slice.getWorldToLocal();
@@ -256,7 +255,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         return true;
     }
 
-    private void writeSliceElementAttributes(@NonNull Element docElement, @NonNull Slice slice) {
+    private void writeSliceElementAttributes(Element docElement, Slice slice) {
         Bounds b = slice.getLayoutBounds();
         Point2D sliceOrigin = slice.getSliceOrigin();
         Transform tx = slice.getWorldToLocal();

@@ -19,7 +19,6 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
@@ -49,7 +48,7 @@ import static org.jhotdraw8.geom.CubicCurves.getArcLengthIntegrand;
 public class BezierArcLengthExampleMain extends Application {
     private class Handle {
 
-        final @NonNull Rectangle node = new Rectangle(5, 5);
+        final Rectangle node = new Rectangle(5, 5);
 
         {
             node.setManaged(false);
@@ -87,7 +86,7 @@ public class BezierArcLengthExampleMain extends Application {
             node.setY(y - node.getHeight() * 0.5);
         }
 
-        private void onMouseDragged(@NonNull MouseEvent evt) {
+        private void onMouseDragged(MouseEvent evt) {
             setPosition(MathUtil.clamp(round(evt.getX() / 10) * 10, 4, Integer.MAX_VALUE),
                     MathUtil.clamp(round(evt.getY() / 10) * 10, 4, Integer.MAX_VALUE));
             handlesChanged();
@@ -416,7 +415,7 @@ public class BezierArcLengthExampleMain extends Application {
             }
         }
 
-        private final @NonNull List<Segment> segments = new ArrayList<>();
+        private final List<Segment> segments = new ArrayList<>();
         private final double length;
 
         public PathArcLengthParameterization(PathIterator it) {

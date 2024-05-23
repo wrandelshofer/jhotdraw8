@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
@@ -22,24 +21,24 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutableSetTest {
     @Override
-    protected abstract @NonNull <E> ImmutableSequencedSet<E> newInstance();
+    protected abstract <E> ImmutableSequencedSet<E> newInstance();
 
     @Override
-    protected abstract @NonNull <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m);
+    protected abstract <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableSequencedSet<E> toImmutableInstance(Set<E> m);
+    protected abstract <E> ImmutableSequencedSet<E> toImmutableInstance(Set<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableSequencedSet<E> toClonedInstance(ImmutableSet<E> m);
+    protected abstract <E> ImmutableSequencedSet<E> toClonedInstance(ImmutableSet<E> m);
 
     @Override
-    protected abstract @NonNull <E> ImmutableSequencedSet<E> newInstance(Iterable<E> m);
+    protected abstract <E> ImmutableSequencedSet<E> newInstance(Iterable<E> m);
 
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(@NonNull SetData data) throws Exception {
+    public void copyRemoveLastWithEmptySetShouldThrowNoSuchElementException(SetData data) throws Exception {
         ImmutableSequencedSet<Key> instance = newInstance(data.a());
         instance = instance.removeAll(data.a().asSet());
         assertThrows(NoSuchElementException.class, instance::removeLast);
@@ -47,7 +46,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeLastShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastShouldNotChangeSequence(SetData data) throws Exception {
         ImmutableSequencedSet<Key> instance = newInstance(data.a());
         List<Key> expected = new ArrayList<>(data.a().asSet());
         assertEqualSequence(expected, instance, "new instance(data.a())");
@@ -62,7 +61,7 @@ public abstract class AbstractImmutableSequencedSetTest extends AbstractImmutabl
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeLastStartingWithEmptySetShouldNotChangeSequence(@NonNull SetData data) throws Exception {
+    public void removeLastStartingWithEmptySetShouldNotChangeSequence(SetData data) throws Exception {
         ImmutableSequencedSet<Key> instance = newInstance();
         instance = instance.addAll(data.a.asSet());
         List<Key> expected = new ArrayList<>(data.a().asSet());

@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
@@ -13,6 +11,7 @@ import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
 import org.jhotdraw8.icollection.ChampAddOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.LinkedHashMap;
@@ -80,14 +79,14 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
      */
     @Override
     public @Nullable ArcBackLinkWithCost<V, A, C> search(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             int maxDepth,
-            @NonNull C zero,
-            @NonNull C costLimit,
-            @NonNull Function3<V, V, A, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited) {
+            C zero,
+            C costLimit,
+            Function3<V, V, A, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToSet<V> visited) {
         AlgoArguments.checkZero(zero);
         return ArcBackLinkWithAncestorSet.toArcBackLinkWithCost(
                 search(startVertices, goalPredicate, nextArcsFunction, maxDepth),
@@ -106,9 +105,9 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
      * @return on success: a back link, otherwise: null
      */
     public @Nullable ArcBackLinkWithAncestorSet<V, A> search(
-            final @NonNull Iterable<V> startVertices,
-            final @NonNull Predicate<V> goalPredicate,
-            final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            final Iterable<V> startVertices,
+            final Predicate<V> goalPredicate,
+            final Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             final int maxDepth) {
 
         ArcBackLinkWithAncestorSet<V, A> result = null;
@@ -142,11 +141,11 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
      * (the latter is ignored when determining whether
      * the result is unique).
      */
-    private @NonNull SimpleOrderedPair<SearchResultType, @Nullable ArcBackLinkWithAncestorSet<V, A>>
+    private SimpleOrderedPair<SearchResultType, @Nullable ArcBackLinkWithAncestorSet<V, A>>
     searchSingleStartVertex(
-            final @NonNull V startVertex,
-            final @NonNull Predicate<V> goalPredicate,
-            final @NonNull Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
+            final V startVertex,
+            final Predicate<V> goalPredicate,
+            final Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
             final int maxDepth) {
         AlgoArguments.checkMaxDepth(maxDepth);
 

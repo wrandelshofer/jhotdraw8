@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.css.converter;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -20,6 +18,7 @@ import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -42,20 +41,20 @@ import java.util.function.Consumer;
  */
 public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle> {
 
-    public static final @NonNull String INSIDE = "inside";
-    public static final @NonNull String OUTSIDE = "outside";
-    public static final @NonNull String CENTERED = "centered";
-    public static final @NonNull String BUTT = "butt";
-    public static final @NonNull String MITER = "miter";
-    public static final @NonNull String ROUND = "round";
-    public static final @NonNull String BEVEL = "bevel";
-    public static final @NonNull String SQUARE = "square";
-    public static final @NonNull String TYPE = "type";
-    public static final @NonNull String LINEJOIN = "linejoin";
-    public static final @NonNull String LINECAP = "linecap";
-    public static final @NonNull String DASHOFFSET = "dashoffset";
-    public static final @NonNull String DASHARRAY = "dasharray";
-    public static final @NonNull String MITERLIMIT = "miterlimit";
+    public static final String INSIDE = "inside";
+    public static final String OUTSIDE = "outside";
+    public static final String CENTERED = "centered";
+    public static final String BUTT = "butt";
+    public static final String MITER = "miter";
+    public static final String ROUND = "round";
+    public static final String BEVEL = "bevel";
+    public static final String SQUARE = "square";
+    public static final String TYPE = "type";
+    public static final String LINEJOIN = "linejoin";
+    public static final String LINECAP = "linecap";
+    public static final String DASHOFFSET = "dashoffset";
+    public static final String DASHARRAY = "dasharray";
+    public static final String MITERLIMIT = "miterlimit";
     private final boolean printAllValues = true;
 
     public StrokeStyleCssConverter(boolean nullable) {
@@ -63,7 +62,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @Override
-    public @NonNull CssStrokeStyle parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssStrokeStyle parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StrokeType type = StrokeType.CENTERED;
         StrokeLineCap lineCap = StrokeLineCap.BUTT;
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
@@ -100,7 +99,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return new CssStrokeStyle(type, lineCap, lineJoin, miterLimit, dashOffset, dashArray);
     }
 
-    protected @NonNull StrokeLineJoin parseLineJoin(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    protected StrokeLineJoin parseLineJoin(CssTokenizer tt) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !LINEJOIN.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩:: Function " + LINEJOIN + "() expected.", tt.getStartPosition());
         }
@@ -117,7 +116,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return lineJoin;
     }
 
-    protected @NonNull StrokeLineCap parseLineCap(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    protected StrokeLineCap parseLineCap(CssTokenizer tt) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !LINECAP.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩:: Function " + LINECAP + "() expected.", tt.getStartPosition());
         }
@@ -134,7 +133,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return lineCap;
     }
 
-    protected @NonNull StrokeType parseStrokeType(@NonNull CssTokenizer tt) throws ParseException, IOException {
+    protected StrokeType parseStrokeType(CssTokenizer tt) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !TYPE.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩:: Function " + TYPE + "() expected.", tt.getStartPosition());
         }
@@ -151,7 +150,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return type;
     }
 
-    private @NonNull ImmutableList<CssSize> parseDashArray(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    private ImmutableList<CssSize> parseDashArray(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !DASHARRAY.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩: Function " + DASHARRAY + "() expected.", tt.getStartPosition());
         }
@@ -169,7 +168,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return VectorList.copyOf(list);
     }
 
-    private CssSize parseNumericFunction(@NonNull String functionName, CssSize defaultValue, @NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    private CssSize parseNumericFunction(String functionName, CssSize defaultValue, CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !functionName.equals(tt.currentStringNonNull())) {
             throw new ParseException("Function " + functionName + "() expected.", tt.getStartPosition());
         }
@@ -180,7 +179,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return value;
     }
 
-    private CssSize parseSize(String name, CssSize defaultValue, @NonNull CssTokenizer tt, IdResolver idResolver) throws IOException {
+    private CssSize parseSize(String name, CssSize defaultValue, CssTokenizer tt, IdResolver idResolver) throws IOException {
         CssSize value;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
@@ -209,7 +208,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @Override
-    public @NonNull ImmutableList<String> getExamples() {
+    public ImmutableList<String> getExamples() {
         return VectorList.of(
                 "type(inside)",
                 "type(centered)",
@@ -220,7 +219,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @Override
-    protected <TT extends CssStrokeStyle> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssStrokeStyle> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         final StrokeType type = value.getType();
         if (printAllValues || type != StrokeType.CENTERED) {
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, TYPE));

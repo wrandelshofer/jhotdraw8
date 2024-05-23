@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
 import java.util.List;
@@ -25,29 +24,29 @@ import java.util.stream.Stream;
  */
 public class ListFacade<E> extends AbstractList<E>
         implements SequencedCollection<E> {
-    private final @NonNull IntSupplier sizeFunction;
-    private final @NonNull IntFunction<E> getFunction;
-    private final @NonNull BiConsumer<Integer, E> addFunction;
-    private final @NonNull IntFunction<E> removeFunction;
-    private final @NonNull Runnable clearFunction;
+    private final IntSupplier sizeFunction;
+    private final IntFunction<E> getFunction;
+    private final BiConsumer<Integer, E> addFunction;
+    private final IntFunction<E> removeFunction;
+    private final Runnable clearFunction;
 
-    public ListFacade(@NonNull ReadOnlyList<E> backingList) {
+    public ListFacade(ReadOnlyList<E> backingList) {
         this(backingList::size, backingList::get, null, null, null);
     }
 
-    public ListFacade(@NonNull List<E> backingList) {
+    public ListFacade(List<E> backingList) {
         this(backingList::size, backingList::get, backingList::clear,
                 backingList::add, backingList::remove);
     }
 
-    public ListFacade(@NonNull IntSupplier sizeFunction,
-                      @NonNull IntFunction<E> getFunction
+    public ListFacade(IntSupplier sizeFunction,
+                      IntFunction<E> getFunction
     ) {
         this(sizeFunction, getFunction, null, null, null);
     }
 
-    public ListFacade(@NonNull IntSupplier sizeFunction,
-                      @NonNull IntFunction<E> getFunction,
+    public ListFacade(IntSupplier sizeFunction,
+                      IntFunction<E> getFunction,
                       @Nullable Runnable clearFunction,
                       @Nullable BiConsumer<Integer, E> addFunction,
                       @Nullable IntFunction<E> removeFunction
@@ -102,7 +101,7 @@ public class ListFacade<E> extends AbstractList<E>
     }
 
     @Override
-    public @NonNull List<E> reversed() {
+    public List<E> reversed() {
         return new ListFacade<>(
                 sizeFunction,
                 i -> get(size() - i - 1),

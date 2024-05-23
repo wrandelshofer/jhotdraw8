@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.io.CssPrettyPrinter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class CssPrettyPrinterTest {
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsPrettyPrinter() {
+    public List<DynamicTest> dynamicTestsPrettyPrinter() {
         return Arrays.asList(
                 dynamicTest("1", () -> testPrettyPrint("", "")),
                 dynamicTest("2", () -> testPrettyPrint("* {}", "* {}")),

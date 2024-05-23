@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -28,21 +27,21 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      */
     @SuppressWarnings("unchecked")
     @Override
-    @NonNull <T> ImmutableList<T> empty();
+    <T> ImmutableList<T> empty();
 
     @Override
-    @NonNull ImmutableList<E> addFirst(@Nullable final E element);
+    ImmutableList<E> addFirst(@Nullable final E element);
 
     @Override
-    @NonNull ImmutableList<E> addLast(@Nullable final E element);
+    ImmutableList<E> addLast(@Nullable final E element);
 
     @Override
-    default @NonNull ImmutableList<E> removeFirst() {
+    default ImmutableList<E> removeFirst() {
         return (ImmutableList<E>) ImmutableSequencedCollection.super.removeFirst();
     }
 
     @Override
-    default @NonNull ImmutableList<E> removeLast() {
+    default ImmutableList<E> removeLast() {
         return (ImmutableList<E>) ImmutableSequencedCollection.super.removeLast();
     }
 
@@ -55,7 +54,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * @return a different list instance with the element added
      */
     @Override
-    @NonNull ImmutableList<E> add(@NonNull E element);
+    ImmutableList<E> add(E element);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -66,7 +65,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * @param element an element
      * @return a different list instance with the element added
      */
-    @NonNull ImmutableList<E> add(int index, @NonNull E element);
+    ImmutableList<E> add(int index, E element);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -77,7 +76,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * @return a different list instance with the elements added
      */
     @Override
-    @NonNull ImmutableList<E> addAll(@NonNull Iterable<? extends E> c);
+    ImmutableList<E> addAll(Iterable<? extends E> c);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -88,7 +87,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * @param c     a collection to be added to this list
      * @return a different list instance with the elements added
      */
-    @NonNull ImmutableList<E> addAll(int index, @NonNull Iterable<? extends E> c);
+    ImmutableList<E> addAll(int index, Iterable<? extends E> c);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -99,7 +98,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * a different list instance with the element removed
      */
     @Override
-    @NonNull ImmutableList<E> remove(E element);
+    ImmutableList<E> remove(E element);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -108,7 +107,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * @param index an index
      * @return a different list instance with the element removed
      */
-    @NonNull ImmutableList<E> removeAt(int index);
+    ImmutableList<E> removeAt(int index);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -118,7 +117,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * @param toIndex   to index (exclusive) of the sub-list
      * @return a different list instance with the element removed
      */
-    @NonNull ImmutableList<E> removeRange(int fromIndex, int toIndex);
+    ImmutableList<E> removeRange(int fromIndex, int toIndex);
 
     /**
      * Returns a copy of this list that contains all elements
@@ -130,7 +129,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * a different list instance with the elements removed
      */
     @Override
-    @NonNull ImmutableList<E> removeAll(@NonNull Iterable<?> c);
+    ImmutableList<E> removeAll(Iterable<?> c);
 
     /**
      * Returns a copy of this list that contains only elements
@@ -141,7 +140,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * a different list instance with elements removed
      */
     @Override
-    @NonNull ImmutableList<E> retainAll(@NonNull Iterable<?> c);
+    ImmutableList<E> retainAll(Iterable<?> c);
 
     /**
      * Returns a reversed copy of this list.
@@ -153,7 +152,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      *
      * @return a reversed copy of this list.
      */
-    @NonNull ImmutableList<E> reverse();
+    ImmutableList<E> reverse();
 
     /**
      * Returns a copy of this list that contains all elements
@@ -163,7 +162,7 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * @return this list instance if it has not changed, or
      * a different list instance with the element changed
      */
-    @NonNull ImmutableList<E> set(int index, @NonNull E element);
+    ImmutableList<E> set(int index, E element);
 
     /**
      * Returns a copy of this list that contains only
@@ -175,12 +174,12 @@ public interface ImmutableList<E> extends ReadOnlyList<E>, ImmutableSequencedCol
      * a different list instance with the element changed
      */
     @Override
-    @NonNull ImmutableList<E> readOnlySubList(int fromIndex, int toIndex);
+    ImmutableList<E> readOnlySubList(int fromIndex, int toIndex);
 
     /**
      * Returns a mutable copy of this list.
      *
      * @return a mutable copy.
      */
-    @NonNull List<E> toMutable();
+    List<E> toMutable();
 }

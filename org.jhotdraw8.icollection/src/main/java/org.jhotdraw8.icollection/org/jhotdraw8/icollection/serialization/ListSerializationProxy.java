@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.serialization;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -61,12 +60,12 @@ public abstract class ListSerializationProxy<E> implements Serializable {
     private final transient List<E> serialized;
     protected transient List<E> deserializedElements;
 
-    protected ListSerializationProxy(@NonNull List<E> serialized) {
+    protected ListSerializationProxy(List<E> serialized) {
         this.serialized = serialized;
     }
 
     @Serial
-    private void writeObject(@NonNull ObjectOutputStream s)
+    private void writeObject(ObjectOutputStream s)
             throws IOException {
         s.writeInt(serialized.size());
         for (E e : serialized) {
@@ -75,7 +74,7 @@ public abstract class ListSerializationProxy<E> implements Serializable {
     }
 
     @Serial
-    private void readObject(@NonNull ObjectInputStream s)
+    private void readObject(ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         int n = s.readInt();
         deserializedElements = new ArrayList<>(n);
@@ -89,5 +88,5 @@ public abstract class ListSerializationProxy<E> implements Serializable {
     @SuppressWarnings({"serial", "RedundantSuppression"})
 // We define this abstract method here, because require that subclasses have this method.
     @Serial
-    protected abstract @NonNull Object readResolve();
+    protected abstract Object readResolve();
 }

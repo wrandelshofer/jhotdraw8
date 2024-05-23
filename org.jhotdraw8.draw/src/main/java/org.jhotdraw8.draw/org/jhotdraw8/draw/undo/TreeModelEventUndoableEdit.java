@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.undo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 
 import javax.swing.undo.AbstractUndoableEdit;
@@ -16,9 +15,9 @@ import java.io.Serial;
 public class TreeModelEventUndoableEdit<T> extends AbstractUndoableEdit {
     @Serial
     private static final long serialVersionUID = 0L;
-    private final @NonNull TreeModelEvent<T> event;
+    private final TreeModelEvent<T> event;
 
-    public TreeModelEventUndoableEdit(@NonNull TreeModelEvent<T> event) {
+    public TreeModelEventUndoableEdit(TreeModelEvent<T> event) {
         this.event = event;
     }
 

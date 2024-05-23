@@ -9,12 +9,11 @@ import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.scene.control.TextInputControl;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
+import org.jspecify.annotations.Nullable;
 
 /**
  * {@code AbstractSelectionAction} acts on the selection of a target component
@@ -32,7 +31,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
      *
      * @param application the application
      */
-    public AbstractSelectionAction(@NonNull Application application) {
+    public AbstractSelectionAction(Application application) {
         this(application, null);
     }
 
@@ -42,7 +41,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
      * @param application the application
      * @param target      the target node
      */
-    public AbstractSelectionAction(@NonNull Application application, @Nullable Node target) {
+    public AbstractSelectionAction(Application application, @Nullable Node target) {
         super(application);
         this.target = target;
     }
@@ -79,7 +78,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
     }
 
     @Override
-    protected final void onActionPerformed(@NonNull ActionEvent event, @NonNull Application application) {
+    protected final void onActionPerformed(ActionEvent event, Application application) {
         EditableComponent ec = getEditableComponent();
         if (ec != null) {
             onActionPerformed(event, ec);
@@ -88,7 +87,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
 
     protected abstract void onActionPerformed(ActionEvent event, EditableComponent ec);
 
-    private record TextInputControlAdapter(@NonNull TextInputControl control) implements EditableComponent {
+    private record TextInputControlAdapter(TextInputControl control) implements EditableComponent {
 
         @Override
         public void clearSelection() {
@@ -126,7 +125,7 @@ public abstract class AbstractSelectionAction extends AbstractApplicationAction 
         }
 
         @Override
-        public @NonNull ReadOnlyBooleanProperty selectionEmptyProperty() {
+        public ReadOnlyBooleanProperty selectionEmptyProperty() {
             ReadOnlyBooleanWrapper p = new ReadOnlyBooleanWrapper();
             p.bind(control.selectedTextProperty().isNull());
             return p.getReadOnlyProperty();

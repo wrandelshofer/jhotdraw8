@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Lines;
@@ -31,8 +30,8 @@ public class IntersectEllipseLine {
      * @param b1  point 1 of the line
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectEllipseLine(@NonNull Point2D ac, double arx, double ary,
-                                                                   @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static IntersectionResult intersectEllipseLine(Point2D ac, double arx, double ary,
+                                                          Point2D b0, Point2D b1) {
         IntersectionResult result = intersectLineEllipse(b0, b1, ac, arx, ary);
         ArrayList<IntersectionPoint> list = new ArrayList<>();
         for (IntersectionPoint ip : result.intersections()) {
@@ -47,22 +46,22 @@ public class IntersectEllipseLine {
         return new IntersectionResult(result.getStatus(), list);
     }
 
-    public static @NonNull IntersectionResultEx intersectEllipseLineEx(@NonNull Point2D ac, double arx, double ary,
-                                                                       @NonNull Point2D b0, @NonNull Point2D b1) {
+    public static IntersectionResultEx intersectEllipseLineEx(Point2D ac, double arx, double ary,
+                                                              Point2D b0, Point2D b1) {
         return intersectEllipseLineEx(ac.getX(), ac.getY(), arx, ary, b0.getX(), b0.getY(), b1.getX(), b1.getY());
     }
 
-    public static @NonNull IntersectionResult intersectEllipseLine(double acx, double acy, double arx, double ary,
+    public static IntersectionResult intersectEllipseLine(double acx, double acy, double arx, double ary,
                                                                    double b0x, double b0y, double b1x, double b1y) {
         return intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Rectangles.REAL_THRESHOLD);
     }
 
-    public static @NonNull IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
+    public static IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
                                                                        double b0x, double b0y, double b1x, double b1y) {
         return intersectEllipseLineEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Rectangles.REAL_THRESHOLD);
     }
 
-    public static @NonNull IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
+    public static IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
                                                                        double b0x, double b0y, double b1x, double b1y, double epsilon) {
         IntersectionResult result = intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
@@ -79,7 +78,7 @@ public class IntersectEllipseLine {
         return new IntersectionResultEx(result.getStatus(), list);
     }
 
-    public static @NonNull IntersectionResult intersectEllipseLine(double cx, double cy, double rx, double ry,
+    public static IntersectionResult intersectEllipseLine(double cx, double cy, double rx, double ry,
                                                                    double x0, double y0, double x1, double y1, double epsilon) {
         IntersectionResult result = intersectLineEllipse(x0, y0, x1, y1, cx, cy, rx, ry, epsilon);
         // FIXME compute t for Ellipse instead for Line!
@@ -97,7 +96,7 @@ public class IntersectEllipseLine {
      * @param a1 point 1 of the line
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull AABB e) {
+    public static IntersectionResult intersectLineEllipse(Point2D a0, Point2D a1, AABB e) {
         double rx = e.width() * 0.5;
         double ry = e.height() * 0.5;
         return intersectLineEllipse(a0, a1, new Point2D.Double(e.minX() + rx, e.minY() + ry), rx, ry);
@@ -116,7 +115,7 @@ public class IntersectEllipseLine {
      * @param a1 point 1 of the line
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectLineEllipse(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D ec, double rx, double ry) {
+    public static IntersectionResult intersectLineEllipse(Point2D a0, Point2D a1, Point2D ec, double rx, double ry) {
         return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Rectangles.REAL_THRESHOLD);
     }
 
@@ -132,7 +131,7 @@ public class IntersectEllipseLine {
      * @param epsilon
      * @return
      */
-    public static @NonNull IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
+    public static IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
                                                                    double cx, double cy, double rx, double ry,
                                                                    double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>();

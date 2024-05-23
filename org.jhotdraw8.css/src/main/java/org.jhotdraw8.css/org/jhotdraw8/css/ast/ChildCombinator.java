@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -21,17 +20,17 @@ import java.util.function.Consumer;
  */
 public class ChildCombinator extends Combinator {
 
-    public ChildCombinator(@Nullable SourceLocator sourceLocator, @NonNull SimpleSelector first, @NonNull Selector second) {
+    public ChildCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
         super(sourceLocator, first, second);
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "(" + first + " > " + second + ")";
     }
 
     @Override
-    public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
+    public @Nullable <T> T match(SelectorModel<T> model, T element) {
         T result = second.match(model, element);
         if (result != null) {
             result = first.match(model, model.getParent(result));
@@ -45,7 +44,7 @@ public class ChildCombinator extends Combinator {
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         first.produceTokens(consumer);
         consumer.accept(new CssToken(CssTokenType.TT_GREATER_THAN));
         second.produceTokens(consumer);

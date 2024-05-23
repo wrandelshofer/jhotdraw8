@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.tool;
 import javafx.scene.Node;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.DrawingView;
 
 /**
@@ -32,7 +31,7 @@ public interface Tracker {
      *
      * @return a node
      */
-    @NonNull Node getNode();
+    Node getNode();
 
     /**
      * Handle input event forwarded from the parent Tool.

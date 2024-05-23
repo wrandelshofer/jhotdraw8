@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 import java.io.Serial;
@@ -29,7 +28,7 @@ public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] component, float @NonNull [] rgb) {
+    public float[] toRGB(float[] component, float[] rgb) {
         float cyan, magenta, yellow, black;
 
         cyan = component[0];
@@ -55,7 +54,7 @@ public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgbvalue, float @NonNull [] colorvalue) {
+    public float[] fromRGB(float[] rgbvalue, float[] colorvalue) {
         float r = rgbvalue[0];
         float g = rgbvalue[1];
         float b = rgbvalue[2];
@@ -92,7 +91,7 @@ public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return "Nominal CMYK";
     }
 }

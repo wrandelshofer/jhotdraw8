@@ -6,9 +6,8 @@ package org.jhotdraw8.fxcontrols.dock;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a node in a tree structure.
@@ -17,13 +16,11 @@ public interface DockNode {
     /**
      * The name of the {@link #dockParentProperty()}.
      */
-    @NonNull
     String DOCK_PARENT_PROPERTY = "dockParent";
 
     /**
      * Gets the parent of this node.
      */
-    @NonNull
     ObjectProperty<DockParent> dockParentProperty();
 
     /**
@@ -31,7 +28,6 @@ public interface DockNode {
      *
      * @return the children
      */
-    @NonNull
     ReadOnlyList<DockChild> getDockChildrenReadOnly();
 
     default @Nullable DockRoot getDockRoot() {
@@ -51,6 +47,5 @@ public interface DockNode {
         dockParentProperty().set(value);
     }
 
-    @NonNull
     Node getNode();
 }

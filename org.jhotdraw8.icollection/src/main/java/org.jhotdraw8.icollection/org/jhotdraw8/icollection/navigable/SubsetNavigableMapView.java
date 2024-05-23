@@ -1,7 +1,5 @@
 package org.jhotdraw8.icollection.navigable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.MutableMapEntry;
 import org.jhotdraw8.icollection.facade.NavigableSetFacade;
 import org.jhotdraw8.icollection.facade.SetFacade;
@@ -9,6 +7,7 @@ import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Comparator;
@@ -25,8 +24,8 @@ import java.util.Spliterators;
 import java.util.function.IntSupplier;
 
 public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements ReadOnlyMap<K, V>, NavigableMap<K, V> {
-    private final @NonNull NavigableMap<K, V> src;
-    private final @NonNull IntSupplier modCount;
+    private final NavigableMap<K, V> src;
+    private final IntSupplier modCount;
     private final boolean fromStart;
     private final @Nullable K fromKey;
     private final boolean fromInclusive;
@@ -40,7 +39,7 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
      *
      * @param src the source set
      */
-    public SubsetNavigableMapView(@NonNull NavigableMap<K, V> src, @NonNull IntSupplier modCount, boolean fromStart, @Nullable K fromKey, boolean fromInclusive, boolean toEnd, @Nullable K toKey, boolean toInclusive, boolean nullFirst) {
+    public SubsetNavigableMapView(NavigableMap<K, V> src, IntSupplier modCount, boolean fromStart, @Nullable K fromKey, boolean fromInclusive, boolean toEnd, @Nullable K toKey, boolean toInclusive, boolean nullFirst) {
         this.src = src;
         this.modCount = modCount;
         this.fromStart = fromStart;
@@ -117,13 +116,11 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         return navigableKeySet().reversed();
     }
 
-    @NonNull
     @Override
     public NavigableMap<K, V> descendingMap() {
         return new DescendingNavigableMapView<>(this, modCount);
     }
 
-    @NonNull
     @Override
     public Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
@@ -171,7 +168,6 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         return super.getOrDefault(key, defaultValue);
     }
 
-    @NonNull
     @Override
     public NavigableMap<K, V> headMap(K toKey, boolean inclusive) {
         if (!inRange(toKey, toInclusive)) {
@@ -183,7 +179,6 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
                 nullFirst);
     }
 
-    @NonNull
     @Override
     public SortedMap<K, V> headMap(K toKey) {
         return headMap(fromKey, false);
@@ -225,7 +220,7 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         return inclusive ? inRange(e) : inClosedRange(e);
     }
 
-    public @NonNull Iterator<Entry<K, V>> iterator() {
+    public Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
                 new MappedIterator<>(new SubsetIterator(lowestKey(), iteratorHighFence(), src.entrySet().iterator()),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
@@ -345,7 +340,6 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
         return (fromStart && toEnd) ? src.size() : countElements();
     }
 
-    @NonNull
     @Override
     public NavigableMap<K, V> subMap(K fromKey, boolean fromInclusive, K toKey, boolean toInclusive) {
         if (!inRange(fromKey, fromInclusive)) {
@@ -360,13 +354,11 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
                 nullFirst);
     }
 
-    @NonNull
     @Override
     public SortedMap<K, V> subMap(K fromKey, K toKey) {
         return subMap(fromKey, true, toKey, false);
     }
 
-    @NonNull
     @Override
     public NavigableMap<K, V> tailMap(K fromKey, boolean inclusive) {
         if (!inRange(fromKey, fromInclusive)) {
@@ -378,7 +370,6 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
                 nullFirst);
     }
 
-    @NonNull
     @Override
     public SortedMap<K, V> tailMap(K fromKey) {
         return tailMap(fromKey, true);
@@ -441,7 +432,7 @@ public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements R
             return hasNext;
         }
 
-        public final Map.@NonNull Entry<K, V> next() {
+        public final Map.Entry<K, V> next() {
             if (!hasNext) {
                 throw new NoSuchElementException();
             }

@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 public class IntersectRayLine {
     private IntersectRayLine() {
     }
 
-    public static @NonNull IntersectionResultEx intersectRayLineEx(
+    public static IntersectionResultEx intersectRayLineEx(
             double aox, double aoy, double adx, double ady, double amax,
             double b0x, double b0y, double b1x, double b1y, double epsilon) {
         return IntersectRayRay.intersectRayRayEx(

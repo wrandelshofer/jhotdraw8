@@ -21,8 +21,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -51,12 +50,12 @@ import java.util.function.Predicate;
 
 
 public class InteractiveDrawingRenderer extends AbstractPropertyBean {
-    public static final @NonNull String RENDER_CONTEXT_PROPERTY = "renderContext";
-    public static final @NonNull String MODEL_PROPERTY = "model";
-    public static final @NonNull String DRAWING_VIEW_PROPERTY = "drawingView";
-    private final @NonNull NonNullObjectProperty<WritableRenderContext> renderContext //
+    public static final String RENDER_CONTEXT_PROPERTY = "renderContext";
+    public static final String MODEL_PROPERTY = "model";
+    public static final String DRAWING_VIEW_PROPERTY = "drawingView";
+    private final NonNullObjectProperty<WritableRenderContext> renderContext //
             = new NonNullObjectProperty<>(this, RENDER_CONTEXT_PROPERTY, new SimpleRenderContext());
-    private final @NonNull NonNullObjectProperty<DrawingModel> model //
+    private final NonNullObjectProperty<DrawingModel> model //
             = new NonNullObjectProperty<>(this, MODEL_PROPERTY, new SimpleDrawingModel());
 
     /**
@@ -65,13 +64,13 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * This node must have its{@code managed} property set to true, so that its {@code layoutChildren}
      * method is called by the parent node.
      */
-    private final @NonNull Group drawingPane = new Group() {
+    private final Group drawingPane = new Group() {
         @Override
         protected void layoutChildren() {
             paint();
         }
     };
-    private final @NonNull ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
+    private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
 
     /**
@@ -81,15 +80,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * If many figures change constantly, and {@link #updateLimit} is a small
      * value, then the linked set ensures that all figures are updated eventually.
      */
-    private final @NonNull SequencedSet<Figure> dirtyFigureNodes = new LinkedHashSet<>();
-    private final @NonNull DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
-    private final @NonNull IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 10_000);
+    private final SequencedSet<Figure> dirtyFigureNodes = new LinkedHashSet<>();
+    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
+    private final IntegerProperty updateLimit = new SimpleIntegerProperty(this, "updateLimit", 10_000);
     private final Map<Figure, Node> figureToNodeMap = new IdentityHashMap<>();
     private final Map<Node, Figure> nodeToFigureMap = new IdentityHashMap<>();
-    private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
-    private final @NonNull ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
-    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
-    private final @NonNull NodeFinder nodeFinder = new NodeFinder();
+    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
+    private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
+    private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
+    private final NodeFinder nodeFinder = new NodeFinder();
 
     public InteractiveDrawingRenderer() {
         drawingPane.setManaged(true);
@@ -101,11 +100,11 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return clipBounds;
     }
 
-    public @NonNull ObjectProperty<DrawingView> drawingViewProperty() {
+    public ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
-    public @NonNull ObjectProperty<DrawingEditor> editorProperty() {
+    public ObjectProperty<DrawingEditor> editorProperty() {
         return editor;
     }
 
@@ -127,7 +126,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @param vy     y coordinate of a point in view coordinates
      * @return the front-most JavaFX Node of the figure that intersects with the point
      */
-    public @Nullable Node findFigureNode(@NonNull Figure figure, double vx, double vy) {
+    public @Nullable Node findFigureNode(Figure figure, double vx, double vy) {
         Node n = figureToNodeMap.get(figure);
         if (n == null) {
             return null;
@@ -163,7 +162,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @param predicate a predicate for selecting figures
      * @return a mutable list of figures with their distance to the point
      */
-    public @NonNull List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, @NonNull Predicate<Figure> predicate) {
+    public List<Map.Entry<Figure, Double>> findFigures(double vx, double vy, boolean decompose, Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pp = vt.transform(vx, vy);
         List<Map.Entry<Figure, Double>> list = new ArrayList<>();
@@ -186,7 +185,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @return the children of the node in front-to-back-order in a new
      * mutable array
      */
-    private @NonNull Node[] frontToBack(@Nullable Parent parent) {
+    private Node[] frontToBack(@Nullable Parent parent) {
         if (parent == null) {
             return new Node[0];
         }
@@ -225,7 +224,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    public @NonNull List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
+    public List<Map.Entry<Figure, Double>> findFiguresInside(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
@@ -251,7 +250,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @param predicate a predicate for adding figures
      * @return true if one or more figures were found
      */
-    private boolean findFiguresInsideRecursive(@NonNull Node node, @NonNull Bounds pp, @NonNull List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
+    private boolean findFiguresInsideRecursive(Node node, Bounds pp, List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
         // base case
         // ---------
         if (!node.isVisible()) {
@@ -291,7 +290,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return true;
     }
 
-    public @NonNull List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
+    public List<Map.Entry<Figure, Double>> findFiguresIntersecting(double vx, double vy, double vwidth, double vheight, boolean decompose, Predicate<Figure> predicate) {
         Transform vt = getDrawingView().getViewToWorld();
         Point2D pxy = vt.transform(vx, vy);
         Point2D pwh = vt.deltaTransform(vwidth, vheight);
@@ -305,7 +304,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return list;
     }
 
-    private boolean findFiguresIntersectingRecursive(@NonNull Node node, @NonNull Bounds pp, @NonNull List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
+    private boolean findFiguresIntersectingRecursive(Node node, Bounds pp, List<Map.Entry<Figure, Double>> found, boolean decompose, Predicate<Figure> predicate) {
         // base case
         // ---------
         if (!node.isVisible()) {
@@ -356,9 +355,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
      * @param radius          the radius of the circle around the point
      * @return whether figures were found
      */
-    private boolean findFiguresRecursive(@NonNull Node node, @NonNull Point2D center,
-                                         @NonNull List<Map.Entry<Figure, Double>> found, boolean decompose,
-                                         @NonNull Predicate<Figure> figurePredicate, double radius) {
+    private boolean findFiguresRecursive(Node node, Point2D center,
+                                         List<Map.Entry<Figure, Double>> found, boolean decompose,
+                                         Predicate<Figure> figurePredicate, double radius) {
         // base case
         // ---------
         if (!node.isVisible()) {
@@ -443,15 +442,15 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return n;
     }
 
-    public @NonNull NonNullObjectProperty<WritableRenderContext> renderContextProperty() {
+    public NonNullObjectProperty<WritableRenderContext> renderContextProperty() {
         return renderContext;
     }
 
-    public @NonNull WritableRenderContext getRenderContext() {
+    public WritableRenderContext getRenderContext() {
         return renderContext.get();
     }
 
-    public void setRenderContext(@NonNull WritableRenderContext newValue) {
+    public void setRenderContext(WritableRenderContext newValue) {
         renderContext.set(newValue);
     }
 
@@ -467,7 +466,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return figureToNodeMap.containsKey(f);
     }
 
-    private void invalidateFigureNode(@NonNull Figure f) {
+    private void invalidateFigureNode(Figure f) {
         if (hasNode(f)) {
             dirtyFigureNodes.add(f);
         }
@@ -480,7 +479,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    public @NonNull NonNullObjectProperty<DrawingModel> modelProperty() {
+    public NonNullObjectProperty<DrawingModel> modelProperty() {
         return model;
     }
 
@@ -502,28 +501,28 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    private void onFigureAddedToParent(@NonNull Figure figure) {
+    private void onFigureAddedToParent(Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             invalidateFigureNode(f);
         }
         repaint();
     }
 
-    private void onFigureRemovedFromParent(@NonNull Figure figure) {
+    private void onFigureRemovedFromParent(Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             removeNode(f);
         }
     }
 
-    private void onNodeChanged(@NonNull Figure figure) {
+    private void onNodeChanged(Figure figure) {
         invalidateFigureNode(figure);
         repaint();
     }
 
-    private void onNodeAddedToTree(@NonNull Figure f) {
+    private void onNodeAddedToTree(Figure f) {
     }
 
-    private void onNodeRemovedFromTree(@NonNull Figure f) {
+    private void onNodeRemovedFromTree(Figure f) {
     }
 
     private void onRootChanged(@Nullable Figure f) {
@@ -543,7 +542,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         }
     }
 
-    private void onSubtreeNodesChanged(@NonNull Figure figure) {
+    private void onSubtreeNodesChanged(Figure figure) {
         for (Figure f : figure.preorderIterable()) {
             dirtyFigureNodes.add(f);
         }
@@ -675,7 +674,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         return count;
     }
 
-    public @NonNull DoubleProperty zoomFactorProperty() {
+    public DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }
 

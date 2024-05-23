@@ -5,7 +5,6 @@
 
 package io;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
@@ -28,7 +27,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class FigureSvgTinyReaderTest {
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSvgWithDefaultableAttributes() {
+    public List<DynamicTest> dynamicTestsSvgWithDefaultableAttributes() {
         return Arrays.asList(
                 dynamicTest("rect with fill value", () -> testDefaultable(
                         "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n" +

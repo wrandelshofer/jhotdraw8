@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.draw.DrawingView;
@@ -23,8 +22,8 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import java.util.function.Supplier;
 
 public class LineCreationTool extends CreationTool {
-    private final @NonNull MapAccessor<CssPoint2D> p1;
-    private final @NonNull MapAccessor<CssPoint2D> p2;
+    private final MapAccessor<CssPoint2D> p1;
+    private final MapAccessor<CssPoint2D> p2;
 
     public LineCreationTool(String name, Resources rsrc, Supplier<? extends Figure> factory) {
         this(name, rsrc, factory, LayerFigure::new, LineFigure.START, LineFigure.END);
@@ -46,7 +45,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
         undoHelper.stopCompositeEdit();
         x1 = event.getX();
         y1 = event.getY();
@@ -77,7 +76,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
         undoHelper.startCompositeEdit(null);
         if (createdFigure != null) {
             x2 = event.getX();
@@ -94,7 +93,7 @@ public class LineCreationTool extends CreationTool {
     }
 
     @Override
-    protected void reshapeInLocal(@NonNull Figure figure, @NonNull CssPoint2D c1, @NonNull CssPoint2D c2, @NonNull DrawingModel dm) {
+    protected void reshapeInLocal(Figure figure, CssPoint2D c1, CssPoint2D c2, DrawingModel dm) {
         dm.set(figure, p1, c1);
         dm.set(figure, p2, c2);
     }

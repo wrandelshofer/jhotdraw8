@@ -5,8 +5,8 @@
 
 package org.jhotdraw8.fxbase.undo;
 
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.text.FXBaseLabels;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.undo.CompoundEdit;
 import javax.swing.undo.UndoableEdit;

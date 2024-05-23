@@ -1,7 +1,6 @@
 package org.jhotdraw8.icollection.sequenced;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Collection;
@@ -17,14 +16,14 @@ import java.util.Set;
  * @param <V> the value type
  */
 public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements SequencedMap<K, V> {
-    private final @NonNull SequencedMap<K, V> src;
+    private final SequencedMap<K, V> src;
 
     /**
      * Constructs a new instance.
      *
      * @param src the source map
      */
-    public ReversedSequencedMapView(@NonNull SequencedMap<K, V> src) {
+    public ReversedSequencedMapView(SequencedMap<K, V> src) {
         this.src = src;
     }
 
@@ -68,7 +67,6 @@ public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements
         return src.remove(key);
     }
 
-    @NonNull
     @Override
     public Set<Entry<K, V>> entrySet() {
         return src.sequencedEntrySet().reversed();
@@ -95,35 +93,33 @@ public class ReversedSequencedMapView<K, V> extends AbstractMap<K, V> implements
         src.clear();
     }
 
-    @NonNull
     @Override
     public Set<K> keySet() {
         return src.sequencedKeySet().reversed();
     }
 
-    @NonNull
     @Override
     public Collection<V> values() {
         return src.sequencedValues().reversed();
     }
 
     @Override
-    public @NonNull SequencedMap<K, V> reversed() {
+    public SequencedMap<K, V> reversed() {
         return src;
     }
 
     @Override
-    public @NonNull SequencedSet<K> sequencedKeySet() {
+    public SequencedSet<K> sequencedKeySet() {
         return src.sequencedKeySet().reversed();
     }
 
     @Override
-    public @NonNull SequencedCollection<V> sequencedValues() {
+    public SequencedCollection<V> sequencedValues() {
         return src.sequencedValues().reversed();
     }
 
     @Override
-    public @NonNull SequencedSet<Entry<K, V>> sequencedEntrySet() {
+    public SequencedSet<Entry<K, V>> sequencedEntrySet() {
         return src.sequencedEntrySet().reversed();
     }
 

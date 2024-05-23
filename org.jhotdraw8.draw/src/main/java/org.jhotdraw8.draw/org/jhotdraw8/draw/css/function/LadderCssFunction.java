@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.SelectorModel;
@@ -16,6 +14,7 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -52,7 +51,7 @@ import java.util.function.Consumer;
  * @param <T> the element type of the DOM
  */
 public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
-    public static final @NonNull String NAME = "ladder";
+    public static final String NAME = "ladder";
 
     public LadderCssFunction() {
         this(NAME);
@@ -63,8 +62,8 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
     }
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
-                        @NonNull CssFunctionProcessor<T> functionProcessor, @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
+    public void process(T element, CssTokenizer tt, SelectorModel<T> model,
+                        CssFunctionProcessor<T> functionProcessor, Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "():  function " + getName() + "() expected.");
         if (!getName().equals(tt.currentString())) {
             throw tt.createParseException(getName() + "():  function " + getName() + "() expected.");
@@ -109,7 +108,7 @@ public class LadderCssFunction<T> extends AbstractColorCssFunction<T> {
                 : list.getLast();
     }
 
-    protected @NonNull CssSize parsePercentageValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected CssSize parsePercentageValue(T element, CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize size = switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> CssSize.of(tt.currentNumberNonNull().doubleValue());
             case CssTokenType.TT_PERCENTAGE ->

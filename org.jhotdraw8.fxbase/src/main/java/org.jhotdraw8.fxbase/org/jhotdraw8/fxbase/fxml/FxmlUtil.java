@@ -8,8 +8,7 @@ package org.jhotdraw8.fxbase.fxml;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.util.Callback;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -25,20 +24,20 @@ public class FxmlUtil {
     private FxmlUtil() {
     }
 
-    public static @NonNull <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
-                                                                        @NonNull ResourceBundle resources) {
+    public static <T> Supplier<T> createFxmlControllerSupplier(URL fxml,
+                                                               ResourceBundle resources) {
         return createFxmlControllerSupplier(fxml, resources, (Callback<Class<?>, Object>) null);
     }
 
 
-    public static @NonNull <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
-                                                                        @NonNull ResourceBundle resources,
+    public static <T> Supplier<T> createFxmlControllerSupplier(URL fxml,
+                                                               ResourceBundle resources,
                                                                         @Nullable Supplier<T> controllerFactory) {
         return () -> FxmlUtil.<T>createFxmlControllerSupplier(fxml, resources, controllerFactory == null ? null : clazz -> controllerFactory.get()).get();
     }
 
-    public static @NonNull <T> Supplier<T> createFxmlControllerSupplier(@NonNull URL fxml,
-                                                                        @NonNull ResourceBundle resources,
+    public static <T> Supplier<T> createFxmlControllerSupplier(URL fxml,
+                                                               ResourceBundle resources,
                                                                         @Nullable Callback<Class<?>, Object> controllerFactory) {
         return () -> {
             FXMLLoader loader = new FXMLLoader();
@@ -53,7 +52,7 @@ public class FxmlUtil {
         };
     }
 
-    public static @NonNull <T extends Node> Supplier<T> createFxmlNodeSupplier(@NonNull URL fxml, @Nullable ResourceBundle resourceBundle) {
+    public static <T extends Node> Supplier<T> createFxmlNodeSupplier(URL fxml, @Nullable ResourceBundle resourceBundle) {
         return () -> {
             FXMLLoader loader = new FXMLLoader();
             loader.setResources(resourceBundle);

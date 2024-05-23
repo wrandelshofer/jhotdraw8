@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.collection.spliterator;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -21,9 +20,9 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class SpliteratorIterable<T> implements Iterable<T> {
-    private final @NonNull Supplier<Spliterator<T>> factory;
+    private final Supplier<Spliterator<T>> factory;
 
-    public SpliteratorIterable(@NonNull Supplier<Spliterator<T>> factory) {
+    public SpliteratorIterable(Supplier<Spliterator<T>> factory) {
         this.factory = factory;
     }
 
@@ -33,7 +32,7 @@ public class SpliteratorIterable<T> implements Iterable<T> {
     }
 
     @Override
-    public @NonNull Iterator<T> iterator() {
+    public Iterator<T> iterator() {
         return Spliterators.iterator(factory.get());
     }
 

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         this.value = value;
     }
 
-    public void addChild(@NonNull SimpleTreeNode<V> child) {
+    public void addChild(SimpleTreeNode<V> child) {
         if (child.parent != null) {
             child.parent.removeChild(child);
         }
@@ -29,7 +28,7 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
         child.parent = this;
     }
 
-    public void removeChild(@NonNull SimpleTreeNode<V> child) {
+    public void removeChild(SimpleTreeNode<V> child) {
         if (children != null) {
             children.remove(child);
             child.parent = null;
@@ -37,7 +36,7 @@ public class SimpleTreeNode<V> implements TreeNode<SimpleTreeNode<V>> {
     }
 
     @Override
-    public @NonNull List<SimpleTreeNode<V>> getChildren() {
+    public List<SimpleTreeNode<V>> getChildren() {
         if (children == null) {
             children = new ChildList<>(this);
         }

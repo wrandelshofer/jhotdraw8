@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
@@ -13,6 +11,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -49,7 +48,7 @@ public abstract class AbstractMathCssFunction<T> extends AbstractCssFunction<T> 
     }
 
 
-    protected @Nullable CssSize parseCalcSum(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssSize parseCalcSum(T element, CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize dim = parseCalcProduct(element, tt, functionProcessor);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
@@ -83,7 +82,7 @@ public abstract class AbstractMathCssFunction<T> extends AbstractCssFunction<T> 
         return dim;
     }
 
-    protected @Nullable CssSize parseCalcProduct(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssSize parseCalcProduct(T element, CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         CssSize dim = parseCalcValue(element, tt, functionProcessor);
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         Loop:
@@ -117,7 +116,7 @@ public abstract class AbstractMathCssFunction<T> extends AbstractCssFunction<T> 
         return dim;
     }
 
-    protected void produceNumberPercentageOrDimension(@NonNull Consumer<CssToken> out, @NonNull CssSize dim, int line, int start, int end) {
+    protected void produceNumberPercentageOrDimension(Consumer<CssToken> out, CssSize dim, int line, int start, int end) {
         if ("%".equals(dim.getUnits())) {
             out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, null, dim.getValue(), line, start, end));
         } else {
@@ -125,7 +124,7 @@ public abstract class AbstractMathCssFunction<T> extends AbstractCssFunction<T> 
         }
     }
 
-    protected @Nullable CssSize parseCalcValue(@NonNull T element, @NonNull CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
+    protected @Nullable CssSize parseCalcValue(T element, CssTokenizer tt, CssFunctionProcessor<T> functionProcessor) throws IOException, ParseException {
         switch (tt.next()) {
             case CssTokenType.TT_NUMBER:
                 return CssSize.of(tt.currentNumberNonNull().doubleValue());

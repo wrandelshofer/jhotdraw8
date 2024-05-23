@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.junit.jupiter.api.DynamicTest;
 
@@ -23,12 +22,12 @@ public class MutableIntAttributed16BitIndexedBidiGraphTest extends AbstractMutab
     }
 
     @Override
-    public @NonNull List<DynamicTest> dynamicTestsRandomSortedGraph() {
+    public List<DynamicTest> dynamicTestsRandomSortedGraph() {
         return Collections.emptyList();
     }
 
     @Override
-    public @NonNull List<DynamicTest> dynamicTestsRandomSortedGraphWithArrowData() {
+    public List<DynamicTest> dynamicTestsRandomSortedGraphWithArrowData() {
         return Collections.emptyList();
     }
 

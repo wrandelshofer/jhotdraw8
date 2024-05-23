@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -14,6 +12,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssInsets;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -44,7 +43,7 @@ public class InsetsCssConverter extends AbstractCssConverter<CssInsets> {
     }
 
     @Override
-    public @NonNull CssInsets parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssInsets parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<CssSize> list = new ArrayList<>(4);
         for (int i = 0; i < 4; i++) {
             switch (tt.next()) {
@@ -86,7 +85,7 @@ public class InsetsCssConverter extends AbstractCssConverter<CssInsets> {
     }
 
     @Override
-    protected <TT extends CssInsets> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssInsets> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         CssSize top = value.getTop();
         CssSize right = value.getRight();
         CssSize bottom = value.getBottom();

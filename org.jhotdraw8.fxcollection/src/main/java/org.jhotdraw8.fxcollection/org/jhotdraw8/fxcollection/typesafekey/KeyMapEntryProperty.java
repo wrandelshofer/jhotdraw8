@@ -5,9 +5,8 @@
 package org.jhotdraw8.fxcollection.typesafekey;
 
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxcollection.MapEntryProperty;
+import org.jspecify.annotations.Nullable;
 
 /**
  * KeyMapEntryProperty.
@@ -19,9 +18,9 @@ import org.jhotdraw8.fxcollection.MapEntryProperty;
  * @author Werner Randelshofer
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
-    private final @NonNull MapAccessor<V> accessor;
+    private final MapAccessor<V> accessor;
 
-    public KeyMapEntryProperty(@NonNull ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
+    public KeyMapEntryProperty(ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
         super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getRawValueType());
         this.accessor = key;
     }

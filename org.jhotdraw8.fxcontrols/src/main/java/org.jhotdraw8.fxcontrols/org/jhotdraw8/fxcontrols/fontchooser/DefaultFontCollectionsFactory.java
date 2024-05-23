@@ -7,7 +7,6 @@ package org.jhotdraw8.fxcontrols.fontchooser;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.text.Font;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
 
@@ -35,7 +34,7 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
      *
      * @return a FontChooserModel.
      */
-    public @NonNull List<FontCollection> create() {
+    public List<FontCollection> create() {
         return generateCollections(loadFonts());
     }
 
@@ -44,7 +43,7 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
      *
      * @return the list of fonts
      */
-    protected @NonNull List<FontFamily> loadFonts() {
+    protected List<FontFamily> loadFonts() {
         List<FontFamily> allFamilies = new ArrayList<>();
 
         List<String> familyNames = Font.getFamilies();
@@ -85,7 +84,7 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
      * @param families a list of font families
      * @return a collection of font families
      */
-    protected @NonNull ObservableList<FontCollection> generateCollections(@NonNull List<FontFamily> families) {
+    protected ObservableList<FontCollection> generateCollections(List<FontFamily> families) {
         ObservableList<FontCollection> collections = FXCollections.observableArrayList();
 
         final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
@@ -546,7 +545,7 @@ public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
 
     }
 
-    public static @NonNull ArrayList<FontFamily> collectFamiliesNamed(@NonNull List<FontFamily> allFamilies, String... names) {
+    public static ArrayList<FontFamily> collectFamiliesNamed(List<FontFamily> allFamilies, String... names) {
         ArrayList<FontFamily> coll = new ArrayList<>();
         HashSet<String> nameMap = new HashSet<>(Arrays.asList(names));
         for (FontFamily family : allFamilies) {

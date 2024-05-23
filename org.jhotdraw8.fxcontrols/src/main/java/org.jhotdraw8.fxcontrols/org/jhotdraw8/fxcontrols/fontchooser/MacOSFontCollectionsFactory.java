@@ -2,7 +2,6 @@ package org.jhotdraw8.fxcontrols.fontchooser;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.text.NaturalSortCollator;
@@ -25,10 +24,10 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
-    private final @NonNull Logger LOGGER = Logger.getLogger(MacOSFontCollectionsFactory.class.getName());
+    private final Logger LOGGER = Logger.getLogger(MacOSFontCollectionsFactory.class.getName());
 
     @Override
-    protected @NonNull ObservableList<FontCollection> generateCollections(@NonNull List<FontFamily> families) {
+    protected ObservableList<FontCollection> generateCollections(List<FontFamily> families) {
         List<FontCollection> collections = new ArrayList<>();
 
         final Resources labels = ModulepathResources.getResources(FontDialog.class.getModule(), "org.jhotdraw8.fxcontrols.spi.labels");
@@ -79,7 +78,7 @@ public class MacOSFontCollectionsFactory extends DefaultFontCollectionsFactory {
      * @return
      * @throws IOException
      */
-    private @NonNull FontCollection readFontCollection(@NonNull Map<String, FontFamily> families, @NonNull Path path) throws IOException {
+    private FontCollection readFontCollection(Map<String, FontFamily> families, Path path) throws IOException {
         try {
             var map = PListParsers.toMap(PListParsers.readPList(path.toFile()));
             SequencedSet<FontFamily> fontFamilies = new LinkedHashSet<>();

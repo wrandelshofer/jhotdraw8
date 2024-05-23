@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -25,9 +24,9 @@ import java.nio.file.Paths;
  * @author Werner Randelshofer
  */
 public interface OutputFormat {
-    void setOptions(@NonNull ImmutableMap<Key<?>, Object> newValue);
+    void setOptions(ImmutableMap<Key<?>, Object> newValue);
 
-    @NonNull ImmutableMap<Key<?>, Object> getOptions();
+    ImmutableMap<Key<?>, Object> getOptions();
 
     /**
      * Writes a Drawing into the resource identified by the given URI.
@@ -37,7 +36,7 @@ public interface OutputFormat {
      * @param workState for progress monitoring and cancelling the operation
      * @throws IOException if an IO error occurs
      */
-    default void write(@NonNull URI uri, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    default void write(URI uri, Drawing drawing, WorkState<Void> workState) throws IOException {
         write(Paths.get(uri), drawing, workState);
     }
 
@@ -50,7 +49,7 @@ public interface OutputFormat {
      * @param workState for progress monitoring and cancelling the operation
      * @throws IOException if an IO error occurs
      */
-    default void write(@NonNull Path file, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException {
+    default void write(Path file, Drawing drawing, WorkState<Void> workState) throws IOException {
         try (BufferedOutputStream out = new BufferedOutputStream(Files.newOutputStream(file))) {
             write(out, file.getParent().toUri(), drawing, workState);
         }
@@ -66,6 +65,6 @@ public interface OutputFormat {
      * @param workState    for progress monitoring and cancelling the operation
      * @throws IOException if an IO error occurs
      */
-    void write(@NonNull OutputStream out, @Nullable URI documentHome, @NonNull Drawing drawing, @NonNull WorkState<Void> workState) throws IOException;
+    void write(OutputStream out, @Nullable URI documentHome, Drawing drawing, WorkState<Void> workState) throws IOException;
 
 }

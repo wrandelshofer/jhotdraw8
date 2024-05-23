@@ -5,8 +5,6 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.css.manager.StylesheetsManager;
@@ -23,6 +21,7 @@ import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.nio.file.Paths;
@@ -49,7 +48,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.
      */
-    @NonNull Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
+    Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
             Paths.get(System.getProperty("user.home")).toUri());
 
     /**
@@ -65,7 +64,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<URI>> AUTHOR_STYLESHEETS = new NonNullListKey<>("authorStylesheets",
+    NonNullKey<ImmutableList<URI>> AUTHOR_STYLESHEETS = new NonNullListKey<>("authorStylesheets",
             new SimpleParameterizedType(ImmutableList.class, URI.class));
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
@@ -78,24 +77,24 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new NonNullListKey<>("userAgentStylesheets", new SimpleParameterizedType(ImmutableList.class, URI.class));
+    NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new NonNullListKey<>("userAgentStylesheets", new SimpleParameterizedType(ImmutableList.class, URI.class));
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    @NonNull NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new NonNullListKey<>("inlineStylesheets", new SimpleParameterizedType(ImmutableList.class, String.class));
+    NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new NonNullListKey<>("inlineStylesheets", new SimpleParameterizedType(ImmutableList.class, String.class));
 
 
     /**
      * Defines the width of the canvas.
      */
-    @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.of(640.0));
+    CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.of(640.0));
     /**
      * Defines the height of the canvas.
      */
-    @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.of(480.0));
+    CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.of(480.0));
 
 
     /**
@@ -109,7 +108,7 @@ public interface Drawing extends Figure {
      * This property is styleable with the key
      * {@code Figure.JHOTDRAW_CSS_PREFIX+"background"}.</p>
      */
-    @NonNull NullableCssColorStyleableKey BACKGROUND = new NullableCssColorStyleableKey("background", new CssColor("white", Color.WHITE));
+    NullableCssColorStyleableKey BACKGROUND = new NullableCssColorStyleableKey("background", new CssColor("white", Color.WHITE));
 
     /**
      * The CSS type selector for a label object is {@value #TYPE_SELECTOR}.
@@ -117,7 +116,7 @@ public interface Drawing extends Figure {
     String TYPE_SELECTOR = "Drawing";
 
     @Override
-    default @NonNull String getTypeSelector() {
+    default String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -143,7 +142,7 @@ public interface Drawing extends Figure {
      *
      * @param ctx the render context
      */
-    default void layoutAll(@NonNull RenderContext ctx) {
+    default void layoutAll(RenderContext ctx) {
         layoutAll(ctx, true);
     }
 
@@ -158,7 +157,7 @@ public interface Drawing extends Figure {
      * @param ctx      the render context
      * @param parallel performs the layout in parallel or sequentially
      */
-    default void layoutAll(@NonNull RenderContext ctx, boolean parallel) {
+    default void layoutAll(RenderContext ctx, boolean parallel) {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
         // IdentityMap is slower for insertion than an equality-based map.
@@ -194,7 +193,7 @@ public interface Drawing extends Figure {
         }
     }
 
-    default void updateAllCss(@NonNull RenderContext ctx) {
+    default void updateAllCss(RenderContext ctx) {
         StylesheetsManager<Figure> styleManager = getStyleManager();
         if (styleManager != null && styleManager.hasStylesheets()) {
             // Performance: We copy preorderIterable into a list, so that it
@@ -216,7 +215,7 @@ public interface Drawing extends Figure {
      *
      * @return figures in topological order according to layout dependencies
      */
-    default @NonNull Iterable<Figure> layoutDependenciesIterable() {
+    default Iterable<Figure> layoutDependenciesIterable() {
         // build a graph which includes all figures that must be laid out and all their observers
         // transitively
         SimpleMutableDirectedGraph<Figure, Figure> graphBuilder = new SimpleMutableDirectedGraph<>(1024, 1024, true);

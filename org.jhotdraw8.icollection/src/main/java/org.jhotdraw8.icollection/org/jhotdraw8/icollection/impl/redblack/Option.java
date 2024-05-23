@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -74,12 +73,12 @@ public interface Option<T> extends ReadOnlyCollection<T> {
         }
 
         @Override
-        public @NonNull Iterator<T> iterator() {
+        public Iterator<T> iterator() {
             return Set.of(value).iterator();
         }
 
         @Override
-        public @NonNull Option<T> orElse(@NonNull Option<? extends T> other) {
+        public Option<T> orElse(Option<? extends T> other) {
             return this;
         }
 
@@ -121,13 +120,13 @@ public interface Option<T> extends ReadOnlyCollection<T> {
         }
 
         @Override
-        public @NonNull Iterator<T> iterator() {
+        public Iterator<T> iterator() {
             return Collections.emptyIterator();
         }
 
         @SuppressWarnings("unchecked")
         @Override
-        public @NonNull Option<T> orElse(@NonNull Option<? extends T> other) {
+        public Option<T> orElse(Option<? extends T> other) {
             return (Option<T>) other;
         }
 
@@ -179,7 +178,7 @@ public interface Option<T> extends ReadOnlyCollection<T> {
      * @return this {@code Option} if it is nonempty, otherwise return the alternative.
      */
     @SuppressWarnings("unchecked")
-    @NonNull Option<T> orElse(@NonNull Option<? extends T> other);
+    Option<T> orElse(Option<? extends T> other);
 
     /**
      * Returns the value if this is a {@code Some} or the {@code other} value if this is a {@code None}.

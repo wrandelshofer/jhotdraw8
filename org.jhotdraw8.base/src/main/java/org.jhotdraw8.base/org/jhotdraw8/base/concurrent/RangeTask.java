@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.concurrent;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountedCompleter;
@@ -24,14 +23,14 @@ import java.util.function.BiConsumer;
 public class RangeTask extends CountedCompleter<Void> {
     private final int lo, hi;
     private final int chunkSize;
-    private final @NonNull BiConsumer<Integer, Integer> rangeConsumer;
-    private final @NonNull CompletableFuture<Void> future;
+    private final BiConsumer<Integer, Integer> rangeConsumer;
+    private final CompletableFuture<Void> future;
 
-    public RangeTask(int lo, int hi, int chunkSize, @NonNull BiConsumer<Integer, Integer> rangeConsumer, @NonNull CompletableFuture<Void> future) {
+    public RangeTask(int lo, int hi, int chunkSize, BiConsumer<Integer, Integer> rangeConsumer, CompletableFuture<Void> future) {
         this(null, lo, hi, chunkSize, rangeConsumer, future);
     }
 
-    RangeTask(@Nullable RangeTask parent, int lo, int hi, int chunkSize, @NonNull BiConsumer<Integer, Integer> rangeConsumer, @NonNull CompletableFuture<Void> future) {
+    RangeTask(@Nullable RangeTask parent, int lo, int hi, int chunkSize, BiConsumer<Integer, Integer> rangeConsumer, CompletableFuture<Void> future) {
         super(parent, ((hi - lo - 1) / chunkSize));
         this.chunkSize = chunkSize;
         this.lo = lo;

@@ -6,10 +6,9 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A locator that specifies a point that is relative to the bounds of a figure.
@@ -30,16 +29,16 @@ import org.jhotdraw8.draw.figure.Figure;
  */
 public class BoundsLocator extends AbstractLocator {
 
-    public static final @NonNull BoundsLocator CENTER = new BoundsLocator(0.5, 0.5);
+    public static final BoundsLocator CENTER = new BoundsLocator(0.5, 0.5);
 
-    public static final @NonNull BoundsLocator EAST = new BoundsLocator(1.0, 0.5);
-    public static final @NonNull BoundsLocator NORTH = new BoundsLocator(0.5, 0.0);
-    public static final @NonNull BoundsLocator NORTH_EAST = new BoundsLocator(1.0, 0.0);
-    public static final @NonNull BoundsLocator NORTH_WEST = new BoundsLocator(0.0, 0.0);
-    public static final @NonNull BoundsLocator SOUTH = new BoundsLocator(0.5, 1.0);
-    public static final @NonNull BoundsLocator SOUTH_EAST = new BoundsLocator(1.0, 1.0);
-    public static final @NonNull BoundsLocator SOUTH_WEST = new BoundsLocator(0.0, 1.0);
-    public static final @NonNull BoundsLocator WEST = new BoundsLocator(0.0, 0.5);
+    public static final BoundsLocator EAST = new BoundsLocator(1.0, 0.5);
+    public static final BoundsLocator NORTH = new BoundsLocator(0.5, 0.0);
+    public static final BoundsLocator NORTH_EAST = new BoundsLocator(1.0, 0.0);
+    public static final BoundsLocator NORTH_WEST = new BoundsLocator(0.0, 0.0);
+    public static final BoundsLocator SOUTH = new BoundsLocator(0.5, 1.0);
+    public static final BoundsLocator SOUTH_EAST = new BoundsLocator(1.0, 1.0);
+    public static final BoundsLocator SOUTH_WEST = new BoundsLocator(0.0, 1.0);
+    public static final BoundsLocator WEST = new BoundsLocator(0.0, 0.5);
 
     /**
      * Relative x-coordinate on the bounds of the figure. The value 0 is on the
@@ -78,7 +77,7 @@ public class BoundsLocator extends AbstractLocator {
      * @param bounds current local bounds of a figure
      * @param p      a local coordinate on the figure
      */
-    public BoundsLocator(@NonNull Bounds bounds, @NonNull Point2D p) {
+    public BoundsLocator(Bounds bounds, Point2D p) {
         this(bounds, p.getX(), p.getY());
     }
 
@@ -89,7 +88,7 @@ public class BoundsLocator extends AbstractLocator {
      * @param x      a local coordinate on the figure
      * @param y      a local coordinate on the figre
      */
-    public BoundsLocator(@NonNull Bounds bounds, double x, double y) {
+    public BoundsLocator(Bounds bounds, double x, double y) {
         this(MathUtil.clamp((x - bounds.getMinX()) / bounds.getWidth(), 0, 1),
                 MathUtil.clamp((y - bounds.getMinY()) / bounds.getHeight(), 0, 1));
     }
@@ -103,7 +102,7 @@ public class BoundsLocator extends AbstractLocator {
     }
 
     @Override
-    public @NonNull Point2D locate(@NonNull Figure owner) {
+    public Point2D locate(Figure owner) {
         Bounds bounds = owner.getLayoutBounds();
 
         Point2D location = new Point2D(

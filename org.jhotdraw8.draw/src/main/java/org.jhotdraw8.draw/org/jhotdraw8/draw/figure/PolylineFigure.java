@@ -10,8 +10,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
@@ -27,6 +25,7 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -43,11 +42,11 @@ public class PolylineFigure extends AbstractLeafFigure
         LockableFigure, CompositableFigure, TransformableFigure, ResizableFigure,
         PathIterableFigure {
 
-    public static final @NonNull Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", VectorList.of());
+    public static final Point2DListStyleableKey POINTS = new Point2DListStyleableKey("points", VectorList.of());
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Polyline";
+    public static final String TYPE_SELECTOR = "Polyline";
 
     public PolylineFigure() {
         this(0, 0, 1, 1);
@@ -64,7 +63,7 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new PolylineOutlineHandle(this, POINTS, false));
         } else if (handleType == HandleType.MOVE) {
@@ -83,14 +82,14 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Polyline n = new Polyline();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         // XXX should be cached
         double minX = Double.POSITIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -106,22 +105,22 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         return FXShapes.fxPointsToAwtPathIterator(getNonNull(POINTS).asList(), false, PathIterator.WIND_NON_ZERO, tx);
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         List<Point2D> newP = getNonNull(POINTS).toMutable();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, FXTransforms.transform(transform, newP.get(i)));
@@ -130,7 +129,7 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D t) {
+    public void translateInLocal(CssPoint2D t) {
         List<Point2D> newP = getNonNull(POINTS).toMutable();
         for (int i = 0, n = newP.size(); i < n; i++) {
             newP.set(i, newP.get(i).add(t.getConvertedValue()));
@@ -140,7 +139,7 @@ public class PolylineFigure extends AbstractLeafFigure
 
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Polyline lineNode = (Polyline) node;
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
@@ -158,7 +157,7 @@ public class PolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    public static double @NonNull [] toPointArray(@NonNull Figure f, @NonNull NonNullMapAccessor<? extends ImmutableList<Point2D>> key) {
+    public static double[] toPointArray(Figure f, NonNullMapAccessor<? extends ImmutableList<Point2D>> key) {
         ImmutableList<Point2D> points = f.getNonNull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {
@@ -170,7 +169,7 @@ public class PolylineFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         reshapeInLocal(FXTransforms.createReshapeTransform(getLayoutBounds(), x.getConvertedValue(), y.getConvertedValue(), width.getConvertedValue(), height.getConvertedValue()));
 
     }

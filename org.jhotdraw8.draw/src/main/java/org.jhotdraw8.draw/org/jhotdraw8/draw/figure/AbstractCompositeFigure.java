@@ -8,12 +8,11 @@ import javafx.collections.ObservableList;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxbase.tree.ChildList;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
@@ -24,13 +23,13 @@ import static java.lang.Math.min;
  * @author Werner Randelshofer
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
-    private final @NonNull ChildList<Figure> children = new ChildList<>(this);
+    private final ChildList<Figure> children = new ChildList<>(this);
 
     public AbstractCompositeFigure() {
     }
 
     @Override
-    public @NonNull ObservableList<Figure> getChildren() {
+    public ObservableList<Figure> getChildren() {
         return children;
     }
 
@@ -40,7 +39,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -57,7 +56,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         ObservableList<Figure> children = getChildren();
         if (children.isEmpty()) {
             return new BoundingBox(0, 0, 0, 0);
@@ -78,12 +77,12 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
     @Override
-    public @NonNull Bounds getLayoutBoundsInParent() {
+    public Bounds getLayoutBoundsInParent() {
         double minX = Double.POSITIVE_INFINITY;
         double maxX = Double.NEGATIVE_INFINITY;
         double minY = Double.POSITIVE_INFINITY;
@@ -102,7 +101,7 @@ public abstract class AbstractCompositeFigure extends AbstractFigure {
     }
 
     @Override
-    public void firePropertyChangeEvent(@NonNull FigurePropertyChangeEvent event) {
+    public void firePropertyChangeEvent(FigurePropertyChangeEvent event) {
         final Figure source = event.getSource();
         if (source.getParent() == this) {
             children.fireItemUpdated(children.indexOf(source));

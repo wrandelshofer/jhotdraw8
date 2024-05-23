@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.collection.util;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.lang.reflect.Array;
 import java.util.Arrays;
@@ -34,7 +33,7 @@ public class ListHelper {
      * @param <T>    the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyAddAll(@NonNull T @NonNull [] src, int index, @NonNull T @NonNull [] values) {
+    public static <T> T[] copyAddAll(T[] src, int index, T[] values) {
         final T[] dst = copyComponentAdd(src, index, values.length);
         System.arraycopy(values, 0, dst, index, values.length);
         return dst;
@@ -51,7 +50,7 @@ public class ListHelper {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyComponentAdd(@NonNull T @NonNull [] src, int index, int numComponents) {
+    public static <T> T[] copyComponentAdd(T[] src, int index, int numComponents) {
         if (index == src.length) {
             return Arrays.copyOf(src, src.length + numComponents);
         }
@@ -70,7 +69,7 @@ public class ListHelper {
      * @param <T>           the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copyComponentRemove(@NonNull T @NonNull [] src, int index, int numComponents) {
+    public static <T> T[] copyComponentRemove(T[] src, int index, int numComponents) {
         if (index == src.length - numComponents) {
             return Arrays.copyOf(src, src.length - numComponents);
         }
@@ -89,7 +88,7 @@ public class ListHelper {
      * @param <T>   the array type
      * @return a new array
      */
-    public static <T> @NonNull T @NonNull [] copySet(@NonNull T @NonNull [] src, int index, T value) {
+    public static <T> T[] copySet(T[] src, int index, T value) {
         final T[] dst = Arrays.copyOf(src, src.length);
         dst[index] = value;
         return dst;
@@ -103,7 +102,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static Object @NonNull [] grow(final int targetCapacity, final int itemSize, @NonNull final Object @NonNull [] items) {
+    public static Object[] grow(final int targetCapacity, final int itemSize, final Object[] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -119,7 +118,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static double @NonNull [] grow(final int targetCapacity, final int itemSize, final double @NonNull [] items) {
+    public static double[] grow(final int targetCapacity, final int itemSize, final double[] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -135,7 +134,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static byte @NonNull [] grow(final int targetCapacity, final int itemSize, final byte @NonNull [] items) {
+    public static byte[] grow(final int targetCapacity, final int itemSize, final byte[] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -151,7 +150,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static short @NonNull [] grow(final int targetCapacity, final int itemSize, final short @NonNull [] items) {
+    public static short[] grow(final int targetCapacity, final int itemSize, final short[] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -167,7 +166,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static int @NonNull [] grow(final int targetCapacity, final int itemSize, final int @NonNull [] items) {
+    public static int[] grow(final int targetCapacity, final int itemSize, final int[] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -183,7 +182,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static long @NonNull [] grow(final int targetCapacity, final int itemSize, final long @NonNull [] items) {
+    public static long[] grow(final int targetCapacity, final int itemSize, final long[] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -199,7 +198,7 @@ public class ListHelper {
      * @param items          the items array
      * @return a new item array of larger size or the same if no resizing is necessary
      */
-    public static char @NonNull [] grow(final int targetCapacity, final int itemSize, final char @NonNull [] items) {
+    public static char[] grow(final int targetCapacity, final int itemSize, final char[] items) {
         if (targetCapacity * itemSize <= items.length) {
             return items;
         }
@@ -216,7 +215,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static Object @NonNull [] trimToSize(final int size, final int itemSize, @NonNull final Object @NonNull [] items) {
+    public static Object[] trimToSize(final int size, final int itemSize, final Object[] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;
@@ -232,7 +231,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static int @NonNull [] trimToSize(final int size, final int itemSize, final int @NonNull [] items) {
+    public static int[] trimToSize(final int size, final int itemSize, final int[] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;
@@ -248,7 +247,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static long @NonNull [] trimToSize(final int size, final int itemSize, final long @NonNull [] items) {
+    public static long[] trimToSize(final int size, final int itemSize, final long[] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;
@@ -264,7 +263,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static double @NonNull [] trimToSize(final int size, final int itemSize, final double @NonNull [] items) {
+    public static double[] trimToSize(final int size, final int itemSize, final double[] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;
@@ -280,7 +279,7 @@ public class ListHelper {
      * @param items    the items array
      * @return a new item array of smaller size or the same if no resizing is necessary
      */
-    public static byte @NonNull [] trimToSize(final int size, final int itemSize, final byte @NonNull [] items) {
+    public static byte[] trimToSize(final int size, final int itemSize, final byte[] items) {
         int newLength = size * itemSize;
         if (items.length == newLength) {
             return items;

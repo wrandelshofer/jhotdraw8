@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.icollection.impl.champmap;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.ToIntFunction;
@@ -37,7 +36,7 @@ public abstract class Node<K, V> {
      * We can not use {@code null}, because we allow storing null-keys and
      * null-values in the trie.
      */
-    public static final @NonNull Object NO_DATA = new IdentityObject();
+    public static final Object NO_DATA = new IdentityObject();
 
     static final int MAX_DEPTH = (HASH_CODE_LENGTH + BIT_PARTITION_SIZE - 1) / BIT_PARTITION_SIZE + 1;
     static final int ENTRY_LENGTH = 2;
@@ -81,7 +80,7 @@ public abstract class Node<K, V> {
         return (keyHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    @NonNull Node<K, V> mergeTwoDataEntriesIntoNode(IdentityObject mutator,
+    Node<K, V> mergeTwoDataEntriesIntoNode(IdentityObject mutator,
                                                     final K k0, final V v0, final int keyHash0,
                                                     final K k1, final V v1, final int keyHash1,
                                                     final int shift) {
@@ -145,7 +144,7 @@ public abstract class Node<K, V> {
      * @param other the other trie
      * @return true if equivalent
      */
-    abstract boolean equivalent(final @NonNull Object other);
+    abstract boolean equivalent(final Object other);
 
     /**
      * Finds a value by a key.
@@ -187,7 +186,7 @@ public abstract class Node<K, V> {
                                final int keyHash, final int shift, final ChangeEvent<V> details);
 
     abstract Node<K, V> put(final @Nullable IdentityObject mutator, final K key, final V val,
-                            final int keyHash, final int shift, final ChangeEvent<V> details, @NonNull ToIntFunction<K> hashFunction);
+                            final int keyHash, final int shift, final ChangeEvent<V> details, ToIntFunction<K> hashFunction);
 
 
 }

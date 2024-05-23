@@ -13,13 +13,12 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
@@ -29,9 +28,9 @@ import org.jhotdraw8.geom.FXTransforms;
  */
 public class BoundsInLocalOutlineHandle extends AbstractHandle {
 
-    private final @NonNull Group node;
-    private final @NonNull Polygon poly1;
-    private final @NonNull Polygon poly2;
+    private final Group node;
+    private final Polygon poly1;
+    private final Polygon poly2;
     private final double[] points;
 
     public BoundsInLocalOutlineHandle(Figure figure) {
@@ -59,7 +58,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         poly1.setStroke(Color.WHITE);
         poly2.setStroke(Paintable.getPaint(color));
@@ -75,7 +74,7 @@ public class BoundsInLocalOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         t = FXTransforms.concat(Transform.translate(0.5, 0.5), t);

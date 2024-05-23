@@ -15,7 +15,6 @@ import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.prefs.Preferences;
@@ -28,8 +27,8 @@ import java.util.prefs.Preferences;
  * @author Werner Randelshofer
  */
 public class PreferencesUtil {
-    private static final @NonNull ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();
-    private static final @NonNull ConcurrentHashMap<Package, Preferences> userNodes = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();
+    private static final ConcurrentHashMap<Package, Preferences> userNodes = new ConcurrentHashMap<>();
 
     /**
      * Gets the system node for the package of the class if permitted, gets a
@@ -38,7 +37,7 @@ public class PreferencesUtil {
      * @param c The class
      * @return system node or a proxy.
      */
-    public static Preferences systemNodeForPackage(@NonNull Class<?> c) {
+    public static Preferences systemNodeForPackage(Class<?> c) {
         return systemNodes.computeIfAbsent(c.getPackage(), pckg -> {
             try {
                 return Preferences.systemNodeForPackage(c);
@@ -55,7 +54,7 @@ public class PreferencesUtil {
      * @param c The class
      * @return user node or a proxy.
      */
-    public static Preferences userNodeForPackage(@NonNull Class<?> c) {
+    public static Preferences userNodeForPackage(Class<?> c) {
         return userNodes.computeIfAbsent(c.getPackage(), pckg -> {
             try {
                 return Preferences.userNodeForPackage(c);
@@ -84,7 +83,7 @@ public class PreferencesUtil {
      * @param name  Base name of the preference.
      * @param stage The window for which to track preferences.
      */
-    public static void installStagePrefsHandler(final @NonNull Preferences prefs, final String name, @NonNull Stage stage) {
+    public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage) {
         installStagePrefsHandler(prefs, name, stage, new Dimension2D(400, 300));
     }
 
@@ -100,7 +99,7 @@ public class PreferencesUtil {
      * @param defaultSize This size is used when no preferences are stored yet for
      *                    this window.
      */
-    public static void installStagePrefsHandler(final @NonNull Preferences prefs, final String name, @NonNull Stage stage, @NonNull Dimension2D defaultSize) {
+    public static void installStagePrefsHandler(final Preferences prefs, final String name, Stage stage, Dimension2D defaultSize) {
         double prefWidth = prefs.getDouble(name + ".width", defaultSize.getWidth());
         double prefHeight = prefs.getDouble(name + ".height", defaultSize.getHeight());
         Rectangle2D stageBounds = new Rectangle2D(0, 0, prefWidth, prefHeight);
@@ -127,7 +126,7 @@ public class PreferencesUtil {
      * @param splitPane          splitPane to which the node is added or removed
      * @param side               on which side of the split pane the element should be added
      */
-    public static void installVisibilityPrefsHandlers(@NonNull Preferences prefs, @NonNull Node node, @NonNull BooleanProperty visibilityProperty, @NonNull SplitPane splitPane, Side side) {
+    public static void installVisibilityPrefsHandlers(Preferences prefs, Node node, BooleanProperty visibilityProperty, SplitPane splitPane, Side side) {
         ChangeListener<? super Number> positionListener = (o, oldValue, newValue) -> prefs.putDouble(visibilityProperty.getName() + ".dividerPosition", newValue.doubleValue());
 
         ChangeListener<Boolean> visibilityListener = (o, oldValue, newValue) -> {
@@ -175,7 +174,7 @@ public class PreferencesUtil {
         visibilityProperty.set(prefs.getBoolean(visibilityProperty.getName(), true));
     }
 
-    public static void installBooleanPropertyHandler(final @NonNull Preferences prefs, final String name, @NonNull BooleanProperty property) {
+    public static void installBooleanPropertyHandler(final Preferences prefs, final String name, BooleanProperty property) {
         boolean prefValue = prefs.getBoolean(name, true);
         property.setValue(prefValue);
         property.addListener((o, oldValue, newValue) -> prefs.putBoolean(name, newValue));

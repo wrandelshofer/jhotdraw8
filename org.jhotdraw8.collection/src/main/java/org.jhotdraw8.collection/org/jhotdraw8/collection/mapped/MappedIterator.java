@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.collection.mapped;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Iterator;
 import java.util.function.Function;
@@ -20,11 +19,11 @@ import java.util.function.Function;
  * @author Werner Randelshofer
  */
 public class MappedIterator<E, F> implements Iterator<E> {
-    private final @NonNull Iterator<F> i;
+    private final Iterator<F> i;
 
-    private final @NonNull Function<F, E> mappingFunction;
+    private final Function<F, E> mappingFunction;
 
-    public MappedIterator(@NonNull Iterator<F> i, @NonNull Function<F, E> mappingFunction) {
+    public MappedIterator(Iterator<F> i, Function<F, E> mappingFunction) {
         this.i = i;
         this.mappingFunction = mappingFunction;
     }

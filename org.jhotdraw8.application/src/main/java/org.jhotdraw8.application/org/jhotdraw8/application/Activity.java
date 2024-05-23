@@ -10,11 +10,10 @@ import javafx.beans.property.ReadOnlyMapProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.fxbase.beans.PropertyBean;
 import org.jhotdraw8.fxbase.control.Disableable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents an activity that the user performs with an {@link Application}.
@@ -73,9 +72,9 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the activities
      */
-    @NonNull ReadOnlyMapProperty<String, Action> actionsProperty();
+    ReadOnlyMapProperty<String, Action> actionsProperty();
 
-    default @NonNull ObservableMap<String, Action> getActions() {
+    default ObservableMap<String, Action> getActions() {
         return actionsProperty().get();
     }
 
@@ -89,7 +88,7 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the property
      */
-    @NonNull ObjectProperty<Application> applicationProperty();
+    ObjectProperty<Application> applicationProperty();
 
     /**
      * Used by the application to display unique titles if multiple
@@ -97,15 +96,15 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the property
      */
-    @NonNull IntegerProperty disambiguationProperty();
+    IntegerProperty disambiguationProperty();
 
 
     // getter and setter methods for properties
-    default void setApplication(@NonNull Application application) {
+    default void setApplication(Application application) {
         applicationProperty().set(application);
     }
 
-    default @NonNull Application getApplication() {
+    default Application getApplication() {
         Application application = applicationProperty().get();
         if (application == null) {
             throw new NullPointerException(
@@ -178,6 +177,6 @@ public interface Activity extends Disableable, PropertyBean {
      *
      * @return the title of the activity
      */
-    @NonNull StringProperty titleProperty();
+    StringProperty titleProperty();
 
 }

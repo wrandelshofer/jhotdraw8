@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.junit.jupiter.api.DynamicTest;
@@ -23,7 +22,7 @@ public class Point2DCssConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverter.
      */
-    public static void doTestFromString(CssPoint2D expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssPoint2D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         Point2DCssConverter instance = new Point2DCssConverter(false);
@@ -43,13 +42,13 @@ public class Point2DCssConverterTest {
     /**
      * Test of fromString and toString methods, of class CssPoint2DConverter.
      */
-    public static void doTest(CssPoint2D value, @NonNull String str) throws Exception {
+    public static void doTest(CssPoint2D value, String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(new CssPoint2D(40, 40, "cm"), "40cm 40cm"))
         );

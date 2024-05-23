@@ -7,8 +7,7 @@ package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -36,7 +35,7 @@ public class PaintCssConverterTest {
     /**
      * Test of fromString method, of class CssPaintConverter.
      */
-    public static void testFromString(@Nullable Paintable expected, @NonNull String string) throws Exception {
+    public static void testFromString(@Nullable Paintable expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         PaintCssConverter instance = new PaintCssConverter(true);
@@ -60,7 +59,7 @@ public class PaintCssConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFromString(null, "none")),
                 dynamicTest("2", () -> testFromString(new CssColor("white", Color.WHITE), "white")),

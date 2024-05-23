@@ -10,11 +10,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 /**
  * LineConnectionWithMarkersFigure.
@@ -29,13 +28,13 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "LineConnectionWithMarkers";
+    public static final String TYPE_SELECTOR = "LineConnectionWithMarkers";
 
     public LineConnectionWithMarkersFigure() {
         this(0, 0, 1, 1);
     }
 
-    public LineConnectionWithMarkersFigure(@NonNull Point2D start, @NonNull Point2D end) {
+    public LineConnectionWithMarkersFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -45,24 +44,24 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    protected void updateEndMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateEndMarkerNode(RenderContext ctx, Path node) {
         super.updateEndMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }
 
     @Override
-    protected void updateLineNode(@NonNull RenderContext ctx, @NonNull Line node) {
+    protected void updateLineNode(RenderContext ctx, Line node) {
         super.updateLineNode(ctx, node);
         applyStrokableFigureProperties(ctx, node);
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         super.updateNode(ctx, node);
 
         applyHideableFigureProperties(ctx, node);
@@ -71,7 +70,7 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    protected void updateStartMarkerNode(@NonNull RenderContext ctx, @NonNull Path node) {
+    protected void updateStartMarkerNode(RenderContext ctx, Path node) {
         super.updateStartMarkerNode(ctx, node);
         applyMarkerFillableFigureProperties(ctx, node);
     }
@@ -97,12 +96,12 @@ public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnect
     }
 
     @Override
-    public double getStrokeCutEnd(@NonNull RenderContext ctx) {
+    public double getStrokeCutEnd(RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutEnd();
     }
 
     @Override
-    public double getStrokeCutStart(@NonNull RenderContext ctx) {
+    public double getStrokeCutStart(RenderContext ctx) {
         return StrokeCuttableFigure.super.getStrokeCutStart();
     }
 

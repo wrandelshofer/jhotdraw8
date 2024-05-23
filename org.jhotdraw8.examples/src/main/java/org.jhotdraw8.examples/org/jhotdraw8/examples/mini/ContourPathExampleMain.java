@@ -26,7 +26,6 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.shape.Polyline;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.contour.ContourBuilder;
@@ -41,20 +40,20 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class ContourPathExampleMain extends Application {
-    private final @NonNull Polyline polyline = new Polyline(
+    private final Polyline polyline = new Polyline(
             110, 200,
             160, 180,
             210, 120,
             260, 180,
             310, 200);
-    private final @NonNull Path offsetPath1 = new Path();
-    private final @NonNull Path offsetPath2 = new Path();
+    private final Path offsetPath1 = new Path();
+    private final Path offsetPath2 = new Path();
     StackPane canvas = new StackPane();
-    private final @NonNull DoubleProperty offset = new SimpleDoubleProperty(0.0);
-    private final @NonNull BooleanProperty closed = new SimpleBooleanProperty();
+    private final DoubleProperty offset = new SimpleDoubleProperty(0.0);
+    private final BooleanProperty closed = new SimpleBooleanProperty();
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         BorderPane borderPane = new BorderPane();
         HBox hbox = new HBox();
         Slider slider = new Slider();
@@ -196,7 +195,7 @@ public class ContourPathExampleMain extends Application {
         }
     }
 
-    private @NonNull PlinePath createPline(Polyline polyline) {
+    private PlinePath createPline(Polyline polyline) {
         PlinePath pap = new PlinePath();
         ObservableList<Double> points = polyline.getPoints();
         for (int i = 0, n = points.size(); i < n; i += 2) {

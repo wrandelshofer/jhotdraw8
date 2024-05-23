@@ -5,10 +5,9 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterator;
 import java.util.function.BiFunction;
@@ -39,12 +38,12 @@ public interface IndexedVertexPathSearchAlgo<C extends Number & Comparable<C>> {
      * @return on success: a back link, otherwise: null
      */
     @Nullable IndexedVertexBackLinkWithCost<C> search(
-            @NonNull Iterable<Integer> startVertices,
-            @NonNull IntPredicate goalPredicate,
-            @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+            Iterable<Integer> startVertices,
+            IntPredicate goalPredicate,
+            Function<Integer, Spliterator.OfInt> nextVerticesFunction,
             int maxDepth,
-            @NonNull C zero,
-            @NonNull C costLimit,
-            @NonNull BiFunction<Integer, Integer, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToIntSet visited);
+            C zero,
+            C costLimit,
+            BiFunction<Integer, Integer, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToIntSet visited);
 }

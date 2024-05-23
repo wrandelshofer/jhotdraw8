@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
@@ -14,6 +12,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 import org.jhotdraw8.icollection.serialization.ListSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -72,7 +71,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     private static final VectorList<?> EMPTY = new VectorList<>();
-    final transient @NonNull BitMappedTrie<E> trie;
+    final transient BitMappedTrie<E> trie;
 
     /**
      * Constructs a new empty list.
@@ -108,7 +107,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
 
-    VectorList(@NonNull BitMappedTrie<E> trie) {
+    VectorList(BitMappedTrie<E> trie) {
         this.trie = trie;
     }
 
@@ -120,7 +119,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
      *
      * @param privateData an privateData data object
      */
-    protected VectorList(@NonNull PrivateData privateData) {
+    protected VectorList(PrivateData privateData) {
         this.trie = privateData.get();
     }
 
@@ -132,12 +131,12 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
      * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull VectorList<E> newInstance(@NonNull PrivateData privateData) {
+    protected VectorList<E> newInstance(PrivateData privateData) {
         return new VectorList<>(privateData);
     }
 
     @SuppressWarnings("unchecked")
-    private @NonNull VectorList<E> newInstance(@NonNull BitMappedTrie<E> trie) {
+    private VectorList<E> newInstance(BitMappedTrie<E> trie) {
         return newInstance(new PrivateData(trie));
     }
 
@@ -182,18 +181,18 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull <T> VectorList<T> empty() {
+    public <T> VectorList<T> empty() {
         return of();
     }
 
     @Override
-    public @NonNull VectorList<E> add(@NonNull E element) {
+    public VectorList<E> add(E element) {
         return newInstance(trie.append(element));
     }
 
 
     @Override
-    public @NonNull VectorList<E> add(int index, @NonNull E element) {
+    public VectorList<E> add(int index, E element) {
         if (index == 0) {
             return newInstance(trie.prepend(element));
         }
@@ -201,7 +200,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull VectorList<E> addAll(@NonNull Iterable<? extends E> c) {
+    public VectorList<E> addAll(Iterable<? extends E> c) {
         Objects.requireNonNull(c, "iterable is null");
         if (isEmpty()) {
             return copyOf(c);
@@ -224,17 +223,17 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull VectorList<E> addFirst(@Nullable E element) {
+    public VectorList<E> addFirst(@Nullable E element) {
         return add(0, element);
     }
 
     @Override
-    public @NonNull VectorList<E> addLast(@Nullable E element) {
+    public VectorList<E> addLast(@Nullable E element) {
         return newInstance(trie.append(element));
     }
 
     @Override
-    public @NonNull VectorList<E> addAll(int index, @NonNull Iterable<? extends E> c) {
+    public VectorList<E> addAll(int index, Iterable<? extends E> c) {
         Objects.requireNonNull(c, "c is null");
         if (index >= 0 && index <= size()) {
             final VectorList<E> begin = readOnlySubList(0, index).addAll(c);
@@ -246,41 +245,41 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+    public ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlyListFacade<>(
                 this::size,
                 index -> get(size() - 1 - index),
                 () -> this);
     }
 
-    public @NonNull VectorList<E> reverse() {
+    public VectorList<E> reverse() {
         return size() < 2 ? this : VectorList.copyOf(readOnlyReversed());
     }
 
     @Override
-    public @NonNull VectorList<E> remove(E element) {
+    public VectorList<E> remove(E element) {
         int index = indexOf(element);
         return index < 0 ? this : removeAt(index);
     }
 
     @Override
-    public @NonNull VectorList<E> removeAt(int index) {
+    public VectorList<E> removeAt(int index) {
         return removeRange(index, index + 1);
     }
 
     @Override
-    public @NonNull VectorList<E> removeFirst() {
+    public VectorList<E> removeFirst() {
         return (VectorList<E>) ImmutableList.super.removeFirst();
     }
 
     @Override
-    public @NonNull VectorList<E> removeLast() {
+    public VectorList<E> removeLast() {
         return (VectorList<E>) ImmutableList.super.removeLast();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull VectorList<E> retainAll(@NonNull Iterable<?> c) {
+    public VectorList<E> retainAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
@@ -308,7 +307,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull VectorList<E> removeRange(int fromIndex, int toIndex) {
+    public VectorList<E> removeRange(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size() + 1);
         var begin = trie.take(fromIndex);
@@ -326,7 +325,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull VectorList<E> removeAll(@NonNull Iterable<?> c) {
+    public VectorList<E> removeAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
@@ -345,7 +344,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
 
     @Override
-    public @NonNull VectorList<E> set(int index, @NonNull E element) {
+    public VectorList<E> set(int index, E element) {
         BitMappedTrie<E> newRoot = trie.update(index, element);
         return newRoot == this.trie ? this : newInstance(newRoot);
     }
@@ -357,7 +356,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull VectorList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public VectorList<E> readOnlySubList(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size() + 1);
         BitMappedTrie<E> newRoot = this.trie;
@@ -403,17 +402,17 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull MutableVectorList<E> toMutable() {
+    public MutableVectorList<E> toMutable() {
         return new MutableVectorList<>(this);
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new VectorList.SerializationProxy<>(this.toMutable());
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return trie.iterator(0, size());
     }
 
@@ -423,7 +422,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return trie.spliterator(0, size(), Spliterator.SIZED | Spliterator.ORDERED | Spliterator.SUBSIZED);
     }
 
@@ -449,13 +448,13 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         @Serial
         private static final long serialVersionUID = 0L;
 
-        protected SerializationProxy(@NonNull List<E> target) {
+        protected SerializationProxy(List<E> target) {
             super(target);
         }
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return VectorList.of().addAll(deserializedElements);
         }
     }

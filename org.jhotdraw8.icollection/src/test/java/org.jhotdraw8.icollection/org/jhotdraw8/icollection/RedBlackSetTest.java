@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 
 import java.util.SequencedSet;
@@ -15,28 +14,28 @@ public class RedBlackSetTest extends AbstractImmutableNavigableSetTest {
 
 
     @Override
-    protected <E> @NonNull RedBlackSet<E> newInstance() {
+    protected <E> RedBlackSet<E> newInstance() {
         return RedBlackSet.of();
     }
 
 
     @Override
-    protected <E> @NonNull SequencedSet<E> toMutableInstance(ImmutableSet<E> m) {
+    protected <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m) {
         return ((RedBlackSet<E>) m).toMutable();
     }
 
     @Override
-    protected <E> @NonNull RedBlackSet<E> toImmutableInstance(Set<E> m) {
+    protected <E> RedBlackSet<E> toImmutableInstance(Set<E> m) {
         return ((MutableRedBlackSet<E>) m).toImmutable();
     }
 
     @Override
-    protected <E> @NonNull RedBlackSet<E> toClonedInstance(ImmutableSet<E> m) {
+    protected <E> RedBlackSet<E> toClonedInstance(ImmutableSet<E> m) {
         return RedBlackSet.copyOf(m.asSet());
     }
 
     @Override
-    protected <E> @NonNull RedBlackSet<E> newInstance(Iterable<E> m) {
+    protected <E> RedBlackSet<E> newInstance(Iterable<E> m) {
         return RedBlackSet.copyOf(m);
     }
 

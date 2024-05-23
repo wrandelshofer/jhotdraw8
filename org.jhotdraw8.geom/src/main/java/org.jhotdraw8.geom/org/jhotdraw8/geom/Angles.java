@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 
@@ -117,7 +116,7 @@ public class Angles {
      * @param y the x value of the vector
      * @return the perpendicular vector
      */
-    public static Point2D.@NonNull Double perp(double x, double y) {
+    public static Point2D.Double perp(double x, double y) {
         return new Point2D.Double(y, -x);
     }
 

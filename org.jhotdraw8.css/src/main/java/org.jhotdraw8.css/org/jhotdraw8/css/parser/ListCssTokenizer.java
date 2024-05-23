@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.css.parser;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.ast.SourceLocator;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,17 +19,17 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_COMMENT;
 import static org.jhotdraw8.css.parser.CssTokenType.TT_S;
 
 public class ListCssTokenizer implements CssTokenizer {
-    private final @NonNull ImmutableList<CssToken> in;
+    private final ImmutableList<CssToken> in;
     private int index = 0;
     private boolean pushBack = true;
     private @Nullable CssToken current;
-    private static final @NonNull CssToken EOF = new CssToken(CssTokenType.TT_EOF);
+    private static final CssToken EOF = new CssToken(CssTokenType.TT_EOF);
 
-    public ListCssTokenizer(@NonNull List<CssToken> in) {
+    public ListCssTokenizer(List<CssToken> in) {
         this(VectorList.copyOf(in));
     }
 
-    public ListCssTokenizer(@NonNull ReadOnlyList<CssToken> in) {
+    public ListCssTokenizer(ReadOnlyList<CssToken> in) {
         this.in = VectorList.copyOf(in);
         current = in.isEmpty() ? EOF : in.get(0);
     }

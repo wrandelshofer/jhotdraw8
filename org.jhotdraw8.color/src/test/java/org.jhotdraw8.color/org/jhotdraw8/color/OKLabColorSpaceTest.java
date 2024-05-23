@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -18,7 +17,7 @@ public class OKLabColorSpaceTest extends AbstractNamedColorSpaceTest {
 
 
     @Override
-    protected @NonNull OKLabColorSpace getInstance() {
+    protected OKLabColorSpace getInstance() {
         return new OKLabColorSpace();
     }
 

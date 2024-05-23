@@ -3,15 +3,19 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Defines an interpreter for CSS stylesheets.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.css {
     requires transitive java.logging;
     requires transitive java.xml;
     requires transitive javafx.graphics;
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;
     requires org.jhotdraw8.icollection;

@@ -8,8 +8,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -66,7 +65,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     // Behaviors
     // ---
     @Override
-    public void setDraggedFigure(Figure anchor, @NonNull DrawingView view) {
+    public void setDraggedFigure(Figure anchor, DrawingView view) {
         this.anchorFigure = anchor;
 
         // Determine which figures can be reshaped together as a group.
@@ -79,13 +78,13 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
         }
     }
 
-    private boolean dependsOn(final @NonNull Figure f, final @NonNull Set<Figure> others) {
+    private boolean dependsOn(final Figure f, final Set<Figure> others) {
         return StreamSupport.stream(new BfsDfsVertexSpliterator<>(Figure::getLayoutSubjects, f, false), false)
                 .anyMatch(fg -> (fg != f) && others.contains(fg) ||
                         (fg.getParent() != null && containsAny(others, fg.getParent().getPath())));
     }
 
-    private <E> boolean containsAny(@NonNull Collection<E> subject, @NonNull Collection<E> c) {
+    private <E> boolean containsAny(Collection<E> subject, Collection<E> c) {
         for (E e : c) {
             if (subject.contains(e)) {
                 return true;
@@ -96,14 +95,14 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
 
 
     @Override
-    public void trackMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void trackMousePressed(MouseEvent event, DrawingView view) {
         stopCompositeEdit(view);
         oldPoint = anchor = view.getConstrainer().constrainPoint(anchorFigure,
                 new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY()))));
     }
 
     @Override
-    public void trackMouseReleased(MouseEvent event, @NonNull DrawingView dv) {
+    public void trackMouseReleased(MouseEvent event, DrawingView dv) {
         dv.recreateHandles();
         stopCompositeEdit(dv);
     }
@@ -114,7 +113,7 @@ public class SimpleDragTracker extends AbstractTracker implements DragTracker {
     }
 
     @Override
-    public void trackMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void trackMouseDragged(MouseEvent event, DrawingView view) {
         startCompositeEdit(view);
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 

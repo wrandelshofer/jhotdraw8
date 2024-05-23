@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.manager;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.function.CssFunction;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
@@ -49,12 +48,12 @@ public interface CssFunctionProcessor<T> {
      * @throws IOException    in case of IO failure
      * @throws ParseException in case of a parsing failure
      */
-    void process(T element, CssTokenizer tt, Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
+    void process(T element, CssTokenizer tt, Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
 
     /**
      * Processes the next token(s).
      */
-    void processToken(@NonNull T element, @NonNull CssTokenizer tt, @NonNull Consumer<CssToken> out, @NonNull Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
+    void processToken(T element, CssTokenizer tt, Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException;
 
 
     /**
@@ -67,7 +66,7 @@ public interface CssFunctionProcessor<T> {
      * @return the processed tokens
      * @throws ParseException in case of a parsing failure
      */
-    default @NonNull ImmutableList<CssToken> process(T element, @NonNull ReadOnlyList<CssToken> in) throws ParseException {
+    default ImmutableList<CssToken> process(T element, ReadOnlyList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {

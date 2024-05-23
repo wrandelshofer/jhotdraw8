@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.css.util;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssParser;
@@ -27,7 +26,7 @@ public class CssUtil {
     /**
      * Returns the selected elements.
      */
-    public static <E> @NonNull Stream<E> select(@NonNull String selector, @NonNull Iterable<E> elements, @NonNull SelectorModel<E> model, boolean parallel) throws ParseException {
+    public static <E> Stream<E> select(String selector, Iterable<E> elements, SelectorModel<E> model, boolean parallel) throws ParseException {
         CssParser parser = new CssParser();
         Selector s = parser.parseSelector(selector);
         return StreamSupport.stream(elements.spliterator(), parallel)

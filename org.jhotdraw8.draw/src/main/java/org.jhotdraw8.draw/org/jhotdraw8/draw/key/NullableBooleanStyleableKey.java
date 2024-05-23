@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.BooleanCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * NonNullBooleanStyleableKey.
@@ -26,7 +25,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *
      * @param name The name of the key.
      */
-    public NullableBooleanStyleableKey(@NonNull String name) {
+    public NullableBooleanStyleableKey(String name) {
         this(name, null);
     }
 
@@ -39,7 +38,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableBooleanStyleableKey(@NonNull String key, Boolean defaultValue) {
+    public NullableBooleanStyleableKey(String key, Boolean defaultValue) {
         this(null, key, defaultValue);
     }
 
@@ -51,14 +50,14 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableBooleanStyleableKey(@Nullable String namespace, @NonNull String key, Boolean defaultValue) {
+    public NullableBooleanStyleableKey(@Nullable String namespace, String key, Boolean defaultValue) {
         super(namespace, key, Boolean.class, true, defaultValue);
     }
 
     private Converter<Boolean> converter;
 
     @Override
-    public @NonNull Converter<Boolean> getCssConverter() {
+    public Converter<Boolean> getCssConverter() {
         if (converter == null) {
             converter = new BooleanCssConverter(isNullable());
         }

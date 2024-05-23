@@ -5,12 +5,11 @@
 package org.jhotdraw8.draw.inspector;
 
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
@@ -22,7 +21,7 @@ import javax.swing.event.UndoableEditEvent;
 public abstract class AbstractDrawingViewInspector extends AbstractInspector<DrawingView> {
 
 
-    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
+    protected final UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
 
     {
         subject.addListener(this::onDrawingViewChanged);
@@ -31,7 +30,7 @@ public abstract class AbstractDrawingViewInspector extends AbstractInspector<Dra
     public AbstractDrawingViewInspector() {
     }
 
-    private void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+    private void forwardUndoableEdit(UndoableEditEvent event) {
         final DrawingView s = getSubject();
         final DrawingEditor editor = s == null ? null : s.getEditor();
         if (editor != null) {

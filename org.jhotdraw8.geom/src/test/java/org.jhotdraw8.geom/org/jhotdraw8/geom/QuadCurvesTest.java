@@ -1,6 +1,5 @@
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.shape.SimplePathMetrics;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class QuadCurvesTest {
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsShouldComputeArcLength() {
+    public List<DynamicTest> dynamicTestsShouldComputeArcLength() {
         return Arrays.asList(
                 dynamicTest("nice-curve", () -> shouldComputeArcLength(10, 10, 100, 10, 100, 200, 233.02908392127134)),
                 dynamicTest("colinear", () -> shouldComputeArcLength(110, 50, 180, 50, 220, 50, 220 - 110))

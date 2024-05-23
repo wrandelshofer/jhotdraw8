@@ -17,8 +17,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
@@ -27,6 +25,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Handle for moving all selected figures.
@@ -37,9 +36,9 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
 
     private static final @Nullable Background REGION_BACKGROUND = new Background(new BackgroundFill(Color.BLUE, null, null));
     private static final @Nullable Border REGION_BORDER = new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, null, null));
-    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
     private @Nullable Point2D locationInDrawing;
-    private final @NonNull Region node;
+    private final Region node;
     private Point2D oldPoint;
     private @Nullable Point2D pickLocation;
     private final double relativeX;
@@ -71,7 +70,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         return Cursor.OPEN_HAND;
     }
 
-    private @Nullable Point2D getLocation(@NonNull DrawingView dv) {
+    private @Nullable Point2D getLocation(DrawingView dv) {
         return locationInDrawing == null ? null : dv.worldToView(locationInDrawing);
     }
 
@@ -80,12 +79,12 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public @NonNull Region getNode(@NonNull DrawingView view) {
+    public Region getNode(DrawingView view) {
         return node;
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         Point2D newPoint = view.viewToWorld(new Point2D(event.getX(), event.getY()));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -125,14 +124,14 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         oldPoint = view.getConstrainer().constrainPoint(getOwner(),
                 new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())))).getConvertedValue();
 
     }
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         // FIXME fireDrawingModelEvent undoable edit
     }
 
@@ -141,7 +140,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         return true;
     }
 
-    private void updateLocation(@NonNull DrawingView dv) {
+    private void updateLocation(DrawingView dv) {
         Bounds b = null;
         for (Figure f : dv.getSelectedFigures()) {
             Transform l2w = f.getLocalToWorld();
@@ -156,7 +155,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         updateLocation(view);
         Point2D p = getLocation(view);
         //Point2D p = unconstrainedPoint!=null?unconstrainedPoint:f.get(pointKey);
@@ -171,19 +170,19 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
         }
     }
 
-    public static @NonNull MultipleSelectionMoveHandle northEast() {
+    public static MultipleSelectionMoveHandle northEast() {
         return new MultipleSelectionMoveHandle(1.0, 0.0);
     }
 
-    public static @NonNull MultipleSelectionMoveHandle northWest() {
+    public static MultipleSelectionMoveHandle northWest() {
         return new MultipleSelectionMoveHandle(0.0, 0.0);
     }
 
-    public static @NonNull MultipleSelectionMoveHandle southEast() {
+    public static MultipleSelectionMoveHandle southEast() {
         return new MultipleSelectionMoveHandle(1.0, 1.0);
     }
 
-    public static @NonNull MultipleSelectionMoveHandle southWest() {
+    public static MultipleSelectionMoveHandle southWest() {
         return new MultipleSelectionMoveHandle(0.0, 1.0);
     }
 }

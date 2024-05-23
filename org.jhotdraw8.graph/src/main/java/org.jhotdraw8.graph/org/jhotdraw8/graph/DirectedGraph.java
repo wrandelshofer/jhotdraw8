@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.iterator.BfsDfsVertexSpliterator;
 import org.jhotdraw8.icollection.facade.ListFacade;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,7 +34,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param v a vertex
      * @return the arrow data or null
      */
-    default @Nullable A findArrow(@NonNull V u, @NonNull V v) {
+    default @Nullable A findArrow(V u, V v) {
         int index = findIndexOfNext(u, v);
         return index < 0 ? null : getNextArrow(u, index);
     }
@@ -48,7 +47,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param u a vertex
      * @return index of vertex {@code u} or a value {@literal < 0}
      */
-    default int findIndexOfNext(@NonNull V v, @NonNull V u) {
+    default int findIndexOfNext(V v, V u) {
         for (int i = 0, n = getNextCount(v); i < n; i++) {
             if (u.equals(getNext(v, i))) {
                 return i;
@@ -63,7 +62,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param v a vertex
      * @return a collection view on the direct successor vertices of vertex
      */
-    default @NonNull Collection<V> getNextVertices(@NonNull V v) {
+    default Collection<V> getNextVertices(V v) {
         return new ListFacade<>(() -> this.getNextCount(v), i -> getNext(v, i));
     }
 
@@ -75,7 +74,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param i the index into the list of outgoing arrows
      * @return the arc data
      */
-    default @NonNull Arc<V, A> getNextArc(@NonNull V v, int i) {
+    default Arc<V, A> getNextArc(V v, int i) {
         return new Arc<>(v, getNext(v, i), getNextArrow(v, i));
     }
 
@@ -85,7 +84,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param v a vertex
      * @return a collection view on the arrow data
      */
-    default @NonNull Collection<A> getNextArrows(@NonNull V v) {
+    default Collection<A> getNextArrows(V v) {
         return new ListFacade<>(() -> this.getNextCount(v), i -> getNextArrow(v, i));
     }
 
@@ -95,7 +94,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param v a vertex
      * @return a collection view on the arc data
      */
-    default @NonNull Collection<Arc<V, A>> getNextArcs(@NonNull V v) {
+    default Collection<Arc<V, A>> getNextArcs(V v) {
         return new ListFacade<>(() -> this.getNextCount(v), i -> getNextArc(v, i));
     }
 
@@ -122,7 +121,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param v2 vertex 2
      * @return a collection of all arrows
      */
-    default @NonNull Collection<A> getArrows(@NonNull V v1, V v2) {
+    default Collection<A> getArrows(V v1, V v2) {
         int n = getNextCount(v1);
         List<A> arrows = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
@@ -138,7 +137,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      *
      * @return a collection of all arrows
      */
-    default @NonNull Collection<A> getArrows() {
+    default Collection<A> getArrows() {
         ArrayList<A> arrows = new ArrayList<>(getArrowCount());
         for (V v1 : getVertices()) {
             int n = getNextCount(v1);
@@ -157,7 +156,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param u a vertex
      * @return true if {@code u} is next of {@code v}
      */
-    default boolean isNext(@NonNull V v, @NonNull V u) {
+    default boolean isNext(V v, V u) {
         return findIndexOfNext(v, u) != -1;
     }
 
@@ -168,7 +167,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @return vertex data
      * @throws IndexOutOfBoundsException if the index is out of bounds
      */
-    @NonNull V getVertex(int index);
+    V getVertex(int index);
 
     /**
      * Searches for vertices starting at the provided vertex.
@@ -177,8 +176,8 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param dfs   whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final boolean dfs) {
-        final @NonNull Set<V> visited = new HashSet<>();
+    default Enumerator<V> searchNextVertices(final V start, final boolean dfs) {
+        final Set<V> visited = new HashSet<>();
         return searchNextVertices(start, visited::add, dfs);
     }
 
@@ -190,7 +189,7 @@ public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
      * @param dfs     whether to search depth-first instead of breadth-first
      * @return breadth first search
      */
-    default @NonNull Enumerator<V> searchNextVertices(final @NonNull V start, final @NonNull AddToSet<V> visited, final boolean dfs) {
+    default Enumerator<V> searchNextVertices(final V start, final AddToSet<V> visited, final boolean dfs) {
         return new BfsDfsVertexSpliterator<>(this::getNextVertices, start, visited, dfs);
     }
 }

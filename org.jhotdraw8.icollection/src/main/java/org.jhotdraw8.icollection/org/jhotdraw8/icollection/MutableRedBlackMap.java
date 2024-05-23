@@ -1,7 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.CollectionFacade;
 import org.jhotdraw8.icollection.facade.NavigableSetFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
@@ -16,6 +14,7 @@ import org.jhotdraw8.icollection.navigable.SubsetNavigableMapView;
 import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
 import org.jhotdraw8.icollection.serialization.SortedMapSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.ObjectStreamException;
 import java.io.Serial;
@@ -37,9 +36,9 @@ import java.util.Spliterators;
 public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadOnlyNavigableMap<K, V>, Cloneable, Serializable {
     @Serial
     private final static long serialVersionUID = 0L;
-    transient @NonNull RedBlackTree<K, V> root;
+    transient RedBlackTree<K, V> root;
     @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
-    final @NonNull Comparator<? super K> comparator;
+    final Comparator<? super K> comparator;
     transient private int modCount;
 
     @SuppressWarnings("unchecked")
@@ -85,7 +84,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
      * @param m a map
      */
     @SuppressWarnings("this-escape")
-    public MutableRedBlackMap(@NonNull Map<? extends K, ? extends V> m) {
+    public MutableRedBlackMap(Map<? extends K, ? extends V> m) {
         this.comparator = NaturalComparator.instance();
         if (m instanceof MutableRedBlackMap<?, ?> r && r.comparator() == null) {
             @SuppressWarnings("unchecked")
@@ -104,7 +103,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
      * @param m a map
      */
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableRedBlackMap(@NonNull SortedMap<? extends K, ? extends V> m) {
+    public MutableRedBlackMap(SortedMap<? extends K, ? extends V> m) {
         this.comparator = m.comparator() == null ? NaturalComparator.instance() : (Comparator<? super K>) m.comparator();
         if (m instanceof MutableRedBlackMap<?, ?> r && r.comparator() == null) {
             MutableRedBlackMap<K, V> that = (MutableRedBlackMap<K, V>) m;
@@ -123,7 +122,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
      * @param m an iterable
      */
     @SuppressWarnings({"unchecked", "this-escape"})
-    public MutableRedBlackMap(@NonNull Iterable<? extends Entry<? extends K, ? extends V>> m) {
+    public MutableRedBlackMap(Iterable<? extends Entry<? extends K, ? extends V>> m) {
         this.comparator = NaturalComparator.instance();
         if (m instanceof RedBlackMap) {
             RedBlackMap<K, V> that = (RedBlackMap<K, V>) m;
@@ -136,7 +135,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         }
     }
 
-    MutableRedBlackMap(@NonNull RedBlackTree<K, V> root, @NonNull Comparator<? super K> comparator) {
+    MutableRedBlackMap(RedBlackTree<K, V> root, Comparator<? super K> comparator) {
         this.root = root;
         this.comparator = comparator;
     }
@@ -182,7 +181,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Override
-    public @NonNull ReadOnlySequencedMap<K, V> readOnlyReversed() {
+    public ReadOnlySequencedMap<K, V> readOnlyReversed() {
         return new ReadOnlySequencedMapFacade<>(
                 this::iterator,
                 this::reverseIterator,
@@ -261,17 +260,17 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Override
-    public @NonNull SortedMap<K, V> subMap(K fromKey, K toKey) {
+    public SortedMap<K, V> subMap(K fromKey, K toKey) {
         return subMap(fromKey, true, toKey, false);
     }
 
     @Override
-    public @NonNull SortedMap<K, V> headMap(K toKey) {
+    public SortedMap<K, V> headMap(K toKey) {
         return headMap(toKey, true);
     }
 
     @Override
-    public @NonNull SortedMap<K, V> tailMap(K fromKey) {
+    public SortedMap<K, V> tailMap(K fromKey) {
         return tailMap(fromKey, true);
     }
 
@@ -372,7 +371,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         return new RedBlackMap<>(root, comparator);
     }
 
-    public @NonNull Iterator<Entry<K, V>> iterator() {
+    public Iterator<Entry<K, V>> iterator() {
         return new FailFastIterator<>(
                 new MappedIterator<>(root.iterator(),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
@@ -380,7 +379,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         );
     }
 
-    @NonNull Iterator<Entry<K, V>> reverseIterator() {
+    Iterator<Entry<K, V>> reverseIterator() {
         return new FailFastIterator<>(
                 new MappedIterator<>(root.reverseIterator(),
                         e -> new MutableMapEntry<>(this::iteratorPutIfPresent, e.getKey(), e.getValue())),
@@ -388,7 +387,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         );
     }
 
-    public @NonNull Spliterator<Entry<K, V>> spliterator() {
+    public Spliterator<Entry<K, V>> spliterator() {
         //noinspection MagicConstant
         Spliterator<Entry<K, V>> spliterator = Spliterators.spliterator(root.iterator(), size(),
                 Spliterator.NONNULL | characteristics());
@@ -399,7 +398,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
 
     @Override
-    public @NonNull Set<Entry<K, V>> entrySet() {
+    public Set<Entry<K, V>> entrySet() {
         return new SetFacade<>(
                 this::iterator,
                 this::spliterator,
@@ -413,7 +412,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
 
     @Override
-    public @NonNull Set<K> keySet() {
+    public Set<K> keySet() {
         return new SetFacade<>(
                 () -> new MappedIterator<>(iterator(), Entry::getKey),
                 () -> new MappedSpliterator<>(spliterator(), Entry::getKey, characteristics(), comparator()),
@@ -425,7 +424,6 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
         );
     }
 
-    @NonNull
     @Override
     public Collection<V> values() {
         return new CollectionFacade<>(
@@ -465,7 +463,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Override
-    public V getOrDefault(@NonNull Object key, V defaultValue) {
+    public V getOrDefault(Object key, V defaultValue) {
         return super.getOrDefault(key, defaultValue);
     }
 
@@ -476,7 +474,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Serial
-    private @NonNull Object writeReplace() throws ObjectStreamException {
+    private Object writeReplace() throws ObjectStreamException {
         return new MutableRedBlackMap.SerializationProxy<>(this);
     }
 
@@ -490,7 +488,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             MutableRedBlackMap<K, V> m = new MutableRedBlackMap<>(deserializedComparator);
             m.putAll(deserializedEntries);
             return m;

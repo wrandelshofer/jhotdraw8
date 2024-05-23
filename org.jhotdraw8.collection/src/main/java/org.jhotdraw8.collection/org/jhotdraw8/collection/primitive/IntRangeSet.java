@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Objects;
@@ -32,7 +31,7 @@ public class IntRangeSet extends AbstractReadOnlySet<Integer> {
     }
 
     @Override
-    public @NonNull Iterator<Integer> iterator() {
+    public Iterator<Integer> iterator() {
         return IntStream.range(from, to).iterator();
     }
 

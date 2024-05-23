@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterators;
 import java.util.function.Consumer;
@@ -28,7 +27,7 @@ import java.util.function.Function;
  * @param <E> the element type of the iterator
  */
 public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> {
-    private final @NonNull Function<K, E> mappingFunction;
+    private final Function<K, E> mappingFunction;
     private static final int MAX_DEPTH = 7;
 
     protected int currentValueCursor;
@@ -48,7 +47,7 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
     private K current;
 
     @SuppressWarnings("unchecked")
-    public ChampSpliterator(@NonNull Node<K> rootNode, @Nullable Function<K, E> mappingFunction, long size, int characteristics) {
+    public ChampSpliterator(Node<K> rootNode, @Nullable Function<K, E> mappingFunction, long size, int characteristics) {
         super(size, characteristics);
         this.mappingFunction = mappingFunction == null ? k -> (E) k : mappingFunction;
         if (rootNode.hasNodes()) {
@@ -94,7 +93,7 @@ public class ChampSpliterator<K, E> extends Spliterators.AbstractSpliterator<E> 
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
+    public boolean tryAdvance(Consumer<? super E> action) {
         // For inlining, it is essential that this method has a very small amount of byte code!
         // Specifically, do not inline searchNextValueNode() into this method!
         if (currentValueCursor < currentValueLength || searchNextValueNode()) {

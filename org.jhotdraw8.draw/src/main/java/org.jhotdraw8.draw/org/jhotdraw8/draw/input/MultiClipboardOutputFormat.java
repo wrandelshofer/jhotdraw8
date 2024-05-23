@@ -5,10 +5,9 @@
 package org.jhotdraw8.draw.input;
 
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -27,7 +26,7 @@ public class MultiClipboardOutputFormat implements ClipboardOutputFormat {
 
     @SafeVarargs
     @SuppressWarnings("varargs")
-    public MultiClipboardOutputFormat(@NonNull Supplier<ClipboardOutputFormat>... formatSuppliers) {
+    public MultiClipboardOutputFormat(Supplier<ClipboardOutputFormat>... formatSuppliers) {
         this.formatSuppliers = formatSuppliers;
     }
 

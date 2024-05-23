@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.*;
 import java.awt.geom.PathIterator;
@@ -115,11 +114,11 @@ public class Points {
      * @param y        y-coordinate of the point
      * @return the distance
      */
-    public static double distanceFromShape(@NonNull Shape awtShape, double x, double y) {
+    public static double distanceFromShape(Shape awtShape, double x, double y) {
         return Math.sqrt(squaredDistanceFromShape(awtShape, x, y));
     }
 
-    public static double squaredDistanceFromShape(@NonNull Shape awtShape, double x, double y) {
+    public static double squaredDistanceFromShape(Shape awtShape, double x, double y) {
         if (awtShape.contains(x, y)) {
             return 0;
         }

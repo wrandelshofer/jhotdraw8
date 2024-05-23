@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Tests {@link SimpleMutableDirectedGraph}.
@@ -23,22 +22,22 @@ public class SimpleMutableDirectedGraphTest extends AbstractMutableDirectedGraph
     }
 
     @Override
-    protected @NonNull Integer newVertex(int id) {
+    protected Integer newVertex(int id) {
         return id;
     }
 
     @Override
-    protected @NonNull Character newArrow(@NonNull Integer start, @NonNull Integer end, char id) {
+    protected Character newArrow(Integer start, Integer end, char id) {
         return id;
     }
 
     @Override
-    protected @NonNull char getArrowId(@Nullable Character character) {
+    protected char getArrowId(@Nullable Character character) {
         return character == null ? '\u0000' : character;
     }
 
     @Override
-    protected @NonNull int getVertexId(@NonNull Integer integer) {
+    protected int getVertexId(Integer integer) {
         return integer;
     }
 }

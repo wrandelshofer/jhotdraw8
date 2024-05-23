@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -19,7 +18,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class BezierCurvesTest {
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsCharacterization() {
+    public List<DynamicTest> dynamicTestsCharacterization() {
         return Arrays.asList(
                 dynamicTest("plainCurve", () -> testCurveCharacteristics(new double[]{160, 200, 75, 240, 260, 300, 260, 80},
                         CubicCurveCharacteristics.Characteristics.PLAIN_CURVE)),
@@ -52,7 +51,7 @@ public class BezierCurvesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsInflections() {
+    public List<DynamicTest> dynamicTestsInflections() {
         return Arrays.asList(
                 dynamicTest("1", () -> testInflections(new double[]{135, 25, 25, 135, 215, 75, 215, 240}, new double[]{0.5059963709191709})),
                 dynamicTest("2", () -> testInflections(new double[]{80, 40, 210, 40, 190, 110, 190, 20}, new double[]{0.4746000729159903, 0.8484087766415317,}))
@@ -68,7 +67,7 @@ public class BezierCurvesTest {
      * </dl>
      */
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsInflectionsPaper() {
+    public List<DynamicTest> dynamicTestsInflectionsPaper() {
         return Arrays.asList(
                 dynamicTest("Fig. 3", () -> testInflections(
                         new double[]{16, 467, 185, 95, 673, 545, 810, 17}, new double[]{0.45659003534192677})),
@@ -94,7 +93,7 @@ public class BezierCurvesTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsAlign() {
+    public List<DynamicTest> dynamicTestsAlign() {
         return Arrays.asList(
                 dynamicTest("1", () -> testAlign(new double[]{135, 25, 25, 135, 215, 75, 215, 240},
                         new double[]{0, 0,

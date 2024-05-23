@@ -22,7 +22,6 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.fxbase.tree.PreorderSpliterator;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
@@ -40,43 +39,43 @@ import java.util.List;
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 
     @SuppressWarnings("this-escape")
-    protected final @NonNull ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
-    protected final @NonNull ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
+    protected final ObjectProperty<Application> application = new SimpleObjectProperty<>(this, APPLICATION_PROPERTY);
+    protected final ObservableMap<Key<?>, Object> properties = FXCollections.observableHashMap();
     /**
      * The title of {@link Stage} that contains the activity will be bound to the title of the activity.
      */
     @SuppressWarnings("this-escape")
-    protected final @NonNull StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
+    protected final StringProperty title = new SimpleStringProperty(this, TITLE_PROPERTY,
             ApplicationLabels.getResources().getString("unnamedFile"));
     @SuppressWarnings("this-escape")
-    private final @NonNull IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
-    private final @NonNull ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
+    private final IntegerProperty disambiguation = new SimpleIntegerProperty(this, DISAMBIGUATION_PROPERTY);
+    private final ReadOnlyMapProperty<String, Action> actions = new ReadOnlyMapWrapper<String, Action>(FXCollections.observableMap(new LinkedHashMap<>())).getReadOnlyProperty();
 
 
     public AbstractActivity() {
     }
 
     @Override
-    public @NonNull IntegerProperty disambiguationProperty() {
+    public IntegerProperty disambiguationProperty() {
         return disambiguation;
     }
 
-    protected abstract void initActions(@NonNull ObservableMap<String, Action> actionMap);
+    protected abstract void initActions(ObservableMap<String, Action> actionMap);
 
     protected abstract void initView();
 
     @Override
-    public @NonNull StringProperty titleProperty() {
+    public StringProperty titleProperty() {
         return title;
     }
 
     @Override
-    public @NonNull ObjectProperty<Application> applicationProperty() {
+    public ObjectProperty<Application> applicationProperty() {
         return application;
     }
 
     @Override
-    public @NonNull ObservableMap<Key<?>, Object> getProperties() {
+    public ObservableMap<Key<?>, Object> getProperties() {
         return properties;
     }
 
@@ -131,7 +130,7 @@ public abstract class AbstractActivity extends AbstractDisableable implements Ac
     protected abstract void initTitle();
 
     @Override
-    public @NonNull ReadOnlyMapProperty<String, Action> actionsProperty() {
+    public ReadOnlyMapProperty<String, Action> actionsProperty() {
         return actions;
     }
 }

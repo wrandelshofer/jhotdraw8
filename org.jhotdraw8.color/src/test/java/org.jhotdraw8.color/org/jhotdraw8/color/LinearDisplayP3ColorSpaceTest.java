@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Disabled;
 
 @Disabled("TEST RUN NEEDS TOO MUCH TIME")
@@ -13,7 +12,7 @@ import org.junit.jupiter.api.Disabled;
 public class LinearDisplayP3ColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     @Override
-    protected @NonNull NamedColorSpace getInstance() {
+    protected NamedColorSpace getInstance() {
         return new DisplayP3ColorSpace().getLinearColorSpace();
     }
 }

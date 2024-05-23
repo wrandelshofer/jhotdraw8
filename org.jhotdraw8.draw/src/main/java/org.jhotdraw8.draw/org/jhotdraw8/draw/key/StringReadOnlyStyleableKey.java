@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
@@ -19,7 +18,7 @@ import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 
     private static final long serialVersionUID = 1L;
-    private final @NonNull StringCssConverter converter;
+    private final StringCssConverter converter;
 
     /**
      * Creates a new instance with the specified name and with an empty String
@@ -27,7 +26,7 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      *
      * @param name The name of the key.
      */
-    public StringReadOnlyStyleableKey(@NonNull String name) {
+    public StringReadOnlyStyleableKey(String name) {
         this(name, "");
     }
 
@@ -37,7 +36,7 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public StringReadOnlyStyleableKey(@NonNull String name, String defaultValue) {
+    public StringReadOnlyStyleableKey(String name, String defaultValue) {
         this(name, defaultValue, null);
     }
 
@@ -48,13 +47,13 @@ public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> imp
      * @param defaultValue The default value.
      * @param helpText     the help text
      */
-    public StringReadOnlyStyleableKey(@NonNull String name, String defaultValue, String helpText) {
+    public StringReadOnlyStyleableKey(String name, String defaultValue, String helpText) {
         super(null, name, String.class, true, defaultValue);
         converter = new StringCssConverter(false, '\'', helpText);
     }
 
     @Override
-    public @NonNull Converter<String> getCssConverter() {
+    public Converter<String> getCssConverter() {
         return converter;
     }
 }

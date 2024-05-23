@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.draw.model;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Event;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -43,20 +42,20 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         TRANSFORM_CHANGED,
     }
 
-    private final @NonNull Figure figure;
+    private final Figure figure;
     private final Key<?> key;
-    private final @NonNull Object oldValue;
-    private final @NonNull Object newValue;
+    private final Object oldValue;
+    private final Object newValue;
 
-    private final @NonNull Figure parent;
-    private final @NonNull Drawing drawing;
+    private final Figure parent;
+    private final Drawing drawing;
     private final int index;
     private final DrawingModelEvent.EventType eventType;
 
     private final boolean valueWasAdded;
     private final boolean valueWasRemoved;
 
-    private DrawingModelEvent(@NonNull DrawingModel source, EventType eventType, Figure figure, Figure parent, Drawing drawing, int index, Key<?> key, Object oldValue, Object newValue, boolean valueWasAdded, boolean valueWasRemoved) {
+    private DrawingModelEvent(DrawingModel source, EventType eventType, Figure figure, Figure parent, Drawing drawing, int index, Key<?> key, Object oldValue, Object newValue, boolean valueWasAdded, boolean valueWasRemoved) {
         super(source);
         this.figure = figure;
         this.key = key;
@@ -70,19 +69,19 @@ public class DrawingModelEvent extends Event<DrawingModel> {
         this.valueWasRemoved = valueWasRemoved;
     }
 
-    public static @NonNull <T> DrawingModelEvent propertyValueChanged(@NonNull DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
+    public static <T> DrawingModelEvent propertyValueChanged(DrawingModel source, Figure figure, Key<T> key, T oldValue, T newValue, boolean wasAdded, boolean wasRemoved) {
         return new DrawingModelEvent(source, EventType.PROPERTY_VALUE_CHANGED, figure, null, null, -1, key, oldValue, newValue, wasAdded, wasRemoved);
     }
 
-    public static @NonNull <T> DrawingModelEvent transformChanged(@NonNull DrawingModel source, Figure figure) {
+    public static <T> DrawingModelEvent transformChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.TRANSFORM_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
-    public static @NonNull <T> DrawingModelEvent layoutChanged(@NonNull DrawingModel source, Figure figure) {
+    public static <T> DrawingModelEvent layoutChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
-    public static @NonNull <T> DrawingModelEvent styleInvalidated(@NonNull DrawingModel source, Figure figure) {
+    public static <T> DrawingModelEvent styleInvalidated(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
@@ -101,7 +100,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
      * @param <T> the value type
      * @return the key
      */
-    public @NonNull <T> Key<T> getKey() {
+    public <T> Key<T> getKey() {
         @SuppressWarnings("unchecked")
         Key<T> tmp = (Key<T>) key;
         return tmp;
@@ -195,7 +194,7 @@ public class DrawingModelEvent extends Event<DrawingModel> {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "DrawingModelEvent{"
                 + (figure == null ? null : figure.getTypeSelector() + "@" + Integer.toHexString(System.identityHashCode(figure)))
                 + ", key=" + key

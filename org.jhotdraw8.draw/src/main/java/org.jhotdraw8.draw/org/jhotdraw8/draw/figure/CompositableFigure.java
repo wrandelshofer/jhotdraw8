@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.PercentageCssConverter;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.EffectStyleableKey;
@@ -19,7 +18,7 @@ import org.jhotdraw8.draw.render.RenderContext;
  * Usage:
  * <pre>
  * class MyFigureClass implements CompositableFigure {
- *     public void updateNode(@NonNull RenderContext ctx, Node n) {
+ *     public void updateNode(RenderContext ctx, Node n) {
  *         applyCompositableFigureProperties(ctx, n);
  *     }
  * }
@@ -34,14 +33,14 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code SRC_OVER}.
      */
-    @NonNull NonNullEnumStyleableKey<BlendMode> BLEND_MODE = new NonNullEnumStyleableKey<>("blendMode", BlendMode.class, BlendMode.SRC_OVER);
+    NonNullEnumStyleableKey<BlendMode> BLEND_MODE = new NonNullEnumStyleableKey<>("blendMode", BlendMode.class, BlendMode.SRC_OVER);
     /**
      * Specifies an effect applied to the figure. The {@code null} value means
      * that no effect is applied.
      * <p>
      * Default value: {@code null}.
      */
-    @NonNull EffectStyleableKey EFFECT = new EffectStyleableKey("effect", null);
+    EffectStyleableKey EFFECT = new EffectStyleableKey("effect", null);
     /**
      * Specifies the opacity of the figure. A figure with {@code 0} opacity is
      * completely translucent. A figure with {@code 1} opacity is completely
@@ -52,7 +51,7 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code 1}.
      */
-    @NonNull DoubleStyleableKey OPACITY = new DoubleStyleableKey("opacity", 1.0, new PercentageCssConverter(false));
+    DoubleStyleableKey OPACITY = new DoubleStyleableKey("opacity", 1.0, new PercentageCssConverter(false));
 
     /**
      * Updates a figure node with all effect properties defined in this
@@ -66,7 +65,7 @@ public interface CompositableFigure extends Figure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyCompositableFigureProperties(@NonNull RenderContext ctx, @NonNull Node node) {
+    default void applyCompositableFigureProperties(RenderContext ctx, Node node) {
         // Performance: JavaFX performs compositing on a Group node,
         // when blend mode != null, although this should be equivalent to SRC_OVER.
         final BlendMode blendMode = getStyled(BLEND_MODE);

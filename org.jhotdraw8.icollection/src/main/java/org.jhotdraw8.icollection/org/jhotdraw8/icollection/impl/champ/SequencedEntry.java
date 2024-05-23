@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.AbstractMap;
@@ -34,26 +33,24 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
         this.sequenceNumber = sequenceNumber;
     }
 
-    public static <K, V> boolean keyEquals(@NonNull SequencedEntry<K, V> a, @NonNull SequencedEntry<K, V> b) {
+    public static <K, V> boolean keyEquals(SequencedEntry<K, V> a, SequencedEntry<K, V> b) {
         return Objects.equals(a.getKey(), b.getKey());
     }
 
-    public static <V, K> int entryKeyHash(@NonNull SequencedEntry<K, V> a) {
+    public static <V, K> int entryKeyHash(SequencedEntry<K, V> a) {
         return Objects.hashCode(a.getKey());
     }
 
-    public static int keyHash(@NonNull Object a) {
+    public static int keyHash(Object a) {
         return Objects.hashCode(a);
     }
 
-    @NonNull
-    public static <K, V> SequencedEntry<K, V> update(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
+    public static <K, V> SequencedEntry<K, V> update(SequencedEntry<K, V> oldK, SequencedEntry<K, V> newK) {
         return Objects.equals(oldK.getValue(), newK.getValue()) ? oldK :
                 new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.getSequenceNumber());
     }
 
-    @NonNull
-    public static <K, V> SequencedEntry<K, V> updateAndMoveToFirst(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
+    public static <K, V> SequencedEntry<K, V> updateAndMoveToFirst(SequencedEntry<K, V> oldK, SequencedEntry<K, V> newK) {
         return Objects.equals(oldK.getValue(), newK.getValue())
                 && oldK.sequenceNumber == newK.sequenceNumber + 1
                 ? oldK
@@ -61,8 +58,7 @@ public class SequencedEntry<K, V> extends AbstractMap.SimpleImmutableEntry<K, V>
                 ? new SequencedEntry<>(oldK.getKey(), newK.getValue(), oldK.sequenceNumber) : newK;
     }
 
-    @NonNull
-    public static <K, V> SequencedEntry<K, V> updateAndMoveToLast(@NonNull SequencedEntry<K, V> oldK, @NonNull SequencedEntry<K, V> newK) {
+    public static <K, V> SequencedEntry<K, V> updateAndMoveToLast(SequencedEntry<K, V> oldK, SequencedEntry<K, V> newK) {
         return Objects.equals(oldK.getValue(), newK.getValue())
                 && oldK.sequenceNumber == newK.sequenceNumber - 1
                 ? oldK

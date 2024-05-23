@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 
 /**
@@ -24,15 +23,15 @@ import org.jhotdraw8.icollection.impl.IdentityObject;
  */
 class MutableBitmapIndexedNode<K> extends BitmapIndexedNode<K> {
 
-    private final @NonNull IdentityObject ownedBy;
+    private final IdentityObject ownedBy;
 
-    MutableBitmapIndexedNode(@NonNull IdentityObject ownedBy, int nodeMap, int dataMap, @NonNull Object @NonNull [] nodes) {
+    MutableBitmapIndexedNode(IdentityObject ownedBy, int nodeMap, int dataMap, Object[] nodes) {
         super(nodeMap, dataMap, nodes);
         this.ownedBy = ownedBy;
     }
 
     @Override
-    protected @NonNull IdentityObject getOwner() {
+    protected IdentityObject getOwner() {
         return ownedBy;
     }
 }

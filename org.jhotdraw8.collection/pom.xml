@@ -50,14 +50,12 @@
 
   <dependencies>
     <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.annotation</artifactId>
-      <version>${revision}</version>
+      <groupId>org.jspecify</groupId>
+      <artifactId>jspecify</artifactId>
     </dependency>
     <dependency>
         <groupId>ch.randelshofer</groupId>
         <artifactId>org.jhotdraw8.icollection</artifactId>
-        <version>${revision}</version>
     </dependency>
       <dependency>
       <groupId>com.google.guava</groupId>

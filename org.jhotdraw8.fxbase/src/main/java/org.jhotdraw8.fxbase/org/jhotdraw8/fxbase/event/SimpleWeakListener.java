@@ -5,8 +5,7 @@
 package org.jhotdraw8.fxbase.event;
 
 import javafx.beans.WeakListener;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 
 import java.lang.ref.WeakReference;
@@ -22,8 +21,8 @@ import java.util.function.Consumer;
  */
 public final class SimpleWeakListener<E extends EventObject> implements Listener<E>, WeakListener {
 
-    private final @NonNull WeakReference<Listener<E>> ref;
-    private final @NonNull Consumer<Listener<E>> removeListener;
+    private final WeakReference<Listener<E>> ref;
+    private final Consumer<Listener<E>> removeListener;
 
     public SimpleWeakListener(@Nullable Listener<E> listener, Consumer<Listener<E>> removeListener) {
         Objects.requireNonNull(listener, "listener");

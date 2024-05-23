@@ -12,7 +12,6 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
@@ -20,36 +19,36 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyList;
  * Abstract base class for implementations of {@link Dockable}.
  */
 public abstract class AbstractDockable implements Dockable {
-    protected final @NonNull ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
-    protected final @NonNull ObjectProperty<Node> graphic = new SimpleObjectProperty<>(this, GRAPHIC_PROPERTY);
-    protected final @NonNull StringProperty text = new SimpleStringProperty(this, TEXT_PROPERTY);
-    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
+    protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
+    protected final ObjectProperty<Node> graphic = new SimpleObjectProperty<>(this, GRAPHIC_PROPERTY);
+    protected final StringProperty text = new SimpleStringProperty(this, TEXT_PROPERTY);
+    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
 
     public AbstractDockable() {
     }
 
     @Override
-    public @NonNull ObjectProperty<Node> graphicProperty() {
+    public ObjectProperty<Node> graphicProperty() {
         return graphic;
     }
 
     @Override
-    public @NonNull StringProperty textProperty() {
+    public StringProperty textProperty() {
         return text;
     }
 
     @Override
-    public @NonNull BooleanProperty showingProperty() {
+    public BooleanProperty showingProperty() {
         return showing;
     }
 
     @Override
-    public @NonNull ObjectProperty<DockParent> dockParentProperty() {
+    public ObjectProperty<DockParent> dockParentProperty() {
         return dockParent;
     }
 
     @Override
-    public @NonNull ReadOnlyList<DockChild> getDockChildrenReadOnly() {
+    public ReadOnlyList<DockChild> getDockChildrenReadOnly() {
         return VectorList.of();
     }
 

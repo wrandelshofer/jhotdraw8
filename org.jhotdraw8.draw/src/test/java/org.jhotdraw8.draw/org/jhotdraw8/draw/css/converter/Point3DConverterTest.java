@@ -6,7 +6,6 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.geometry.Point3D;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -22,7 +21,7 @@ public class Point3DConverterTest {
     /**
      * Test of fromString method, of class Point3DConverter.
      */
-    public static void doTestFromString(Point3D expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(Point3D expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         Point3DConverter instance = new Point3DConverter(false);
@@ -42,13 +41,13 @@ public class Point3DConverterTest {
     /**
      * Test of fromString and toString methods, of class Point3DConverter.
      */
-    public static void doTest(Point3D value, @NonNull String str) throws Exception {
+    public static void doTest(Point3D value, String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTest(new Point3D(1, 2, 3), "1 2 3")),
                 dynamicTest("2", () -> doTest(new Point3D(1, 2, 0), "1 2"))

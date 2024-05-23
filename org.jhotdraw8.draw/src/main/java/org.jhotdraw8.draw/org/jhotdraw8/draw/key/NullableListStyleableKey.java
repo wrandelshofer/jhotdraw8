@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
@@ -33,7 +32,7 @@ public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Im
      * @param elementType      the class of the type
      * @param elementConverter String converter for a list element
      */
-    public NullableListStyleableKey(@NonNull String name, @NonNull Type elementType, @NonNull CssConverter<T> elementConverter) {
+    public NullableListStyleableKey(String name, Type elementType, CssConverter<T> elementConverter) {
         super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), VectorList.of());
     }
 }

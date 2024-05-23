@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 
 /**
@@ -24,15 +23,15 @@ import org.jhotdraw8.icollection.impl.IdentityObject;
  */
 class MutableHashCollisionNode<K> extends HashCollisionNode<K> {
 
-    private final @NonNull IdentityObject ownedBy;
+    private final IdentityObject ownedBy;
 
-    MutableHashCollisionNode(@NonNull IdentityObject ownedBy, int hash, Object @NonNull [] entries) {
+    MutableHashCollisionNode(IdentityObject ownedBy, int hash, Object[] entries) {
         super(hash, entries);
         this.ownedBy = ownedBy;
     }
 
     @Override
-    protected @NonNull IdentityObject getOwner() {
+    protected IdentityObject getOwner() {
         return ownedBy;
     }
 }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.Angles;
@@ -22,7 +21,7 @@ public class IntersectCubicCurveEllipse {
     private IntersectCubicCurveEllipse() {
     }
 
-    public static @NonNull IntersectionResult intersectCubicCurveEllipse(
+    public static IntersectionResult intersectCubicCurveEllipse(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double rx, double ry) {
         return intersectCubicCurveEllipse(
@@ -31,7 +30,7 @@ public class IntersectCubicCurveEllipse {
 
     }
 
-    public static @NonNull IntersectionResult intersectCubicCurveEllipse(
+    public static IntersectionResult intersectCubicCurveEllipse(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double rx, double ry, double epsilon) {
         return intersectCubicCurveEllipse(
@@ -40,7 +39,7 @@ public class IntersectCubicCurveEllipse {
 
     }
 
-    public static @NonNull IntersectionResultEx intersectCubicCurveEllipseEx(
+    public static IntersectionResultEx intersectCubicCurveEllipseEx(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double rx, double ry) {
         return intersectCubicCurveEllipseEx(
@@ -49,7 +48,7 @@ public class IntersectCubicCurveEllipse {
 
     }
 
-    public static @NonNull IntersectionResultEx intersectCubicCurveEllipseEx(
+    public static IntersectionResultEx intersectCubicCurveEllipseEx(
             double x0, double y0, double x1, double y1, double x2, double y2, double x3, double y3,
             double cx, double cy, double rx, double ry, double epsilon) {
         IntersectionResult result = intersectCubicCurveEllipse(
@@ -85,9 +84,9 @@ public class IntersectCubicCurveEllipse {
      * @return the computed result. Status can be{@link IntersectionStatus#INTERSECTION},
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
-    public static @NonNull IntersectionResult intersectCubicCurveEllipse(
-            @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
-            @NonNull Point2D ec, double rx, double ry) {
+    public static IntersectionResult intersectCubicCurveEllipse(
+            Point2D p0, Point2D p1, Point2D p2, Point2D p3,
+            Point2D ec, double rx, double ry) {
         return intersectCubicCurveEllipse(p0, p1, p2, p3, ec, rx, ry, Rectangles.REAL_THRESHOLD);
     }
 
@@ -102,9 +101,9 @@ public class IntersectCubicCurveEllipse {
      * @param epsilon
      * @return
      */
-    public static @NonNull IntersectionResult intersectCubicCurveEllipse(
-            @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3,
-            @NonNull Point2D ec, double rx, double ry, double epsilon) {
+    public static IntersectionResult intersectCubicCurveEllipse(
+            Point2D p0, Point2D p1, Point2D p2, Point2D p3,
+            Point2D ec, double rx, double ry, double epsilon) {
         Point2D.Double a, b, c, d;       // temporary variables
         List<IntersectionPoint> result = new ArrayList<>();
 

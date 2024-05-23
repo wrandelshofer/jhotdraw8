@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.base.function;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Represents a function that accepts 3 arguments and produces a result.
@@ -24,6 +23,6 @@ public interface Function3<T1, T2, T3, R> {
      * @param t3 the third function argument
      * @return the function result
      */
-    @NonNull R apply(T1 t1, T2 t2, T3 t3);
+    R apply(T1 t1, T2 t2, T3 t3);
 
 }

@@ -5,7 +5,6 @@
 package org.jhotdraw8.application.action.file;
 
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.FileBasedActivity;
 
 import java.net.URI;
@@ -19,14 +18,14 @@ import java.net.URI;
 public class SaveFileAction extends AbstractSaveFileAction {
 
 
-    public static final @NonNull String ID = "file.save";
+    public static final String ID = "file.save";
 
     /**
      * Creates a new instance.
      *
      * @param view the view
      */
-    public SaveFileAction(@NonNull FileBasedActivity view) {
+    public SaveFileAction(FileBasedActivity view) {
         this(view, false);
     }
 
@@ -36,7 +35,7 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param view   the view
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(@NonNull FileBasedActivity view, boolean saveAs) {
+    public SaveFileAction(FileBasedActivity view, boolean saveAs) {
         this(view, ID, saveAs);
     }
 
@@ -47,13 +46,13 @@ public class SaveFileAction extends AbstractSaveFileAction {
      * @param id     the id
      * @param saveAs whether to force a file dialog
      */
-    public SaveFileAction(@NonNull FileBasedActivity view, String id, boolean saveAs) {
+    public SaveFileAction(FileBasedActivity view, String id, boolean saveAs) {
         super(view, id, saveAs);
     }
 
 
     @Override
-    protected void onSaveSucceeded(@NonNull FileBasedActivity v, @NonNull URI uri, DataFormat format) {
+    protected void onSaveSucceeded(FileBasedActivity v, URI uri, DataFormat format) {
         v.setURI(uri);
         v.clearModified();
         v.setDataFormat(format);

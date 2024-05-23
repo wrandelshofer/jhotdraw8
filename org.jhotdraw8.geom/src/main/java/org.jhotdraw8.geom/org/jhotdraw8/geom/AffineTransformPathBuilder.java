@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -18,14 +17,14 @@ import java.awt.geom.Point2D;
  */
 public class AffineTransformPathBuilder<T> extends AbstractPathBuilder<T> {
 
-    private final @NonNull PathBuilder<T> target;
-    private @NonNull AffineTransform transform;
+    private final PathBuilder<T> target;
+    private AffineTransform transform;
 
-    public AffineTransformPathBuilder(@NonNull PathBuilder<T> target) {
+    public AffineTransformPathBuilder(PathBuilder<T> target) {
         this(target, new AffineTransform());
     }
 
-    public AffineTransformPathBuilder(@NonNull PathBuilder<T> target, @NonNull AffineTransform transform) {
+    public AffineTransformPathBuilder(PathBuilder<T> target, AffineTransform transform) {
         this.target = target;
         this.transform = transform;
     }
@@ -62,11 +61,11 @@ public class AffineTransformPathBuilder<T> extends AbstractPathBuilder<T> {
         target.quadTo(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
-    public @NonNull AffineTransform getTransform() {
+    public AffineTransform getTransform() {
         return transform;
     }
 
-    public void setTransform(@NonNull AffineTransform transform) {
+    public void setTransform(AffineTransform transform) {
         this.transform = transform;
     }
 

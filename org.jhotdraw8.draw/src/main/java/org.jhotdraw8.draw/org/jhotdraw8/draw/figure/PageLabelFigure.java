@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.key.StringStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -24,14 +23,14 @@ import java.time.format.FormatStyle;
  */
 public class PageLabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {
-    public static final @NonNull String TYPE_SELECTOR = "PageLabel";
-    public static final @NonNull String NUM_PAGES_PLACEHOLDER = "${numPages}";
-    public static final @NonNull String PAGE_PLACEHOLDER = "${page}";
-    public static final @NonNull String DATE_PLACEHOLDER = "${date}";
+    public static final String TYPE_SELECTOR = "PageLabel";
+    public static final String NUM_PAGES_PLACEHOLDER = "${numPages}";
+    public static final String PAGE_PLACEHOLDER = "${page}";
+    public static final String DATE_PLACEHOLDER = "${date}";
     /**
      * The text. Default value: {@code ""}.
      */
-    public static final @NonNull StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", "",
+    public static final StringStyleableKey TEXT_WITH_PLACEHOLDERS = new StringStyleableKey("text", "",
             "Supported placeholders:  " + PAGE_PLACEHOLDER + ", " + NUM_PAGES_PLACEHOLDER + ", " + DATE_PLACEHOLDER);
 
     public PageLabelFigure() {
@@ -44,7 +43,7 @@ public class PageLabelFigure extends AbstractLabelFigure
      * @param position of the label
      * @param text     text of the label
      */
-    public PageLabelFigure(@NonNull Point2D position, @NonNull String text) {
+    public PageLabelFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
@@ -57,7 +56,7 @@ public class PageLabelFigure extends AbstractLabelFigure
      * @param keyValues properties to set
      */
     @SuppressWarnings("this-escape")
-    public PageLabelFigure(double x, double y, @NonNull String text, Object... keyValues) {
+    public PageLabelFigure(double x, double y, String text, Object... keyValues) {
         set(TEXT_WITH_PLACEHOLDERS, text);
         set(ORIGIN, new CssPoint2D(x, y));
         for (int i = 0; i < keyValues.length; i += 2) {
@@ -68,7 +67,7 @@ public class PageLabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    protected String getText(@NonNull RenderContext ctx) {
+    protected String getText(RenderContext ctx) {
         String text = getNonNull(TEXT_WITH_PLACEHOLDERS);
         final Integer pageNumber = ctx == null ? 0 : ctx.get(RenderContext.RENDER_PAGE_NUMBER);
         final Integer numPages = ctx == null ? 0 : ctx.get(RenderContext.RENDER_NUMBER_OF_PAGES);
@@ -88,7 +87,7 @@ public class PageLabelFigure extends AbstractLabelFigure
         return text;
     }
 
-    private @NonNull String replaceAll(@NonNull String text, @NonNull String placeholder, String replace) {
+    private String replaceAll(String text, String placeholder, String replace) {
         for (int p = text.indexOf(placeholder); p != -1; p = text.indexOf(placeholder)) {
             text = text.substring(0, p) + replace + text.substring(p + placeholder.length());
         }
@@ -96,7 +95,7 @@ public class PageLabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         super.updateNode(ctx, node);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, node);
@@ -105,7 +104,7 @@ public class PageLabelFigure extends AbstractLabelFigure
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

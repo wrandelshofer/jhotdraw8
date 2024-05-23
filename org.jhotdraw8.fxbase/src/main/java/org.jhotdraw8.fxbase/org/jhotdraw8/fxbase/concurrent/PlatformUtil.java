@@ -7,8 +7,7 @@ package org.jhotdraw8.fxbase.concurrent;
 
 import javafx.application.Platform;
 import javafx.beans.property.Property;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
@@ -21,7 +20,7 @@ public class PlatformUtil {
     /**
      * This object is used to coalesce multiple updates.
      */
-    static final @NonNull Object NO_UPDATE_IS_IN_PROGRESS = new Object();
+    static final Object NO_UPDATE_IS_IN_PROGRESS = new Object();
 
     /**
      * Don't let anyone instantiate this class.
@@ -42,7 +41,7 @@ public class PlatformUtil {
      * @param <X>            the property type
      */
     @SuppressWarnings("unchecked")
-    static <X> void update(@Nullable X newValue, @NonNull Property<X> property, @NonNull AtomicReference<Object> propertyUpdate) {
+    static <X> void update(@Nullable X newValue, Property<X> property, AtomicReference<Object> propertyUpdate) {
         if (Platform.isFxApplicationThread()) {
             property.setValue(newValue);
         } else if (propertyUpdate.getAndSet(newValue) == NO_UPDATE_IS_IN_PROGRESS) {
@@ -59,7 +58,7 @@ public class PlatformUtil {
      *
      * @param r the runnable
      */
-    public static void invokeAndWait(@NonNull RunnableWithException r) {
+    public static void invokeAndWait(RunnableWithException r) {
         invokeAndWait(60 * 1000, r);
     }
 
@@ -70,7 +69,7 @@ public class PlatformUtil {
      * @param timeout the timeout in milliseconds
      * @param r       the runnable
      */
-    public static void invokeAndWait(long timeout, @NonNull RunnableWithException r) {
+    public static void invokeAndWait(long timeout, RunnableWithException r) {
         CompletableFuture<Void> f = new CompletableFuture<>();
         Platform.runLater(() -> {
             try {
@@ -95,7 +94,7 @@ public class PlatformUtil {
      *
      * @param r the runnable
      */
-    public static <T> T callAndWait(@NonNull Callable<T> r) {
+    public static <T> T callAndWait(Callable<T> r) {
         return callAndWait(60 * 1000, r);
     }
 
@@ -106,7 +105,7 @@ public class PlatformUtil {
      * @param timeout the timeout in milliseconds
      * @param r       the runnable
      */
-    public static <T> T callAndWait(long timeout, @NonNull Callable<T> r) {
+    public static <T> T callAndWait(long timeout, Callable<T> r) {
         CompletableFuture<T> f = new CompletableFuture<>();
         Platform.runLater(() -> {
             try {

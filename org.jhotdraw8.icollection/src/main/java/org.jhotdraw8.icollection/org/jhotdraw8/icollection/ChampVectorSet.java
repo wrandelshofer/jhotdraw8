@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.icollection.impl.IdentityObject;
@@ -20,6 +18,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -125,11 +124,11 @@ import java.util.Spliterators;
 public class ChampVectorSet<E>
 
         implements Serializable, ImmutableSequencedSet<E> {
-    private static final @NonNull ChampVectorSet<?> EMPTY = new ChampVectorSet<>(
+    private static final ChampVectorSet<?> EMPTY = new ChampVectorSet<>(
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
     private static final long serialVersionUID = 0L;
-    final transient @NonNull BitmapIndexedNode<SequencedElement<E>> root;
+    final transient BitmapIndexedNode<SequencedElement<E>> root;
     /**
      * Offset of sequence numbers to vector indices.
      *
@@ -144,10 +143,10 @@ public class ChampVectorSet<E>
     /**
      * In this vector we store the elements in the order in which they were inserted.
      */
-    final @NonNull VectorList<Object> vector;
+    final VectorList<Object> vector;
 
-    private record OpaqueRecord<E>(@NonNull BitmapIndexedNode<SequencedElement<E>> root,
-                                   @NonNull VectorList<Object> vector,
+    private record OpaqueRecord<E>(BitmapIndexedNode<SequencedElement<E>> root,
+                                   VectorList<Object> vector,
                                    int size, int offset) {
     }
 
@@ -160,7 +159,7 @@ public class ChampVectorSet<E>
      * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected ChampVectorSet(@NonNull PrivateData privateData) {
+    protected ChampVectorSet(PrivateData privateData) {
         this(((ChampVectorSet.OpaqueRecord<E>) privateData.get()).root,
                 ((ChampVectorSet.OpaqueRecord<E>) privateData.get()).vector,
                 ((ChampVectorSet.OpaqueRecord<E>) privateData.get()).size,
@@ -175,19 +174,19 @@ public class ChampVectorSet<E>
      * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull ChampVectorSet<E> newInstance(@NonNull PrivateData privateData) {
+    protected ChampVectorSet<E> newInstance(PrivateData privateData) {
         return new ChampVectorSet<>(privateData);
     }
 
-    private @NonNull ChampVectorSet<E> newInstance(@NonNull BitmapIndexedNode<SequencedElement<E>> root,
-                                                   @NonNull VectorList<Object> vector,
+    private ChampVectorSet<E> newInstance(BitmapIndexedNode<SequencedElement<E>> root,
+                                          VectorList<Object> vector,
                                                    int size, int offset) {
         return new ChampVectorSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
     ChampVectorSet(
-            @NonNull BitmapIndexedNode<SequencedElement<E>> root,
-            @NonNull VectorList<Object> vector,
+            BitmapIndexedNode<SequencedElement<E>> root,
+            VectorList<Object> vector,
             int size, int offset) {
         this.root = root;
         this.size = size;
@@ -205,7 +204,7 @@ public class ChampVectorSet<E>
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampVectorSet<E> copyOf(@NonNull Iterable<? extends E> c) {
+    public static <E> ChampVectorSet<E> copyOf(Iterable<? extends E> c) {
         return ChampVectorSet.<E>of().addAll(c);
     }
 
@@ -218,7 +217,7 @@ public class ChampVectorSet<E>
      */
 
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull ChampVectorSet<E> of() {
+    public static <E> ChampVectorSet<E> of() {
         return ((ChampVectorSet<E>) ChampVectorSet.EMPTY);
     }
 
@@ -233,28 +232,28 @@ public class ChampVectorSet<E>
 
     @SuppressWarnings({"unchecked", "varargs"})
     @SafeVarargs
-    public static <E> @NonNull ChampVectorSet<E> of(E @Nullable ... elements) {
+    public static <E> ChampVectorSet<E> of(E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
         return ChampVectorSet.<E>of().addAll(Arrays.asList(elements));
     }
 
     @Override
-    public @NonNull ChampVectorSet<E> add(@Nullable E key) {
+    public ChampVectorSet<E> add(@Nullable E key) {
         return addLast(key, false);
     }
 
     @Override
     @SuppressWarnings({"unchecked"})
-    public @NonNull ChampVectorSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    public ChampVectorSet<E> addAll(Iterable<? extends E> c) {
         var m = toMutable();
         return m.addAll(c) ? m.toImmutable() : this;
     }
 
-    public @NonNull ChampVectorSet<E> addFirst(@Nullable E element) {
+    public ChampVectorSet<E> addFirst(@Nullable E element) {
         return addFirst(element, true);
     }
 
-    private @NonNull ChampVectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
+    private ChampVectorSet<E> addFirst(@Nullable E e, boolean moveToFirst) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, -offset - 1);
         var newRoot = root.put(null, newElem,
@@ -280,11 +279,11 @@ public class ChampVectorSet<E>
         return this;
     }
 
-    public @NonNull ChampVectorSet<E> addLast(@Nullable E element) {
+    public ChampVectorSet<E> addLast(@Nullable E element) {
         return addLast(element, true);
     }
 
-    private @NonNull ChampVectorSet<E> addLast(@Nullable E e,
+    private ChampVectorSet<E> addLast(@Nullable E e,
                                                boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, vector.size() - offset);
@@ -316,12 +315,12 @@ public class ChampVectorSet<E>
      * {@inheritDoc}
      */
     @Override
-    public <T> @NonNull ChampVectorSet<T> empty() {
+    public <T> ChampVectorSet<T> empty() {
         return of();
     }
 
     @Override
-    public boolean contains(@Nullable final @NonNull Object o) {
+    public boolean contains(@Nullable final Object o) {
         @SuppressWarnings("unchecked") final E key = (E) o;
         return root.find(new SequencedElement<>(key), SequencedElement.keyHash(key), 0, Objects::equals) != Node.NO_DATA;
     }
@@ -359,7 +358,7 @@ public class ChampVectorSet<E>
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return Spliterators.iterator(spliterator());
     }
 
@@ -369,7 +368,7 @@ public class ChampVectorSet<E>
     }
 
     @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+    public ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,
@@ -381,7 +380,7 @@ public class ChampVectorSet<E>
     }
 
     @Override
-    public @NonNull ChampVectorSet<E> remove(@Nullable E key) {
+    public ChampVectorSet<E> remove(@Nullable E key) {
         int keyHash = SequencedElement.keyHash(key);
         var details = new ChangeEvent<SequencedElement<E>>();
         BitmapIndexedNode<SequencedElement<E>> newRoot = root.remove(null,
@@ -398,7 +397,7 @@ public class ChampVectorSet<E>
 
 
     @Override
-    public @NonNull ChampVectorSet<E> removeAll(@NonNull Iterable<?> c) {
+    public ChampVectorSet<E> removeAll(Iterable<?> c) {
         var m = toMutable();
         return m.removeAll(c) ? m.toImmutable() : this;
     }
@@ -424,7 +423,6 @@ public class ChampVectorSet<E>
      * @param offset the offset that must be added to a sequence number to get the index into the vector
      * @return a new {@link ChampVectorSet} instance
      */
-    @NonNull
     private ChampVectorSet<E> renumber(
             BitmapIndexedNode<SequencedElement<E>> root,
             VectorList<Object> vector,
@@ -444,17 +442,17 @@ public class ChampVectorSet<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ChampVectorSet<E> retainAll(@NonNull Iterable<?> c) {
+    public ChampVectorSet<E> retainAll(Iterable<?> c) {
         var m = toMutable();
         return m.retainAll(c) ? m.toImmutable() : this;
     }
 
-    @NonNull Iterator<E> reverseIterator() {
+    Iterator<E> reverseIterator() {
         return Spliterators.iterator(reverseSpliterator());
     }
 
     @SuppressWarnings("unchecked")
-    @NonNull Spliterator<E> reverseSpliterator() {
+    Spliterator<E> reverseSpliterator() {
         return new ReverseTombSkippingVectorSpliterator<>(vector,
                 e -> ((SequencedElement<E>) e).getElement(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE, size());
@@ -467,14 +465,14 @@ public class ChampVectorSet<E>
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return new TombSkippingVectorSpliterator<>(vector.trie,
                 e -> ((SequencedElement<E>) e).getElement(),
                 0, size(), vector.size(), Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.IMMUTABLE);
     }
 
     @Override
-    public @NonNull MutableChampVectorSet<E> toMutable() {
+    public MutableChampVectorSet<E> toMutable() {
         return new MutableChampVectorSet<>(this);
     }
 
@@ -487,12 +485,12 @@ public class ChampVectorSet<E>
      * @return a string representation
      */
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return ReadOnlyCollection.iterableToString(this);
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new SerializationProxy<>(toMutable());
     }
 
@@ -506,7 +504,7 @@ public class ChampVectorSet<E>
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return ChampVectorSet.copyOf(deserializedElements);
         }
     }

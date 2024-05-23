@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.iterator;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.io.GraphvizReader;
 import org.jhotdraw8.graph.io.GraphvizWriter;
@@ -113,9 +112,9 @@ public class VertexEnumeratorTestSpliterator {
 
     public void testIterate(final DirectedGraph<Integer, Double> graph, final Integer start, final Integer goal, final List<Integer> expResult) throws Exception {
         System.out.println("testIterate start:" + start + " goal:" + goal + " expResult:" + expResult);
-        final @NonNull BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
+        final BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
         final Iterator<Integer> iterator = Spliterators.iterator(instance);
-        final @NonNull List<Integer> result = new ArrayList<>();
+        final List<Integer> result = new ArrayList<>();
         while (iterator.hasNext()) {
             final Integer next = iterator.next();
             result.add(next);
@@ -137,8 +136,8 @@ public class VertexEnumeratorTestSpliterator {
 
     public void testTryAdvance(final DirectedGraph<Integer, Double> graph, final Integer start, final Integer goal, final List<Integer> expResult) throws Exception {
         System.out.println("testForEachRemaining start:" + start + " goal:" + goal + " expResult:" + expResult);
-        final @NonNull BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
-        final @NonNull List<Integer> result = new ArrayList<>();
+        final BfsDfsVertexSpliterator<Integer> instance = new BfsDfsVertexSpliterator<>(graph::getNextVertices, start, false);
+        final List<Integer> result = new ArrayList<>();
         while (instance.tryAdvance(result::add)) {
             if (result.get(result.size() - 1).equals(goal)) {
                 break;

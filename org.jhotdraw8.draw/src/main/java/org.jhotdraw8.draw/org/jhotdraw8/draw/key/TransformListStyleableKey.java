@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.draw.css.converter.TransformCssConverter;
@@ -24,7 +23,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
         implements WritableStyleableMapAccessor<ImmutableList<Transform>>, NonNullKey<ImmutableList<Transform>> {
 
 
-    private final @NonNull Converter<ImmutableList<Transform>> converter;
+    private final Converter<ImmutableList<Transform>> converter;
 
     /**
      * Creates a new instance with the specified name and with an empty list as the
@@ -32,7 +31,7 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      *
      * @param name The name of the key.
      */
-    public TransformListStyleableKey(@NonNull String name) {
+    public TransformListStyleableKey(String name) {
         this(name, VectorList.of());
     }
 
@@ -42,13 +41,13 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public TransformListStyleableKey(@NonNull String name, ImmutableList<Transform> defaultValue) {
+    public TransformListStyleableKey(String name, ImmutableList<Transform> defaultValue) {
         super(name, new SimpleParameterizedType(ImmutableList.class, Transform.class), defaultValue);
         converter = new ListCssConverter<>(new TransformCssConverter());
     }
 
     @Override
-    public @NonNull Converter<ImmutableList<Transform>> getCssConverter() {
+    public Converter<ImmutableList<Transform>> getCssConverter() {
         return converter;
     }
 

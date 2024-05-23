@@ -13,23 +13,22 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This track stacks its children on the Z-axis into a tab pane.
  */
 public class TabPaneTrack extends AbstractDockParent implements Track {
 
-    private final @NonNull TabPane tabPane = new TabPane();
-    private final @NonNull ResizePane resizePane = new ResizePane();
+    private final TabPane tabPane = new TabPane();
+    private final ResizePane resizePane = new ResizePane();
 
     static class MyTab extends Tab {
-        private final @NonNull DockableDragHandler dockableDragHandler;
-        private final @NonNull DockChild dockChild;
+        private final DockableDragHandler dockableDragHandler;
+        private final DockChild dockChild;
 
-        MyTab(@NonNull DockChild dockChild, @Nullable String text, @Nullable Node graphic) {
+        MyTab(DockChild dockChild, @Nullable String text, @Nullable Node graphic) {
             super(text, graphic);
             this.dockChild = dockChild;
             if (dockChild instanceof Dockable) {
@@ -75,14 +74,14 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
                 false);
     }
 
-    protected @NonNull ChangeListener<DockParent> onParentChanged() {
+    protected ChangeListener<DockParent> onParentChanged() {
         return (o, oldv, newv) -> {
             resizePane.setUserResizable(newv != null && !newv.isResizesDockChildren());
             resizePane.setResizeAxis(newv == null ? TrackAxis.Y : newv.getDockAxis());
         };
     }
 
-    private @NonNull MyTab makeTab(DockChild c) {
+    private MyTab makeTab(DockChild c) {
         if (c instanceof Dockable k) {
             MyTab tab = new MyTab(k, k.getText(), k.getNode());
             tab.graphicProperty().bind(CustomBinding.compute(k::getGraphic, k.graphicProperty(), editableProperty()));
@@ -94,7 +93,7 @@ public class TabPaneTrack extends AbstractDockParent implements Track {
 
 
     @Override
-    public @NonNull TrackAxis getDockAxis() {
+    public TrackAxis getDockAxis() {
         return TrackAxis.Z;
     }
 

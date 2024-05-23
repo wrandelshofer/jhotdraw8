@@ -1,6 +1,6 @@
 package org.jhotdraw8.examples.mini;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.geom.AbstractShape;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.PathData;

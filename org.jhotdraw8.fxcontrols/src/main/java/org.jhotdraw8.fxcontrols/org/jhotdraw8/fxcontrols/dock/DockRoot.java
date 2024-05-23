@@ -8,9 +8,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.Parent;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Predicate;
 
@@ -33,7 +32,7 @@ public interface DockRoot extends DockParent {
      */
     ObjectProperty<Dockable> draggedDockable = new SimpleObjectProperty<>();
 
-    static @NonNull ObjectProperty<Dockable> draggedDockableProperty() {
+    static ObjectProperty<Dockable> draggedDockableProperty() {
         return draggedDockable;
     }
 
@@ -54,18 +53,16 @@ public interface DockRoot extends DockParent {
      *
      * @return filter for accepting {@link Dockable}s
      */
-    @NonNull
     ObjectProperty<Predicate<Dockable>> dockablePredicateProperty();
 
-    default @NonNull Predicate<Dockable> getDockablePredicate() {
+    default Predicate<Dockable> getDockablePredicate() {
         return dockablePredicateProperty().get();
     }
 
-    default void setDockablePredicate(@NonNull Predicate<Dockable> value) {
+    default void setDockablePredicate(Predicate<Dockable> value) {
         dockablePredicateProperty().set(value);
     }
 
     @Override
-    @NonNull
     Parent getNode();
 }

@@ -10,7 +10,6 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.List;
 
@@ -21,25 +20,25 @@ import java.util.List;
  */
 public class FontCollection {
 
-    private final @NonNull StringProperty name = new SimpleStringProperty();
+    private final StringProperty name = new SimpleStringProperty();
 
-    private final @NonNull ObservableList<FontFamily> families = FXCollections.observableArrayList();
-    private final @NonNull BooleanProperty smartCollection = new SimpleBooleanProperty();
+    private final ObservableList<FontFamily> families = FXCollections.observableArrayList();
+    private final BooleanProperty smartCollection = new SimpleBooleanProperty();
 
     public FontCollection() {
     }
 
-    public FontCollection(String name, @NonNull List<FontFamily> families) {
+    public FontCollection(String name, List<FontFamily> families) {
         this(name, false, families);
     }
 
-    public FontCollection(String name, boolean isSmart, @NonNull List<FontFamily> families) {
+    public FontCollection(String name, boolean isSmart, List<FontFamily> families) {
         setName(name);
         setSmartCollection(isSmart);
         this.families.addAll(families);
     }
 
-    public @NonNull ObservableList<FontFamily> getFamilies() {
+    public ObservableList<FontFamily> getFamilies() {
         return families;
     }
 
@@ -59,11 +58,11 @@ public class FontCollection {
         smartCollection.set(value);
     }
 
-    public @NonNull StringProperty nameProperty() {
+    public StringProperty nameProperty() {
         return name;
     }
 
-    public @NonNull BooleanProperty smartCollectionProperty() {
+    public BooleanProperty smartCollectionProperty() {
         return smartCollection;
     }
 

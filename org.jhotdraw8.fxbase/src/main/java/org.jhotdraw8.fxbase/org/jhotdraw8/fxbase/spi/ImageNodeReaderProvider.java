@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.fxbase.spi;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.net.URL;
 
@@ -14,12 +13,12 @@ public class ImageNodeReaderProvider implements NodeReaderProvider {
     }
 
     @Override
-    public boolean canDecodeInput(@NonNull URL source) {
+    public boolean canDecodeInput(URL source) {
         return canDecodeInput(source.getFile());
     }
 
     @Override
-    public boolean canDecodeInput(@NonNull String path) {
+    public boolean canDecodeInput(String path) {
         int p = path.lastIndexOf('.');
         String extension = path.substring(p + 1);
         return switch (extension.toLowerCase()) {

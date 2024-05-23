@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.graph.iterator.BfsDfsArcSpliterator;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
@@ -22,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
 public class BfsDfsArcSpliteratorTest {
-    protected @NonNull DirectedGraph<Integer, Integer> createDoubleVertexGraph() {
+    protected DirectedGraph<Integer, Integer> createDoubleVertexGraph() {
         final SimpleMutableDirectedGraph<Integer, Integer> builder = new SimpleMutableDirectedGraph<>();
 
         //  (1)->(2)------------->(3)------->(4)----

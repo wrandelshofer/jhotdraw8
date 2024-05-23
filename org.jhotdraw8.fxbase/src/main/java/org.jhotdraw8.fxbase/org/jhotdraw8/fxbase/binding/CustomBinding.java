@@ -19,8 +19,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableSet;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -63,9 +62,9 @@ public class CustomBinding {
      * @param propertyB property 'b', this can be a new instance on each call
      */
     public static <T, M> void bindBidirectionalStrongly(
-            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
+            Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
 
-        final @NonNull ChangeListener<M> changeListener = new ChangeListener<>() {
+        final ChangeListener<M> changeListener = new ChangeListener<>() {
             private Property<T> strongReference;
 
             @Override
@@ -85,9 +84,9 @@ public class CustomBinding {
     }
 
     public static <T, M> void bindBidirectionalStrongly2(
-            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
+            Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
 
-        final @NonNull ChangeListener<M> changeListener = new ChangeListener<>() {
+        final ChangeListener<M> changeListener = new ChangeListener<>() {
             private Property<T> strongReference;
 
             @Override
@@ -117,7 +116,7 @@ public class CustomBinding {
      *                  when called for the same object 'm'.
      */
     public static <T, M> void bindBidirectional(
-            @NonNull Property<T> propertyA, @NonNull Property<M> mediator, @NonNull Function<M, Property<T>> propertyB) {
+            Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
 
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
@@ -144,7 +143,7 @@ public class CustomBinding {
      * @param propertyB property 'b'
      */
     public static <T, M> void bind(
-            @NonNull Property<T> propertyA, @NonNull Property<M> mediatorB, @NonNull Function<M, ObservableValue<T>> propertyB) {
+            Property<T> propertyA, Property<M> mediatorB, Function<M, ObservableValue<T>> propertyB) {
         bind(propertyA, mediatorB, propertyB, propertyA.getValue());
     }
 
@@ -161,7 +160,7 @@ public class CustomBinding {
      * @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
      */
     public static <T, M> void bind(
-            @NonNull Property<T> propertyA, @NonNull Property<M> mediatorB, @NonNull Function<M, ObservableValue<T>> propertyB, T unboundValue) {
+            Property<T> propertyA, Property<M> mediatorB, Function<M, ObservableValue<T>> propertyB, T unboundValue) {
 
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
@@ -189,8 +188,8 @@ public class CustomBinding {
      * @param propertyB    property 'b'
      * @param unboundValue the value to be set on 'a' when 'a' is unbound from 'b'.
      */
-    public static <T, M> void bind(@NonNull ObservableValue<M> mediatorA,
-                                   @NonNull Function<M, Property<T>> propertyA, @NonNull ObservableValue<T> propertyB, T unboundValue) {
+    public static <T, M> void bind(ObservableValue<M> mediatorA,
+                                   Function<M, Property<T>> propertyA, ObservableValue<T> propertyB, T unboundValue) {
 
         final ChangeListener<M> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
@@ -216,8 +215,8 @@ public class CustomBinding {
      * @param propertyB       property 'b'
      * @param stringConverter the converter
      */
-    public static <T, S> void bindBidirectional(@NonNull StringProperty propertyA, @NonNull Property<S> mediator, @NonNull Function<S, Property<T>> propertyB,
-                                                @NonNull StringConverter<T> stringConverter) {
+    public static <T, S> void bindBidirectional(StringProperty propertyA, Property<S> mediator, Function<S, Property<T>> propertyB,
+                                                StringConverter<T> stringConverter) {
         final ChangeListener<S> changeListener = (o, oldv, newv) -> {
             if (oldv != null) {
                 propertyA.unbindBidirectional(propertyB.apply(oldv));
@@ -245,7 +244,7 @@ public class CustomBinding {
      * @param convertBtoA  converts a value from B to A
      */
     public static <A, B, PROPERTY_A extends WritableValue<A> & ObservableValue<A>, PROPERTY_B extends WritableValue<B> & ObservableValue<B>>
-    void bindBidirectionalAndConvert(@NonNull PROPERTY_A propertyA, @NonNull PROPERTY_B propertyB, @NonNull Function<A, B> convertAtoB, @NonNull Function<B, A> convertBtoA) {
+    void bindBidirectionalAndConvert(PROPERTY_A propertyA, PROPERTY_B propertyB, Function<A, B> convertAtoB, Function<B, A> convertBtoA) {
         boolean[] alreadyCalled = new boolean[1];
         propertyB.setValue(convertAtoB.apply(propertyA.getValue()));
         addFlaggedChangeListener(propertyB, propertyA, convertAtoB, alreadyCalled);
@@ -253,7 +252,7 @@ public class CustomBinding {
     }
 
 
-    private static <Y, X> void addFlaggedChangeListener(@NonNull WritableValue<X> propertyX, @NonNull ObservableValue<Y> propertyY, @NonNull Function<Y, X> updateX,
+    private static <Y, X> void addFlaggedChangeListener(WritableValue<X> propertyX, ObservableValue<Y> propertyY, Function<Y, X> updateX,
                                                         boolean[] alreadyCalled) {
         propertyY.addListener((observable, oldValue, newValue) -> {
                     if (!alreadyCalled[0]) {
@@ -277,7 +276,7 @@ public class CustomBinding {
      * @param args   The arguments.
      * @return The string expression
      */
-    public static @NonNull StringExpression formatted(String format, Object... args) {
+    public static StringExpression formatted(String format, Object... args) {
         return MessageStringFormatter.format(format, args);
     }
 
@@ -290,7 +289,7 @@ public class CustomBinding {
      * @param <D>    the type of list dest
      * @param <S>    the type of list source
      */
-    public static <D, S> void bindContent(@NonNull ObservableList<D> dest, @NonNull ObservableList<S> src, @NonNull Function<S, D> toDest) {
+    public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest) {
         bindContent(dest, src, toDest, null);
     }
 
@@ -304,7 +303,7 @@ public class CustomBinding {
      * @param <D>          the type of list dest
      * @param <S>          the type of list source
      */
-    public static <D, S> void bindContent(@NonNull ObservableList<D> dest, @NonNull ObservableList<S> src, @NonNull Function<S, D> toDest, @Nullable Consumer<D> destOnRemove) {
+    public static <D, S> void bindContent(ObservableList<D> dest, ObservableList<S> src, Function<S, D> toDest, @Nullable Consumer<D> destOnRemove) {
         ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest, null, destOnRemove, null);
         src.addListener(binding.getSourceChangeListener());
     }
@@ -320,9 +319,9 @@ public class CustomBinding {
      * @param <S>          the type of list source
      */
     public static <D, S> void bindContentBidirectional(
-            @NonNull ObservableList<D> dest, @NonNull ObservableList<S> src,
-            @NonNull Function<S, D> toDest, @Nullable Consumer<D> destOnRemove,
-            @NonNull Function<D, S> toSource, @Nullable Consumer<S> sourceOnRemove) {
+            ObservableList<D> dest, ObservableList<S> src,
+            Function<S, D> toDest, @Nullable Consumer<D> destOnRemove,
+            Function<D, S> toSource, @Nullable Consumer<S> sourceOnRemove) {
         ListTransformContentBinding<D, S> binding = new ListTransformContentBinding<>(dest, src, toDest, toSource, destOnRemove, sourceOnRemove);
         src.addListener(binding.getSourceChangeListener());
         dest.addListener(binding.getDestChangeListener());
@@ -591,7 +590,7 @@ public class CustomBinding {
      * @param <B>     the type of the converted binding
      * @return a new binding
      */
-    public static <A, B> ObjectBinding<B> convert(@NonNull ObservableValue<A> a, @NonNull Function<A, B> convert) {
+    public static <A, B> ObjectBinding<B> convert(ObservableValue<A> a, Function<A, B> convert) {
         return new ObjectBinding<>() {
             {
                 super.bind(a);

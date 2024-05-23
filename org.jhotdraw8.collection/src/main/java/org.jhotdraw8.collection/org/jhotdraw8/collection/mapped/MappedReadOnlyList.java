@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.collection.mapped;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedCollectionFacade;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
@@ -26,10 +25,10 @@ import java.util.function.Function;
  */
 public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
 
-    private final @NonNull ReadOnlyList<F> backingList;
-    private final @NonNull Function<F, E> mapf;
+    private final ReadOnlyList<F> backingList;
+    private final Function<F, E> mapf;
 
-    public MappedReadOnlyList(@NonNull ReadOnlyList<F> backingList, @NonNull Function<F, E> mapf) {
+    public MappedReadOnlyList(ReadOnlyList<F> backingList, Function<F, E> mapf) {
         this.backingList = backingList;
         this.mapf = mapf;
     }
@@ -50,9 +49,9 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new Iterator<>() {
-            private final @NonNull Iterator<F> i = backingList.iterator();
+            private final Iterator<F> i = backingList.iterator();
 
             @Override
             public boolean hasNext() {
@@ -71,7 +70,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
         };
     }
 
-    @NonNull Iterator<E> reverseIterator() {
+    Iterator<E> reverseIterator() {
         return new Iterator<>() {
             private int i = size() - 1;
 
@@ -96,7 +95,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
     }
 
     @Override
-    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+    public ReadOnlySequencedCollection<E> readOnlyReversed() {
         return new ReadOnlySequencedCollectionFacade<>(
                 this::reverseIterator,
                 this::iterator,
@@ -109,7 +108,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         return new MappedSpliterator<>(backingList.spliterator(), mapf);
     }
 
@@ -119,7 +118,7 @@ public final class MappedReadOnlyList<E, F> extends AbstractReadOnlyList<E> {
     }
 
     @Override
-    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         return new MappedReadOnlyList<>(backingList.readOnlySubList(fromIndex, toIndex), mapf);
     }
 }

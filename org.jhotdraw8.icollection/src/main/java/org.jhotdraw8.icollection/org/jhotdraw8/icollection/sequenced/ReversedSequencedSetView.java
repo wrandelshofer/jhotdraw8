@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection.sequenced;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.AbstractSet;
 import java.util.Collection;
@@ -15,9 +14,9 @@ import java.util.function.Supplier;
  * @param <E> the element type
  */
 public class ReversedSequencedSetView<E> extends AbstractSet<E> implements SequencedSet<E> {
-    private final @NonNull SequencedSet<E> src;
-    private final @NonNull Supplier<Iterator<E>> reverseIterator;
-    private final @NonNull Supplier<Spliterator<E>> reverseSpliterator;
+    private final SequencedSet<E> src;
+    private final Supplier<Iterator<E>> reverseIterator;
+    private final Supplier<Spliterator<E>> reverseSpliterator;
 
     /**
      * Constructs a new instance.
@@ -26,9 +25,9 @@ public class ReversedSequencedSetView<E> extends AbstractSet<E> implements Seque
      * @param reverseIterator    the reverse iterator
      * @param reverseSpliterator the reverse spliterator
      */
-    public ReversedSequencedSetView(@NonNull SequencedSet<E> src,
-                                    @NonNull Supplier<Iterator<E>> reverseIterator,
-                                    @NonNull Supplier<Spliterator<E>> reverseSpliterator) {
+    public ReversedSequencedSetView(SequencedSet<E> src,
+                                    Supplier<Iterator<E>> reverseIterator,
+                                    Supplier<Spliterator<E>> reverseSpliterator) {
         this.src = src;
         this.reverseIterator = reverseIterator;
         this.reverseSpliterator = reverseSpliterator;
@@ -69,12 +68,12 @@ public class ReversedSequencedSetView<E> extends AbstractSet<E> implements Seque
     }
 
     @Override
-    public boolean containsAll(@NonNull Collection<?> c) {
+    public boolean containsAll(Collection<?> c) {
         return src.containsAll(c);
     }
 
     @Override
-    public boolean retainAll(@NonNull Collection<?> c) {
+    public boolean retainAll(Collection<?> c) {
         return src.retainAll(c);
     }
 
@@ -99,7 +98,7 @@ public class ReversedSequencedSetView<E> extends AbstractSet<E> implements Seque
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return reverseIterator.get();
     }
 
@@ -129,7 +128,7 @@ public class ReversedSequencedSetView<E> extends AbstractSet<E> implements Seque
     }
 
     @Override
-    public @NonNull SequencedSet<E> reversed() {
+    public SequencedSet<E> reversed() {
         return src;
     }
 }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.io;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
@@ -15,9 +14,9 @@ import org.jhotdraw8.icollection.immutable.ImmutableMap;
  * @author Werner Randelshofer
  */
 public interface ExportOutputFormat {
-    void setOptions(@NonNull ImmutableMap<Key<?>, Object> newValue);
+    void setOptions(ImmutableMap<Key<?>, Object> newValue);
 
-    @NonNull ImmutableMap<Key<?>, Object> getOptions();
+    ImmutableMap<Key<?>, Object> getOptions();
 
     NonNullObjectKey<Double> EXPORT_DRAWING_DPI_KEY = new NonNullObjectKey<>("exportDrawingDpi", Double.class, 72.0);
     NonNullObjectKey<Boolean> EXPORT_DRAWING_KEY = new NonNullObjectKey<>("exportDrawing", Boolean.class, true);

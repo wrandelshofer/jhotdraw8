@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.collection.enumerator;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * An integer enumerator/spliterator over an integer array.

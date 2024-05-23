@@ -12,7 +12,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Slider;
 import javafx.scene.layout.BorderPane;
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,9 +33,9 @@ public class ZoomToolbar extends BorderPane {
 
     @FXML
     private Slider zoomSlider;
-    private final @NonNull DoubleProperty zoomPower = new SimpleDoubleProperty(this, "zoomPower", 0.0);
+    private final DoubleProperty zoomPower = new SimpleDoubleProperty(this, "zoomPower", 0.0);
     private int isUpdating = 0;
-    private final @NonNull DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
+    private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
 
     {
         zoomFactor.addListener((o, oldv, newv) -> {
@@ -58,11 +57,11 @@ public class ZoomToolbar extends BorderPane {
         this(ZoomToolbar.class.getResource("ZoomToolbar.fxml"));
     }
 
-    public ZoomToolbar(@NonNull URL fxmlUrl) {
+    public ZoomToolbar(URL fxmlUrl) {
         init(fxmlUrl);
     }
 
-    private void init(@NonNull URL fxmlUrl) {
+    private void init(URL fxmlUrl) {
         FXMLLoader loader = new FXMLLoader();
         loader.setController(this);
 
@@ -76,12 +75,12 @@ public class ZoomToolbar extends BorderPane {
 
         zoomSlider.setLabelFormatter(new StringConverter<>() {
             @Override
-            public @NonNull String toString(@NonNull Double object) {
+            public String toString(Double object) {
                 return Integer.toString(object.intValue());
             }
 
             @Override
-            public @NonNull Double fromString(String string) {
+            public Double fromString(String string) {
                 return 0.0;
             }
         });
@@ -93,7 +92,7 @@ public class ZoomToolbar extends BorderPane {
      *
      * @return zoom factor
      */
-    public @NonNull DoubleProperty zoomFactorProperty() {
+    public DoubleProperty zoomFactorProperty() {
         return zoomFactor;
     }
 
@@ -116,11 +115,11 @@ public class ZoomToolbar extends BorderPane {
         zoomPower.set(Math.round((zoomPower.get() + zoomPowerIncrement) / zoomPowerIncrement) * zoomPowerIncrement);
     }
 
-    public @NonNull DoubleProperty minProperty() {
+    public DoubleProperty minProperty() {
         return zoomSlider.minProperty();
     }
 
-    public @NonNull DoubleProperty maxProperty() {
+    public DoubleProperty maxProperty() {
         return zoomSlider.maxProperty();
     }
 

@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.primitive.GrowableIntSet8Bit;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLink;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -59,12 +58,12 @@ public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
      */
     @Override
     public @Nullable IndexedVertexBackLinkWithCost<C> search(
-            @NonNull Iterable<Integer> startVertices,
-            @NonNull IntPredicate goalPredicate,
-            @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-            int maxDepth, @NonNull C zero, @NonNull C costLimit,
-            @NonNull BiFunction<Integer, Integer, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToIntSet visited) {
+            Iterable<Integer> startVertices,
+            IntPredicate goalPredicate,
+            Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+            int maxDepth, C zero, C costLimit,
+            BiFunction<Integer, Integer, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToIntSet visited) {
         AlgoArguments.checkZero(zero);
         return IndexedVertexBackLink.toIndexedVertexBackLinkWithCost(
                 search(startVertices, goalPredicate, nextVerticesFunction,
@@ -84,10 +83,10 @@ public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
      * @return
      * @return on success: a back link, otherwise: null
      */
-    public @Nullable IndexedVertexBackLink search(@NonNull Iterable<Integer> startVertices,
-                                                  @NonNull IntPredicate goalPredicate,
-                                                  @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-                                                  @NonNull AddToIntSet visited,
+    public @Nullable IndexedVertexBackLink search(Iterable<Integer> startVertices,
+                                                  IntPredicate goalPredicate,
+                                                  Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+                                                  AddToIntSet visited,
                                                   int maxDepth) {
         AlgoArguments.checkMaxDepth(maxDepth);
 

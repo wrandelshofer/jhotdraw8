@@ -16,8 +16,6 @@ import javafx.collections.ObservableSet;
 import javafx.scene.Node;
 import javafx.scene.control.MenuBar;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
@@ -26,6 +24,7 @@ import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.control.Disableable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.concurrent.CompletionStage;
@@ -61,11 +60,11 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the activities
      */
-    @NonNull ReadOnlySetProperty<Activity> activitiesProperty();
+    ReadOnlySetProperty<Activity> activitiesProperty();
 
     Executor getExecutor();
 
-    @NonNull NonNullObjectProperty<Preferences> preferencesProperty();
+    NonNullObjectProperty<Preferences> preferencesProperty();
 
 
     /**
@@ -74,18 +73,18 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the activities
      */
-    @NonNull ReadOnlyMapProperty<String, Action> actionsProperty();
+    ReadOnlyMapProperty<String, Action> actionsProperty();
 
 
-    default @NonNull ObservableMap<String, Action> getActions() {
+    default ObservableMap<String, Action> getActions() {
         return actionsProperty().get();
     }
 
-    default @NonNull Preferences getPreferences() {
+    default Preferences getPreferences() {
         return preferencesProperty().get();
     }
 
-    default void setPreferences(@NonNull Preferences preferences) {
+    default void setPreferences(Preferences preferences) {
         preferencesProperty().set(preferences);
     }
 
@@ -99,7 +98,7 @@ public interface Application extends Disableable, PropertyBean {
      */
     ReadOnlyMapProperty<URI, DataFormat> recentUrisProperty();
 
-    default @NonNull ObservableMap<URI, DataFormat> getRecentUris() {
+    default ObservableMap<URI, DataFormat> getRecentUris() {
         return recentUrisProperty().get();
     }
 
@@ -110,10 +109,10 @@ public interface Application extends Disableable, PropertyBean {
      *
      * @return the number of recent Uris
      */
-    @NonNull IntegerProperty maxNumberOfRecentUrisProperty();
+    IntegerProperty maxNumberOfRecentUrisProperty();
 
     // Convenience method
-    default @NonNull ObservableSet<Activity> getActivities() {
+    default ObservableSet<Activity> getActivities() {
         return activitiesProperty().get();
     }
 
@@ -168,7 +167,7 @@ public interface Application extends Disableable, PropertyBean {
         maxNumberOfRecentUrisProperty().set(newValue);
     }
 
-    @NonNull ObjectProperty<Supplier<Activity>> activityFactoryProperty();
+    ObjectProperty<Supplier<Activity>> activityFactoryProperty();
 
     default Supplier<Activity> getActivityFactory() {
         return activityFactoryProperty().get();
@@ -178,17 +177,17 @@ public interface Application extends Disableable, PropertyBean {
         activityFactoryProperty().set(newValue);
     }
 
-    @NonNull ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty();
+    ObjectProperty<Supplier<MenuBar>> menuBarFactoryProperty();
 
-    @NonNull NonNullObjectProperty<Resources> resourcesProperty();
+    NonNullObjectProperty<Resources> resourcesProperty();
 
     default @Nullable Supplier<MenuBar> getMenuBarFactory() {
         return menuBarFactoryProperty().get();
     }
 
-    @NonNull ReadOnlyListProperty<String> stylesheetsProperty();
+    ReadOnlyListProperty<String> stylesheetsProperty();
 
-    default @NonNull ObservableList<String> getStylesheets() {
+    default ObservableList<String> getStylesheets() {
         return stylesheetsProperty().get();
     }
 
@@ -196,11 +195,11 @@ public interface Application extends Disableable, PropertyBean {
         menuBarFactoryProperty().set(newValue);
     }
 
-    default @NonNull Resources getResources() {
+    default Resources getResources() {
         return resourcesProperty().get();
     }
 
-    default void setResources(@NonNull Resources newValue) {
+    default void setResources(Resources newValue) {
         resourcesProperty().set(newValue);
     }
 }

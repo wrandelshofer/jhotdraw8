@@ -6,20 +6,19 @@ package org.jhotdraw8.teddy.action;
 
 import javafx.event.ActionEvent;
 import javafx.scene.text.Font;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.action.AbstractActivityAction;
 import org.jhotdraw8.fxcontrols.fontchooser.FontDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
 import org.jhotdraw8.teddy.TeddyLabels;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 
 public class FontAction extends AbstractActivityAction<FontableActivity> {
 
     private FontDialog fontDialog;
-    public static final @NonNull String ID = "format.font";
+    public static final String ID = "format.font";
 
     /**
      * Creates a new instance which acts on the specified activity of the
@@ -30,13 +29,13 @@ public class FontAction extends AbstractActivityAction<FontableActivity> {
      *                 the active activity of the application. Otherwise it will act on the
      *                 specified activity.
      */
-    public FontAction(@NonNull Application app, @Nullable FontableActivity activity) {
+    public FontAction(Application app, @Nullable FontableActivity activity) {
         super(activity);
         TeddyLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull FontableActivity activity) {
+    protected void onActionPerformed(ActionEvent event, FontableActivity activity) {
         if (fontDialog == null) {
             fontDialog = new FontDialog();
             fontDialog.initOwner(activity.getNode().getScene().getWindow());

@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.immutable;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
 
 import java.util.NoSuchElementException;
@@ -24,10 +23,10 @@ import java.util.NoSuchElementException;
  */
 public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>, ReadOnlySequencedCollection<E> {
     @Override
-    @NonNull ImmutableSequencedCollection<E> add(E element);
+    ImmutableSequencedCollection<E> add(E element);
 
     @Override
-    @NonNull ImmutableSequencedCollection<E> addAll(@NonNull Iterable<? extends E> c);
+    ImmutableSequencedCollection<E> addAll(Iterable<? extends E> c);
 
     /**
      * Returns a copy of this collection that contains all elements
@@ -48,7 +47,7 @@ public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>,
      * a different collection instance with the element added as the first
      * in the iteration order
      */
-    @NonNull ImmutableSequencedCollection<E> addFirst(final @Nullable E element);
+    ImmutableSequencedCollection<E> addFirst(final @Nullable E element);
 
     /**
      * Returns a copy of this collection that contains all elements
@@ -69,16 +68,16 @@ public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>,
      * a different collection instance with the element added as the last
      * in the iteration order
      */
-    @NonNull ImmutableSequencedCollection<E> addLast(final @Nullable E element);
+    ImmutableSequencedCollection<E> addLast(final @Nullable E element);
 
     @Override
-    @NonNull <T> ImmutableSequencedCollection<T> empty();
+    <T> ImmutableSequencedCollection<T> empty();
 
     @Override
-    @NonNull ImmutableSequencedCollection<E> remove(E element);
+    ImmutableSequencedCollection<E> remove(E element);
 
     @Override
-    @NonNull ImmutableSequencedCollection<E> removeAll(@NonNull Iterable<?> c);
+    ImmutableSequencedCollection<E> removeAll(Iterable<?> c);
 
     /**
      * Returns a copy of this set that contains all elements
@@ -103,6 +102,6 @@ public interface ImmutableSequencedCollection<E> extends ImmutableCollection<E>,
     }
 
     @Override
-    @NonNull ImmutableSequencedCollection<E> retainAll(@NonNull Iterable<?> c);
+    ImmutableSequencedCollection<E> retainAll(Iterable<?> c);
 
 }

@@ -10,8 +10,6 @@ import javafx.scene.control.Labeled;
 import javafx.scene.text.FontSmoothingType;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -20,6 +18,7 @@ import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A figure which supports font attributes.
@@ -55,7 +54,7 @@ public interface TextLayoutableFigure extends Figure {
      * @param ctx  RenderContext, can be null
      * @param text a text node
      */
-    default void applyTextLayoutableFigureProperties(@Nullable RenderContext ctx, @NonNull Text text) {
+    default void applyTextLayoutableFigureProperties(@Nullable RenderContext ctx, Text text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
 
         CssSize lineSpacing = getStyledNonNull(LINE_SPACING);
@@ -101,7 +100,7 @@ public interface TextLayoutableFigure extends Figure {
      * @param ctx  context
      * @param text a text node
      */
-    default void applyTextLayoutableFigureProperties(@Nullable RenderContext ctx, @NonNull Labeled text) {
+    default void applyTextLayoutableFigureProperties(@Nullable RenderContext ctx, Labeled text) {
         UnitConverter units = ctx == null ? DefaultUnitConverter.getInstance() : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double d = units.convert(getStyledNonNull(LINE_SPACING), UnitConverter.DEFAULT);
         if (text.getLineSpacing() == d) {

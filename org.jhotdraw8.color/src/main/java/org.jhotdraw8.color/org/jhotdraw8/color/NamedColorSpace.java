@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 
@@ -24,24 +23,24 @@ public interface NamedColorSpace {
     /**
      * Faster fromCIEXYZ method which uses the provided output array.
      */
-    float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue);
+    float[] fromCIEXYZ(float[] xyz, float[] colorvalue);
 
     /**
      * See {@link ColorSpace#fromCIEXYZ(float[])}.
      */
-    default float @NonNull [] fromCIEXYZ(float @NonNull [] colorvalue) {
+    default float[] fromCIEXYZ(float[] colorvalue) {
         return fromCIEXYZ(colorvalue, new float[getNumComponents()]);
     }
 
     /**
      * Faster fromRGB method which uses the provided output array.
      */
-    float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] colorvalue);
+    float[] fromRGB(float[] rgb, float[] colorvalue);
 
     /**
      * See {@link ColorSpace#fromRGB(float[])}.
      */
-    default float @NonNull [] fromRGB(float @NonNull [] rgb) {
+    default float[] fromRGB(float[] rgb) {
         return fromRGB(rgb, new float[getNumComponents()]);
     }
 
@@ -55,12 +54,12 @@ public interface NamedColorSpace {
      */
     float getMinValue(int component);
 
-    @NonNull String getName();
+    String getName();
 
     /**
      * See {@link ColorSpace#getName(int)} ()}.
      */
-    @NonNull String getName(int component);
+    String getName(int component);
 
     /**
      * See {@link ColorSpace#getNumComponents()}.
@@ -75,24 +74,24 @@ public interface NamedColorSpace {
     /**
      * Faster toCIEXYZ method which uses the provided output array.
      */
-    float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz);
+    float[] toCIEXYZ(float[] colorvalue, float[] xyz);
 
     /**
      * See {@link ColorSpace#toCIEXYZ(float[])}.
      */
-    default float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue) {
+    default float[] toCIEXYZ(float[] colorvalue) {
         return toCIEXYZ(colorvalue, new float[3]);
     }
 
     /**
      * Faster toRGB method which uses the provided output array.
      */
-    float @NonNull [] toRGB(float @NonNull [] colorvalue, float @NonNull [] rgb);
+    float[] toRGB(float[] colorvalue, float[] rgb);
 
     /**
      * See {@link ColorSpace#toRGB(float[])}.
      */
-    default float @NonNull [] toRGB(float @NonNull [] colorvalue) {
+    default float[] toRGB(float[] colorvalue) {
         return toRGB(colorvalue, new float[3]);
     }
 }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.graph.iterator;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.graph.algo.AddToSet;
 
@@ -31,9 +30,9 @@ import java.util.function.Function;
  */
 public class BfsDfsVertexSpliterator<V> extends AbstractEnumerator<V> {
 
-    private final @NonNull Function<V, Iterable<V>> nextFunction;
-    private final @NonNull Deque<V> deque;
-    private final @NonNull AddToSet<V> visited;
+    private final Function<V, Iterable<V>> nextFunction;
+    private final Deque<V> deque;
+    private final AddToSet<V> visited;
     private final boolean dfs;
 
     /**
@@ -43,7 +42,7 @@ public class BfsDfsVertexSpliterator<V> extends AbstractEnumerator<V> {
      * @param root         the root vertex
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
-    public BfsDfsVertexSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, boolean dfs) {
+    public BfsDfsVertexSpliterator(Function<V, Iterable<V>> nextFunction, V root, boolean dfs) {
         this(nextFunction, root, new HashSet<>()::add, dfs);
     }
 
@@ -56,7 +55,7 @@ public class BfsDfsVertexSpliterator<V> extends AbstractEnumerator<V> {
      *                     If the graph is known to be a tree, the function can always return true.
      * @param dfs          whether to enumerate depth-first instead of breadth-first
      */
-    public BfsDfsVertexSpliterator(@NonNull Function<V, Iterable<V>> nextFunction, @NonNull V root, @NonNull AddToSet<V> visited, boolean dfs) {
+    public BfsDfsVertexSpliterator(Function<V, Iterable<V>> nextFunction, V root, AddToSet<V> visited, boolean dfs) {
         super(Long.MAX_VALUE, ORDERED | DISTINCT | NONNULL);
         this.dfs = dfs;
         Objects.requireNonNull(nextFunction, "nextFunction");

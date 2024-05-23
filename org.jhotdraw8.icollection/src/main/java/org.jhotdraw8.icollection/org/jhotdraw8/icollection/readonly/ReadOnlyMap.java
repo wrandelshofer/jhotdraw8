@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.MapFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlyCollectionFacade;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.Iterator;
@@ -112,7 +111,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @return a read-only view
      */
-    default @NonNull ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
+    default ReadOnlySet<Map.Entry<K, V>> readOnlyEntrySet() {
         return new ReadOnlySetFacade<>(
                 this::iterator,
                 this::size,
@@ -126,7 +125,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @return a read-only view
      */
-    default @NonNull ReadOnlySet<K> readOnlyKeySet() {
+    default ReadOnlySet<K> readOnlyKeySet() {
         return new ReadOnlySetFacade<>(
                 () -> new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getKey),
                 this::size,
@@ -140,7 +139,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @return a read-only view
      */
-    default @NonNull ReadOnlyCollection<V> readOnlyValues() {
+    default ReadOnlyCollection<V> readOnlyValues() {
         return new ReadOnlyCollectionFacade<>(
                 () -> new MappedIterator<>(ReadOnlyMap.this.iterator(), Map.Entry::getValue),
                 this::size,
@@ -153,7 +152,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @return the wrapped map
      */
-    default @NonNull Map<K, V> asMap() {
+    default Map<K, V> asMap() {
         return new MapFacade<>(this);
     }
 
@@ -168,7 +167,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @param <V> the value type
      * @return a string representation
      */
-    static <K, V> @NonNull String mapToString(final @NonNull ReadOnlyMap<K, V> map) {
+    static <K, V> String mapToString(final ReadOnlyMap<K, V> map) {
         Iterator<Map.Entry<K, V>> i = map.iterator();
         if (!i.hasNext()) {
             return "{}";
@@ -201,7 +200,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @param <V> the value type
      * @return {@code true} if the object is equal to the map
      */
-    static <K, V> boolean mapEquals(@NonNull ReadOnlyMap<K, V> map, Object o) {
+    static <K, V> boolean mapEquals(ReadOnlyMap<K, V> map, Object o) {
         if (o == map) {
             return true;
         }
@@ -229,7 +228,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
                     }
                 }
             }
-        } catch (@NonNull ClassCastException | NullPointerException unused) {
+        } catch (ClassCastException | NullPointerException unused) {
             return false;
         }
 
@@ -246,7 +245,7 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @return the sum of the hash codes of the elements in the set
      * @see Map#hashCode()
      */
-    static <K, V> int iteratorToHashCode(@NonNull Iterator<Map.Entry<K, V>> entries) {
+    static <K, V> int iteratorToHashCode(Iterator<Map.Entry<K, V>> entries) {
         return ReadOnlySet.iteratorToHashCode(entries);
     }
 
@@ -277,14 +276,13 @@ public interface ReadOnlyMap<K, V> extends Iterable<Map.Entry<K, V>> {
      * @return an iterator
      */
     @Override
-    @NonNull Iterator<Map.Entry<K, V>> iterator();
+    Iterator<Map.Entry<K, V>> iterator();
 
     /**
      * Returns a spliterator over the entries contained in this map.
      *
      * @return a spliterator
      */
-    @NonNull
     @Override
     default Spliterator<Map.Entry<K, V>> spliterator() {
         //noinspection MagicConstant

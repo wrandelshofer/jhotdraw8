@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -12,12 +11,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class MutableVectorListTest extends AbstractListTest {
     @Override
-    protected @NonNull SequencedCollection<Key> newInstance() {
+    protected SequencedCollection<Key> newInstance() {
         return new MutableVectorList<Key>();
     }
 
     @Override
-    protected @NonNull List<Key> newListInstance() {
+    protected List<Key> newListInstance() {
         return new MutableVectorList<Key>();
     }
 

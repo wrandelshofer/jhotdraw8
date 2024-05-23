@@ -4,8 +4,10 @@
  */
 
 import org.jhotdraw8.grapher.spi.GrapherResourceBundleProvider;
+import org.jspecify.annotations.NullMarked;
 
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.grapher {
     requires transitive java.desktop;
     requires transitive java.prefs;
@@ -19,7 +21,8 @@ module org.jhotdraw8.grapher {
     requires transitive org.jhotdraw8.os;
     requires transitive org.jhotdraw8.svg;
     requires transitive org.jhotdraw8.theme;
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
 
     opens org.jhotdraw8.grapher to javafx.fxml, javafx.graphics;
 

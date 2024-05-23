@@ -5,11 +5,10 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A figure which supports start markers.
@@ -20,8 +19,8 @@ public interface MarkerStartableFigure extends Figure {
     /**
      * Marker start is an SVG path that points to the right, with coordinate 0,0 at the head of the path.
      */
-    @NonNull NullableFXPathElementsStyleableKey MARKER_START_SHAPE = new NullableFXPathElementsStyleableKey("marker-start-shape", null);
-    @NonNull DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
+    NullableFXPathElementsStyleableKey MARKER_START_SHAPE = new NullableFXPathElementsStyleableKey("marker-start-shape", null);
+    DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
 
     default @Nullable ImmutableList<PathElement> getMarkerStartShape() {
         return getStyled(MarkerStartableFigure.MARKER_START_SHAPE);

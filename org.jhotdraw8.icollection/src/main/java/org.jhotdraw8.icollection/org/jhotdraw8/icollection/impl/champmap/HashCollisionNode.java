@@ -5,10 +5,9 @@
 
 package org.jhotdraw8.icollection.impl.champmap;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.ArrayHelper;
 import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.ToIntFunction;
@@ -21,9 +20,9 @@ import java.util.function.ToIntFunction;
  */
 class HashCollisionNode<K, V> extends Node<K, V> {
     private final int hash;
-    @NonNull Object[] entries;
+    Object[] entries;
 
-    HashCollisionNode(final int hash, final Object @NonNull [] entries) {
+    HashCollisionNode(final int hash, final Object[] entries) {
         this.entries = entries;
         this.hash = hash;
     }
@@ -39,19 +38,19 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    boolean equivalent(@NonNull Object other) {
+    boolean equivalent(Object other) {
         if (this == other) {
             return true;
         }
         HashCollisionNode<?, ?> that = (HashCollisionNode<?, ?>) other;
-        @NonNull Object[] thatEntries = that.entries;
+        Object[] thatEntries = that.entries;
         if (hash != that.hash
                 || thatEntries.length != entries.length) {
             return false;
         }
 
         // Linear scan for each key, because of arbitrary element order.
-        @NonNull Object[] thatEntriesCloned = thatEntries.clone();
+        Object[] thatEntriesCloned = thatEntries.clone();
         int remainingLength = thatEntriesCloned.length;
         outerLoop:
         for (int i = 0; i < entries.length; i += ENTRY_LENGTH) {
@@ -92,7 +91,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    Object @NonNull [] getDataEntry(int index) {
+    Object[] getDataEntry(int index) {
         Object[] entry = new Object[ENTRY_LENGTH];
         System.arraycopy(entries, ENTRY_LENGTH * index, entry, 0, ENTRY_LENGTH);
         return entry;
@@ -100,14 +99,12 @@ class HashCollisionNode<K, V> extends Node<K, V> {
 
     @Override
     @SuppressWarnings("unchecked")
-    @NonNull
     public K getKey(final int index) {
         return (K) entries[index * ENTRY_LENGTH];
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    @NonNull
     EditableMapEntry<K, V> getMapEntry(final int index) {
         return new EditableMapEntry<>(
                 (K) entries[index * ENTRY_LENGTH],
@@ -117,7 +114,6 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     }
 
     @Override
-    @NonNull
     Node<K, V> getNode(int index) {
         throw new IllegalStateException("Is leaf node.");
     }
@@ -147,7 +143,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @Override
     @Nullable
     Node<K, V> remove(final @Nullable IdentityObject mutator, final K key,
-                      final int keyHash, final int shift, final @NonNull ChangeEvent<V> details) {
+                      final int keyHash, final int shift, final ChangeEvent<V> details) {
         for (int idx = 0, i = 0; i < entries.length; i += ENTRY_LENGTH, idx++) {
             if (Objects.equals(entries[i], key)) {
                 @SuppressWarnings("unchecked") final V currentVal = ENTRY_LENGTH > 1 ? (V) entries[i + 1] : null;
@@ -178,7 +174,7 @@ class HashCollisionNode<K, V> extends Node<K, V> {
     @Override
     @Nullable
     Node<K, V> put(final @Nullable IdentityObject mutator, final K key, final V val,
-                   final int keyHash, final int shift, final @NonNull ChangeEvent<V> details, @NonNull ToIntFunction<K> hashFunction) {
+                   final int keyHash, final int shift, final ChangeEvent<V> details, ToIntFunction<K> hashFunction) {
         assert this.hash == keyHash;
 
         for (int idx = 0, i = 0; i < entries.length; i += ENTRY_LENGTH, idx++) {

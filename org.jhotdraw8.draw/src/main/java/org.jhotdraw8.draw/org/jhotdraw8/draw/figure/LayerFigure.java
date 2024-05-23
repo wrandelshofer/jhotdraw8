@@ -19,8 +19,6 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssFont;
@@ -29,6 +27,7 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.geom.FXRectangles;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,19 +49,19 @@ public class LayerFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         for (Figure child : getChildren()) {
             child.reshapeInLocal(transform);
         }
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         // empty
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group n = (Group) node;
         applyHideableFigureProperties(ctx, n);
         RenderingIntent renderingIntent = ctx.get(RenderContext.RENDERING_INTENT);
@@ -101,7 +100,7 @@ public class LayerFigure extends AbstractCompositeFigure
         }
     }
 
-    public void updateNodeWithErrorMessage(@NonNull RenderContext ctx, List<Node> childNodes, Bounds clipBounds) {
+    public void updateNodeWithErrorMessage(RenderContext ctx, List<Node> childNodes, Bounds clipBounds) {
         Drawing drawing = getDrawing();
         Bounds b = (drawing != null) ? drawing.getLayoutBounds() : new BoundingBox(0, 0, 100, 100);
         Rectangle r = new Rectangle(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
@@ -151,7 +150,7 @@ public class LayerFigure extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext ctx) {
+    public Node createNode(RenderContext ctx) {
         Group n = new Group();
         n.setManaged(false);
         n.setAutoSizeChildren(false);
@@ -186,12 +185,12 @@ public class LayerFigure extends AbstractCompositeFigure
      * Layers never create handles.
      */
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         // empty
     }
 
     @Override
-    public boolean isSuitableChild(@NonNull Figure newChild) {
+    public boolean isSuitableChild(Figure newChild) {
         return true;
     }
 
@@ -206,7 +205,7 @@ public class LayerFigure extends AbstractCompositeFigure
      * @return [0, 0, MAX_VALUE, MAX_VALUE].
      */
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         return new BoundingBox(0, 0, Double.MAX_VALUE, Double.MAX_VALUE);
     }
 }

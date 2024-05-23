@@ -9,8 +9,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.Paintable;
@@ -22,6 +20,7 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -87,7 +86,6 @@ public interface SecondStrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull
     NullablePaintableStyleableKey SECOND_STROKE = new NullablePaintableStyleableKey("second-stroke", null);
     /**
      * Defines the stroke type used for drawing outline of the figure.
@@ -144,7 +142,7 @@ public interface SecondStrokableFigure extends Figure {
             SECOND_STROKE_TYPE, SECOND_STROKE_LINE_CAP, SECOND_STROKE_LINE_JOIN, SECOND_STROKE_MITER_LIMIT,
             SECOND_STROKE_DASH_OFFSET, SECOND_STROKE_DASH_ARRAY);
 
-    default void applySecondStrokeCapAndJoinProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeCapAndJoinProperties(RenderContext ctx, Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(SECOND_STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -160,7 +158,7 @@ public interface SecondStrokableFigure extends Figure {
         }
     }
 
-    default void applySecondStrokeDashProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeDashProperties(RenderContext ctx, Shape shape) {
         double d = getStyledNonNull(SECOND_STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -177,7 +175,7 @@ public interface SecondStrokableFigure extends Figure {
         }
     }
 
-    default void applySecondStrokeTypeProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeTypeProperties(RenderContext ctx, Shape shape) {
         StrokeType st = getStyled(SECOND_STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -190,7 +188,7 @@ public interface SecondStrokableFigure extends Figure {
      * @param ctx
      * @param shape a shape node
      */
-    default void applySecondStrokeableFigureProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeableFigureProperties(RenderContext ctx, Shape shape) {
         applySecondStrokeColorProperties(ctx, shape);
         applySecondStrokeWidthProperties(ctx, shape);
         applySecondStrokeCapAndJoinProperties(ctx, shape);
@@ -199,14 +197,14 @@ public interface SecondStrokableFigure extends Figure {
         applySecondStrokeDashProperties(ctx, shape);
     }
 
-    default void applySecondStrokeColorProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeColorProperties(RenderContext ctx, Shape shape) {
         Paint p = Paintable.getPaint(getStyled(SECOND_STROKE), ctx);
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
 
-    default void applySecondStrokeWidthProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applySecondStrokeWidthProperties(RenderContext ctx, Shape shape) {
         double d = getStyledNonNull(SECOND_STROKE_WIDTH).getConvertedValue();
         if (shape.getStrokeWidth() != d) {
             shape.setStrokeWidth(d);

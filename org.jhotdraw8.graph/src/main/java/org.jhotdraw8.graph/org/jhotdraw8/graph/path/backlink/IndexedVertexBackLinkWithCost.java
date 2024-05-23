@@ -5,11 +5,10 @@
 
 package org.jhotdraw8.graph.path.backlink;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -31,7 +30,7 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
      * @param parent the parent back link
      * @param cost   the cumulated cost of this back link. Must be zero if parent is null.
      */
-    public IndexedVertexBackLinkWithCost(int vertex, @Nullable IndexedVertexBackLinkWithCost<C> parent, @NonNull C cost) {
+    public IndexedVertexBackLinkWithCost(int vertex, @Nullable IndexedVertexBackLinkWithCost<C> parent, C cost) {
         super(parent, cost);
         this.vertex = vertex;
     }
@@ -51,7 +50,7 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
      * @return the vertex sequence
      */
     public static <XX, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable IndexedVertexBackLinkWithCost<CC> node,
-                                                                                                                               @NonNull Function<IndexedVertexBackLinkWithCost<CC>, XX> mappingFunction) {
+                                                                                                                               Function<IndexedVertexBackLinkWithCost<CC>, XX> mappingFunction) {
         if (node == null) {
             return null;
         }

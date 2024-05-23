@@ -7,8 +7,6 @@ package org.jhotdraw8.draw.figure;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Line;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.handle.Handle;
@@ -20,6 +18,7 @@ import org.jhotdraw8.draw.handle.SelectionHandle;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -37,13 +36,13 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "LineConnection";
+    public static final String TYPE_SELECTOR = "LineConnection";
 
     public LineConnectionFigure() {
         this(0, 0, 1, 1);
     }
 
-    public LineConnectionFigure(@NonNull Point2D start, @NonNull Point2D end) {
+    public LineConnectionFigure(Point2D start, Point2D end) {
         this(start.getX(), start.getY(), end.getX(), end.getY());
     }
 
@@ -52,7 +51,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.SELECT) {
             list.add(new LineOutlineHandle(this));
         } else if (handleType == HandleType.MOVE) {
@@ -83,19 +82,19 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Line n = new Line();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
 
         Line lineNode = (Line) node;
         Point2D start = getNonNull(START).getConvertedValue();
@@ -112,7 +111,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         return FXShapes.fxShapeToAwtShape(new Line(
                 getNonNull(START_X).getConvertedValue(),
                 getNonNull(START_Y).getConvertedValue(),
@@ -121,7 +120,7 @@ public class LineConnectionFigure extends AbstractLineConnectionFigure
     }
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         Point2D start = getNonNull(START).getConvertedValue();
         Point2D end = getNonNull(END).getConvertedValue();
         Connector startConnector = get(START_CONNECTOR);

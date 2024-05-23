@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champmap;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -36,7 +35,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
     private final @Nullable Consumer<K> persistentRemoveFunction;
     private final @Nullable BiConsumer<K, V> persistentPutIfPresentFunction;
     @SuppressWarnings({"unchecked", "rawtypes"})
-    final Node<K, V> @NonNull [] nodes = new Node[Node.MAX_DEPTH];
+    final Node<K, V>[] nodes = new Node[Node.MAX_DEPTH];
 
     /**
      * Creates a new instance.
@@ -49,7 +48,7 @@ public class EntryIterator<K, V> implements Iterator<Map.Entry<K, V>> {
      *                                       the function must not change the trie that was passed
      *                                       to this iterator
      */
-    public EntryIterator(@NonNull Node<K, V> rootNode, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
+    public EntryIterator(Node<K, V> rootNode, @Nullable Consumer<K> persistentRemoveFunction, @Nullable BiConsumer<K, V> persistentPutIfPresentFunction) {
         this.persistentRemoveFunction = persistentRemoveFunction;
         this.persistentPutIfPresentFunction = persistentPutIfPresentFunction;
         if (rootNode.hasNodes()) {

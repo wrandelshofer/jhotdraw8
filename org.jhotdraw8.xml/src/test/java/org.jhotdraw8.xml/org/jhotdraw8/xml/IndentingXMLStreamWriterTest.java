@@ -1,6 +1,5 @@
 package org.jhotdraw8.xml;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
@@ -36,7 +35,7 @@ public class IndentingXMLStreamWriterTest {
      * @return
      */
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsCanonicalXml() {
+    public List<DynamicTest> dynamicTestsCanonicalXml() {
         return Arrays.asList(
                 dynamicTest("3.4 Character Modifications and Character References", () -> shouldHonourXmlSpaceAttribute(
                         """
@@ -77,7 +76,7 @@ public class IndentingXMLStreamWriterTest {
      * @return
      */
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsXmlSpace() {
+    public List<DynamicTest> dynamicTestsXmlSpace() {
         return Arrays.asList(
                 dynamicTest("3. Whitespace only text nodes, xml:space=preserve", () -> shouldHonourXmlSpaceAttribute(
                         """

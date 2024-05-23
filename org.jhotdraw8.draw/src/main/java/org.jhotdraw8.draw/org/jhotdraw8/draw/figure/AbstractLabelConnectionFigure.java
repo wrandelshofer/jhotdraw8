@@ -10,8 +10,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.connector.Connector;
@@ -34,6 +32,7 @@ import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,40 +66,40 @@ import java.util.Set;
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure, LabelConnectionFigure {
 
-    public static final @NonNull CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", CssSize.ZERO);
-    public static final @NonNull CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
+    public static final CssSizeStyleableKey LABELED_LOCATION_X = new CssSizeStyleableKey("labeledLocationX", CssSize.ZERO);
+    public static final CssSizeStyleableKey LABELED_LOCATION_Y = new CssSizeStyleableKey("labeledLocationY", CssSize.ZERO);
+    public static final CssPoint2DStyleableMapAccessor LABELED_LOCATION = new CssPoint2DStyleableMapAccessor("labeledLocation", LABELED_LOCATION_X, LABELED_LOCATION_Y);
 
     /**
      * The perpendicular offset of the label.
      * <p>
      * The offset is perpendicular to the tangent line of the figure.
      */
-    public static final @NonNull CssSizeStyleableKey LABEL_OFFSET_Y = new CssSizeStyleableKey("labelOffsetY", CssSize.ZERO);
+    public static final CssSizeStyleableKey LABEL_OFFSET_Y = new CssSizeStyleableKey("labelOffsetY", CssSize.ZERO);
     /**
      * The tangential offset of the label.
      * <p>
      * The offset is on tangent line of the figure.
      */
-    public static final @NonNull CssSizeStyleableKey LABEL_OFFSET_X = new CssSizeStyleableKey("labelOffsetX", CssSize.ZERO);
-    public static final @NonNull CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
+    public static final CssSizeStyleableKey LABEL_OFFSET_X = new CssSizeStyleableKey("labelOffsetX", CssSize.ZERO);
+    public static final CssPoint2DStyleableMapAccessor LABEL_OFFSET = new CssPoint2DStyleableMapAccessor("labelOffset", LABEL_OFFSET_X, LABEL_OFFSET_Y);
     /**
      * Whether the label should be rotated with the target.
      */
-    public static final @NonNull NonNullEnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new NonNullEnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
-    public static final @NonNull CssSizeStyleableKey LABEL_TRANSLATE_Y = new CssSizeStyleableKey("labelTranslationY", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey LABEL_TRANSLATE_X = new CssSizeStyleableKey("labelTranslationX", CssSize.ZERO);
+    public static final NonNullEnumStyleableKey<LabelAutorotate> LABEL_AUTOROTATE = new NonNullEnumStyleableKey<>("labelAutorotate", LabelAutorotate.class, LabelAutorotate.OFF);
+    public static final CssSizeStyleableKey LABEL_TRANSLATE_Y = new CssSizeStyleableKey("labelTranslationY", CssSize.ZERO);
+    public static final CssSizeStyleableKey LABEL_TRANSLATE_X = new CssSizeStyleableKey("labelTranslationX", CssSize.ZERO);
     /**
      * The position relative to the parent (respectively the offset).
      */
-    public static final @NonNull CssPoint2DStyleableMapAccessor LABEL_TRANSLATE = new CssPoint2DStyleableMapAccessor("labelTranslation", LABEL_TRANSLATE_X, LABEL_TRANSLATE_Y);
-    private final @NonNull ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
+    public static final CssPoint2DStyleableMapAccessor LABEL_TRANSLATE = new CssPoint2DStyleableMapAccessor("labelTranslation", LABEL_TRANSLATE_X, LABEL_TRANSLATE_Y);
+    private final ReadOnlyBooleanWrapper connected = new ReadOnlyBooleanWrapper();
 
     public AbstractLabelConnectionFigure() {
     }
 
     @Override
-    protected <T> void onPropertyChanged(@NonNull Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
+    protected <T> void onPropertyChanged(Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         if (key == LABEL_TARGET) {
             if (getDrawing() != null) {
                 if (oldValue != null) {
@@ -118,7 +117,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void doAddedToDrawing(final @NonNull Drawing drawing) {
+    public void doAddedToDrawing(final Drawing drawing) {
         final Figure labelTarget = get(LABEL_TARGET);
         if (labelTarget != null) {
             labelTarget.getLayoutObservers().add(this);
@@ -126,7 +125,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    protected void doRemovedFromDrawing(final @NonNull Drawing drawing) {
+    protected void doRemovedFromDrawing(final Drawing drawing) {
         final Figure labelTarget = get(LABEL_TARGET);
         if (labelTarget != null) {
             labelTarget.getLayoutObservers().remove(this);
@@ -143,12 +142,12 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      *
      * @return the connected property
      */
-    public @NonNull ReadOnlyBooleanProperty connectedProperty() {
+    public ReadOnlyBooleanProperty connectedProperty() {
         return connected.getReadOnlyProperty();
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.MOVE) {
             list.add(new BoundsInLocalOutlineHandle(this));
             if (get(LABEL_CONNECTOR) == null) {
@@ -175,7 +174,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * @return a list of connected figures
      */
     @Override
-    public @NonNull ReadOnlySet<Figure> getLayoutSubjects() {
+    public ReadOnlySet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
         return labelTarget == null ? ChampSet.of() : ChampSet.of(labelTarget);
     }
@@ -185,7 +184,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public boolean isGroupReshapeableWith(@NonNull Set<Figure> others) {
+    public boolean isGroupReshapeableWith(Set<Figure> others) {
         for (Figure f : getLayoutSubjects()) {
             if (others.contains(f)) {
                 return false;
@@ -200,7 +199,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void layout(final @NonNull RenderContext ctx) {
+    public void layout(final RenderContext ctx) {
         layoutOrigin(ctx);
         super.layout(ctx);
     }
@@ -217,7 +216,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      *
      * @param ctx
      */
-    protected void layoutOrigin(final @NonNull RenderContext ctx) {
+    protected void layoutOrigin(final RenderContext ctx) {
         final Figure labelTarget = get(LABEL_TARGET);
         final Connector labelConnector = get(LABEL_CONNECTOR);
 
@@ -266,7 +265,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         set(LABELED_LOCATION, new CssPoint2D(labeledLoc));
 
         if (layoutTransforms) {
-            final @NonNull List<Transform> transforms = new ArrayList<>();
+            final List<Transform> transforms = new ArrayList<>();
             if (!rotate.isIdentity()) {
                 transforms.add(rotate);
             }
@@ -280,7 +279,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void removeLayoutSubject(final @NonNull Figure subject) {
+    public void removeLayoutSubject(final Figure subject) {
         if (subject == get(LABEL_TARGET)) {
             set(LABEL_TARGET, null);
         }
@@ -288,13 +287,13 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void updateGroupNode(final @NonNull RenderContext ctx, final @NonNull Group node) {
+    public void updateGroupNode(final RenderContext ctx, final Group node) {
         super.updateGroupNode(ctx, node);
         applyTransformableFigureProperties(ctx, node);
     }
 
     @Override
-    public void reshapeInLocal(final @NonNull CssSize x, final @NonNull CssSize y, final @NonNull CssSize width, final @NonNull CssSize height) {
+    public void reshapeInLocal(final CssSize x, final CssSize y, final CssSize width, final CssSize height) {
         if (get(LABEL_TARGET) == null) {
             super.reshapeInLocal(x, y, width, height);
             set(LABELED_LOCATION, getNonNull(ORIGIN));
@@ -309,7 +308,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
     }
 
     @Override
-    public void translateInLocal(@NonNull CssPoint2D delta) {
+    public void translateInLocal(CssPoint2D delta) {
         if (get(LABEL_TARGET) == null) {
             super.translateInLocal(delta);
             set(LABELED_LOCATION, getNonNull(ORIGIN));

@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.collection.spliterator;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -19,13 +18,13 @@ import java.util.function.Consumer;
  * @param <E> the element type
  */
 public class IteratorFacade<E> implements Iterator<E>, Consumer<E> {
-    private final @NonNull Spliterator<E> e;
+    private final Spliterator<E> e;
     private final @Nullable Consumer<E> removeFunction;
     private boolean valueReady;
     private boolean canRemove;
     private E current;
 
-    public IteratorFacade(@NonNull Spliterator<E> e, @Nullable Consumer<E> removeFunction) {
+    public IteratorFacade(Spliterator<E> e, @Nullable Consumer<E> removeFunction) {
         this.e = e;
         this.removeFunction = removeFunction;
     }

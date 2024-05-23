@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.svg.css.text;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -16,6 +14,7 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.SvgPaintDefaulting;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,8 +23,8 @@ import java.util.function.Consumer;
 public class SvgDefaultablePaintConverter<T extends Paintable> implements CssConverter<SvgDefaultablePaint<T>> {
 
 
-    public static final @NonNull String CURRENT_COLOR = "currentColor";
-    private final @NonNull CssConverter<T> valueConverter;
+    public static final String CURRENT_COLOR = "currentColor";
+    private final CssConverter<T> valueConverter;
 
     public SvgDefaultablePaintConverter(CssConverter<T> valueConverter) {
 
@@ -34,7 +33,7 @@ public class SvgDefaultablePaintConverter<T extends Paintable> implements CssCon
 
 
     @Override
-    public @Nullable SvgDefaultablePaint<T> parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable SvgDefaultablePaint<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT) {
             switch (tt.currentStringNonNull()) {
                 case CssTokenType.IDENT_INHERIT:
@@ -48,7 +47,7 @@ public class SvgDefaultablePaintConverter<T extends Paintable> implements CssCon
     }
 
     @Override
-    public <TT extends SvgDefaultablePaint<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) throws IOException {
+    public <TT extends SvgDefaultablePaint<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;

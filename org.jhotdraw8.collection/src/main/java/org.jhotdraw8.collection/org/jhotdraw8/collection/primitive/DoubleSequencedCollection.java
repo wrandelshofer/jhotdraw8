@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.SequencedCollection;
 
@@ -52,11 +51,11 @@ public interface DoubleSequencedCollection extends SequencedCollection<Double> {
         return removeLastAsDouble();
     }
 
-    default void addLastAllAsDouble(double @NonNull [] array) {
+    default void addLastAllAsDouble(double[] array) {
         addLastAllAsDouble(array, 0, array.length);
     }
 
-    default void addLastAllAsDouble(double @NonNull [] array, int offset, int length) {
+    default void addLastAllAsDouble(double[] array, int offset, int length) {
         for (int i = offset, limit = offset + length; i < limit; i++) {
             addLastAsDouble(array[i]);
         }

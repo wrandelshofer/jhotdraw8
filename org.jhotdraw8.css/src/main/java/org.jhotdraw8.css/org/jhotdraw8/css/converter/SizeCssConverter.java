@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
@@ -13,6 +11,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -45,7 +44,7 @@ public final class SizeCssConverter implements CssConverter<CssSize> {
 
 
     @Override
-    public @Nullable CssSize parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable CssSize parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (nullable) {
             if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
                 return null;
@@ -56,7 +55,7 @@ public final class SizeCssConverter implements CssConverter<CssSize> {
         return parseSizeOrPercentage(tt, "size");
     }
 
-    public static CssSize parseSize(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
+    public static CssSize parseSize(CssTokenizer tt, String variable) throws ParseException, IOException {
         return switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> CssSize.of(tt.currentNumberNonNull().doubleValue());
             case CssTokenType.TT_DIMENSION -> CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentString());
@@ -72,7 +71,7 @@ public final class SizeCssConverter implements CssConverter<CssSize> {
         };
     }
 
-    public static CssSize parseSizeOrPercentage(@NonNull CssTokenizer tt, String variable) throws ParseException, IOException {
+    public static CssSize parseSizeOrPercentage(CssTokenizer tt, String variable) throws ParseException, IOException {
         return switch (tt.next()) {
             case CssTokenType.TT_NUMBER -> CssSize.of(tt.currentNumberNonNull().doubleValue());
             case CssTokenType.TT_DIMENSION -> CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentString());
@@ -91,7 +90,7 @@ public final class SizeCssConverter implements CssConverter<CssSize> {
 
 
     @Override
-    public <TT extends CssSize> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    public <TT extends CssSize> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else if (UnitConverter.DEFAULT.equals(value.getUnits())) {

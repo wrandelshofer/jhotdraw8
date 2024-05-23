@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.action;
 import javafx.event.ActionEvent;
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -24,7 +23,7 @@ import java.util.Set;
 
 public class DistributeVerticallyAction extends AbstractDrawingViewAction {
 
-    public static final @NonNull String ID = "edit.distributeVertically";
+    public static final String ID = "edit.distributeVertically";
 
     /**
      * Creates a new instance.
@@ -32,7 +31,7 @@ public class DistributeVerticallyAction extends AbstractDrawingViewAction {
      * @param editor the drawing editor
      */
     @SuppressWarnings("this-escape")
-    public DistributeVerticallyAction(@NonNull DrawingEditor editor) {
+    public DistributeVerticallyAction(DrawingEditor editor) {
         super(editor);
         Resources labels
                 = DrawLabels.getResources();
@@ -40,7 +39,7 @@ public class DistributeVerticallyAction extends AbstractDrawingViewAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent e, @NonNull DrawingView drawingView) {
+    protected void onActionPerformed(ActionEvent e, DrawingView drawingView) {
         final Set<Figure> figures = drawingView.getSelectedFigures();
         distributeVertically(drawingView, figures);
     }
@@ -51,7 +50,7 @@ public class DistributeVerticallyAction extends AbstractDrawingViewAction {
      * @param view    the drawing view
      * @param figures the figures to be distributed horizontally
      */
-    private void distributeVertically(@NonNull DrawingView view, @NonNull Set<Figure> figures) {
+    private void distributeVertically(DrawingView view, Set<Figure> figures) {
         if (figures.size() < 3) {
             return;
         }

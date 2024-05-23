@@ -6,10 +6,9 @@ package org.jhotdraw8.fxcontrols.dock;
 
 import javafx.scene.Node;
 import javafx.scene.text.Text;
-import org.jhotdraw8.annotation.NonNull;
 
 public class SimpleDockable extends AbstractDockable {
-    private final @NonNull Node node;
+    private final Node node;
 
     public SimpleDockable(Node content) {
         this(null, content);
@@ -24,7 +23,7 @@ public class SimpleDockable extends AbstractDockable {
 
 
     @Override
-    public @NonNull Node getNode() {
+    public Node getNode() {
         return node;
     }
 

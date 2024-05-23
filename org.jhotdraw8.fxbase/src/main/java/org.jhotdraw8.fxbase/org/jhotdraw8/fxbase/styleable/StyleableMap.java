@@ -6,8 +6,7 @@ package org.jhotdraw8.fxbase.styleable;
 
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Set;
@@ -23,13 +22,15 @@ import java.util.Set;
  * @author Werner Randelshofer
  */
 public interface StyleableMap<K, V> extends ObservableMap<K, V> {
-    <T extends K> boolean containsKey(@NonNull StyleOrigin origin, @NonNull T key);
+    <T extends K> boolean containsKey(StyleOrigin origin, T key);
 
-    @Nullable V get(@NonNull StyleOrigin origin, @NonNull K key);
+    @Nullable
+    V get(StyleOrigin origin, K key);
 
-    @NonNull Map<K, V> getMap(@NonNull StyleOrigin origin);
+    Map<K, V> getMap(StyleOrigin origin);
 
-    @Nullable StyleOrigin getStyleOrigin(@NonNull K key);
+    @Nullable
+    StyleOrigin getStyleOrigin(K key);
 
     /**
      * Removes the specified key from the specified style origin
@@ -38,15 +39,16 @@ public interface StyleableMap<K, V> extends ObservableMap<K, V> {
      * @param origin the style origin
      * @param key    the key
      */
-    V removeKey(@NonNull StyleOrigin origin, @NonNull K key);
+    V removeKey(StyleOrigin origin, K key);
 
-    @NonNull Map<K, V> getStyledMap();
+    Map<K, V> getStyledMap();
 
-    @Nullable V put(@NonNull StyleOrigin styleOrigin, @NonNull K key, @Nullable V value);
+    @Nullable
+    V put(StyleOrigin styleOrigin, K key, @Nullable V value);
 
-    void removeAll(@NonNull StyleOrigin origin);
+    void removeAll(StyleOrigin origin);
 
     void resetStyledValues();
 
-    Set<Entry<K, V>> entrySet(@NonNull StyleOrigin origin);
+    Set<Entry<K, V>> entrySet(StyleOrigin origin);
 }

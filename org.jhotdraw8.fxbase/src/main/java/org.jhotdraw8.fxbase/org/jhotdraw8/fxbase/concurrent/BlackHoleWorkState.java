@@ -13,8 +13,7 @@ import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.ReadOnlyStringProperty;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This work state does not update its properties, except for {@link #isCancelled()}.
@@ -24,19 +23,19 @@ import org.jhotdraw8.annotation.Nullable;
  */
 public class BlackHoleWorkState<V> implements WorkState<V> {
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
+    private final ReadOnlyStringWrapper title = new ReadOnlyStringWrapper(this, TITLE_PROPERTY, null);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, MESSAGE_PROPERTY, null);
+    private final ReadOnlyStringWrapper message = new ReadOnlyStringWrapper(this, MESSAGE_PROPERTY, null);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, VALUE_PROPERTY, null);
+    private final ReadOnlyObjectWrapper<V> value = new ReadOnlyObjectWrapper<>(this, VALUE_PROPERTY, null);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
+    private final ReadOnlyDoubleWrapper workDone = new ReadOnlyDoubleWrapper(this, WORK_DONE_PROPERTY, -1.0);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, TOTAL_WORK_PROPERTY, -1.0);
+    private final ReadOnlyDoubleWrapper totalWork = new ReadOnlyDoubleWrapper(this, TOTAL_WORK_PROPERTY, -1.0);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, PROGRESS_PROPERTY, -1.0);
+    private final ReadOnlyDoubleWrapper progress = new ReadOnlyDoubleWrapper(this, PROGRESS_PROPERTY, -1.0);
     @SuppressWarnings("this-escape")
-    private final @NonNull ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
+    private final ReadOnlyBooleanWrapper running = new ReadOnlyBooleanWrapper(this, RUNNING_PROPERTY, true);
     private volatile boolean isCancelled;
 
     public BlackHoleWorkState() {
@@ -54,12 +53,12 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public void updateState(@NonNull State value) {
+    public void updateState(State value) {
 
     }
 
     @Override
-    public void updateException(@NonNull Throwable value) {
+    public void updateException(Throwable value) {
 
     }
 
@@ -111,8 +110,8 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
         return state.get();
     }
 
-    private final @NonNull ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(State.READY);
-    private final @NonNull ReadOnlyObjectWrapper<Throwable> throwable = new ReadOnlyObjectWrapper<>(null);
+    private final ReadOnlyObjectWrapper<State> state = new ReadOnlyObjectWrapper<>(State.READY);
+    private final ReadOnlyObjectWrapper<Throwable> throwable = new ReadOnlyObjectWrapper<>(null);
 
     @Override
     public ReadOnlyObjectProperty<State> stateProperty() {
@@ -126,7 +125,7 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyObjectProperty<V> valueProperty() {
+    public ReadOnlyObjectProperty<V> valueProperty() {
         return value.getReadOnlyProperty();
     }
 
@@ -146,7 +145,7 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyDoubleProperty workDoneProperty() {
+    public ReadOnlyDoubleProperty workDoneProperty() {
         return workDone.getReadOnlyProperty();
     }
 
@@ -156,7 +155,7 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyDoubleProperty totalWorkProperty() {
+    public ReadOnlyDoubleProperty totalWorkProperty() {
         return totalWork.getReadOnlyProperty();
     }
 
@@ -166,7 +165,7 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyDoubleProperty progressProperty() {
+    public ReadOnlyDoubleProperty progressProperty() {
         return progress.getReadOnlyProperty();
     }
 
@@ -186,7 +185,7 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyStringProperty messageProperty() {
+    public ReadOnlyStringProperty messageProperty() {
         return message.getReadOnlyProperty();
     }
 
@@ -196,7 +195,7 @@ public class BlackHoleWorkState<V> implements WorkState<V> {
     }
 
     @Override
-    public @NonNull ReadOnlyStringProperty titleProperty() {
+    public ReadOnlyStringProperty titleProperty() {
         return title.getReadOnlyProperty();
     }
 

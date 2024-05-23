@@ -7,11 +7,10 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.DoubleConverter;
 import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.base.io.StreamPosTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.IllegalPathStateException;
@@ -27,7 +26,7 @@ import java.util.logging.Logger;
  * Provides methods for parsing and generating SVG path strings from AWT paths.
  */
 public class SvgPaths {
-    private static final @NonNull Logger LOGGER = Logger.getLogger(SvgPaths.class.getName());
+    private static final Logger LOGGER = Logger.getLogger(SvgPaths.class.getName());
 
     /**
      * Don't let anyone instantiate this class.
@@ -46,7 +45,7 @@ public class SvgPaths {
      * @return the path builder
      * @throws ParseException if the String is not a valid path
      */
-    public static <T> @NonNull PathBuilder<T> buildSvgString(@NonNull PathBuilder<T> builder, @NonNull String str) throws ParseException {
+    public static <T> PathBuilder<T> buildSvgString(PathBuilder<T> builder, String str) throws ParseException {
         StreamPosTokenizer tt = new StreamPosTokenizer(new StringReader(str));
         try {
 
@@ -308,7 +307,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String awtPathIteratorToDoubleSvgString(@NonNull PathIterator iter) {
+    public static String awtPathIteratorToDoubleSvgString(PathIterator iter) {
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
         double reflectedX = Double.NaN;
@@ -408,7 +407,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String awtPathIteratorToDoubleRelativeSvgString(@NonNull PathIterator iter) {
+    public static String awtPathIteratorToDoubleRelativeSvgString(PathIterator iter) {
         StringBuilder buf = new StringBuilder();
         double[] coords = new double[6];
         double x = 0, y = 0;// current point
@@ -482,7 +481,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String awtPathIteratorToFloatRelativeSvgString(@NonNull PathIterator iter) {
+    public static String awtPathIteratorToFloatRelativeSvgString(PathIterator iter) {
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
         float x = 0, y = 0;// current point
@@ -555,7 +554,7 @@ public class SvgPaths {
      * @param iter AWT Path Iterator
      * @return SVG Path
      */
-    public static @NonNull String awtPathIteratorToFloatSvgString(@NonNull PathIterator iter) {
+    public static String awtPathIteratorToFloatSvgString(PathIterator iter) {
 
         StringBuilder buf = new StringBuilder();
         float[] coords = new float[6];
@@ -628,7 +627,7 @@ public class SvgPaths {
      * @return the SvgPath2D
      * @throws ParseException if the String is not a valid path
      */
-    public static Path2D.@NonNull Double svgStringToAwtShape(@NonNull String str) throws ParseException {
+    public static Path2D.Double svgStringToAwtShape(String str) throws ParseException {
         AwtPathBuilder b = new AwtPathBuilder();
         buildSvgString(b, str);
         return b.build();
@@ -644,7 +643,7 @@ public class SvgPaths {
      * @param pathstr an SVGPath String
      * @param b       the desired bounds
      */
-    public static void buildReshapedSvgString(@NonNull PathBuilder<?> builder, @Nullable String pathstr, @NonNull Bounds b) {
+    public static void buildReshapedSvgString(PathBuilder<?> builder, @Nullable String pathstr, Bounds b) {
         if (pathstr != null) {
             Shape shape = null;
             try {

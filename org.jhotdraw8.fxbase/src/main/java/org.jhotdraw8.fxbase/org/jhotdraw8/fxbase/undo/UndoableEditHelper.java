@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.fxbase.undo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 import java.util.function.Consumer;
@@ -16,8 +15,8 @@ import java.util.function.Consumer;
  */
 public class UndoableEditHelper {
     private @Nullable CompositeEdit edit;
-    private final @NonNull Consumer<UndoableEditEvent> handler;
-    private final @NonNull Object source;
+    private final Consumer<UndoableEditEvent> handler;
+    private final Object source;
 
     /**
      * Creates a new instance.
@@ -25,7 +24,7 @@ public class UndoableEditHelper {
      * @param source  the event source
      * @param handler the event handler
      */
-    public UndoableEditHelper(@NonNull Object source, @NonNull Consumer<UndoableEditEvent> handler) {
+    public UndoableEditHelper(Object source, Consumer<UndoableEditEvent> handler) {
         this.handler = handler;
         this.source = source;
     }

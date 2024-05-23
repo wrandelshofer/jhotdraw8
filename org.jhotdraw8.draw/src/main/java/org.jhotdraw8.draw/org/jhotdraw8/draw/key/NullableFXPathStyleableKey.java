@@ -5,11 +5,10 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.scene.shape.Path;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.FXPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * NullableSvgPathStyleableKey.
@@ -18,7 +17,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
  */
 public class NullableFXPathStyleableKey extends AbstractStyleableKey<Path> implements WritableStyleableMapAccessor<Path> {
 
-    private final @NonNull Converter<Path> converter;
+    private final Converter<Path> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -26,7 +25,7 @@ public class NullableFXPathStyleableKey extends AbstractStyleableKey<Path> imple
      *
      * @param name The name of the key.
      */
-    public NullableFXPathStyleableKey(@NonNull String name) {
+    public NullableFXPathStyleableKey(String name) {
         this(name, null);
     }
 
@@ -40,13 +39,13 @@ public class NullableFXPathStyleableKey extends AbstractStyleableKey<Path> imple
      * @param defaultValue The default value.
      */
     @SuppressWarnings("this-escape")
-    public NullableFXPathStyleableKey(@NonNull String key, @Nullable Path defaultValue) {
+    public NullableFXPathStyleableKey(String key, @Nullable Path defaultValue) {
         super(null, key, Path.class, true, defaultValue);
         converter = new FXPathCssConverter(true);
     }
 
     @Override
-    public @NonNull Converter<Path> getCssConverter() {
+    public Converter<Path> getCssConverter() {
         return converter;
     }
 }

@@ -6,8 +6,7 @@ package org.jhotdraw8.fxbase.binding;
 
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,20 +14,20 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 class ListTransformContentBinding<D, S> {
-    private final @NonNull ObservableList<D> dest;
-    private final @NonNull ObservableList<S> source;
-    private final @NonNull Function<S, D> toDest;
+    private final ObservableList<D> dest;
+    private final ObservableList<S> source;
+    private final Function<S, D> toDest;
     private final @Nullable Function<D, S> toSource;
     private final @Nullable Consumer<D> destOnRemove;
     private final @Nullable Consumer<S> sourceOnRemove;
 
     private int isChanging;
 
-    private final @NonNull ListChangeListener<S> sourceChangeListener = this::onSourceChanged;
-    private final @NonNull ListChangeListener<D> destChangeListener = this::onDestChanged;
+    private final ListChangeListener<S> sourceChangeListener = this::onSourceChanged;
+    private final ListChangeListener<D> destChangeListener = this::onDestChanged;
 
 
-    ListTransformContentBinding(@NonNull ObservableList<D> dest, @NonNull ObservableList<S> source, @NonNull Function<S, D> toDest, @Nullable Function<D, S> toSource, @Nullable Consumer<D> destOnRemove, @Nullable Consumer<S> sourceOnRemove) {
+    ListTransformContentBinding(ObservableList<D> dest, ObservableList<S> source, Function<S, D> toDest, @Nullable Function<D, S> toSource, @Nullable Consumer<D> destOnRemove, @Nullable Consumer<S> sourceOnRemove) {
         this.dest = dest;
         this.source = source;
         this.toDest = toDest;

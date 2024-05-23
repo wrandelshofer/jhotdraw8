@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -26,12 +25,12 @@ public class AndCombinator extends Combinator {
      * @param first         the first selector
      * @param second        the second selector
      */
-    public AndCombinator(@Nullable SourceLocator sourceLocator, @NonNull SimpleSelector first, @NonNull Selector second) {
+    public AndCombinator(@Nullable SourceLocator sourceLocator, SimpleSelector first, Selector second) {
         super(sourceLocator, first, second);
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "(" + first + " && " + second + ")";
     }
 

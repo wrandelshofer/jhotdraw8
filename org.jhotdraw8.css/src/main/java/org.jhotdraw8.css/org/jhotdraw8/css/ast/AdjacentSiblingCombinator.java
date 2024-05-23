@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Consumer;
 
@@ -33,12 +32,12 @@ public class AdjacentSiblingCombinator extends Combinator {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return first + " + " + second;
     }
 
     @Override
-    public @Nullable <T> T match(@NonNull SelectorModel<T> model, T element) {
+    public @Nullable <T> T match(SelectorModel<T> model, T element) {
         T result = second.match(model, element);
         if (result != null) {
             result = first.match(model, model.getPreviousSibling(result));
@@ -52,7 +51,7 @@ public class AdjacentSiblingCombinator extends Combinator {
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         first.produceTokens(consumer);
         consumer.accept(new CssToken(CssTokenType.TT_PLUS));
         second.produceTokens(consumer);

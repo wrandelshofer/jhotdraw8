@@ -9,13 +9,12 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.intersect.IntersectLineLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -45,11 +44,11 @@ public class FXGeom {
      *              b. Values outside this range yield an extrapolation.
      * @return the interpolated or extrapolated value
      */
-    public static @NonNull Point2D lerp(@NonNull Point2D start, @NonNull Point2D end, double t) {
+    public static Point2D lerp(Point2D start, Point2D end, double t) {
         return lerp(start.getX(), start.getY(), end.getX(), end.getY(), t);
     }
 
-    public static @NonNull Point2D lerp(double x0, double y0, double x1, double y1, double t) {
+    public static Point2D lerp(double x0, double y0, double x1, double y1, double t) {
         return new Point2D(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t);
     }
 
@@ -65,7 +64,7 @@ public class FXGeom {
      * @param p the vector
      * @return the normalized vector
      */
-    public static @NonNull Point3D homogenize(@NonNull Point3D p) {
+    public static Point3D homogenize(Point3D p) {
         return new Point3D(//
                 p.getX() / p.getZ(),//
                 p.getY() / p.getZ(),
@@ -85,7 +84,7 @@ public class FXGeom {
      * @param p the vector
      * @return the normalized vector
      */
-    public static @NonNull Point2D homogenize2D(@NonNull Point3D p) {
+    public static Point2D homogenize2D(Point3D p) {
         double z = p.getZ();
         return new Point2D(//
                 p.getX() / z,//
@@ -113,7 +112,7 @@ public class FXGeom {
      * @param angle the angle of the ray starting at the center of the rectangle
      * @return a point on the rectangle
      */
-    public static @NonNull Point2D angleToPoint(@NonNull Rectangle2D r, double angle) {
+    public static Point2D angleToPoint(Rectangle2D r, double angle) {
         double si = sin(angle);
         double co = cos(angle);
         double e = 0.0001;
@@ -142,7 +141,7 @@ public class FXGeom {
      * @param p2 a point
      * @return true if the area is 0
      */
-    public static boolean isCollinear(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
+    public static boolean isCollinear(Point2D p0, Point2D p1, Point2D p2) {
         return Lines.isCollinear(p0.getX(), p0.getY(), p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
@@ -156,7 +155,7 @@ public class FXGeom {
      * @param p     the point
      * @return a point on the shape
      */
-    public static @NonNull Point2D chop(@NonNull Shape shape, @NonNull Point2D p) {
+    public static Point2D chop(Shape shape, Point2D p) {
         java.awt.geom.Rectangle2D bounds = shape.getBounds2D();
         java.awt.geom.Point2D.Double ctr = new java.awt.geom.Point2D.Double(bounds.getCenterX(), bounds.getCenterY());
 
@@ -249,7 +248,7 @@ public class FXGeom {
      * @param p2 point 2
      * @return the distance between the two points
      */
-    public static double length(@NonNull Point2D p1, @NonNull Point2D p2) {
+    public static double length(Point2D p1, Point2D p2) {
         return sqrt(Points.squaredDistance(p1.getX(), p1.getY(), p2.getX(), p2.getY()));
     }
 
@@ -260,7 +259,7 @@ public class FXGeom {
      * @param angle the angle
      * @return a point on the oval
      */
-    public static @NonNull Point2D ovalAngleToPoint(@NonNull Rectangle2D r, double angle) {
+    public static Point2D ovalAngleToPoint(Rectangle2D r, double angle) {
         Point2D center = FXRectangles.center(r);
         Point2D p = polarToPoint(angle, r.getWidth() / 2.0, r.getHeight() / 2.0);
         return new Point2D(center.getX() + p.getX(), center.getY() + p.getY());
@@ -275,7 +274,7 @@ public class FXGeom {
      * @param l2y point 2 on the line
      * @return the perpendicular vector of length {@code 1}
      */
-    public static @NonNull Point2D perp(double l1x, double l1y, double l2x, double l2y) {
+    public static Point2D perp(double l1x, double l1y, double l2x, double l2y) {
         // matlab: v    = p2 - p1
         //         cv    = cross([v 1] * [0 0 1])
         //         m     = distance/norm(cv);
@@ -298,7 +297,7 @@ public class FXGeom {
      * @param p the point
      * @return the angle
      */
-    public static double pointToAngle(@NonNull Rectangle2D r, @NonNull Point2D p) {
+    public static double pointToAngle(Rectangle2D r, Point2D p) {
         double px = p.getX() - (r.getMinX() + r.getWidth() * 0.5);
         double py = p.getY() - (r.getMinY() + r.getHeight() * 0.5);
         return Angles.atan2(py * r.getWidth(), px * r.getHeight());
@@ -312,7 +311,7 @@ public class FXGeom {
      * @param fy    the y coordinate of the point in polar coordinates
      * @return the point in Cartesian coordinates
      */
-    public static @NonNull Point2D polarToPoint(double angle, double fx, double fy) {
+    public static Point2D polarToPoint(double angle, double fx, double fy) {
         double si = sin(angle);
         double co = cos(angle);
         return new Point2D((int) (fx * co), (int) (fy * si));
@@ -327,7 +326,7 @@ public class FXGeom {
      * @param distance the shifting distance
      * @return the shifted point
      */
-    public static @NonNull Point2D shiftPerp(@NonNull Point2D l1, @NonNull Point2D l2, @NonNull Point2D p, double distance) {
+    public static Point2D shiftPerp(Point2D l1, Point2D l2, Point2D p, double distance) {
 
         return shiftPerp(l1.getX(), l1.getY(), l2.getX(), l2.getY(), p.getX(), p.getY(), distance);
     }
@@ -338,7 +337,7 @@ public class FXGeom {
      * @param p a point
      * @return the squared distance of the point to (0,0)
      */
-    public static double squaredMagnitude(@NonNull Point2D p) {
+    public static double squaredMagnitude(Point2D p) {
         double x = p.getX();
         double y = p.getY();
         return x * x + y * y;
@@ -350,7 +349,7 @@ public class FXGeom {
      * @param vector a vector
      * @return the perpendicular vector
      */
-    public static @NonNull Point2D perp(@NonNull Point2D vector) {
+    public static Point2D perp(Point2D vector) {
         return new Point2D(vector.getY(), -vector.getX());
     }
 
@@ -380,7 +379,7 @@ public class FXGeom {
      * @param distance the shifting distance
      * @return the shifted point
      */
-    public static @NonNull Point2D shiftPerp(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
+    public static Point2D shiftPerp(double l1x, double l1y, double l2x, double l2y, double px, double py, double distance) {
         // matlab: v    = p2 - p1
         //         line = cross([v 1] * [0 0 1])
         //         m     = distance/norm(cv);
@@ -395,19 +394,19 @@ public class FXGeom {
         return new Point2D(px + perpX * m, py + perpY * m);
     }
 
-    public static double distanceSq(@NonNull Point2D p, @NonNull Point2D q) {
+    public static double distanceSq(Point2D p, Point2D q) {
         double Δx = p.getX() - q.getX();
         double Δy = p.getY() - q.getY();
         return Δx * Δx + Δy * Δy;
     }
 
-    public static double distanceSq(java.awt.geom.@NonNull Point2D p, java.awt.geom.@NonNull Point2D q) {
+    public static double distanceSq(java.awt.geom.Point2D p, java.awt.geom.Point2D q) {
         double Δx = p.getX() - q.getX();
         double Δy = p.getY() - q.getY();
         return Δx * Δx + Δy * Δy;
     }
 
-    public static double distanceSq(@NonNull Point2D p, double x, double y) {
+    public static double distanceSq(Point2D p, double x, double y) {
         double Δx = p.getX() - x;
         double Δy = p.getY() - y;
         return Δx * Δx + Δy * Δy;
@@ -560,11 +559,11 @@ public class FXGeom {
         }
     }
 
-    public static @NonNull Point2D divide(@NonNull Point2D p, double factor) {
+    public static Point2D divide(Point2D p, double factor) {
         return new Point2D(p.getX() / factor, p.getY() / factor);
     }
 
-    public static @NonNull Transform toDeltaTransform(@NonNull Transform t) {
+    public static Transform toDeltaTransform(Transform t) {
         Transform d = new Affine(t.getMxx(), t.getMxy(), 0.0,
                 t.getMyx(), t.getMyy(), 0.0);
         return d;
@@ -585,7 +584,7 @@ public class FXGeom {
      * @param p2 point 2
      * @return the cross product
      */
-    public static @NonNull Point3D hcross(@NonNull Point2D p1, @NonNull Point2D p2) {
+    public static Point3D hcross(Point2D p1, Point2D p2) {
         return hcross(p1.getX(), p1.getY(), p2.getX(), p2.getY());
     }
 
@@ -605,7 +604,7 @@ public class FXGeom {
      * @param y2 y2
      * @return the cross product
      */
-    public static @NonNull Point3D hcross(double x1, double y1, double x2, double y2) {
+    public static Point3D hcross(double x1, double y1, double x2, double y2) {
         return new Point3D(//
                 y1 * 1 - 1 * y2,//
                 1 * x2 - x1 * 1,//

@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.inspector;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Interface for inspectors.

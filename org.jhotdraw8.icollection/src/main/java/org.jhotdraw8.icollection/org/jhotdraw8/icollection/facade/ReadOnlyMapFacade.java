@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Map;
@@ -25,24 +24,24 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class ReadOnlyMapFacade<K, V> implements ReadOnlyMap<K, V> {
-    protected final @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
-    protected final @NonNull IntSupplier sizeFunction;
-    protected final @NonNull Predicate<Object> containsKeyFunction;
-    protected final @NonNull Function<K, V> getFunction;
+    protected final Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;
+    protected final IntSupplier sizeFunction;
+    protected final Predicate<Object> containsKeyFunction;
+    protected final Function<K, V> getFunction;
 
 
-    public ReadOnlyMapFacade(@NonNull ReadOnlyMap<K, V> m) {
+    public ReadOnlyMapFacade(ReadOnlyMap<K, V> m) {
         this(m::iterator, m::size, m::containsKey, m::get);
     }
 
-    public ReadOnlyMapFacade(@NonNull Map<K, V> m) {
+    public ReadOnlyMapFacade(Map<K, V> m) {
         this(() -> m.entrySet().iterator(), m::size, m::containsKey, m::get);
     }
 
-    public ReadOnlyMapFacade(@NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
-                             @NonNull IntSupplier sizeFunction,
-                             @NonNull Predicate<Object> containsKeyFunction,
-                             @NonNull Function<K, V> getFunction) {
+    public ReadOnlyMapFacade(Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
+                             IntSupplier sizeFunction,
+                             Predicate<Object> containsKeyFunction,
+                             Function<K, V> getFunction) {
         this.iteratorFunction = iteratorFunction;
         this.sizeFunction = sizeFunction;
         this.containsKeyFunction = containsKeyFunction;
@@ -66,7 +65,7 @@ public class ReadOnlyMapFacade<K, V> implements ReadOnlyMap<K, V> {
     }
 
     @Override
-    public @NonNull Iterator<Map.Entry<K, V>> iterator() {
+    public Iterator<Map.Entry<K, V>> iterator() {
         return iteratorFunction.get();
     }
 

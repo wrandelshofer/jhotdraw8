@@ -11,14 +11,13 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Shear;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -72,7 +71,7 @@ public class TransformCssConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    protected <TT extends Transform> void produceTokensNonNull(@NonNull TT tx, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Transform> void produceTokensNonNull(TT tx, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         if (tx instanceof Translate tr) {
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, "translate"));
             out.accept(new CssToken(CssTokenType.TT_NUMBER, tr.getTx()));
@@ -208,7 +207,7 @@ public class TransformCssConverter extends AbstractCssConverter<Transform> {
     }
 
     @Override
-    public @NonNull Transform parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Transform parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_FUNCTION, "⟨Transform⟩: function expected");
         String func = tt.currentStringNonNull();
         int funcPos = tt.getStartPosition();

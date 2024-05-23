@@ -8,8 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
@@ -21,6 +19,7 @@ import org.jhotdraw8.base.net.UriUtil;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.icollection.ChampMap;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.MissingResourceException;
@@ -60,8 +59,8 @@ import java.util.logging.Logger;
  */
 public class OpenRecentFileAction extends AbstractApplicationAction {
 
-    public static final @NonNull String ID = "file.openRecent";
-    private final @NonNull URI uri;
+    public static final String ID = "file.openRecent";
+    private final URI uri;
     private final @Nullable DataFormat format;
     private final boolean reuseEmptyViews = true;
 
@@ -73,7 +72,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
      * @param format the data format that should be used to access the URI
      */
     @SuppressWarnings("this-escape")
-    public OpenRecentFileAction(Application app, @NonNull URI uri, @Nullable DataFormat format) {
+    public OpenRecentFileAction(Application app, URI uri, @Nullable DataFormat format) {
         super(app);
         this.uri = uri;
         this.format = format;
@@ -81,7 +80,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent evt, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent evt, Application app) {
         {
             // Check if there is already an activity with this URI.
             for (Activity activity : app.getActivities()) {
@@ -117,11 +116,11 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    public void doIt(@NonNull FileBasedActivity view, boolean disposeView) {
+    public void doIt(FileBasedActivity view, boolean disposeView) {
         openViewFromURI(view, uri, format);
     }
 
-    private void onException(final @NonNull FileBasedActivity v, @NonNull Throwable exception) throws MissingResourceException {
+    private void onException(final FileBasedActivity v, Throwable exception) throws MissingResourceException {
         Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + exception.getMessage(), exception);
 
         Resources labels = ApplicationLabels.getResources();
@@ -138,7 +137,7 @@ public class OpenRecentFileAction extends AbstractApplicationAction {
         }
     }
 
-    protected void openViewFromURI(final @NonNull FileBasedActivity v, final @NonNull URI uri, @Nullable DataFormat format) {
+    protected void openViewFromURI(final FileBasedActivity v, final URI uri, @Nullable DataFormat format) {
         final Application app = getApplication();
         WorkState<Void> workState = new SimpleWorkState<>(getLabel());
         v.addDisabler(workState);

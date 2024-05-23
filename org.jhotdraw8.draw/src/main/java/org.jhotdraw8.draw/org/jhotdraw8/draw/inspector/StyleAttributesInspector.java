@@ -9,8 +9,6 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.manager.StylesheetsManager;
@@ -23,6 +21,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
@@ -34,7 +33,7 @@ import javax.swing.event.UndoableEditEvent;
 public class StyleAttributesInspector extends AbstractStyleAttributesInspector<Figure>
         implements Inspector<DrawingView> {
 
-    protected final @NonNull ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
+    protected final ObjectProperty<DrawingView> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
 
     public StyleAttributesInspector() {
     }
@@ -42,15 +41,15 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
 
 
     @Override
-    public @NonNull ObjectProperty<DrawingView> subjectProperty() {
+    public ObjectProperty<DrawingView> subjectProperty() {
         return subject;
     }
 
-    private final @NonNull InvalidationListener modelInvalidationHandler = this::invalidateTextArea;
+    private final InvalidationListener modelInvalidationHandler = this::invalidateTextArea;
 
-    private final @NonNull Listener<TreeModelEvent<Figure>> treeModelListener = event -> invalidateTextArea(event.getSource());
+    private final Listener<TreeModelEvent<Figure>> treeModelListener = event -> invalidateTextArea(event.getSource());
 
-    private final @NonNull ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
+    private final ChangeListener<DrawingModel> modelChangeHandler = (ObservableValue<? extends DrawingModel> observable, DrawingModel oldValue, DrawingModel newValue) -> {
         if (oldValue != null) {
             oldValue.removeListener(modelInvalidationHandler);
             oldValue.removeTreeModelListener(treeModelListener);
@@ -76,12 +75,12 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected @Nullable Object get(@NonNull Figure f, @NonNull WritableStyleableMapAccessor<Object> finalSelectedAccessor) {
+    protected @Nullable Object get(Figure f, WritableStyleableMapAccessor<Object> finalSelectedAccessor) {
         return getDrawingModel().get(f, finalSelectedAccessor);
     }
 
     @Override
-    protected @Nullable WritableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, @NonNull Figure f, String propertyNamespace, String propertyName) {
+    protected @Nullable WritableStyleableMapAccessor<?> getAccessor(SelectorModel<Figure> selectorModel, Figure f, String propertyNamespace, String propertyName) {
         if (selectorModel instanceof FigureSelectorModel m) {
             return m.getAccessor(f, propertyNamespace, propertyName);
         }
@@ -89,7 +88,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected @Nullable Converter<?> getConverter(SelectorModel<Figure> selectorModel, @NonNull Figure f, String namespace, String name) {
+    protected @Nullable Converter<?> getConverter(SelectorModel<Figure> selectorModel, Figure f, String namespace, String name) {
         if (selectorModel instanceof FigureSelectorModel m) {
             return m.getConverter(f, namespace, name);
         }
@@ -107,7 +106,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected @NonNull Iterable<Figure> getEntities() {
+    protected Iterable<Figure> getEntities() {
         return getDrawing().breadthFirstIterable();
     }
 
@@ -145,12 +144,12 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected void remove(@NonNull Figure f, WritableStyleableMapAccessor<Object> finalSelectedAccessor) {
+    protected void remove(Figure f, WritableStyleableMapAccessor<Object> finalSelectedAccessor) {
         getDrawingModel().remove(f, finalSelectedAccessor);
     }
 
     @Override
-    protected void set(@NonNull Figure f, WritableStyleableMapAccessor<Object> finalSelectedAccessor, Object o) {
+    protected void set(Figure f, WritableStyleableMapAccessor<Object> finalSelectedAccessor, Object o) {
         getDrawingModel().set(f, finalSelectedAccessor, o);
     }
 
@@ -181,7 +180,7 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     }
 
     @Override
-    protected void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+    protected void forwardUndoableEdit(UndoableEditEvent event) {
         final DrawingView s = getSubject();
         final DrawingEditor editor = s == null ? null : s.getEditor();
         if (editor != null) {

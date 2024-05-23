@@ -5,14 +5,13 @@
 package org.jhotdraw8.svg.text;
 
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -32,16 +31,16 @@ import java.util.function.Consumer;
  */
 public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType> {
 
-    public static final @NonNull String INSIDE = "inner";
-    public static final @NonNull String OUTSIDE = "outer";
-    public static final @NonNull String CENTERED = "center";
+    public static final String INSIDE = "inner";
+    public static final String OUTSIDE = "outer";
+    public static final String CENTERED = "center";
 
     public SvgStrokeAlignmentConverter(boolean nullable) {
         super(nullable);
     }
 
     @Override
-    public @NonNull StrokeType parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public StrokeType parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         StrokeType type;
         tt.requireNextToken(CssTokenType.TT_IDENT, "One of " + INSIDE + ", " + OUTSIDE + ", " + CENTERED + " expected.");
         type = switch (tt.currentStringNonNull()) {
@@ -62,7 +61,7 @@ public class SvgStrokeAlignmentConverter extends AbstractCssConverter<StrokeType
 
 
     @Override
-    protected <TT extends StrokeType> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends StrokeType> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         final StrokeType type = value;
         switch (type) {
             case INSIDE:

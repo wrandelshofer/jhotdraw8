@@ -9,10 +9,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.fxbase.control.Disableable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
@@ -28,21 +27,21 @@ import java.util.concurrent.ExecutionException;
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 
-    protected final @NonNull Application app;
+    protected final Application app;
 
     /**
      * Creates a new instance.
      *
      * @param app the application
      */
-    public AbstractApplicationAction(@NonNull Application app) {
+    public AbstractApplicationAction(Application app) {
         Objects.requireNonNull(app, "app");
         this.app = app;
         disabled.unbind();
         disabled.bind(Bindings.isNotEmpty(disablers).or(app.disabledProperty()));
     }
 
-    protected @NonNull String createErrorMessage(@Nullable Throwable t) {
+    protected String createErrorMessage(@Nullable Throwable t) {
         StringBuilder buf = new StringBuilder();
         for (; t != null; t = t.getCause()) {
             if (t.getCause() != null && (t instanceof RuntimeException || t instanceof ExecutionException
@@ -61,12 +60,12 @@ public abstract class AbstractApplicationAction extends AbstractAction {
         return buf.toString();
     }
 
-    public final @NonNull Application getApplication() {
+    public final Application getApplication() {
         return app;
     }
 
     @Override
-    protected final void onActionPerformed(@NonNull ActionEvent event) {
+    protected final void onActionPerformed(ActionEvent event) {
         onActionPerformed(event, app);
     }
 
@@ -77,9 +76,9 @@ public abstract class AbstractApplicationAction extends AbstractAction {
      * @param event the action event
      * @param app   the applicatoin
      */
-    protected abstract void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app);
+    protected abstract void onActionPerformed(ActionEvent event, Application app);
 
-    protected @NonNull Alert createAlert(Alert.AlertType alertType, String message, String headerText) {
+    protected Alert createAlert(Alert.AlertType alertType, String message, String headerText) {
         TextArea textArea = new TextArea(message);
         textArea.setEditable(false);
         textArea.setWrapText(true);

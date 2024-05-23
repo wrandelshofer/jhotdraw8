@@ -5,8 +5,7 @@
 package org.jhotdraw8.draw.xml.converter;
 
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -29,7 +28,7 @@ public class FXPathElementsXmlConverter implements Converter<ImmutableList<PathE
     }
 
     @Override
-    public @Nullable ImmutableList<PathElement> fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable ImmutableList<PathElement> fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = 0;
         try {

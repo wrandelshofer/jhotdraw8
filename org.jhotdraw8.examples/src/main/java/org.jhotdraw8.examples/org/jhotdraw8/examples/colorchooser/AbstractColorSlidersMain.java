@@ -14,7 +14,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.util.StringConverter;
 import javafx.util.converter.FloatStringConverter;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 
@@ -37,7 +36,6 @@ public abstract class AbstractColorSlidersMain extends Application {
     public AbstractColorSlidersMain() {
     }
 
-    @NonNull
     protected ComboBox<ToIntFunction<Integer>> createBitDepthComboBox() {
         ComboBox<ToIntFunction<Integer>> comboBox = new ComboBox<>();
         var map = new LinkedHashMap<String, ToIntFunction<Integer>>();
@@ -78,7 +76,7 @@ public abstract class AbstractColorSlidersMain extends Application {
      * @param colorSpaces a set of color spaces
      * @return a combo box
      */
-    protected @NonNull ComboBox<NamedColorSpace> createColorSpaceComboBox(NamedColorSpace... colorSpaces) {
+    protected ComboBox<NamedColorSpace> createColorSpaceComboBox(NamedColorSpace... colorSpaces) {
         Map<String, NamedColorSpace> map =
                 Arrays.stream(colorSpaces)
                         .collect(Collectors.toMap(NamedColorSpace::getName, Function.identity(), (a, b) -> b, LinkedHashMap::new));
@@ -107,8 +105,7 @@ public abstract class AbstractColorSlidersMain extends Application {
      * @param components properties holding component values
      * @return text fields
      */
-    @NonNull
-    protected List<TextField> createTextFields(@NonNull FloatProperty... components) {
+    protected List<TextField> createTextFields(FloatProperty... components) {
         List<TextField> fields = new ArrayList<>(components.length);
         for (FloatProperty c : components) {
             TextField field = new TextField();

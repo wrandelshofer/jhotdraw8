@@ -15,8 +15,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
@@ -29,10 +28,10 @@ import java.util.HashSet;
 
 public abstract class AbstractDrawingEditor implements DrawingEditor {
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<String> helpText = new SimpleObjectProperty<>(this, HELP_TEXT_PROPERTY);
+    private final ObjectProperty<String> helpText = new SimpleObjectProperty<>(this, HELP_TEXT_PROPERTY);
     @SuppressWarnings("this-escape")
-    private final @NonNull NonNullObjectProperty<FXUndoManager> undoManager = new NonNullObjectProperty<>(this, UNDO_MANAGER_PROPERTY, new FXUndoManager());
-    private final @NonNull DoubleProperty handleSize = new SimpleDoubleProperty(
+    private final NonNullObjectProperty<FXUndoManager> undoManager = new NonNullObjectProperty<>(this, UNDO_MANAGER_PROPERTY, new FXUndoManager());
+    private final DoubleProperty handleSize = new SimpleDoubleProperty(
             this, HANDLE_SIZE_PROPERTY, 5.0) {
         @Override
         public void set(double newValue) {
@@ -40,7 +39,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
-    private final @NonNull DoubleProperty tolerance = new SimpleDoubleProperty(
+    private final DoubleProperty tolerance = new SimpleDoubleProperty(
             this, TOLERANCE_PROPERTY, 5.0) {
         @Override
         public void set(double newValue) {
@@ -48,7 +47,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
-    private final @NonNull DoubleProperty handleStrokeWidth = new SimpleDoubleProperty(
+    private final DoubleProperty handleStrokeWidth = new SimpleDoubleProperty(
             this, HANDLE_STROKE_WDITH_PROPERTY, 1.0) {
         @Override
         public void set(double newValue) {
@@ -56,7 +55,7 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             recreateHandles();
         }
     };
-    private final @NonNull NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<>(this, HANDLE_COLOR_PROPERTY,
+    private final NonNullObjectProperty<CssColor> handleColor = new NonNullObjectProperty<>(this, HANDLE_COLOR_PROPERTY,
             CssColor.valueOf("blue")) {
         @Override
         public void set(CssColor newValue) {
@@ -65,18 +64,18 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
         }
     };
     @SuppressWarnings("this-escape")
-    private final @NonNull NonNullObjectProperty<HandleType> handleType = new NonNullObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final NonNullObjectProperty<HandleType> handleType = new NonNullObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<HandleType> leadHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final ObjectProperty<HandleType> leadHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<HandleType> anchorHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
+    private final ObjectProperty<HandleType> anchorHandleType = new SimpleObjectProperty<>(this, HANDLE_TYPE_PROPERTY, HandleType.RESIZE);
 
     @SuppressWarnings("this-escape")
-    private final @NonNull NonNullObjectProperty<HandleType> multiHandleType = new NonNullObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
+    private final NonNullObjectProperty<HandleType> multiHandleType = new NonNullObjectProperty<>(this, MULTI_HANDLE_TYPE_PROPERTY, HandleType.SELECT);
     @SuppressWarnings("this-escape")
-    private final @NonNull SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
-    private final @NonNull ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
+    private final SetProperty<DrawingView> drawingViews = new SimpleSetProperty<>(this, DRAWING_VIEWS_PROPERTY, FXCollections.observableSet(new HashSet<>()));
+    private final ChangeListener<Boolean> focusListener = (ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) -> {
         if (newValue) {
             setActiveDrawingView((DrawingView) ((ReadOnlyProperty<?>) observable).getBean());
         }
@@ -92,9 +91,9 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
             break;
         }
     };
-    private final @NonNull ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
-    private final @NonNull ObjectProperty<Tool> activeTool = new SimpleObjectProperty<>(this, ACTIVE_TOOL_PROPERTY);
-    private final @NonNull ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
+    private final ObjectProperty<DrawingView> activeDrawingView = new SimpleObjectProperty<>(this, ACTIVE_DRAWING_VIEW_PROPERTY);
+    private final ObjectProperty<Tool> activeTool = new SimpleObjectProperty<>(this, ACTIVE_TOOL_PROPERTY);
+    private final ObjectProperty<Tool> defaultTool = new SimpleObjectProperty<>(this, DEFAULT_TOOL_PROPERTY);
 
     {
         ChangeListener<Object> recreateHandles = (observable, oldValue, newValue) -> recreateHandles();
@@ -151,72 +150,72 @@ public abstract class AbstractDrawingEditor implements DrawingEditor {
     }
 
     @Override
-    public @NonNull ObjectProperty<DrawingView> activeDrawingViewProperty() {
+    public ObjectProperty<DrawingView> activeDrawingViewProperty() {
         return activeDrawingView;
     }
 
     @Override
-    public @NonNull ObjectProperty<Tool> activeToolProperty() {
+    public ObjectProperty<Tool> activeToolProperty() {
         return activeTool;
     }
 
     @Override
-    public @NonNull ObjectProperty<HandleType> anchorHandleTypeProperty() {
+    public ObjectProperty<HandleType> anchorHandleTypeProperty() {
         return anchorHandleType;
     }
 
     @Override
-    public @NonNull ObjectProperty<Tool> defaultToolProperty() {
+    public ObjectProperty<Tool> defaultToolProperty() {
         return defaultTool;
     }
 
     @Override
-    public @NonNull SetProperty<DrawingView> drawingViewsProperty() {
+    public SetProperty<DrawingView> drawingViewsProperty() {
         return drawingViews;
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<CssColor> handleColorProperty() {
+    public NonNullObjectProperty<CssColor> handleColorProperty() {
         return handleColor;
     }
 
     @Override
-    public @NonNull DoubleProperty handleSizeProperty() {
+    public DoubleProperty handleSizeProperty() {
         return handleSize;
     }
 
     @Override
-    public @NonNull DoubleProperty handleStrokeWidthProperty() {
+    public DoubleProperty handleStrokeWidthProperty() {
         return handleStrokeWidth;
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<HandleType> handleTypeProperty() {
+    public NonNullObjectProperty<HandleType> handleTypeProperty() {
         return handleType;
     }
 
     @Override
-    public @NonNull ObjectProperty<String> helpTextProperty() {
+    public ObjectProperty<String> helpTextProperty() {
         return helpText;
     }
 
     @Override
-    public @NonNull ObjectProperty<HandleType> leadHandleTypeProperty() {
+    public ObjectProperty<HandleType> leadHandleTypeProperty() {
         return leadHandleType;
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<HandleType> multiHandleTypeProperty() {
+    public NonNullObjectProperty<HandleType> multiHandleTypeProperty() {
         return multiHandleType;
     }
 
     @Override
-    public @NonNull DoubleProperty toleranceProperty() {
+    public DoubleProperty toleranceProperty() {
         return tolerance;
     }
 
     @Override
-    public @NonNull NonNullObjectProperty<FXUndoManager> undoManagerProperty() {
+    public NonNullObjectProperty<FXUndoManager> undoManagerProperty() {
         return undoManager;
     }
 }

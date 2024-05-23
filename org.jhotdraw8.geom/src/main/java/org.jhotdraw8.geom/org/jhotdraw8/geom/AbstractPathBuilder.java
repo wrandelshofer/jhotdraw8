@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 
@@ -80,7 +79,7 @@ public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
     }
 
     @Override
-    public Point2D.@NonNull Double getLastPoint() {
+    public Point2D.Double getLastPoint() {
         return new Point2D.Double(lastX, lastY);
     }
 

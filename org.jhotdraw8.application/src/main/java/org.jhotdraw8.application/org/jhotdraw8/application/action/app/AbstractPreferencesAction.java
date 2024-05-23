@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application.action.app;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
@@ -16,7 +15,7 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
  */
 public abstract class AbstractPreferencesAction extends AbstractApplicationAction {
 
-    public static final @NonNull String ID = "application.preferences";
+    public static final String ID = "application.preferences";
 
     /**
      * Creates a new instance.

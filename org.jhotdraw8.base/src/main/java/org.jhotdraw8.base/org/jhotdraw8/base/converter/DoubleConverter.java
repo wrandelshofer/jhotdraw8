@@ -1,7 +1,6 @@
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -16,8 +15,8 @@ import java.util.Locale;
 public class DoubleConverter implements Converter<Double> {
     private final boolean nullable;
     private final boolean usesScientificNotation = true;
-    private final @NonNull DecimalFormat decimalFormat;
-    private final @NonNull DecimalFormat scientificFormat;
+    private final DecimalFormat decimalFormat;
+    private final DecimalFormat scientificFormat;
     private final int minNegativeExponent = -3;
     private final int minPositiveExponent = 7;
 
@@ -31,14 +30,14 @@ public class DoubleConverter implements Converter<Double> {
                 new DecimalFormat("0.0################E0", new DecimalFormatSymbols(Locale.ENGLISH)));
     }
 
-    public DoubleConverter(boolean nullable, @NonNull DecimalFormat decimalFormat, @NonNull DecimalFormat scientificFormat) {
+    public DoubleConverter(boolean nullable, DecimalFormat decimalFormat, DecimalFormat scientificFormat) {
         this.nullable = nullable;
         this.decimalFormat = decimalFormat;
         this.scientificFormat = scientificFormat;
     }
 
     @Override
-    public @Nullable Double fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Double fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         try {
             if (in.isEmpty() && nullable) {

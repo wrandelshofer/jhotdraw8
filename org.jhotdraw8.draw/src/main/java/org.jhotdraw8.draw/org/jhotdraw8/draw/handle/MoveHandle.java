@@ -18,8 +18,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -27,6 +25,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -44,10 +43,10 @@ public class MoveHandle extends LocatorHandle {
 
     private Point2D pickLocation;
     private CssPoint2D oldPoint;
-    private final @NonNull Region node;
-    private static final @NonNull Rectangle REGION_SHAPE = new Rectangle(5, 5);
-    private static final @NonNull Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
-    private static final @NonNull Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
+    private final Region node;
+    private static final Rectangle REGION_SHAPE = new Rectangle(5, 5);
+    private static final Function<Color, Background> REGION_BACKGROUND = color -> new Background(new BackgroundFill(color, null, null));
+    private static final Function<Color, Border> REGION_BORDER = color -> new Border(new BorderStroke(color, BorderStrokeStyle.SOLID, null, null));
     private Set<Figure> groupReshapeableFigures;
     private boolean pressed;
 
@@ -69,7 +68,7 @@ public class MoveHandle extends LocatorHandle {
     }
 
     @Override
-    public @NonNull Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         double size = view.getEditor().getHandleSize();
         node.resize(size, size);
         CssColor color = view.getEditor().getHandleColor();
@@ -79,7 +78,7 @@ public class MoveHandle extends LocatorHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Figure f = owner;
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
         Bounds b = f.getLayoutBounds();
@@ -96,7 +95,7 @@ public class MoveHandle extends LocatorHandle {
     }
 
     @Override
-    public void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMousePressed(MouseEvent event, DrawingView view) {
         pressed = true;
         oldPoint = view.getConstrainer().constrainPoint(owner, new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY()))));
 
@@ -112,7 +111,7 @@ public class MoveHandle extends LocatorHandle {
     }
 
     @Override
-    public void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    public void onMouseDragged(MouseEvent event, DrawingView view) {
         CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
@@ -146,7 +145,7 @@ public class MoveHandle extends LocatorHandle {
         oldPoint = newPoint;
     }
 
-    protected void doTranslateFigure(@NonNull Figure f, @NonNull CssPoint2D oldPoint, @NonNull CssPoint2D newPoint, @Nullable DrawingModel model) {
+    protected void doTranslateFigure(Figure f, CssPoint2D oldPoint, CssPoint2D newPoint, @Nullable DrawingModel model) {
         translateFigure(f, oldPoint, newPoint, model);
     }
 
@@ -159,7 +158,7 @@ public class MoveHandle extends LocatorHandle {
      * @param newPoint newPoint in world coordinates
      * @param model    the drawing model
      */
-    public static void translateFigure(@NonNull Figure f, @NonNull Point2D oldPoint, @NonNull Point2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(Figure f, Point2D oldPoint, Point2D newPoint, @Nullable DrawingModel model) {
         Point2D delta = newPoint.subtract(oldPoint);
         if (model != null) {
             model.translateInParent(f, new CssPoint2D(delta));
@@ -177,7 +176,7 @@ public class MoveHandle extends LocatorHandle {
      * @param newPoint newPoint in world coordinates
      * @param model    the drawing model
      */
-    public static void translateFigure(@NonNull Figure f, @NonNull CssPoint2D oldPoint, @NonNull CssPoint2D newPoint, @Nullable DrawingModel model) {
+    public static void translateFigure(Figure f, CssPoint2D oldPoint, CssPoint2D newPoint, @Nullable DrawingModel model) {
         CssPoint2D delta = newPoint.subtract(oldPoint);
 
         final Transform wtl = f.getWorldToParent();
@@ -192,7 +191,7 @@ public class MoveHandle extends LocatorHandle {
 
 
     @Override
-    public void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    public void onMouseReleased(MouseEvent event, DrawingView dv) {
         pressed = false;
         // FIXME create undoable edit
     }

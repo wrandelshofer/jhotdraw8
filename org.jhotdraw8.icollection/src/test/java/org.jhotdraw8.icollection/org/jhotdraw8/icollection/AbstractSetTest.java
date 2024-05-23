@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,13 +33,13 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractSetTest {
-    private static final @NonNull SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
-    private static final @NonNull SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
-    private static final @NonNull SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
-    private static final @NonNull SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final SetData NO_COLLISION_NICE_KEYS = SetData.newNiceData("no collisions nice keys", -1, 32, 100_000);
+    private static final SetData NO_COLLISION = SetData.newData("no collisions", -1, 32, 100_000);
+    private static final SetData ALL_COLLISION = SetData.newData("all collisions", 0, 32, 100_000);
+    private static final SetData SOME_COLLISION = SetData.newData("some collisions", 0x55555555, 32, 100_000);
 
 
-    public static @NonNull Stream<SetData> dataProvider() {
+    public static Stream<SetData> dataProvider() {
         return Stream.of(
                 NO_COLLISION_NICE_KEYS, NO_COLLISION, ALL_COLLISION, SOME_COLLISION
         );
@@ -49,11 +48,11 @@ public abstract class AbstractSetTest {
     protected abstract boolean supportsNullKeys();
 
 
-    protected void assertEqualSet(@NonNull ReadOnlySet<Key> expected, @NonNull Set<Key> actual) {
+    protected void assertEqualSet(ReadOnlySet<Key> expected, Set<Key> actual) {
         assertEqualSet(expected.asSet(), actual);
     }
 
-    protected void assertEqualSet(@NonNull Set<Key> expected, @NonNull Set<Key> actual) {
+    protected void assertEqualSet(Set<Key> expected, Set<Key> actual) {
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.isEmpty(), actual.isEmpty());
         assertEquals(expected.hashCode(), actual.hashCode());
@@ -75,29 +74,29 @@ public abstract class AbstractSetTest {
     /**
      * Creates a new empty instance.
      */
-    protected abstract <E> @NonNull Set<E> newInstance();
+    protected abstract <E> Set<E> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract <E> @NonNull Set<E> newInstance(int numElements, float loadFactor);
+    protected abstract <E> Set<E> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <E> @NonNull Set<E> newInstance(@NonNull Set<E> m);
+    protected abstract <E> Set<E> newInstance(Set<E> m);
 
-    protected abstract <E> @NonNull Set<E> newInstance(@NonNull ReadOnlySet<E> m);
+    protected abstract <E> Set<E> newInstance(ReadOnlySet<E> m);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <E> @NonNull Set<E> newInstance(@NonNull Iterable<E> m);
+    protected abstract <E> Set<E> newInstance(Iterable<E> m);
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addNullContainsNullShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addNullContainsNullShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance();
         assertFalse(instance.contains(null));
         var expected = new LinkedHashSet<Key>();
@@ -109,7 +108,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllNullContainsNullShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addAllNullContainsNullShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance();
         assertFalse(instance.contains(null));
         var expected = new LinkedHashSet<Key>();
@@ -121,7 +120,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithCloneShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void addAllWithCloneShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         if (!(instance instanceof Cloneable)) {
             return;
@@ -133,7 +132,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithContainedElementsShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void addAllWithContainedElementsShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertFalse(instance.addAll(data.a.asSet()));
         assertEquals(data.a.asSet(), instance);
@@ -141,7 +140,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithNewElementsShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addAllWithNewElementsShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertTrue(instance.addAll(data.c.asSet()));
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
@@ -151,7 +150,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSameTypeAndAllNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         Set<Key> instance2 = newInstance(data.c);
         assertTrue(instance.addAll(instance2));
@@ -163,7 +162,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSameTypeAndSomeNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
 
         ArrayList<Key> listA = new ArrayList<>(data.a.asSet());
@@ -186,7 +185,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSelfShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void addAllWithSelfShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertFalse(instance.addAll(instance));
         assertEquals(data.a.asSet(), instance);
@@ -194,7 +193,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addAllWithSomeNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addAllWithSomeNewKeysShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
 
         ArrayList<Key> listA = new ArrayList<>(data.a.asSet());
@@ -209,7 +208,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addWithContainedElementShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void addWithContainedElementShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.a) {
@@ -220,7 +219,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void addWithNewElementShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void addWithNewElementShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         for (Key e : data.c) {
@@ -232,7 +231,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void clearShouldBeIdempotent(@NonNull SetData data) {
+    public void clearShouldBeIdempotent(SetData data) {
         Set<Key> instance = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), instance);
         instance.clear();
@@ -243,7 +242,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void clearShouldYieldEmptySet(@NonNull SetData data) {
+    public void clearShouldYieldEmptySet(SetData data) {
         Set<Key> instance = newInstance(data.a());
         assertNotEqualSet(Collections.emptySet(), instance);
         instance.clear();
@@ -252,7 +251,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void cloneShouldYieldEqualSet(@NonNull SetData data) {
+    public void cloneShouldYieldEqualSet(SetData data) {
         Set<Key> instance = newInstance(data.a());
         if (!(instance instanceof Cloneable)) {
             return;
@@ -264,7 +263,7 @@ public abstract class AbstractSetTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void containsShouldYieldExpectedValue(@NonNull SetData data) {
+    public void containsShouldYieldExpectedValue(SetData data) {
         Set<Key> instance = newInstance(data.a());
         for (Key k : data.a()) {
             assertTrue(instance.contains(k));
@@ -292,7 +291,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void containsAllShouldYieldExpectedValue(@NonNull SetData data) {
+    public void containsAllShouldYieldExpectedValue(SetData data) {
         Set<Key> instance = newInstance(data.a());
         assertTrue(instance.containsAll(data.a().asSet()));
         assertFalse(instance.containsAll(data.b().asSet()));
@@ -301,7 +300,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void hashCodeShouldYieldExpectedValue(@NonNull SetData data) {
+    public void hashCodeShouldYieldExpectedValue(SetData data) {
         Set<Key> instance = newInstance(data.a());
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         assertEquals(expected.hashCode(), instance.hashCode());
@@ -315,14 +314,14 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalWithThisShouldYieldTrue(@NonNull SetData data) {
+    public void equalWithThisShouldYieldTrue(SetData data) {
         Set<Key> instance = newInstance(data.a());
         assertEquals(instance, instance);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithCloneShouldYieldTrue(@NonNull SetData data) throws Exception {
+    public void equalsWithCloneShouldYieldTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a());
         if (!(instance instanceof Cloneable)) {
             return;
@@ -335,21 +334,21 @@ public abstract class AbstractSetTest {
     @SuppressWarnings({"ConstantConditions", "SimplifiableAssertion"})
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithNullShouldYieldFalse(@NonNull SetData data) throws Exception {
+    public void equalsWithNullShouldYieldFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a());
         assertFalse(instance.equals(null));
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithObjectShouldYieldFalse(@NonNull SetData data) throws Exception {
+    public void equalsWithObjectShouldYieldFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a());
         assertNotEquals(instance, new Object());
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorRemoveShouldRemoveElement(@NonNull SetData data) {
+    public void iteratorRemoveShouldRemoveElement(SetData data) {
         Set<Key> actual = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().asSet()));
@@ -369,7 +368,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorRemoveShouldThrowIllegalStateException(@NonNull SetData data) {
+    public void iteratorRemoveShouldThrowIllegalStateException(SetData data) {
         Set<Key> instance = newInstance(data.a());
         Iterator<Key> i = instance.iterator();
         assertThrows(IllegalStateException.class, i::remove);
@@ -379,7 +378,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorShouldYieldElements(@NonNull SetData data) {
+    public void iteratorShouldYieldElements(SetData data) {
         Set<Key> instance = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = new ArrayList<>();
@@ -391,7 +390,7 @@ public abstract class AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void toArrayShouldYieldElements(@NonNull SetData data) {
+    public void toArrayShouldYieldElements(SetData data) {
         Set<Key> instance = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = (List<Key>) (List<?>) Arrays.asList(instance.toArray());
@@ -402,7 +401,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void toArrayWithTemplateArgShouldYieldElements(@NonNull SetData data) {
+    public void toArrayWithTemplateArgShouldYieldElements(SetData data) {
         Set<Key> instance = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = Arrays.asList(instance.toArray(new Key[0]));
@@ -426,14 +425,14 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceReadOnlySetArgsShouldBeEqualToSet(@NonNull SetData data) {
+    public void newInstanceReadOnlySetArgsShouldBeEqualToSet(SetData data) {
         Set<Key> actual = newInstance(data.a());
         assertEqualSet(data.a().asSet(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceSetArgsOfSameTypeShouldBeEqualToSet(@NonNull SetData data) {
+    public void newInstanceSetArgsOfSameTypeShouldBeEqualToSet(SetData data) {
         Set<Key> actual1 = newInstance(data.a().asSet());
         Set<Key> actual = newInstance(actual1);
         assertEqualSet(data.a().asSet(), actual);
@@ -441,14 +440,14 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceSetArgsShouldBeEqualToSet(@NonNull SetData data) {
+    public void newInstanceSetArgsShouldBeEqualToSet(SetData data) {
         Set<Key> actual = newInstance(data.a().asSet());
         assertEqualSet(data.a().asSet(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllOfEmptySetShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void removeAllOfEmptySetShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance();
         assertFalse(instance.removeAll(data.a.asSet()));
         assertEqualSet(Collections.emptySet(), instance);
@@ -456,7 +455,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithContainedKeyShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void removeAllWithContainedKeyShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertTrue(instance.removeAll(data.a.asSet()));
         assertEqualSet(Collections.emptySet(), instance);
@@ -464,7 +463,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithEmptyThisShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void removeAllWithEmptyThisShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance();
         assertFalse(instance.removeAll(instance));
         assertEqualSet(Collections.emptySet(), instance);
@@ -472,7 +471,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithNewKeyShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void removeAllWithNewKeyShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertFalse(instance.removeAll(data.c.asSet()));
         assertEqualSet(data.a, instance);
@@ -480,7 +479,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithSomeContainedKeyShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void removeAllWithSomeContainedKeyShouldReturnTrue(SetData data) throws Exception {
         ArrayList<Key> listA = new ArrayList<>(data.a.asSet());
         ArrayList<Key> listC = new ArrayList<>(data.c.asSet());
         ArrayList<Key> list = new ArrayList<>(listA.subList(0, listA.size() / 2));
@@ -492,7 +491,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeAllWithThisShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void removeAllWithThisShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertTrue(instance.removeAll(instance));
         assertEqualSet(Collections.emptySet(), instance);
@@ -500,7 +499,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithContainedKeyShouldReturnOldValue(@NonNull SetData data) throws Exception {
+    public void removeWithContainedKeyShouldReturnOldValue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         for (Key e : data.a) {
@@ -512,7 +511,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithNewElementShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void removeWithNewElementShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         for (Key e : data.c) {
             assertFalse(instance.remove(e));
@@ -523,7 +522,7 @@ public abstract class AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void serializationShouldYieldSameSet(@NonNull SetData data) throws Exception {
+    public void serializationShouldYieldSameSet(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a());
         if (!(instance instanceof Serializable)) {
             return;
@@ -542,7 +541,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void spliteratorShouldYieldElements(@NonNull SetData data) {
+    public void spliteratorShouldYieldElements(SetData data) {
         Set<Key> instance = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = new ArrayList<>();
@@ -564,7 +563,7 @@ public abstract class AbstractSetTest {
     @SuppressWarnings("SimplifyStreamApiCallChains")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void streamShouldYieldElements(@NonNull SetData data) {
+    public void streamShouldYieldElements(SetData data) {
         Set<Key> instance = newInstance(data.a());
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a().asSet());
         List<Key> actualList = instance.stream().collect(Collectors.toList());
@@ -572,12 +571,12 @@ public abstract class AbstractSetTest {
         assertEquals(expected, newInstance(actualList));
     }
 
-    protected abstract <E> @NonNull Set<E> toClonedInstance(@NonNull Set<E> m);
+    protected abstract <E> Set<E> toClonedInstance(Set<E> m);
 
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithCloneShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void retainAllWithCloneShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         if (!(instance instanceof Cloneable)) {
             return;
@@ -589,7 +588,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithContainedElementsShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void retainAllWithContainedElementsShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertFalse(instance.retainAll(data.a.asSet()));
         assertEqualSet(data.a, instance);
@@ -597,7 +596,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSomeContainedElementsShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void retainAllWithSomeContainedElementsShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         SequencedSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         assertTrue(instance.retainAll(data.someAPlusSomeB.asSet()));
@@ -607,7 +606,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithNewElementsShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void retainAllWithNewElementsShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertTrue(instance.retainAll(data.c.asSet()));
         assertEquals(Collections.emptySet(), instance);
@@ -615,7 +614,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllOfEmptySetShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void retainAllOfEmptySetShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance();
         assertFalse(instance.retainAll(data.c.asSet()));
         assertEquals(Collections.emptySet(), instance);
@@ -624,7 +623,7 @@ public abstract class AbstractSetTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithEmptySetShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void retainAllWithEmptySetShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a.asSet());
         assertTrue(instance.retainAll(Collections.emptySet()));
         assertEquals(Collections.emptySet(), instance);
@@ -632,7 +631,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSameTypeAndAllNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void retainAllWithSameTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         Set<Key> instance2 = newInstance(data.c);
         assertTrue(instance.retainAll(instance2));
@@ -641,7 +640,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSameTypeAndSomeNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void retainAllWithSameTypeAndSomeNewKeysShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
 
         ArrayList<Key> listA = new ArrayList<>(data.a.asSet());
@@ -664,7 +663,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSelfShouldReturnFalse(@NonNull SetData data) throws Exception {
+    public void retainAllWithSelfShouldReturnFalse(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertFalse(instance.retainAll(instance));
         assertEqualSet(data.a, instance);
@@ -672,7 +671,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void retainAllWithSomeNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void retainAllWithSomeNewKeysShouldReturnTrue(SetData data) throws Exception {
         Set<Key> instance = newInstance(data.a);
         assertTrue(instance.retainAll(data.someAPlusSomeB.asSet()));
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
@@ -682,7 +681,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void toStringShouldContainAllElements(@NonNull SetData data) {
+    public void toStringShouldContainAllElements(SetData data) {
         Set<Key> instance = newInstance();
         assertEquals("[]", instance.toString());
 
@@ -698,7 +697,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void sizeShouldReturnExpectedValue(@NonNull SetData data) {
+    public void sizeShouldReturnExpectedValue(SetData data) {
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         Set<Key> instance = newInstance();
         assertEquals(0, instance.size());
@@ -724,7 +723,7 @@ public abstract class AbstractSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void isEmptyShouldReturnExpectedValue(@NonNull SetData data) {
+    public void isEmptyShouldReturnExpectedValue(SetData data) {
         LinkedHashSet<Key> expected = new LinkedHashSet<>(data.a.asSet());
         Set<Key> instance = newInstance();
         assertTrue(instance.isEmpty());

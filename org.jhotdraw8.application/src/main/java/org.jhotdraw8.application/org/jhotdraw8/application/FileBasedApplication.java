@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.application;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 
@@ -15,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
  * @author Werner Randelshofer
  */
 public interface FileBasedApplication extends Application {
-    @NonNull
     NonNullKey<Boolean> ALLOW_MULTIPLE_ACTIVITIES_WITH_SAME_URI = new NonNullObjectKey<>("allowMultipleActivitiesWithSameURI", Boolean.class,
             Boolean.FALSE);
 }

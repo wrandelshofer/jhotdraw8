@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * This record holds an object that contains private data.
@@ -36,7 +36,7 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
  * public class ImmutableFoo {
- *     private final @NonNull InternalHashtable table;
+ *     private final InternalHashtable table;
  *     public ImmutableFoo() {
  *        table = new InternalHashtable();
  *     }

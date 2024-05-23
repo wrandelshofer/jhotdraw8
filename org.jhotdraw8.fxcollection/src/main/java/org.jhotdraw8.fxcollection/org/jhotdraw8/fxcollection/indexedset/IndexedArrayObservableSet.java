@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.fxcollection.indexedset;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -21,7 +20,7 @@ public class IndexedArrayObservableSet<E> extends AbstractIndexedArrayObservable
     public IndexedArrayObservableSet() {
     }
 
-    public IndexedArrayObservableSet(@NonNull Collection<? extends E> col) {
+    public IndexedArrayObservableSet(Collection<? extends E> col) {
         super(col);
     }
 
@@ -42,7 +41,7 @@ public class IndexedArrayObservableSet<E> extends AbstractIndexedArrayObservable
     }
 
     @Override
-    protected boolean mayBeAdded(@NonNull E e) {
+    protected boolean mayBeAdded(E e) {
         return true;
     }
 }

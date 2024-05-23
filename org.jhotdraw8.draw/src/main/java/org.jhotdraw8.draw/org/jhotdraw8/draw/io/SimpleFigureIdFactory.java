@@ -6,9 +6,9 @@
 package org.jhotdraw8.draw.io;
 
 import javafx.css.Styleable;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
+import org.jspecify.annotations.Nullable;
 
 /**
  * SimpleFigureIdFactory.

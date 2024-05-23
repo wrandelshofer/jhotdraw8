@@ -17,10 +17,9 @@ import javafx.geometry.Orientation;
 import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.concurrent.TileTask;
 import org.jhotdraw8.color.NamedColorSpace;
+import org.jspecify.annotations.Nullable;
 
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -41,17 +40,17 @@ public class ColorSlider extends AbstractColorSlider {
      * Alpha has index 4.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull IntegerProperty componentIndex = new SimpleIntegerProperty(this, "componentIndex", 0);
+    private final IntegerProperty componentIndex = new SimpleIntegerProperty(this, "componentIndex", 0);
 
     /**
      * The slider value.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull FloatProperty value = new SimpleFloatProperty(this, "value", 0);
+    private final FloatProperty value = new SimpleFloatProperty(this, "value", 0);
 
 
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
+    private final ObjectProperty<Orientation> orientation = new SimpleObjectProperty<>(this, "orientation", Orientation.HORIZONTAL);
 
     /**
      * The unit distance between tick marks.
@@ -59,9 +58,9 @@ public class ColorSlider extends AbstractColorSlider {
      * This must be a double property (and not float) so that we do not run into rounding issues.
      */
     @SuppressWarnings("this-escape")
-    private final @NonNull DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 1d / 255);
+    private final DoubleProperty minorTickUnit = new SimpleDoubleProperty(this, "minorTickUnit", 1d / 255);
     @SuppressWarnings("this-escape")
-    private final @NonNull DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 1d / 255);
+    private final DoubleProperty majorTickUnit = new SimpleDoubleProperty(this, "majorTickUnit", 1d / 255);
 
     public ColorSlider() {
         load();
@@ -146,7 +145,7 @@ public class ColorSlider extends AbstractColorSlider {
     }
 
     @Override
-    protected @Nullable AbstractFillTask createFillTask(@NonNull PixelBuffer<IntBuffer> pixelBuffer) {
+    protected @Nullable AbstractFillTask createFillTask(PixelBuffer<IntBuffer> pixelBuffer) {
         if (getDisplayColorSpace() == null || getSourceColorSpace() == null || getTargetColorSpace() == null) {
             return null;
         }
@@ -185,14 +184,14 @@ public class ColorSlider extends AbstractColorSlider {
 
 
     static class FillTask extends AbstractFillTask {
-        private final @NonNull Orientation orientation;
+        private final Orientation orientation;
 
-        public FillTask(@NonNull FillTaskRecord record, @NonNull Orientation orientation) {
+        public FillTask(FillTaskRecord record, Orientation orientation) {
             super(record);
             this.orientation = orientation;
         }
 
-        public void accept(TileTask.@NonNull Tile tile) {
+        public void accept(TileTask.Tile tile) {
             if (orientation == Orientation.HORIZONTAL) {
                 fillHorizontal(tile);
             } else {
@@ -201,7 +200,7 @@ public class ColorSlider extends AbstractColorSlider {
         }
 
 
-        public void fillHorizontal(TileTask.@NonNull Tile tile) {
+        public void fillHorizontal(TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             IntBuffer b = pixelBuffer.getBuffer();
@@ -245,7 +244,7 @@ public class ColorSlider extends AbstractColorSlider {
         }
 
 
-        public void fillVertical(TileTask.@NonNull Tile tile) {
+        public void fillVertical(TileTask.Tile tile) {
             PixelBuffer<IntBuffer> pixelBuffer = record.pixelBuffer();
             int width = pixelBuffer.getWidth();
             int height = pixelBuffer.getHeight();
@@ -290,7 +289,7 @@ public class ColorSlider extends AbstractColorSlider {
         return componentIndex.get();
     }
 
-    public @NonNull IntegerProperty componentIndexProperty() {
+    public IntegerProperty componentIndexProperty() {
         return componentIndex;
     }
 
@@ -298,15 +297,15 @@ public class ColorSlider extends AbstractColorSlider {
         this.componentIndex.set(xComponentIndex);
     }
 
-    public @NonNull Orientation getOrientation() {
+    public Orientation getOrientation() {
         return orientation.get();
     }
 
-    public @NonNull ObjectProperty<Orientation> orientationProperty() {
+    public ObjectProperty<Orientation> orientationProperty() {
         return orientation;
     }
 
-    public void setOrientation(@NonNull Orientation orientation) {
+    public void setOrientation(Orientation orientation) {
         this.orientation.set(orientation);
     }
 
@@ -314,7 +313,7 @@ public class ColorSlider extends AbstractColorSlider {
         return minorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty minorTickUnitProperty() {
+    public DoubleProperty minorTickUnitProperty() {
         return minorTickUnit;
     }
 
@@ -326,7 +325,7 @@ public class ColorSlider extends AbstractColorSlider {
         return value.get();
     }
 
-    public @NonNull FloatProperty valueProperty() {
+    public FloatProperty valueProperty() {
         return value;
     }
 
@@ -338,7 +337,7 @@ public class ColorSlider extends AbstractColorSlider {
         return majorTickUnit.get();
     }
 
-    public @NonNull DoubleProperty majorTickUnitProperty() {
+    public DoubleProperty majorTickUnitProperty() {
         return majorTickUnit;
     }
 

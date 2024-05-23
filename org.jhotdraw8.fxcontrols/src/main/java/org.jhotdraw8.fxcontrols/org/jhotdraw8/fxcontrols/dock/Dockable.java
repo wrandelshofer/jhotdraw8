@@ -7,7 +7,6 @@ package org.jhotdraw8.fxcontrols.dock;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Represents a dock child that the user can drag from one {@link Track} to
@@ -30,7 +29,6 @@ public interface Dockable extends DockChild {
      *
      * @return the graphic
      */
-    @NonNull
     ObjectProperty<Node> graphicProperty();
 
     default Node getGraphic() {
@@ -48,7 +46,6 @@ public interface Dockable extends DockChild {
      *
      * @return the graphic
      */
-    @NonNull
     StringProperty textProperty();
 
     default String getText() {

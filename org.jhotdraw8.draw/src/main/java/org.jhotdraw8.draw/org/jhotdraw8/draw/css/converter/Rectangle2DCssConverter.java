@@ -4,8 +4,6 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
@@ -14,6 +12,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -43,7 +42,7 @@ public class Rectangle2DCssConverter extends AbstractCssConverter<CssRectangle2D
     }
 
     @Override
-    public @NonNull CssRectangle2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public CssRectangle2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final CssSize x, y, width, height;
         x = parseSize(tt, "x");
         tt.skipIfPresent(CssTokenType.TT_COMMA);
@@ -57,7 +56,7 @@ public class Rectangle2DCssConverter extends AbstractCssConverter<CssRectangle2D
     }
 
     @Override
-    protected <TT extends CssRectangle2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends CssRectangle2D> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         CssSize x = value.getMinX();
         CssSize y = value.getMinY();
         CssSize width = value.getWidth();
@@ -71,7 +70,7 @@ public class Rectangle2DCssConverter extends AbstractCssConverter<CssRectangle2D
         out.accept(new CssToken(CssTokenType.TT_DIMENSION, height.getValue(), height.getUnits()));
     }
 
-    private void produceDelimiter(@NonNull Consumer<CssToken> out) {
+    private void produceDelimiter(Consumer<CssToken> out) {
         if (withComma) {
             out.accept(new CssToken(CssTokenType.TT_COMMA));
         }

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.collection.mapped;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -25,10 +24,10 @@ import java.util.function.Function;
  */
 public final class MappedSet<E, F> extends AbstractSet<E> {
 
-    private final @NonNull Set<F> backingSet;
-    private final @NonNull Function<F, E> mapf;
+    private final Set<F> backingSet;
+    private final Function<F, E> mapf;
 
-    public MappedSet(@NonNull Set<F> backingSet, Function<F, E> mapf) {
+    public MappedSet(Set<F> backingSet, Function<F, E> mapf) {
         this.backingSet = backingSet;
         this.mapf = mapf;
     }
@@ -40,9 +39,9 @@ public final class MappedSet<E, F> extends AbstractSet<E> {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new Iterator<>() {
-            private final @NonNull Iterator<F> i = backingSet.iterator();
+            private final Iterator<F> i = backingSet.iterator();
 
             @Override
             public boolean hasNext() {
@@ -62,16 +61,16 @@ public final class MappedSet<E, F> extends AbstractSet<E> {
     }
 
     @Override
-    public @NonNull Spliterator<E> spliterator() {
+    public Spliterator<E> spliterator() {
         class MappingSpliterator implements Spliterator<E> {
-            private final @NonNull Spliterator<F> i;
+            private final Spliterator<F> i;
 
-            public MappingSpliterator(@NonNull Spliterator<F> i) {
+            public MappingSpliterator(Spliterator<F> i) {
                 this.i = i;
             }
 
             @Override
-            public boolean tryAdvance(@NonNull Consumer<? super E> action) {
+            public boolean tryAdvance(Consumer<? super E> action) {
                 return i.tryAdvance(f -> action.accept(mapf.apply(f)));
             }
 

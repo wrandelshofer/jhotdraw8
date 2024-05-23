@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.Rectangles;
@@ -67,7 +66,7 @@ public class IntersectLinePoint {
      * @param r  the tolerance radius
      * @return computed intersection
      */
-    public static @NonNull IntersectionResult intersectLinePoint(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
+    public static IntersectionResult intersectLinePoint(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
         List<IntersectionPoint> result = new ArrayList<>();
         // Build polynomial
         final double Δx, Δy, a, b;
@@ -94,7 +93,7 @@ public class IntersectLinePoint {
                 result);
     }
 
-    public static @NonNull IntersectionResultEx intersectLinePointEx(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
+    public static IntersectionResultEx intersectLinePointEx(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
         IntersectionResult result = intersectLinePoint(x0, y0, x1, y1, cx, cy, r);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result.intersections()) {

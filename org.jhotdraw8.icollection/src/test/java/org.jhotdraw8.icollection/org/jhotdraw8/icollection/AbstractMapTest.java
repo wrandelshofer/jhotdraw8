@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -37,9 +36,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public abstract class AbstractMapTest {
 
-    private static final @NonNull MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
-    private static final @NonNull MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
-    private static final @NonNull MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
+    private static final MapData NO_COLLISION = MapData.newData("no collisions", -1, 32, 100_000);
+    private static final MapData ALL_COLLISION = MapData.newData("all collisions", 0, 32, 100_000);
+    private static final MapData SOME_COLLISION = MapData.newData("some collisions", 0x55555555, 32, 100_000);
 
     public static Stream<MapData> dataProvider() {
         return Stream.of(
@@ -78,27 +77,27 @@ public abstract class AbstractMapTest {
     /**
      * Creates a new empty instance.
      */
-    protected abstract <K, V> @NonNull Map<K, V> newInstance();
+    protected abstract <K, V> Map<K, V> newInstance();
 
     /**
      * Creates a new instance with the specified expected number of elements
      * and load factor.
      */
-    protected abstract <K, V> @NonNull Map<K, V> newInstance(int numElements, float loadFactor);
+    protected abstract <K, V> Map<K, V> newInstance(int numElements, float loadFactor);
 
     /**
      * Creates a new instance with the specified map.
      */
-    protected abstract <K, V> @NonNull Map<K, V> newInstance(@NonNull Map<K, V> m);
+    protected abstract <K, V> Map<K, V> newInstance(Map<K, V> m);
 
     /**
      * Creates a new instance with the specified map.
      */
-    abstract <K, V> @NonNull Map<K, V> newInstance(@NonNull Iterable<Map.Entry<K, V>> m);
+    abstract <K, V> Map<K, V> newInstance(Iterable<Map.Entry<K, V>> m);
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void clearShouldBeIdempotent(@NonNull MapData data) {
+    public void clearShouldBeIdempotent(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
         instance.clear();
@@ -109,7 +108,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void clearShouldYieldEmptyMap(@NonNull MapData data) {
+    public void clearShouldYieldEmptyMap(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         assertNotEqualMap(Collections.emptyMap(), instance);
         instance.clear();
@@ -118,7 +117,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void cloneShouldYieldEqualMap(@NonNull MapData data) {
+    public void cloneShouldYieldEqualMap(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         Map<Key, Value> clone = toClonedInstance(instance);
         assertEqualMap(data.a(), clone);
@@ -127,7 +126,7 @@ public abstract class AbstractMapTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void containsKeyShouldYieldExpectedValue(@NonNull MapData data) {
+    public void containsKeyShouldYieldExpectedValue(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         for (Key k : data.a().readOnlyKeySet()) {
             assertTrue(instance.containsKey(k));
@@ -152,7 +151,7 @@ public abstract class AbstractMapTest {
     }
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entryIteratorEntrySetValueShouldUpdateMap(@NonNull MapData data) {
+    public void entryIteratorEntrySetValueShouldUpdateMap(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> entry : instance.entrySet()) {
@@ -165,7 +164,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entryIteratorRemoveShouldRemoveEntryAndRemoveIsNotIdempotent(@NonNull MapData data) {
+    public void entryIteratorRemoveShouldRemoveEntryAndRemoveIsNotIdempotent(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         List<Map.Entry<Key, Value>> toRemove = new ArrayList<>(new HashSet<>(data.a().readOnlyEntrySet().asSet()));
@@ -187,7 +186,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entryIteratorShouldYieldExpectedEntries(@NonNull MapData data) throws Exception {
+    public void entryIteratorShouldYieldExpectedEntries(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         List<Map.Entry<Key, Value>> actualList = new ArrayList<>();
         LinkedHashMap<Key, Value> actualMap = new LinkedHashMap<>();
@@ -199,7 +198,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetContainsExpectedEntries(@NonNull MapData data) throws Exception {
+    public void entrySetContainsExpectedEntries(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         Set<Map.Entry<Key, Value>> entrySet = instance.entrySet();
         for (Map.Entry<Key, Value> e : data.a) {
@@ -223,7 +222,7 @@ public abstract class AbstractMapTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetContainsShouldYieldExpectedValue(@NonNull MapData data) {
+    public void entrySetContainsShouldYieldExpectedValue(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         for (Map.Entry<Key, Value> e : data.a().readOnlyEntrySet()) {
             assertTrue(instance.entrySet().contains(e));
@@ -239,7 +238,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetRemoveAllWithContainedEntryShouldReturnTrue(@NonNull MapData data) throws Exception {
+    public void entrySetRemoveAllWithContainedEntryShouldReturnTrue(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         assertTrue(instance.entrySet().removeAll(data.a.readOnlyEntrySet().asSet()));
         assertEqualMap(Collections.emptyMap(), instance);
@@ -247,7 +246,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetRemoveAllWithEntriesThatHaveSameKeyButDifferentValueShouldReturnFalse(@NonNull MapData data) throws Exception {
+    public void entrySetRemoveAllWithEntriesThatHaveSameKeyButDifferentValueShouldReturnFalse(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         assertFalse(instance.entrySet().removeAll(data.aWithDifferentValues.readOnlyEntrySet().asSet()));
         assertEqualMap(data.a, instance);
@@ -255,7 +254,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetRemoveAllWithNewEntryShouldReturnFalse(@NonNull MapData data) throws Exception {
+    public void entrySetRemoveAllWithNewEntryShouldReturnFalse(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         assertFalse(instance.entrySet().removeAll(data.c.readOnlyEntrySet().asSet()));
         assertEqualMap(data.a, instance);
@@ -263,7 +262,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetRemoveShouldNotRemoveEntryWithDifferentKeyAndDifferentValue(@NonNull MapData data) {
+    public void entrySetRemoveShouldNotRemoveEntryWithDifferentKeyAndDifferentValue(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.c().readOnlyEntrySet()) {
@@ -274,7 +273,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetRemoveShouldNotRemoveEntryWithSameKeyButDifferentValue(@NonNull MapData data) {
+    public void entrySetRemoveShouldNotRemoveEntryWithSameKeyButDifferentValue(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.aWithDifferentValues().readOnlyEntrySet()) {
@@ -285,7 +284,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void entrySetRemoveShouldRemoveEntryWithSameKeyAndValue(@NonNull MapData data) {
+    public void entrySetRemoveShouldRemoveEntryWithSameKeyAndValue(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
 
@@ -299,14 +298,14 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalWithThisShouldYieldTrue(@NonNull MapData data) {
+    public void equalWithThisShouldYieldTrue(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         assertEquals(instance, instance);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithCloneWithUpdatedEntriesShouldYieldFalse(@NonNull MapData data) throws Exception {
+    public void equalsWithCloneWithUpdatedEntriesShouldYieldFalse(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         Map<Key, Value> instance2 = toClonedInstance(instance);
         assertEquals(instance, instance2);
@@ -317,21 +316,21 @@ public abstract class AbstractMapTest {
     @SuppressWarnings("SimplifiableAssertion")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithNullShouldYieldFalse(@NonNull MapData data) {
+    public void equalsWithNullShouldYieldFalse(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         assertFalse(instance.equals(null));
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void equalsWithObjectShouldYieldFalse(@NonNull MapData data) throws Exception {
+    public void equalsWithObjectShouldYieldFalse(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         assertNotEquals(instance, new Object());
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void getOrDefaultWithContainedKeyShouldYieldValue(@NonNull MapData data) throws Exception {
+    public void getOrDefaultWithContainedKeyShouldYieldValue(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         Value defaultValue = new Value(7, -1);
         for (Map.Entry<Key, Value> e : data.a()) {
@@ -341,7 +340,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void getOfEntryWithNullValueShouldYieldNull(@NonNull MapData data) throws Exception {
+    public void getOfEntryWithNullValueShouldYieldNull(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a.asMap());
         Key key = new Key(42, -1);
@@ -354,7 +353,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void getOrDefaultWithNonContainedKeyShouldYieldDefault(@NonNull MapData data) throws Exception {
+    public void getOrDefaultWithNonContainedKeyShouldYieldDefault(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         Value defaultValue = new Value(7, -1);
         for (Map.Entry<Key, Value> e : data.c()) {
@@ -364,7 +363,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void iteratorRemoveShouldThrowIllegalStateException(@NonNull MapData data) {
+    public void iteratorRemoveShouldThrowIllegalStateException(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         Iterator<Key> i = instance.keySet().iterator();
         assertThrows(IllegalStateException.class, i::remove);
@@ -376,7 +375,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keyIteratorRemoveShouldRemoveEntry(@NonNull MapData data) {
+    public void keyIteratorRemoveShouldRemoveEntry(MapData data) {
         Map<Key, Value> instance = newInstance(data.a());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         List<Key> toRemove = new ArrayList<>(new HashSet<>(data.a().readOnlyKeySet().asSet()));
@@ -396,7 +395,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRemoveAllOfEmptyMapShouldReturnFalse(@NonNull MapData data) throws Exception {
+    public void keySetRemoveAllOfEmptyMapShouldReturnFalse(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance();
         assertFalse(instance.keySet().removeAll(data.a.readOnlyKeySet().asSet()));
         assertEqualMap(Collections.emptyMap(), instance);
@@ -404,7 +403,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRemoveAllWithEmptyMapShouldReturnFalse(@NonNull MapData data) throws Exception {
+    public void keySetRemoveAllWithEmptyMapShouldReturnFalse(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         assertFalse(instance.keySet().removeAll(Collections.<Key>emptySet()));
         assertEqualMap(data.a(), instance);
@@ -412,7 +411,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRemoveAllWithContainedKeyShouldReturnTrue(@NonNull MapData data) throws Exception {
+    public void keySetRemoveAllWithContainedKeyShouldReturnTrue(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         assertTrue(instance.keySet().removeAll(data.a.readOnlyKeySet().asSet()));
         assertEqualMap(Collections.emptyMap(), instance);
@@ -420,7 +419,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRemoveAllWithSomeContainedKeyShouldReturnTrue(@NonNull MapData data) throws Exception {
+    public void keySetRemoveAllWithSomeContainedKeyShouldReturnTrue(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         assertTrue(instance.keySet().removeAll(data.someAPlusSomeB().readOnlyKeySet().asSet()));
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a.asMap());
@@ -430,7 +429,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRemoveAllWithNewKeyShouldReturnFalse(@NonNull MapData data) throws Exception {
+    public void keySetRemoveAllWithNewKeyShouldReturnFalse(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         assertFalse(instance.keySet().removeAll(data.c.readOnlyKeySet().asSet()));
         assertEqualMap(data.a, instance);
@@ -438,7 +437,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRetainAllOfEmptyMapShouldNotChangeMap(@NonNull MapData data) throws Exception {
+    public void keySetRetainAllOfEmptyMapShouldNotChangeMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance();
         instance.keySet().retainAll(data.a().asMap().keySet());
         assertEqualMap(Collections.emptyMap(), instance);
@@ -446,7 +445,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRetainAllWithContainedKeysShouldNotChangeMap(@NonNull MapData data) throws Exception {
+    public void keySetRetainAllWithContainedKeysShouldNotChangeMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.keySet().retainAll(data.a().asMap().keySet());
         assertEqualMap(data.a().asMap(), instance);
@@ -455,7 +454,7 @@ public abstract class AbstractMapTest {
     @SuppressWarnings("SuspiciousMethodCalls")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRetainAllWithEmptySetShouldClearMap(@NonNull MapData data) throws Exception {
+    public void keySetRetainAllWithEmptySetShouldClearMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.keySet().retainAll(Collections.emptySet());
         assertEqualMap(Collections.emptyMap(), instance);
@@ -463,7 +462,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRetainAllWithSomeContainedKeysShouldChangeMap(@NonNull MapData data) throws Exception {
+    public void keySetRetainAllWithSomeContainedKeysShouldChangeMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a.asMap());
         instance.keySet().retainAll(data.someAPlusSomeB().asMap().keySet());
@@ -473,7 +472,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void keySetRetainAllWithSomeContainedKeysShouldReturnNewInstance(@NonNull MapData data) throws Exception {
+    public void keySetRetainAllWithSomeContainedKeysShouldReturnNewInstance(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         assertTrue(instance.keySet().retainAll(data.someAPlusSomeB().asMap().keySet()));
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
@@ -490,14 +489,14 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceIterableArgShouldBeEqualToArg(@NonNull MapData data) {
+    public void newInstanceIterableArgShouldBeEqualToArg(MapData data) {
         Map<Key, Value> actual = newInstance(data.a().readOnlyEntrySet());
         assertEqualMap(data.a(), actual);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceMapArgsOfSameTypeShouldBeEqualToArg(@NonNull MapData data) {
+    public void newInstanceMapArgsOfSameTypeShouldBeEqualToArg(MapData data) {
         Map<Key, Value> actual1 = newInstance(data.a().asMap());
         Map<Key, Value> actual = newInstance(actual1);
         assertEqualMap(data.a(), actual);
@@ -505,7 +504,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceMapArgsShouldBeEqualToArg(@NonNull MapData data) {
+    public void newInstanceMapArgsShouldBeEqualToArg(MapData data) {
         Map<Key, Value> actual = newInstance(data.a().asMap());
         assertEqualMap(data.a(), actual);
     }
@@ -519,7 +518,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void newInstanceReadOnlyMapArgShouldBeEqualToARg(@NonNull MapData data) {
+    public void newInstanceReadOnlyMapArgShouldBeEqualToARg(MapData data) {
         Map<Key, Value> actual = newInstance(data.a());
         assertEqualMap(data.a(), actual);
     }
@@ -553,7 +552,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putAllWithContainedEntriesShouldNotChangeMap(@NonNull MapData data) throws Exception {
+    public void putAllWithContainedEntriesShouldNotChangeMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.putAll(data.a().asMap());
         assertEqualMap(data.a().asMap(), instance);
@@ -561,7 +560,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putAllWithContainedKeysButNewValuesShouldChangeMap(@NonNull MapData data) throws Exception {
+    public void putAllWithContainedKeysButNewValuesShouldChangeMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.putAll(data.aWithDifferentValues().asMap());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
@@ -571,7 +570,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putAllWithNewEntriesShouldChangeMap(@NonNull MapData data) throws Exception {
+    public void putAllWithNewEntriesShouldChangeMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.putAll(data.c().asMap());
         SequencedMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
@@ -582,7 +581,7 @@ public abstract class AbstractMapTest {
     @SuppressWarnings({"CollectionAddedToSelf"})
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putAllWithSelfShouldYieldSameMap(@NonNull MapData data) throws Exception {
+    public void putAllWithSelfShouldYieldSameMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         instance.putAll(instance);
         assertEqualMap(data.a(), instance);
@@ -590,7 +589,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putAllWithSomeNewKeyShouldAddAll(@NonNull MapData data) throws Exception {
+    public void putAllWithSomeNewKeyShouldAddAll(MapData data) throws Exception {
         ArrayList<Map.Entry<Key, Value>> listB = new ArrayList<>(data.aWithDifferentValues.readOnlyEntrySet().asSet());
         ArrayList<Map.Entry<Key, Value>> listC = new ArrayList<>(data.c.readOnlyEntrySet().asSet());
         SequencedMap<Key, Value> m = new LinkedHashMap<>(data.a.asMap());
@@ -609,7 +608,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putWithContainedEntryShouldReturnOldValue(@NonNull MapData data) throws Exception {
+    public void putWithContainedEntryShouldReturnOldValue(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.aWithDifferentValues) {
@@ -619,7 +618,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putWithContainedKeyButNewValueShouldReturnOldValue(@NonNull MapData data) throws Exception {
+    public void putWithContainedKeyButNewValueShouldReturnOldValue(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.aWithDifferentValues) {
@@ -631,7 +630,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void putWithNewKeyShouldReturnNull(@NonNull MapData data) throws Exception {
+    public void putWithNewKeyShouldReturnNull(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         for (Map.Entry<Key, Value> e : data.c) {
             assertNull(instance.put(e.getKey(), e.getValue()));
@@ -640,7 +639,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithContainedKeyShouldReturnOldValue(@NonNull MapData data) throws Exception {
+    public void removeWithContainedKeyShouldReturnOldValue(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a().asMap());
         for (Map.Entry<Key, Value> e : data.aWithDifferentValues) {
@@ -652,7 +651,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void removeWithNewKeyShouldReturnNull(@NonNull MapData data) throws Exception {
+    public void removeWithNewKeyShouldReturnNull(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a);
         for (Map.Entry<Key, Value> e : data.c) {
             assertNull(instance.remove(e.getKey()));
@@ -663,7 +662,7 @@ public abstract class AbstractMapTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void serializationShouldYieldSameMap(@NonNull MapData data) throws Exception {
+    public void serializationShouldYieldSameMap(MapData data) throws Exception {
         Map<Key, Value> instance = newInstance(data.a());
         assertEqualMap(data.a(), instance);
         if (instance instanceof Serializable) {
@@ -681,7 +680,7 @@ public abstract class AbstractMapTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void toStringShouldContainAllEntries(@NonNull MapData data) {
+    public void toStringShouldContainAllEntries(MapData data) {
         Map<Key, Value> instance = newInstance();
         assertEquals("{}", instance.toString());
 
@@ -695,5 +694,5 @@ public abstract class AbstractMapTest {
         assertEquals(expected, actual);
     }
 
-    protected abstract <K, V> @NonNull Map<K, V> toClonedInstance(@NonNull Map<K, V> m);
+    protected abstract <K, V> Map<K, V> toClonedInstance(Map<K, V> m);
 }

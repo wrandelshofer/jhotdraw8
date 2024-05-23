@@ -9,7 +9,6 @@ import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssDimension2D;
@@ -35,7 +34,7 @@ public interface Page extends Figure {
      * @param internalPageNumber the internal page number
      * @return a new node
      */
-    @NonNull Node createPageNode(int internalPageNumber);
+    Node createPageNode(int internalPageNumber);
 
     /**
      * List of all available papers.
@@ -99,7 +98,7 @@ public interface Page extends Figure {
      * @param internalPageNumber the internal page number
      * @return the clipping region
      */
-    @NonNull Bounds getPageBounds(int internalPageNumber);
+    Bounds getPageBounds(int internalPageNumber);
 
     /**
      * Returns the clip for the page content.
@@ -107,7 +106,7 @@ public interface Page extends Figure {
      * @param internalPageNumber the internal page number
      * @return the clipping region
      */
-    @NonNull Shape getPageClip(int internalPageNumber);
+    Shape getPageClip(int internalPageNumber);
 
     /**
      * Returns a transform which will position the drawing contents inside the
@@ -131,7 +130,7 @@ public interface Page extends Figure {
     }
 
     @Override
-    default boolean isSuitableParent(@NonNull Figure newParent) {
+    default boolean isSuitableParent(Figure newParent) {
         return (newParent instanceof Layer) || (newParent instanceof Clipping);
     }
 

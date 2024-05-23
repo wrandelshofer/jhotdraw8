@@ -12,7 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
@@ -43,16 +42,16 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Slice";
+    public static final String TYPE_SELECTOR = "Slice";
 
-    public static final @NonNull CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
-    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
-    public static final @NonNull CssSizeStyleableKey SLICE_ORIGIN_X = new CssSizeStyleableKey("sliceOriginX", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey SLICE_ORIGIN_Y = new CssSizeStyleableKey("sliceOriginY", CssSize.ZERO);
-    public static final @NonNull CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
+    public static final CssSizeStyleableKey X = new CssSizeStyleableKey("x", CssSize.ZERO);
+    public static final CssSizeStyleableKey Y = new CssSizeStyleableKey("y", CssSize.ZERO);
+    public static final CssSizeStyleableKey WIDTH = new CssSizeStyleableKey("width", CssSize.ZERO);
+    public static final CssSizeStyleableKey HEIGHT = new CssSizeStyleableKey("height", CssSize.ZERO);
+    public static final CssRectangle2DStyleableMapAccessor BOUNDS = new CssRectangle2DStyleableMapAccessor("bounds", X, Y, WIDTH, HEIGHT);
+    public static final CssSizeStyleableKey SLICE_ORIGIN_X = new CssSizeStyleableKey("sliceOriginX", CssSize.ZERO);
+    public static final CssSizeStyleableKey SLICE_ORIGIN_Y = new CssSizeStyleableKey("sliceOriginY", CssSize.ZERO);
+    public static final CssPoint2DStyleableMapAccessor SLICE_ORIGIN = new CssPoint2DStyleableMapAccessor("sliceOrigin", SLICE_ORIGIN_X, SLICE_ORIGIN_Y);
 
     public SliceFigure() {
         this(0, 0, 1, 1);
@@ -63,12 +62,12 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
         reshapeInLocal(x, y, width, height);
     }
 
-    public SliceFigure(@NonNull Rectangle2D rect) {
+    public SliceFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override
-    public void createHandles(@NonNull HandleType handleType, @NonNull List<Handle> list) {
+    public void createHandles(HandleType handleType, List<Handle> list) {
         if (handleType == HandleType.POINT) {
             list.add(new BoundsInLocalOutlineHandle(this));
             ResizeHandleKit.addCornerResizeHandles(this, list);
@@ -79,12 +78,12 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         return new BoundingBox(get(X).getConvertedValue(), get(Y).getConvertedValue(), get(WIDTH).getConvertedValue(), get(HEIGHT).getConvertedValue());
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(get(X), get(Y), get(WIDTH), get(HEIGHT));
     }
 
@@ -96,7 +95,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         set(X, width.getValue() < 0 ? x.add(width) : x);
         set(Y, height.getValue() < 0 ? y.add(height) : y);
         set(WIDTH, width.abs());
@@ -104,7 +103,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Rectangle node = new Rectangle();
         node.setFill(new Color(0, 1.0, 0, 0.5));
         node.setStroke(Color.DARKRED);
@@ -113,7 +112,7 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(ctx, node);
         if (ctx.get(RenderContext.RENDERING_INTENT) != RenderingIntent.EDITOR) {
@@ -127,17 +126,17 @@ public class SliceFigure extends AbstractLeafFigure implements Slice, Transforma
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public boolean isSuitableParent(@NonNull Figure newParent) {
+    public boolean isSuitableParent(Figure newParent) {
         return Slice.super.isSuitableParent(newParent);
     }
 
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         return getLayoutBounds();
     }
 }

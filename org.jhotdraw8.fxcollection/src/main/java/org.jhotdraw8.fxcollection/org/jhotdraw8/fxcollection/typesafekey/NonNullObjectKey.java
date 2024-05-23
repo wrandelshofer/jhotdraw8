@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.lang.reflect.Type;
 
@@ -14,8 +13,8 @@ import java.lang.reflect.Type;
  * @param <T> the value type
  * @author Werner Randelshofer
  */
-public class NonNullObjectKey<@NonNull T> extends AbstractKey<@NonNull T> implements
-        NonNullKey<@NonNull T> {
+public class NonNullObjectKey<T> extends AbstractKey<T> implements
+        NonNullKey<T> {
 
 
     /**
@@ -26,7 +25,7 @@ public class NonNullObjectKey<@NonNull T> extends AbstractKey<@NonNull T> implem
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public NonNullObjectKey(@NonNull String name, @NonNull Type type, @NonNull T defaultValue) {
+    public NonNullObjectKey(String name, Type type, T defaultValue) {
         super(name, type, false, false, defaultValue);
     }
 }

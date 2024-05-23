@@ -5,14 +5,13 @@
 
 package org.jhotdraw8.graph.path;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToIntSet;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.algo.IndexedVertexPathSearchAlgo;
 import org.jhotdraw8.graph.path.backlink.IndexedVertexBackLinkWithCost;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Spliterator;
 import java.util.function.BiFunction;
@@ -26,11 +25,11 @@ import java.util.function.Supplier;
  * @param <C> the cost number type
  */
 public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>> implements VertexSequenceFinder<Integer, C> {
-    private final @NonNull IndexedVertexPathSearchAlgo<C> algo;
-    private final @NonNull C zero;
-    private final @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction;
-    private final @NonNull BiFunction<Integer, Integer, C> costFunction;
-    private final @NonNull BiFunction<C, C, C> sumFunction;
+    private final IndexedVertexPathSearchAlgo<C> algo;
+    private final C zero;
+    private final Function<Integer, Spliterator.OfInt> nextVerticesFunction;
+    private final BiFunction<Integer, Integer, C> costFunction;
+    private final BiFunction<C, C, C> sumFunction;
 
     /**
      * Creates a new instance.
@@ -44,11 +43,11 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      *                             e.g. {@link Integer#sum}, {@link Double#sum}.
      */
     public SimpleIndexedVertexSequenceFinder(
-            @NonNull C zero,
-            @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-            @NonNull BiFunction<Integer, Integer, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction,
-            @NonNull IndexedVertexPathSearchAlgo<C> algo) {
+            C zero,
+            Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+            BiFunction<Integer, Integer, C> costFunction,
+            BiFunction<C, C, C> sumFunction,
+            IndexedVertexPathSearchAlgo<C> algo) {
         this.zero = zero;
         this.nextVerticesFunction = nextVerticesFunction;
         this.costFunction = costFunction;
@@ -67,10 +66,10 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * @param algo                 the search algorithm
      * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
      */
-    public static @NonNull SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
-            @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-            @NonNull BiFunction<Integer, Integer, Integer> costFunction,
-            @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
+    public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
+            Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+            BiFunction<Integer, Integer, Integer> costFunction,
+            IndexedVertexPathSearchAlgo<Integer> algo) {
         return new SimpleIndexedVertexSequenceFinder<>(0, nextVerticesFunction, costFunction, Integer::sum, algo);
     }
 
@@ -84,9 +83,9 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * @param algo                 the search algorithm
      * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
      */
-    public static @NonNull SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
-            @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-            @NonNull IndexedVertexPathSearchAlgo<Integer> algo) {
+    public static SimpleIndexedVertexSequenceFinder<Integer> newIntCostInstance(
+            Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+            IndexedVertexPathSearchAlgo<Integer> algo) {
         return new SimpleIndexedVertexSequenceFinder<>(0, nextVerticesFunction, (u, v) -> 1, Integer::sum, algo);
     }
 
@@ -101,17 +100,17 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
      * @param algo                 the search algorithm
      * @return the new {@link SimpleIndexedVertexSequenceFinder} instance.
      */
-    public static @NonNull SimpleIndexedVertexSequenceFinder<Long> newLongCostInstance(
-            @NonNull Function<Integer, Spliterator.OfInt> nextVerticesFunction,
-            @NonNull BiFunction<Integer, Integer, Long> costFunction,
-            @NonNull IndexedVertexPathSearchAlgo<Long> algo) {
+    public static SimpleIndexedVertexSequenceFinder<Long> newLongCostInstance(
+            Function<Integer, Spliterator.OfInt> nextVerticesFunction,
+            BiFunction<Integer, Integer, Long> costFunction,
+            IndexedVertexPathSearchAlgo<Long> algo) {
         return new SimpleIndexedVertexSequenceFinder<>(0L, nextVerticesFunction, costFunction, Long::sum, algo);
     }
 
     @Override
     public @Nullable SimpleOrderedPair<ImmutableList<Integer>, C> findVertexSequence(
-            @NonNull Iterable<Integer> startVertices, @NonNull Predicate<Integer> goalPredicate,
-            int maxDepth, @NonNull C costLimit, @NonNull AddToSet<Integer> visited) {
+            Iterable<Integer> startVertices, Predicate<Integer> goalPredicate,
+            int maxDepth, C costLimit, AddToSet<Integer> visited) {
         AddToIntSet visitedAsInt = visited instanceof AddToIntSet ? (AddToIntSet) visited : visited::add;
         return IndexedVertexBackLinkWithCost.toVertexSequence(algo.search(
                 startVertices, goalPredicate::test, nextVerticesFunction, maxDepth, zero, costLimit, costFunction, sumFunction,
@@ -120,7 +119,7 @@ public class SimpleIndexedVertexSequenceFinder<C extends Number & Comparable<C>>
 
     @Override
     public @Nullable SimpleOrderedPair<ImmutableList<Integer>, C> findVertexSequenceOverWaypoints(
-            @NonNull Iterable<Integer> waypoints, int maxDepth, @NonNull C costLimit, @NonNull Supplier<AddToSet<Integer>> visitedSetFactory) {
+            Iterable<Integer> waypoints, int maxDepth, C costLimit, Supplier<AddToSet<Integer>> visitedSetFactory) {
         return VertexSequenceFinder.findVertexSequenceOverWaypoints(
                 waypoints,
                 (start, goal) -> this.findVertexSequence(start, goal, maxDepth, costLimit, visitedSetFactory.get()),

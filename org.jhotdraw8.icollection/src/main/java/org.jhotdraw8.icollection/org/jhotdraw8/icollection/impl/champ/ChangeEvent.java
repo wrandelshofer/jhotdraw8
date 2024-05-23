@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -27,7 +26,7 @@ public class ChangeEvent<D> {
         REPLACED
     }
 
-    private @NonNull Type type = Type.UNCHANGED;
+    private Type type = Type.UNCHANGED;
     private @Nullable D oldData;
     private @Nullable D newData;
 
@@ -46,11 +45,11 @@ public class ChangeEvent<D> {
         return newData;
     }
 
-    public @NonNull D getOldDataNonNull() {
+    public D getOldDataNonNull() {
         return Objects.requireNonNull(oldData);
     }
 
-    public @NonNull D getNewDataNonNull() {
+    public D getNewDataNonNull() {
         return Objects.requireNonNull(newData);
     }
 

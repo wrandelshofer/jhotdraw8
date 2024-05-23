@@ -5,14 +5,13 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -43,7 +42,7 @@ public class Scale2DCssConverter extends AbstractCssConverter<Point2D> {
     }
 
     @Override
-    public @NonNull Point2D parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Point2D parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         final double x, y;
         tt.requireNextToken(CssTokenType.TT_NUMBER, " ⟨Scale2D⟩: ⟨x⟩ expected.");
         x = tt.currentNumberNonNull().doubleValue();
@@ -59,7 +58,7 @@ public class Scale2DCssConverter extends AbstractCssConverter<Point2D> {
     }
 
     @Override
-    protected <TT extends Point2D> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    protected <TT extends Point2D> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         double x = value.getX();
         double y = value.getY();
         out.accept(new CssToken(CssTokenType.TT_NUMBER, x));

@@ -6,7 +6,6 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -32,13 +31,13 @@ public class FXSvgTinyReader {
     public FXSvgTinyReader() {
     }
 
-    public Node read(@NonNull Path file) throws IOException {
+    public Node read(Path file) throws IOException {
         try (final InputStream in = new BufferedInputStream(Files.newInputStream(file))) {
             return read(new StreamSource(in));
         }
     }
 
-    public Node read(@NonNull URL file) throws IOException {
+    public Node read(URL file) throws IOException {
         try (final InputStream in = new BufferedInputStream(file.openStream())) {
             return read(new StreamSource(in));
         }
@@ -47,7 +46,7 @@ public class FXSvgTinyReader {
     /**
      * The reader does not close the provided source.
      */
-    public Node read(@NonNull Source in) throws IOException {
+    public Node read(Source in) throws IOException {
         SequencedMap<MapAccessor<?>, Object> m = new LinkedHashMap<>();
         RenderContext.RENDERING_INTENT.put(m, RenderingIntent.EXPORT);
         return read(in, m);
@@ -57,7 +56,7 @@ public class FXSvgTinyReader {
      * The reader does not close the provided source.
      */
     @SuppressWarnings("unchecked")
-    public Node read(@NonNull Source in, Map<MapAccessor<?>, Object> renderingHints) throws IOException {
+    public Node read(Source in, Map<MapAccessor<?>, Object> renderingHints) throws IOException {
         Figure figure = new FigureSvgTinyReader().read(in);
         SimpleDrawingRenderer r = new SimpleDrawingRenderer();
         renderingHints.forEach((key, value) -> r.put((MapAccessor<Object>) key, value));

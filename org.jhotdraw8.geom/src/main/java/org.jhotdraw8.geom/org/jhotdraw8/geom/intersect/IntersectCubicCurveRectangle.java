@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class IntersectCubicCurveRectangle {
      * @param r1 corner point 1 of the rectangle
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectCubicCurveRectangle(@NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2, @NonNull Point2D p3, @NonNull Point2D r0, @NonNull Point2D r1) {
+    public static IntersectionResult intersectCubicCurveRectangle(Point2D p0, Point2D p1, Point2D p2, Point2D p3, Point2D r0, Point2D r1) {
         final Point2D.Double topLeft, bottomRight, topRight, bottomLeft;
         topLeft = Intersections.topLeft(r0, r1);
         bottomRight = Intersections.bottomRight(r0, r1);
@@ -39,7 +38,7 @@ public class IntersectCubicCurveRectangle {
         inter3 = IntersectCubicCurveLine.intersectCubicCurveLine(p0, p1, p2, p3, bottomRight, bottomLeft);
         inter4 = IntersectCubicCurveLine.intersectCubicCurveLine(p0, p1, p2, p3, bottomLeft, topLeft);
 
-        final @NonNull List<IntersectionPoint> result = new ArrayList<>();
+        final List<IntersectionPoint> result = new ArrayList<>();
 
         result.addAll(inter1.intersections().asList());
         result.addAll(inter2.intersections().asList());

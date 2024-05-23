@@ -25,8 +25,7 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.concurrent.RangeTask;
 import org.jhotdraw8.color.DisplayP3ColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
@@ -62,11 +61,11 @@ public class ChromaticityDiagram extends Pane {
     private static final float ywMax = 0.9f;
     private static final float ywMin = 0f;
     private static final float ywExtent = ywMax - ywMin;
-    private final @NonNull ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new SrgbColorSpace());
-    private final @NonNull ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(new DisplayP3ColorSpace());
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new SrgbColorSpace());
+    private final ObjectProperty<NamedColorSpace> displayColorSpace = new SimpleObjectProperty<>(new DisplayP3ColorSpace());
 
-    private final @NonNull ImageView imageView = new ImageView();
-    private final @NonNull Group overlay = new Group();
+    private final ImageView imageView = new ImageView();
+    private final Group overlay = new Group();
     @Nullable
     protected PixelBuffer<IntBuffer> pixelBuffer;
 
@@ -200,9 +199,9 @@ public class ChromaticityDiagram extends Pane {
         pixelBuffer.updateBuffer(pb -> new Rectangle2D(0, 0, pb.getWidth(), pb.getHeight()));
     }
 
-    record UpdateRange(@NonNull NamedColorSpace cs, @NonNull PixelBuffer<IntBuffer> pxBuf,
-                       Path2D.@NonNull Float shape,
-                       @NonNull NamedColorSpace displayCS)
+    record UpdateRange(NamedColorSpace cs, PixelBuffer<IntBuffer> pxBuf,
+                       Path2D.Float shape,
+                       NamedColorSpace displayCS)
             implements BiConsumer<Integer, Integer> {
 
         private static final float EPSILON = 1e-3f;
@@ -329,7 +328,7 @@ public class ChromaticityDiagram extends Pane {
         return colorSpace.get();
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> colorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> colorSpaceProperty() {
         return colorSpace;
     }
 
@@ -341,7 +340,7 @@ public class ChromaticityDiagram extends Pane {
         return displayColorSpace.get();
     }
 
-    public @NonNull ObjectProperty<NamedColorSpace> displayColorSpaceProperty() {
+    public ObjectProperty<NamedColorSpace> displayColorSpaceProperty() {
         return displayColorSpace;
     }
 

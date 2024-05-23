@@ -5,7 +5,6 @@
 package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * The CssColorConverter converts system colors into color values.
@@ -72,7 +71,7 @@ public interface SystemColorConverter {
      * @param value a value
      * @return converted value
      */
-    default Color convert(@NonNull CssColor value) {
+    default Color convert(CssColor value) {
         return value.getColor();
     }
 

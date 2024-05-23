@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.tool;
 
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
 

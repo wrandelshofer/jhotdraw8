@@ -19,10 +19,9 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.resources.ModulepathResources;
 import org.jhotdraw8.application.resources.Resources;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URL;
 import java.util.MissingResourceException;
@@ -42,11 +41,11 @@ public class FontFamilyChooserController {
     @FXML
     private URL location;
 
-    private final @NonNull ObjectProperty<FontChooserModel> model = new SimpleObjectProperty<>();
+    private final ObjectProperty<FontChooserModel> model = new SimpleObjectProperty<>();
 
-    private final @NonNull ObjectProperty<EventHandler<ActionEvent>> onAction = new SimpleObjectProperty<>();
+    private final ObjectProperty<EventHandler<ActionEvent>> onAction = new SimpleObjectProperty<>();
 
-    protected final @NonNull DoubleProperty fontSize = new SimpleDoubleProperty(13.0);
+    protected final DoubleProperty fontSize = new SimpleDoubleProperty(13.0);
 
     @FXML
     private TextArea previewTextArea;
@@ -101,12 +100,12 @@ public class FontFamilyChooserController {
 
     private void initListCells() {
         familyList.setCellFactory(lv -> {
-            final @NonNull TextFieldListCell<FontFamily> listCell = new TextFieldListCell<>();
+            final TextFieldListCell<FontFamily> listCell = new TextFieldListCell<>();
             return listCell;
         });
 
         collectionList.setCellFactory(lv -> {
-            final @NonNull TextFieldListCell<FontCollection> listCell = new TextFieldListCell<>();
+            final TextFieldListCell<FontCollection> listCell = new TextFieldListCell<>();
             return listCell;
         });
     }
@@ -193,11 +192,11 @@ public class FontFamilyChooserController {
 
     }
 
-    public @NonNull ObjectProperty<FontChooserModel> modelProperty() {
+    public ObjectProperty<FontChooserModel> modelProperty() {
         return model;
     }
 
-    public @NonNull ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
+    public ObjectProperty<EventHandler<ActionEvent>> onActionProperty() {
         return onAction;
     }
 

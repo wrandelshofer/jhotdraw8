@@ -6,7 +6,7 @@
 package org.jhotdraw8.os;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Simple implementation of system preferences with setter methods.

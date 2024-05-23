@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.inspector;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 
 /**
@@ -14,7 +13,7 @@ import org.jhotdraw8.application.resources.Resources;
  */
 public class InspectorLabels {
 
-    public static final @NonNull String RESOURCE_BUNDLE = "org.jhotdraw8.draw.inspector.Labels";
+    public static final String RESOURCE_BUNDLE = "org.jhotdraw8.draw.inspector.Labels";
 
     /**
      * Don't let anyone instantiate this class.

@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -24,7 +23,7 @@ public class TypeSelector extends SimpleSelector {
      * <p>
      * Value: {@value #ANY_NAMESPACE}
      */
-    public static final @NonNull String ANY_NAMESPACE = "*";
+    public static final String ANY_NAMESPACE = "*";
     /**
      * Special namespace value which means 'without a namespace'.
      * <p>
@@ -34,7 +33,7 @@ public class TypeSelector extends SimpleSelector {
      */
     public static final @Nullable String WITHOUT_NAMESPACE = null;
     private final @Nullable String namespacePattern;
-    private final @NonNull String type;
+    private final String type;
 
     /**
      * Creates a new instance
@@ -43,21 +42,21 @@ public class TypeSelector extends SimpleSelector {
      *                         null means no namespace)
      * @param type the type name
      */
-    public TypeSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, @NonNull String type) {
+    public TypeSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String type) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;
         this.type = type;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "Type:"
                 + (namespacePattern == null ? "" : namespacePattern + "|")
                 + type;
     }
 
     @Override
-    public @Nullable <T> T match(@NonNull SelectorModel<T> model, @Nullable T element) {
+    public @Nullable <T> T match(SelectorModel<T> model, @Nullable T element) {
         return (element != null && model.hasType(element, namespacePattern, type)) //
                 ? element : null;
     }
@@ -68,7 +67,7 @@ public class TypeSelector extends SimpleSelector {
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         if (!ANY_NAMESPACE.equals(namespacePattern)) {
             if (namespacePattern != null) {
                 consumer.accept(new CssToken(CssTokenType.TT_IDENT, namespacePattern));
@@ -99,7 +98,7 @@ public class TypeSelector extends SimpleSelector {
         return namespacePattern;
     }
 
-    public @NonNull String getType() {
+    public String getType() {
         return type;
     }
 

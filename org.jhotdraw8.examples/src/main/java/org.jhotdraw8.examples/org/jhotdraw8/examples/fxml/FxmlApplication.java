@@ -13,7 +13,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
@@ -27,10 +26,10 @@ import java.util.concurrent.Executors;
  * to its primary {@link Stage}.
  */
 public abstract class FxmlApplication extends Application {
-    private static final @NonNull String FXML_PROPERTY_NAME = "fxml";
+    private static final String FXML_PROPERTY_NAME = "fxml";
 
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<URL> fxml = new SimpleObjectProperty<>(this, FXML_PROPERTY_NAME);
+    private final ObjectProperty<URL> fxml = new SimpleObjectProperty<>(this, FXML_PROPERTY_NAME);
     private CompletableFuture<FXMLLoader> loaderFuture;
 
     @Override

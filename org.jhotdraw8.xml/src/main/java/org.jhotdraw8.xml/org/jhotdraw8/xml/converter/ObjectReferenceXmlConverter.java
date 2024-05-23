@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -25,8 +24,8 @@ import java.util.logging.Logger;
  */
 public class ObjectReferenceXmlConverter<T> implements Converter<T> {
 
-    private static final @NonNull Logger LOGGER = Logger.getLogger(ObjectReferenceXmlConverter.class.getName());
-    private final @NonNull Class<T> clazz;
+    private static final Logger LOGGER = Logger.getLogger(ObjectReferenceXmlConverter.class.getName());
+    private final Class<T> clazz;
 
     /**
      * Creates a new instance
@@ -34,12 +33,12 @@ public class ObjectReferenceXmlConverter<T> implements Converter<T> {
      * @param clazz the type class
      * @throws IllegalArgumentException if clazz is null
      */
-    public ObjectReferenceXmlConverter(@NonNull Class<T> clazz) {
+    public ObjectReferenceXmlConverter(Class<T> clazz) {
         this.clazz = clazz;
     }
 
     @Override
-    public <TT extends T> void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends T> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (idSupplier == null) {
             throw new IllegalArgumentException("IdSupplier is required for this converter");
         }
@@ -47,7 +46,7 @@ public class ObjectReferenceXmlConverter<T> implements Converter<T> {
     }
 
     @Override
-    public @Nullable T fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable T fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         return fromString(buf.toString(), idResolver);
     }
 

@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -31,14 +30,14 @@ public class UuidXmlConverter implements Converter<UUID> {
     }
 
     @Override
-    public void toString(@NonNull Appendable buf, @Nullable IdSupplier idSupplier, UUID value) throws IOException {
+    public void toString(Appendable buf, @Nullable IdSupplier idSupplier, UUID value) throws IOException {
         if (value != null) {
             buf.append(value.toString());
         }
     }
 
     @Override
-    public @Nullable UUID fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable UUID fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         if (in != null) {
             String converted = in.toString();
             in.position(in.position() + in.remaining());

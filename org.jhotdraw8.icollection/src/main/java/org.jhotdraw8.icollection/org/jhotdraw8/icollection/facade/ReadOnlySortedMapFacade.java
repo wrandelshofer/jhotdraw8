@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySortedMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -28,13 +27,13 @@ import java.util.function.Supplier;
  */
 public class ReadOnlySortedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
         implements ReadOnlySortedMap<K, V> {
-    private final @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction;
-    private final @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction;
-    private final @NonNull Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction;
+    private final Supplier<Map.Entry<K, V>> firstEntryFunction;
+    private final Supplier<Map.Entry<K, V>> lastEntryFunction;
+    private final Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction;
     private final int characteristics;
-    private final @NonNull Supplier<Comparator<? super K>> comparatorSupplier;
+    private final Supplier<Comparator<? super K>> comparatorSupplier;
 
-    public ReadOnlySortedMapFacade(@NonNull SortedMap<K, V> target) {
+    public ReadOnlySortedMapFacade(SortedMap<K, V> target) {
         super(target);
         this.firstEntryFunction = target::firstEntry;
         this.lastEntryFunction = target::lastEntry;
@@ -44,13 +43,13 @@ public class ReadOnlySortedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
     }
 
     public ReadOnlySortedMapFacade(
-            @NonNull Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
-            @NonNull Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction,
-            @NonNull IntSupplier sizeFunction,
-            @NonNull Predicate<Object> containsKeyFunction,
-            @NonNull Function<K, V> getFunction,
-            @NonNull Supplier<Map.Entry<K, V>> firstEntryFunction,
-            @NonNull Supplier<Map.Entry<K, V>> lastEntryFunction,
+            Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction,
+            Supplier<Iterator<Map.Entry<K, V>>> reverseIteratorFunction,
+            IntSupplier sizeFunction,
+            Predicate<Object> containsKeyFunction,
+            Function<K, V> getFunction,
+            Supplier<Map.Entry<K, V>> firstEntryFunction,
+            Supplier<Map.Entry<K, V>> lastEntryFunction,
             int characteristics, @Nullable Supplier<Comparator<? super K>> comparator) {
         super(iteratorFunction, sizeFunction, containsKeyFunction, getFunction);
         this.firstEntryFunction = firstEntryFunction;
@@ -61,7 +60,7 @@ public class ReadOnlySortedMapFacade<K, V> extends ReadOnlyMapFacade<K, V>
     }
 
     @Override
-    public @NonNull ReadOnlySortedMap<K, V> readOnlyReversed() {
+    public ReadOnlySortedMap<K, V> readOnlyReversed() {
         return new ReadOnlySortedMapFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

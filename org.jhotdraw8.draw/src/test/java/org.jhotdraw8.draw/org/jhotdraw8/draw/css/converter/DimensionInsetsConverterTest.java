@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.value.CssInsets;
 import org.junit.jupiter.api.DynamicTest;
@@ -23,7 +22,7 @@ public class DimensionInsetsConverterTest {
     /**
      * Test of fromString method, of class CssPoint2DConverterTest.
      */
-    public static void doTestFromString(CssInsets expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssInsets expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         InsetsCssConverter instance = new InsetsCssConverter(false);
@@ -32,7 +31,7 @@ public class DimensionInsetsConverterTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 dynamicTest("1", () -> doTestFromString(new CssInsets(10, 20, 30, 40, "mm"), "10mm 20mm 30mm 40mm")),
                 dynamicTest("2", () -> doTestFromString(new CssInsets(10, 10, 20, 40, "mm"), "10mm 10mm 20mm 40mm")),

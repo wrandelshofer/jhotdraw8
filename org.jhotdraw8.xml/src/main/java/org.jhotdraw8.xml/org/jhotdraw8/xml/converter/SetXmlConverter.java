@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -30,7 +29,7 @@ import java.util.regex.Pattern;
  * @param <T> the element type
  */
 public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
-    private final @NonNull Converter<T> elementConverter;
+    private final Converter<T> elementConverter;
     private final @Nullable Pattern delimiterPattern;
     private final @Nullable String delimiter;
     private final @Nullable String prefix;
@@ -41,15 +40,15 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
      *
      * @param elementConverter
      */
-    public SetXmlConverter(@NonNull Converter<T> elementConverter) {
+    public SetXmlConverter(Converter<T> elementConverter) {
         this(elementConverter, " ");
     }
 
-    public SetXmlConverter(@NonNull Converter<T> elementConverter, @Nullable String delimiter) {
+    public SetXmlConverter(Converter<T> elementConverter, @Nullable String delimiter) {
         this(elementConverter, delimiter, null, null, null);
     }
 
-    public SetXmlConverter(@NonNull Converter<T> elementConverter, @Nullable String delimiter,
+    public SetXmlConverter(Converter<T> elementConverter, @Nullable String delimiter,
                            @Nullable String prefix, @Nullable String suffix,
                            @Nullable Comparator<T> comparatorForSorting
     ) {
@@ -62,7 +61,7 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
     }
 
     @Override
-    public @Nullable ImmutableSequencedSet<T> fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable ImmutableSequencedSet<T> fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (prefix != null) {
             if (!str.startsWith(prefix)) {

@@ -5,7 +5,6 @@
 package org.jhotdraw8.styleable;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.fxbase.styleable.SimpleStyleableMap;
@@ -128,7 +127,7 @@ public class StyleableMapTest {
     @Test
     public void concurrentUsageTest() {
         ConcurrentHashMap<Character, Integer> sharedKeysMap = new ConcurrentHashMap<>() {
-            final @NonNull AtomicInteger nextIndex = new AtomicInteger();
+            final AtomicInteger nextIndex = new AtomicInteger();
 
             @Override
             public Integer get(Object key) {

@@ -10,7 +10,6 @@ import javafx.beans.property.Property;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.lang.ref.WeakReference;
 import java.util.function.Function;
@@ -38,20 +37,20 @@ import java.util.function.Function;
  * @param <T> the value type of the property
  */
 public class Via<T> {
-    private final @NonNull WeakReference<Property<?>> weakReferenceToRoot;
-    private final @NonNull Property<T> intermediate;
+    private final WeakReference<Property<?>> weakReferenceToRoot;
+    private final Property<T> intermediate;
 
     /**
      * Creates a new via builder.
      *
      * @param weakReferenceToRoot the root property
      */
-    public Via(@NonNull Property<T> weakReferenceToRoot) {
+    public Via(Property<T> weakReferenceToRoot) {
         this.weakReferenceToRoot = new WeakReference<>(weakReferenceToRoot);
         this.intermediate = weakReferenceToRoot;
     }
 
-    private Via(@NonNull WeakReference<Property<?>> weakReferenceToRoot, @NonNull Property<T> intermediate) {
+    private Via(WeakReference<Property<?>> weakReferenceToRoot, Property<T> intermediate) {
         this.weakReferenceToRoot = weakReferenceToRoot;
         this.intermediate = intermediate;
     }
@@ -63,7 +62,7 @@ public class Via<T> {
      * @param <U>         the type of the property
      * @return a via binding to the property
      */
-    public <U> Via<U> via(@NonNull Function<T, Property<U>> viaFunction) {
+    public <U> Via<U> via(Function<T, Property<U>> viaFunction) {
         // Create a change listener that has strong references to
         // - the 'viaFunction' function
         // - the intermediate 'next' property.
@@ -82,12 +81,12 @@ public class Via<T> {
      * @param <U>
      */
     private static class ViaChangeListener<T, U> implements ChangeListener<T> {
-        private final @NonNull ObjectProperty<U> next = new SimpleObjectProperty<>();
-        private final @NonNull Function<T, Property<U>> viaFunction;
-        private final @NonNull WeakReference<Property<?>> weakReferenceToRoot;
-        final private @NonNull Property<T> intermediate;
+        private final ObjectProperty<U> next = new SimpleObjectProperty<>();
+        private final Function<T, Property<U>> viaFunction;
+        private final WeakReference<Property<?>> weakReferenceToRoot;
+        final private Property<T> intermediate;
 
-        private ViaChangeListener(@NonNull WeakReference<Property<?>> weakReferenceToRoot, @NonNull Property<T> intermediate, @NonNull Function<T, Property<U>> viaFunction) {
+        private ViaChangeListener(WeakReference<Property<?>> weakReferenceToRoot, Property<T> intermediate, Function<T, Property<U>> viaFunction) {
             this.viaFunction = viaFunction;
             this.weakReferenceToRoot = weakReferenceToRoot;
             this.intermediate = intermediate;

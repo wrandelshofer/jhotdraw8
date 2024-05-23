@@ -10,7 +10,6 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
@@ -39,7 +38,7 @@ public class DoubleXmlConverterTest {
     /**
      * Test of toString method, of class XmlNumberConverter.
      */
-    public static void testFromString(Double expectedValue, @NonNull String inputValue) throws ParseException, IOException {
+    public static void testFromString(Double expectedValue, String inputValue) throws ParseException, IOException {
         DoubleXmlConverter c = new DoubleXmlConverter();
 
         Number actualValue = c.fromString(inputValue);
@@ -47,13 +46,13 @@ public class DoubleXmlConverterTest {
         Assertions.assertEquals(expectedValue, actualValue);
     }
 
-    public static void testToFromString(Double doubleValue, @NonNull String stringValue) throws Exception {
+    public static void testToFromString(Double doubleValue, String stringValue) throws Exception {
         testToString(doubleValue, stringValue);
         testFromString(doubleValue, stringValue);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFromString() {
+    public List<DynamicTest> dynamicTestsFromString() {
         return Arrays.asList(
                 DynamicTest.dynamicTest("1", () -> testToFromString(-0.0, "-0")),
                 DynamicTest.dynamicTest("2", () -> testToFromString(0.0, "0")),

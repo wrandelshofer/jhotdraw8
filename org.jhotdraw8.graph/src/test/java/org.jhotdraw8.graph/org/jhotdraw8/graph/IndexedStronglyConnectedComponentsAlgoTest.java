@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.IntList;
 import org.jhotdraw8.graph.algo.IndexedStronglyConnectedComponentsAlgo;
 import org.junit.jupiter.api.DynamicTest;
@@ -24,14 +23,14 @@ public class IndexedStronglyConnectedComponentsAlgoTest extends AbstractGraphAlg
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSearchStronglyConnectedComponents() {
+    public List<DynamicTest> dynamicTestsSearchStronglyConnectedComponents() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSearchStronglyConnectedComponents(createDisjointGraph(), 4)),
                 dynamicTest("2", () -> testSearchStronglyConnectedComponents(createLoopGraph(), 1))
         );
     }
 
-    void testSearchStronglyConnectedComponents(@NonNull DirectedGraph<String, Integer> graph, int expectedSetCount) {
+    void testSearchStronglyConnectedComponents(DirectedGraph<String, Integer> graph, int expectedSetCount) {
 
         ImmutableAttributed16BitIndexedDirectedGraph<String, Integer> intGraph = new ImmutableAttributed16BitIndexedDirectedGraph<>(graph);
 

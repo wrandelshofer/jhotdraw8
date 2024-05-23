@@ -11,8 +11,6 @@ import javafx.scene.Node;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -24,6 +22,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -42,8 +41,8 @@ public class TextFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Text";
-    public static final @NonNull CssPoint2DStyleableKey ORIGIN = new CssPoint2DStyleableKey("origin", new CssPoint2D(0, 0));
+    public static final String TYPE_SELECTOR = "Text";
+    public static final CssPoint2DStyleableKey ORIGIN = new CssPoint2DStyleableKey("origin", new CssPoint2D(0, 0));
 
     private Text textNode;
 
@@ -51,7 +50,7 @@ public class TextFigure extends AbstractLeafFigure
         this(0, 0, "");
     }
 
-    public TextFigure(@NonNull Point2D position, String text) {
+    public TextFigure(Point2D position, String text) {
         this(position.getX(), position.getY(), text);
     }
 
@@ -61,7 +60,7 @@ public class TextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         // FIXME the text node should be computed during layout
         if (textNode == null) {
             layout(new SimpleRenderContext());
@@ -72,12 +71,12 @@ public class TextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
+    public TextEditorData getTextEditorDataFor(Point2D pointInLocal, Node node) {
         return new TextEditorData(this, getLayoutBounds(), TEXT);
     }
 
     @Override
-    public void layout(@NonNull RenderContext ctx) {
+    public void layout(RenderContext ctx) {
         if (textNode == null) {
             textNode = new Text();
         }
@@ -85,32 +84,32 @@ public class TextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(getLayoutBounds());
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         Point2D o = getNonNull(ORIGIN).getConvertedValue();
         o = FXTransforms.transform(transform, o);
         set(ORIGIN, new CssPoint2D(o));
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         Bounds b = getLayoutBounds();
         reshapeInLocal(Transform.translate(x.getConvertedValue() - b.getMinX(), y.getConvertedValue() - b.getMinY()));
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Text n = new Text();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Text tn = (Text) node;
         tn.setX(getStyledNonNull(ORIGIN).getX().getConvertedValue());
         tn.setY(getStyledNonNull(ORIGIN).getY().getConvertedValue());
@@ -131,17 +130,17 @@ public class TextFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(Point2D p, Figure prototype, double tolerance) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         if (textNode == null) {
             layout(new SimpleRenderContext());
         }

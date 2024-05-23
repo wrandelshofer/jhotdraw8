@@ -17,7 +17,6 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
@@ -30,13 +29,13 @@ import static org.jhotdraw8.fxcontrols.colorchooser.CheckerboardFactory.createCh
 
 public class AlphaChooser extends VBox {
     @SuppressWarnings("this-escape")
-    private final @NonNull ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
+    private final ObjectProperty<ColorChooserPaneModel> model = new SimpleObjectProperty<>(this, "model");
 
     public ColorChooserPaneModel getModel() {
         return model.get();
     }
 
-    public @NonNull ObjectProperty<ColorChooserPaneModel> modelProperty() {
+    public ObjectProperty<ColorChooserPaneModel> modelProperty() {
         return model;
     }
 

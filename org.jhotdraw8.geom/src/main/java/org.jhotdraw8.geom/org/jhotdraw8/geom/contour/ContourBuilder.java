@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Consumer3;
 import org.jhotdraw8.base.function.Function5;
 import org.jhotdraw8.collection.pair.OrderedPair;
@@ -420,7 +419,7 @@ public class ContourBuilder {
     /**
      * Creates all the raw polyline offset segments.
      */
-    List<PlineOffsetSegment> createUntrimmedOffsetSegments(@NonNull PlinePath pline,
+    List<PlineOffsetSegment> createUntrimmedOffsetSegments(PlinePath pline,
                                                            double offset) {
         int size = pline.size();
         int segmentCount = pline.isClosed() ? size : size - 1;
@@ -738,10 +737,10 @@ public class ContourBuilder {
         return result;
     }
 
-    private @NonNull Map<Integer, List<Point2D.Double>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
-            @NonNull PlinePath originalPline,
-            @NonNull PlinePath rawOffsetPline,
-            @NonNull PlinePath dualRawOffsetPline,
+    private Map<Integer, List<Point2D.Double>> computeIntersectionsOfRawWithSelfWithDualRawAndAtEndPoints(
+            PlinePath originalPline,
+            PlinePath rawOffsetPline,
+            PlinePath dualRawOffsetPline,
             double offset) {
 
         StaticSpatialIndex rawOffsetPlineSpatialIndex = createApproxSpatialIndex(rawOffsetPline);
@@ -1012,7 +1011,7 @@ public class ContourBuilder {
      * @param offset offset
      * @return offset polyline
      */
-    public @NonNull List<PlinePath> parallelOffset(@NonNull PlinePath pline, double offset) {
+    public List<PlinePath> parallelOffset(PlinePath pline, double offset) {
         return parallelOffset(pline, offset, true);
     }
 
@@ -1024,7 +1023,7 @@ public class ContourBuilder {
      * @param mayHaveSelfIntersects true if the polyline may have self-intersects
      * @return list of offset polylines
      */
-    private @NonNull List<PlinePath> parallelOffset(@NonNull PlinePath pline, double offset,
+    private List<PlinePath> parallelOffset(PlinePath pline, double offset,
                                                     boolean mayHaveSelfIntersects) {
 
         if (pline.size() < 2) {
@@ -1257,7 +1256,7 @@ public class ContourBuilder {
     }
 
     protected List<PlinePath> stitchOffsetSlicesTogether(
-            final @NonNull List<OpenPolylineSlice> slices,
+            final List<OpenPolylineSlice> slices,
             boolean closedPolyline,
             int origMaxIndex,
             double joinThreshold) {

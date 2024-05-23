@@ -5,10 +5,9 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -37,12 +36,12 @@ public interface VertexPathSearchAlgo<V, C extends Number & Comparable<C>> {
      * @return on success: a back link, otherwise: null
      */
     @Nullable VertexBackLinkWithCost<V, C> search(
-            @NonNull Iterable<V> startVertices,
-            @NonNull Predicate<V> goalPredicate,
-            @NonNull Function<V, Iterable<V>> nextVerticesFunction,
+            Iterable<V> startVertices,
+            Predicate<V> goalPredicate,
+            Function<V, Iterable<V>> nextVerticesFunction,
             int maxDepth,
-            @NonNull C zero,
-            @NonNull C costLimit,
-            @NonNull BiFunction<V, V, C> costFunction,
-            @NonNull BiFunction<C, C, C> sumFunction, @NonNull AddToSet<V> visited);
+            C zero,
+            C costLimit,
+            BiFunction<V, V, C> costFunction,
+            BiFunction<C, C, C> sumFunction, AddToSet<V> visited);
 }

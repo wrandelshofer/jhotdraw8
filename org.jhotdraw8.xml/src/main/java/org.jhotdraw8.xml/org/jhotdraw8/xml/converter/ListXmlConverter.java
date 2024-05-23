@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -32,7 +31,7 @@ import java.util.regex.Pattern;
 public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
 
 
-    private final @NonNull Converter<T> elementConverter;
+    private final Converter<T> elementConverter;
     private final @Nullable Pattern delimiterPattern;
     private final @Nullable String delimiter;
     private final @Nullable String prefix;
@@ -43,15 +42,15 @@ public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
      *
      * @param elementConverter the element converter
      */
-    public ListXmlConverter(@NonNull Converter<T> elementConverter) {
+    public ListXmlConverter(Converter<T> elementConverter) {
         this(elementConverter, " ");
     }
 
-    public ListXmlConverter(@NonNull Converter<T> elementConverter, @Nullable String delimiter) {
+    public ListXmlConverter(Converter<T> elementConverter, @Nullable String delimiter) {
         this(elementConverter, delimiter, null, null, null);
     }
 
-    public ListXmlConverter(@NonNull Converter<T> elementConverter, @Nullable String delimiter,
+    public ListXmlConverter(Converter<T> elementConverter, @Nullable String delimiter,
                             @Nullable String prefix, @Nullable String suffix,
                             @Nullable Comparator<T> comparatorForSorting
     ) {
@@ -70,7 +69,7 @@ public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
 
 
     @Override
-    public @Nullable ImmutableList<T> fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable ImmutableList<T> fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (prefix != null) {
             if (!str.startsWith(prefix)) {

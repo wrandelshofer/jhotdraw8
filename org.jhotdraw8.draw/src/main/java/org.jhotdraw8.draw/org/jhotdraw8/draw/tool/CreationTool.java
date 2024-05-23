@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.css.value.CssSize;
@@ -76,7 +75,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
        undoHelper.stopCompositeEdit();
 
         createdFigure = createFigure();
@@ -115,7 +114,7 @@ public class CreationTool extends AbstractCreationTool<Figure> {
     }
 
     @Override
-    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseReleased(MouseEvent event, DrawingView dv) {
         undoHelper.stopCompositeEdit();
         if (createdFigure != null) {
             if (abs(x2 - x1) < minSize && abs(y2 - y1) < minSize) {
@@ -141,14 +140,14 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         fireToolDone();
     }
 
-    protected void reshapeInLocal(Figure figure, @NonNull CssPoint2D c1, @NonNull CssPoint2D c2, @NonNull DrawingModel dm) {
+    protected void reshapeInLocal(Figure figure, CssPoint2D c1, CssPoint2D c2, DrawingModel dm) {
         dm.reshapeInLocal(figure, c1.getX(), c1.getY(),
                 c2.getX().subtract(c1.getX()),
                 c2.getY().subtract(c1.getY()));
     }
 
     @Override
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView dv) {
+    protected void onMouseDragged(MouseEvent event, DrawingView dv) {
         undoHelper.startCompositeEdit(null);
         if (createdFigure != null) {
             x2 = event.getX();
@@ -180,13 +179,13 @@ public class CreationTool extends AbstractCreationTool<Figure> {
      * This implementation is empty.
      */
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         requestFocus();
         super.activate(editor);
     }
 
     @Override
-    public @NonNull String getHelpText() {
+    public String getHelpText() {
         return """
                CreationTool
                  Click on the drawing view. The tool will create a new figure with default size at the clicked location.

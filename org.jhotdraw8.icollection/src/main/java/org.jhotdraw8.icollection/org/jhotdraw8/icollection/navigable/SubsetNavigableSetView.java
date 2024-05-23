@@ -1,9 +1,8 @@
 package org.jhotdraw8.icollection.navigable;
 
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractSet;
 import java.util.Comparator;
@@ -15,8 +14,8 @@ import java.util.SortedSet;
 import java.util.function.IntSupplier;
 
 public class SubsetNavigableSetView<E> extends AbstractSet<E> implements NavigableSet<E> {
-    private final @NonNull NavigableSet<E> src;
-    private final @NonNull IntSupplier modCount;
+    private final NavigableSet<E> src;
+    private final IntSupplier modCount;
     private final boolean fromStart;
     private final @Nullable E fromElement;
     private final boolean fromInclusive;
@@ -30,7 +29,7 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
      *
      * @param src the source set
      */
-    public SubsetNavigableSetView(@NonNull NavigableSet<E> src, @NonNull IntSupplier modCount, boolean fromStart, @Nullable E fromElement, boolean fromInclusive, boolean toEnd, @Nullable E toElement, boolean toInclusive, boolean nullFirst) {
+    public SubsetNavigableSetView(NavigableSet<E> src, IntSupplier modCount, boolean fromStart, @Nullable E fromElement, boolean fromInclusive, boolean toEnd, @Nullable E toElement, boolean toInclusive, boolean nullFirst) {
         this.src = src;
         this.modCount = modCount;
         this.fromStart = fromStart;
@@ -177,7 +176,6 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return inRange(o) && src.contains(o);
     }
 
-    @NonNull
     @Override
     public Iterator<E> iterator() {
         return new SubsetIterator(lowest(), iteratorHighFence(), src.iterator());
@@ -208,13 +206,11 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         }
     }
 
-    @NonNull
     @Override
     public NavigableSet<E> descendingSet() {
         return new DescendingNavigableSetView<>(this, modCount);
     }
 
-    @NonNull
     @Override
     public Iterator<E> descendingIterator() {
         return new SubsetIterator(highest(), iteratorLowFence(), src.descendingIterator());
@@ -228,7 +224,6 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
     private boolean inRange(E e, boolean inclusive) {
         return inclusive ? inRange(e) : inClosedRange(e);
     }
-    @NonNull
     @Override
     public NavigableSet<E> subSet(E fromElement, boolean fromInclusive, E toElement, boolean toInclusive) {
         if (!inRange(fromElement, fromInclusive)) {
@@ -243,7 +238,6 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
                 nullFirst);
     }
 
-    @NonNull
     @Override
     public NavigableSet<E> headSet(E toElement, boolean inclusive) {
         if (!inRange(toElement, toInclusive)) {
@@ -255,7 +249,6 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
                 nullFirst);
     }
 
-    @NonNull
     @Override
     public NavigableSet<E> tailSet(E fromElement, boolean inclusive) {
         if (!inRange(fromElement, fromInclusive)) {
@@ -273,19 +266,16 @@ public class SubsetNavigableSetView<E> extends AbstractSet<E> implements Navigab
         return src.comparator();
     }
 
-    @NonNull
     @Override
     public SortedSet<E> subSet(E fromElement, E toElement) {
         return subSet(fromElement, true, toElement, false);
     }
 
-    @NonNull
     @Override
     public SortedSet<E> headSet(E toElement) {
         return headSet(fromElement, false);
     }
 
-    @NonNull
     @Override
     public SortedSet<E> tailSet(E fromElement) {
         return tailSet(fromElement, true);

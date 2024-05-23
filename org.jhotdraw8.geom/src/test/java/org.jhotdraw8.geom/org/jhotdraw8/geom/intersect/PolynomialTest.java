@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.Polynomial;
 import org.junit.jupiter.api.DynamicTest;
@@ -26,7 +25,7 @@ public class PolynomialTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsGetRoots() {
+    public List<DynamicTest> dynamicTestsGetRoots() {
         return Arrays.asList(
                 dynamicTest("1", () -> testGetRoots(
                         new Polynomial(1, -1.61900826446281, 0.882231404958678, -0.163453828290417), new double[]{0.635379615995478})),
@@ -40,7 +39,7 @@ public class PolynomialTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsGetRootsInInterval() {
+    public List<DynamicTest> dynamicTestsGetRootsInInterval() {
         return Arrays.asList(
                 dynamicTest("1", () -> testGetRootsInInterval(new Polynomial(1, -1.61900826446281, 0.882231404958678, -0.163453828290417), 0.0, 1.0, new double[]{0.635379615995478})),
                 dynamicTest("1", () -> testGetRootsInInterval(new Polynomial(5), -5.0, 5.0, new double[]{})),
@@ -54,7 +53,7 @@ public class PolynomialTest {
         );
     }
 
-    public static void testGetRoots(@NonNull Polynomial instance, @NonNull double[] expected) {
+    public static void testGetRoots(Polynomial instance, double[] expected) {
         Arrays.sort(expected);
         double[] actual = instance.getRoots();
         Arrays.sort(actual);
@@ -64,7 +63,7 @@ public class PolynomialTest {
         }
     }
 
-    public static void testGetRootsInInterval(@NonNull Polynomial instance, double from, double to, @NonNull double[] expected) {
+    public static void testGetRootsInInterval(Polynomial instance, double from, double to, double[] expected) {
         Arrays.sort(expected);
         DoubleArrayList actual = instance.getRootsInInterval(from, to);
         actual.sort();

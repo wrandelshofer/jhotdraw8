@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.draw.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -42,10 +41,10 @@ import java.util.function.Function;
  */
 public class ConnectorXmlConverter implements Converter<Connector> {
 
-    private final @NonNull LocatorCssConverter locatorConverter = new LocatorCssConverter();
+    private final LocatorCssConverter locatorConverter = new LocatorCssConverter();
 
-    private static final @NonNull HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
-    private static final @NonNull HashMap<Class<? extends Connector>, String> connectorToChoiceMap = new HashMap<>();
+    private static final HashMap<String, Function<Locator, Connector>> choiceToConnectorMap = new HashMap<>();
+    private static final HashMap<Class<? extends Connector>, String> connectorToChoiceMap = new HashMap<>();
 
     static {
         connectorToChoiceMap.put(PathConnector.class, "path");
@@ -60,7 +59,7 @@ public class ConnectorXmlConverter implements Converter<Connector> {
     }
 
     @Override
-    public void toString(@NonNull Appendable out, @Nullable IdSupplier idSupplier, @Nullable Connector value) throws IOException {
+    public void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable Connector value) throws IOException {
         if (value == null) {
             out.append("none");
         }
@@ -74,7 +73,7 @@ public class ConnectorXmlConverter implements Converter<Connector> {
     }
 
     @Override
-    public @Nullable Connector fromString(@NonNull CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable Connector fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         Connector c;
         CssTokenizer tt = new StreamCssTokenizer(new CharBufferReader(buf));
         try {
@@ -103,7 +102,7 @@ public class ConnectorXmlConverter implements Converter<Connector> {
      * @throws ParseException if parsing fails
      * @throws IOException    if IO fails
      */
-    public @Nullable Connector parseConnector(@NonNull CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable Connector parseConnector(CssTokenizer tt, IdResolver idResolver) throws ParseException, IOException {
         Locator locator;
         Function<Locator, Connector> supplier;
 

@@ -5,9 +5,8 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 
 /**
@@ -44,7 +43,7 @@ public interface TransformCachingFigure extends Figure {
     void setCachedWorldToParent(@Nullable Transform newValue);
 
     @Override
-    default @NonNull Transform getParentToWorld() {
+    default Transform getParentToWorld() {
         Transform t = CACHE ? getCachedParentToWorld() : null;
         if (t == null) {
             t = getParent() == null ? FXTransforms.IDENTITY : getParent().getLocalToWorld();
@@ -57,7 +56,7 @@ public interface TransformCachingFigure extends Figure {
 
 
     @Override
-    default @NonNull Transform getLocalToWorld() {
+    default Transform getLocalToWorld() {
         Transform t = CACHE ? getCachedLocalToWorld() : null;
         if (t == null) {
             t = getLocalToParent();
@@ -71,7 +70,7 @@ public interface TransformCachingFigure extends Figure {
     }
 
     @Override
-    default @NonNull Transform getWorldToLocal() {
+    default Transform getWorldToLocal() {
         Transform t = getCachedWorldToLocal();
         if (t == null) {
             t = getParentToLocal();
@@ -85,7 +84,7 @@ public interface TransformCachingFigure extends Figure {
     }
 
     @Override
-    default @NonNull Transform getWorldToParent() {
+    default Transform getWorldToParent() {
         Transform t = CACHE ? getCachedWorldToParent() : null;
         if (t == null) {
             final Figure parent = getParent();

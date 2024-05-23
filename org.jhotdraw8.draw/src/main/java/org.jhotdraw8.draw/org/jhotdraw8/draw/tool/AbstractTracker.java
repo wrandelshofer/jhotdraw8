@@ -6,8 +6,7 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -23,7 +22,7 @@ import javax.swing.event.UndoableEditEvent;
  */
 public abstract class AbstractTracker extends AbstractDisableable implements Tracker {
 
-    protected final @NonNull BorderPane node = new BorderPane();
+    protected final BorderPane node = new BorderPane();
     protected @Nullable CompositeEdit compositeEdit;
 
     /**
@@ -34,7 +33,7 @@ public abstract class AbstractTracker extends AbstractDisableable implements Tra
     }
 
     @Override
-    public @NonNull Node getNode() {
+    public Node getNode() {
         return node;
     }
 

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.xml;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.DOMImplementation;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -64,17 +63,17 @@ import java.util.Properties;
  */
 public class XmlUtil {
 
-    public static final @NonNull String LOCATION_ATTRIBUTE = "location";
-    public static final @NonNull String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
-    private static final @NonNull String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
-    private static final @NonNull String SEPARATOR = "\0";
-    private static final @NonNull Properties DEFAULT_PROPERTIES = new Properties();
+    public static final String LOCATION_ATTRIBUTE = "location";
+    public static final String LOCATION_NAMESPACE = "http://location.xmlutil.ch";
+    private static final String QUALIFIED_LOCATION_ATTRIBUTE = "xmlutil:location";
+    private static final String SEPARATOR = "\0";
+    private static final Properties DEFAULT_PROPERTIES = new Properties();
 
-    public static final @NonNull String HTTP_XML_APACHE_ORG_XALAN_LINE_SEPARATOR = "{http://xml.apache.org/xalan}line-separator";
+    public static final String HTTP_XML_APACHE_ORG_XALAN_LINE_SEPARATOR = "{http://xml.apache.org/xalan}line-separator";
 
-    public static final @NonNull String HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
+    public static final String HTTP_XML_APACHE_ORG_XSLT_INDENT_AMOUNT = "{http://xml.apache.org/xslt}indent-amount";
 
-    public static final @NonNull String CANONICAL_LINE_SEPARATOR = "\n";
+    public static final String CANONICAL_LINE_SEPARATOR = "\n";
 
     static {
         DEFAULT_PROPERTIES.put(OutputKeys.INDENT, "yes");
@@ -129,12 +128,12 @@ public class XmlUtil {
 
     }
 
-    public static Document read(@NonNull Path in, boolean namespaceAware) throws IOException {
+    public static Document read(Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.read(inputSource, namespaceAware);
     }
 
-    public static @NonNull Document readWithLocations(@NonNull Path in, boolean namespaceAware) throws IOException {
+    public static Document readWithLocations(Path in, boolean namespaceAware) throws IOException {
         InputSource inputSource = new InputSource(in.toUri().toASCIIString());
         return XmlUtil.readWithLocations(inputSource, namespaceAware);
     }
@@ -169,7 +168,7 @@ public class XmlUtil {
      * @return the document
      * @throws IOException in case of failure
      */
-    public static @NonNull Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
+    public static Document readWithLocations(InputSource inputSource, boolean namespaceAware) throws IOException {
         try {
             // Create transformer SAX source that adds current element position to
             // the element as attributes.
@@ -192,7 +191,7 @@ public class XmlUtil {
         }
     }
 
-    public static @Nullable Locator getLocator(@NonNull Node node) {
+    public static @Nullable Locator getLocator(Node node) {
         final NamedNodeMap attributes = node.getAttributes();
         Node attrNode = attributes == null ? null : attributes.getNamedItemNS(LOCATION_NAMESPACE, LOCATION_ATTRIBUTE);
         if (attrNode != null) {
@@ -204,17 +203,17 @@ public class XmlUtil {
         return null;
     }
 
-    public static void validate(@NonNull Document doc, @NonNull URI schemaUri) throws IOException {
+    public static void validate(Document doc, URI schemaUri) throws IOException {
         XmlUtil.validate(doc, schemaUri.toURL());
     }
 
-    public static void validate(@NonNull Document doc, @NonNull URL schemaUrl) throws IOException {
+    public static void validate(Document doc, URL schemaUrl) throws IOException {
         try (InputStream schemaStream = schemaUrl.openStream()) {
             validate(new DOMSource(doc), new StreamSource(schemaStream));
         }
     }
 
-    public static void validate(@NonNull Source docSource, @NonNull Source schemaSource) throws IOException {
+    public static void validate(Source docSource, Source schemaSource) throws IOException {
         SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         try {
             Schema schema = factory.newSchema(schemaSource);
@@ -225,11 +224,11 @@ public class XmlUtil {
         }
     }
 
-    public static void validate(@NonNull Path xmlPath, @NonNull URI schemaUri) throws IOException {
+    public static void validate(Path xmlPath, URI schemaUri) throws IOException {
         validate(new StreamSource(xmlPath.toUri().toString()), new StreamSource(schemaUri.toString()));
     }
 
-    public static void validate(@NonNull URI xmlUri, @NonNull URI schemaUri) throws IOException {
+    public static void validate(URI xmlUri, URI schemaUri) throws IOException {
         validate(new StreamSource(xmlUri.toString()), new StreamSource(schemaUri.toString()));
     }
 
@@ -243,20 +242,20 @@ public class XmlUtil {
         write(result, doc);
     }
 
-    public static void write(@NonNull Path out, Document doc) throws IOException {
+    public static void write(Path out, Document doc) throws IOException {
         write(out, doc, DEFAULT_PROPERTIES);
     }
 
-    public static void write(@NonNull Path out, Document doc, Properties outputProperties) throws IOException {
+    public static void write(Path out, Document doc, Properties outputProperties) throws IOException {
         StreamResult result = new StreamResult(out.toFile());
         write(result, doc, outputProperties);
     }
 
-    public static void write(@NonNull Result result, @NonNull Document doc) throws IOException {
+    public static void write(Result result, Document doc) throws IOException {
         write(result, doc, DEFAULT_PROPERTIES);
     }
 
-    public static void write(@NonNull Result result, @NonNull Document doc, @Nullable Properties outputProperties) throws IOException {
+    public static void write(Result result, Document doc, @Nullable Properties outputProperties) throws IOException {
         try {
             // We replace the StreamResult by a StAXResult,
             // because with a StreamResult we would produce platform-dependent line-breaks.
@@ -281,7 +280,7 @@ public class XmlUtil {
      * @param file a file
      * @return an XMLStreamWriter
      */
-    public static XMLStreamWriter streamWriter(final @NonNull Result file, @Nullable Properties outputProperties) {
+    public static XMLStreamWriter streamWriter(final Result file, @Nullable Properties outputProperties) {
         return ((StAXResult) replaceStreamResultByStAXResult(file, outputProperties)).getXMLStreamWriter();
     }
 
@@ -293,7 +292,7 @@ public class XmlUtil {
      * @return an XMLStreamReader
      * @throws XMLStreamException when the XMLStreamReader could not be created
      */
-    public static XMLStreamReader streamReader(final @NonNull Source file) throws XMLStreamException {
+    public static XMLStreamReader streamReader(final Source file) throws XMLStreamException {
         final XMLInputFactory dbf = XMLInputFactory.newInstance();
 
         // We do not want that the reader creates a socket connection,
@@ -317,7 +316,7 @@ public class XmlUtil {
      * @param outputProperties the desired output properties of the StaxResult
      * @return the StaxResult if replacement was successful, the provided result otherwise
      */
-    private static Result replaceStreamResultByStAXResult(@NonNull Result result, @Nullable Properties outputProperties) {
+    private static Result replaceStreamResultByStAXResult(Result result, @Nullable Properties outputProperties) {
         if (outputProperties == null) {
             outputProperties = new Properties();
         }
@@ -394,14 +393,14 @@ public class XmlUtil {
 
     }
 
-    public static @Nullable String readNamespaceUri(@NonNull URI file) throws IOException {
+    public static @Nullable String readNamespaceUri(URI file) throws IOException {
         try (BufferedInputStream in = new BufferedInputStream(Files.newInputStream(Paths.get(file)))) {
             return readNamespaceUri(new StreamSource(in));
         }
 
     }
 
-    public static @Nullable String readNamespaceUri(@NonNull Source source) throws IOException {
+    public static @Nullable String readNamespaceUri(Source source) throws IOException {
         try {
             for (XMLStreamReader r = streamReader(source); r.hasNext(); ) {
                 int next = r.next();

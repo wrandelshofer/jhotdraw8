@@ -5,8 +5,7 @@
 package org.jhotdraw8.fxbase.converter;
 
 import javafx.util.StringConverter;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 
 import java.text.ParseException;
@@ -20,19 +19,19 @@ import java.text.ParseException;
  */
 public class StringConverterAdapter<T> extends StringConverter<T> {
 
-    private final @NonNull Converter<T> converter;
+    private final Converter<T> converter;
 
     public StringConverterAdapter(Converter<T> converter) {
         this.converter = converter;
     }
 
     @Override
-    public @NonNull String toString(T object) {
+    public String toString(T object) {
         return converter.toString(object);
     }
 
     @Override
-    public @Nullable T fromString(@NonNull String string) {
+    public @Nullable T fromString(String string) {
         try {
             return converter.fromString(string);
         } catch (ParseException ex) {

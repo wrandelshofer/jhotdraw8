@@ -1,7 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
 import org.jhotdraw8.icollection.immutable.ImmutableCollection;
 import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
@@ -11,6 +9,7 @@ import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 import org.jhotdraw8.icollection.serialization.SortedSetSerializationProxy;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -43,9 +42,9 @@ import java.util.function.Consumer;
 public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
-    final transient @NonNull RedBlackTree<E, Void> root;
+    final transient RedBlackTree<E, Void> root;
     @SuppressWarnings({"serial", "RedundantSuppression"})//Conditionally serializable
-    final @NonNull Comparator<E> comparator;
+    final Comparator<E> comparator;
 
     /**
      * Creates a new instance with the provided privateData data object.
@@ -56,7 +55,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @param privateData an privateData data object
      */
     @SuppressWarnings("unchecked")
-    protected RedBlackSet(@NonNull PrivateData privateData) {
+    protected RedBlackSet(PrivateData privateData) {
         this(((Map.Entry<Comparator<E>, ?>) privateData.get()).getKey(), ((Map.Entry<?, RedBlackTree<E, Void>>) privateData.get()).getValue());
     }
 
@@ -68,15 +67,15 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @param privateData the internal data structure needed by this class for creating the instance.
      * @return a new instance of the subclass
      */
-    protected @NonNull RedBlackSet<E> newInstance(@NonNull PrivateData privateData) {
+    protected RedBlackSet<E> newInstance(PrivateData privateData) {
         return new RedBlackSet<>(privateData);
     }
 
-    private @NonNull RedBlackSet<E> newInstance(@NonNull Comparator<E> comparator, @NonNull RedBlackTree<E, Void> root) {
+    private RedBlackSet<E> newInstance(Comparator<E> comparator, RedBlackTree<E, Void> root) {
         return newInstance(new PrivateData(new AbstractMap.SimpleImmutableEntry<>(comparator, root)));
     }
 
-    RedBlackSet(@NonNull Comparator<E> comparator, @NonNull RedBlackTree<E, Void> root) {
+    RedBlackSet(Comparator<E> comparator, RedBlackTree<E, Void> root) {
         this.root = root;
         this.comparator = comparator;
     }
@@ -91,7 +90,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @return an immutable set of the provided elements
      */
     @SuppressWarnings("unchecked")
-    public static <E> @NonNull RedBlackSet<E> copyOf(@Nullable Comparator<E> comparator, @NonNull Iterable<? extends E> c) {
+    public static <E> RedBlackSet<E> copyOf(@Nullable Comparator<E> comparator, Iterable<? extends E> c) {
         if (comparator == null) {
             comparator = NaturalComparator.instance();
         }
@@ -112,7 +111,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @param <E> the element type
      * @return an immutable set of the provided elements
      */
-    public static <E> @NonNull RedBlackSet<E> copyOf(@NonNull Iterable<? extends E> c) {
+    public static <E> RedBlackSet<E> copyOf(Iterable<? extends E> c) {
         return RedBlackSet.copyOf(NaturalComparator.instance(), c);
     }
 
@@ -124,7 +123,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @param <E>        the element type
      * @return an empty immutable set
      */
-    public static <E> @NonNull RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator) {
+    public static <E> RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator) {
         if (comparator == null) {
             comparator = NaturalComparator.instance();
         }
@@ -142,7 +141,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
-    public static <E> @NonNull RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator, @NonNull E @Nullable ... elements) {
+    public static <E> RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator, E @Nullable ... elements) {
         Objects.requireNonNull(elements, "elements is null");
         if (comparator == null) {
             comparator = NaturalComparator.instance();
@@ -157,7 +156,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      * @param <E> the element type
      * @return an empty immutable set
      */
-    public static <E> @NonNull RedBlackSet<E> of() {
+    public static <E> RedBlackSet<E> of() {
         return new RedBlackSet<>(NaturalComparator.instance(), RedBlackTree.of(NaturalComparator.instance()));
     }
 
@@ -171,12 +170,12 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
-    public static <E> @NonNull RedBlackSet<E> of(@NonNull E @Nullable ... elements) {
+    public static <E> RedBlackSet<E> of(E @Nullable ... elements) {
         return sortedOf(NaturalComparator.instance(), elements);
     }
 
     @Override
-    public @NonNull RedBlackSet<E> add(E element) {
+    public RedBlackSet<E> add(E element) {
         RedBlackTree<E, Void> newRoot = root.insert(element, null, comparator);
         return newRoot == root ? this : newInstance(comparator, newRoot);
     }
@@ -192,7 +191,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull RedBlackSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    public RedBlackSet<E> addAll(Iterable<? extends E> c) {
         return (RedBlackSet<E>) ImmutableNavigableSet.super.addAll(c);
     }
 
@@ -202,12 +201,12 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public <T> @NonNull RedBlackSet<T> empty() {
+    public <T> RedBlackSet<T> empty() {
         return of();
     }
 
     @Override
-    public @NonNull <T> ImmutableCollection<T> empty(@Nullable Comparator<T> comparator) {
+    public <T> ImmutableCollection<T> empty(@Nullable Comparator<T> comparator) {
         return sortedOf(comparator);
     }
 
@@ -233,7 +232,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return new MappedIterator<>(root.iterator(), Map.Entry::getKey);
     }
 
@@ -241,10 +240,10 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     public Spliterator<E> spliterator() {
         return new Spliterators.AbstractSpliterator<>(size(),
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED | Spliterator.SORTED | Spliterator.IMMUTABLE) {
-            private final @NonNull Iterator<E> iterator = iterator();
+            private final Iterator<E> iterator = iterator();
 
             @Override
-            public boolean tryAdvance(@NonNull Consumer<? super E> action) {
+            public boolean tryAdvance(Consumer<? super E> action) {
                 if (iterator.hasNext()) {
                     action.accept(iterator.next());
                 }
@@ -269,7 +268,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull ReadOnlySequencedSet<E> readOnlyReversed() {
+    public ReadOnlySequencedSet<E> readOnlyReversed() {
         return new ReadOnlySequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,
@@ -281,22 +280,22 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull RedBlackSet<E> remove(E element) {
+    public RedBlackSet<E> remove(E element) {
         RedBlackTree<E, Void> newRoot = root.delete(element, comparator);
         return newRoot.size() == root.size() ? this : newInstance(comparator, newRoot);
     }
 
     @Override
-    public @NonNull RedBlackSet<E> removeAll(@NonNull Iterable<?> c) {
+    public RedBlackSet<E> removeAll(Iterable<?> c) {
         return (RedBlackSet<E>) ImmutableNavigableSet.super.removeAll(c);
     }
 
     @Override
-    public @NonNull RedBlackSet<E> retainAll(@NonNull Iterable<?> c) {
+    public RedBlackSet<E> retainAll(Iterable<?> c) {
         return (RedBlackSet<E>) ImmutableNavigableSet.super.retainAll(c);
     }
 
-    @NonNull Iterator<E> reverseIterator() {
+    Iterator<E> reverseIterator() {
         return new MappedIterator<>(root.reverseIterator(), Map.Entry::getKey);
     }
 
@@ -316,7 +315,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public @NonNull MutableRedBlackSet<E> toMutable() {
+    public MutableRedBlackSet<E> toMutable() {
         return new MutableRedBlackSet<>(comparator, root);
     }
 
@@ -326,7 +325,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Serial
-    private @NonNull Object writeReplace() {
+    private Object writeReplace() {
         return new RedBlackSet.SerializationProxy<>(this.toMutable());
     }
 
@@ -334,13 +333,13 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
         @Serial
         private static final long serialVersionUID = 0L;
 
-        protected SerializationProxy(@NonNull SortedSet<E> target) {
+        protected SerializationProxy(SortedSet<E> target) {
             super(target);
         }
 
         @Serial
         @Override
-        protected @NonNull Object readResolve() {
+        protected Object readResolve() {
             return RedBlackSet.copyOf(deserializedComparator, deserializedElements);
         }
     }

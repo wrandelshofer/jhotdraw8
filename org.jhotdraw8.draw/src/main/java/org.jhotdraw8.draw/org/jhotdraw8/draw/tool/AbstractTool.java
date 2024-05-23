@@ -19,8 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.application.resources.Resources;
@@ -50,11 +49,11 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * The active view.
      */
-    private final @NonNull ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
+    private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW_PROPERTY);
     /**
      * The active editor.
      */
-    private final @NonNull ObjectProperty<DrawingEditor> drawingEditor = new SimpleObjectProperty<>(this, DRAWING_EDITOR_PROPERTY);
+    private final ObjectProperty<DrawingEditor> drawingEditor = new SimpleObjectProperty<>(this, DRAWING_EDITOR_PROPERTY);
 
     {
         drawingView.addListener((ObservableValue<? extends DrawingView> observable, DrawingView oldValue, DrawingView newValue) -> stopEditing());
@@ -145,9 +144,9 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
 
     }
 
-    protected final @NonNull BorderPane eventPane = new EventPane();
-    protected final @NonNull BorderPane drawPane = new BorderPane();
-    protected final @NonNull StackPane node = new StackPane();
+    protected final BorderPane eventPane = new EventPane();
+    protected final BorderPane drawPane = new BorderPane();
+    protected final StackPane node = new StackPane();
 
     {
         eventPane.addEventHandler(MouseEvent.ANY, (MouseEvent event) -> {
@@ -213,7 +212,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     /**
      * Listeners.
      */
-    private final @NonNull LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
+    private final LinkedList<Listener<ToolEvent>> toolListeners = new LinkedList<>();
 
     // ---
     // Constructors
@@ -226,7 +225,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * @param name the id of the tool
      * @param rsrc iff nonnull, the resource is applied to the tool
      */
-    public AbstractTool(@NonNull String name, @Nullable Resources rsrc) {
+    public AbstractTool(String name, @Nullable Resources rsrc) {
         set(NAME, name);
         if (rsrc != null) {
             applyResources(rsrc);
@@ -239,7 +238,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // Properties
     // ---
     @Override
-    public final @NonNull ObservableMap<Key<?>, Object> getProperties() {
+    public final ObservableMap<Key<?>, Object> getProperties() {
         if (properties == null) {
             properties = FXCollections.observableHashMap();
         }
@@ -247,19 +246,19 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     @Override
-    public @NonNull ObjectProperty<DrawingView> drawingViewProperty() {
+    public ObjectProperty<DrawingView> drawingViewProperty() {
         return drawingView;
     }
 
     @Override
-    public @NonNull ObjectProperty<DrawingEditor> drawingEditorProperty() {
+    public ObjectProperty<DrawingEditor> drawingEditorProperty() {
         return drawingEditor;
     }
 
     // ---
     // Behaviors
     // ---
-    protected void applyResources(@NonNull Resources rsrc) {
+    protected void applyResources(Resources rsrc) {
         String name = get(NAME);
         set(LABEL, rsrc.getTextProperty(name));
         set(LARGE_ICON_KEY, rsrc.getLargeIconProperty(name, getClass()));
@@ -267,7 +266,7 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     @Override
-    public @NonNull Node getNode() {
+    public Node getNode() {
         return node;
     }
 
@@ -321,28 +320,28 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     // ---
     // Event handlers
     // ----
-    protected void onMouseMoved(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseMoved(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseDragged(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseDragged(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseExited(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseExited(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseEntered(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseEntered(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseReleased(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseReleased(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMousePressed(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMousePressed(MouseEvent event, DrawingView view) {
     }
 
-    protected void onMouseClicked(@NonNull MouseEvent event, @NonNull DrawingView view) {
+    protected void onMouseClicked(MouseEvent event, DrawingView view) {
     }
 
-    protected void onKeyPressed(@NonNull KeyEvent event, @NonNull DrawingView view) {
+    protected void onKeyPressed(KeyEvent event, DrawingView view) {
         if (event.getCode() == KeyCode.ESCAPE) {
             fireToolDone();
         } else if (event.getCode() == KeyCode.ENTER) {
@@ -350,17 +349,17 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
         }
     }
 
-    protected void onKeyReleased(@NonNull KeyEvent event, @NonNull DrawingView view) {
+    protected void onKeyReleased(KeyEvent event, DrawingView view) {
     }
 
-    protected void onKeyTyped(@NonNull KeyEvent event, @NonNull DrawingView view) {
+    protected void onKeyTyped(KeyEvent event, DrawingView view) {
     }
 
     /**
      * This implementation sets the help text on the drawing view.
      */
     @Override
-    public void activate(@NonNull DrawingEditor editor) {
+    public void activate(DrawingEditor editor) {
         editor.setHelpText(getHelpText());
     }
 
@@ -368,35 +367,35 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
      * This implementation is empty.
      */
     @Override
-    public void deactivate(@NonNull DrawingEditor editor) {
+    public void deactivate(DrawingEditor editor) {
     }
 
     // ---
     // Listeners
     // ---
     @Override
-    public void addToolListener(@NonNull Listener<ToolEvent> listener) {
+    public void addToolListener(Listener<ToolEvent> listener) {
         toolListeners.add(listener);
     }
 
     @Override
-    public void removeToolListener(@NonNull Listener<ToolEvent> listener) {
+    public void removeToolListener(Listener<ToolEvent> listener) {
         toolListeners.remove(listener);
     }
 
-    protected void fire(@NonNull ToolEvent event) {
+    protected void fire(ToolEvent event) {
         for (Listener<ToolEvent> l : toolListeners) {
             l.handle(event);
         }
     }
 
-    protected void onZoom(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoom(ZoomEvent event, DrawingView dv) {
     }
 
-    protected void onZoomStarted(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoomStarted(ZoomEvent event, DrawingView dv) {
     }
 
-    protected void onZoomFinished(@NonNull ZoomEvent event, @NonNull DrawingView dv) {
+    protected void onZoomFinished(ZoomEvent event, DrawingView dv) {
     }
 
     protected void fireToolStarted() {
@@ -412,13 +411,13 @@ public abstract class AbstractTool extends AbstractDisableable implements Tool {
     }
 
     @Override
-    public @NonNull ReadOnlyBooleanProperty focusedProperty() {
+    public ReadOnlyBooleanProperty focusedProperty() {
         return eventPane.focusedProperty();
     }
 
-    protected final @NonNull UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
+    protected final UndoableEditHelper undoHelper = new UndoableEditHelper(this, this::forwardUndoableEdit);
 
-    protected void forwardUndoableEdit(@NonNull UndoableEditEvent event) {
+    protected void forwardUndoableEdit(UndoableEditEvent event) {
         DrawingEditor editor = getDrawingEditor();
         if (editor != null) {
             editor.getUndoManager().undoableEditHappened(event);

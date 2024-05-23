@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.serialization;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -62,12 +61,12 @@ public abstract class SetSerializationProxy<E> implements Serializable {
     private final transient Set<E> serialized;
     protected transient List<E> deserializedElements;
 
-    protected SetSerializationProxy(@NonNull Set<E> serialized) {
+    protected SetSerializationProxy(Set<E> serialized) {
         this.serialized = serialized;
     }
 
     @Serial
-    private void writeObject(@NonNull ObjectOutputStream s)
+    private void writeObject(ObjectOutputStream s)
             throws IOException {
         s.writeInt(serialized.size());
         for (E e : serialized) {
@@ -76,7 +75,7 @@ public abstract class SetSerializationProxy<E> implements Serializable {
     }
 
     @Serial
-    private void readObject(@NonNull ObjectInputStream s)
+    private void readObject(ObjectInputStream s)
             throws IOException, ClassNotFoundException {
         int n = s.readInt();
         deserializedElements = new ArrayList<>(n);
@@ -88,5 +87,5 @@ public abstract class SetSerializationProxy<E> implements Serializable {
     }
 
     @Serial
-    protected abstract @NonNull Object readResolve();
+    protected abstract Object readResolve();
 }

@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.ast.Declaration;
 import org.jhotdraw8.css.ast.Selector;
 import org.jhotdraw8.css.ast.SelectorGroup;
@@ -41,12 +40,12 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
  */
 public class CssSelectorTest {
 
-    private static final @NonNull String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
+    private static final String XML_PREFIX = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>";
 
     /**
      * Test various selectors.
      */
-    public static void testSelector(@NonNull String stylesheet, @NonNull String before, @NonNull String expectedValue) throws Exception {
+    public static void testSelector(String stylesheet, String before, String expectedValue) throws Exception {
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);
@@ -88,7 +87,7 @@ public class CssSelectorTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsVariousSelectors() {
+    public List<DynamicTest> dynamicTestsVariousSelectors() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSelector("#vertex4 {\n"
                         + "    -jhotdraw-fill: yellow;\n"
@@ -153,7 +152,7 @@ public class CssSelectorTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSelectorSpecificity() {
+    public List<DynamicTest> dynamicTestsSelectorSpecificity() {
         return Arrays.asList(
                 dynamicTest("46", () -> testSelectorSpecificity("TubeShape,\n" +
                         "TubeShape.One,\n" +
@@ -172,7 +171,7 @@ public class CssSelectorTest {
     /**
      * Test various selectors.
      */
-    public static void testSelectorSpecificity(@NonNull String stylesheet, @NonNull String xml, int expectedSpecifity) throws IOException, ParserConfigurationException, SAXException {
+    public static void testSelectorSpecificity(String stylesheet, String xml, int expectedSpecifity) throws IOException, ParserConfigurationException, SAXException {
         //---
         CssParser p = new CssParser();
         Stylesheet ast = p.parseStylesheet(stylesheet, null, null);

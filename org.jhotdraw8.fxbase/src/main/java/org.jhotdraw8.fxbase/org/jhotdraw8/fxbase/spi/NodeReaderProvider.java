@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.fxbase.spi;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.net.URL;
 
@@ -20,7 +19,7 @@ public interface NodeReaderProvider {
      * @param source the source URL
      * @return true if readers can read from this source
      */
-    boolean canDecodeInput(@NonNull URL source);
+    boolean canDecodeInput(URL source);
 
     /**
      * Returns true if readers of this service provider can read inputs from
@@ -29,7 +28,7 @@ public interface NodeReaderProvider {
      * @param path the source path
      * @return true if readers can read from this source
      */
-    boolean canDecodeInput(@NonNull String path);
+    boolean canDecodeInput(String path);
 
     /**
      * Creates a reader.

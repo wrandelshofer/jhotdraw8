@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.geom.shape;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -24,16 +23,16 @@ public class BezierPathIterator implements PathIterator {
         FINAL_SEGMENT, DONE
     }
 
-    private @NonNull State state;
+    private State state;
     private int index;
     private int lastMoveTo;
-    private final @NonNull BezierPath path;
-    private final @NonNull AffineTransform transform;
+    private final BezierPath path;
+    private final AffineTransform transform;
 
-    private final double @NonNull [] segCoords = new double[6];
+    private final double[] segCoords = new double[6];
     private int segType;
 
-    public BezierPathIterator(@NonNull BezierPath path, @Nullable AffineTransform transform) {
+    public BezierPathIterator(BezierPath path, @Nullable AffineTransform transform) {
         this.path = path;
         this.transform = transform == null ? AffineTransform.getTranslateInstance(0, 0) : transform;
         if (path.isEmpty()) {

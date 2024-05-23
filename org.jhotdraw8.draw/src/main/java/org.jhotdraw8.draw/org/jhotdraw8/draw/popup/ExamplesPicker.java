@@ -8,7 +8,6 @@ import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
@@ -29,10 +28,10 @@ public class ExamplesPicker<T> extends AbstractPicker<T> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
     private BiConsumer<Boolean, T> callback;
-    private final @NonNull ImmutableList<String> examples;
-    private final @NonNull Converter<T> converter;
+    private final ImmutableList<String> examples;
+    private final Converter<T> converter;
 
-    public ExamplesPicker(@NonNull ImmutableList<String> examples, @NonNull Converter<T> converter) {
+    public ExamplesPicker(ImmutableList<String> examples, Converter<T> converter) {
         this.examples = examples;
         this.converter = converter;
     }

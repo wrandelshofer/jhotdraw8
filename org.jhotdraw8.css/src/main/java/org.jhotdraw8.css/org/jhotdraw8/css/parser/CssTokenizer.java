@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.css.parser;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.ast.SourceLocator;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -79,7 +78,7 @@ public interface CssTokenizer {
     @Nullable
     Number currentNumber();
 
-    default @NonNull Number currentNumberNonNull() {
+    default Number currentNumberNonNull() {
         Number number = currentNumber();
         if (number == null) {
             throw new AssertionError("currentNumber");
@@ -95,7 +94,7 @@ public interface CssTokenizer {
     @Nullable
     String currentString();
 
-    default @NonNull String currentStringNonNull() {
+    default String currentStringNonNull() {
         String str = currentString();
         if (str == null) {
             throw new AssertionError("currentString");
@@ -228,7 +227,7 @@ public interface CssTokenizer {
      * @return a new list
      * @throws IOException on io exception
      */
-    default @NonNull List<CssToken> toTokenList() throws IOException {
+    default List<CssToken> toTokenList() throws IOException {
         List<CssToken> list = new ArrayList<>();
         while (nextNoSkip() != CssTokenType.TT_EOF) {
             list.add(getToken());

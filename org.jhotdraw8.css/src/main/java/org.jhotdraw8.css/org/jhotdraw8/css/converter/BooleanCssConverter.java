@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -24,15 +23,15 @@ import java.util.function.Consumer;
 public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
 
 
-    private final @NonNull String trueString = "true";
-    private final @NonNull String falseString = "false";
+    private final String trueString = "true";
+    private final String falseString = "false";
 
     public BooleanCssConverter(boolean nullable) {
         super(nullable);
     }
 
     @Override
-    public @NonNull Boolean parseNonNull(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public Boolean parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_IDENT, "⟨Boolean⟩ identifier expected.");
         String s = tt.currentStringNonNull();
         return switch (s) {
@@ -44,7 +43,7 @@ public class BooleanCssConverter extends AbstractCssConverter<Boolean> {
     }
 
     @Override
-    public <TT extends Boolean> void produceTokensNonNull(@NonNull TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> out) {
+    public <TT extends Boolean> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_IDENT, value.booleanValue() ? trueString : falseString));
     }
 

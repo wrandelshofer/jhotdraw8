@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.graph.iterator;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -26,9 +25,9 @@ import java.util.function.Function;
  */
 public class BfsDfsArcSpliterator<V, A> extends AbstractEnumerator<Arc<V, A>> {
 
-    private final @NonNull Function<V, Iterable<Arc<V, A>>> nextFunction;
-    private final @NonNull Deque<Arc<V, A>> deque;
-    private final @NonNull AddToSet<Arc<V, A>> visited;
+    private final Function<V, Iterable<Arc<V, A>>> nextFunction;
+    private final Deque<Arc<V, A>> deque;
+    private final AddToSet<Arc<V, A>> visited;
     private final boolean dfs;
 
     /**

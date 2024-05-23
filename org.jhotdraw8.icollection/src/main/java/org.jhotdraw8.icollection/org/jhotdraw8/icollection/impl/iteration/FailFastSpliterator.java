@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.iteration;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.ConcurrentModificationException;
@@ -22,12 +21,12 @@ import java.util.function.IntSupplier;
  * @param <E> the element type
  */
 public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> {
-    private final @NonNull Spliterator<? extends E> s;
+    private final Spliterator<? extends E> s;
     private final int expectedModCount;
-    private final @NonNull IntSupplier modCountSupplier;
+    private final IntSupplier modCountSupplier;
     private final @Nullable Comparator<E> comparator;
 
-    public FailFastSpliterator(@NonNull Spliterator<? extends E> s, @NonNull IntSupplier modCountSupplier, @Nullable Comparator<E> comparator) {
+    public FailFastSpliterator(Spliterator<? extends E> s, IntSupplier modCountSupplier, @Nullable Comparator<E> comparator) {
         super(s.estimateSize(), s.characteristics());
         this.s = s;
         this.modCountSupplier = modCountSupplier;
@@ -36,7 +35,7 @@ public class FailFastSpliterator<E> extends Spliterators.AbstractSpliterator<E> 
     }
 
     @Override
-    public boolean tryAdvance(@NonNull Consumer<? super E> action) {
+    public boolean tryAdvance(Consumer<? super E> action) {
         ensureUnmodified();
         return s.tryAdvance(action);
     }

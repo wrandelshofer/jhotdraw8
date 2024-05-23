@@ -11,8 +11,6 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -27,6 +25,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public interface StrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", CssSize.ZERO);
+    CssSizeStyleableKey STROKE_DASH_OFFSET = new CssSizeStyleableKey("stroke-dashoffset", CssSize.ZERO);
     /**
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
@@ -60,7 +59,7 @@ public interface StrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull NonNullEnumStyleableKey<StrokeLineCap> STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
+    NonNullEnumStyleableKey<StrokeLineCap> STROKE_LINE_CAP = new NonNullEnumStyleableKey<>("stroke-linecap", StrokeLineCap.class, StrokeLineCap.BUTT);
     /**
      * Defines the style applied where path segments meet. Default value:
      * {@code MITER}.
@@ -71,7 +70,7 @@ public interface StrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull NonNullEnumStyleableKey<StrokeLineJoin> STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
+    NonNullEnumStyleableKey<StrokeLineJoin> STROKE_LINE_JOIN = new NonNullEnumStyleableKey<>("stroke-linejoin", StrokeLineJoin.class, StrokeLineJoin.MITER);
     /**
      * Defines the limit for the {@code StrokeLineJoin.MITER} style.
      * <p>
@@ -83,7 +82,7 @@ public interface StrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull CssSizeStyleableKey STROKE_MITER_LIMIT = new CssSizeStyleableKey("stroke-miterlimit", CssSize.of(4.0));
+    CssSizeStyleableKey STROKE_MITER_LIMIT = new CssSizeStyleableKey("stroke-miterlimit", CssSize.of(4.0));
     /**
      * Defines the paint used for filling the outline of the figure. Default
      * value: {@code Color.BLACK}.
@@ -94,13 +93,13 @@ public interface StrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull NullablePaintableStyleableKey STROKE = new NullablePaintableStyleableKey("stroke", new CssColor("canvastext", Color.BLACK));
+    NullablePaintableStyleableKey STROKE = new NullablePaintableStyleableKey("stroke", new CssColor("canvastext", Color.BLACK));
     /**
      * Defines the stroke type used for drawing outline of the figure.
      * <p>
      * Default value: {@code StrokeType.CENTERED}.
      */
-    @NonNull NonNullEnumStyleableKey<StrokeType> STROKE_TYPE = new NonNullEnumStyleableKey<>("stroke-type", StrokeType.class, StrokeType.CENTERED);
+    NonNullEnumStyleableKey<StrokeType> STROKE_TYPE = new NonNullEnumStyleableKey<>("stroke-type", StrokeType.class, StrokeType.CENTERED);
     /**
      * Defines the width of the outline of the figure.
      * <p>
@@ -112,7 +111,7 @@ public interface StrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull CssSizeStyleableKey STROKE_WIDTH = new CssSizeStyleableKey("stroke-width", CssSize.ONE);
+    CssSizeStyleableKey STROKE_WIDTH = new CssSizeStyleableKey("stroke-width", CssSize.ONE);
     /**
      * Defines the dash array used. Default value: {@code empty array}.
      * <p>
@@ -122,7 +121,7 @@ public interface StrokableFigure extends Figure {
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
      * </dl>
      */
-    @NonNull NonNullListStyleableKey<CssSize> STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("stroke-dasharray",
+    NonNullListStyleableKey<CssSize> STROKE_DASH_ARRAY = new NonNullListStyleableKey<>("stroke-dasharray",
             CssSize.class,
             new SizeCssConverter(false), VectorList.of());
 
@@ -134,7 +133,7 @@ public interface StrokableFigure extends Figure {
     @Nullable StrokeStyleableMapAccessor STROKE_STYLE = new StrokeStyleableMapAccessor("stroke-style",
             STROKE_TYPE, STROKE_LINE_CAP, STROKE_LINE_JOIN, STROKE_MITER_LIMIT, STROKE_DASH_OFFSET, STROKE_DASH_ARRAY);
 
-    default void applyStrokeCapAndJoinProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeCapAndJoinProperties(RenderContext ctx, Shape shape) {
         double d;
         StrokeLineCap slp = getStyled(STROKE_LINE_CAP);
         if (shape.getStrokeLineCap() != slp) {
@@ -150,7 +149,7 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    default void applyStrokeDashProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeDashProperties(RenderContext ctx, Shape shape) {
         double d = getStyledNonNull(STROKE_DASH_OFFSET).getConvertedValue();
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
@@ -167,7 +166,7 @@ public interface StrokableFigure extends Figure {
         }
     }
 
-    default void applyStrokeTypeProperties(@NonNull RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeTypeProperties(RenderContext ctx, Shape shape) {
         StrokeType st = getStyled(STROKE_TYPE);
         if (shape.getStrokeType() != st) {
             shape.setStrokeType(st);
@@ -180,7 +179,7 @@ public interface StrokableFigure extends Figure {
      * @param ctx   the render context
      * @param shape a shape node
      */
-    default void applyStrokableFigureProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokableFigureProperties(@Nullable RenderContext ctx, Shape shape) {
         applyStrokeColorProperties(ctx, shape);
         applyStrokeWidthProperties(ctx, shape);
         applyStrokeCapAndJoinProperties(ctx, shape);
@@ -188,14 +187,14 @@ public interface StrokableFigure extends Figure {
         applyStrokeDashProperties(ctx, shape);
     }
 
-    default void applyStrokeColorProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeColorProperties(@Nullable RenderContext ctx, Shape shape) {
         Paint p = Paintable.getPaint(getStyled(STROKE), ctx);
         if (!Objects.equals(shape.getStroke(), p)) {
             shape.setStroke(p);
         }
     }
 
-    default void applyStrokeWidthProperties(@Nullable RenderContext ctx, @NonNull Shape shape) {
+    default void applyStrokeWidthProperties(@Nullable RenderContext ctx, Shape shape) {
         CssSize cssSize = getStyledNonNull(STROKE_WIDTH);
         double width = ctx == null ? cssSize.getConvertedValue()
                 : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
@@ -205,7 +204,7 @@ public interface StrokableFigure extends Figure {
 
     }
 
-    default @NonNull BasicStroke getStyledStroke(@Nullable RenderContext ctx) {
+    default BasicStroke getStyledStroke(@Nullable RenderContext ctx) {
         CssSize cssSize = getStyledNonNull(STROKE_WIDTH);
         double width = ctx == null ? cssSize.getConvertedValue()
                 : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(cssSize, UnitConverter.DEFAULT);
@@ -240,7 +239,7 @@ public interface StrokableFigure extends Figure {
     }
 
     @Override
-    default @NonNull Bounds getBoundsInLocal() {
+    default Bounds getBoundsInLocal() {
         Bounds layoutBounds = getLayoutBounds();
         Paintable paintable = get(STROKE);
         if (paintable == null) {

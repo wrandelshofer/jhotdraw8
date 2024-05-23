@@ -13,8 +13,6 @@ import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.SimpleUriResolver;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -39,6 +37,7 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.svg.io.FXSvgTinyReader;
+import org.jspecify.annotations.Nullable;
 
 import javax.xml.transform.stream.StreamSource;
 import java.io.BufferedInputStream;
@@ -62,13 +61,13 @@ public class SvgImageFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Image";
+    public static final String TYPE_SELECTOR = "Image";
 
-    public static final @NonNull CssSizeStyleableKey X = RectangleFigure.X;
-    public static final @NonNull CssSizeStyleableKey Y = RectangleFigure.Y;
-    public static final @NonNull CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
-    public static final @NonNull CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
-    public static final @NonNull CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
+    public static final CssSizeStyleableKey X = RectangleFigure.X;
+    public static final CssSizeStyleableKey Y = RectangleFigure.Y;
+    public static final CssSizeStyleableKey WIDTH = RectangleFigure.WIDTH;
+    public static final CssSizeStyleableKey HEIGHT = RectangleFigure.HEIGHT;
+    public static final CssRectangle2DStyleableMapAccessor BOUNDS = RectangleFigure.BOUNDS;
 
     public SvgImageFigure() {
         this(0, 0, 1, 1);
@@ -83,12 +82,12 @@ public class SvgImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return getNonNull(BOUNDS);
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         Rectangle2D r = getNonNull(BOUNDS).getConvertedValue();
         Bounds b = new BoundingBox(r.getMinX(), r.getMinY(), r.getWidth(), r.getHeight());
         b = transform.transform(b);
@@ -96,7 +95,7 @@ public class SvgImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         set(BOUNDS, new CssRectangle2D(
                 width.getValue() < 0 ? x.add(width) : x,
                 height.getValue() < 0 ? y.add(height) : y,
@@ -104,13 +103,13 @@ public class SvgImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Group g = new Group();
         return g;
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         final Object renderedUri = g.getProperties().get("renderedUri");
         final URI imageUri = getStyled(IMAGE_URI);
@@ -135,12 +134,12 @@ public class SvgImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(Point2D p, Figure prototype, double tolerance) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 
@@ -173,7 +172,7 @@ public class SvgImageFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @NonNull Bounds getBoundsInLocal() {
+    public Bounds getBoundsInLocal() {
         return getLayoutBounds();
     }
 }

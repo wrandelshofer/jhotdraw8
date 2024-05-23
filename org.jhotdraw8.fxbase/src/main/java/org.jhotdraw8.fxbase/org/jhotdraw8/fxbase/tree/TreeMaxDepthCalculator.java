@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.fxbase.tree;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -28,7 +27,7 @@ public class TreeMaxDepthCalculator {
      *
      * @return the maximal depth
      */
-    public <T> int getMaxDepth(@NonNull T root, @NonNull Function<T, Iterable<T>> getChildren) {
+    public <T> int getMaxDepth(T root, Function<T, Iterable<T>> getChildren) {
         Deque<T> q = new ArrayDeque<>();
         q.add(root);
         int maxDepth = 0;

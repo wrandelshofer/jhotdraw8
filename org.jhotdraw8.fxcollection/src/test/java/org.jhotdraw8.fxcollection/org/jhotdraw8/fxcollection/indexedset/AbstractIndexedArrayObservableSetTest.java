@@ -6,7 +6,6 @@
 package org.jhotdraw8.fxcollection.indexedset;
 
 import javafx.collections.ListChangeListener;
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -29,7 +28,7 @@ public abstract class AbstractIndexedArrayObservableSetTest {
 
     protected abstract AbstractIndexedArrayObservableSet<Character> newInstance(Collection<Character> col);
 
-    public void testAdd(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
+    public void testAdd(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
         AbstractIndexedArrayObservableSet<Character> list = newInstance(asList(initialList));
 
         AbstractIndexedArrayObservableSetTest.ChangeRecorder recorder = new AbstractIndexedArrayObservableSetTest.ChangeRecorder();
@@ -49,7 +48,7 @@ public abstract class AbstractIndexedArrayObservableSetTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsAdd() {
+    public List<DynamicTest> dynamicTestsAdd() {
         return Arrays.asList(
                 dynamicTest("0", () -> testAdd("", 0, 'a', "a", "add(0,[a])")),
                 dynamicTest("1", () -> testAdd("a", 0, 'a', "a", "")),
@@ -78,7 +77,7 @@ public abstract class AbstractIndexedArrayObservableSetTest {
 
     }
 
-    public void testSet(@NonNull String initialList, int index, Character value, @NonNull String expectedListStr, String expectedChanges) throws Exception {
+    public void testSet(String initialList, int index, Character value, String expectedListStr, String expectedChanges) throws Exception {
         AbstractIndexedArrayObservableSet<Character> list = newInstance(asList(initialList));
 
         AbstractIndexedArrayObservableSetTest.ChangeRecorder recorder = new AbstractIndexedArrayObservableSetTest.ChangeRecorder();
@@ -98,7 +97,7 @@ public abstract class AbstractIndexedArrayObservableSetTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsSet() {
+    public List<DynamicTest> dynamicTestsSet() {
         return Arrays.asList(
                 dynamicTest("1", () -> testSet("a", 0, 'a', "a", "")),
                 dynamicTest("1", () -> testSet("a", 0, 'b', "b", "rep([a]->[b])")),
@@ -122,10 +121,10 @@ public abstract class AbstractIndexedArrayObservableSetTest {
 
     private static class ChangeRecorder implements ListChangeListener<Character> {
 
-        private final @NonNull StringBuilder buf = new StringBuilder();
+        private final StringBuilder buf = new StringBuilder();
 
         @Override
-        public void onChanged(ListChangeListener.@NonNull Change<? extends Character> c) {
+        public void onChanged(ListChangeListener.Change<? extends Character> c) {
             while (c.next()) {
                 if (c.wasPermutated()) {
                     buf.append("perm(");
@@ -154,12 +153,12 @@ public abstract class AbstractIndexedArrayObservableSetTest {
             }
         }
 
-        private @NonNull String getChanges() {
+        private String getChanges() {
             return buf.toString();
         }
     }
 
-    private static @NonNull List<Character> asList(@NonNull String str) {
+    private static List<Character> asList(String str) {
         ArrayList<Character> l = new ArrayList<>();
         for (char ch : str.toCharArray()) {
             l.add(ch);

@@ -5,7 +5,6 @@
 package org.jhotdraw8.application.action;
 
 import javafx.event.ActionEvent;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Activity;
 import org.jhotdraw8.application.Application;
 
@@ -21,7 +20,7 @@ import org.jhotdraw8.application.Application;
  */
 public abstract class AbstractActivityAction<A extends Activity> extends AbstractApplicationAction {
 
-    private final @NonNull A activity;
+    private final A activity;
 
     /**
      * Creates a new instance which acts on the specified activity of the
@@ -31,17 +30,17 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
      *                 the active activity of the application. Otherwise, it will act on the
      *                 specified activity.
      */
-    public AbstractActivityAction(@NonNull A activity) {
+    public AbstractActivityAction(A activity) {
         super(activity.getApplication());
         this.activity = activity;
     }
 
-    public @NonNull A getActivity() {
+    public A getActivity() {
         return activity;
     }
 
     @Override
-    protected final void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
+    protected final void onActionPerformed(ActionEvent event, Application app) {
         onActionPerformed(event, getActivity());
     }
 
@@ -52,7 +51,7 @@ public abstract class AbstractActivityAction<A extends Activity> extends Abstrac
      * @param event    the action event
      * @param activity the activity
      */
-    protected abstract void onActionPerformed(@NonNull ActionEvent event, @NonNull A activity);
+    protected abstract void onActionPerformed(ActionEvent event, A activity);
 
 
 }

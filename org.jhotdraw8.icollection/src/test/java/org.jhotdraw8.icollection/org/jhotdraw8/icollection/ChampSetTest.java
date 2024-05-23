@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,34 +18,34 @@ public class ChampSetTest extends AbstractImmutableSetTest {
 
 
     @Override
-    protected <E> @NonNull ImmutableSet<E> newInstance() {
+    protected <E> ImmutableSet<E> newInstance() {
         return ChampSet.of();
     }
 
 
     @Override
-    protected <E> @NonNull Set<E> toMutableInstance(ImmutableSet<E> m) {
+    protected <E> Set<E> toMutableInstance(ImmutableSet<E> m) {
         return m.toMutable();
     }
 
     @Override
-    protected <E> @NonNull ImmutableSet<E> toImmutableInstance(Set<E> m) {
+    protected <E> ImmutableSet<E> toImmutableInstance(Set<E> m) {
         return ((MutableChampSet<E>) m).toImmutable();
     }
 
     @Override
-    protected <E> @NonNull ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
+    protected <E> ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
         return ChampSet.copyOf(m.asSet());
     }
 
     @Override
-    protected <E> @NonNull ImmutableSet<E> newInstance(Iterable<E> m) {
+    protected <E> ImmutableSet<E> newInstance(Iterable<E> m) {
         return ChampSet.copyOf(m);
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(@NonNull SetData data) throws Exception {
+    public void testToMutableAddAllWithImmutableTypeAndAllNewKeysShouldReturnTrue(SetData data) throws Exception {
         ImmutableSet<Key> instance = newInstance(data.a);
         ImmutableSet<Key> instance2 = newInstance(data.c);
         MutableChampSet<Key> mutableInstance = (MutableChampSet<Key>) instance.toMutable();
@@ -59,7 +58,7 @@ public class ChampSetTest extends AbstractImmutableSetTest {
 
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void testOfArrayArgShouldYieldExpectedResult(@NonNull SetData data) throws Exception {
+    public void testOfArrayArgShouldYieldExpectedResult(SetData data) throws Exception {
         ImmutableSet<Key> instance = ChampSet.of(data.a().toArray(new Key[0]));
         assertEqualSet(data.a, instance);
     }

@@ -7,9 +7,8 @@ package org.jhotdraw8.draw.css.value;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -22,13 +21,13 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class CssFont {
 
-    private final @NonNull String family;
+    private final String family;
     private final @Nullable FontWeight weight;
     private final @Nullable FontPosture posture;
-    private final @NonNull CssSize size;
-    private final @NonNull Font font;
+    private final CssSize size;
+    private final Font font;
 
-    public CssFont(@NonNull String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
+    public CssFont(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, CssSize size) {
         this.family = family;
         this.weight = weight;
         this.posture = posture;
@@ -40,7 +39,7 @@ public class CssFont {
                 : Font.font(family, weight, posture, size.getConvertedValue());
     }
 
-    public @NonNull String getFamily() {
+    public String getFamily() {
         return family;
     }
 
@@ -52,17 +51,17 @@ public class CssFont {
         return posture;
     }
 
-    public @NonNull CssSize getSize() {
+    public CssSize getSize() {
         return size;
     }
 
-    public @NonNull Font getFont() {
+    public Font getFont() {
         return font;
     }
 
-    private static final @NonNull Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
+    private static final Map<String, CssFont> cachedFonts = new ConcurrentHashMap<>();
 
-    public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, @NonNull CssSize size) {
+    public static CssFont font(String family, @Nullable FontWeight weight, @Nullable FontPosture posture, CssSize size) {
         return cachedFonts.computeIfAbsent(family
                 + (weight == null ? "" : weight.name())
                 + (posture == null ? "" : posture.name())
@@ -73,7 +72,7 @@ public class CssFont {
         return font(family, weight, posture, CssSize.of(size));
     }
 
-    public static @NonNull CssFont font(String family, double size) {
+    public static CssFont font(String family, double size) {
         return font(family, null, null, CssSize.of(size));
     }
 
@@ -112,7 +111,7 @@ public class CssFont {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "CssFont{" +
                 "family='" + family + '\'' +
                 ", weight=" + weight +

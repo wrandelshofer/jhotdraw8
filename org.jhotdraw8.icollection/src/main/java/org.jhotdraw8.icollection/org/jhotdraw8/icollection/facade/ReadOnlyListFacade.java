@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.readonly.AbstractReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
@@ -22,11 +21,11 @@ import java.util.function.Supplier;
  * @author Werner Randelshofer
  */
 public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
-    private final @NonNull IntSupplier sizeFunction;
-    private final @NonNull IntFunction<E> getFunction;
-    private final @NonNull Supplier<ReadOnlySequencedCollection<E>> readOnlyReversedFunction;
+    private final IntSupplier sizeFunction;
+    private final IntFunction<E> getFunction;
+    private final Supplier<ReadOnlySequencedCollection<E>> readOnlyReversedFunction;
 
-    public ReadOnlyListFacade(@NonNull List<E> backingList) {
+    public ReadOnlyListFacade(List<E> backingList) {
         this.sizeFunction = backingList::size;
         this.getFunction = backingList::get;
         this.readOnlyReversedFunction = () -> new ReadOnlyListFacade<>(
@@ -35,7 +34,7 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
                 () -> this);
     }
 
-    public ReadOnlyListFacade(@NonNull IntSupplier sizeFunction, @NonNull IntFunction<E> getFunction) {
+    public ReadOnlyListFacade(IntSupplier sizeFunction, IntFunction<E> getFunction) {
         this.sizeFunction = sizeFunction;
         this.getFunction = getFunction;
         this.readOnlyReversedFunction = () -> new ReadOnlyListFacade<>(
@@ -44,7 +43,7 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
                 () -> this);
     }
 
-    public ReadOnlyListFacade(@NonNull IntSupplier sizeFunction, @NonNull IntFunction<E> getFunction, @NonNull Supplier<ReadOnlySequencedCollection<E>> readOnlyReversedFunction) {
+    public ReadOnlyListFacade(IntSupplier sizeFunction, IntFunction<E> getFunction, Supplier<ReadOnlySequencedCollection<E>> readOnlyReversedFunction) {
         this.sizeFunction = sizeFunction;
         this.getFunction = getFunction;
         this.readOnlyReversedFunction = readOnlyReversedFunction;
@@ -56,12 +55,12 @@ public class ReadOnlyListFacade<E> extends AbstractReadOnlyList<E> {
     }
 
     @Override
-    public @NonNull ReadOnlySequencedCollection<E> readOnlyReversed() {
+    public ReadOnlySequencedCollection<E> readOnlyReversed() {
         return readOnlyReversedFunction.get();
     }
 
     @Override
-    public @NonNull ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
         int length = size();
         Objects.checkFromToIndex(fromIndex, toIndex, length);
         return new ReadOnlyListFacade<>(

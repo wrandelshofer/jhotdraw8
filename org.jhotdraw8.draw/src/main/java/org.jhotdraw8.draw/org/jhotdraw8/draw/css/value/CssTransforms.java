@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.geometry.Bounds;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -20,7 +19,7 @@ public class CssTransforms {
     private CssTransforms() {
     }
 
-    public static @NonNull CssRectangle2D transform(@NonNull Transform transform, @NonNull CssRectangle2D b) {
+    public static CssRectangle2D transform(Transform transform, CssRectangle2D b) {
         Bounds tb = transform.transform(b.getConvertedBoundsValue());
         DefaultUnitConverter c = DefaultUnitConverter.getInstance();
         return new CssRectangle2D(
@@ -31,7 +30,7 @@ public class CssTransforms {
         );
     }
 
-    public static @NonNull Transform createReshapeTransform(@NonNull CssRectangle2D csssrc, @NonNull CssSize destX, @NonNull CssSize destY, @NonNull CssSize destW, @NonNull CssSize destH) {
+    public static Transform createReshapeTransform(CssRectangle2D csssrc, CssSize destX, CssSize destY, CssSize destW, CssSize destH) {
         return FXTransforms.createReshapeTransform(csssrc.getConvertedValue(),
                 destX.getConvertedValue(), destY.getConvertedValue(), destW.getConvertedValue(), destH.getConvertedValue()
         );

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.BitSet;
@@ -143,7 +142,7 @@ public class DenseIntSet8Bit implements IntSet {
      *
      * @return a new long array.
      */
-    public long @NonNull [] toLongArray() {
+    public long[] toLongArray() {
         int length = (a.length - 1 >>> 6) + 1;
         long[] words = new long[length];
         int lastSetBit = -1;
@@ -160,7 +159,7 @@ public class DenseIntSet8Bit implements IntSet {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         StringBuilder buf = new StringBuilder();
         buf.append('{');
         int i = 0, n = capacity();

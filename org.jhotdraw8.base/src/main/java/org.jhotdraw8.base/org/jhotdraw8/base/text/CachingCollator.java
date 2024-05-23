@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.text;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.text.CollationKey;
 import java.text.Collator;
@@ -23,10 +22,10 @@ import java.util.Map;
  */
 public class CachingCollator implements Comparator<String> {
 
-    private final @NonNull Collator collator;
-    private final @NonNull Map<String, CollationKey> keyMap = new HashMap<>();
+    private final Collator collator;
+    private final Map<String, CollationKey> keyMap = new HashMap<>();
 
-    public CachingCollator(@NonNull Collator collator) {
+    public CachingCollator(Collator collator) {
         this.collator = collator;
     }
 

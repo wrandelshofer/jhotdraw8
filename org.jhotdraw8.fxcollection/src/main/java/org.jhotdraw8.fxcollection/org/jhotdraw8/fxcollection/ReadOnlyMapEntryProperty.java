@@ -8,8 +8,7 @@ import javafx.beans.property.ReadOnlyObjectPropertyBase;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.collections.WeakMapChangeListener;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -24,15 +23,15 @@ import java.lang.reflect.Type;
 public class ReadOnlyMapEntryProperty<K, V, T extends V> extends ReadOnlyObjectPropertyBase<T>
         implements MapChangeListener<K, V> {
 
-    final protected @NonNull K key;
-    final protected @NonNull ObservableMap<K, V> map;
+    final protected K key;
+    final protected ObservableMap<K, V> map;
     final private @Nullable WeakMapChangeListener<K, V> weakListener;
     /**
      * Here char is used as an uint16.
      */
     private char changing;
 
-    public ReadOnlyMapEntryProperty(@NonNull ObservableMap<K, V> map, @NonNull K key, @NonNull Type tClazz) {
+    public ReadOnlyMapEntryProperty(ObservableMap<K, V> map, K key, Type tClazz) {
         this.map = map;
         this.key = key;
 
@@ -57,7 +56,7 @@ public class ReadOnlyMapEntryProperty<K, V, T extends V> extends ReadOnlyObjectP
     }
 
     @Override
-    public void onChanged(@NonNull Change<? extends K, ? extends V> change) {
+    public void onChanged(Change<? extends K, ? extends V> change) {
         if (changing++ == 0) {
             if (this.key.equals(change.getKey())) {
                 fireValueChangedEvent();

@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssFont;
@@ -25,7 +24,7 @@ public class FontCssConverterTest {
     /**
      * Test of fromString method, of class CssFontConverter.
      */
-    public static void doTestFromString(CssFont expected, @NonNull String string) throws Exception {
+    public static void doTestFromString(CssFont expected, String string) throws Exception {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         FontCssConverter instance = new FontCssConverter(false);
@@ -45,13 +44,13 @@ public class FontCssConverterTest {
     /**
      * Test of fromString and toString methods, of class CssFontConverter.
      */
-    public static void testFont(CssFont value, @NonNull String str) throws Exception {
+    public static void testFont(CssFont value, String str) throws Exception {
         doTestFromString(value, str);
         doTestToString(value, str);
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFont() {
+    public List<DynamicTest> dynamicTestsFont() {
         return Arrays.asList(
                 dynamicTest("1", () -> testFont(
                         new CssFont("Arial", FontWeight.NORMAL, FontPosture.REGULAR, CssSize.of(12)),

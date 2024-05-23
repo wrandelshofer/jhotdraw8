@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -17,11 +16,11 @@ import java.util.Map;
  * @author Werner Randelshofer
  */
 public class SimpleIdFactory implements IdFactory {
-    private final @NonNull Map<String, Long> prefixToNextId = new HashMap<>(128, 0.4f);
-    private final @NonNull Map<String, Object> idToObject = new HashMap<>(128, 0.4f);
-    private final @NonNull Map<Object, String> objectToId = new HashMap<>(128, 0.4f);
+    private final Map<String, Long> prefixToNextId = new HashMap<>(128, 0.4f);
+    private final Map<String, Object> idToObject = new HashMap<>(128, 0.4f);
+    private final Map<Object, String> objectToId = new HashMap<>(128, 0.4f);
 
-    private @NonNull UriResolver uriResolver = new SimpleUriResolver();
+    private UriResolver uriResolver = new SimpleUriResolver();
 
     public SimpleIdFactory() {
     }
@@ -51,7 +50,7 @@ public class SimpleIdFactory implements IdFactory {
     }
 
     @Override
-    public @NonNull URI relativize(@NonNull URI uri) {
+    public URI relativize(URI uri) {
         return documentHome == null ? uri : uriResolver.relativize(documentHome, uri);
     }
 
@@ -61,12 +60,12 @@ public class SimpleIdFactory implements IdFactory {
     }
 
     @Override
-    public @NonNull URI absolutize(@NonNull URI uri) {
+    public URI absolutize(URI uri) {
         return documentHome == null ? uri : uriResolver.absolutize(documentHome, uri);
     }
 
     @Override
-    public Object putIdAndObject(@NonNull String id, @NonNull Object object) {
+    public Object putIdAndObject(String id, Object object) {
         String oldId = objectToId.put(object, id);
         if (oldId != null) {
             idToObject.remove(oldId);
@@ -79,7 +78,7 @@ public class SimpleIdFactory implements IdFactory {
     }
 
     @Override
-    public Object putIdToObject(@NonNull String id, @NonNull Object object) {
+    public Object putIdToObject(String id, Object object) {
         Object oldObject = idToObject.put(id, object);
         if (oldObject != null) {
             objectToId.remove(oldObject);
@@ -104,7 +103,7 @@ public class SimpleIdFactory implements IdFactory {
     }
 
     @Override
-    public @Nullable String createId(@NonNull Object object, @Nullable String prefix, @Nullable String suggestedId) {
+    public @Nullable String createId(Object object, @Nullable String prefix, @Nullable String suggestedId) {
         String existingId = objectToId.get(object);
         if (existingId == null) {
             if (suggestedId != null && !idToObject.containsKey(suggestedId)) {
@@ -125,11 +124,11 @@ public class SimpleIdFactory implements IdFactory {
         return existingId;
     }
 
-    public @NonNull UriResolver getUriResolver() {
+    public UriResolver getUriResolver() {
         return uriResolver;
     }
 
-    public void setUriResolver(@NonNull UriResolver uriResolver) {
+    public void setUriResolver(UriResolver uriResolver) {
         this.uriResolver = uriResolver;
     }
 }

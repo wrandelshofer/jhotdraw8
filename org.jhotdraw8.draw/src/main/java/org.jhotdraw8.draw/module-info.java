@@ -4,11 +4,13 @@
  */
 
 import org.jhotdraw8.draw.spi.DrawResourceBundleProvider;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Defines a framework for vector drawing editors.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.draw {
     requires transitive java.desktop;
     requires transitive java.logging;
@@ -16,7 +18,8 @@ module org.jhotdraw8.draw {
     requires transitive javafx.controls;
     requires transitive javafx.fxml;
     requires transitive javafx.graphics;
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.application;
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;

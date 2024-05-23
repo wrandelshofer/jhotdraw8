@@ -13,7 +13,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
 import javafx.scene.input.DataFormat;
 import javafx.scene.layout.GridPane;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.css.converter.NumberCssConverter;
@@ -46,7 +45,7 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
 public class SvgDrawingExportOptionsPane extends GridPane {
 
-    public static @NonNull Dialog<SequencedMap<Key<?>, Object>> createDialog(DataFormat format) {
+    public static Dialog<SequencedMap<Key<?>, Object>> createDialog(DataFormat format) {
         Resources labels = ApplicationLabels.getResources();
         final SvgDrawingExportOptionsPane pane = new SvgDrawingExportOptionsPane();
         pane.setFormat(format);
@@ -57,7 +56,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @FXML
     private TextField drawingDpiField;
 
-    private final @NonNull TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
+    private final TextFormatter<Number> drawingDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label drawingDpiLabel;
@@ -79,7 +78,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @SuppressWarnings("unused")
     @FXML
     private TextField pagesDpiField;
-    private final @NonNull TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
+    private final TextFormatter<Number> pagesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label pagesDpiLabel;
@@ -90,7 +89,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
     @SuppressWarnings("unused")
     @FXML
     private TextField slicesDpiField;
-    private final @NonNull TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
+    private final TextFormatter<Number> slicesDpiFormatter = new TextFormatter<>(new StringConverterAdapter<>(new NumberCssConverter(false)));
     @SuppressWarnings("unused")
     @FXML
     private Label slicesDpiLabel;
@@ -127,7 +126,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
      *
      * @return the export options
      */
-    public @NonNull SequencedMap<Key<?>, Object> getExportOptions() {
+    public SequencedMap<Key<?>, Object> getExportOptions() {
         SequencedMap<Key<?>, Object> map = new LinkedHashMap<>();
         EXPORT_DRAWING_KEY.put(map, exportDrawingCheckBox.isSelected());
         EXPORT_PAGES_KEY.put(map, exportPagesCheckBox.isSelected());
@@ -220,7 +219,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
         exportInvisibleElements.setVisible(invisibles);
     }
 
-    private final @NonNull Set<DataFormat> dpiFormats = new HashSet<>();
+    private final Set<DataFormat> dpiFormats = new HashSet<>();
 
     {
         dpiFormats.add(DataFormat.IMAGE);
@@ -228,7 +227,7 @@ public class SvgDrawingExportOptionsPane extends GridPane {
         dpiFormats.add(registerDataFormat(BitmapExportOutputFormat.JPEG_MIME_TYPE));
     }
 
-    private final @NonNull Set<DataFormat> invisiblesFormats = new HashSet<>();
+    private final Set<DataFormat> invisiblesFormats = new HashSet<>();
 
     {
         invisiblesFormats.add(registerDataFormat(SvgExportOutputFormat.SVG_MIME_TYPE));

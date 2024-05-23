@@ -5,13 +5,12 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Insets;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.InsetsConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -23,11 +22,11 @@ import java.util.Map;
 public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Insets> {
 
 
-    private final @NonNull MapAccessor<Double> topKey;
-    private final @NonNull MapAccessor<Double> rightKey;
-    private final @NonNull MapAccessor<Double> bottomKey;
-    private final @NonNull MapAccessor<Double> leftKey;
-    private final @NonNull Converter<Insets> converter = new InsetsConverter(false);
+    private final MapAccessor<Double> topKey;
+    private final MapAccessor<Double> rightKey;
+    private final MapAccessor<Double> bottomKey;
+    private final MapAccessor<Double> leftKey;
+    private final Converter<Insets> converter = new InsetsConverter(false);
 
     /**
      * Creates a new instance with the specified name.
@@ -38,7 +37,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
      * @param bottomKey the insets bottom key
      * @param leftKey   the insets left key
      */
-    public InsetsStyleableMapAccessor(String name, @NonNull MapAccessor<Double> topKey, @NonNull MapAccessor<Double> rightKey, @NonNull MapAccessor<Double> bottomKey, @NonNull MapAccessor<Double> leftKey) {
+    public InsetsStyleableMapAccessor(String name, MapAccessor<Double> topKey, MapAccessor<Double> rightKey, MapAccessor<Double> bottomKey, MapAccessor<Double> leftKey) {
         super(name, Insets.class, new MapAccessor<?>[]{topKey, rightKey, bottomKey, leftKey}, new Insets(topKey.getDefaultValue(), rightKey.getDefaultValue(), bottomKey.getDefaultValue(), leftKey.getDefaultValue()));
 
         this.topKey = topKey;
@@ -48,7 +47,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     }
 
     @Override
-    public @NonNull Insets get(@NonNull Map<? super Key<?>, Object> a) {
+    public Insets get(Map<? super Key<?>, Object> a) {
         final Double top = topKey.get(a);
         final Double right = rightKey.get(a);
         final Double bottom = bottomKey.get(a);
@@ -62,12 +61,12 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     }
 
     @Override
-    public @NonNull Converter<Insets> getCssConverter() {
+    public Converter<Insets> getCssConverter() {
         return converter;
     }
 
     @Override
-    public @NonNull Insets remove(@NonNull Map<? super Key<?>, Object> a) {
+    public Insets remove(Map<? super Key<?>, Object> a) {
         Insets oldValue = get(a);
         topKey.remove(a);
         rightKey.remove(a);
@@ -77,7 +76,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Insets value) {
+    public void set(Map<? super Key<?>, Object> a, @Nullable Insets value) {
         if (value == null) {
             remove(a);
         } else {
@@ -89,7 +88,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Insets value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable Insets value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -101,7 +100,7 @@ public class InsetsStyleableMapAccessor extends AbstractStyleableMapAccessor<Ins
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = topKey.remove(a);
         a = rightKey.remove(a);
         a = bottomKey.remove(a);

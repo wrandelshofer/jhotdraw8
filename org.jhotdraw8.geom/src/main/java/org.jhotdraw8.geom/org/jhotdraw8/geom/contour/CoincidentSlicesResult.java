@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -22,9 +21,9 @@ import java.util.Deque;
  * </dl>
  */
 class CoincidentSlicesResult {
-    final @NonNull Deque<PlinePath> coincidentSlices = new ArrayDeque<>();
-    final @NonNull Deque<PlineIntersect> sliceStartPoints = new ArrayDeque<>();
-    final @NonNull Deque<PlineIntersect> sliceEndPoints = new ArrayDeque<>();
+    final Deque<PlinePath> coincidentSlices = new ArrayDeque<>();
+    final Deque<PlineIntersect> sliceStartPoints = new ArrayDeque<>();
+    final Deque<PlineIntersect> sliceEndPoints = new ArrayDeque<>();
 
     CoincidentSlicesResult() {
     }

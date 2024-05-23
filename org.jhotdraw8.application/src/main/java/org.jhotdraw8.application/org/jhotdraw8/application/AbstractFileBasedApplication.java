@@ -32,8 +32,6 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.application.action.Actions;
 import org.jhotdraw8.application.action.ScreenMenuBarProxyAction;
@@ -61,6 +59,7 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampMap;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.net.URI;
@@ -102,12 +101,12 @@ import static java.lang.Math.min;
 @SuppressWarnings("this-escape")
 public abstract class AbstractFileBasedApplication extends AbstractApplication implements FileBasedApplication {
 
-    private static final @NonNull Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new NullableObjectKey<>("focusListener",
+    private static final Key<ChangeListener<Boolean>> FOCUS_LISTENER_KEY = new NullableObjectKey<>("focusListener",
             new SimpleParameterizedType(ChangeListener.class, Boolean.class));
-    private static final @NonNull Key<Stage> STAGE_KEY = new NullableObjectKey<>("stage", Stage.class);
-    public static final @NonNull String WINDOW_MENU_ID = "window";
-    public static final @NonNull String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
-    private final @NonNull Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
+    private static final Key<Stage> STAGE_KEY = new NullableObjectKey<>("stage", Stage.class);
+    public static final String WINDOW_MENU_ID = "window";
+    public static final String FILE_OPEN_RECENT_MENU = "file.openRecentMenu";
+    private final Logger LOGGER = Logger.getLogger(AbstractFileBasedApplication.class.getName());
 
     /**
      * @param args the command line arguments
@@ -116,11 +115,11 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         launch(args);
     }
 
-    private final @NonNull ReadOnlyObjectWrapper<Activity> activeActivity = new ReadOnlyObjectWrapper<>();
+    private final ReadOnlyObjectWrapper<Activity> activeActivity = new ReadOnlyObjectWrapper<>();
     private boolean isSystemMenuSupported;
 
 
-    private final @NonNull ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
+    private final ArrayList<Action> systemMenuActiveViewActions = new ArrayList<>();
     private List<Menu> systemMenus;
 
     {
@@ -161,14 +160,14 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      * @param actions the action map
      * @return the menu bar
      */
-    protected @Nullable MenuBar createMenuBar(@Nullable FileBasedActivity activity, @Nullable Stage stage, @NonNull Map<String, Action> actions) {
+    protected @Nullable MenuBar createMenuBar(@Nullable FileBasedActivity activity, @Nullable Stage stage, Map<String, Action> actions) {
         Supplier<MenuBar> factory = getMenuBarFactory();
         MenuBar mb = factory == null ? null : factory.get();
         if (mb == null) {
             return null;
         }
         Deque<Menu> todo = new LinkedList<>(mb.getMenus());
-        final @NonNull List<KeyCombination> accelerators = new ArrayList<>();
+        final List<KeyCombination> accelerators = new ArrayList<>();
         while (!todo.isEmpty()) {
             final Menu menu = todo.remove();
             if (WINDOW_MENU_ID.equals(menu.getId())) {
@@ -293,7 +292,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      *
      * @param view the view
      */
-    protected void onActivityActivated(@NonNull FileBasedActivity view) {
+    protected void onActivityActivated(FileBasedActivity view) {
 
     }
 
@@ -303,7 +302,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      *
      * @param activity the activity
      */
-    protected void onActivityAdded(@NonNull FileBasedActivity activity) {
+    protected void onActivityAdded(FileBasedActivity activity) {
         activity.setApplication(this);
         activity.init();
 
@@ -376,7 +375,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         Platform.runLater(activity::start);
     }
 
-    protected @NonNull Stage createStage(@NonNull FileBasedActivity activity) {
+    protected Stage createStage(FileBasedActivity activity) {
         Stage stage = new Stage();
         BorderPane borderPane = new BorderPane();
         borderPane.setCenter(activity.getNode());
@@ -412,7 +411,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      *
      * @param view the view
      */
-    protected void onActivityDeactivated(@NonNull FileBasedActivity view) {
+    protected void onActivityDeactivated(FileBasedActivity view) {
 
     }
 
@@ -422,7 +421,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
      *
      * @param activity the view
      */
-    protected void onActivityRemoved(@NonNull FileBasedActivity activity) {
+    protected void onActivityRemoved(FileBasedActivity activity) {
         Stage stage = (Stage) activity.getNode().getScene().getWindow();
         activity.stop();
         ChangeListener<Boolean> focusListener = activity.get(FOCUS_LISTENER_KEY);
@@ -563,7 +562,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         }
     }
 
-    private void openActivityFrom(@NonNull URI uri) {
+    private void openActivityFrom(URI uri) {
         final Resources labels = ApplicationLabels.getResources();
         createActivity().whenComplete((pv, ex1) -> {
             FileBasedActivity v = (FileBasedActivity) pv;
@@ -746,7 +745,7 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
     protected void initFactories() {
     }
 
-    protected void initActions(@NonNull ObservableMap<String, Action> map) {
+    protected void initActions(ObservableMap<String, Action> map) {
         map.put(AboutAction.ID, new AboutAction(this));
         map.put(ExitAction.ID, new ExitAction(this));
         map.put(NewFileAction.ID, new NewFileAction(this));

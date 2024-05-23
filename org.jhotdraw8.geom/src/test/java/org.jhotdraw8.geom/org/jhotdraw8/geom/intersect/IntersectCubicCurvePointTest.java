@@ -6,7 +6,6 @@ package org.jhotdraw8.geom.intersect;
 
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.CubicCurve;
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -25,7 +24,7 @@ public class IntersectCubicCurvePointTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsIntersectCubicCurvePoint_11args() {
+    public List<DynamicTest> dynamicTestsIntersectCubicCurvePoint_11args() {
         return Arrays.asList(
                 dynamicTest("1", () -> testIntersectCubicCurvePoint_11args(new CubicCurve(900.0, 700.0, 60.0, 100.0, 70.0, 700.0, 900.0, 100.0), new Circle(410.0, 400.0, 60.0), new double[]{0.7244335835816225})),
                 dynamicTest("2", () -> testIntersectCubicCurvePoint_11args(new CubicCurve(200.0, 20.0, 40.0, 240.0, 40.0, 20.0, 200.0, 240.0), new Circle(130, 180, 40), new double[]{0.8548192690545715})),
@@ -37,7 +36,7 @@ public class IntersectCubicCurvePointTest {
     /**
      * Test of intersectLineBezier2 method, of class Intersection.
      */
-    public static void testIntersectCubicCurvePoint_11args(@NonNull CubicCurve a, @NonNull Circle b, @NonNull double[] expected) {
+    public static void testIntersectCubicCurvePoint_11args(CubicCurve a, Circle b, double[] expected) {
         IntersectionResult isec = IntersectCubicCurvePoint.intersectCubicCurvePoint(
                 a.getStartX(), a.getStartY(), a.getControlX1(), a.getControlY1(),
                 a.getControlX2(), a.getControlY2(), a.getEndX(), a.getEndY(),

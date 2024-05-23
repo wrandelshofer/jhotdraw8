@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
 
@@ -17,11 +16,11 @@ public class IntersectLinePathIterator {
     private IntersectLinePathIterator() {
     }
 
-    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, @NonNull PathIterator pit) {
+    public static IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, PathIterator pit) {
         return intersectLinePathIteratorEx(a0x, a0y, a1x, a1y, pit, 1.0);
     }
 
-    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull PathIterator pit, double maxT) {
+    public static IntersectionResultEx intersectLinePathIteratorEx(Point2D a0, Point2D a1, PathIterator pit, double maxT) {
         return intersectLinePathIteratorEx(a0.getX(), a0.getY(), a1.getX(), a1.getY(), pit, maxT);
     }
 
@@ -50,7 +49,7 @@ public class IntersectLinePathIterator {
      * @param maxT the maximal time of the line (1 = entire line)
      * @return the intersection result
      */
-    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, @NonNull PathIterator pit, double maxT) {
+    public static IntersectionResultEx intersectLinePathIteratorEx(double a0x, double a0y, double a1x, double a1y, PathIterator pit, double maxT) {
         List<IntersectionPointEx> lineIntersections = new ArrayList<>();
         List<IntersectionPointEx> insideIntersections = new ArrayList<>();
         final double[] coords = new double[6];
@@ -157,7 +156,7 @@ public class IntersectLinePathIterator {
     }
 
 
-    public static @NonNull IntersectionResultEx intersectLinePathIteratorEx(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull PathIterator pit) {
+    public static IntersectionResultEx intersectLinePathIteratorEx(Point2D a0, Point2D a1, PathIterator pit) {
         IntersectionResultEx i = intersectLinePathIteratorEx(a0, a1, pit, 1.0);
         if (i.getStatus() == IntersectionStatus.INTERSECTION && i.intersections().getFirst().argumentA() > 1) {
             return new IntersectionResultEx(IntersectionStatus.NO_INTERSECTION, new ArrayList<>());

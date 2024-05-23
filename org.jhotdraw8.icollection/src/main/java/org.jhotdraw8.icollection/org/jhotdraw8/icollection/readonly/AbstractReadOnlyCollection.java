@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.icollection.readonly;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.Objects;
 
@@ -30,7 +29,7 @@ public abstract class AbstractReadOnlyCollection<E> implements ReadOnlyCollectio
      *
      * @return a string representation of this collection
      */
-    public final @NonNull String toString() {
+    public final String toString() {
         return ReadOnlyCollection.iterableToString(this);
     }
 

@@ -17,7 +17,6 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.layout.Region;
-import org.jhotdraw8.annotation.NonNull;
 
 import java.util.List;
 
@@ -29,12 +28,12 @@ public abstract class AbstractDockParent
         extends Region
         implements DockParent {
     @SuppressWarnings("this-escape")
-    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
+    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY);
     @SuppressWarnings("this-escape")
-    protected final @NonNull BooleanProperty editable = new SimpleBooleanProperty(this, EDITABLE_PROPERTY, true);
+    protected final BooleanProperty editable = new SimpleBooleanProperty(this, EDITABLE_PROPERTY, true);
     @SuppressWarnings("this-escape")
-    protected final @NonNull ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
-    protected final @NonNull ObservableList<DockChild> dockChildren = FXCollections.observableArrayList();
+    protected final ObjectProperty<DockParent> dockParent = new SimpleObjectProperty<>(this, DOCK_PARENT_PROPERTY);
+    protected final ObservableList<DockChild> dockChildren = FXCollections.observableArrayList();
 
     public AbstractDockParent() {
         dockChildren.addListener((ListChangeListener.Change<? extends DockChild> change) -> {
@@ -53,28 +52,28 @@ public abstract class AbstractDockParent
     }
 
     @Override
-    public @NonNull ObjectProperty<DockParent> dockParentProperty() {
+    public ObjectProperty<DockParent> dockParentProperty() {
         return dockParent;
     }
 
 
     @Override
-    public @NonNull ObservableList<DockChild> getDockChildren() {
+    public ObservableList<DockChild> getDockChildren() {
         return dockChildren;
     }
 
     @Override
-    public @NonNull Parent getNode() {
+    public Parent getNode() {
         return this;
     }
 
     @Override
-    public @NonNull BooleanProperty showingProperty() {
+    public BooleanProperty showingProperty() {
         return showing;
     }
 
     @Override
-    public @NonNull BooleanProperty editableProperty() {
+    public BooleanProperty editableProperty() {
         return editable;
     }
 

@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.css.ast;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -21,8 +20,8 @@ import java.util.function.Consumer;
  */
 public class EqualsMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;
-    private final @NonNull String attributeName;
-    private final @NonNull String attributeValue;
+    private final String attributeName;
+    private final String attributeValue;
 
     /**
      * Creates a new instance.
@@ -33,7 +32,7 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
      * @param attributeName    the attribute name
      * @param attributeValue   the attribute value
      */
-    public EqualsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, @NonNull String attributeName, @NonNull String attributeValue) {
+    public EqualsMatchSelector(@Nullable SourceLocator sourceLocator, @Nullable String namespacePattern, String attributeName, String attributeValue) {
         super(sourceLocator);
         this.namespacePattern = namespacePattern;
         this.attributeName = attributeName;
@@ -41,17 +40,17 @@ public class EqualsMatchSelector extends AbstractAttributeSelector {
     }
 
     @Override
-    protected @Nullable <T> T match(@NonNull SelectorModel<T> model, @NonNull T element) {
+    protected @Nullable <T> T match(SelectorModel<T> model, T element) {
         return model.attributeValueEquals(element, namespacePattern, attributeName, attributeValue) ? element : null;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "[" + attributeName + "=\"" + attributeValue + "\"]";
     }
 
     @Override
-    public void produceTokens(@NonNull Consumer<CssToken> consumer) {
+    public void produceTokens(Consumer<CssToken> consumer) {
         consumer.accept(new CssToken(CssTokenType.TT_LEFT_SQUARE_BRACKET));
         if (!TypeSelector.ANY_NAMESPACE.equals(namespacePattern)) {
             if (namespacePattern != null) {

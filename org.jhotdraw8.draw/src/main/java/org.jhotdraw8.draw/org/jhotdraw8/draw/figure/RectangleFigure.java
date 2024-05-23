@@ -8,8 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Rectangle;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
@@ -18,6 +16,7 @@ import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
@@ -35,10 +34,10 @@ public class RectangleFigure extends AbstractLeafFigure
     /**
      * The CSS type selector for this object is {@value #TYPE_SELECTOR}.
      */
-    public static final @NonNull String TYPE_SELECTOR = "Rectangle";
+    public static final String TYPE_SELECTOR = "Rectangle";
 
-    public static final @NonNull CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", CssSize.ZERO);
-    public static final @NonNull CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", CssSize.ZERO);
+    public static final CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", CssSize.ZERO);
+    public static final CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", CssSize.ZERO);
     public static final @Nullable SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
 
     public RectangleFigure() {
@@ -49,12 +48,12 @@ public class RectangleFigure extends AbstractLeafFigure
         reshapeInLocal(x, y, width, height);
     }
 
-    public RectangleFigure(@NonNull Rectangle2D rect) {
+    public RectangleFigure(Rectangle2D rect) {
         this(rect.getMinX(), rect.getMinY(), rect.getWidth(), rect.getHeight());
     }
 
     @Override
-    public @NonNull PathIterator getPathIterator(@NonNull RenderContext ctx, @Nullable AffineTransform tx) {
+    public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         Rectangle shape = new Rectangle();
         shape.setX(getNonNull(X).getConvertedValue());
         shape.setY(getNonNull(Y).getConvertedValue());
@@ -70,14 +69,14 @@ public class RectangleFigure extends AbstractLeafFigure
 
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Rectangle n = new Rectangle();
         n.setManaged(false);
         return n;
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node node) {
+    public void updateNode(RenderContext ctx, Node node) {
         Rectangle rectangleNode = (Rectangle) node;
         applyHideableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, rectangleNode);
@@ -94,12 +93,12 @@ public class RectangleFigure extends AbstractLeafFigure
     }
 
     @Override
-    public @Nullable Connector findConnector(@NonNull Point2D p, Figure prototype, double tolerance) {
+    public @Nullable Connector findConnector(Point2D p, Figure prototype, double tolerance) {
         return new RectangleConnector(new BoundsLocator(getLayoutBounds(), p));
     }
 
     @Override
-    public @NonNull String getTypeSelector() {
+    public String getTypeSelector() {
         return TYPE_SELECTOR;
     }
 }

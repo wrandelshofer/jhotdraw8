@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.collection.enumerator;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
 import java.util.Spliterator;
@@ -17,11 +16,11 @@ import java.util.Spliterator;
  * @author Werner Randelshofer
  */
 public class IteratorEnumeratorFacade<E> implements Enumerator<E> {
-    private final @NonNull Iterator<? extends E> iterator;
+    private final Iterator<? extends E> iterator;
 
     private E current;
 
-    public IteratorEnumeratorFacade(final @NonNull Iterator<? extends E> iterator) {
+    public IteratorEnumeratorFacade(final Iterator<? extends E> iterator) {
         this.iterator = iterator;
     }
 

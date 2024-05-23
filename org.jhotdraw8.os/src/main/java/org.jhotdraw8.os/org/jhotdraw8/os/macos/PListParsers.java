@@ -1,6 +1,5 @@
 package org.jhotdraw8.os.macos;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -41,7 +40,7 @@ public class PListParsers {
      * Reads the specified PList file and returns it as a document.
      * This method can deal with XML encoded and binary encoded PList files.
      */
-    public static Document readPList(@NonNull File file) throws IOException {
+    public static Document readPList(File file) throws IOException {
         Document doc;
         try {
             doc = readBinaryPropertyList(file);
@@ -60,7 +59,7 @@ public class PListParsers {
         return doc;
     }
 
-    private static Document readXmlPropertyList(@NonNull File file) throws IOException {
+    private static Document readXmlPropertyList(File file) throws IOException {
         InputSource inputSource = new InputSource(file.toString());
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         builderFactory.setNamespaceAware(true);
@@ -81,13 +80,13 @@ public class PListParsers {
         return new BinaryPListParser().parse(file);
     }
 
-    public static Map<String, Object> toMap(@NonNull Document plist) throws IOException {
+    public static Map<String, Object> toMap(Document plist) throws IOException {
         SequencedMap<String, Object> map = new LinkedHashMap<>();
         map.put("plist", readNode(plist.getDocumentElement()));
         return map;
     }
 
-    private static Object readNode(@NonNull Element node) throws IOException {
+    private static Object readNode(Element node) throws IOException {
         String name = node.getTagName();
         Object value = switch (name) {
             case "plist" -> readPList(node);
@@ -98,7 +97,7 @@ public class PListParsers {
         return value;
     }
 
-    private static @NonNull Iterable<Node> getChildren(final @NonNull Element elem) {
+    private static Iterable<Node> getChildren(final Element elem) {
         return () -> new Iterator<>() {
             int index = 0;
             final NodeList children = elem.getChildNodes();
@@ -115,12 +114,12 @@ public class PListParsers {
         };
     }
 
-    private static @NonNull Iterable<Element> getChildElements(final @NonNull Element elem) {
+    private static Iterable<Element> getChildElements(final Element elem) {
         return () -> StreamSupport.stream(getChildren(elem).spliterator(), false)
                 .filter(e -> e instanceof Element).map(e -> (Element) e).iterator();
     }
 
-    private static @NonNull List<Object> readPList(@NonNull Element plistElem) throws IOException {
+    private static List<Object> readPList(Element plistElem) throws IOException {
         List<Object> plist = new ArrayList<>();
         for (Element child : getChildElements(plistElem)) {
             plist.add(readNode(child));
@@ -128,7 +127,7 @@ public class PListParsers {
         return plist;
     }
 
-    private static @NonNull String getContent(@NonNull Element elem) {
+    private static String getContent(Element elem) {
         StringBuilder buf = new StringBuilder();
         for (Node child : getChildren(elem)) {
             if (child instanceof Text) {
@@ -138,7 +137,7 @@ public class PListParsers {
         return buf.toString().trim();
     }
 
-    private static @NonNull Map<String, Object> readDict(@NonNull Element dictElem) throws IOException {
+    private static Map<String, Object> readDict(Element dictElem) throws IOException {
         LinkedHashMap<String, Object> dict = new LinkedHashMap<>();
         for (Iterator<Element> iterator = getChildElements(dictElem).iterator(); iterator.hasNext(); ) {
             Element keyElem = iterator.next();
@@ -152,7 +151,7 @@ public class PListParsers {
         return dict;
     }
 
-    private static @NonNull List<Object> readArray(@NonNull Element arrayElem) throws IOException {
+    private static List<Object> readArray(Element arrayElem) throws IOException {
         List<Object> array = new ArrayList<>();
         for (Element child : getChildElements(arrayElem)) {
             array.add(readNode(child));
@@ -160,7 +159,7 @@ public class PListParsers {
         return array;
     }
 
-    private static Object readValue(@NonNull Element value) throws IOException {
+    private static Object readValue(Element value) throws IOException {
         Object parsedValue;
         switch (value.getTagName()) {
             case "true":

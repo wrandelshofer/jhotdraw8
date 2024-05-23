@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.parser;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 
 import java.io.IOException;
@@ -15,15 +14,15 @@ public class ReaderCssScanner extends AbstractCssScanner {
     /**
      * The underlying reader.
      */
-    private final @NonNull Reader in;
+    private final Reader in;
 
 
     /**
      * Stack of pushed back characters.
      */
-    private final @NonNull IntArrayList pushedChars = new IntArrayList();
+    private final IntArrayList pushedChars = new IntArrayList();
 
-    public ReaderCssScanner(@NonNull Reader reader) {
+    public ReaderCssScanner(Reader reader) {
         this.in = reader;
     }
 

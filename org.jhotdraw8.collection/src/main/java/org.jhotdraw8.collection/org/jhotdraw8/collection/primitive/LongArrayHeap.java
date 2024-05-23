@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -108,7 +107,7 @@ public class LongArrayHeap extends AbstractCollection<Long>
     }
 
     @Override
-    public @NonNull Iterator<Long> iterator() {
+    public Iterator<Long> iterator() {
         return Spliterators.iterator(Arrays.spliterator(array, 1, size + 1));
     }
 

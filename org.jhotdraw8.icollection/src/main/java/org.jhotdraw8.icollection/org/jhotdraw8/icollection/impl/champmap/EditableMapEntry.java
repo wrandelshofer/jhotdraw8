@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection.impl.champmap;
 
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.AbstractMap;

@@ -5,8 +5,6 @@
 package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.FloatConverter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -30,6 +28,7 @@ import org.jhotdraw8.draw.css.value.SrgbaCssColor;
 import org.jhotdraw8.draw.css.value.SystemCssColor;
 import org.jhotdraw8.draw.css.value.Uint4HexSrgbaCssColor;
 import org.jhotdraw8.draw.css.value.Uint8HexSrgbaCssColor;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -109,7 +108,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
      * Configure the number convert so that it preserves 32-bit float values,
      * which have a precision of 8 decimal digits.
      */
-    private final static @NonNull FloatConverter number = new FloatConverter();
+    private final static FloatConverter number = new FloatConverter();
 
     final boolean nullable;
 
@@ -153,7 +152,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     }
 
     @Override
-    public @Nullable CssColor parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable CssColor parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         // CssColor ::= NamedColor | HexColor | ColorFunction  ;
 
         return switch (tt.next()) {
@@ -214,7 +213,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
     }
 
-    private static @NonNull List<CssSize> parseParams(CssTokenizer tt, NamedColorSpace cs) throws IOException, ParseException {
+    private static List<CssSize> parseParams(CssTokenizer tt, NamedColorSpace cs) throws IOException, ParseException {
         List<CssSize> params = new ArrayList<>();
         while (tt.next() != CssTokenType.TT_EOF && tt.current() != CssTokenType.TT_RIGHT_BRACKET) {
             switch (tt.current()) {
@@ -252,7 +251,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         return params;
     }
 
-    private static float toDeg(@NonNull CssSize size, @NonNull CssTokenizer tt) throws ParseException {
+    private static float toDeg(CssSize size, CssTokenizer tt) throws ParseException {
         double v = size.getValue();
         return (float) switch (size.getUnits()) {
             case "", "deg" -> v;
@@ -264,13 +263,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         };
     }
 
-    private final static @NonNull NamedColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
-    private final static @NonNull NamedColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new ParametricScaledColorSpace("CSS sRGB*255",
+    private final static NamedColorSpace CSS_SRGB_COLOR_SPACE = new SrgbColorSpace();
+    private final static NamedColorSpace CSS_LEGACY_SRGB_COLOR_SPACE = new ParametricScaledColorSpace("CSS sRGB*255",
             255f, CSS_SRGB_COLOR_SPACE);
-    private final static @NonNull NamedColorSpace CSS_HLS_COLOR_SPACE = new ParametricHlsColorSpace("CSS HSL", CSS_SRGB_COLOR_SPACE);
-    private final static @NonNull NamedColorSpace JAVAFX_HSB_COLOR_SPACE = new ParametricHsvColorSpace("HSB", CSS_SRGB_COLOR_SPACE);
+    private final static NamedColorSpace CSS_HLS_COLOR_SPACE = new ParametricHlsColorSpace("CSS HSL", CSS_SRGB_COLOR_SPACE);
+    private final static NamedColorSpace JAVAFX_HSB_COLOR_SPACE = new ParametricHsvColorSpace("HSB", CSS_SRGB_COLOR_SPACE);
 
-    private @NonNull CssColor parseRgbFunction(CssTokenizer tt) throws ParseException, IOException {
+    private CssColor parseRgbFunction(CssTokenizer tt) throws ParseException, IOException {
         List<CssSize> params = parseParams(tt, CSS_LEGACY_SRGB_COLOR_SPACE);
         float[] rgb = {
                 toPercentage(params.get(0), 2.55, tt),
@@ -287,7 +286,6 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 new Color(clamped[0], clamped[1], clamped[2], alpha));
     }
 
-    @NonNull
     private CssColor parseHslFunction(CssTokenizer tt) throws ParseException, IOException {
         List<CssSize> params = parseParams(tt, CSS_HLS_COLOR_SPACE);
         float[] hls = {
@@ -303,7 +301,6 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         );
     }
 
-    @NonNull
     private CssColor parseHsbFunction(CssTokenizer tt) throws ParseException, IOException {
         List<CssSize> params = parseParams(tt, JAVAFX_HSB_COLOR_SPACE);
         float[] hsb = {
@@ -369,7 +366,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     }
 
 
-    private @NonNull CssColor parseColorHexDigits(@NonNull String hexdigits, int startpos) throws ParseException {
+    private CssColor parseColorHexDigits(String hexdigits, int startpos) throws ParseException {
         try {
             int v = (int) Long.parseLong(hexdigits, 16);
             int r, g, b, a;
@@ -408,7 +405,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         }
     }
 
-    private @NonNull CssColor parseHexColor(CssTokenizer tt) throws ParseException, IOException {
+    private CssColor parseHexColor(CssTokenizer tt) throws ParseException, IOException {
         return switch (tt.next()) {
             case CssTokenType.TT_DIMENSION -> {
                 // If the color is written with a leading "0xabcdef", then the
@@ -441,7 +438,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     }
 
     //@Override
-    public @Nullable CssColor parseOld(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws
+    public @Nullable CssColor parseOld(CssTokenizer tt, @Nullable IdResolver idResolver) throws
             ParseException, IOException {
         CssColor color = null;
 
@@ -499,8 +496,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         return color;
     }
 
-    @NonNull
-    private CssColor parseShsbaColor(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private CssColor parseShsbaColor(CssTokenizer tt) throws IOException, ParseException {
         CssColor color;
         int i = 0;
         CssSize[] sizes = new CssSize[4];
@@ -535,8 +531,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         return color;
     }
 
-    @NonNull
-    private CssColor parseSrgbaColor(@NonNull CssTokenizer tt) throws IOException, ParseException {
+    private CssColor parseSrgbaColor(CssTokenizer tt) throws IOException, ParseException {
         int i = 0;
         CssColor color;
         CssSize[] sizes = new CssSize[4];
@@ -567,7 +562,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
 
     @Override
     public <TT extends CssColor> void produceTokens(@Nullable TT value, @Nullable IdSupplier
-            idSupplier, @NonNull Consumer<CssToken> out) {
+            idSupplier, Consumer<CssToken> out) {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;

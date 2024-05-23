@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
@@ -37,7 +36,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     public UniqueShortestArcPathSearchAlgoTest() {
     }
 
-    private @NonNull DirectedGraph<Integer, Double> createGraph() {
+    private DirectedGraph<Integer, Double> createGraph() {
         SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
 
         // __|  1  |  2  |  3  |  4  |  5  |   6
@@ -80,7 +79,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
      *
      * @return
      */
-    private @NonNull DirectedGraph<Integer, Double> createDiamondGraph() {
+    private DirectedGraph<Integer, Double> createDiamondGraph() {
         SimpleMutableDirectedGraph<Integer, Double> builder = new SimpleMutableDirectedGraph<>();
 
 
@@ -117,7 +116,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindShortestVertexPath() {
+    public List<DynamicTest> dynamicTestsFindShortestVertexPath() {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -133,7 +132,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindShortestVertexPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
+    public void testFindShortestVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
 
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         SimpleOrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal,
@@ -146,8 +145,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
         }
     }
 
-    @NonNull
-    private CombinedSequenceFinder<Integer, Double, Double> newInstance(@NonNull DirectedGraph<Integer, Double> graph) {
+    private CombinedSequenceFinder<Integer, Double, Double> newInstance(DirectedGraph<Integer, Double> graph) {
         Function3<Integer, Integer, Double, Double> costf = (a, b, arg) -> arg;
         CombinedSequenceFinder<Integer, Double, Double> instance = SimpleCombinedSequenceFinder.newDoubleCostInstance(
                 graph::getNextArcs, costf, new UniqueShortestArcPathSearchAlgo<>());
@@ -155,7 +153,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindShortestEdgeMultiGoalPath() throws Exception {
+    public List<DynamicTest> dynamicTestsFindShortestEdgeMultiGoalPath() throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         DirectedGraph<Integer, Double> diamondGraph = createDiamondGraph();
         return Arrays.asList(
@@ -173,7 +171,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindShortestEdgeMultiGoalPath(@NonNull DirectedGraph<Integer, Double> graph, @NonNull Integer start, @NonNull List<Integer> multiGoal, ImmutableList<Double> expResult) throws Exception {
+    public void testFindShortestEdgeMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, List<Integer> multiGoal, ImmutableList<Double> expResult) throws Exception {
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
 
         // Find shortest path to any of the goals
@@ -202,7 +200,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindShortestEdgePath() throws Exception {
+    public List<DynamicTest> dynamicTestsFindShortestEdgePath() throws Exception {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> testFindShortestEdgePath(1, 5, null)),
                 dynamicTest("2", () -> testFindShortestEdgePath(1, 4, VectorList.of(14.0))),
@@ -213,14 +211,14 @@ public class UniqueShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    private void testFindShortestEdgePath(@NonNull Integer start, @NonNull Integer goal, ImmutableList<Double> expResult) throws Exception {
+    private void testFindShortestEdgePath(Integer start, Integer goal, ImmutableList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         SimpleOrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal, Integer.MAX_VALUE, Double.MAX_VALUE);
         assertEquals(expResult, result == null ? null : result.first());
     }
 
-    private @NonNull DirectedGraph<Integer, Double> createGraph2() {
+    private DirectedGraph<Integer, Double> createGraph2() {
         SimpleMutableDirectedGraph<Integer, Double> b = new SimpleMutableDirectedGraph<>();
         b.addVertex(1);
         b.addVertex(2);
@@ -239,7 +237,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindShortestVertexPathOverWaypoints() throws Exception {
+    public List<DynamicTest> dynamicTestsFindShortestVertexPathOverWaypoints() throws Exception {
         return Arrays.asList(
                 dynamicTest("1", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 3, 5), VectorList.of(1, 3, 6, 5), 20.0)),
                 dynamicTest("2", () -> testFindShortestVertexPathOverWaypoints(Arrays.asList(1, 4), VectorList.of(1, 4), 14.0)),
@@ -251,7 +249,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindShortestVertexPathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
+    private void testFindShortestVertexPathOverWaypoints(List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
         SimpleOrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Double.MAX_VALUE);
@@ -264,7 +262,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsFindEdgePathOverWaypoints() {
+    public List<DynamicTest> dynamicTestsFindEdgePathOverWaypoints() {
         return Arrays.asList(
                 dynamicTest("1.nonunique", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 5), null, 0.0)),
                 dynamicTest("2", () -> testFindEdgePathOverWaypoints(Arrays.asList(1, 4), VectorList.of(14.0), 14.0)),
@@ -276,7 +274,7 @@ public class UniqueShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindEdgePathOverWaypoints(@NonNull List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
+    private void testFindEdgePathOverWaypoints(List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);

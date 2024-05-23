@@ -8,7 +8,6 @@ package org.jhotdraw8.examples.colorchooser;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.fxcontrols.colorchooser.ColorChooserPane;
 
 /**
@@ -17,7 +16,7 @@ import org.jhotdraw8.fxcontrols.colorchooser.ColorChooserPane;
 public class ColorChooserPaneMain extends Application {
 
     @Override
-    public void start(@NonNull Stage primaryStage) {
+    public void start(Stage primaryStage) {
         ColorChooserPane root = new ColorChooserPane();
 
         root.getModel().initWithDefaultValues();
@@ -33,7 +32,7 @@ public class ColorChooserPaneMain extends Application {
     /**
      * @param args the command line arguments
      */
-    public static void main(@NonNull String[] args) {
+    public static void main(String[] args) {
         launch(args);
     }
 

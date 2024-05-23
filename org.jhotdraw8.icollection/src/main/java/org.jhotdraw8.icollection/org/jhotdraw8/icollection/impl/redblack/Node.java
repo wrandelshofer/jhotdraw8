@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -322,7 +321,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> ceiling(K value, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> ceiling(K value, Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.ceiling(value, comparator);
@@ -379,7 +378,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> floor(K value, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> floor(K value, Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.floor(value, comparator).orElse(this);
@@ -407,7 +406,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> higher(K value, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> higher(K value, Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.higher(value, comparator);
@@ -443,7 +442,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> lower(K value, @NonNull Comparator<? super K> comparator) {
+    public RedBlackTree<K, V> lower(K value, Comparator<? super K> comparator) {
         final int result = comparator.compare(value, this.key);
         if (result < 0) {
             return left.lower(value, comparator).orElse(this);
@@ -455,7 +454,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public <E> @Nullable E mapOrNull(@NonNull BiFunction<K, V, E> f) {
+    public <E> @Nullable E mapOrNull(BiFunction<K, V, E> f) {
         return f.apply(key, value);
     }
 
@@ -465,7 +464,7 @@ public final class Node<K, V> implements RedBlackTree<K, V>, Map.Entry<K, V> {
     }
 
     @Override
-    public @NonNull RedBlackTree<K, V> right() {
+    public RedBlackTree<K, V> right() {
         return right;
     }
 

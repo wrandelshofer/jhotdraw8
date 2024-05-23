@@ -6,8 +6,6 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.Node;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.NullableStringStyleableKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.key.WordSetKey;
@@ -16,6 +14,7 @@ import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxcollection.facade.ObservableSetFacade;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jspecify.annotations.Nullable;
 
 /**
  * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
@@ -30,7 +29,6 @@ public interface StyleableFigure extends Figure {
      * <p>
      * Default value: {@code null}.
      */
-    @NonNull
     NullableStringStyleableKey ID = new NullableStringStyleableKey("id");
     /**
      * Defines the style class of the figure. The style class is used for
@@ -38,7 +36,6 @@ public interface StyleableFigure extends Figure {
      * <p>
      * Default value: empty set.
      */
-    @NonNull
     WordSetKey STYLE_CLASS = new WordSetKey("class", ChampSet.of());
     /**
      * Defines the pseudo class states of the figure. The pseudo class states
@@ -47,7 +44,6 @@ public interface StyleableFigure extends Figure {
      * <p>
      * Default value: empty set.
      */
-    @NonNull
     WordSetKey PSEUDO_CLASS = new WordSetKey("pseudoClass", ChampSet.of());
     /**
      * Defines the style of the figure. The style is used for styling a figure
@@ -55,7 +51,6 @@ public interface StyleableFigure extends Figure {
      * <p>
      * Default value: {@code null}.
      */
-    @NonNull
     StringReadOnlyStyleableKey STYLE = new StringReadOnlyStyleableKey("style");
 
     /**
@@ -80,7 +75,7 @@ public interface StyleableFigure extends Figure {
      * @param ctx  the render context
      * @param node a node which was created with method {@link #createNode}.
      */
-    default void applyStyleableFigureProperties(@NonNull RenderContext ctx, @NonNull Node node) {
+    default void applyStyleableFigureProperties(RenderContext ctx, Node node) {
         if (ctx.get(RenderContext.RENDERING_INTENT) == RenderingIntent.EXPORT) {
             String styleId = getId();
             node.setId(styleId == null ? "" : styleId);
@@ -95,12 +90,12 @@ public interface StyleableFigure extends Figure {
     }
 
     @Override
-    default @NonNull ReadOnlySet<String> getStyleClasses() {
+    default ReadOnlySet<String> getStyleClasses() {
         return getNonNull(STYLE_CLASS);
     }
 
     @Override
-    default @NonNull ReadOnlySet<String> getPseudoClassStates() {
+    default ReadOnlySet<String> getPseudoClassStates() {
         return getNonNull(PSEUDO_CLASS);
     }
 
@@ -111,7 +106,7 @@ public interface StyleableFigure extends Figure {
     }
 
     @Override
-    default @NonNull ReadOnlyProperty<String> idProperty() {
+    default ReadOnlyProperty<String> idProperty() {
         return ID.readOnlyPropertyAt(getProperties());
     }
 }

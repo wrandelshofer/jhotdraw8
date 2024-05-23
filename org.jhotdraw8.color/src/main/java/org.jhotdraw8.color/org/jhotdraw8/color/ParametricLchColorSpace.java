@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serial;
 
@@ -30,10 +29,10 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final @NonNull NamedColorSpace labColorSpace;
-    private final @NonNull String name;
+    private final NamedColorSpace labColorSpace;
+    private final String name;
 
-    public ParametricLchColorSpace(@NonNull String name, @NonNull NamedColorSpace labColorSpace) {
+    public ParametricLchColorSpace(String name, NamedColorSpace labColorSpace) {
         super(TYPE_LCH, 3);
         assert (labColorSpace.getType() == TYPE_Lab);
         this.name = name;
@@ -47,11 +46,11 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
      * @return CIEXYZ color value.
      */
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return labColorSpace.toCIEXYZ(lchToLab(colorvalue, xyz), xyz);
     }
 
-    protected float @NonNull [] lchToLab(float[] lch, float[] lab) {
+    protected float[] lchToLab(float[] lch, float[] lab) {
         double L = lch[0];
         double C = lch[1];
         double H = lch[2] * PI / 180;
@@ -71,7 +70,7 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
      * @return LCH color value.
      */
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
+    public float[] fromCIEXYZ(float[] xyz, float[] lch) {
         return labToLch(labColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
@@ -95,12 +94,12 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
+    public float[] toRGB(float[] lch, float[] rgb) {
         return labColorSpace.toRGB(lchToLab(lch, rgb), rgb);
     }
 
@@ -115,7 +114,7 @@ public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
+    public float[] fromRGB(float[] rgb, float[] lch) {
         return labToLch(labColorSpace.fromRGB(rgb, lch), lch);
     }
 }

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.concurrent;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CountedCompleter;
@@ -17,16 +16,16 @@ import java.util.function.Consumer;
  */
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class TileTask extends CountedCompleter<Void> {
-    private final @NonNull Tile tile;
+    private final Tile tile;
     private final int chunkSize;
-    private final @NonNull Consumer<Tile> tileConsumer;
-    private final @NonNull CompletableFuture<Void> future;
+    private final Consumer<Tile> tileConsumer;
+    private final CompletableFuture<Void> future;
 
-    public TileTask(@NonNull Tile tile, int chunkSize, @NonNull Consumer<Tile> tileConsumer, @NonNull CompletableFuture<Void> future) {
+    public TileTask(Tile tile, int chunkSize, Consumer<Tile> tileConsumer, CompletableFuture<Void> future) {
         this(null, tile, chunkSize, tileConsumer, future);
     }
 
-    TileTask(@Nullable TileTask parent, @NonNull Tile tile, int chunkSize, @NonNull Consumer<Tile> tileConsumer, @NonNull CompletableFuture<Void> future) {
+    TileTask(@Nullable TileTask parent, Tile tile, int chunkSize, Consumer<Tile> tileConsumer, CompletableFuture<Void> future) {
         super(parent, ((tile.xto - tile.xfrom + chunkSize - 1) / chunkSize) * ((tile.yto - tile.yfrom + chunkSize - 1) / chunkSize) - 1);
         this.chunkSize = chunkSize;
         this.tile = tile;

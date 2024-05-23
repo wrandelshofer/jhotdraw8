@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.awt.color.ColorSpace;
 import java.io.Serial;
@@ -25,32 +24,32 @@ public abstract class AbstractNamedColorSpace extends ColorSpace implements Name
     }
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] colorvalue) {
+    public float[] fromCIEXYZ(float[] colorvalue) {
         return fromCIEXYZ(colorvalue, new float[getNumComponents()]);
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] colorvalue) {
+    public float[] toRGB(float[] colorvalue) {
         return toRGB(colorvalue, new float[3]);
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb) {
+    public float[] fromRGB(float[] rgb) {
         return fromRGB(rgb, new float[getNumComponents()]);
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue) {
+    public float[] toCIEXYZ(float[] colorvalue) {
         return toCIEXYZ(colorvalue, new float[3]);
     }
 
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return new SrgbColorSpace().toCIEXYZ(toRGB(colorvalue, xyz), xyz);
     }
 
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] colorvalue) {
+    public float[] fromCIEXYZ(float[] xyz, float[] colorvalue) {
         return fromRGB(new SrgbColorSpace().fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
@@ -65,7 +64,7 @@ public abstract class AbstractNamedColorSpace extends ColorSpace implements Name
      */
     private transient volatile String[] compName;
 
-    public @NonNull String getName(int component) {
+    public String getName(int component) {
         Objects.checkIndex(component, getNumComponents());
         if (compName == null) {
             compName = switch (getType()) {

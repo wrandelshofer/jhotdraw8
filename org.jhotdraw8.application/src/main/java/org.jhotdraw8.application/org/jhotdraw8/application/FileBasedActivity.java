@@ -9,8 +9,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.StringProperty;
 import javafx.print.PrinterJob;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.action.Action;
 import org.jhotdraw8.fxbase.concurrent.CompletableWorker;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
@@ -20,6 +18,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxbase.control.Disableable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.concurrent.CompletionStage;
@@ -54,7 +53,7 @@ public interface FileBasedActivity extends Activity {
      *
      * @return the modified property
      */
-    @NonNull ReadOnlyBooleanProperty modifiedProperty();
+    ReadOnlyBooleanProperty modifiedProperty();
 
     default boolean isModified() {
         return modifiedProperty().get();
@@ -76,7 +75,7 @@ public interface FileBasedActivity extends Activity {
      *
      * @return the resource
      */
-    @NonNull ObjectProperty<@Nullable URI> uriProperty();
+    ObjectProperty<@Nullable URI> uriProperty();
 
     default @Nullable URI getURI() {
         return uriProperty().get();
@@ -96,7 +95,7 @@ public interface FileBasedActivity extends Activity {
      *
      * @return the data format of the content
      */
-    @NonNull ObjectProperty<@Nullable DataFormat> dataFormatProperty();
+    ObjectProperty<@Nullable DataFormat> dataFormatProperty();
 
     default @Nullable DataFormat getDataFormat() {
         return dataFormatProperty().get();
@@ -135,7 +134,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed with the data format that was
      * actually used for reading the file.
      */
-    @NonNull CompletionStage<@NonNull DataFormat> read(@NonNull URI uri, @Nullable DataFormat format, @NonNull ImmutableMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState);
+    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, ImmutableMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState);
 
     /**
      * Sets the content of this activity by asynchronously reading the data from
@@ -155,7 +154,7 @@ public interface FileBasedActivity extends Activity {
      * @param options reading options
      * @return a completable worker for monitoring the progress of the read operation
      */
-    default @NonNull CompletableWorker<Void> read(@NonNull URI uri, @NonNull ImmutableMap<Key<?>, Object> options) {
+    default CompletableWorker<Void> read(URI uri, ImmutableMap<Key<?>, Object> options) {
         SimpleCompletableWorker<Void> worker = new SimpleCompletableWorker<>(new SimpleWorkState<>(getApplication().getResources().getFormatted("file.reading.worker.title", uri.getPath())));
         worker.completeExceptionally(new UnsupportedOperationException());
         return worker;
@@ -179,7 +178,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    @NonNull CompletionStage<Void> write(@NonNull URI uri, @Nullable DataFormat format, @NonNull ImmutableMap<Key<?>, Object> options, @NonNull WorkState<Void> workState);
+    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, ImmutableMap<Key<?>, Object> options, WorkState<Void> workState);
 
     /**
      * Asynchronously writes the content of this activity into the specified uri.
@@ -198,7 +197,7 @@ public interface FileBasedActivity extends Activity {
      * @param options writing options
      * @return a completable worker for monitoring the progress of the write operation
      */
-    default @NonNull CompletableWorker<Void> write(@NonNull URI uri, @NonNull ImmutableMap<Key<?>, Object> options, WorkState<Void> state) {
+    default CompletableWorker<Void> write(URI uri, ImmutableMap<Key<?>, Object> options, WorkState<Void> state) {
         return FXWorker.work(getApplication().getExecutor(), s -> null, state);
     }
 
@@ -209,7 +208,7 @@ public interface FileBasedActivity extends Activity {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    @NonNull CompletionStage<Void> clear();
+    CompletionStage<Void> clear();
 
     /**
      * Prints the current content.
@@ -227,7 +226,7 @@ public interface FileBasedActivity extends Activity {
      * operation has finished. For example
      * {@code return CompletableFuture.completedFuture(null);}
      */
-    @NonNull CompletionStage<Void> print(@NonNull PrinterJob job, @NonNull WorkState<Void> workState);
+    CompletionStage<Void> print(PrinterJob job, WorkState<Void> workState);
 
     /**
      * Returns true if this content is empty and can be replaced by
@@ -249,5 +248,5 @@ public interface FileBasedActivity extends Activity {
      * @return the title of the activity
      */
     @Override
-    @NonNull StringProperty titleProperty();
+    StringProperty titleProperty();
 }

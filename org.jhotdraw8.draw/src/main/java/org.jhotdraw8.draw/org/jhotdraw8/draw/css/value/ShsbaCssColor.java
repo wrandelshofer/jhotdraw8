@@ -6,7 +6,6 @@
 package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -42,12 +41,12 @@ import static org.jhotdraw8.base.util.MathUtil.clamp;
  * </dl>
  */
 public class ShsbaCssColor extends CssColor {
-    private static final @NonNull DoubleCssConverter num = new DoubleCssConverter(false);
-    public static final @NonNull SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
+    private static final DoubleCssConverter num = new DoubleCssConverter(false);
+    public static final SrgbaCssColor BLACK = new SrgbaCssColor(CssSize.ZERO, CssSize.ZERO, CssSize.ZERO, CssSize.ONE);
 
-    private final @NonNull CssSize hue, saturation, brightness, opacity;
+    private final CssSize hue, saturation, brightness, opacity;
 
-    public ShsbaCssColor(@NonNull Color color) {
+    public ShsbaCssColor(Color color) {
         super(toName(
                 CssSize.of(color.getHue()),
                 CssSize.of(color.getSaturation()),
@@ -59,7 +58,7 @@ public class ShsbaCssColor extends CssColor {
         this.opacity = CssSize.of(color.getOpacity());
     }
 
-    public ShsbaCssColor(@NonNull CssSize hue, @NonNull CssSize saturation, @NonNull CssSize brightness, @NonNull CssSize opacity) {
+    public ShsbaCssColor(CssSize hue, CssSize saturation, CssSize brightness, CssSize opacity) {
         super(toName(hue, saturation, brightness, opacity),
                 Color.hsb(
                         UnitConverter.PERCENTAGE.equals(hue.getUnits()) ? hue.getValue() / 360 : hue.getValue(),
@@ -74,7 +73,7 @@ public class ShsbaCssColor extends CssColor {
         this.opacity = opacity;
     }
 
-    private static String toName(@NonNull CssSize hue, @NonNull CssSize saturation, @NonNull CssSize brightness, @NonNull CssSize opacity) {
+    private static String toName(CssSize hue, CssSize saturation, CssSize brightness, CssSize opacity) {
         StringBuilder buf = new StringBuilder(20);
         if (UnitConverter.PERCENTAGE.equals(opacity.getUnits()) && opacity.getValue() == 100.0
             || opacity.getValue() == 1) {

@@ -4,14 +4,13 @@
  */
 package org.jhotdraw8.css.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -26,21 +25,21 @@ import java.util.function.Consumer;
  */
 public class MappedCssConverter<E> implements CssConverter<E> {
 
-    private final @NonNull Map<String, E> fromStringMap;
-    private final @NonNull Map<E, String> toStringMap;
+    private final Map<String, E> fromStringMap;
+    private final Map<E, String> toStringMap;
     private final boolean nullable;
-    private final @NonNull String name;
+    private final String name;
 
 
-    public MappedCssConverter(@NonNull String name, @NonNull Map<String, E> fromStringMap) {
+    public MappedCssConverter(String name, Map<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
 
-    public MappedCssConverter(@NonNull String name, @NonNull ReadOnlyMap<String, E> fromStringMap) {
+    public MappedCssConverter(String name, ReadOnlyMap<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
 
-    public MappedCssConverter(@NonNull String name, @NonNull Map<String, E> fromStringMap, boolean nullable) {
+    public MappedCssConverter(String name, Map<String, E> fromStringMap, boolean nullable) {
         this.fromStringMap = new LinkedHashMap<>();
         this.toStringMap = new LinkedHashMap<>();
         for (Map.Entry<String, E> entry : fromStringMap.entrySet()) {
@@ -51,12 +50,12 @@ public class MappedCssConverter<E> implements CssConverter<E> {
         this.nullable = nullable;
     }
 
-    public MappedCssConverter(@NonNull String name, @NonNull ReadOnlyMap<String, E> fromStringMap, boolean nullable) {
+    public MappedCssConverter(String name, ReadOnlyMap<String, E> fromStringMap, boolean nullable) {
         this(name, fromStringMap.asMap(), nullable);
     }
 
     @Override
-    public @Nullable E parse(@NonNull CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable E parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_IDENT) {
             throw new ParseException("Could not convert " + tt.getToken() + " to a value.", tt.getStartPosition());
         }
@@ -95,7 +94,7 @@ public class MappedCssConverter<E> implements CssConverter<E> {
     }
 
     @Override
-    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, @NonNull Consumer<CssToken> consumer) {
+    public <TT extends E> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> consumer) {
         if (value == null) {
             if (!nullable) {
                 throw new IllegalArgumentException("Could not convert the value=null to a string.");

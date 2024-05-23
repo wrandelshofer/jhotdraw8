@@ -18,8 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.manager.SimpleStylesheetsManager;
 import org.jhotdraw8.css.manager.StylesheetsManager;
 import org.jhotdraw8.css.value.CssSize;
@@ -29,6 +27,7 @@ import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -62,7 +61,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public @NonNull Node createNode(@NonNull RenderContext drawingView) {
+    public Node createNode(RenderContext drawingView) {
         Pane g = new Pane();
         g.setManaged(false);
 
@@ -73,7 +72,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         return g;
     }
 
-    protected @NonNull StylesheetsManager<Figure> createStyleManager() {
+    protected StylesheetsManager<Figure> createStyleManager() {
         return new SimpleStylesheetsManager<>(new FigureSelectorModel());
     }
 
@@ -87,12 +86,12 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
      * @return bounding box (0, 0, WIDTH, HEIGHT).
      */
     @Override
-    public @NonNull CssRectangle2D getCssLayoutBounds() {
+    public CssRectangle2D getCssLayoutBounds() {
         return new CssRectangle2D(CssSize.ZERO, CssSize.ZERO, getStyledNonNull(WIDTH), getStyledNonNull(HEIGHT));
     }
 
     @Override
-    public @NonNull Bounds getLayoutBounds() {
+    public Bounds getLayoutBounds() {
         // Note: We must override getBoundsInLocal of AbstractCompositeFigure.
         return getCssLayoutBounds().getConvertedBoundsValue();
     }
@@ -126,20 +125,20 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void reshapeInLocal(@NonNull Transform transform) {
+    public void reshapeInLocal(Transform transform) {
         Bounds b = getLayoutBounds();
         b = transform.transform(b);
         reshapeInLocal(b.getMinX(), b.getMinY(), b.getWidth(), b.getHeight());
     }
 
     @Override
-    public void reshapeInLocal(@NonNull CssSize x, @NonNull CssSize y, @NonNull CssSize width, @NonNull CssSize height) {
+    public void reshapeInLocal(CssSize x, CssSize y, CssSize width, CssSize height) {
         set(WIDTH, width.abs());
         set(HEIGHT, height.abs());
     }
 
     @Override
-    public void stylesheetChanged(@NonNull RenderContext ctx) {
+    public void stylesheetChanged(RenderContext ctx) {
         if (styleManager != null) {
             styleManager.setStylesheets(StyleOrigin.USER_AGENT, get(DOCUMENT_HOME), getList(USER_AGENT_STYLESHEETS));
             styleManager.setStylesheets(StyleOrigin.AUTHOR, get(DOCUMENT_HOME), getList(AUTHOR_STYLESHEETS));
@@ -149,7 +148,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public void updateNode(@NonNull RenderContext ctx, @NonNull Node n) {
+    public void updateNode(RenderContext ctx, Node n) {
         Pane g = (Pane) n;
         Bounds bounds = getLayoutBounds();
         g.setPrefWidth(bounds.getWidth());
@@ -175,7 +174,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         }
     }
 
-    public void updateBackground(@NonNull RenderContext ctx, @NonNull Pane g) {
+    public void updateBackground(RenderContext ctx, Pane g) {
         Paint paint = Paintable.getPaint(getStyled(BACKGROUND));
         if ((paint instanceof Color) && ((Color) paint).getOpacity() == 0) {
             paint = null;
@@ -185,7 +184,7 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     }
 
     @Override
-    public boolean isSuitableParent(@NonNull Figure newParent) {
+    public boolean isSuitableParent(Figure newParent) {
         return true;
     }
 

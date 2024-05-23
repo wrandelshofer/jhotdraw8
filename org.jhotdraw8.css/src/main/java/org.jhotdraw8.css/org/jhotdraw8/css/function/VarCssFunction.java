@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.css.function;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
@@ -42,20 +41,20 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
     /**
      * Function name.
      */
-    public static final @NonNull String NAME = "var";
+    public static final String NAME = "var";
 
     public VarCssFunction() {
         this(NAME);
     }
 
-    public VarCssFunction(@NonNull String name) {
+    public VarCssFunction(String name) {
         super(name);
     }
 
     @Override
-    public void process(@NonNull T element, @NonNull CssTokenizer tt, @NonNull SelectorModel<T> model,
-                        @NonNull CssFunctionProcessor<T> functionProcessor,
-                        @NonNull Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
+    public void process(T element, CssTokenizer tt, SelectorModel<T> model,
+                        CssFunctionProcessor<T> functionProcessor,
+                        Consumer<CssToken> out, Deque<CssFunction<T>> recursionStack) throws IOException, ParseException {
 
         tt.requireNextToken(CssTokenType.TT_FUNCTION, getName() + "(): function var() expected.");
         if (!getName().equals(tt.currentString())) {

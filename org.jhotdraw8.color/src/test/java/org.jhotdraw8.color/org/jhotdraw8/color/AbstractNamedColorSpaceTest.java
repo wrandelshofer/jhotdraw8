@@ -1,6 +1,5 @@
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.util.FloatFunction;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -35,7 +34,7 @@ public abstract class AbstractNamedColorSpaceTest {
      */
     private static final float EPSILON_EXPECTED_XYZ = 0x1p-10f;
 
-    protected abstract @NonNull NamedColorSpace getInstance();
+    protected abstract NamedColorSpace getInstance();
 
     @Test
     public void shouldHaveExpectedComponentNames() {

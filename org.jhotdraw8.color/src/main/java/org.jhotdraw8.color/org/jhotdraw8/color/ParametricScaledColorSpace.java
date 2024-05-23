@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 import java.io.Serial;
 
@@ -18,12 +17,12 @@ public class ParametricScaledColorSpace extends AbstractNamedColorSpace {
 
     @Serial
     private static final long serialVersionUID = 1L;
-    private final @NonNull NamedColorSpace labColorSpace;
-    private final @NonNull String name;
+    private final NamedColorSpace labColorSpace;
+    private final String name;
     private final float scale;
     private final float inverseScale;
 
-    public ParametricScaledColorSpace(@NonNull String name, float scale, @NonNull NamedColorSpace rgbColorSpace) {
+    public ParametricScaledColorSpace(String name, float scale, NamedColorSpace rgbColorSpace) {
         super(TYPE_RGB, 3);
         assert (rgbColorSpace.getType() == TYPE_RGB);
         this.name = name;
@@ -39,12 +38,12 @@ public class ParametricScaledColorSpace extends AbstractNamedColorSpace {
      * @return LCH color value.
      */
     @Override
-    public float @NonNull [] fromCIEXYZ(float @NonNull [] xyz, float @NonNull [] lch) {
+    public float[] fromCIEXYZ(float[] xyz, float[] lch) {
         return rgbToScaled(labColorSpace.fromCIEXYZ(xyz, lch), lch);
     }
 
     @Override
-    public float @NonNull [] fromRGB(float @NonNull [] rgb, float @NonNull [] lch) {
+    public float[] fromRGB(float[] rgb, float[] lch) {
         return rgbToScaled(labColorSpace.fromRGB(rgb, lch), lch);
     }
 
@@ -54,18 +53,18 @@ public class ParametricScaledColorSpace extends AbstractNamedColorSpace {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
-    protected float @NonNull [] scaledToRgb(float @NonNull [] scaled, float @NonNull [] rgb) {
+    protected float[] scaledToRgb(float[] scaled, float[] rgb) {
         rgb[0] = scaled[0] * inverseScale;
         rgb[1] = scaled[1] * inverseScale;
         rgb[2] = scaled[2] * inverseScale;
         return rgb;
     }
 
-    protected float @NonNull [] rgbToScaled(float @NonNull [] rgb, float @NonNull [] scaled) {
+    protected float[] rgbToScaled(float[] rgb, float[] scaled) {
         scaled[0] = rgb[0] * scale;
         scaled[1] = rgb[1] * scale;
         scaled[2] = rgb[2] * scale;
@@ -79,12 +78,12 @@ public class ParametricScaledColorSpace extends AbstractNamedColorSpace {
      * @return CIEXYZ color value.
      */
     @Override
-    public float @NonNull [] toCIEXYZ(float @NonNull [] colorvalue, float @NonNull [] xyz) {
+    public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return labColorSpace.toCIEXYZ(scaledToRgb(colorvalue, xyz), xyz);
     }
 
     @Override
-    public float @NonNull [] toRGB(float @NonNull [] lch, float @NonNull [] rgb) {
+    public float[] toRGB(float[] lch, float[] rgb) {
         return labColorSpace.toRGB(scaledToRgb(lch, rgb), rgb);
     }
 

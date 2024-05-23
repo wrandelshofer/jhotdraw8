@@ -6,7 +6,6 @@ package org.jhotdraw8.fxcontrols.dock;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.collections.ObservableList;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlyList;
 
@@ -20,14 +19,12 @@ public interface DockParent extends DockChild {
     /**
      * The name of the {@link #editableProperty()}.
      */
-    @NonNull
     String EDITABLE_PROPERTY = "editable";
 
-    @NonNull
     ObservableList<DockChild> getDockChildren();
 
     @Override
-    default @NonNull ReadOnlyList<DockChild> getDockChildrenReadOnly() {
+    default ReadOnlyList<DockChild> getDockChildrenReadOnly() {
         return new ReadOnlyListFacade<>(getDockChildren());
     }
 
@@ -36,7 +33,6 @@ public interface DockParent extends DockChild {
      *
      * @return true if this dock parent is editable.
      */
-    @NonNull
     BooleanProperty editableProperty();
 
     /**
@@ -57,7 +53,6 @@ public interface DockParent extends DockChild {
         editableProperty().set(value);
     }
 
-    @NonNull
     TrackAxis getDockAxis();
 
     /**

@@ -10,12 +10,11 @@ import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.geom.FXRectangles;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Draws the {@code boundsInLocal} of all selected figurs, but does not provide
@@ -25,7 +24,7 @@ import org.jhotdraw8.geom.FXRectangles;
  */
 public class MultipleSelectionOutlineHandle extends AbstractHandle {
 
-    private final @NonNull Polygon node;
+    private final Polygon node;
     private final double[] points;
 
     public MultipleSelectionOutlineHandle() {
@@ -41,7 +40,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
         return false;
     }
 
-    private @Nullable Bounds getBounds(@NonNull DrawingView dv) {
+    private @Nullable Bounds getBounds(DrawingView dv) {
         Bounds b = null;
         for (Figure f : dv.getSelectedFigures()) {
             Transform l2w = f.getLocalToWorld();
@@ -61,13 +60,13 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public Node getNode(@NonNull DrawingView view) {
+    public Node getNode(DrawingView view) {
         CssColor color = view.getEditor().getHandleColor();
         node.setStroke(color.getColor());
         return node;
     }
 
-    protected void initNode(@NonNull Polygon r) {
+    protected void initNode(Polygon r) {
         r.setFill(null);
     }
 
@@ -77,7 +76,7 @@ public class MultipleSelectionOutlineHandle extends AbstractHandle {
     }
 
     @Override
-    public void updateNode(@NonNull DrawingView view) {
+    public void updateNode(DrawingView view) {
         Bounds b = getBounds(view);
         if (b == null) {
             return;

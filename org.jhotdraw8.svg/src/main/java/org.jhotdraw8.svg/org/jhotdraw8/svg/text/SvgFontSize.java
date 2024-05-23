@@ -5,10 +5,10 @@
 
 package org.jhotdraw8.svg.text;
 
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jspecify.annotations.Nullable;
 
 /**
  * SVG font size.

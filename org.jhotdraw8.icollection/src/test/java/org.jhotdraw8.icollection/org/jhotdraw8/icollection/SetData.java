@@ -1,6 +1,5 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
 import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
@@ -13,11 +12,11 @@ import java.util.Set;
  * The test data.
  */
 public final class SetData {
-    private final @NonNull String name;
-    public final @NonNull ReadOnlySet<Key> a;
-    public final @NonNull ReadOnlySet<Key> b;
-    public final @NonNull ReadOnlySet<Key> someAPlusSomeB;
-    public final @NonNull ReadOnlySet<Key> c;
+    private final String name;
+    public final ReadOnlySet<Key> a;
+    public final ReadOnlySet<Key> b;
+    public final ReadOnlySet<Key> someAPlusSomeB;
+    public final ReadOnlySet<Key> c;
 
     /**
      * Creates a new instance with 3 maps of the same non-empty size.
@@ -69,7 +68,7 @@ public final class SetData {
     }
 
 
-    public static @NonNull SetData newData(@NonNull String name, int hashBitMask, int size, int bound) {
+    public static SetData newData(String name, int hashBitMask, int size, int bound) {
         Random rng = new Random(0);
         LinkedHashSet<Key> a = new LinkedHashSet<>(size * 2);
         LinkedHashSet<Key> b = new LinkedHashSet<>(size * 2);
@@ -90,7 +89,7 @@ public final class SetData {
                 new ReadOnlySetFacade<>(c));
     }
 
-    public static @NonNull SetData newNiceData(String name, int hashBitMask, int size, int bound) {
+    public static SetData newNiceData(String name, int hashBitMask, int size, int bound) {
         int count = 0;
         LinkedHashSet<Key> a = new LinkedHashSet<>(size * 2);
         LinkedHashSet<Key> b = new LinkedHashSet<>(size * 2);
@@ -107,7 +106,7 @@ public final class SetData {
                 new ReadOnlySetFacade<>(c));
     }
 
-    private static int createNewValue(@NonNull Random rng, @NonNull Set<Integer> usedValues, int bound) {
+    private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {
         int value;
         int count = 0;
         do {

@@ -5,8 +5,7 @@
 
 package org.jhotdraw8.fxbase.beans;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 
@@ -18,7 +17,8 @@ public interface ReadOnlyPropertyBean {
      * @param key the key
      * @return the value
      */
-    @Nullable <T> T get(@NonNull MapAccessor<T> key);
+    @Nullable
+    <T> T get(MapAccessor<T> key);
 
     /**
      * Gets a nonnull property value.
@@ -27,5 +27,5 @@ public interface ReadOnlyPropertyBean {
      * @param key the key
      * @return the value
      */
-    @NonNull <T> T getNonNull(@NonNull NonNullMapAccessor<T> key);
+    <T> T getNonNull(NonNullMapAccessor<T> key);
 }

@@ -3,12 +3,16 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Provides JavaFX-specific utility classes used by the JHotDraw framework.
  */
 @SuppressWarnings("module")
+@NullMarked
 module org.jhotdraw8.fxbase {
-    requires transitive static org.jhotdraw8.annotation;
+    requires transitive static org.jspecify;
+
     requires transitive org.jhotdraw8.base;
     requires transitive javafx.base;
     requires transitive javafx.graphics;

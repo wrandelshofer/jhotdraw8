@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.Iterators;
@@ -26,28 +25,28 @@ import java.util.function.Function;
  * @param <E> the element type
  */
 public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements ImmutableSet<E> {
-    private final @NonNull Set<E> target;
-    private final @NonNull Function<Set<E>, Set<E>> cloneFunction;
+    private final Set<E> target;
+    private final Function<Set<E>, Set<E>> cloneFunction;
 
-    public ImmutableSetFacade(@NonNull Set<E> target, @NonNull Function<Set<E>, Set<E>> cloneFunction) {
+    public ImmutableSetFacade(Set<E> target, Function<Set<E>, Set<E>> cloneFunction) {
         this.target = target;
         this.cloneFunction = cloneFunction;
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public <T> @NonNull ImmutableSet<T> empty() {
+    public <T> ImmutableSet<T> empty() {
         return new ImmutableSetFacade<>(new LinkedHashSet<>(), k -> (Set<T>) ((LinkedHashSet<?>) k).clone());
     }
 
     @Override
-    public @NonNull ImmutableSet<E> add(E element) {
+    public ImmutableSet<E> add(E element) {
         Set<E> clone = cloneFunction.apply(target);
         return clone.add(element) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
     }
 
     @Override
-    public @NonNull ImmutableSet<E> addAll(@NonNull Iterable<? extends E> c) {
+    public ImmutableSet<E> addAll(Iterable<? extends E> c) {
         Set<E> clone = cloneFunction.apply(target);
         boolean changed = false;
         for (E e : c) {
@@ -57,13 +56,13 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
-    public @NonNull ImmutableSet<E> remove(E element) {
+    public ImmutableSet<E> remove(E element) {
         Set<E> clone = cloneFunction.apply(target);
         return clone.remove(element) ? new ImmutableSetFacade<>(clone, cloneFunction) : this;
     }
 
     @Override
-    public @NonNull ImmutableSet<E> removeAll(@NonNull Iterable<?> c) {
+    public ImmutableSet<E> removeAll(Iterable<?> c) {
         Set<E> clone = cloneFunction.apply(target);
         boolean changed = false;
         for (Object e : c) {
@@ -74,7 +73,7 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
 
     @SuppressWarnings("unchecked")
     @Override
-    public @NonNull ImmutableSet<E> retainAll(@NonNull Iterable<?> c) {
+    public ImmutableSet<E> retainAll(Iterable<?> c) {
         if (isEmpty()) {
             return this;
         }
@@ -107,7 +106,7 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
-    public @NonNull Iterator<E> iterator() {
+    public Iterator<E> iterator() {
         return Iterators.unmodifiableIterator(target.iterator());
     }
 
@@ -117,7 +116,7 @@ public class ImmutableSetFacade<E> extends AbstractReadOnlySet<E> implements Imm
     }
 
     @Override
-    public @NonNull Set<E> toMutable() {
+    public Set<E> toMutable() {
         return cloneFunction.apply(target);
     }
 

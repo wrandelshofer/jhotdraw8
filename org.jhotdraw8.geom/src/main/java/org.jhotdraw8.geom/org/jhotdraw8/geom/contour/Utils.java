@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.geom.Angles;
@@ -170,12 +169,12 @@ public class Utils {
         return Points2D.normalize(result);
     }
 
-    static <T> int nextWrappingIndex(int index, @NonNull List<T> container) {
+    static <T> int nextWrappingIndex(int index, List<T> container) {
         return index == container.size() - 1 ? 0 : index + 1;
 
     }
 
-    static <T> int prevWrappingIndex(int index, @NonNull List<T> container) {
+    static <T> int prevWrappingIndex(int index, List<T> container) {
         return index == 0 ? container.size() - 1 : index - 1;
 
     }

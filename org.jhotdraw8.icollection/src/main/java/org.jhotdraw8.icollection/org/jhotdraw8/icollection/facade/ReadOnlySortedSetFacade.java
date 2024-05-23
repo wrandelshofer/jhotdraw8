@@ -4,9 +4,8 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.readonly.ReadOnlySortedSet;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Comparator;
 import java.util.Iterator;
@@ -25,27 +24,27 @@ import java.util.function.Supplier;
 public class ReadOnlySortedSetFacade<E> extends ReadOnlySetFacade<E>
         implements ReadOnlySortedSet<E> {
 
-    final @NonNull Supplier<E> getFirstFunction;
+    final Supplier<E> getFirstFunction;
 
-    final @NonNull Supplier<E> getLastFunction;
-    final @NonNull Supplier<Comparator<? super E>> comparatorSupplier;
-    final @NonNull Supplier<Iterator<E>> reverseIteratorFunction;
+    final Supplier<E> getLastFunction;
+    final Supplier<Comparator<? super E>> comparatorSupplier;
+    final Supplier<Iterator<E>> reverseIteratorFunction;
 
-    public ReadOnlySortedSetFacade(@NonNull SortedSet<E> s) {
+    public ReadOnlySortedSetFacade(SortedSet<E> s) {
         this(s::iterator, () -> s.reversed().iterator(), s::size,
                 s::contains, s::getFirst, s::getLast,
                 s::comparator,
                 Spliterator.SIZED | Spliterator.DISTINCT | Spliterator.ORDERED);
     }
 
-    public ReadOnlySortedSetFacade(@NonNull Supplier<Iterator<E>> iteratorFunction,
-                                   @NonNull Supplier<Iterator<E>> reverseIteratorFunction,
-                                   @NonNull IntSupplier sizeFunction,
-                                   @NonNull Predicate<Object> containsFunction,
-                                   @NonNull Supplier<E> getFirstFunction,
-                                   @NonNull Supplier<E> getLastFunction,
+    public ReadOnlySortedSetFacade(Supplier<Iterator<E>> iteratorFunction,
+                                   Supplier<Iterator<E>> reverseIteratorFunction,
+                                   IntSupplier sizeFunction,
+                                   Predicate<Object> containsFunction,
+                                   Supplier<E> getFirstFunction,
+                                   Supplier<E> getLastFunction,
 
-                                   final @NonNull Supplier<Comparator<? super E>> comparatorSupplier,
+                                   final Supplier<Comparator<? super E>> comparatorSupplier,
                                    int characteristics) {
         super(iteratorFunction, sizeFunction, containsFunction, characteristics);
         this.getFirstFunction = getFirstFunction;
@@ -67,7 +66,7 @@ public class ReadOnlySortedSetFacade<E> extends ReadOnlySetFacade<E>
     }
 
     @Override
-    public @NonNull ReadOnlySortedSet<E> readOnlyReversed() {
+    public ReadOnlySortedSet<E> readOnlyReversed() {
         return new ReadOnlySortedSetFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

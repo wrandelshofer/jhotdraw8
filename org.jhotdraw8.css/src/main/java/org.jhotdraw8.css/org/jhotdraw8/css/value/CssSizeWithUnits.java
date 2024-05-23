@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.css.value;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Represents a size specified in a particular unit.
@@ -25,7 +24,7 @@ import org.jhotdraw8.annotation.Nullable;
  * @author Werner Randelshofer
  */
 public class CssSizeWithUnits extends CssSize {
-    private final @NonNull String units;
+    private final String units;
 
     CssSizeWithUnits(double value, @Nullable String units) {
         super(value);
@@ -33,7 +32,7 @@ public class CssSizeWithUnits extends CssSize {
     }
 
     @Override
-    public @NonNull String getUnits() {
+    public String getUnits() {
         return units;
     }
 

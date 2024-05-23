@@ -5,12 +5,11 @@
 package org.jhotdraw8.css.manager;
 
 import javafx.css.StyleOrigin;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.function.Consumer3;
 import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.css.model.SelectorModel;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.text.ParseException;
@@ -33,7 +32,7 @@ public interface StylesheetsManager<E> {
      * @param origin the style origin
      * @param url    the stylesheet url
      */
-    default void addStylesheet(@NonNull StyleOrigin origin, @NonNull URI url) {
+    default void addStylesheet(StyleOrigin origin, URI url) {
         addStylesheet(origin, url, url);
     }
 
@@ -44,7 +43,7 @@ public interface StylesheetsManager<E> {
      * @param stylesheetUri the stylesheet url
      * @param documentHome  the document Home url
      */
-    void addStylesheet(@NonNull StyleOrigin origin, @NonNull URI stylesheetUri, @NonNull URI documentHome);
+    void addStylesheet(StyleOrigin origin, URI stylesheetUri, URI documentHome);
 
     /**
      * Adds a stylesheet with the specified origin.
@@ -52,7 +51,7 @@ public interface StylesheetsManager<E> {
      * @param origin     the style origin
      * @param stylesheet the stylesheet
      */
-    void addStylesheet(@NonNull StyleOrigin origin, @NonNull Stylesheet stylesheet);
+    void addStylesheet(StyleOrigin origin, Stylesheet stylesheet);
 
     /**
      * Adds a stylesheet with the specified origin.
@@ -60,9 +59,9 @@ public interface StylesheetsManager<E> {
      * @param origin     the style origin
      * @param stylesheet the stylesheet given as a literal string
      */
-    void addStylesheet(@NonNull StyleOrigin origin, @NonNull String stylesheet, @Nullable URI documentHome);
+    void addStylesheet(StyleOrigin origin, String stylesheet, @Nullable URI documentHome);
 
-    default void applyStylesheetsTo(@NonNull Iterable<E> iterable) {
+    default void applyStylesheetsTo(Iterable<E> iterable) {
         StreamSupport.stream(iterable.spliterator(), false).toList()
                 .stream()
                 .parallel()
@@ -109,7 +108,6 @@ public interface StylesheetsManager<E> {
      *
      * @return the selector model
      */
-    @NonNull
     SelectorModel<E> getSelectorModel();
 
     /**
@@ -133,7 +131,7 @@ public interface StylesheetsManager<E> {
      * @param elem the element
      * @return true the element was selected
      */
-    default boolean matchesElement(@NonNull Stylesheet s, E elem) {
+    default boolean matchesElement(Stylesheet s, E elem) {
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
             if (r.getSelectorGroup().matches(selectorModel, elem)) {
@@ -144,7 +142,7 @@ public interface StylesheetsManager<E> {
         return false;
     }
 
-    default List<StyleRule> getMatchingRulesForElement(@NonNull Stylesheet s, E elem) {
+    default List<StyleRule> getMatchingRulesForElement(Stylesheet s, E elem) {
         List<StyleRule> matchingRules = new ArrayList<>();
         SelectorModel<E> selectorModel = getSelectorModel();
         for (StyleRule r : s.getStyleRules()) {
@@ -162,7 +160,7 @@ public interface StylesheetsManager<E> {
      * @return the logger
      * @see #setLogger(Consumer3)
      */
-    @NonNull Consumer3<Level, String, Throwable> getLogger();
+    Consumer3<Level, String, Throwable> getLogger();
 
     /**
      * Sets the logger.
@@ -176,7 +174,7 @@ public interface StylesheetsManager<E> {
      *
      * @param logger a logger
      */
-    void setLogger(@NonNull Consumer3<Level, String, Throwable> logger);
+    void setLogger(Consumer3<Level, String, Throwable> logger);
 
     /**
      * Returns a localized help text.

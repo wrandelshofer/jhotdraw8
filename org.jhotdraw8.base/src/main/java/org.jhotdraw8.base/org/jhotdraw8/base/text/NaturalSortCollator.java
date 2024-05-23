@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.text;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serializable;
 import java.text.CollationKey;
@@ -46,7 +45,7 @@ import java.util.logging.Logger;
  */
 public class NaturalSortCollator extends Collator {
 
-    private final @NonNull Collator collator;
+    private final Collator collator;
 
     /**
      * Creates a new instance.
@@ -55,7 +54,7 @@ public class NaturalSortCollator extends Collator {
         this(Locale.getDefault());
     }
 
-    public NaturalSortCollator(@NonNull Locale locale) {
+    public NaturalSortCollator(Locale locale) {
         Collator c = Collator.getInstance(locale);
 
         if (c instanceof RuleBasedCollator) {
@@ -101,8 +100,8 @@ public class NaturalSortCollator extends Collator {
         this.collator = c;
     }
 
-    public static <T> @NonNull Comparator<T> comparing(
-            @NonNull Function<? super T, String> keyExtractor) {
+    public static <T> Comparator<T> comparing(
+            Function<? super T, String> keyExtractor) {
         NaturalSortCollator collator = new NaturalSortCollator();
         Objects.requireNonNull(keyExtractor, "keyExtractor");
         return (Comparator<T> & Serializable)
@@ -118,7 +117,7 @@ public class NaturalSortCollator extends Collator {
      * @param start start index of digit group
      * @param end   end index+ 1 of digit group
      */
-    private void appendDigitGroup(@NonNull StringBuilder out, @NonNull String s, int start, int end) {
+    private void appendDigitGroup(StringBuilder out, String s, int start, int end) {
         assert start < end : "start:" + start + " end:" + end;
         int num = Math.min(100, end - start) - 1;
         out.append((char) (num / 10 + '0'));
@@ -186,7 +185,7 @@ public class NaturalSortCollator extends Collator {
     }
 
     @Override
-    public @NonNull CollationKey getCollationKey(@NonNull String source) {
+    public CollationKey getCollationKey(String source) {
         return collator.getCollationKey(expandNumbers(source));
     }
 

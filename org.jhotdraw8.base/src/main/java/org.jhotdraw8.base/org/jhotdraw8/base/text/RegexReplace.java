@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.base.text;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 import java.util.logging.Level;
@@ -42,11 +41,11 @@ public class RegexReplace {
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "/" + escape(find) + "/" + escape(replace) + "/";
     }
 
-    private @NonNull String escape(@Nullable String str) {
+    private String escape(@Nullable String str) {
         return str == null ? "" : str.replace("/", "\\/");
     }
 

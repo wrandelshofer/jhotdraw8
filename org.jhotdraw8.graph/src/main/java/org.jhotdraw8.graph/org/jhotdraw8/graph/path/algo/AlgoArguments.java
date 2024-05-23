@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.graph.path.algo;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Provides methods for checking common algorithm arguments.
@@ -28,7 +27,7 @@ class AlgoArguments {
      * @param zero      must be {@literal = 0}
      * @param costLimit must be {@literal >= zero}
      */
-    static <CC extends Number & Comparable<CC>> void checkMaxDepthMaxCostArguments(int maxDepth, @NonNull CC zero, @NonNull CC costLimit) {
+    static <CC extends Number & Comparable<CC>> void checkMaxDepthMaxCostArguments(int maxDepth, CC zero, CC costLimit) {
         checkMaxDepth(maxDepth);
         checkZero(zero);
         if (costLimit.compareTo(zero) < 0) {
@@ -41,7 +40,7 @@ class AlgoArguments {
      *
      * @param zero must be {@literal = 0}
      */
-    static <CC extends Number & Comparable<CC>> void checkZero(@NonNull CC zero) {
+    static <CC extends Number & Comparable<CC>> void checkZero(CC zero) {
         if (zero.intValue() != 0) {
             throw new IllegalArgumentException("zero must be = 0. zero=" + zero);
         }

@@ -5,10 +5,10 @@
 package org.jhotdraw8.draw.figure;
 
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A figure which supports markers at the nodes of a path.

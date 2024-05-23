@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -36,7 +35,6 @@ public interface MapAccessor<T> {
      *
      * @return name string.
      */
-    @NonNull
     String getName();
 
     /**
@@ -46,9 +44,9 @@ public interface MapAccessor<T> {
      * @return The value of the attribute.
      */
     @Nullable
-    T get(@NonNull Map<? super Key<?>, Object> a);
+    T get(Map<? super Key<?>, Object> a);
 
-    default @Nullable T get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+    default @Nullable T get(ReadOnlyMap<? super Key<?>, Object> a) {
         return get(a.asMap());
     }
 
@@ -60,7 +58,7 @@ public interface MapAccessor<T> {
      * @return The old value.
      */
     @Nullable
-    T put(@NonNull Map<? super Key<?>, Object> a, @Nullable T value);
+    T put(Map<? super Key<?>, Object> a, @Nullable T value);
 
     /**
      * Puts the value of the attribute denoted by this accessor from a Map.
@@ -69,7 +67,7 @@ public interface MapAccessor<T> {
      * @param value The new value. Subclasses may require that the value is non-null.
      * @return The updated map.
      */
-    @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable T value);
+    ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable T value);
 
     /**
      * Sets the value of the attribute denoted by this accessor from a Map.
@@ -77,7 +75,7 @@ public interface MapAccessor<T> {
      * @param a     A map.
      * @param value The new value. Subclasses may require that the value is non-null.
      */
-    default void set(@NonNull Map<? super Key<?>, Object> a, @Nullable T value) {
+    default void set(Map<? super Key<?>, Object> a, @Nullable T value) {
         put(a, value);
     }
 
@@ -88,7 +86,7 @@ public interface MapAccessor<T> {
      * @return The old value.
      */
     @Nullable
-    T remove(@NonNull Map<? super Key<?>, Object> a);
+    T remove(Map<? super Key<?>, Object> a);
 
     /**
      * Removes the value of the attribute denoted by this accessor from a Map.
@@ -96,8 +94,7 @@ public interface MapAccessor<T> {
      * @param a A map.
      * @return The old value.
      */
-    @NonNull
-    ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a);
+    ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a);
 
     /**
      * Returns the value type of this map accessor.
@@ -105,13 +102,13 @@ public interface MapAccessor<T> {
      * If the value type has type parameters, make sure to create it using
      * {@link TypeToken}.
      */
-    @NonNull Type getValueType();
+    Type getValueType();
 
     /**
      * Returns the raw value type of this map accessor.
      */
     @SuppressWarnings("unchecked")
-    default @NonNull Class<T> getRawValueType() {
+    default Class<T> getRawValueType() {
         Type t = getValueType();
         return (Class<T>) ((t instanceof ParameterizedType) ? ((ParameterizedType) t).getRawType() : t);
     }

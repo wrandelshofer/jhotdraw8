@@ -4,10 +4,9 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
@@ -20,7 +19,7 @@ import java.lang.reflect.Type;
 public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
 
     private static final long serialVersionUID = 1L;
-    private final @NonNull String cssName;
+    private final String cssName;
     private final @Nullable String namespace;
 
 
@@ -32,7 +31,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements 
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@NonNull String key, @NonNull Type type, @Nullable T defaultValue) {
+    public AbstractStyleableKey(String key, Type type, @Nullable T defaultValue) {
         this(null, key, ReadOnlyStyleableMapAccessor.toCssName(key), type, defaultValue == null, defaultValue);
     }
 
@@ -46,7 +45,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements 
      * @param isNullable   Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull Type type, boolean isNullable, @Nullable T defaultValue) {
+    public AbstractStyleableKey(@Nullable String namespace, String name, Type type, boolean isNullable, @Nullable T defaultValue) {
         this(namespace, name, ReadOnlyStyleableMapAccessor.toCssName(name), type, isNullable, defaultValue);
     }
 
@@ -61,14 +60,14 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements 
      * @param isNullable   Whether the value may be set to null
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(@Nullable String namespace, @NonNull String name, @NonNull String cssName, @NonNull Type type, boolean isNullable, @Nullable T defaultValue) {
+    public AbstractStyleableKey(@Nullable String namespace, String name, String cssName, Type type, boolean isNullable, @Nullable T defaultValue) {
         super(name, type, isNullable, defaultValue);
         this.cssName = cssName;
         this.namespace = namespace;
     }
 
     @Override
-    public @NonNull String getCssName() {
+    public String getCssName() {
         return cssName;
     }
 

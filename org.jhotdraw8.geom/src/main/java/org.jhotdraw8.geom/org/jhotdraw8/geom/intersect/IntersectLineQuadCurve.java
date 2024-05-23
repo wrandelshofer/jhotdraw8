@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
@@ -37,7 +36,7 @@ public class IntersectLineQuadCurve {
      * @param a1 point 0 of 'a'
      * @return the computed intersection
      */
-    public static @NonNull IntersectionResult intersectLineQuadCurve(@NonNull Point2D a0, @NonNull Point2D a1, @NonNull Point2D p0, @NonNull Point2D p1, @NonNull Point2D p2) {
+    public static IntersectionResult intersectLineQuadCurve(Point2D a0, Point2D a1, Point2D p0, Point2D p1, Point2D p2) {
         return intersectLineQuadCurve(
                 a0.getX(), a0.getY(),
                 a1.getX(), a1.getY(),
@@ -46,7 +45,7 @@ public class IntersectLineQuadCurve {
                 p2.getX(), p2.getY());
     }
 
-    public static @NonNull IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
+    public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
                                                                      double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         return intersectLineQuadCurve(
                 a0x, a0y,
@@ -70,7 +69,7 @@ public class IntersectLineQuadCurve {
      * @param epsilon
      * @return
      */
-    public static @NonNull IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
+    public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
                                                                      double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
                                                                      double epsilon) {
         /* steps:

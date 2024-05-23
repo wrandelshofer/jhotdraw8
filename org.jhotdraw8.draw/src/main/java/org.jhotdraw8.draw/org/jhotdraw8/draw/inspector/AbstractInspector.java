@@ -8,7 +8,6 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * AbstractInspector.
@@ -18,19 +17,19 @@ import org.jhotdraw8.annotation.NonNull;
  */
 public abstract class AbstractInspector<S> implements Inspector<S> {
 
-    protected final @NonNull ObjectProperty<S> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
-    protected final @NonNull BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
+    protected final ObjectProperty<S> subject = new SimpleObjectProperty<>(this, SUBJECT_PROPERTY);
+    protected final BooleanProperty showing = new SimpleBooleanProperty(this, SHOWING_PROPERTY, true);
 
     public AbstractInspector() {
     }
 
     @Override
-    public @NonNull ObjectProperty<S> subjectProperty() {
+    public ObjectProperty<S> subjectProperty() {
         return subject;
     }
 
     @Override
-    public @NonNull BooleanProperty showingProperty() {
+    public BooleanProperty showingProperty() {
         return showing;
     }
 

@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * Maps a color into the gamut of a color space.
@@ -27,5 +26,5 @@ public interface GamutMapper {
      * @param mapped the mapped value is copied into this array. Can be the same array as {@code value}.
      * @return the mapped value
      */
-    float @NonNull [] map(float @NonNull [] value, float @NonNull [] mapped);
+    float[] map(float[] value, float[] mapped);
 }

@@ -1,7 +1,6 @@
 package org.jhotdraw8.collection.pair;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -28,7 +27,7 @@ public interface OrderedPair<U, V> {
      * @param <V>  the type of the second element of the pair
      * @return true if equal
      */
-    static <U, V> boolean orderedPairEquals(@NonNull OrderedPair<U, V> pair, @Nullable Object obj) {
+    static <U, V> boolean orderedPairEquals(OrderedPair<U, V> pair, @Nullable Object obj) {
         if (pair == obj) {
             return true;
         }
@@ -54,7 +53,7 @@ public interface OrderedPair<U, V> {
      * @param <V>  the type of the second element of the pair
      * @return the hash code
      */
-    static <U, V> int orderedPairHashCode(@NonNull OrderedPair<U, V> pair) {
+    static <U, V> int orderedPairHashCode(OrderedPair<U, V> pair) {
         int hash = 3;
         hash = 59 * hash + Objects.hashCode(pair.first());
         hash = 59 * hash + Objects.hashCode(pair.second());

@@ -4,13 +4,12 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
 import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
 import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 import java.util.Objects;
@@ -23,13 +22,13 @@ import java.util.Objects;
  */
 public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
 
-    private final @NonNull MapAccessor<ImmutableSet<E>> setAccessor;
+    private final MapAccessor<ImmutableSet<E>> setAccessor;
     private final @Nullable E value;
     private final boolean defaultValue;
-    private final @NonNull String name;
+    private final String name;
     private final boolean isTransient;
 
-    public SetValueMapAccessor(@NonNull String name, boolean isTransient, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
+    public SetValueMapAccessor(String name, boolean isTransient, MapAccessor<ImmutableSet<E>> setAccessor, @Nullable E value, boolean defaultValue) {
         Objects.requireNonNull(value, "value");
         this.setAccessor = setAccessor;
         this.value = value;
@@ -38,18 +37,18 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
         this.isTransient = isTransient;
     }
 
-    public SetValueMapAccessor(@NonNull String name, @NonNull MapAccessor<ImmutableSet<E>> setAccessor, E value) {
+    public SetValueMapAccessor(String name, MapAccessor<ImmutableSet<E>> setAccessor, E value) {
         this(name, false, setAccessor, value, false);
     }
 
     @Override
-    public Boolean get(@NonNull Map<? super Key<?>, Object> a) {
+    public Boolean get(Map<? super Key<?>, Object> a) {
         ImmutableSet<E> es = setAccessor.get(a);
         return es != null && es.contains(value);
     }
 
     @Override
-    public Boolean get(@NonNull ReadOnlyMap<? super Key<?>, Object> a) {
+    public Boolean get(ReadOnlyMap<? super Key<?>, Object> a) {
         ImmutableSet<E> es = setAccessor.get(a);
         return es != null && es.contains(value);
     }
@@ -60,17 +59,17 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public @NonNull String getName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public @NonNull ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
+    public ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
         return ChampVectorSet.of(setAccessor);
     }
 
     @Override
-    public @NonNull Class<Boolean> getValueType() {
+    public Class<Boolean> getValueType() {
         return Boolean.class;
     }
 
@@ -80,7 +79,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public Boolean put(@NonNull Map<? super Key<?>, Object> a, @Nullable Boolean value) {
+    public Boolean put(Map<? super Key<?>, Object> a, @Nullable Boolean value) {
         ImmutableSet<E> set = setAccessor.get(a);
         assert set != null;
         boolean oldValue = set.contains(this.value);
@@ -94,7 +93,7 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Boolean value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable Boolean value) {
         ImmutableSet<E> set = setAccessor.get(a);
         assert set != null;
         if (value != null && value) {
@@ -106,12 +105,12 @@ public class SetValueMapAccessor<E> implements CompositeMapAccessor<Boolean> {
     }
 
     @Override
-    public Boolean remove(@NonNull Map<? super Key<?>, Object> a) {
+    public Boolean remove(Map<? super Key<?>, Object> a) {
         return put(a, false);
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         return setAccessor.remove(a);
     }
 }

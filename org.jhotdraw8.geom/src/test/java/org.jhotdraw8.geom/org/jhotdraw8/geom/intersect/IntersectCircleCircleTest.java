@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -23,7 +22,7 @@ public class IntersectCircleCircleTest {
 
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsCircleCircle() {
+    public List<DynamicTest> dynamicTestsCircleCircle() {
         return Arrays.asList(
                 dynamicTest("2 intersections same radius", () -> testIntersectCircleCircle_5args(
                         100, 100, 100, 150, 100, 100, IntersectionStatus.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),
@@ -45,7 +44,7 @@ public class IntersectCircleCircleTest {
     }
 
     @TestFactory
-    public @NonNull List<DynamicTest> dynamicTestsCircleCircleEx() {
+    public List<DynamicTest> dynamicTestsCircleCircleEx() {
         return Arrays.asList(
                 dynamicTest("2 intersections same radius", () -> testIntersectCircleCircle_5argsEx(
                         100, 100, 100, 150, 100, 100, IntersectionStatus.INTERSECTION, new double[]{1.318116071652818, -1.318116071652818})),
@@ -68,7 +67,7 @@ public class IntersectCircleCircleTest {
 
 
     public static void testIntersectCircleCircle_5argsEx(double c1x, double c1y, double r1, double c2x, double c2y, double r2,
-                                                         @NonNull IntersectionStatus expectedStatus, @NonNull double[] expected) {
+                                                         IntersectionStatus expectedStatus, double[] expected) {
         IntersectionResultEx isect = IntersectCircleCircle.intersectCircleCircleEx(c1x, c1y, r1, c2x, c2y, r2, Intersections.EPSILON);
         IntersectionStatus actualStatus = isect.getStatus();
 
@@ -82,7 +81,7 @@ public class IntersectCircleCircleTest {
     }
 
     public static void testIntersectCircleCircle_5args(double c1x, double c1y, double r1, double c2x, double c2y, double r2,
-                                                       @NonNull IntersectionStatus expectedStatus, @NonNull double[] expected) {
+                                                       IntersectionStatus expectedStatus, double[] expected) {
         IntersectionResult isect = IntersectCircleCircle.intersectCircleCircle(c1x, c1y, r1, c2x, c2y, r2, Intersections.EPSILON);
         IntersectionStatus actualStatus = isect.getStatus();
 

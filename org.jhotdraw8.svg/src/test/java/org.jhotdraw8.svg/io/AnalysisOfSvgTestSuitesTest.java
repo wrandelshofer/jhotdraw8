@@ -24,7 +24,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.draw.figure.Figure;
@@ -67,14 +66,14 @@ public class AnalysisOfSvgTestSuitesTest {
      * <p>
      * <a href="https://github.com/web-platform-tests/wpt">github</a>
      */
-    private static final @NonNull String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
+    private static final String WPT_PATH = "/Users/Shared/Developer/SVG/web-platform-tests/github/wpt";
     /**
      * Set this constant to the path of the folder into which you checked
      * out the SVG Tiny 1.2 test suite.
      * <p>
      * <a href="https://dev.w3.org/cvsweb/SVG/profiles/1.2T/test/archives/W3C_SVG_12_TinyTestSuite.tar.gz">dev.w3.org</a>
      */
-    private static final @NonNull String W3C_SVG_12_TINY_TEST_SUITE = "/Users/Shared/Developer/SVG/W3C_SVG_12_TinyTestSuite";
+    private static final String W3C_SVG_12_TINY_TEST_SUITE = "/Users/Shared/Developer/SVG/W3C_SVG_12_TinyTestSuite";
 
     private static final boolean INTERACTIVE = true;
     private static final long INTERACTIVE_TIMEOUT_SECONDS = 60;
@@ -111,7 +110,7 @@ public class AnalysisOfSvgTestSuitesTest {
      */
     @TestFactory
     @Disabled
-    public @NonNull Stream<DynamicTest> dynamicTestsW3cSvgTiny12TestSuite() throws IOException {
+    public Stream<DynamicTest> dynamicTestsW3cSvgTiny12TestSuite() throws IOException {
         if (!Files.isDirectory(Path.of(W3C_SVG_12_TINY_TEST_SUITE))) {
             System.err.println("Please fix the path to W3C SVG 1.2 Tiny Test Suite: " +
                     Path.of(W3C_SVG_12_TINY_TEST_SUITE).toAbsolutePath());
@@ -160,7 +159,7 @@ public class AnalysisOfSvgTestSuitesTest {
      */
     @Disabled
     @TestFactory
-    public @NonNull Stream<DynamicTest> dynamicTestsWebPlatformTests() throws IOException {
+    public Stream<DynamicTest> dynamicTestsWebPlatformTests() throws IOException {
         if (!Files.isDirectory(Path.of(WPT_PATH))) {
             System.err.println("Please fix the path to web-platform-tests: " +
                     Path.of(WPT_PATH).toAbsolutePath());
@@ -184,7 +183,7 @@ public class AnalysisOfSvgTestSuitesTest {
 
     }
 
-    protected @NonNull String getLastTwoPathElements(Path p) {
+    protected String getLastTwoPathElements(Path p) {
         return p.getName(p.getNameCount() - 2)
                 + "/" + p.getName(p.getNameCount() - 1);
     }
@@ -311,7 +310,6 @@ public class AnalysisOfSvgTestSuitesTest {
         assertArrayEquals(expectedBuffer.array(), actualBuffer.array());
     }
 
-    @NonNull
     private WritableImage markDifferences(WritableImage actualImage, IntBuffer actualBuffer, IntBuffer expectedBuffer) {
         WritableImage markedDifferences = new WritableImage((int) actualImage.getWidth(), (int) actualImage.getHeight());
         int[] aa = actualBuffer.array();
@@ -328,7 +326,7 @@ public class AnalysisOfSvgTestSuitesTest {
         return markedDifferences;
     }
 
-    private @NonNull IntBuffer createIntBuffer(WritableImage actualImage) {
+    private IntBuffer createIntBuffer(WritableImage actualImage) {
         int w = (int) actualImage.getWidth();
         int h = (int) actualImage.getHeight();
         IntBuffer intBuffer = IntBuffer.allocate(w * h);

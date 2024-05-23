@@ -10,7 +10,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
-import org.jhotdraw8.annotation.NonNull;
 
 /**
  * ResizeButton.
@@ -21,7 +20,7 @@ public class ResizeButton extends Region {
 
     private Point2D pressed;
     private Point2D size;
-    private final @NonNull ObjectProperty<Region> target = new SimpleObjectProperty<>();
+    private final ObjectProperty<Region> target = new SimpleObjectProperty<>();
 
     public ResizeButton() {
         setOnMousePressed(this::mousePressed);
@@ -39,7 +38,7 @@ public class ResizeButton extends Region {
         target.set(value);
     }
 
-    private void mouseDragged(@NonNull MouseEvent evt) {
+    private void mouseDragged(MouseEvent evt) {
         final Region t = getTarget();
         if (t != null && pressed != null) {
             Point2D current = new Point2D(evt.getSceneX(), evt.getSceneY());
@@ -49,7 +48,7 @@ public class ResizeButton extends Region {
         }
     }
 
-    private void mousePressed(@NonNull MouseEvent evt) {
+    private void mousePressed(MouseEvent evt) {
         final Region t = getTarget();
         if (t != null) {
             pressed = new Point2D(evt.getSceneX(), evt.getSceneY());
@@ -57,7 +56,7 @@ public class ResizeButton extends Region {
         }
     }
 
-    public @NonNull ObjectProperty<Region> targetProperty() {
+    public ObjectProperty<Region> targetProperty() {
         return target;
     }
 

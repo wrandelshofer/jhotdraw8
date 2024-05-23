@@ -5,9 +5,8 @@
 
 package org.jhotdraw8.icollection.impl.champ;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.icollection.impl.IdentityObject;
+import org.jspecify.annotations.Nullable;
 
 import java.util.NoSuchElementException;
 import java.util.function.BiFunction;
@@ -61,7 +60,7 @@ public abstract class Node<D> {
      * We can not use {@code null}, because we allow storing null-data in the
      * trie.
      */
-    public static final @NonNull Object NO_DATA = new Object();
+    public static final Object NO_DATA = new Object();
     static final int HASH_CODE_LENGTH = 32;
     /**
      * Bit partition size in the range [1,5].
@@ -94,7 +93,7 @@ public abstract class Node<D> {
         return 1 << mask;
     }
 
-    public static <E> @NonNull E getFirst(@NonNull Node<E> node) {
+    public static <E> E getFirst(Node<E> node) {
         while (node instanceof BitmapIndexedNode<E> bxn) {
             int nodeMap = bxn.nodeMap();
             int dataMap = bxn.dataMap();
@@ -115,7 +114,7 @@ public abstract class Node<D> {
         throw new NoSuchElementException();
     }
 
-    public static <E> @NonNull E getLast(@NonNull Node<E> node) {
+    public static <E> E getLast(Node<E> node) {
         while (node instanceof BitmapIndexedNode<E> bxn) {
             int nodeMap = bxn.nodeMap();
             int dataMap = bxn.dataMap();
@@ -138,7 +137,7 @@ public abstract class Node<D> {
         return (dataHash >>> shift) & BIT_PARTITION_MASK;
     }
 
-    static <K> @NonNull Node<K> mergeTwoDataEntriesIntoNode(IdentityObject owner,
+    static <K> Node<K> mergeTwoDataEntriesIntoNode(IdentityObject owner,
                                                             K k0, int keyHash0,
                                                             K k1, int keyHash1,
                                                             int shift) {
@@ -195,7 +194,7 @@ public abstract class Node<D> {
      * @param other the other trie
      * @return true if equivalent
      */
-    abstract boolean equivalent(@NonNull Object other);
+    abstract boolean equivalent(Object other);
 
     /**
      * Finds a data object in the CHAMP trie, that matches the provided data
@@ -208,7 +207,7 @@ public abstract class Node<D> {
      * @return the found data, returns {@link #NO_DATA} if no data in the trie
      * matches the provided data.
      */
-    abstract Object find(D data, int dataHash, int shift, @NonNull BiPredicate<D, D> equalsFunction);
+    abstract Object find(D data, int dataHash, int shift, BiPredicate<D, D> equalsFunction);
 
     abstract @Nullable D getData(int index);
 
@@ -216,12 +215,12 @@ public abstract class Node<D> {
         return null;
     }
 
-    abstract @NonNull Node<D> getNode(int index);
+    abstract Node<D> getNode(int index);
 
     /**
      * Gets the node without de-referencing it.
      */
-    abstract @NonNull Object getNodeRaw(int index);
+    abstract Object getNodeRaw(int index);
 
     abstract boolean hasData();
 
@@ -261,10 +260,10 @@ public abstract class Node<D> {
      * @param equalsFunction a function that tests data objects for equality
      * @return the updated trie
      */
-    abstract @NonNull Node<D> remove(@Nullable IdentityObject owner, D data,
+    abstract Node<D> remove(@Nullable IdentityObject owner, D data,
                                      int dataHash, int shift,
-                                     @NonNull ChangeEvent<D> details,
-                                     @NonNull BiPredicate<D, D> equalsFunction);
+                            ChangeEvent<D> details,
+                            BiPredicate<D, D> equalsFunction);
 
     /**
      * Inserts or replaces a data object in the trie.
@@ -295,11 +294,11 @@ public abstract class Node<D> {
      *                       object
      * @return the updated trie
      */
-    abstract @NonNull Node<D> put(@Nullable IdentityObject owner, D newData,
-                                  int dataHash, int shift, @NonNull ChangeEvent<D> details,
-                                  @NonNull BiFunction<D, D, D> updateFunction,
-                                  @NonNull BiPredicate<D, D> equalsFunction,
-                                  @NonNull ToIntFunction<D> hashFunction);
+    abstract Node<D> put(@Nullable IdentityObject owner, D newData,
+                         int dataHash, int shift, ChangeEvent<D> details,
+                         BiFunction<D, D, D> updateFunction,
+                         BiPredicate<D, D> equalsFunction,
+                         ToIntFunction<D> hashFunction);
 
     /**
      * Inserts or replaces data elements from the specified other trie in this trie.
@@ -314,12 +313,12 @@ public abstract class Node<D> {
      * @param details        the change event for single elements
      * @return the updated trie
      */
-    protected abstract @NonNull Node<D> putAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift,
-                                               @NonNull BulkChangeEvent bulkChange,
-                                               @NonNull BiFunction<D, D, D> updateFunction,
-                                               @NonNull BiPredicate<D, D> equalsFunction,
-                                               @NonNull ToIntFunction<D> hashFunction,
-                                               @NonNull ChangeEvent<D> details);
+    protected abstract Node<D> putAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
+                                      BulkChangeEvent bulkChange,
+                                      BiFunction<D, D, D> updateFunction,
+                                      BiPredicate<D, D> equalsFunction,
+                                      ToIntFunction<D> hashFunction,
+                                      ChangeEvent<D> details);
 
     /**
      * Removes data elements in the specified other trie from this trie.
@@ -334,12 +333,12 @@ public abstract class Node<D> {
      * @param details        the change event for single elements
      * @return the updated trie
      */
-    protected abstract @NonNull Node<D> removeAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift,
-                                                  @NonNull BulkChangeEvent bulkChange,
-                                                  @NonNull BiFunction<D, D, D> updateFunction,
-                                                  @NonNull BiPredicate<D, D> equalsFunction,
-                                                  @NonNull ToIntFunction<D> hashFunction,
-                                                  @NonNull ChangeEvent<D> details);
+    protected abstract Node<D> removeAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
+                                         BulkChangeEvent bulkChange,
+                                         BiFunction<D, D, D> updateFunction,
+                                         BiPredicate<D, D> equalsFunction,
+                                         ToIntFunction<D> hashFunction,
+                                         ChangeEvent<D> details);
 
     /**
      * Retains data elements in this trie that are also in the other trie - removes the rest.
@@ -354,12 +353,12 @@ public abstract class Node<D> {
      * @param details        the change event for single elements
      * @return the updated trie
      */
-    protected abstract @NonNull Node<D> retainAll(@Nullable IdentityObject owner, @NonNull Node<D> otherNode, int shift,
-                                                  @NonNull BulkChangeEvent bulkChange,
-                                                  @NonNull BiFunction<D, D, D> updateFunction,
-                                                  @NonNull BiPredicate<D, D> equalsFunction,
-                                                  @NonNull ToIntFunction<D> hashFunction,
-                                                  @NonNull ChangeEvent<D> details);
+    protected abstract Node<D> retainAll(@Nullable IdentityObject owner, Node<D> otherNode, int shift,
+                                         BulkChangeEvent bulkChange,
+                                         BiFunction<D, D, D> updateFunction,
+                                         BiPredicate<D, D> equalsFunction,
+                                         ToIntFunction<D> hashFunction,
+                                         ChangeEvent<D> details);
 
     /**
      * Retains data elements in this trie for which the provided predicate returns true.
@@ -370,8 +369,8 @@ public abstract class Node<D> {
      * @param bulkChange updates the field {@link BulkChangeEvent#removed}
      * @return the updated trie
      */
-    protected abstract @NonNull Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift,
-                                                  @NonNull BulkChangeEvent bulkChange);
+    protected abstract Node<D> filterAll(@Nullable IdentityObject owner, Predicate<? super D> predicate, int shift,
+                                         BulkChangeEvent bulkChange);
 
     protected abstract int calculateSize();
 }

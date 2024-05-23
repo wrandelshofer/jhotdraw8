@@ -5,13 +5,12 @@
 package org.jhotdraw8.draw.key;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.Scale2DCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -23,9 +22,9 @@ import java.util.Map;
 public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point2D> {
 
 
-    private final @NonNull MapAccessor<Double> xKey;
-    private final @NonNull MapAccessor<Double> yKey;
-    private final @NonNull Converter<Point2D> converter = new Scale2DCssConverter();
+    private final MapAccessor<Double> xKey;
+    private final MapAccessor<Double> yKey;
+    private final Converter<Point2D> converter = new Scale2DCssConverter();
 
     /**
      * Creates a new instance with the specified name.
@@ -34,7 +33,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
      * @param xKey the key for the x coordinate of the point
      * @param yKey the key for the y coordinate of the point
      */
-    public Scale2DStyleableMapAccessor(String name, @NonNull MapAccessor<Double> xKey, @NonNull MapAccessor<Double> yKey) {
+    public Scale2DStyleableMapAccessor(String name, MapAccessor<Double> xKey, MapAccessor<Double> yKey) {
         super(name, Point2D.class, new MapAccessor<?>[]{xKey, yKey}, new Point2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
 
         this.xKey = xKey;
@@ -42,7 +41,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     }
 
     @Override
-    public @NonNull Point2D get(@NonNull Map<? super Key<?>, Object> a) {
+    public Point2D get(Map<? super Key<?>, Object> a) {
 
         Double x = xKey.get(a);
         Double y = yKey.get(a);
@@ -50,12 +49,12 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     }
 
     @Override
-    public @NonNull Converter<Point2D> getCssConverter() {
+    public Converter<Point2D> getCssConverter() {
         return converter;
     }
 
     @Override
-    public @NonNull Point2D remove(@NonNull Map<? super Key<?>, Object> a) {
+    public Point2D remove(Map<? super Key<?>, Object> a) {
         Point2D oldValue = get(a);
         xKey.remove(a);
         yKey.remove(a);
@@ -63,7 +62,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     }
 
     @Override
-    public void set(@NonNull Map<? super Key<?>, Object> a, @Nullable Point2D value) {
+    public void set(Map<? super Key<?>, Object> a, @Nullable Point2D value) {
         if (value == null) {
             remove(a);
         } else {
@@ -73,7 +72,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> put(@NonNull ImmutableMap<Key<?>, Object> a, @Nullable Point2D value) {
+    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable Point2D value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -83,7 +82,7 @@ public class Scale2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Po
     }
 
     @Override
-    public @NonNull ImmutableMap<Key<?>, Object> remove(@NonNull ImmutableMap<Key<?>, Object> a) {
+    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         return yKey.remove(a);
     }

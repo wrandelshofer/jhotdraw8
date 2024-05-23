@@ -6,14 +6,13 @@ package org.jhotdraw8.application.action.file;
 
 import javafx.scene.control.Dialog;
 import javafx.scene.input.DataFormat;
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
 import java.util.SequencedMap;
@@ -28,10 +27,10 @@ import java.util.function.Supplier;
  */
 public class ExportFileAction extends AbstractSaveFileAction {
 
-    public static final @NonNull String ID = "file.export";
+    public static final String ID = "file.export";
     private final @Nullable Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialogFactory;
-    public static final @NonNull Key<URIChooser> EXPORT_CHOOSER_KEY = new NullableObjectKey<>("exportChooser", URIChooser.class);
-    public static final @NonNull Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("exportChooserFactory",
+    public static final Key<URIChooser> EXPORT_CHOOSER_KEY = new NullableObjectKey<>("exportChooser", URIChooser.class);
+    public static final Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("exportChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
     /**
@@ -39,11 +38,11 @@ public class ExportFileAction extends AbstractSaveFileAction {
      *
      * @param activity the view
      */
-    public ExportFileAction(@NonNull FileBasedActivity activity) {
+    public ExportFileAction(FileBasedActivity activity) {
         this(activity, ID, null);
     }
 
-    public ExportFileAction(@NonNull FileBasedActivity activity, @Nullable Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(FileBasedActivity activity, @Nullable Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
         this(activity, ID, optionsDialog);
     }
 
@@ -55,13 +54,13 @@ public class ExportFileAction extends AbstractSaveFileAction {
      * @param id            the id, nonnull
      * @param optionsDialog the dialog for specifying export options
      */
-    public ExportFileAction(@NonNull FileBasedActivity activity, String id, Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
+    public ExportFileAction(FileBasedActivity activity, String id, Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialog) {
         super(activity, id, true);
         this.optionsDialogFactory = optionsDialog;
     }
 
     @Override
-    protected @NonNull URIChooser getChooser(FileBasedActivity view) {
+    protected URIChooser getChooser(FileBasedActivity view) {
         URIChooser chooser = app.get(EXPORT_CHOOSER_KEY);
         if (chooser == null) {
             Supplier<URIChooser> factory = app.get(EXPORT_CHOOSER_FACTORY_KEY);

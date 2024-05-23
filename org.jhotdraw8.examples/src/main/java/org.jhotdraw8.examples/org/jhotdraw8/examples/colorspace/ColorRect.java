@@ -15,7 +15,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.NamedColorSpaceAdapter;
 
@@ -24,11 +23,11 @@ import java.awt.color.ColorSpace;
 import static org.jhotdraw8.base.util.MathUtil.clamp;
 
 public class ColorRect extends HBox {
-    private final @NonNull ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)));
+    private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)));
     private final ObjectProperty<float[]> baseColor = new SimpleObjectProperty<>(new float[3]);
-    private final @NonNull IntegerProperty xComponent = new SimpleIntegerProperty(0);
-    private final @NonNull IntegerProperty yComponent = new SimpleIntegerProperty(1);
-    private final @NonNull Canvas canvas = new Canvas();
+    private final IntegerProperty xComponent = new SimpleIntegerProperty(0);
+    private final IntegerProperty yComponent = new SimpleIntegerProperty(1);
+    private final Canvas canvas = new Canvas();
 
     @SuppressWarnings("this-escape")
     public ColorRect() {

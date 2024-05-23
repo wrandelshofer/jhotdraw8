@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.handle;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.base.event.Event;
 
 import java.io.Serial;
@@ -27,19 +26,19 @@ public class HandleEvent extends Event<Handle> {
         FIGURE_INVALIDATED
     }
 
-    private final @NonNull EventType eventType;
+    private final EventType eventType;
 
-    public <T> HandleEvent(@NonNull Handle source, @NonNull EventType type) {
+    public <T> HandleEvent(Handle source, EventType type) {
         super(source);
         this.eventType = type;
     }
 
-    public @NonNull EventType getEventType() {
+    public EventType getEventType() {
         return eventType;
     }
 
     @Override
-    public @NonNull String toString() {
+    public String toString() {
         return "HandleEvent{" + "type=" + eventType + " handle=" + getSource()
                 + '}';
     }

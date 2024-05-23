@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.color.math.Matrix3;
 import org.jhotdraw8.color.math.Matrix3Double;
 import org.junit.jupiter.api.Disabled;
@@ -18,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 public class ProPhotoRgbColorSpaceTest extends AbstractNamedColorSpaceTest {
 
     @Override
-    protected @NonNull ProPhotoRgbColorSpace getInstance() {
+    protected ProPhotoRgbColorSpace getInstance() {
         return new ProPhotoRgbColorSpace();
     }
 

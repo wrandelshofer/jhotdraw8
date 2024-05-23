@@ -4,11 +4,10 @@
  */
 package org.jhotdraw8.xml.converter;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -42,14 +41,14 @@ public class StringXmlConverter implements Converter<String> {
     }
 
     @Override
-    public void toString(@NonNull Appendable buf, @Nullable IdSupplier idSupplier, String value) throws IOException {
+    public void toString(Appendable buf, @Nullable IdSupplier idSupplier, String value) throws IOException {
         if (value != null) {
             buf.append(value);
         }
     }
 
     @Override
-    public @Nullable String fromString(@NonNull CharBuffer in, @Nullable IdResolver idResolver) {
+    public @Nullable String fromString(CharBuffer in, @Nullable IdResolver idResolver) {
         if (in != null) {
             if (in.isEmpty() && nullable) {
                 return null;

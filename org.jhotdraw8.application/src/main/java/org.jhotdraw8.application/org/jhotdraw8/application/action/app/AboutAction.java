@@ -12,7 +12,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Window;
-import org.jhotdraw8.annotation.NonNull;
 import org.jhotdraw8.application.Application;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.action.AbstractApplicationAction;
@@ -38,7 +37,7 @@ public class AboutAction extends AbstractApplicationAction {
     /**
      * The id of this action.
      */
-    public static final @NonNull String ID = "application.about";
+    public static final String ID = "application.about";
 
     /**
      * Creates a new instance.
@@ -46,13 +45,13 @@ public class AboutAction extends AbstractApplicationAction {
      * @param app the application
      */
     @SuppressWarnings("this-escape")
-    public AboutAction(@NonNull Application app) {
+    public AboutAction(Application app) {
         super(app);
         ApplicationLabels.getResources().configureAction(this, ID);
     }
 
     @Override
-    protected void onActionPerformed(@NonNull ActionEvent event, @NonNull Application app) {
+    protected void onActionPerformed(ActionEvent event, Application app) {
         String name = app.get(NAME_KEY);
         String version = app.get(VERSION_KEY);
         String vendor = app.get(COPYRIGHT_KEY);
@@ -90,7 +89,7 @@ public class AboutAction extends AbstractApplicationAction {
         alert.show();
     }
 
-    private @NonNull String getDependencies() {
+    private String getDependencies() {
         Pattern pattern = Pattern.compile("-(\\w+(?:[.\\-+]\\w+)*).jar$");
 
         return

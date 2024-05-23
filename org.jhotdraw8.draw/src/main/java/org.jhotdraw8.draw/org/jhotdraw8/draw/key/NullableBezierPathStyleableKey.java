@@ -4,12 +4,11 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.annotation.NonNull;
-import org.jhotdraw8.annotation.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 /**
  * BezierPathStyleableKey.
@@ -27,7 +26,7 @@ public class NullableBezierPathStyleableKey
      *
      * @param name The name of the key.
      */
-    public NullableBezierPathStyleableKey(@NonNull String name) {
+    public NullableBezierPathStyleableKey(String name) {
         this(name, null);
     }
 
@@ -37,15 +36,15 @@ public class NullableBezierPathStyleableKey
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public NullableBezierPathStyleableKey(@NonNull String name, @Nullable BezierPath defaultValue) {
+    public NullableBezierPathStyleableKey(String name, @Nullable BezierPath defaultValue) {
         super(name, BezierPath.class, defaultValue);
 
     }
 
-    private final @NonNull Converter<BezierPath> converter = new BezierPathCssConverter(false);
+    private final Converter<BezierPath> converter = new BezierPathCssConverter(false);
 
     @Override
-    public @NonNull Converter<BezierPath> getCssConverter() {
+    public Converter<BezierPath> getCssConverter() {
         return converter;
     }
 
