@@ -4,8 +4,11 @@
  */
 package org.jhotdraw8.grapher;
 
+import javafx.application.ColorScheme;
+import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
 import javafx.stage.Screen;
-import org.jhotdraw8.annotation.NonNull;
+import javafx.stage.Window;
 import org.jhotdraw8.application.AbstractFileBasedApplication;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIExtensionFilter;
@@ -13,9 +16,6 @@ import org.jhotdraw8.draw.DrawStylesheets;
 import org.jhotdraw8.draw.io.BitmapExportOutputFormat;
 import org.jhotdraw8.draw.io.XmlEncoderOutputFormat;
 import org.jhotdraw8.fxbase.fxml.FxmlUtil;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
-import org.jhotdraw8.os.macos.MacOSPreferencesUtil;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
 
@@ -33,8 +33,6 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
  * @author Werner Randelshofer
  */
 public class GrapherApplication extends AbstractFileBasedApplication {
-    public static final @NonNull NonNullKey<Boolean> DARK_MODE_KEY = new NonNullObjectKey<>("darkMode", Boolean.class, Boolean.FALSE);
-
     /**
      * @param args the command line arguments
      */
@@ -100,18 +98,30 @@ public class GrapherApplication extends AbstractFileBasedApplication {
         }
         */
 
-        // https://stackoverflow.com/questions/57303286/how-to-detect-if-osx-in-dark-or-light-mode-in-auto-appearance-mode-in-catalina
 
-        final Object interfaceStyle = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyle");
-        final Object interfaceStyleSwitchesAutomatically = MacOSPreferencesUtil.get(MacOSPreferencesUtil.GLOBAL_PREFERENCES, "AppleInterfaceStyleSwitchesAutomatically");
-        if ("Dark".equals(interfaceStyle)
-                || interfaceStyle == null && "true".equals(interfaceStyleSwitchesAutomatically)) {
-            set(DARK_MODE_KEY, true);
-            getStylesheets().add(getClass().getResource("dark-theme.css").toString());
-        } else {
-            set(DARK_MODE_KEY, false);
-            getStylesheets().add(getClass().getResource("light-theme.css").toString());
-        }
+        Platform.Preferences preferences = Platform.getPreferences();
+        ChangeListener<ColorScheme> listener = (observable, oldValue, newValue) -> {
+            if (oldValue != null) {
+                String oldTheme = getClass().getResource(switch (oldValue) {
+                    case LIGHT -> "light-theme.css";
+                    case DARK -> "dark-theme.css";
+                }).toString();
+                getStylesheets().remove(oldTheme);
+                Window.getWindows().forEach(w -> System.out.println(w.getScene().getStylesheets().remove(oldTheme)));
+            }
+            if (newValue != null) {
+                String newTheme = getClass().getResource(switch (newValue) {
+                    case LIGHT -> "light-theme.css";
+                    case DARK -> "dark-theme.css";
+                }).toString();
+                getStylesheets().add(newTheme);
+                Window.getWindows().forEach(w -> System.out.println(w.getScene().getStylesheets().add(newTheme)));
+            }
+
+        };
+        listener.changed(null, null, preferences.getColorScheme());
+        preferences.colorSchemeProperty().addListener(listener);
+
         getStylesheets().add(DrawStylesheets.getInspectorsStylesheet());
     }
 }
