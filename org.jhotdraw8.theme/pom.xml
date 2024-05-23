@@ -52,14 +52,13 @@
 
   <dependencies>
     <dependency>
-      <groupId>ch.randelshofer</groupId>
-      <artifactId>org.jhotdraw8.annotation</artifactId>
-      <version>${revision}</version>
+      <groupId>org.jspecify</groupId>
+      <artifactId>jspecify</artifactId>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>ch.randelshofer</groupId>
       <artifactId>org.jhotdraw8.color</artifactId>
-      <version>${revision}</version>
     </dependency>
     <dependency>
       <groupId>ch.randelshofer</groupId>
