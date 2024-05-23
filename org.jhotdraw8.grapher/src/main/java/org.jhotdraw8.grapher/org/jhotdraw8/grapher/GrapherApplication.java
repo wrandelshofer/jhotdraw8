@@ -107,7 +107,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
                     case DARK -> "dark-theme.css";
                 }).toString();
                 getStylesheets().remove(oldTheme);
-                Window.getWindows().forEach(w -> System.out.println(w.getScene().getStylesheets().remove(oldTheme)));
+                Window.getWindows().forEach(w -> w.getScene().getStylesheets().remove(oldTheme));
             }
             if (newValue != null) {
                 String newTheme = getClass().getResource(switch (newValue) {
@@ -115,7 +115,7 @@ public class GrapherApplication extends AbstractFileBasedApplication {
                     case DARK -> "dark-theme.css";
                 }).toString();
                 getStylesheets().add(newTheme);
-                Window.getWindows().forEach(w -> System.out.println(w.getScene().getStylesheets().add(newTheme)));
+                Window.getWindows().forEach(w -> w.getScene().getStylesheets().add(newTheme));
             }
 
         };
