@@ -9,9 +9,6 @@ import java.awt.color.ColorSpace;
 
 /**
  * Interface for {@code ColorSpace} classes which have a name.
- *
- * @author Werner Randelshofer
-
  */
 public interface NamedColorSpace {
     /**

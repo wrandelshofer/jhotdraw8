@@ -11,9 +11,6 @@ import java.util.Objects;
 
 /**
  * {@code AbstractNamedColorSpace}.
- *
- * @author Werner Randelshofer
-
  */
 public abstract class AbstractNamedColorSpace extends ColorSpace implements NamedColorSpace {
     @Serial

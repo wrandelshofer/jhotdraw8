@@ -31,9 +31,6 @@ import java.io.Serial;
  *     <dt>OPTEL-Vision's Explanation on CIELAB color space</dt>
  *     <dd><a href="http://www.optelvision.com/documents/optel-vision-s-explanation-on-cielab-color-space.pdf">optelvision.com</a></dd>
  * </dl>
- *
- * @author Werner Randelshofer
-
  */
 public class CieLabColorSpace extends AbstractNamedColorSpace {
 
