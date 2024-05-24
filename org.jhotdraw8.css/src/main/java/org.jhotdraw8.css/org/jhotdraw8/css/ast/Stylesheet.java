@@ -28,7 +28,7 @@ public class Stylesheet extends AbstractSyntaxTree {
     private final ImmutableList<StyleRule> styleRules;
 
     public Stylesheet(@Nullable URI uri, List<Rule> rules) {
-        super(new SourceLocator(0, 0, uri));
+        super(new SourceLocator(0, 1, uri));
         this.uri = uri;
         this.rules = VectorList.copyOf(rules);
         this.styleRules = VectorList.copyOf(

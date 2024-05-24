@@ -14,8 +14,9 @@ public abstract class AbstractCssScanner implements CssScanner {
     protected long position;
     /**
      * The current line number in the input stream.
+     * An input stream starts with line number 1.
      */
-    protected long lineNumber;
+    protected long lineNumber = 1;
 
     /**
      * The current character.
