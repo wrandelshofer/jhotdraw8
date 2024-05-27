@@ -22,11 +22,11 @@ public class PathMetricsBuilder extends AbstractPathDataBuilder<PathMetrics> {
     private final double epsilon;
     // For code simplicity, copy these constants to our namespace
     // and cast them to byte constants for easy storage.
-    private static final byte SEG_MOVETO = (int) PathIterator.SEG_MOVETO;
-    private static final byte SEG_LINETO = (int) PathIterator.SEG_LINETO;
-    private static final byte SEG_QUADTO = (int) PathIterator.SEG_QUADTO;
-    private static final byte SEG_CUBICTO = (int) PathIterator.SEG_CUBICTO;
-    private static final byte SEG_CLOSE = (byte) PathIterator.SEG_CLOSE;
+    private static final byte SEG_MOVETO = PathIterator.SEG_MOVETO;
+    private static final byte SEG_LINETO = PathIterator.SEG_LINETO;
+    private static final byte SEG_QUADTO = PathIterator.SEG_QUADTO;
+    private static final byte SEG_CUBICTO = PathIterator.SEG_CUBICTO;
+    private static final byte SEG_CLOSE = PathIterator.SEG_CLOSE;
 
     /**
      * Creates a path metrics builder with an accuracy of 1/8 (=0.125) pixels.
