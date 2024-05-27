@@ -38,7 +38,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableBooleanStyleableKey(String key, Boolean defaultValue) {
+    public NullableBooleanStyleableKey(String key, @Nullable Boolean defaultValue) {
         this(null, key, defaultValue);
     }
 
@@ -50,7 +50,7 @@ public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableBooleanStyleableKey(@Nullable String namespace, String key, Boolean defaultValue) {
+    public NullableBooleanStyleableKey(@Nullable String namespace, String key, @Nullable Boolean defaultValue) {
         super(namespace, key, Boolean.class, true, defaultValue);
     }
 

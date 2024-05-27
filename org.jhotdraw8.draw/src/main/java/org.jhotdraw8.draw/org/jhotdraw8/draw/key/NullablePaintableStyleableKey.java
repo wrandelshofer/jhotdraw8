@@ -8,6 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.PaintableCssConverter;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * PaintStyleableFigureKey.
@@ -37,7 +38,7 @@ public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintabl
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullablePaintableStyleableKey(String key, Paintable defaultValue) {
+    public NullablePaintableStyleableKey(String key, @Nullable Paintable defaultValue) {
         super(key, Paintable.class, defaultValue);
 
         converter = new PaintableCssConverter(true);

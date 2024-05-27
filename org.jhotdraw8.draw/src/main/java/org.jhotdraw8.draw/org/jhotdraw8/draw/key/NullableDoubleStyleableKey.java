@@ -8,6 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * NullableDoubleStyleableKey.
@@ -35,12 +36,12 @@ public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> imp
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public NullableDoubleStyleableKey(String name, Double defaultValue) {
+    public NullableDoubleStyleableKey(String name, @Nullable Double defaultValue) {
         this(name, defaultValue, new DoubleCssConverter(true));
     }
 
 
-    public NullableDoubleStyleableKey(String name, Double defaultValue, CssConverter<Double> converter) {
+    public NullableDoubleStyleableKey(String name, @Nullable Double defaultValue, CssConverter<Double> converter) {
         super(name, Double.class, defaultValue);
         this.converter = converter;
     }

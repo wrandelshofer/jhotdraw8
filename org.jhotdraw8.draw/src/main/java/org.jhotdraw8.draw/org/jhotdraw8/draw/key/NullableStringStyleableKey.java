@@ -7,6 +7,7 @@ package org.jhotdraw8.draw.key;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * NullableStringStyleableKey.
@@ -38,7 +39,7 @@ public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         this(namespace, name, null);
     }
 
-    public NullableStringStyleableKey(String namespace, String name, String helpText) {
+    public NullableStringStyleableKey(String namespace, String name, @Nullable String helpText) {
         super(namespace, name, String.class, true, null);
         converter = new StringCssConverter(true, '\'', helpText);
     }

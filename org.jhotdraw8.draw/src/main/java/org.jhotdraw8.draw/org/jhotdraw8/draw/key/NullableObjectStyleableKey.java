@@ -51,7 +51,7 @@ public class NullableObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<
      * @param converter    the CSS converter
      * @param defaultValue The default value.
      */
-    public NullableObjectStyleableKey(String name, String cssName, Type type, Converter<T> converter, T defaultValue) {
+    public NullableObjectStyleableKey(String name, String cssName, Type type, Converter<T> converter, @Nullable T defaultValue) {
         super(name, cssName, type, converter, defaultValue);
     }
 

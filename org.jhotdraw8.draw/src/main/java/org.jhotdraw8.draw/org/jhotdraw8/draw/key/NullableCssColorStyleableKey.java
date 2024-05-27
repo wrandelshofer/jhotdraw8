@@ -8,6 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.ColorCssConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * NullableCssColorStyleableKey.
@@ -38,7 +39,7 @@ public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
      *                     specify them in arrow brackets.
      * @param defaultValue The default value.
      */
-    public NullableCssColorStyleableKey(String key, CssColor defaultValue) {
+    public NullableCssColorStyleableKey(String key, @Nullable CssColor defaultValue) {
         super(key, CssColor.class, defaultValue);
     }
 
