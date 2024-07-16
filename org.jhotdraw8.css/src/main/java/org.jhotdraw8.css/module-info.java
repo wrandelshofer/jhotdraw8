@@ -14,7 +14,7 @@ module org.jhotdraw8.css {
     requires transitive java.logging;
     requires transitive java.xml;
     requires transitive javafx.graphics;
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
 
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;

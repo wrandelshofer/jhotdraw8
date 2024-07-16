@@ -10,7 +10,7 @@ import org.jspecify.annotations.NullMarked;
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.base {
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
 
     requires java.logging;
     exports org.jhotdraw8.base.converter;

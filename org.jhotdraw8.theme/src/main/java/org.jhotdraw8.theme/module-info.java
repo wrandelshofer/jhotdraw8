@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 module org.jhotdraw8.theme {
     requires transitive org.jhotdraw8.color;
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
 
     requires transitive org.jhotdraw8.fxbase;
     exports org.jhotdraw8.theme;

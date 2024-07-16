@@ -11,7 +11,7 @@ import org.jspecify.annotations.NullMarked;
 @SuppressWarnings("module")
 @NullMarked
 module org.jhotdraw8.fxbase {
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
 
     requires transitive org.jhotdraw8.base;
     requires transitive javafx.base;

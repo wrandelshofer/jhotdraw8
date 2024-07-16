@@ -767,6 +767,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         write(START_PROCESSING_INSTRUCTION);
         write(target);
         write(END_PROCESSING_INSTRUCTION);
+        write
     }
 
     @Override

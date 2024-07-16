@@ -18,7 +18,7 @@ module org.jhotdraw8.application {
     requires transitive java.desktop;
     requires transitive java.prefs;
     requires transitive javafx.fxml;
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
 
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.base;

@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 module org.jhotdraw8.geom {
     requires transitive javafx.graphics;
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
     requires transitive java.desktop;
     requires transitive org.jhotdraw8.collection;
     requires transitive org.jhotdraw8.base;

@@ -12,7 +12,7 @@ import org.jspecify.annotations.NullMarked;
 module org.jhotdraw8.examples {
     requires transitive java.desktop;
     requires transitive org.jhotdraw8.draw;
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
 
     requires transitive org.jhotdraw8.color;
     requires transitive org.jhotdraw8.os;

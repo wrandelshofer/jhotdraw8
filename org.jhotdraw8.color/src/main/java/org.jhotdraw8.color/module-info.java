@@ -13,7 +13,7 @@ import org.jspecify.annotations.NullMarked;
 module org.jhotdraw8.color {
     requires transitive java.desktop;
     requires transitive javafx.graphics;
-    requires transitive static org.jspecify;
+    requires transitive org.jspecify;
 
     requires java.logging;
 
