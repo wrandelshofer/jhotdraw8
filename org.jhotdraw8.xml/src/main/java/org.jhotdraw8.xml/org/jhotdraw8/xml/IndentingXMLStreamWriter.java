@@ -762,12 +762,7 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
 
     @Override
     public void writeProcessingInstruction(String target) throws XMLStreamException {
-        Objects.requireNonNull(target, "target");
-        closeStartTagOrCloseEmptyElemTag();
-        write(START_PROCESSING_INSTRUCTION);
-        write(target);
-        write(END_PROCESSING_INSTRUCTION);
-        write
+        writeProcessingInstruction(target, "");
     }
 
     @Override
@@ -776,10 +771,11 @@ public class IndentingXMLStreamWriter implements XMLStreamWriter, AutoCloseable 
         closeStartTagOrCloseEmptyElemTag();
         write(START_PROCESSING_INSTRUCTION);
         write(target);
-        write(SPACE);
-        write(data);
+        if (!data.isEmpty()) {
+            write(SPACE);
+            write(data);
+        }
         write(END_PROCESSING_INSTRUCTION);
-
     }
 
     @Override
