@@ -56,30 +56,22 @@ public class SrgbaCssColor extends CssColor {
     }
 
     public SrgbaCssColor(CssSize red, CssSize green, CssSize blue, CssSize opacity) {
-        double value = UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue();
-        double value1 = UnitConverter.PERCENTAGE.equals(blue.getUnits()) ? blue.getValue() * 2.55 : blue.getValue();
-        double value2 = UnitConverter.PERCENTAGE.equals(green.getUnits()) ? green.getValue() * 2.55 : green.getValue();
-        double value3 = UnitConverter.PERCENTAGE.equals(red.getUnits()) ? red.getValue() * 2.55 : red.getValue();
-        double value4 = UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue();
-        double value5 = UnitConverter.PERCENTAGE.equals(blue.getUnits()) ? blue.getValue() / 100 : blue.getValue() / 255;
-        double value6 = UnitConverter.PERCENTAGE.equals(green.getUnits()) ? green.getValue() / 100 : green.getValue() / 255;
-        double value7 = UnitConverter.PERCENTAGE.equals(red.getUnits()) ? red.getValue() / 100 : red.getValue() / 255;
         super(toName(red, green, blue, opacity),
 
                 (UnitConverter.PERCENTAGE.equals(red.getUnits())
                         || UnitConverter.PERCENTAGE.equals(green.getUnits())
                         || UnitConverter.PERCENTAGE.equals(blue.getUnits()))
                         ? Color.color(
-                        Math.clamp(value7, 0, 1),
-                        Math.clamp(value6, 0, 1),
-                        Math.clamp(value5, 0, 1),
-                        Math.clamp(value4, 0, 1)
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(red.getUnits()) ? red.getValue() / 100 : red.getValue() / 255, 0, 1),
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(green.getUnits()) ? green.getValue() / 100 : green.getValue() / 255, 0, 1),
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(blue.getUnits()) ? blue.getValue() / 100 : blue.getValue() / 255, 0, 1),
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue(), 0, 1)
                 )
                         : Color.rgb(
-                        (int) Math.round(Math.clamp(value3, 0, 255)),
-                        (int) Math.round(Math.clamp(value2, 0, 255)),
-                        (int) Math.round(Math.clamp(value1, 0, 255)),
-                        Math.clamp(value, 0, 1)
+                        (int) Math.round(Math.clamp(UnitConverter.PERCENTAGE.equals(red.getUnits()) ? red.getValue() * 2.55 : red.getValue(), 0, 255)),
+                        (int) Math.round(Math.clamp(UnitConverter.PERCENTAGE.equals(green.getUnits()) ? green.getValue() * 2.55 : green.getValue(), 0, 255)),
+                        (int) Math.round(Math.clamp(UnitConverter.PERCENTAGE.equals(blue.getUnits()) ? blue.getValue() * 2.55 : blue.getValue(), 0, 255)),
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue(), 0, 1)
                 )
         );
         this.red = red;

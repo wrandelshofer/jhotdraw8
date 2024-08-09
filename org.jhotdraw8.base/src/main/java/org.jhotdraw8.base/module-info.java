@@ -16,7 +16,6 @@ module org.jhotdraw8.base {
     exports org.jhotdraw8.base.converter;
     exports org.jhotdraw8.base.io;
     exports org.jhotdraw8.base.function;
-    exports org.jhotdraw8.base.util;
     exports org.jhotdraw8.base.event;
     exports org.jhotdraw8.base.text;
     exports org.jhotdraw8.base.concurrent;

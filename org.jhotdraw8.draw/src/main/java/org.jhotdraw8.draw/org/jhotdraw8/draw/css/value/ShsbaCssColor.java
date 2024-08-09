@@ -57,15 +57,12 @@ public class ShsbaCssColor extends CssColor {
     }
 
     public ShsbaCssColor(CssSize hue, CssSize saturation, CssSize brightness, CssSize opacity) {
-        double value = UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue();
-        double value1 = UnitConverter.PERCENTAGE.equals(brightness.getUnits()) ? brightness.getValue() / 100 : brightness.getValue();
-        double value2 = UnitConverter.PERCENTAGE.equals(saturation.getUnits()) ? saturation.getValue() / 100 : saturation.getValue();
         super(toName(hue, saturation, brightness, opacity),
                 Color.hsb(
                         UnitConverter.PERCENTAGE.equals(hue.getUnits()) ? hue.getValue() / 360 : hue.getValue(),
-                        Math.clamp(value2, 0, 1),
-                        Math.clamp(value1, 0, 1),
-                        Math.clamp(value, 0, 1)
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(saturation.getUnits()) ? saturation.getValue() / 100 : saturation.getValue(), 0, 1),
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(brightness.getUnits()) ? brightness.getValue() / 100 : brightness.getValue(), 0, 1),
+                        Math.clamp(UnitConverter.PERCENTAGE.equals(opacity.getUnits()) ? opacity.getValue() / 100 : opacity.getValue(), 0, 1)
                 )
         );
         this.hue = hue;
