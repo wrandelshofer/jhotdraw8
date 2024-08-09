@@ -47,7 +47,6 @@ import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jspecify.annotations.Nullable;
@@ -443,7 +442,7 @@ public class ZoomableScrollPane extends GridPane {
 
         // we only consume if we can scroll
         if (visible < max - min) {
-            scrollBar.setValue(MathUtil.clamp(value - delta, min, max));
+            scrollBar.setValue(Math.clamp(value - delta, min, max));
             event.consume();
         }
     }
@@ -537,7 +536,7 @@ public class ZoomableScrollPane extends GridPane {
         if (visible > max) {
             return -Math.round((visible - max) * 0.5);
         }
-        return MathUtil.clamp(Math.round((max - min - visible) * (value - min) / (max - min)) + min, min, max);
+        return Math.clamp(Math.round((max - min - visible) * (value - min) / (max - min)) + min, min, max);
     }
 
     public Bounds getViewportRect() {
@@ -585,8 +584,12 @@ public class ZoomableScrollPane extends GridPane {
                 hvalue = cx * (hmax - hmin) / (hmax - hvisible) + hmin,
                 vvalue = cy * (vmax - vmin) / (vmax - vvisible) + vmin;
 
-        horizontalScrollBar.setValue(MathUtil.clamp(hvalue, horizontalScrollBar.getMin(), horizontalScrollBar.getMax()));
-        verticalScrollBar.setValue(MathUtil.clamp(vvalue, verticalScrollBar.getMin(), verticalScrollBar.getMax()));
+        double min1 = horizontalScrollBar.getMin();
+        double max1 = horizontalScrollBar.getMax();
+        horizontalScrollBar.setValue(Math.clamp(hvalue, min1, max1));
+        double min = verticalScrollBar.getMin();
+        double max = verticalScrollBar.getMax();
+        verticalScrollBar.setValue(Math.clamp(vvalue, min, max));
 
     }
 

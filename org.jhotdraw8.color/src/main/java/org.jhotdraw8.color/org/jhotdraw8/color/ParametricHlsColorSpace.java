@@ -8,8 +8,6 @@ package org.jhotdraw8.color;
 import java.awt.color.ColorSpace;
 import java.io.Serial;
 
-import static org.jhotdraw8.color.util.MathUtil.clamp;
-
 /**
  * A parametric HLS color space computed from an RGB color space.
  * <p>
@@ -157,9 +155,9 @@ public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
             blue = p;
         }
 
-        rgb[0] = (float) clamp(red, 0d, 1d);
-        rgb[1] = (float) clamp(green, 0d, 1d);
-        rgb[2] = (float) clamp(blue, 0d, 1d);
+        rgb[0] = (float) Math.clamp(red, 0d, 1d);
+        rgb[1] = (float) Math.clamp(green, 0d, 1d);
+        rgb[2] = (float) Math.clamp(blue, 0d, 1d);
         return rgb;
     }
 

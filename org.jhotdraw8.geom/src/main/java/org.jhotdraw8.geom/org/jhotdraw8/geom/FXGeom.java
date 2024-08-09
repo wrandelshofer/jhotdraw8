@@ -9,14 +9,13 @@ import javafx.geometry.Point3D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.transform.Affine;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.intersect.IntersectLineLine;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 
@@ -120,13 +119,15 @@ public class FXGeom {
         double x = 0, y = 0;
         if (abs(si) > e) {
             x = (1.0 + co / abs(si)) / 2.0 * r.getWidth();
-            x = MathUtil.clamp(x, 0, r.getWidth());
+            double max = r.getWidth();
+            x = Math.clamp(x, 0, max);
         } else if (co >= 0.0) {
             x = r.getWidth();
         }
         if (abs(co) > e) {
             y = (1.0 + si / abs(co)) / 2.0 * r.getHeight();
-            y = MathUtil.clamp(y, 0, r.getHeight());
+            double max = r.getHeight();
+            y = Math.clamp(y, 0, max);
         } else if (si >= 0.0) {
             y = r.getHeight();
         }

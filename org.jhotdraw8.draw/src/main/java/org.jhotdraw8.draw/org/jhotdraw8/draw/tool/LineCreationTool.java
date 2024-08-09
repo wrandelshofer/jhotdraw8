@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
@@ -61,8 +60,10 @@ public class LineCreationTool extends CreationTool {
         DrawingModel dm = view.getModel();
         dm.addChildTo(createdFigure, parent);
 
-        double anchorX = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double value1 = createdFigure.getNonNull(AnchorableFigure.ANCHOR_X);
+        double anchorX = Math.clamp(value1, 0, 1);
+        double value = createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y);
+        double anchorY = Math.clamp(value, 0, 1);
 
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure,

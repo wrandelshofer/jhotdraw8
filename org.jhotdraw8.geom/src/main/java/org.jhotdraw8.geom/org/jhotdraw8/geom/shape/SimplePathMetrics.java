@@ -5,7 +5,6 @@
 
 package org.jhotdraw8.geom.shape;
 
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.AbstractShape;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.CubicCurves;
@@ -18,7 +17,7 @@ import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Rectangle2D;
@@ -101,7 +100,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         if (commands.length == 0) {
             return new PointAndDerivative(0, 0, 1, 0);
         }
-        s = MathUtil.clamp(s, 0, arcLength());
+        double max = arcLength();
+        s = Math.clamp(s, 0, max);
         int search = Arrays.binarySearch(lengths, s);
         int i = search < 0 ? Math.min(commands.length - 1, ~search) : search;
 
@@ -281,8 +281,8 @@ public class SimplePathMetrics extends AbstractShape implements PathMetrics {
         }
 
         double totalArcLength = arcLength();
-        s0 = MathUtil.clamp(s0, 0, totalArcLength);
-        s1 = MathUtil.clamp(s1, s0, totalArcLength);
+        s0 = Math.clamp(s0, 0, totalArcLength);
+        s1 = Math.clamp(s1, s0, totalArcLength);
         boolean startsAtFirstSegment = s0 == 0;
         boolean endsAtLastSegment = s1 == totalArcLength;
 

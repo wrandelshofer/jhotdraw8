@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.CubicCurves;
@@ -143,7 +142,7 @@ public class IntersectCubicCurveEllipse {
         DoubleArrayList roots = poly.getRootsInInterval(-epsilon, 1 + epsilon);
 
         for (Double root : roots) {
-            double t = MathUtil.clamp(root, 0, 1);
+            double t = Math.clamp(root, 0, 1);
 
             result.add(new IntersectionPoint(
                     Points2D.sum(Points2D.multiply(c3, t * t * t), Points2D.multiply(c2, t * t), Points2D.multiply(c1, t), c0), t));

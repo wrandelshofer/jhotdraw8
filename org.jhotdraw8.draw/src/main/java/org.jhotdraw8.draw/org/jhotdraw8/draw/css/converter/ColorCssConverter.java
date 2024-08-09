@@ -36,8 +36,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static org.jhotdraw8.base.util.MathUtil.clamp;
-
 /**
  * CssColorConverter.
  * <p>
@@ -205,12 +203,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
             throw tt.createParseException("Could not convert a string to a CssColor because the closing bracket ')' is missing.");
         }
         float[] rgb = clampColors(params);
+        double value = params.get(3).getValue();
         return new CssColor(
                 "color("
                         + colorSpaceParam + " "
                         + colorParamToString(params)
                         + ")",
-                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? clamp(params.get(3).getValue(), 0, 1) : 1.0));
+                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? Math.clamp(value, 0, 1) : 1.0));
     }
 
     private static List<CssSize> parseParams(CssTokenizer tt, NamedColorSpace cs) throws IOException, ParseException {
@@ -280,7 +279,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
             rgb[i] = rgb[i] / 255f;
         }
         var clamped = clampColors(rgb);
-        float alpha = params.size() == 4 ? clamp(toPercentage(params.get(3), 0.01, tt), 0, 1) : 1;
+        float alpha;
+        if (params.size() == 4) {
+            float value = toPercentage(params.get(3), 0.01, tt);
+            alpha = Math.clamp(value, (float) 0, (float) 1);
+        } else {
+            alpha = 1;
+        }
         return new CssColor(
                 "rgb(" + colorParamToString(params) + ")",
                 new Color(clamped[0], clamped[1], clamped[2], alpha));
@@ -294,7 +299,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
                 toPercentage(params.get(1), 1 / 100d, tt)
         };
         float[] rgb = clampColors(CSS_HLS_COLOR_SPACE.toRGB(hls));
-        float alpha = params.size() == 4 ? clamp(toPercentage(params.get(3), 0.01, tt), 0, 1) : 1;
+        float alpha;
+        if (params.size() == 4) {
+            float value = toPercentage(params.get(3), 0.01, tt);
+            alpha = Math.clamp(value, (float) 0, (float) 1);
+        } else {
+            alpha = 1;
+        }
         return new CssColor(
                 "hsl(" + colorParamToString(params) + ")",
                 new Color(rgb[0], rgb[1], rgb[2], alpha)
@@ -310,7 +321,13 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         };
         float[] rgb = JAVAFX_HSB_COLOR_SPACE.toRGB(hsb);
         float[] clamped = clampColors(rgb);
-        float alpha = params.size() == 4 ? clamp(toPercentage(params.get(3), 0.01, tt), 0, 1) : 1;
+        float alpha;
+        if (params.size() == 4) {
+            float value = toPercentage(params.get(3), 0.01, tt);
+            alpha = Math.clamp(value, (float) 0, (float) 1);
+        } else {
+            alpha = 1;
+        }
         return new CssColor(
                 "hsb(" + colorParamToString(params) + ")",
                 new Color(clamped[0], clamped[1], clamped[2], alpha));
@@ -360,7 +377,7 @@ public class ColorCssConverter implements CssConverter<CssColor> {
     private static float[] clampColors(float[] params) {
         float[] clamped = new float[3];
         for (int i = 0; i < clamped.length; i++) {
-            clamped[i] = clamp(params[i], 0, 1);
+            clamped[i] = Math.clamp(params[i], (float) 0, (float) 1);
         }
         return clamped;
     }

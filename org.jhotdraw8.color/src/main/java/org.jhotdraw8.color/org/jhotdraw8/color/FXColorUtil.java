@@ -6,7 +6,6 @@
 package org.jhotdraw8.color;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.color.util.MathUtil;
 
 
 public class FXColorUtil {
@@ -37,7 +36,7 @@ public class FXColorUtil {
      */
     public static Color toColor(NamedColorSpace colorSpace, float[] components) {
         float[] srgb = colorSpace.toRGB(components);
-        return new Color(MathUtil.clamp(srgb[0], 0, 1), MathUtil.clamp(srgb[1], 0, 1), MathUtil.clamp(srgb[2], 0, 1), 1);
+        return new Color(Math.clamp(srgb[0], (float) 0, (float) 1), Math.clamp(srgb[1], (float) 0, (float) 1), Math.clamp(srgb[2], (float) 0, (float) 1), 1);
     }
 
     /**

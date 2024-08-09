@@ -7,7 +7,6 @@ package org.jhotdraw8.geom.biarc;
 
 import org.jhotdraw8.base.function.DoubleConsumer2;
 import org.jhotdraw8.base.function.DoubleConsumer6;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.Angles;
 
 import java.util.ArrayList;
@@ -261,7 +260,7 @@ public class ArcToCubicCurve {
         int sign = (ux * vy - uy * vx < 0) ? -1 : 1;
 
         // Rounding errors, e.g. -1.0000000000000002 can screw up this.
-        double dot = MathUtil.clamp(ux * vx + uy * vy, -1, 1);
+        double dot = Math.clamp(ux * vx + uy * vy, -1, 1);
 
         return sign * Math.acos(dot);
     }

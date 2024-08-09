@@ -20,8 +20,6 @@ import org.jhotdraw8.color.NamedColorSpaceAdapter;
 
 import java.awt.color.ColorSpace;
 
-import static org.jhotdraw8.base.util.MathUtil.clamp;
-
 public class ColorRect extends HBox {
     private final ObjectProperty<NamedColorSpace> colorSpace = new SimpleObjectProperty<>(new NamedColorSpaceAdapter("sRGB", ColorSpace.getInstance(ColorSpace.CS_sRGB)));
     private final ObjectProperty<float[]> baseColor = new SimpleObjectProperty<>(new float[3]);
@@ -76,8 +74,8 @@ public class ColorRect extends HBox {
                 float cy = extentCY * y / h + minValueCY;
                 colorValue[yComp] = cy;
                 float[] rgbValue = cs.toRGB(colorValue, rgb);
-                Color color = new Color(clamp(rgbValue[0], 0, 1),
-                        clamp(rgbValue[1], 0, 1), clamp(rgbValue[2], 0, 1), 1);
+                Color color = new Color(Math.clamp(rgbValue[0], (float) 0, (float) 1),
+                        Math.clamp(rgbValue[1], (float) 0, (float) 1), Math.clamp(rgbValue[2], (float) 0, (float) 1), 1);
                 pw.setColor(x, y, color);
             }
         }

@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jspecify.annotations.Nullable;
 
@@ -89,8 +88,8 @@ public class BoundsLocator extends AbstractLocator {
      * @param y      a local coordinate on the figre
      */
     public BoundsLocator(Bounds bounds, double x, double y) {
-        this(MathUtil.clamp((x - bounds.getMinX()) / bounds.getWidth(), 0, 1),
-                MathUtil.clamp((y - bounds.getMinY()) / bounds.getHeight(), 0, 1));
+        this(Math.clamp((x - bounds.getMinX()) / bounds.getWidth(), 0, 1),
+                Math.clamp((y - bounds.getMinY()) / bounds.getHeight(), 0, 1));
     }
 
     public double getRelativeX() {

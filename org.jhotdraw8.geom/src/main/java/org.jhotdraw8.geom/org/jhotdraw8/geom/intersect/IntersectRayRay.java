@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.geom.Points;
 
 import java.awt.geom.Point2D;
@@ -169,7 +168,7 @@ public class IntersectRayRay {
                         result.add(new IntersectionPointEx(
                                 new Point2D.Double(aox, aoy),
                                 0, derivativeA,
-                                MathUtil.clamp(argB, 0, bmax), derivativeB
+                                Math.clamp(argB, 0, bmax), derivativeB
                         ));
                     } else {
                         status = IntersectionStatus.NO_INTERSECTION_PARALLEL;
@@ -180,7 +179,7 @@ public class IntersectRayRay {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPointEx(
                                 new Point2D.Double(box, boy),
-                                MathUtil.clamp(argA, 0, amax), derivativeA, 0, derivativeB
+                                Math.clamp(argA, 0, amax), derivativeA, 0, derivativeB
                         ));
                     } else {
                         status = IntersectionStatus.NO_INTERSECTION_PARALLEL;
@@ -203,8 +202,8 @@ public class IntersectRayRay {
                     }
 
                     if (at0 < 1 + epsilon && at1 > -epsilon) {
-                        at0 = MathUtil.clamp(at0, 0.0, amax);
-                        at1 = MathUtil.clamp(at1, 0.0, bmax);
+                        at0 = Math.clamp(at0, 0.0, amax);
+                        at1 = Math.clamp(at1, 0.0, bmax);
                         double bt0, bt1;
                         if (Points.almostZero(bdx)) {
                             bt0 = (aoy + at0 * ady - boy) / bdy;

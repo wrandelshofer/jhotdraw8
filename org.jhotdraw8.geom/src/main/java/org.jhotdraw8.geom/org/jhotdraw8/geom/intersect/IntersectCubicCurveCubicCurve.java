@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PointAndDerivative;
@@ -358,7 +357,7 @@ public class IntersectCubicCurveCubicCurve {
                                                 Points2D.multiply(c23, s * s * s),
                                                 Points2D.multiply(c22, s * s),
                                                 Points2D.multiply(c21, s), c20),
-                                        MathUtil.clamp(xRoot, 0, 1)));
+                                        Math.clamp(xRoot, 0, 1)));
                                 break checkRoots;
                             }
                         }

@@ -25,12 +25,12 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.concurrent.RangeTask;
 import org.jhotdraw8.color.DisplayP3ColorSpace;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jhotdraw8.color.RgbBitConverters;
 import org.jhotdraw8.color.SrgbColorSpace;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.color.ColorSpace;
 import java.awt.geom.Path2D;
@@ -39,8 +39,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.BiConsumer;
-
-import static org.jhotdraw8.color.util.MathUtil.clamp;
 
 
 /**
@@ -254,7 +252,7 @@ public class ChromaticityDiagram extends Pane {
                 max = Math.max(max, colorvalue[i]);
             }
             for (int i = 0; i < colorvalue.length; i++) {
-                colorvalue[i] = clamp(colorvalue[i] / max, 0, 1);
+                colorvalue[i] = Math.clamp(colorvalue[i] / max, (float) 0, (float) 1);
             }
         }
 
@@ -290,9 +288,9 @@ public class ChromaticityDiagram extends Pane {
         }
 
         private static void clampIfTooBright(float[] colorvalue) {
-            colorvalue[0] = clamp(colorvalue[0], 0, 1);
-            colorvalue[1] = clamp(colorvalue[1], 0, 1);
-            colorvalue[2] = clamp(colorvalue[2], 0, 1);
+            colorvalue[0] = Math.clamp(colorvalue[0], (float) 0, (float) 1);
+            colorvalue[1] = Math.clamp(colorvalue[1], (float) 0, (float) 1);
+            colorvalue[2] = Math.clamp(colorvalue[2], (float) 0, (float) 1);
         }
 
         private static void grayIfTooBright(float[] colorvalue) {

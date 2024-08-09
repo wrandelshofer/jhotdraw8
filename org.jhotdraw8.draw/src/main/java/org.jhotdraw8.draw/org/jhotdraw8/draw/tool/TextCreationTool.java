@@ -10,9 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -25,6 +23,7 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.TextEditableFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -127,8 +126,10 @@ public class TextCreationTool extends AbstractCreationTool<Figure> {
         DrawingModel dm = view.getModel();
         dm.addChildTo(createdFigure, parent);
 
-        double anchorX = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double value1 = createdFigure.getNonNull(AnchorableFigure.ANCHOR_X);
+        double anchorX = Math.clamp(value1, 0, 1);
+        double value = createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y);
+        double anchorY = Math.clamp(value, 0, 1);
 
 
         CssPoint2D c = view.getConstrainer().constrainPoint(createdFigure, new CssPoint2D(

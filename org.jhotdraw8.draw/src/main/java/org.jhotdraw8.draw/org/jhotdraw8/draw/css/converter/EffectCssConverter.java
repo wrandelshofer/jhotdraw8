@@ -19,7 +19,6 @@ import javafx.scene.effect.Shadow;
 import javafx.scene.paint.Color;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.KebabCaseEnumCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
@@ -187,7 +186,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
         }
-        return new Bloom(MathUtil.clamp(threshold, 0, 1));
+        return new Bloom(Math.clamp(threshold, 0, 1));
     }
 
     private Effect parseBoxBlur(CssTokenizer tt) throws ParseException, IOException {
@@ -196,7 +195,8 @@ public class EffectCssConverter implements CssConverter<Effect> {
         int iterations = 1;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            width = MathUtil.clamp(tt.currentNumberNonNull().doubleValue(), 0, 255);
+            double value = tt.currentNumberNonNull().doubleValue();
+            width = Math.clamp(value, 0, 255);
             break;
         default:
             tt.pushBack();
@@ -206,7 +206,8 @@ public class EffectCssConverter implements CssConverter<Effect> {
         }
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            height = MathUtil.clamp(tt.currentNumberNonNull().doubleValue(), 0, 255);
+            double value = tt.currentNumberNonNull().doubleValue();
+            height = Math.clamp(value, 0, 255);
             break;
         default:
             tt.pushBack();
@@ -216,7 +217,8 @@ public class EffectCssConverter implements CssConverter<Effect> {
         }
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            iterations = MathUtil.clamp(tt.currentNumberNonNull().intValue(), 0, 3);
+            int value = tt.currentNumberNonNull().intValue();
+            iterations = Math.clamp(value, 0, 3);
             break;
         default:
             tt.pushBack();
@@ -245,7 +247,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
             default:
                 tt.pushBack();
             }
-            adjust = MathUtil.clamp(adjust, 0, 1);
+            adjust = Math.clamp(adjust, 0, 1);
             switch (ident) {
             case "hue":
                 hue = adjust;
@@ -349,13 +351,13 @@ public class EffectCssConverter implements CssConverter<Effect> {
 
         final Effect effect;
         if (isDropShadow) {
-            DropShadow dropShadow = new DropShadow(blurType, color, MathUtil.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            DropShadow dropShadow = new DropShadow(blurType, color, Math.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
             if (input != null) {
                 dropShadow.setInput(input);
             }
             effect = dropShadow;
         } else {
-            InnerShadow innerhShadow = new InnerShadow(blurType, color, MathUtil.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
+            InnerShadow innerhShadow = new InnerShadow(blurType, color, Math.clamp(radius, 0, 127), spreadOrChocke, offsetX, offsetY);
             if (input != null) {
                 innerhShadow.setInput(input);
             }
@@ -408,7 +410,8 @@ public class EffectCssConverter implements CssConverter<Effect> {
         double radius = 5;
         switch (tt.next()) {
         case CssTokenType.TT_NUMBER:
-            radius = MathUtil.clamp(tt.currentNumberNonNull().doubleValue(), 0, 63);
+            double value = tt.currentNumberNonNull().doubleValue();
+            radius = Math.clamp(value, 0, 63);
             break;
         default:
             tt.pushBack();
@@ -434,7 +437,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
         if (tt.next() != ')') {
             throw tt.createParseException("CSS Effect: ')' expected.");
         }
-        return new Glow(MathUtil.clamp(level, 0, 1));
+        return new Glow(Math.clamp(level, 0, 1));
     }
 
     private Effect parseInnerShadow(CssTokenizer tt) throws ParseException, IOException {
@@ -480,7 +483,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
                 throw tt.createParseException("CSS Effect: ')' expected.");
             }
         }
-        return new Shadow(blurType, color, MathUtil.clamp(radius, 0, 127));
+        return new Shadow(blurType, color, Math.clamp(radius, 0, 127));
     }
 
     @Override

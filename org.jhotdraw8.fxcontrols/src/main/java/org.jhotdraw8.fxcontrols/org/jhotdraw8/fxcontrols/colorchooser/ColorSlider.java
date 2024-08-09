@@ -26,8 +26,6 @@ import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.base.util.MathUtil.clamp;
-
 
 /**
  * This slider shows one component dimension of an {@link NamedColorSpace}
@@ -92,19 +90,19 @@ public class ColorSlider extends AbstractColorSlider {
             // increment by tick unit
             case UP, RIGHT -> {
                 keyEvent.consume();
-                setValue(clamp((float) (vSnappedToTick + tickUnit), vMin, vMax));
+                setValue(Math.clamp((float) (vSnappedToTick + tickUnit), vMin, vMax));
             }
 
             // decrement by tick unit
             case DOWN, LEFT -> {
                 keyEvent.consume();
-                setValue(clamp((float) (vSnappedToTick - tickUnit), vMin, vMax));
+                setValue(Math.clamp((float) (vSnappedToTick - tickUnit), vMin, vMax));
             }
 
             // snap to tick unit
             case SPACE -> {
                 keyEvent.consume();
-                setValue(clamp((float) vSnappedToTick, vMin, vMax));
+                setValue(Math.clamp((float) vSnappedToTick, vMin, vMax));
             }
         }
     }
@@ -161,8 +159,8 @@ public class ColorSlider extends AbstractColorSlider {
         requestFocus();
         float width = (float) getWidth();
         float height = (float) getHeight();
-        float x = clamp((float) mouseEvent.getX(), 0, width);
-        float y = clamp((float) mouseEvent.getY(), 0, height);
+        float x = Math.clamp((float) mouseEvent.getX(), (float) 0, width);
+        float y = Math.clamp((float) mouseEvent.getY(), (float) 0, height);
         NamedColorSpace cs = getSourceColorSpace();
         if (cs == null) {
             return;

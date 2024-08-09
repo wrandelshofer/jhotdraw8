@@ -5,8 +5,6 @@
 
 package org.jhotdraw8.color;
 
-import static org.jhotdraw8.color.util.MathUtil.clamp;
-
 /**
  * Provides conversion functions between RGB bit representations.
  */
@@ -182,7 +180,7 @@ public class RgbBitConverters {
                 || rgb[0] > EPSILON + 1 || rgb[1] > EPSILON + 1 || rgb[2] > EPSILON + 1) {
             return 0;
         }*/
-        return (clamp((int) (alpha * 255), 0, 255) << 24) | rgbFloatToRgb24(rgb);
+        return (Math.clamp((int) (alpha * 255), 0, 255) << 24) | rgbFloatToRgb24(rgb);
     }
 
     public static int rgbFloatToPreArgb32(float[] rgb, float alpha, float[] pre) {
@@ -192,11 +190,11 @@ public class RgbBitConverters {
                 || rgb[0] > EPSILON + 1 || rgb[1] > EPSILON + 1 || rgb[2] > EPSILON + 1) {
             return 0;
         }*/
-        alpha = clamp(alpha, 0, 1);
+        alpha = Math.clamp(alpha, (float) 0, (float) 1);
         pre[0] = rgb[0] * alpha;
         pre[1] = rgb[1] * alpha;
         pre[2] = rgb[2] * alpha;
-        return (clamp((int) (alpha * 255), 0, 255) << 24) | rgbFloatToRgb24(pre);
+        return (Math.clamp((int) (alpha * 255), 0, 255) << 24) | rgbFloatToRgb24(pre);
     }
 
     /**
@@ -206,9 +204,9 @@ public class RgbBitConverters {
      * @return 24-bit RGB color value
      */
     public static int rgbFloatToRgb24(float[] rgb) {
-        return (clamp((int) ((rgb[0] + 1f / 512) * 255f), 0, 255) << 16)
-                | (clamp((int) ((rgb[1] + 1f / 512) * 255f), 0, 255) << 8)
-                | clamp((int) ((rgb[2] + 1f / 512) * 255f), 0, 255);
+        return (Math.clamp((int) ((rgb[0] + 1f / 512) * 255f), 0, 255) << 16)
+                | (Math.clamp((int) ((rgb[1] + 1f / 512) * 255f), 0, 255) << 8)
+                | Math.clamp((int) ((rgb[2] + 1f / 512) * 255f), 0, 255);
     }
 
     /**

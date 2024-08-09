@@ -45,8 +45,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.function.ToIntFunction;
 
-import static org.jhotdraw8.color.util.MathUtil.clamp;
-
 /**
  * Data flow:
  * <pre>
@@ -829,7 +827,8 @@ public class ColorChooserPaneModel {
             displayCs.fromRGB(sourceCs.toRGB(component, rgb), rgb);
             int value = RgbBitConverters.rgbFloatToArgb32(rgb, alpha.floatValue());
             int argb = entry == null ? value : entry.getValue().applyAsInt(value);
-            Color previewColorValue = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, clamp(alpha.floatValue(), 0, 1));
+            float value1 = alpha.floatValue();
+            Color previewColorValue = Color.rgb((argb >>> 16) & 0xff, (argb >>> 8) & 0xff, (argb) & 0xff, Math.clamp(value1, (float) 0, (float) 1));
             String hexStr = "00000000" + Integer.toHexString(argb);
             hexStr = hexStr.substring(hexStr.length() - 8);
             previewColor.set(previewColorValue);

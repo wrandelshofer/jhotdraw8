@@ -19,7 +19,6 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.CubicCurveCharacteristics;
@@ -87,8 +86,8 @@ public class BezierArcLengthExampleMain extends Application {
         }
 
         private void onMouseDragged(MouseEvent evt) {
-            setPosition(MathUtil.clamp(round(evt.getX() / 10) * 10, 4, Integer.MAX_VALUE),
-                    MathUtil.clamp(round(evt.getY() / 10) * 10, 4, Integer.MAX_VALUE));
+            setPosition(Math.clamp(round(evt.getX() / 10) * 10, 4, (long) Integer.MAX_VALUE),
+                    Math.clamp(round(evt.getY() / 10) * 10, 4, (long) Integer.MAX_VALUE));
             handlesChanged();
         }
     }

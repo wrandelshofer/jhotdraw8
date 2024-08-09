@@ -15,15 +15,12 @@ import javafx.scene.image.PixelBuffer;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.base.concurrent.TileTask;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.color.NamedColorSpace;
 import org.jspecify.annotations.Nullable;
 
 import java.nio.IntBuffer;
 import java.util.Objects;
 import java.util.function.ToIntFunction;
-
-import static org.jhotdraw8.base.util.MathUtil.clamp;
 
 
 /**
@@ -125,8 +122,8 @@ public class ColorRectangleSlider extends AbstractColorSlider {
         requestFocus();
         float width = (float) getWidth();
         float height = (float) getHeight();
-        float x = MathUtil.clamp((float) mouseEvent.getX(), 0, width);
-        float y = MathUtil.clamp((float) mouseEvent.getY(), 0, height);
+        float x = Math.clamp((float) mouseEvent.getX(), (float) 0, width);
+        float y = Math.clamp((float) mouseEvent.getY(), (float) 0, height);
         NamedColorSpace cs = getSourceColorSpace();
         if (cs == null) {
             return;
@@ -251,28 +248,28 @@ public class ColorRectangleSlider extends AbstractColorSlider {
             // increment by tick unit
             case UP -> {
                 keyEvent.consume();
-                setYValue(clamp((float) (ySnappedToTick + yTickUnit), yMin, yMax));
+                setYValue(Math.clamp((float) (ySnappedToTick + yTickUnit), yMin, yMax));
             }
             case RIGHT -> {
                 keyEvent.consume();
-                setXValue(clamp((float) (xSnappedToTick + xTickUnit), xMin, xMax));
+                setXValue(Math.clamp((float) (xSnappedToTick + xTickUnit), xMin, xMax));
             }
 
             // decrement by tick unit
             case DOWN -> {
                 keyEvent.consume();
-                setYValue(clamp((float) (ySnappedToTick - yTickUnit), yMin, yMax));
+                setYValue(Math.clamp((float) (ySnappedToTick - yTickUnit), yMin, yMax));
             }
             case LEFT -> {
                 keyEvent.consume();
-                setXValue(clamp((float) (xSnappedToTick - xTickUnit), xMin, xMax));
+                setXValue(Math.clamp((float) (xSnappedToTick - xTickUnit), xMin, xMax));
             }
 
             // snap to tick unit
             case SPACE -> {
                 keyEvent.consume();
-                setYValue(clamp((float) ySnappedToTick, yMin, yMax));
-                setXValue(clamp((float) xSnappedToTick, xMin, xMax));
+                setYValue(Math.clamp((float) ySnappedToTick, yMin, yMax));
+                setXValue(Math.clamp((float) xSnappedToTick, xMin, xMax));
             }
         }
     }

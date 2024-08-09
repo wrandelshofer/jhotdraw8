@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.base.util.MathUtil;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -93,8 +92,10 @@ public class CreationTool extends AbstractCreationTool<Figure> {
         x2 = x1;
         y2 = y1;
 
-        double anchorX = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_X), 0, 1);
-        double anchorY = MathUtil.clamp(createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y), 0, 1);
+        double value1 = createdFigure.getNonNull(AnchorableFigure.ANCHOR_X);
+        double anchorX = Math.clamp(value1, 0, 1);
+        double value = createdFigure.getNonNull(AnchorableFigure.ANCHOR_Y);
+        double anchorY = Math.clamp(value, 0, 1);
 
 
         CssPoint2D c =
