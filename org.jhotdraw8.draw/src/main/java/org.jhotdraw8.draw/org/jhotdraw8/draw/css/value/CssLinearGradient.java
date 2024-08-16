@@ -4,10 +4,14 @@
  */
 package org.jhotdraw8.draw.css.value;
 
+import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.DefaultUnitConverter;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.converter.CssStop;
 import org.jspecify.annotations.Nullable;
 
@@ -61,24 +65,28 @@ public class CssLinearGradient implements Paintable {
         cstops = new CssStop[stopList.size()];
         for (int i = 0; i < cstops.length; i++) {
             Stop stop = stopList.get(i);
-            cstops[i] = new CssStop(stop.getOffset(), new CssColor(stop.getColor()));
+            cstops[i] = new CssStop(CssSize.of(stop.getOffset()), new CssColor(stop.getColor()));
         }
     }
 
     public LinearGradient getLinearGradient() {
         if (linearGradient == null) {
-            Stop[] stops = new Stop[cstops.length];
-            for (int i = 0; i < cstops.length; i++) {
+            int length = cstops.length;
+            Stop[] stops = new Stop[length];
+            DefaultUnitConverter cvrtr = DefaultUnitConverter.getInstance();
+            for (int i = 0; i < length; i++) {
                 CssStop cstop = cstops[i];
                 double offset;
                 if (cstop.offset() == null) {
                     int left = i, right = i;
                     for (; left > 0 && cstops[left].offset() == null; left--) {
                     }
-                    for (; right < cstops.length - 1 && cstops[right].offset() == null; right++) {
+                    for (; right < length - 1 && cstops[right].offset() == null; right++) {
                     }
-                    double leftOffset = cstops[left].offset() == null ? 0.0 : cstops[left].offset();
-                    double rightOffset = cstops[right].offset() == null ? 1.0 : cstops[right].offset();
+                    CssSize leftOffsetSize = cstops[left].offset() == null ? CssSize.ZERO : cstops[left].offset();
+                    CssSize rightOffsetSize = cstops[right].offset() == null ? CssSize.ONE : cstops[right].offset();
+                    double leftOffset = cvrtr.convert(leftOffsetSize, UnitConverter.DEFAULT);
+                    double rightOffset = cvrtr.convert(rightOffsetSize, UnitConverter.DEFAULT);
                     if (i == left) {
                         offset = leftOffset;
                     } else if (i == right) {
@@ -88,10 +96,11 @@ public class CssLinearGradient implements Paintable {
                         offset = leftOffset * (1 - mix) + rightOffset * mix;
                     }
                 } else {
-                    offset = cstop.offset();
+                    offset = cvrtr.convert(cstop.offset(), UnitConverter.DEFAULT);
                 }
 
-                stops[i] = new Stop(offset, cstop.color().getColor());
+                CssColor color = cstop.color();
+                stops[i] = new Stop(offset, color == null ? Color.TRANSPARENT : color.getColor());
             }
             linearGradient = new LinearGradient(startX, startY, endX, endY, proportional, cycleMethod, stops);
         }

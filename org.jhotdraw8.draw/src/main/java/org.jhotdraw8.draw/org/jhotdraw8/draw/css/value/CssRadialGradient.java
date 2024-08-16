@@ -8,6 +8,9 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.DefaultUnitConverter;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.converter.CssStop;
 import org.jspecify.annotations.Nullable;
 
@@ -63,13 +66,14 @@ public class CssRadialGradient implements Paintable {
         cstops = new CssStop[stopList.size()];
         for (int i = 0; i < cstops.length; i++) {
             Stop stop = stopList.get(i);
-            cstops[i] = new CssStop(stop.getOffset(), new CssColor(stop.getColor()));
+            cstops[i] = new CssStop(CssSize.of(stop.getOffset()), new CssColor(stop.getColor()));
         }
     }
 
     public RadialGradient getRadialGradient() {
         if (radialGradient == null) {
             Stop[] stops = new Stop[cstops.length];
+            DefaultUnitConverter cvrtr = DefaultUnitConverter.getInstance();
             for (int i = 0; i < cstops.length; i++) {
                 CssStop cstop = cstops[i];
                 double offset;
@@ -79,8 +83,10 @@ public class CssRadialGradient implements Paintable {
                     }
                     for (; right < cstops.length - 1 && cstops[right].offset() == null; right++) {
                     }
-                    double leftOffset = cstops[left].offset() == null ? 0.0 : cstops[left].offset();
-                    double rightOffset = cstops[right].offset() == null ? 1.0 : cstops[right].offset();
+                    CssSize leftOffsetSize = cstops[left].offset() == null ? CssSize.ZERO : cstops[left].offset();
+                    CssSize rightOffsetSize = cstops[right].offset() == null ? CssSize.ONE : cstops[right].offset();
+                    double leftOffset = cvrtr.convert(leftOffsetSize, UnitConverter.DEFAULT);
+                    double rightOffset = cvrtr.convert(rightOffsetSize, UnitConverter.DEFAULT);
                     if (i == left) {
                         offset = leftOffset;
                     } else if (i == right) {
@@ -90,7 +96,7 @@ public class CssRadialGradient implements Paintable {
                         offset = leftOffset * (1 - mix) + rightOffset * mix;
                     }
                 } else {
-                    offset = cstop.offset();
+                    offset = cvrtr.convert(cstop.offset(), UnitConverter.DEFAULT);
                 }
 
                 stops[i] = new Stop(offset, cstop.color().getColor());

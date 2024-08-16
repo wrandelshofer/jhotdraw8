@@ -14,7 +14,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableSet;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
@@ -26,6 +25,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.Serial;
@@ -45,7 +45,8 @@ import java.util.logging.Logger;
  * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingView extends AbstractPropertyBean implements DrawingView {
-    private final ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY, new BitmapExportOutputFormat());
+    private final ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY,
+            new BitmapExportOutputFormat(BitmapExportOutputFormat.PNG_MIME_TYPE, BitmapExportOutputFormat.PNG_EXTENSION));
     private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, EDITOR_PROPERTY, null);
     private final ObjectProperty<ClipboardInputFormat> clipboardInputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_INPUT_FORMAT_PROPERTY);
     /**

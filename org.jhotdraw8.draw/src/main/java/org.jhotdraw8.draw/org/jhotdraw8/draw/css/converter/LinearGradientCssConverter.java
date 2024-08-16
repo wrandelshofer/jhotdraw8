@@ -11,6 +11,8 @@ import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.CssLinearGradient;
 import org.jspecify.annotations.Nullable;
@@ -25,7 +27,7 @@ import java.util.function.Consumer;
  * CssLinearGradientConverter.
  * <p>
  * Parses the following EBNF from the
- * <a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">JavaFX
+ * <a href="https://openjfx.io/javadoc/22/javafx.graphics/javafx/scene/doc-files/cssref.html#typepaint">JavaFX
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
@@ -200,9 +202,14 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
                 }
                 colorConverter.produceTokens(stop.color(), idSupplier, out);
-                if (stop.offset() != null) {
+                CssSize offset = stop.offset();
+                if (offset != null) {
                     out.accept(new CssToken(CssTokenType.TT_S, " "));
-                    out.accept(new CssToken(CssTokenType.TT_PERCENTAGE, stop.offset() * 100.0));
+                    out.accept(switch (offset.getUnits()) {
+                        case UnitConverter.PERCENTAGE -> new CssToken(CssTokenType.TT_PERCENTAGE, offset.getValue());
+                        case UnitConverter.DEFAULT -> new CssToken(CssTokenType.TT_NUMBER, offset.getValue());
+                        default -> new CssToken(CssTokenType.TT_DIMENSION, offset.getValue(), offset.getUnits());
+                    });
                 }
                 needsComma = true;
             }
@@ -442,16 +449,14 @@ public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGr
 
     private CssStop parseColorStop(CssTokenizer tt) throws IOException, ParseException {
         CssColor color = colorConverter.parse(tt, null);
-        Double offset = null;
+        CssSize offset = null;
         switch (tt.next()) {
-        case CssTokenType.TT_NUMBER:
-            offset = tt.currentNumberNonNull().doubleValue();
-            break;
-        case CssTokenType.TT_PERCENTAGE:
-            offset = tt.currentNumberNonNull().doubleValue() / 100.0;
-            break;
-        default:
-            tt.pushBack();
+            case CssTokenType.TT_NUMBER -> offset = CssSize.of(tt.currentNumberNonNull().doubleValue());
+            case CssTokenType.TT_PERCENTAGE ->
+                    offset = CssSize.of(tt.currentNumberNonNull().doubleValue(), UnitConverter.PERCENTAGE);
+            case CssTokenType.TT_DIMENSION ->
+                    offset = CssSize.of(tt.currentNumberNonNull().doubleValue(), tt.currentStringNonNull());
+            default -> tt.pushBack();
         }
         return new CssStop(offset, color);
     }

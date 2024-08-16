@@ -38,11 +38,12 @@ public class Uint8HexSrgbaCssColor extends CssColor {
             length = 6;
         } else {
             // the color is translucent
-            value = argb;
+            // convert argb to rgba
+            value = Integer.rotateLeft(argb, 8);
             length = 8;
         }
         String hex = Integer.toHexString(value);
-        for (int i = 0, n = length - hex.length(); i < n; i++) {
+        for (int i = hex.length(); i < length; i++) {
             buf.append('0');
         }
         buf.append(hex);

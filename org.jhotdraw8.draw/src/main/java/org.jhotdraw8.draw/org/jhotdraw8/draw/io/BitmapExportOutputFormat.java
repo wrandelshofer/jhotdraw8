@@ -41,9 +41,11 @@ import javax.imageio.ImageWriter;
 import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
+import javax.imageio.plugins.jpeg.JPEGImageWriteParam;
 import javax.imageio.stream.ImageOutputStream;
 import javax.imageio.stream.MemoryCacheImageOutputStream;
-import java.awt.*;
+import java.awt.AlphaComposite;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 import java.awt.image.SampleModel;
@@ -75,8 +77,18 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
     private static final double INCH_2_MM = 25.4;
     public static final String JPEG_MIME_TYPE = "image/jpeg";
     public static final String PNG_MIME_TYPE = "image/png";
+    public static final String PNG_EXTENSION = "png";
+    public static final String JPEG_EXTENSION = "jpg";
+    private final String mimetype;
+    private final String extension;
 
     public BitmapExportOutputFormat() {
+        this(PNG_MIME_TYPE, PNG_EXTENSION);
+    }
+
+    public BitmapExportOutputFormat(String mimetype, String extension) {
+        this.mimetype = mimetype;
+        this.extension = extension;
     }
 
     private WritableImage doRenderImage(Figure slice, Node node, Bounds bounds, double dpi) {
@@ -100,7 +112,7 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
 
     @Override
     protected String getExtension() {
-        return "png";
+        return extension;
     }
 
     @Override
@@ -131,6 +143,25 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         } else {
             return doRenderImage(figure, node, bounds, dpi);
         }
+    }
+
+    public static final String JAVAX_IMAGEIO_JPEG_IMAGE_1_0 = "javax_imageio_jpeg_image_1.0";
+
+    private static void setChromaSamplingFactor(IIOMetadata meta, int value) throws IIOInvalidTreeException {
+        String stringValue = Integer.toString(Math.clamp(value, 1, 2));
+        IIOMetadataTree mt = new IIOMetadataTree();
+        org.w3c.dom.Node root = meta.getAsTree(JAVAX_IMAGEIO_JPEG_IMAGE_1_0);
+        for (org.w3c.dom.Node node : mt.findAllNodesByName(root, "componentSpec")) {
+
+            IIOMetadataNode componentSpec = (IIOMetadataNode) node;
+            switch (componentSpec.getAttribute("componentId")) {
+                case "2", "3" -> {
+                    componentSpec.setAttribute("HsamplingFactor", stringValue);
+                    componentSpec.setAttribute("VsamplingFactor", stringValue);
+                }
+            }
+        }
+        meta.mergeTree(JAVAX_IMAGEIO_JPEG_IMAGE_1_0, root);
     }
 
     private void setDPI(IIOMetadata metadata, double dpi) throws IIOInvalidTreeException {
@@ -184,13 +215,23 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
         }
     }
 
+    private int chromaSamplingFactor = 1;
+
+    public int getChromaSamplingFactor() {
+        return chromaSamplingFactor;
+    }
+
+    public void setChromaSamplingFactor(int chromaSamplingFactor) {
+        this.chromaSamplingFactor = chromaSamplingFactor;
+    }
+
     private void writeImage(OutputStream out, WritableImage writableImage, double dpi) throws IOException {
         BufferedImage image = fromFXImage(writableImage, null);
         if (image == null) {
             throw new IOException("Could not convert the JavaFX image to AWT.");
         }
 
-        for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByFormatName("png"); iw.hasNext(); ) {
+        for (Iterator<ImageWriter> iw = ImageIO.getImageWritersByMIMEType(mimetype); iw.hasNext(); ) {
             ImageWriter writer = iw.next();
             ImageWriteParam writeParam = writer.getDefaultWriteParam();
             ImageTypeSpecifier typeSpecifier = ImageTypeSpecifier.createFromBufferedImageType(BufferedImage.TYPE_INT_RGB);
@@ -200,6 +241,12 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
             }
 
             setDPI(metadata, dpi);
+
+            if (writeParam instanceof JPEGImageWriteParam jpegWriteParam) {
+                image = removeAlphaChannel(image);
+                //FIXME this does not work
+                //setChromaSamplingFactor(metadata, chromaSamplingFactor);
+            }
 
             try (ImageOutputStream output = new MemoryCacheImageOutputStream(out)) {
                 writer.setOutput(output);
@@ -229,6 +276,18 @@ public class BitmapExportOutputFormat extends AbstractExportOutputFormat impleme
             writeImage(out, image, dpi);
         }
         return false;
+    }
+
+    private static BufferedImage removeAlphaChannel(BufferedImage img) {
+        if (!img.getColorModel().hasAlpha()) {
+            return img;
+        }
+
+        BufferedImage target = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_INT_RGB);
+        Graphics2D g = target.createGraphics();
+        g.drawImage(img, 0, 0, null);
+        g.dispose();
+        return target;
     }
 
     /**

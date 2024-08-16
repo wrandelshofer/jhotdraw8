@@ -374,7 +374,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         SimpleXmlReader ior = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
         ior.setLayerFactory(LayerFigure::new);
         drawingView.setClipboardOutputFormat(new MultiClipboardOutputFormat(
-                iow, new SvgExportOutputFormat(), new BitmapExportOutputFormat()));
+                iow, new SvgExportOutputFormat(), new BitmapExportOutputFormat(BitmapExportOutputFormat.PNG_MIME_TYPE, BitmapExportOutputFormat.PNG_EXTENSION)));
         drawingView.setClipboardInputFormat(new MultiClipboardInputFormat(ior));
 
         editor = new SimpleDrawingEditor();
@@ -509,7 +509,11 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
                 io.setOptions(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(BitmapExportOutputFormat.PNG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".png")) {
-                BitmapExportOutputFormat io = new BitmapExportOutputFormat();
+                BitmapExportOutputFormat io = new BitmapExportOutputFormat(BitmapExportOutputFormat.PNG_MIME_TYPE, BitmapExportOutputFormat.PNG_EXTENSION);
+                io.setOptions(options);
+                io.write(uri, drawing, workState);
+            } else if (registerDataFormat(BitmapExportOutputFormat.JPEG_MIME_TYPE).equals(format) || uri.getPath().endsWith(".jpg")) {
+                BitmapExportOutputFormat io = new BitmapExportOutputFormat(BitmapExportOutputFormat.JPEG_MIME_TYPE, BitmapExportOutputFormat.JPEG_EXTENSION);
                 io.setOptions(options);
                 io.write(uri, drawing, workState);
             } else if (registerDataFormat(XmlEncoderOutputFormat.XML_SERIALIZER_MIME_TYPE).equals(format) || uri.getPath().endsWith(".ser.xml")) {

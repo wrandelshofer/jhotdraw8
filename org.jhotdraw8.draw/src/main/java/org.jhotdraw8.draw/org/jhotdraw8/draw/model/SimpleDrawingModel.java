@@ -10,7 +10,6 @@ import javafx.beans.property.ReadOnlyBooleanProperty;
 import javafx.beans.property.ReadOnlyBooleanWrapper;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssPoint2D;
@@ -28,6 +27,7 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.ArrayDeque;
@@ -213,7 +213,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
             fireTreeModelEvent(TreeModelEvent.nodeRemovedFromParent(this, child, oldParent, oldChildIndex));
             fireTreeModelEvent(TreeModelEvent.nodeChanged(this, oldParent));
         }
-        parent.getChildren().add(index, child);
+        parent.getChildren().add(Math.clamp(index, 0, parent.getChildren().size()), child);
         Figure newRoot = child.getRoot();
         if (oldRoot != newRoot) {
             if (oldRoot != null) {

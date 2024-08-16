@@ -4,6 +4,7 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jspecify.annotations.Nullable;
 
@@ -12,5 +13,5 @@ import org.jspecify.annotations.Nullable;
  *
  * @author Werner Randelshofer
  */
-public record CssStop(@Nullable Double offset, CssColor color) {
+public record CssStop(@Nullable CssSize offset, CssColor color) {
 }
