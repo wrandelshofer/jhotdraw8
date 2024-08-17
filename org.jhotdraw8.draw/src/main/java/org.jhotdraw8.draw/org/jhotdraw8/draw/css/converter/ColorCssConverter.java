@@ -203,13 +203,12 @@ public class ColorCssConverter implements CssConverter<CssColor> {
             throw tt.createParseException("Could not convert a string to a CssColor because the closing bracket ')' is missing.");
         }
         float[] rgb = clampColors(params);
-        double value = params.get(3).getValue();
         return new CssColor(
                 "color("
                         + colorSpaceParam + " "
                         + colorParamToString(params)
                         + ")",
-                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? Math.clamp(value, 0, 1) : 1.0));
+                new Color(rgb[0], rgb[1], rgb[2], params.size() == 4 ? Math.clamp(params.get(3).getValue(), 0, 1) : 1.0));
     }
 
     private static List<CssSize> parseParams(CssTokenizer tt, NamedColorSpace cs) throws IOException, ParseException {

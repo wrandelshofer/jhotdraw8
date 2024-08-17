@@ -49,7 +49,27 @@
       </testResource>
 
     </testResources>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jar-plugin</artifactId>
+        <configuration>
+          <archive>
+            <manifest>
+              <addDefaultEntries>false</addDefaultEntries>
+              <mainClass>org.jhotdraw8.grapher.GrapherMain</mainClass>
+            </manifest>
+            <manifestEntries>
+              <SCM-URL>${project.scm.url}</SCM-URL>
+              <Git-Commit-Time>${git.commit.time}</Git-Commit-Time>
+              <Git-Commit-Id>${git.commit.id.full}</Git-Commit-Id>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
+
 
   <dependencies>
     <dependency>

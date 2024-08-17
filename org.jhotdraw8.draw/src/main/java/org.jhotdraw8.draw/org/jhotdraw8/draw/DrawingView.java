@@ -15,7 +15,6 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.constrain.Constrainer;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
@@ -28,6 +27,7 @@ import org.jhotdraw8.draw.render.WritableRenderContext;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -141,10 +141,12 @@ public interface DrawingView extends WritableRenderContext {
     ObjectProperty<DrawingEditor> editorProperty();
 
     /**
-     * The active layer of the drawing.
+     * The active parent figure of the drawing.
+     * <p>
+     * Editing operations should add new figures to the active parent.
      *
-     * @return the active layer of the drawing. Returns null if the drawing has
-     * no layers or no layer has been activated.
+     * @return the active parent figure of the drawing. Returns null if the drawing itself
+     * is the active parent.
      */
     ObjectProperty<Figure> activeParentProperty();
 

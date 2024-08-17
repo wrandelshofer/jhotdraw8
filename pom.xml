@@ -207,7 +207,6 @@
             </manifest>
             <manifestEntries>
               <SCM-URL>${project.scm.url}</SCM-URL>
-              <Revision>$revision</Revision>
               <Git-Commit-Time>${git.commit.time}</Git-Commit-Time>
               <Git-Commit-Id>${git.commit.id.full}</Git-Commit-Id>
             </manifestEntries>
@@ -373,12 +372,12 @@
       <dependency>
         <groupId>com.google.guava</groupId>
         <artifactId>guava-testlib</artifactId>
-        <version>33.2.0-jre</version>
+        <version>33.2.1-jre</version>
       </dependency>
       <dependency>
         <groupId>de.sandec</groupId>
         <artifactId>JMemoryBuddy</artifactId>
-        <version>0.5.4</version>
+        <version>0.5.5</version>
         <scope>test</scope>
       </dependency>
       <dependency>
@@ -397,7 +396,7 @@
       <dependency>
         <groupId>org.jspecify</groupId>
         <artifactId>jspecify</artifactId>
-        <version>0.3.0</version>
+        <version>1.0.0</version>
       </dependency>
       <dependency>
         <groupId>ch.randelshofer</groupId>
@@ -477,12 +476,12 @@
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter</artifactId>
-        <version>5.10.2</version>
+        <version>5.11.0</version>
       </dependency>
       <dependency>
         <groupId>org.junit.jupiter</groupId>
         <artifactId>junit-jupiter-api</artifactId>
-        <version>5.10.2</version>
+        <version>5.11.0</version>
       </dependency>
       <dependency>
         <groupId>org.openjfx</groupId>
