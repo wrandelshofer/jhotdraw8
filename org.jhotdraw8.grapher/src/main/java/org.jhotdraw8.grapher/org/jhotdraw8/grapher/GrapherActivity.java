@@ -483,7 +483,6 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             FigureFactory factory = new DefaultFigureFactory(idFactory);
             SimpleXmlReader io = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
-            System.out.println("READING..." + uri);
             applyUserAgentStylesheet(drawing);
             return drawing;
         }).thenApply(drawing -> {

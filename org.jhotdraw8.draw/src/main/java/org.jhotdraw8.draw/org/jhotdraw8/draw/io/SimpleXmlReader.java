@@ -173,8 +173,13 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         if (figure == null) {
             throw new IOException("Input file is empty.");
         }
-        if ((figure instanceof Drawing)) {
+        if ((figure instanceof Drawing d)) {
             figure.set(Drawing.DOCUMENT_HOME, documentHome);
+
+            for (Figure f : figure.preorderIterable()) {
+                f.addedToDrawing(d);
+            }
+
         }
         workState.updateProgress(1.0);
         return figure;
