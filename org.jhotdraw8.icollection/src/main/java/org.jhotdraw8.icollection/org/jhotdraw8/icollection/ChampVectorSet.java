@@ -245,6 +245,9 @@ public class ChampVectorSet<E>
     @Override
     @SuppressWarnings({"unchecked"})
     public ChampVectorSet<E> addAll(Iterable<? extends E> c) {
+        if(isEmpty()&&c instanceof ChampVectorSet<? extends E> s){
+            return (ChampVectorSet<E>) s;
+        }
         var m = toMutable();
         return m.addAll(c) ? m.toImmutable() : this;
     }

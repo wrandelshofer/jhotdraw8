@@ -201,6 +201,9 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public ChampSet<E> addAll(Iterable<? extends E> c) {
+        if(isEmpty()&&c instanceof ChampSet<? extends E> s){
+            return (ChampSet<E>) s;
+        }
         var m = toMutable();
         return m.addAll(c) ? m.toImmutable() : this;
     }
