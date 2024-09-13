@@ -81,35 +81,37 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
      * Prints a slice of a drawing.
      *
      * @param pageSize       the page size
-     * @param worldToLocal   The worldToLocal transform of the viewport
+     * @param worldToLocal   The worldToLocal transform of the viewport (in case the viewport is rotated)
      * @param viewportBounds the bounds of the viewport that we want to print
      * @param node           the rendered node of the slice
      */
     private void printSlice(CssDimension2D pageSize, @Nullable Transform worldToLocal, Bounds viewportBounds, Node node) {
         Paper paper = findPaper(pageSize);
-        Dimension2D psize = pageSize.getConvertedValue();
-        PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getWidth() <= psize.getHeight() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
+        Dimension2D pgSize = pageSize.getConvertedValue();
+        PageLayout pl = job.getPrinter().createPageLayout(paper, pgSize.getWidth() <= pgSize.getHeight() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
         job.getJobSettings().setPageLayout(pl);
         paper = pl.getPaper();
         if (paper == null) {
             paper = Paper.A4;
         }
         double pw, ph;
+        pw = paper.getWidth();
+        ph = paper.getHeight();
         if (pl.getPageOrientation() == PageOrientation.LANDSCAPE) {
-            pw = paper.getHeight();
-            ph = paper.getWidth();
-        } else {
-            pw = paper.getWidth();
-            ph = paper.getHeight();
+            double swap = pw;
+            pw = ph;
+            ph = swap;
         }
-        double paperAspect = paper.getWidth() / paper.getHeight();
-        double pageAspect = viewportBounds.getWidth() / viewportBounds.getHeight();
+        double paperAspect = pw / ph;
 
+        double vw = pgSize.getWidth();
+        double vh = pgSize.getHeight();
+        double viewAspect = vw / vh;
         double scaleFactor;
-        if (paperAspect < pageAspect) {
-            scaleFactor = ph / viewportBounds.getHeight();
+        if (paperAspect < viewAspect) {
+            scaleFactor = pw / vw;
         } else {
-            scaleFactor = pw / viewportBounds.getWidth();
+            scaleFactor = ph / vh;
         }
 
         Group oldParent = (node.getParent() instanceof Group) ? (Group) node.getParent() : null;
@@ -190,7 +192,7 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
                 }
             }
             if (hasPages) {
-            writePages(null, null, drawing);
+                writePages(null, null, drawing);
             } else {
                 writeDrawing(drawing);
             }
