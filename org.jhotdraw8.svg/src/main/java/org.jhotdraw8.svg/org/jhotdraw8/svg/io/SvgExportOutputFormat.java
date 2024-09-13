@@ -214,7 +214,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    protected void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+    protected void writePage(@Nullable Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException {
+        if (file == null) {
+            throw new IOException("No file specified.");
+        }
         CssSize pw = page.getNonNull(PageFigure.PAPER_WIDTH);
         CssSize ph = page.getNonNull(PageFigure.PAPER_HEIGHT);
         markNodesOutsideBoundsWithSkip(node, FXTransforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
@@ -236,8 +239,10 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
     }
 
     @Override
-    protected boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException {
-        LOGGER.info("Writing slice " + file);
+    protected boolean writeSlice(@Nullable Path file, Slice slice, Node node, double dpi) throws IOException {
+        if (file == null) {
+            throw new IOException("No file specified.");
+        }
         markNodesOutsideBoundsWithSkip(node, slice.getLayoutBounds());
         Transform worldToLocal = slice.getWorldToLocal();
         Point2D sliceOrigin = slice.getSliceOrigin();

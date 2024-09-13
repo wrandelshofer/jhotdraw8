@@ -45,9 +45,19 @@ public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
         activity.addDisabler(workState);
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null && job.showPrintDialog(activity.getNode().getScene().getWindow())) {
-            activity.print(job, workState).thenRun(() -> activity.removeDisabler(workState));
+            activity.print(job, workState).whenComplete((v, t) -> {
+                activity.removeDisabler(workState);
+                if (t != null) {
+                    t.printStackTrace();
+                    Alert alert = new Alert(AlertType.INFORMATION, ApplicationLabels.getResources().getTextProperty("file.print.couldntPrint.message"));
+                    alert.setContentText(t.getMessage());
+                    alert.getDialogPane().setMaxWidth(640.0);
+                    alert.show();
+                    activity.removeDisabler(workState);
+                }
+            });
         } else {
-            Alert alert = new Alert(AlertType.INFORMATION, "Sorry, no printer found");
+            Alert alert = new Alert(AlertType.INFORMATION, ApplicationLabels.getResources().getTextProperty("file.print.couldntPrint.message"));
             alert.getDialogPane().setMaxWidth(640.0);
             alert.show();
             activity.removeDisabler(workState);

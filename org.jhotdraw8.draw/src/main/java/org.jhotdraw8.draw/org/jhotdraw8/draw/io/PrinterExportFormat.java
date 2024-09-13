@@ -13,6 +13,7 @@ import javafx.print.PrinterJob;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.transform.Scale;
+import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
@@ -23,14 +24,22 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.draw.figure.PageFigure;
 import org.jhotdraw8.draw.figure.Slice;
+import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.draw.render.RenderingIntent;
+import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 import javax.imageio.metadata.IIOInvalidTreeException;
 import javax.imageio.metadata.IIOMetadata;
 import javax.imageio.metadata.IIOMetadataNode;
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import static java.lang.Math.abs;
+import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 
 /**
  * PrinterExportFormat.
@@ -68,7 +77,15 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         return Paper.A4;
     }
 
-    private void printSlice(CssDimension2D pageSize, Figure slice, Bounds viewportBounds, Node node, double dpi) {
+    /**
+     * Prints a slice of a drawing.
+     *
+     * @param pageSize       the page size
+     * @param worldToLocal   The worldToLocal transform of the viewport
+     * @param viewportBounds the bounds of the viewport that we want to print
+     * @param node           the rendered node of the slice
+     */
+    private void printSlice(CssDimension2D pageSize, @Nullable Transform worldToLocal, Bounds viewportBounds, Node node) {
         Paper paper = findPaper(pageSize);
         Dimension2D psize = pageSize.getConvertedValue();
         PageLayout pl = job.getPrinter().createPageLayout(paper, psize.getWidth() <= psize.getHeight() ? PageOrientation.PORTRAIT : PageOrientation.LANDSCAPE, 0, 0, 0, 0);
@@ -109,10 +126,9 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
                 new Translate(-pl.getLeftMargin(), -pl.getTopMargin()),
                 new Scale(scaleFactor, scaleFactor),
                 new Translate(-viewportBounds.getMinX(), -viewportBounds.getMinY())
-                // slice.getWorldToLocal()
         );
-        if (slice.getWorldToLocal() != null) {
-            printParent.getTransforms().add(slice.getWorldToLocal());
+        if (worldToLocal != null) {
+            printParent.getTransforms().add(worldToLocal);
         }
 
         Group printNode = new Group();
@@ -151,12 +167,12 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
         final Bounds pageBounds = page.getPageBounds(internalPageNumber);
         double factor = paperWidth / pageBounds.getWidth();
 
-        printSlice(page.get(PageFigure.PAPER_SIZE), page, pageBounds, node, EXPORT_PAGES_DPI_KEY.get(getOptions()) * factor);
+        printSlice(page.get(PageFigure.PAPER_SIZE), page.getWorldToLocal(), pageBounds, node);
     }
 
     @Override
     protected boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException {
-        printSlice(null, slice, slice.getLayoutBounds(), node, dpi);
+        printSlice(null, slice.getWorldToLocal(), slice.getLayoutBounds(), node);
         return false;
     }
 
@@ -165,10 +181,32 @@ public class PrinterExportFormat extends AbstractExportOutputFormat {
     public void print(PrinterJob job, Drawing drawing) throws IOException {
         this.job = job;
         try {
+            // If we have pages, print the pages, otherwise print the entire drawing
+            boolean hasPages = false;
+            for (Figure f : drawing.preorderIterable()) {
+                if (f instanceof Page) {
+                    hasPages = true;
+                    break;
+                }
+            }
+            if (hasPages) {
             writePages(null, null, drawing);
-            writeSlices(null, drawing);
+            } else {
+                writeDrawing(drawing);
+            }
         } finally {
             job = null;
         }
+    }
+
+    private void writeDrawing(Drawing drawing) throws IOException {
+        Map<Key<?>, Object> hints = new HashMap<>();
+        Double dpi = EXPORT_PAGES_DPI_KEY.get(getOptions());
+        RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
+        RenderContext.DPI.put(hints, dpi);
+        Bounds b = drawing.getLayoutBounds();
+        Node node = toNode(drawing, Collections.singleton(drawing), hints);
+
+        printSlice(new CssDimension2D(b.getWidth(), b.getHeight()), null, b, node);
     }
 }

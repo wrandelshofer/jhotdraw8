@@ -80,7 +80,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param internalPageNumber the internal page number of the page figure
      * @throws IOException if writing fails
      */
-    protected abstract void writePage(Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
+    protected abstract void writePage(@Nullable Path file, Page page, Node node, int pageCount, int pageNumber, int internalPageNumber) throws IOException;
 
     protected void writePages(@Nullable Path dir, String basename, Drawing drawing) throws IOException {
         List<Page> pages = new ArrayList<>();
@@ -99,7 +99,6 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     /**
      * Writes all pages of the drawing.
      *
-     * @param dir      the output directory, null for print output
      * @param basename the basename of the pages, null for print output
      * @param drawing  the drawing
      * @param pages    the pages
@@ -121,7 +120,6 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         Group parentOfPageNode = new Group();
         for (Page page : pages) {
             for (int internalPageNumber = 0, n = page.getNumberOfSubPages(); internalPageNumber < n; internalPageNumber++) {
-                Path filename = (dir == null) ? null : dir.resolve(basename + "_" + (pageNumber + 1) + "." + getExtension());
 
                 hints.put(RenderContext.RENDER_PAGE, page);
                 hints.put(RenderContext.RENDER_NUMBER_OF_PAGES, numberOfPages);
@@ -150,7 +148,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
 
                 rootNode.getChildren().setAll(parentOfDrawing, parentOfPageNode);
 
-                writePage(filename, page, rootNode, numberOfPages, pageNumber, internalPageNumber);
+                writePage(null, page, rootNode, numberOfPages, pageNumber, internalPageNumber);
 
                 pageNumber++;
             }
@@ -167,7 +165,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @return returns true if the state of the node was destroyed
      * @throws IOException in case of failure
      */
-    protected abstract boolean writeSlice(Path file, Slice slice, Node node, double dpi) throws IOException;
+    protected abstract boolean writeSlice(@Nullable Path file, Slice slice, Node node, double dpi) throws IOException;
 
     protected void writeSlices(@Nullable Path dir, Drawing drawing) throws IOException {
         List<Slice> slices = new ArrayList<>();
@@ -194,7 +192,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
      * @param slices
      * @throws IOException
      */
-    private void writeSlices(Path dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
+    private void writeSlices(@Nullable Path dir, Drawing drawing, List<Slice> slices, String suffix, double dpi) throws IOException {
         Map<Key<?>, Object> hints = new HashMap<>();
         RenderContext.RENDERING_INTENT.put(hints, RenderingIntent.EXPORT);
         RenderContext.DPI.put(hints, dpi);
@@ -208,7 +206,7 @@ public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
         }
         Node node = null;
         for (Slice slice : slices) {
-            Path filename = dir.resolve(idFactory.createId(slice, "Slice") + suffix + "." + getExtension());
+            Path filename = dir == null ? null : dir.resolve(idFactory.createId(slice, "Slice") + suffix + "." + getExtension());
             if (node == null) {
                 node = toNode(drawing, Collections.singleton(drawing), hints);
             }
