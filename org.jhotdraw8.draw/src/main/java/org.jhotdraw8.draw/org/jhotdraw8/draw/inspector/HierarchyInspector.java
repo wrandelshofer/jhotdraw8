@@ -237,7 +237,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                                 TreeTableRow<Figure> row = getTableRow();
                                 boolean isEditable = false;
                                 if (row != null) {
-                                    Figure item = row.getItem();
+                                    @Nullable Figure item = row.getItem();
                                     //Test for disable condition
                                     if (item != null && item.isEditableKey(StyleableFigure.ID)) {
                                         isEditable = true;
@@ -251,9 +251,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                                     //}else{
                                     //textProperty().unbind();
                                     //}
-                                    if (item != null) {
-                                        setText(item.getId());
-                                    }
+                                    setText((item != null) ? item.getId() : null);
                                 }
                                 if (isEditable) {
                                     setEditable(true);

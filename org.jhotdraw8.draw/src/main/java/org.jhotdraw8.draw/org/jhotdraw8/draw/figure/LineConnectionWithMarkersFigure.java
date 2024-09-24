@@ -16,7 +16,17 @@ import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jspecify.annotations.Nullable;
 
 /**
- * LineConnectionWithMarkersFigure.
+ * This figure draws a straight line from a start point to an end point.
+ * <p>
+ * The start point and the end point can be located either
+ * <ul>
+ *     <li>at an absolute position on the drawing,</li>
+ *     <li>or at a point inside another figure</li>
+ * </ul>
+ * <p>
+ * The figure can have an optional marker shape at the start point,
+ * and at the end point.
+ *
  *
  * @author Werner Randelshofer
  */

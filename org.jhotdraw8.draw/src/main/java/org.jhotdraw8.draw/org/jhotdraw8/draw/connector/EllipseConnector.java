@@ -50,8 +50,9 @@ public class EllipseConnector extends LocatorConnector {
             bounds = FXRectangles.grow(bounds, grow, grow);
         }
 
-        IntersectionResultEx i = IntersectEllipseLine.intersectLineEllipseEx(s.getX(), s.getY(), e.getX(), e.getY(),
-                bounds.getMinX() + bounds.getWidth() * 0.5, bounds.getMinY() + bounds.getHeight() * 0.5, bounds.getWidth() * 0.5, bounds.getHeight() * 0.5);
+        IntersectionResultEx i = IntersectEllipseLine.intersectLineEllipseEx(
+                s.getX(), s.getY(), e.getX(), e.getY(),
+                bounds.getCenterX(), bounds.getCenterY(), bounds.getWidth() * 0.5, bounds.getHeight() * 0.5);
         return i.intersections().peekLast();
     }
 }

@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
-  - @(#)createTextArea.svg
-  - Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
-  -->
-
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <svg xmlns="http://www.w3.org/2000/svg" baseProfile="tiny" height="22" version="1.2" viewBox="0 0 22 22" width="22">
-    <defs/>
+  <defs/>
+  <g id="drawing1">
     <g>
-        <g id="content">
-            <rect fill="#ffffff" height="14" id="rectangle13" stroke="#000000" stroke-alignment="inner" stroke-width="2"
-                  width="14" x="4" y="4"/>
-            <path d="M11.125,9.139745712280273 12.35498046875,11.959569931030273 9.8359375,11.959569931030273 11.125,9.139745712280273 Z M11.146484375,6.336034774780273 7.04296875,15.149999618530273 8.39111328125,15.149999618530273 9.31494140625,13.135839462280273 12.865234375,13.135839462280273 13.7353515625,15.149999618530273 15.10498046875,15.149999618530273 11.146484375,6.336034774780273 Z"
-                  fill="#333333" id="combinedpath3"/>
-        </g>
+      <g id="content">
+        <rect fill="#ffffff" height="14" id="rectangle13" width="14" x="4" y="4"/>
+        <path d="M16,6 16,16 6,16 6,6 Z M4,4 4,18 18,18 18,4 Z" fill="#000000"/>
+        <path
+          d="M11.125,9.13974571 12.35498047,11.95956993 9.8359375,11.95956993 11.125,9.13974571 Z M11.14648438,6.33603477 7.04296875,15.14999962 8.39111328,15.14999962 9.31494141,13.13583946 12.86523438,13.13583946 13.73535156,15.14999962 15.10498047,15.14999962 11.14648438,6.33603477 Z"
+          fill="#333333" id="combinedpath3"/>
+      </g>
     </g>
+  </g>
 </svg>

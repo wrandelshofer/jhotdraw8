@@ -60,6 +60,7 @@ import org.jhotdraw8.draw.figure.AbstractDrawing;
 import org.jhotdraw8.draw.figure.BezierPathFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.ElbowConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.FillableFigure;
@@ -304,23 +305,24 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
         ttbar.addTool(new CreationTool("edit.createRectangle", labels, () -> createFigure(RectangleFigure::new), layerFactory), 13, 0, 16);
         ttbar.addTool(new CreationTool("edit.createEllipse", labels, () -> createFigure(EllipseFigure::new), layerFactory), 14, 0);
         ttbar.addTool(new ConnectionTool("edit.createLineConnection", labels, () -> createFigure(LineConnectionWithMarkersFigure::new), layerFactory), 14, 1);
+        ttbar.addTool(new ConnectionTool("edit.createElbowConnection", labels, () -> createFigure(ElbowConnectionWithMarkersFigure::new), layerFactory), 15, 1);
         ttbar.addTool(new LineCreationTool("edit.createLine", labels, () -> createFigure(LineFigure::new), layerFactory), 13, 1, 16);
         ttbar.addTool(new PolyCreationTool("edit.createPolyline", labels, PolylineFigure.POINTS, () -> createFigure(PolylineFigure::new), layerFactory),
-                15, 1);
+                16, 1);
         ttbar.addTool(new PolyCreationTool("edit.createPolygon", labels,
                         PolygonFigure.POINTS, () -> createFigure(PolygonFigure::new), layerFactory),
-                15, 0, 0);
+                16, 0, 0);
         ttbar.addTool(new BezierCreationTool("edit.createBezier", labels,
                         BezierPathFigure.PATH, () -> createFigure(BezierPathFigure::new), layerFactory),
-                16, 1);
+                17, 1);
         ttbar.addTool(new TextCreationTool("edit.createText", labels,//
                 () -> createFigure(() -> new LabelFigure(0, 0, "Hello", FillableFigure.FILL, null, StrokableFigure.STROKE, null)), //
-                layerFactory), 17, 1);
+                layerFactory), 18, 1);
         ttbar.addTool(new TextCreationTool("edit.createTextArea", labels,
                         () -> createFigure(TextAreaFigure::new), layerFactory),
-                17, 0);
+                18, 0);
         ttbar.addTool(new ImageCreationTool("edit.createImage", labels,
-                () -> createFigure(ImageFigure::new), layerFactory), 16, 0, 0);
+                () -> createFigure(ImageFigure::new), layerFactory), 17, 0, 0);
         ttbar.addTool(new CreationTool("edit.createSlice", labels,
                 () -> createFigure(SliceFigure::new), layerFactory), 21, 0, 0);
         ttbar.addTool(new CreationTool("edit.createPage", labels,

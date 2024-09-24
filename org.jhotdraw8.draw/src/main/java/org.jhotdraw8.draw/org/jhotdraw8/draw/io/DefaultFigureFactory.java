@@ -61,6 +61,7 @@ import org.jhotdraw8.draw.figure.BezierPathFigure;
 import org.jhotdraw8.draw.figure.ClippingFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
 import org.jhotdraw8.draw.figure.Drawing;
+import org.jhotdraw8.draw.figure.ElbowConnectionWithMarkersFigure;
 import org.jhotdraw8.draw.figure.EllipseFigure;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.GroupFigure;
@@ -152,6 +153,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addFigureKeysAndNames("Ellipse", EllipseFigure.class);
         addFigureKeysAndNames("LineConnection", LineConnectionFigure.class);
         addFigureKeysAndNames("LineConnectionWithMarkers", LineConnectionWithMarkersFigure.class);
+        addFigureKeysAndNames("ElbowLineConnectionWithMarkers", ElbowConnectionWithMarkersFigure.class);
         addFigureKeysAndNames("Image", ImageFigure.class);
         addFigureKeysAndNames("BezierPath", BezierPathFigure.class);
 

@@ -28,19 +28,15 @@ import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXGeom;
-import org.jhotdraw8.geom.FXPathElementsBuilder;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
+import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.signum;
@@ -157,7 +153,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
         final double startInset = getStrokeCutStart(ctx);
         final double endInset = getStrokeCutEnd(ctx);
-        final String startMarkerStr = getMarkerStartShape();
+        final ImmutableList<PathElement> startMarkerShape = getMarkerStartShape();
 
         ObservableList<Double> points = lineNode.getPoints();
 
@@ -175,11 +171,11 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         }
         updateMarkerNode(ctx, g, startMarkerNode,
                 new PointAndDerivative(p0.getX(), p0.getY(), p1.getX() - p0.getX(), p1.getY() - p0.getY()),
-                startMarkerStr, getMarkerStartScaleFactor());
-        final String endMarkerStr = getMarkerEndShape();
+                startMarkerShape, getMarkerStartScaleFactor());
+        final ImmutableList<PathElement> endMarkerShape = getMarkerEndShape();
         updateMarkerNode(ctx, g, endMarkerNode,
                 new PointAndDerivative(p3.getX(), p3.getY(), p2.getX() - p3.getX(), p2.getY() - p3.getY()),
-                endMarkerStr, getMarkerEndScaleFactor());
+                endMarkerShape, getMarkerEndScaleFactor());
 
         Point2D dir = end.subtract(start).normalize();
         if (startInset != 0) {
@@ -196,19 +192,9 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     protected void updateMarkerNode(RenderContext ctx, Group group,
                                     Path markerNode,
-                                    PointAndDerivative pd, @Nullable String svgString, double markerScaleFactor) {
-        if (svgString != null) {
-            try {
-                // Note: we must not add individual elements to the ObservableList
-                // of the markerNode, because this fires too many change events.
-                List<PathElement> nodes = new ArrayList<>();
-                FXPathElementsBuilder builder = new FXPathElementsBuilder(nodes);
-                SvgPaths.buildSvgString(builder, svgString);
-                builder.build();
-                markerNode.getElements().setAll(nodes);
-            } catch (ParseException e) {
-                Logger.getLogger(AbstractElbowLineConnectionWithMarkersFigure.class.getName()).warning("Illegal path: " + svgString);
-            }
+                                    PointAndDerivative pd, @Nullable ImmutableList<PathElement> shapeElements, double markerScaleFactor) {
+        if (shapeElements != null) {
+            markerNode.getElements().setAll(shapeElements.toMutable());
             double angle = Math.PI + pd.getAngle();
             double pdx = pd.x();
             double pdy = pd.y();
@@ -231,11 +217,11 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     public abstract double getStrokeCutEnd(RenderContext ctx);
 
-    public abstract @Nullable String getMarkerStartShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    public abstract @Nullable String getMarkerEndShape();
+    public abstract @Nullable ImmutableList<PathElement> getMarkerEndShape();
 
     public abstract double getMarkerEndScaleFactor();
 
@@ -272,12 +258,12 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
         // Chop start and end points
-        Point2D endDerivative = null;
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx intersectionPointEx = startConnector.chopStart(ctx, this, startTarget, start, end);
             start = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(START, new CssPoint2D(start));
         }
+        Point2D endDerivative = null;
         if (endConnector != null && endTarget != null) {
             IntersectionPointEx intersectionPointEx = endConnector.chopStart(ctx, this, endTarget, end, start);
             endDerivative = new Point2D(intersectionPointEx.getDerivativeB().getX(), intersectionPointEx.getDerivativeB().getY());

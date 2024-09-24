@@ -120,16 +120,18 @@ public class IntersectEllipseLine {
     }
 
     /**
-     * @param x0
-     * @param y0
-     * @param x1
-     * @param y1
-     * @param cx
-     * @param cy
-     * @param rx
-     * @param ry
-     * @param epsilon
-     * @return
+     * Intersects a line with an ellipse.
+     *
+     * @param x0 the x-coordinate of the start point of the line
+     * @param y0 the y-coordinate of the start point of the line
+     * @param x1 the x-coordinate of the end point of the line
+     * @param y1 the y-coordinate of the end point of the line
+     * @param cx the x-coordinate of the center of the ellipse
+     * @param cy the y-coordinate of the center of the ellipse
+     * @param rx the x-radius of the ellipse
+     * @param ry the y-radius ellipse
+     * @param epsilon the precision threshold
+     * @return the intersection result
      */
     public static IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
                                                                    double cx, double cy, double rx, double ry,
@@ -137,10 +139,8 @@ public class IntersectEllipseLine {
         List<IntersectionPoint> result = new ArrayList<>();
 
         final Point2D.Double origin, dir, center, diff, mDir, mDiff;
-        origin = new Point2D.Double(x0, y0);
         dir = Points2D.subtract(x1, y1, x0, y0);
-        center = new Point2D.Double(cx, cy);
-        diff = Points2D.subtract(origin, center);
+        diff = Points2D.subtract(x0, y0, cx, cy);
         mDir = new Point2D.Double(dir.getX() / (rx * rx), dir.getY() / (ry * ry));
         mDiff = new Point2D.Double(diff.getX() / (rx * rx), diff.getY() / (ry * ry));
 

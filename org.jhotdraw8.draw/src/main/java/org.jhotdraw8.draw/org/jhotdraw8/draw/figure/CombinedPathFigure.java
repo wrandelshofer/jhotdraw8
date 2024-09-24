@@ -23,7 +23,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.PathIterator;
@@ -67,7 +67,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
     }
 
     private PathIterator getStyledPathIteratorInParent(RenderContext ctx, PathIterableFigure f, @Nullable AffineTransform tx) {
-        AffineTransform childTx = tx;
+        AffineTransform childTx;
         final Transform localToParent = f.getLocalToParent();
         AffineTransform ltpTx = FXTransforms.toAwt(localToParent);
         if (tx != null) {
