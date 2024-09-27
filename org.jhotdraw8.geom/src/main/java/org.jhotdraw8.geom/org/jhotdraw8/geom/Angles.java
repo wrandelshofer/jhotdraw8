@@ -36,7 +36,7 @@ public class Angles {
      * @return atan2 of dy, dx or 0.
      */
     public static double atan2(double dy, double dx) {
-        return Points.almostZero(dy) && Points.almostZero(dx) ? 0.0 : Math.atan2(dy, dx);
+        return Scalars.almostZero(dy) && Scalars.almostZero(dx) ? 0.0 : Math.atan2(dy, dx);
     }
 
     /**

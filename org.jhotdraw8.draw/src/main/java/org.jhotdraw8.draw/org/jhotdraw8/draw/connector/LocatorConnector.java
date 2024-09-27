@@ -40,28 +40,4 @@ public class LocatorConnector extends AbstractConnector {
     public PointAndDerivative getPointAndDerivativeInLocal(Figure connection, Figure target) {
         return new PointAndDerivative(locator.locate(target).getX(), locator.locate(target).getY(), new Point2D(1, 0).getX(), new Point2D(1, 0).getY());
     }
-
-    /*
-    @Override
-    public IntersectionPointEx chopStart(RenderContext ctx, Figure connection, Figure target, double startX, double startY, double endX, double endY) {
-        final Bounds b = target.getLayoutBounds();
-        Point2D center = new Point2D(b.getMinX() + b.getWidth() * 0.5, b.getMinY() + b.getHeight() * 0.5);
-        Point2D location = locator.locate(target);
-        Point2D direction = location.subtract(center);
-        Point2D derivative1 = new Point2D(direction.getY(), -direction.getX());
-        Point2D derivative2 = new Point2D(direction.getX(), direction.getY());
-        if (FXGeom.squaredMagnitude(derivative1) < 1e-6) {
-            derivative1 = new Point2D(1, 0);
-            derivative2 = new Point2D(0, -1);
-        }
-
-        Transform localToWorld = target.getLocalToWorld();
-        Point2D targetP = target.localToWorld(location);
-        Point2D t1p = localToWorld == null ? derivative1 : localToWorld.deltaTransform(derivative1);
-        Point2D t2p = localToWorld == null ? derivative2 : localToWorld.deltaTransform(derivative2);
-        return new IntersectionPointEx(
-                targetP.getX(), targetP.getY(),
-                0, t1p.getX(), t1p.getY(),
-                0, t2p.getX(), t2p.getY());
-    }*/
 }

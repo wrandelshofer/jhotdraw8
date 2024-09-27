@@ -5,8 +5,8 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.Angles;
-import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class IntersectCirclePoint {
         double c_dist = cc.distance(pc);
 
         IntersectionStatus status;
-        if (Points.almostZero(c_dist, epsilon)) {
+        if (Scalars.almostZero(c_dist, epsilon)) {
             status = IntersectionStatus.NO_INTERSECTION_INSIDE;
         } else {
 

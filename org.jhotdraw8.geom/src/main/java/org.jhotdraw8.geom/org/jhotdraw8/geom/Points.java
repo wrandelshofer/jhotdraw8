@@ -6,7 +6,7 @@
 package org.jhotdraw8.geom;
 
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
 
@@ -88,22 +88,6 @@ public class Points {
 
     public static boolean almostZero(Point2D.Double v, double epsilon) {
         return Points2D.magnitudeSq(v) < epsilon * epsilon;
-    }
-
-    public static boolean almostEqual(double a, double b) {
-        return almostEqual(a, b, Rectangles.REAL_THRESHOLD);
-    }
-
-    public static boolean almostEqual(double a, double b, double epsilon) {
-        return Math.abs(a - b) < epsilon;
-    }
-
-    public static boolean almostZero(double a) {
-        return almostZero(a, Rectangles.REAL_THRESHOLD);
-    }
-
-    public static boolean almostZero(double a, double epsilon) {
-        return Math.abs(a) < epsilon;
     }
 
     /**

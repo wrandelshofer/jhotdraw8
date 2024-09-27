@@ -11,6 +11,7 @@ import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -351,7 +352,7 @@ public class IntersectCubicCurveCubicCurve {
                 for (double xRoot : xRoots) {
                     if (tMin < xRoot && xRoot <= tMax) {
                         for (double yRoot : yRoots) {
-                            if (Points.almostEqual(xRoot, yRoot, ROOT_X_Y_TOLERANCE)) {
+                            if (Scalars.almostEqual(xRoot, yRoot, ROOT_X_Y_TOLERANCE)) {
                                 result.add(new IntersectionPoint(
                                         Points2D.sum(
                                                 Points2D.multiply(c23, s * s * s),

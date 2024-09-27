@@ -58,7 +58,7 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
  * @author Werner Randelshofer
  */
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
-        implements PathIterableFigure {
+        implements PathIterableFigure, PathMetricsFigure {
 
     public static final NonNullObjectStyleableKey<BezierPath> PATH = new NonNullObjectStyleableKey<>("path", BezierPath.class, new BezierPathCssConverter(true), BezierPath.of());
 
@@ -157,6 +157,17 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         return path.getPathIterator(tx);
     }
 
+    @Override
+    public PathMetrics getPathMetrics() {
+        BezierPath path = get(PATH);
+        if (path == null || path.isEmpty()) {
+            Point2D start = getNonNull(START).getConvertedValue();
+            Point2D end = getNonNull(END).getConvertedValue();
+            return new SimplePathMetrics(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
+        }
+        return path.getPathMetrics();
+    }
+
     public abstract double getStrokeCutEnd(RenderContext ctx);
 
     public abstract double getStrokeCutStart(RenderContext ctx);
@@ -222,6 +233,19 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
     }
 
     @Override
+    public void reshapeInLocal(Transform tx) {
+        super.reshapeInLocal(tx);
+        BezierPath path = get(PATH);
+        if (path != null) {
+            for (int i = 0, n = path.size(); i < n; i++) {
+                var node = path.get(i);
+                path = path.set(i, node.transform(tx));
+            }
+            set(PATH, path);
+        }
+    }
+
+    @Override
     public void transformInLocal(Transform tx) {
         set(START, new CssPoint2D(tx.transform(getNonNull(START).getConvertedValue())));
         set(END, new CssPoint2D(tx.transform(getNonNull(END).getConvertedValue())));
@@ -243,19 +267,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         if (path != null) {
             Point2D tc = t.getConvertedValue();
             Translate tx = new Translate(tc.getX(), tc.getY());
-            for (int i = 0, n = path.size(); i < n; i++) {
-                var node = path.get(i);
-                path = path.set(i, node.transform(tx));
-            }
-            set(PATH, path);
-        }
-    }
-
-    @Override
-    public void reshapeInLocal(Transform tx) {
-        super.reshapeInLocal(tx);
-        BezierPath path = get(PATH);
-        if (path != null) {
             for (int i = 0, n = path.size(); i < n; i++) {
                 var node = path.get(i);
                 path = path.set(i, node.transform(tx));
@@ -342,17 +353,6 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         updateStartMarkerNode(ctx, startMarkerNode);
         updateEndMarkerNode(ctx, endMarkerNode);
     }
-
-    public PathMetrics getPathMetrics() {
-        BezierPath path = get(PATH);
-        if (path == null || path.isEmpty()) {
-            Point2D start = getNonNull(START).getConvertedValue();
-            Point2D end = getNonNull(END).getConvertedValue();
-            return new SimplePathMetrics(new Line2D.Double(start.getX(), start.getY(), end.getX(), end.getY()));
-        }
-        return path.getPathMetrics();
-    }
-
 
     /**
      * This method can be overridden by a subclass to apply styles to the marker

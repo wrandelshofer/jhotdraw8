@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Scalars;
 import org.jspecify.annotations.Nullable;
 
 public class IntersectPointRay {
@@ -44,17 +44,17 @@ public class IntersectPointRay {
         // o + t * d = p
         //     t     = (p - o) / d
 
-        boolean aIsPoint = Points.almostZero(dx * amax) && Points.almostZero(dy * amax);
+        boolean aIsPoint = Scalars.almostZero(dx * amax) && Scalars.almostZero(dy * amax);
         if (aIsPoint) {
-            return Points.almostEqual(ox, px) && Points.almostEqual(oy, py) ? 0.0 : null;
+            return Scalars.almostEqual(ox, px) && Scalars.almostEqual(oy, py) ? 0.0 : null;
         }
         double t;
-        if (Points.almostZero(dx)) {
+        if (Scalars.almostZero(dx)) {
             t = (py - oy) / dy;
         } else {
             t = (px - ox) / dx;
         }
-        return -tolerance < t && t <= amax && Points.almostEqual(ox + t * dx, px) && Points.almostEqual(oy + t * dy, py)
+        return -tolerance < t && t <= amax && Scalars.almostEqual(ox + t * dx, px) && Scalars.almostEqual(oy + t * dy, py)
                 ? t : null;
     }
 }

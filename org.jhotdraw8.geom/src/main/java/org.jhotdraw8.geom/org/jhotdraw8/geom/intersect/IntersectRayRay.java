@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -123,7 +123,7 @@ public class IntersectRayRay {
         double ub_t = adx * doy - ady * dox;
         double u_b = bdy * adx - bdx * ady;
 
-        if (!Points.almostZero(u_b, epsilon)) {
+        if (!Scalars.almostZero(u_b, epsilon)) {
             double ua = ua_t / u_b;
             double ub = ub_t / u_b;
 
@@ -143,13 +143,13 @@ public class IntersectRayRay {
                 ));
             }
         } else {
-            if (Points.almostZero(ua_t) || Points.almostZero(ub_t)) {
+            if (Scalars.almostZero(ua_t) || Scalars.almostZero(ub_t)) {
                 // either collinear or degenerate (segments are single points)
-                boolean aIsPoint = Points.almostZero(amax * adx, epsilon) && Points.almostZero(amax * ady, epsilon);
-                boolean bIsPoint = Points.almostZero(bmax * bdx, epsilon) && Points.almostZero(bmax * bdy, epsilon);
+                boolean aIsPoint = Scalars.almostZero(amax * adx, epsilon) && Scalars.almostZero(amax * ady, epsilon);
+                boolean bIsPoint = Scalars.almostZero(bmax * bdx, epsilon) && Scalars.almostZero(bmax * bdy, epsilon);
                 if (aIsPoint && bIsPoint) {
                     // both segments are just points
-                    if (Points.almostEqual(aox, box) && Points.almostEqual(aoy, boy)) {
+                    if (Scalars.almostEqual(aox, box) && Scalars.almostEqual(aoy, boy)) {
                         // same point
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPointEx(
@@ -187,7 +187,7 @@ public class IntersectRayRay {
                 } else {
                     // neither segment is a point, check if they overlap
                     double at0, at1;
-                    if (Points.almostZero(adx)) {
+                    if (Scalars.almostZero(adx)) {
                         at0 = (boy - aoy) / ady;
                         at1 = (bdy + boy - aoy) / ady;
                     } else {
@@ -205,7 +205,7 @@ public class IntersectRayRay {
                         at0 = Math.clamp(at0, 0.0, amax);
                         at1 = Math.clamp(at1, 0.0, bmax);
                         double bt0, bt1;
-                        if (Points.almostZero(bdx)) {
+                        if (Scalars.almostZero(bdx)) {
                             bt0 = (aoy + at0 * ady - boy) / bdy;
                             bt1 = (aoy + at1 * ady - boy) / bdy;
                         } else {

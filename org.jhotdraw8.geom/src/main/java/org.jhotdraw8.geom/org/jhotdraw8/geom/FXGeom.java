@@ -21,6 +21,7 @@ import java.awt.geom.PathIterator;
 
 import static java.lang.Math.abs;
 import static java.lang.Math.cos;
+import static java.lang.Math.signum;
 import static java.lang.Math.sin;
 import static java.lang.Math.sqrt;
 
@@ -147,6 +148,30 @@ public class FXGeom {
     }
 
     /**
+     * Returns true if the two vectors point roughly in the same direction.
+     *
+     * @param p0 a vector
+     * @param p1 a vector
+     * @return true if the two vectors have a cosine greater than zero
+     */
+    public static boolean isSameDirection(Point2D p0, Point2D p1) {
+        return p0.dotProduct(p1) > 0;
+    }
+
+    /**
+     * Rounds the vector to 90 degrees and normalizes it.
+     *
+     * @param p a vector
+     * @return rounded to 90 degrees
+     */
+    public static Point2D normalizeTo90Degrees(Point2D p) {
+        if (abs(p.getX()) > abs(p.getY())) {
+            return new Point2D(signum(p.getX()), 0);
+        }
+        return new Point2D(0, signum(p.getY()));
+    }
+
+    /**
      * Returns a point on the edge of the shape which crosses the line from the
      * center of the shape to the specified point. If no edge crosses of the
      * shape crosses the line, the nearest control point of the shape is
@@ -175,14 +200,14 @@ public class FXGeom {
         i.next();
         for (; !i.isDone(); i.next()) {
             switch (i.currentSegment(coords)) {
-            case PathIterator.SEG_MOVETO:
-                moveToX = coords[0];
-                moveToY = coords[1];
-                break;
-            case PathIterator.SEG_CLOSE:
-                coords[0] = moveToX;
-                coords[1] = moveToY;
-                break;
+                case PathIterator.SEG_MOVETO:
+                    moveToX = coords[0];
+                    moveToY = coords[1];
+                    break;
+                case PathIterator.SEG_CLOSE:
+                    coords[0] = moveToX;
+                    coords[1] = moveToY;
+                    break;
             }
             IntersectionResultEx chop = IntersectLineLine.intersectLineLineEx(
                     prevX, prevY,

@@ -4,9 +4,9 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -137,10 +137,10 @@ public class IntersectLinePoint {
 
         double a, b, x, y;
 
-        if (Points.almostEqual(x1, x2, tolerance)) {
+        if (Scalars.almostEqual(x1, x2, tolerance)) {
             return (abs(px - x1) <= tolerance);
         }
-        if (Points.almostEqual(y1, y2, tolerance)) {
+        if (Scalars.almostEqual(y1, y2, tolerance)) {
             return (abs(py - y1) <= tolerance);
         }
 

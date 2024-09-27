@@ -16,9 +16,6 @@ import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
 import java.awt.geom.PathIterator;
 
-import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE;
-import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_TYPE;
-
 /**
  * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
  *
@@ -43,19 +40,7 @@ public class PathConnector extends LocatorConnector {
         }
         Point2D s = target.worldToLocal(start);
         Point2D e = target.worldToLocal(end);
-        PathIterator pit;
-
-        // FIXME does not take line join into account
-        if (target.getStyled(STROKE) != null) {
-            pit = switch (target.getStyledNonNull(STROKE_TYPE)) {
-                default ->
-                    // FIXME must stroke the path
-                        pif.getPathIterator(ctx, null);
-                case INSIDE -> pif.getPathIterator(ctx, null);
-            };
-        } else {
-            pit = pif.getPathIterator(ctx, null);
-        }
+        PathIterator pit = pif.getPathIterator(ctx, null);
 
         IntersectionResultEx i = IntersectLinePathIterator.intersectLinePathIteratorEx(s.getX(), s.getY(), e.getX(), e.getY(), pit);
         return i.intersections().peekLast();

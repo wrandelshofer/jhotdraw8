@@ -12,6 +12,7 @@ import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 
@@ -430,11 +431,11 @@ public class PlineVertex implements Cloneable {
                     double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
                     double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
-                    if (Points.almostEqual(arc1StartAndSweep.first(), arc2End)) {
+                    if (Scalars.almostEqual(arc1StartAndSweep.first(), arc2End)) {
                         // only end points touch at start of arc1
                         result.intrType = PlineSegIntrType.OneIntersect;
                         result.point1 = v1.pos();
-                    } else if (Points.almostEqual(arc2StartAndSweep.first(), arc1End)) {
+                    } else if (Scalars.almostEqual(arc2StartAndSweep.first(), arc1End)) {
                         // only end points touch at start of arc2
                         result.intrType = PlineSegIntrType.OneIntersect;
                         result.point1 = u1.pos();

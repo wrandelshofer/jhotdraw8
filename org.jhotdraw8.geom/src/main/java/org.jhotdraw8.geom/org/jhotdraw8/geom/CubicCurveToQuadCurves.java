@@ -45,7 +45,7 @@ public class CubicCurveToQuadCurves {
             }
             final double epsilon = 1e-6;
             for (double t : list) {
-                if (!Points.almostEqual(t, 0, epsilon) && !Points.almostEqual(t, 1, epsilon)) {
+                if (!Scalars.almostEqual(t, 0, epsilon) && !Scalars.almostEqual(t, 1, epsilon)) {
                     return approximateCubicCurveSplitCase(p, offsetP, t, q, offsetQ, tolerance, maxDepth);
                 }
             }

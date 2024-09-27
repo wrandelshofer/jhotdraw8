@@ -30,6 +30,7 @@ import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
+import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jspecify.annotations.Nullable;
@@ -38,8 +39,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.util.List;
 
-import static java.lang.Math.abs;
-import static java.lang.Math.signum;
+import static org.jhotdraw8.draw.render.RenderContext.UNIT_CONVERTER_KEY;
+import static org.jhotdraw8.geom.Scalars.almostEqual;
 
 /**
  * AbstractElbowLineConnectionWithMarkersFigure draws a straight line or an elbow line from start to end.
@@ -116,7 +117,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
      * @param node the node
      */
     protected void updateLineNode(RenderContext ctx, Polyline node) {
-
+        // empty
     }
 
     /**
@@ -143,51 +144,49 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Group g = (Group) node;
-        Polyline lineNode = (Polyline) g.getChildren().get(0);
-        final Path startMarkerNode = (Path) g.getChildren().get(1);
-        final Path endMarkerNode = (Path) g.getChildren().get(2);
+        try {
+            Group g = (Group) node;
+            Polyline lineNode = (Polyline) g.getChildren().get(0);
+            final Path startMarkerNode = (Path) g.getChildren().get(1);
+            final Path endMarkerNode = (Path) g.getChildren().get(2);
 
-        Point2D start = getNonNull(START).getConvertedValue();
-        Point2D end = getNonNull(END).getConvertedValue();
+            Point2D start = getNonNull(START).getConvertedValue();
+            Point2D end = getNonNull(END).getConvertedValue();
 
-        final double startInset = getStrokeCutStart(ctx);
-        final double endInset = getStrokeCutEnd(ctx);
-        final ImmutableList<PathElement> startMarkerShape = getMarkerStartShape();
+            final double startInset = getStrokeCutStart(ctx);
+            final double endInset = getStrokeCutEnd(ctx);
+            final ImmutableList<PathElement> startMarkerShape = getMarkerStartShape();
 
-        ObservableList<Double> points = lineNode.getPoints();
+            ObservableList<Double> points = lineNode.getPoints();
 
-        points.setAll(path.getPoints());
-        int size = points.size();
-        Point2D p0, p1, p3, p2;
-        if (size > 4) {
-            p0 = new Point2D(points.get(0), points.get(1));
-            p1 = new Point2D(points.get(2), points.get(3));
-            p3 = new Point2D(points.get(size - 2), points.get(size - 1));
-            p2 = new Point2D(points.get(size - 4), points.get(size - 3));
-        } else {
-            p2 = p0 = new Point2D(points.get(0), points.get(1));
-            p3 = p1 = new Point2D(points.get(2), points.get(3));
+            points.setAll(path.getPoints());
+            int size = points.size();
+            Point2D p0, p1, p3, p2;
+            if (size > 4) {
+                p0 = new Point2D(points.get(0), points.get(1));
+                p1 = new Point2D(points.get(2), points.get(3));
+                p3 = new Point2D(points.get(size - 2), points.get(size - 1));
+                p2 = new Point2D(points.get(size - 4), points.get(size - 3));
+            } else if (size == 4) {
+                p2 = p0 = new Point2D(points.get(0), points.get(1));
+                p3 = p1 = new Point2D(points.get(2), points.get(3));
+            } else {
+                p2 = p0 = p1 = p3 = new Point2D(0, 0);
+            }
+            updateMarkerNode(ctx, g, startMarkerNode,
+                    new PointAndDerivative(p0.getX(), p0.getY(), p1.getX() - p0.getX(), p1.getY() - p0.getY()),
+                    startMarkerShape, getMarkerStartScaleFactor());
+            final ImmutableList<PathElement> endMarkerShape = getMarkerEndShape();
+            updateMarkerNode(ctx, g, endMarkerNode,
+                    new PointAndDerivative(p3.getX(), p3.getY(), p2.getX() - p3.getX(), p2.getY() - p3.getY()),
+                    endMarkerShape, getMarkerEndScaleFactor());
+
+            updateLineNode(ctx, lineNode);
+            updateStartMarkerNode(ctx, startMarkerNode);
+            updateEndMarkerNode(ctx, endMarkerNode);
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
-        updateMarkerNode(ctx, g, startMarkerNode,
-                new PointAndDerivative(p0.getX(), p0.getY(), p1.getX() - p0.getX(), p1.getY() - p0.getY()),
-                startMarkerShape, getMarkerStartScaleFactor());
-        final ImmutableList<PathElement> endMarkerShape = getMarkerEndShape();
-        updateMarkerNode(ctx, g, endMarkerNode,
-                new PointAndDerivative(p3.getX(), p3.getY(), p2.getX() - p3.getX(), p2.getY() - p3.getY()),
-                endMarkerShape, getMarkerEndScaleFactor());
-
-        Point2D dir = end.subtract(start).normalize();
-        if (startInset != 0) {
-            start = start.add(dir.multiply(startInset));
-        }
-        if (endInset != 0) {
-            end = end.add(dir.multiply(-endInset));
-        }
-
-        updateLineNode(ctx, lineNode);
-        updateStartMarkerNode(ctx, startMarkerNode);
-        updateEndMarkerNode(ctx, endMarkerNode);
     }
 
     protected void updateMarkerNode(RenderContext ctx, Group group,
@@ -243,8 +242,6 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
-        CssSize elbowOffset1 = getElbowOffset();
-        double elbowOffset = elbowOffset1 == null ? 0.0 : ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY).convert(elbowOffset1, UnitConverter.DEFAULT);
 
 
         ObservableList<Double> points = path.getPoints();
@@ -258,8 +255,10 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
         // Chop start and end points
+        Point2D startDerivative = null;
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx intersectionPointEx = startConnector.chopStart(ctx, this, startTarget, start, end);
+            startDerivative = new Point2D(intersectionPointEx.getDerivativeB().getX(), intersectionPointEx.getDerivativeB().getY());
             start = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(START, new CssPoint2D(start));
         }
@@ -270,32 +269,110 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             end = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(END, new CssPoint2D(end));
         }
-
-        CssSize elbowOffsetSize = getElbowOffset();
-        if (elbowOffset == 0 || endDerivative == null || FXGeom.squaredMagnitude(endDerivative) < 1e-7) {
-            points.addAll(start.getX(), start.getY());
-            points.addAll(end.getX(), end.getY());
-        } else {
-            Point2D endDerivativeNormalized = endDerivative.normalize();
-            // Enforce perfect vertical or perfect horizontal line
-            if (abs(endDerivativeNormalized.getX()) > abs(endDerivativeNormalized.getY())) {
-                endDerivativeNormalized = new Point2D(signum(endDerivativeNormalized.getX()), 0);
-            } else {
-                endDerivativeNormalized = new Point2D(0, signum(endDerivativeNormalized.getY()));
-            }
-            Point2D dir = new Point2D(endDerivative.getY(), -endDerivative.getX()).normalize();
-            Point2D p1;
-            Point2D p2;
-            if (UnitConverter.PERCENTAGE.equals(elbowOffsetSize.getUnits())) {
-                elbowOffset = elbowOffsetSize.getConvertedValue() * abs(dir.dotProduct(end.subtract(start)));
-            }
-            p2 = endDerivativeNormalized.multiply(elbowOffset);
-            p1 = endDerivativeNormalized.multiply(abs(dir.dotProduct(end.subtract(start))) - elbowOffset);
-
-            points.addAll(start.getX(), start.getY());
-            points.addAll(start.getX() - p1.getY(), start.getY() + p1.getX());
-            points.addAll(end.getX() + p2.getY(), end.getY() - p2.getX());
-            points.addAll(end.getX(), end.getY());
+        Point2D lineDerivative = end.subtract(start);
+        if (startDerivative == null) {
+            startDerivative = lineDerivative;
         }
+        if (endDerivative == null) {
+            endDerivative = lineDerivative.multiply(-1);
+        }
+
+
+        points.add(start.getX());
+        points.add(start.getY());
+        if (start.getX() == end.getX() || start.getY() == end.getY()) {
+            // case 1: The line is horizontal or vertical: we draw a straight line
+            // nothing to do
+        } else {
+            // Compute perpendicular to boundary of start and end target shape
+            Point2D startPerp = FXGeom.perp(startDerivative).normalize();
+            Point2D endPerp = FXGeom.perp(endDerivative).normalize();
+            // Flip perpendiculars if necessary, so that each points towards the other shape
+            Point2D lineDerivativeNormalized = lineDerivative.normalize();
+            if (!FXGeom.isSameDirection(startPerp, lineDerivativeNormalized)) {
+                startPerp = new Point2D(-startPerp.getX(), -startPerp.getY());
+            }
+            if (FXGeom.isSameDirection(lineDerivativeNormalized, endPerp)) {
+                endPerp = new Point2D(-endPerp.getX(), -endPerp.getY());
+            }
+            // Round perpendiculars to 90° angles
+            startPerp = FXGeom.normalizeTo90Degrees(startPerp);
+            endPerp = FXGeom.normalizeTo90Degrees(endPerp);
+
+            CssSize elbowOffsetSize = getElbowOffset();
+            double elbowOffset = elbowOffsetSize == null ? 0 : ctx.getNonNull(UNIT_CONVERTER_KEY).convert(elbowOffsetSize, UnitConverter.DEFAULT);
+
+            double cosine = startPerp.dotProduct(endPerp);
+            if (almostEqual(cosine, 0)) {
+                if (elbowOffset <= 0) {
+                    // case 2: the lines meet at a 90 degrees angle: we draw an 'L'-shape
+                    var intersection = IntersectRayRay.intersectRayRayEx(
+                            start.getX(), start.getY(), startPerp.getX(), startPerp.getY(),
+                            end.getX(), end.getY(), endPerp.getX(), endPerp.getY()
+                    ).intersections().getFirst();
+                    points.add(intersection.getX());
+                    points.add(intersection.getY());
+                } else {
+                    // case 3: the lines miss their meeting point, we draw a '|_|⎺'-shape
+                    Point2D p1 = start.add(startPerp.multiply(elbowOffset));
+                    double distance2 = -endPerp.dotProduct(end.subtract(p1));
+                    double actualOffset2 = distance2 * 0.5;
+                    Point2D p2 = p1.add(endPerp.multiply(-actualOffset2));
+                    Point2D p3 = end.add(endPerp.multiply(distance2 - actualOffset2));
+                    points.add(p1.getX());
+                    points.add(p1.getY());
+                    points.add(p2.getX());
+                    points.add(p2.getY());
+                    points.add(p3.getX());
+                    points.add(p3.getY());
+                }
+            } else {
+                double distance = startPerp.dotProduct(lineDerivative);
+                double actualOffset = (elbowOffset <= 0) ? distance * 0.5 : elbowOffset;
+                if (actualOffset <= distance) {
+                    // case 4: we draw a Z-shape
+                    Point2D p1 = start.add(startPerp.multiply(actualOffset));
+                    Point2D p2 = end.add(endPerp.multiply(distance - actualOffset));
+                    points.add(p1.getX());
+                    points.add(p1.getY());
+                    points.add(p2.getX());
+                    points.add(p2.getY());
+
+                } else {
+                    // case 4: we draw a Z-shape
+                    Point2D p1 = start.add(startPerp.multiply(actualOffset));
+                    points.add(p1.getX());
+                    points.add(p1.getY());
+                    double distance2 = endPerp.dotProduct(end.subtract(p1));
+                    double actualOffset2 = distance2 * 0.5;
+                    Point2D p3 = end.add(endPerp.multiply(distance2 - actualOffset2));
+                    connectWithElbowLine(p1, p3, FXGeom.perp(startPerp), points);
+                    points.add(p3.getX());
+                    points.add(p3.getY());
+                }
+            }
+        }
+
+        points.add(end.getX());
+        points.add(end.getY());
+
+    }
+
+    /**
+     * Connects two points with a z-shaped elbow line.
+     *
+     * @param a      the first point
+     * @param b      the second point
+     * @param dir    the direction of the z-shape
+     * @param points
+     */
+    private void connectWithElbowLine(Point2D a, Point2D b, Point2D dir, ObservableList<Double> points) {
+        Point2D derivative = b.subtract(a);
+        double distance = dir.dotProduct(derivative);
+        double offsetDistance = distance * 0.5;
+        points.add(a.getX() + dir.getX() * offsetDistance);
+        points.add(a.getY() + dir.getY() * offsetDistance);
+        points.add(b.getX() - dir.getX() * (distance - offsetDistance));
+        points.add(b.getY() - dir.getY() * (distance - offsetDistance));
     }
 }

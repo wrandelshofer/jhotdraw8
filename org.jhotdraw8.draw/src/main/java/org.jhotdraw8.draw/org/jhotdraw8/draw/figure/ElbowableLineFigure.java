@@ -18,7 +18,8 @@ public interface ElbowableLineFigure extends Figure {
     /**
      * The offset of the elbow with respect of the end of the line.
      */
-    @Nullable NullableCssSizeStyleableKey ELBOW_OFFSET = new NullableCssSizeStyleableKey("elbowOffset", CssSize.ZERO);
+    @Nullable
+    NullableCssSizeStyleableKey ELBOW_OFFSET = new NullableCssSizeStyleableKey("elbowOffset", null);
 
     /**
      * The offset of the elbow from the end of the line.

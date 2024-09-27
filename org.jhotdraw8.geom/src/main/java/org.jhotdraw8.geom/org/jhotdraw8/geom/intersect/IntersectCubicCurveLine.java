@@ -6,10 +6,10 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -120,12 +120,12 @@ public class IntersectCubicCurveLine {
                 // See if point is on line segment
                 // Had to make special cases for vertical and horizontal lines due
                 // to slight errors in calculation of p10
-                if (Points.almostEqual(a0x, a1x, epsilon)) {
+                if (Scalars.almostEqual(a0x, a1x, epsilon)) {
                     if (topLeft.getY() <= p10.getY() && p10.getY() <= bottomRight.getY()) {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPoint(p10, t));
                     }
-                } else if (Points.almostEqual(a0y, a1y, epsilon)) {
+                } else if (Scalars.almostEqual(a0y, a1y, epsilon)) {
                     if (topLeft.getX() <= p10.getX() && p10.getX() <= bottomRight.getX()) {
                         status = IntersectionStatus.INTERSECTION;
                         result.add(new IntersectionPoint(p10, t));

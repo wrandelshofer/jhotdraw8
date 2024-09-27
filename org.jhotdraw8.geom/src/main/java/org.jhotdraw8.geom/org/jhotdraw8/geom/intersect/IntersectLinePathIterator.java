@@ -4,8 +4,8 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
@@ -118,7 +118,7 @@ public class IntersectLinePathIterator {
             if (rayCheck != null && rayCheck.getStatus() == IntersectionStatus.INTERSECTION) {
                 for (IntersectionPointEx ip : rayCheck.intersections()) {
                     double ty = ip.getDerivativeB().getY();
-                    if (Points.almostZero(ty)) {
+                    if (Scalars.almostZero(ty)) {
                         // intersection point is tangential to ray - no crossing
                     } else if (ty > 0) {
                         clockwiseCrossings++;

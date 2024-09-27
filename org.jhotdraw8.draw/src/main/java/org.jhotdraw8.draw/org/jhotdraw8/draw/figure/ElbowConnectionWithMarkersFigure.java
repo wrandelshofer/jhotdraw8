@@ -4,6 +4,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
+import javafx.scene.shape.Polyline;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -87,6 +88,11 @@ public class ElbowConnectionWithMarkersFigure extends AbstractElbowLineConnectio
     @Override
     public @Nullable CssSize getElbowOffset() {
         return getStyled(ElbowableLineFigure.ELBOW_OFFSET);
+    }
+
+    @Override
+    protected void updateLineNode(final RenderContext ctx, final Polyline node) {
+        StrokableFigure.super.applyStrokableFigureProperties(ctx, node);
     }
 
 }

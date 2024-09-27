@@ -13,7 +13,7 @@ import java.awt.geom.Point2D;
 
 import static java.lang.Math.sqrt;
 import static org.jhotdraw8.geom.Lines.isCollinear;
-import static org.jhotdraw8.geom.Points.almostZero;
+import static org.jhotdraw8.geom.Scalars.almostZero;
 
 public class CubicCurveCharacteristics {
 
@@ -77,7 +77,7 @@ public class CubicCurveCharacteristics {
 
             if (x <= 0) {
                 double l1 = (-x * x + 3 * x) / 3;
-                if (Points.almostEqual(y, l1, 0.06)) {
+                if (Scalars.almostEqual(y, l1, 0.06)) {
                     return Characteristics.LOOP_AT_T_0;
                 }
                 if (l1 < y && y < cusp) {
@@ -87,7 +87,7 @@ public class CubicCurveCharacteristics {
 
             if (0 <= x) {
                 double l0 = (sqrt(3) * sqrt(4 * x - x * x) - x) / 2;
-                if (Points.almostEqual(y, l0, 0.06)) {
+                if (Scalars.almostEqual(y, l0, 0.06)) {
                     return Characteristics.LOOP_AT_T_1;
                 }
                 if (l0 < y && y < cusp) {
@@ -95,7 +95,7 @@ public class CubicCurveCharacteristics {
                 }
             }
 
-            if (Points.almostEqual(y, cusp, 0.06)) {
+            if (Scalars.almostEqual(y, cusp, 0.06)) {
                 return Characteristics.CUSP;
             }
 

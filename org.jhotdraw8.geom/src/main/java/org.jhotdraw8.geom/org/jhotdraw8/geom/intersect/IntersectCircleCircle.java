@@ -6,6 +6,7 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -65,7 +66,7 @@ public class IntersectCircleCircle {
             status = IntersectionStatus.NO_INTERSECTION_OUTSIDE;
         } else if (c_dist < r_min) {
             status = r1 < r2 ? IntersectionStatus.NO_INTERSECTION_INSIDE : IntersectionStatus.NO_INTERSECTION_OUTSIDE;
-        } else if (Points.almostZero(c_dist, epsilon) && Points.almostEqual(r1, r2, epsilon)) {
+        } else if (Scalars.almostZero(c_dist, epsilon) && Scalars.almostEqual(r1, r2, epsilon)) {
             status = IntersectionStatus.NO_INTERSECTION_COINCIDENT;
         } else {
             status = IntersectionStatus.INTERSECTION;
@@ -86,7 +87,7 @@ public class IntersectCircleCircle {
             double p2x = p.getX() + b * dy;
             double p2y = p.getY() - b * dx;
 
-            if (!Points.almostEqual(c_dist, r_max, epsilon)) {
+            if (!Scalars.almostEqual(c_dist, r_max, epsilon)) {
                 result.add(new IntersectionPointEx(new Point2D.Double(p2x, p2y),
                         Angles.atan2(p2y - c1y, p2x - c1x), Angles.perp(p2x - c1x, p2y - c1y),
                         Angles.atan2(p2y - c2y, p2x - c2x), Angles.perp(p2x - c2x, p2y - c2y)
@@ -142,7 +143,7 @@ public class IntersectCircleCircle {
             status = IntersectionStatus.NO_INTERSECTION_OUTSIDE;
         } else if (c_dist < r_min) {
             status = r1 < r2 ? IntersectionStatus.NO_INTERSECTION_INSIDE : IntersectionStatus.NO_INTERSECTION_OUTSIDE;
-        } else if (Points.almostZero(c_dist, epsilon) && Points.almostEqual(r1, r2, epsilon)) {
+        } else if (Scalars.almostZero(c_dist, epsilon) && Scalars.almostEqual(r1, r2, epsilon)) {
             status = IntersectionStatus.NO_INTERSECTION_COINCIDENT;
         } else {
             status = IntersectionStatus.INTERSECTION;
@@ -162,7 +163,7 @@ public class IntersectCircleCircle {
             double p2x = p.getX() + b * dy;
             double p2y = p.getY() - b * dx;
 
-            if (!Points.almostEqual(c_dist, r_max, epsilon)) {
+            if (!Scalars.almostEqual(c_dist, r_max, epsilon)) {
                 result.add(new IntersectionPoint(p2x, p2y,
                         Angles.atan2(p2y - c1y, p2x - c1x)
 

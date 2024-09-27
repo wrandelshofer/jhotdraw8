@@ -15,6 +15,7 @@ import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
 import org.jhotdraw8.geom.intersect.IntersectLineLine;
@@ -242,7 +243,7 @@ public class ContourIntersections {
         if (pline.size() == 2) {
             if (pline.isClosed()) {
                 // check if overlaps on itself from vertex 1 to vertex 2
-                if (Points.almostEqual(pline.get(0).bulge(), -pline.get(1).bulge())) {
+                if (Scalars.almostEqual(pline.get(0).bulge(), -pline.get(1).bulge())) {
                     // coincident
                     output.add(new PlineIntersect(0, 1, pline.get(1).pos()));
                     output.add(new PlineIntersect(1, 0, pline.get(0).pos()));
@@ -630,11 +631,11 @@ public class ContourIntersections {
                     double arc1End = arc1StartAndSweep.first() + arc1StartAndSweep.second();
                     double arc2End = arc2StartAndSweep.first() + arc2StartAndSweep.second();
 
-                    if (Points.almostEqual(arc1StartAndSweep.first(), arc2End)) {
+                    if (Scalars.almostEqual(arc1StartAndSweep.first(), arc2End)) {
                         // only end points touch at start of arc1
                         result.intrType = PlineSegIntrType.OneIntersect;
                         result.point1 = v1.pos();
-                    } else if (Points.almostEqual(arc2StartAndSweep.first(), arc1End)) {
+                    } else if (Scalars.almostEqual(arc2StartAndSweep.first(), arc1End)) {
                         // only end points touch at start of arc2
                         result.intrType = PlineSegIntrType.OneIntersect;
                         result.point1 = u1.pos();

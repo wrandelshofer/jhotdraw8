@@ -31,6 +31,7 @@ import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.Integrals;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points;
+import org.jhotdraw8.geom.Scalars;
 import org.jhotdraw8.geom.Solvers;
 
 import java.awt.geom.PathIterator;
@@ -336,7 +337,7 @@ public class BezierArcLengthExampleMain extends Application {
                 curve.getEndX(),
                 curve.getEndY());
         pointsOfInterest.getChildren().clear();
-        if (infl.size() == 2 && Points.almostEqual(infl.get(0), infl.get(1), 0.09)) {
+        if (infl.size() == 2 && Scalars.almostEqual(infl.get(0), infl.get(1), 0.09)) {
             double cusp = (infl.get(0) + infl.get(1)) / 2;
             addPoint(cusp, Color.WHITE, Color.BLACK);
         } else {
@@ -463,7 +464,7 @@ public class BezierArcLengthExampleMain extends Application {
 
         private void addNonDegeneratedSegment(double moveX, double moveY, double prevX, double prevY, DoubleSummaryStatistics sum, List<Segment> list) {
             Segment seg = new Segment(sum.getSum(), moveX, moveY, prevX, prevY);
-            if (!Points.almostZero(seg.length)) {
+            if (!Scalars.almostZero(seg.length)) {
                 list.add(seg);
                 sum.accept(seg.length);
             }

@@ -8,9 +8,9 @@ import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Lines;
-import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -108,7 +108,7 @@ public class Utils {
         // that are very near each other in value.
         // See:
         // https://math.stackexchange.com/questions/311382/solving-a-quadratic-equation-with-precision-when-using-floating-point-variables
-        assert Points.almostEqual(b * b - 4.0 * a * c, discr, Rectangles.REAL_THRESHOLD) : "discriminate is not correct";
+        assert Scalars.almostEqual(b * b - 4.0 * a * c, discr, Rectangles.REAL_THRESHOLD) : "discriminate is not correct";
         double sqrtDiscr = Math.sqrt(discr);
         double denom = 2.0 * a;
         double sol1;
