@@ -174,30 +174,33 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     @Override
     public void layout(RenderContext ctx) {
+        // Get start and end points
         Point2D start = getNonNull(START).getConvertedValue();
         Point2D end = getNonNull(END).getConvertedValue();
+
+        // Get the path.
+        BezierPath path = getNonNull(PATH);
+
+        // If the figure is connected at its start and/or end, move the start and/or end points
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
-        BezierPath path = getNonNull(PATH);
-
-        // Find initial start and end points
+        Point2D intialStart = start;
+        Point2D initalEnd = end;
         if (startConnector != null && startTarget != null) {
-            start = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
+            intialStart = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
-            end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
+            initalEnd = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
-
-        // Chop start and end points
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx chp;
             if (path.size() > 2 || path.size() == 2 && (path.getFirst().hasOut() || path.get(1).hasIn())) {
                 PointAndDerivative pd = path.evalFirst();
-                chp = startConnector.chopStart(ctx, this, startTarget, start.getX(), start.getY(), start.getX() + pd.dx(), start.getY() + pd.dy());
+                chp = startConnector.chopStart(ctx, this, startTarget, intialStart.getX(), intialStart.getY(), intialStart.getX() + pd.dx(), intialStart.getY() + pd.dy());
             } else {
-                chp = startConnector.chopStart(ctx, this, startTarget, start, end);
+                chp = startConnector.chopStart(ctx, this, startTarget, intialStart, initalEnd);
             }
             start = worldToParent(chp.getX(), chp.getY());
             set(START, new CssPoint2D(start));
@@ -207,11 +210,11 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             if (path.size() > 2 || path.size() == 2 && (path.getLast().hasIn() || path.getLast(1).hasOut())) {
                 PointAndDerivative pd = path.evalLastInReverse();
                 chp = endConnector.chopStart(ctx, this, endTarget,
-                        end.getX(), end.getY(),
-                        end.getX() + pd.dx(), end.getY() + pd.dy()
+                        initalEnd.getX(), initalEnd.getY(),
+                        initalEnd.getX() + pd.dx(), initalEnd.getY() + pd.dy()
                 );
             } else {
-                chp = endConnector.chopStart(ctx, this, endTarget, end, start);
+                chp = endConnector.chopStart(ctx, this, endTarget, initalEnd, intialStart);
             }
             end = worldToParent(chp.getX(), chp.getY());
             set(END, new CssPoint2D(end));
@@ -228,7 +231,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         path = path.set(path.size() - 1,
                 last.transform(Transform.translate(end.getX() - last.pointX(), end.getY() - last.pointY())));
 
-        // store the path and compute path metrics
+        // Store the path
         set(PATH, path);
     }
 
