@@ -236,35 +236,33 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     @Override
     public void layout(RenderContext ctx) {
+        // Get start and end points
         Point2D start = getNonNull(START).getConvertedValue();
         Point2D end = getNonNull(END).getConvertedValue();
+
+        // If the figure is connected at its start and/or end, move the start and/or end points
         Connector startConnector = get(START_CONNECTOR);
         Connector endConnector = get(END_CONNECTOR);
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
-
-
-        ObservableList<Double> points = path.getPoints();
-        points.clear();
-
-        // Find initial start and end points
+        Point2D startDerivative = null;
+        Point2D endDerivative = null;
+        Point2D initialStart = start;
+        Point2D initalEnd = end;
         if (startConnector != null && startTarget != null) {
-            start = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
+            initialStart = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
-            end = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
+            initalEnd = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
-        // Chop start and end points
-        Point2D startDerivative = null;
         if (startConnector != null && startTarget != null) {
-            IntersectionPointEx intersectionPointEx = startConnector.chopStart(ctx, this, startTarget, start, end);
+            IntersectionPointEx intersectionPointEx = startConnector.chopStart(ctx, this, startTarget, initialStart, initalEnd);
             startDerivative = new Point2D(intersectionPointEx.getDerivativeB().getX(), intersectionPointEx.getDerivativeB().getY());
             start = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(START, new CssPoint2D(start));
         }
-        Point2D endDerivative = null;
         if (endConnector != null && endTarget != null) {
-            IntersectionPointEx intersectionPointEx = endConnector.chopStart(ctx, this, endTarget, end, start);
+            IntersectionPointEx intersectionPointEx = endConnector.chopStart(ctx, this, endTarget, initalEnd, initialStart);
             endDerivative = new Point2D(intersectionPointEx.getDerivativeB().getX(), intersectionPointEx.getDerivativeB().getY());
             end = worldToParent(intersectionPointEx.getX(), intersectionPointEx.getY());
             set(END, new CssPoint2D(end));
@@ -277,7 +275,9 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             endDerivative = lineDerivative.multiply(-1);
         }
 
-
+        // Layout the elbow line
+        ObservableList<Double> points = path.getPoints();
+        points.clear();
         points.add(start.getX());
         points.add(start.getY());
         if (start.getX() == end.getX() || start.getY() == end.getY()) {
