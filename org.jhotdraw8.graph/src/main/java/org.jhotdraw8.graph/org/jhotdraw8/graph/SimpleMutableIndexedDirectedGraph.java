@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractDirectedGraphBuilder.java
+ * @(#)SimpleMutableIndexedDirectedGraph.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph;
@@ -13,7 +13,7 @@ import java.util.Arrays;
 import static java.lang.Math.max;
 
 /**
- * AbstractDirectedGraphBuilder.
+ * Simple implementation of the {@link MutableIndexedDirectedGraph} interface.
  * <p>
  * <b>Implementation:</b>
  * <p>
@@ -91,7 +91,7 @@ import static java.lang.Math.max;
  *
  * @author Werner Randelshofer
  */
-public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGraph {
+public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirectedGraph {
 
     protected static final int ARROWS_NEXT_FIELD = 1;
     protected static final int ARROWS_NUM_FIELDS = 2;
@@ -142,11 +142,11 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
      */
     private int vertexCount;
 
-    public AbstractDirectedGraphBuilder() {
+    public SimpleMutableIndexedDirectedGraph() {
         this(16, 16);
     }
 
-    public AbstractDirectedGraphBuilder(int vertexCapacity, int arrowCapacity) {
+    public SimpleMutableIndexedDirectedGraph(int vertexCapacity, int arrowCapacity) {
         if (vertexCapacity < 0) {
             throw new IllegalArgumentException("vertexCapacity: " + vertexCapacity);
         }
@@ -157,14 +157,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         this.nextLastArrow = new int[vertexCapacity * LASTARROW_NUM_FIELDS];
     }
 
-    /**
-     * Builder-method: adds a directed arrow from 'a' to 'b'.
-     *
-     * @param a vertex a
-     * @param b vertex b
-     * @return index of the arrow
-     */
-    protected int buildAddArrow(int a, int b) {
+    public int addArrowAsInt(int a, int b) {
         if (nextArrowHeads.length <= arrowCountIncludingDeletedArrows * ARROWS_NUM_FIELDS) {
             nextArrowHeads = Arrays.copyOf(nextArrowHeads, max(1, arrowCountIncludingDeletedArrows) * ARROWS_NUM_FIELDS * 2);
         }
@@ -220,7 +213,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
     /**
      * Builder-method: adds a vertex.
      */
-    protected void buildAddVertex() {
+    public void addVertexAsInt() {
         vertexCount++;
         if (nextLastArrow.length < vertexCount * LASTARROW_NUM_FIELDS) {
             nextLastArrow = Arrays.copyOf(nextLastArrow, vertexCount * LASTARROW_NUM_FIELDS * 2);
@@ -238,8 +231,8 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
      * @param a a vertex
      * @param i the i-th arrow of vertex vi
      */
-    protected int buildRemoveArrowAt(int a, int i) {
-        return buildRemoveArrowAt(a, i, nextLastArrow, nextArrowHeads, arrowCountIncludingDeletedArrows);
+    public int removeNextAsInt(int a, int i) {
+        return removeArrowAt(a, i, nextLastArrow, nextArrowHeads, arrowCountIncludingDeletedArrows);
     }
 
     /**
@@ -251,7 +244,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
      * @param arrowHeads the array of arrow heads
      * @param arrowCount the number of arrows
      */
-    protected int buildRemoveArrowAt(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
+    protected int removeArrowAt(int vidx, int i, int[] lastArrow, int[] arrowHeads, int arrowCount) {
         if (vidx < 0 || vidx >= getVertexCount()) {
             throw new IllegalArgumentException("vidx:" + i);
         }
@@ -289,15 +282,15 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         return arrowPtr;
     }
 
-    protected void buildRemoveVertex(int vidx) {
+    public void removeVertexAsInt(int vidx) {
         // Remove all outgoing arrows
         for (int i = getNextCount(vidx) - 1; i >= 0; i--) {
-            buildRemoveArrowAt(vidx, i);
+            removeNextAsInt(vidx, i);
         }
-        buildRemoveVertexAfterArrowsHaveBeenRemoved(vidx);
+        removeVertexAfterArrowsHaveBeenRemoved(vidx);
     }
 
-    protected void buildRemoveVertexAfterArrowsHaveBeenRemoved(int vidx) {
+    protected void removeVertexAfterArrowsHaveBeenRemoved(int vidx) {
         // Remove vertex from nextLastArrow array
         if (vidx < vertexCount - 1) {
             System.arraycopy(nextLastArrow, (vidx + 1) * LASTARROW_NUM_FIELDS, nextLastArrow, vidx * LASTARROW_NUM_FIELDS,
@@ -317,7 +310,7 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
         vertexCount--;
     }
 
-    protected void buildInsertVertexAt(int vidx) {
+    protected void insertVertexAt(int vidx) {
         if (nextLastArrow.length < (vertexCount + 1) * LASTARROW_NUM_FIELDS) {
             nextLastArrow = Arrays.copyOf(nextLastArrow, (vertexCount + 1) * LASTARROW_NUM_FIELDS * 2);
         }
@@ -496,5 +489,10 @@ public abstract class AbstractDirectedGraphBuilder implements IndexedDirectedGra
 
         }
         return new MySpliterator(vidx, 0, getNextCount(vidx));
+    }
+
+    @Override
+    public int getNextArrowAsInt(int v, int i) {
+        return getNextAsInt(v, i);
     }
 }

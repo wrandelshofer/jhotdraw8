@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractMutableIndexedBidiGraphTest.java
+ * @(#)SimpleMutableIndexedBidiGraphTest.java
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -25,7 +25,7 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public abstract class AbstractMutableIndexedBidiGraphTest {
+public abstract class SimpleMutableIndexedBidiGraphTest {
     protected abstract MutableIndexedBidiGraph newInstance(int maxArity);
 
     protected void assertEqualGraphInt(BidiGraph<Integer, Integer> expected,

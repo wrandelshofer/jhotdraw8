@@ -1,5 +1,5 @@
 /*
- * @(#)AbstractMutableIndexedBidiGraph.java
+ * @(#)SimpleMutableIndexedBidiGraph.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * AbstractDirectedGraphBuilder.
+ * A simple implementation of the {@link MutableIndexedDirectedGraph} interface.
  * <p>
  * <b>Implementation:</b>
  * <p>
@@ -54,35 +54,35 @@ import java.util.Objects;
  * @author Werner Randelshofer
  */
 
-public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGraph {
+public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {
     private Node[] nodes = new Node[0];
     private int vertexCount;
     private int arrowCount;
 
-    public AbstractMutableIndexedBidiGraph() {
+    public SimpleMutableIndexedBidiGraph() {
     }
 
-    public AbstractMutableIndexedBidiGraph(int vertexCount) {
-        buildAddVertices(vertexCount);
+    public SimpleMutableIndexedBidiGraph(int vertexCount) {
+        addVerticesAsInt(vertexCount);
     }
 
-    public AbstractMutableIndexedBidiGraph(IndexedDirectedGraph g) {
-        buildAddVertices(g.getVertexCount());
+    public SimpleMutableIndexedBidiGraph(IndexedDirectedGraph g) {
+        addVerticesAsInt(g.getVertexCount());
         for (int v = 0; v < vertexCount; v++) {
             for (Enumerator.OfInt it = g.nextVerticesEnumerator(v); it.moveNext(); ) {
-                buildAddArrow(v, it.currentAsInt());
+                addArrowAsInt(v, it.currentAsInt());
             }
         }
     }
 
-    protected void buildAddVertex() {
+    protected void addVertexAsInt() {
         vertexCount++;
         if (nodes.length < vertexCount) {
             nodes = Arrays.copyOf(nodes, vertexCount * 2);
         }
     }
 
-    protected void buildAddVertices(int count) {
+    protected void addVerticesAsInt(int count) {
         if (count < 0) {
             throw new IllegalArgumentException("count: " + count);
         }
@@ -92,7 +92,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
         }
     }
 
-    protected void buildRemoveVertex(int vidx) {
+    protected void removeVertexAsInt(int vidx) {
         Objects.checkIndex(vidx, vertexCount);
         Node vnode = nodes[vidx];
         arrowCount -= vnode.next.size();
@@ -134,7 +134,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
      * @param vidx index of v
      * @param uidx index of u
      */
-    protected void buildAddArrow(int vidx, int uidx) {
+    protected void addArrowAsInt(int vidx, int uidx) {
         Node node = nodes[vidx];
         if (node == null) {
             node = nodes[vidx] = new Node();
@@ -156,12 +156,12 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
      * @param vidx index of v
      * @param uidx index of u
      */
-    protected void buildRemoveArrow(int vidx, int uidx) {
+    protected void removeArrowAsInt(int vidx, int uidx) {
         Node node = nodes[vidx];
         if (node == null) {
             throw new IndexOutOfBoundsException("vidx=" + vidx);
         }
-        buildRemoveArrowAt(vidx, node.next.indexOfAsInt(uidx));
+        removeArrowAtAsInt(vidx, node.next.indexOfAsInt(uidx));
     }
 
     /**
@@ -170,7 +170,7 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
      * @param vidx index of v
      * @param i    the i-th arrow of the vertex
      */
-    protected void buildRemoveArrowAt(int vidx, int i) {
+    protected void removeArrowAtAsInt(int vidx, int i) {
         Node vnode = nodes[vidx];
         if (vnode == null) {
             throw new IndexOutOfBoundsException("vidx=" + vidx + ", i=" + i);
@@ -206,6 +206,11 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
     }
 
     @Override
+    public int getNextArrowAsInt(int v, int i) {
+        return 0;// we do not store arrow data
+    }
+
+    @Override
     public int getNextCount(int v) {
         Node node = nodes[v];
         return (node == null) ? 0 : node.next.size();
@@ -218,6 +223,11 @@ public abstract class AbstractMutableIndexedBidiGraph implements IndexedBidiGrap
             throw new IndexOutOfBoundsException("vidx=" + v + ", i=" + i);
         }
         return node.prev.getAsInt(i);
+    }
+
+    @Override
+    public int getPrevArrowAsInt(int v, int i) {
+        return 0;//we do not store arrow data
     }
 
     @Override

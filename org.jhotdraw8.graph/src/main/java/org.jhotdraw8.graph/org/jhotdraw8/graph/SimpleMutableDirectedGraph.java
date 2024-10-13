@@ -20,18 +20,18 @@ import java.util.function.Function;
 
 
 /**
- * SimpleMutableDirectedGraph.
+ * Simple implementation of the {@link MutableDirectedGraph} interface.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
  * @author Werner Randelshofer
  */
-public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuilder
+public class SimpleMutableDirectedGraph<V, A>
         implements MutableDirectedGraph<V, A>, AttributedIndexedDirectedGraph<V, A> {
 
     private static final Object TOMBSTONE_OBJECT = new Object();
 
-
+    private final SimpleMutableIndexedDirectedGraph g;
     /**
      * Maps a vertex to a vertex index.
      */
@@ -74,13 +74,13 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      * @param identityMap    whether to use an identity hash map for storing the vertices
      */
     public SimpleMutableDirectedGraph(int vertexCapacity, int arrowCapacity, boolean identityMap) {
-        super(vertexCapacity, arrowCapacity);
+        this.g = new SimpleMutableIndexedDirectedGraph(vertexCapacity, arrowCapacity);
         this.vertexMap = identityMap ? new IdentityHashMap<>(vertexCapacity) : new HashMap<>(vertexCapacity);
         this.vertices = new ArrayList<>(vertexCapacity);
         this.arrows = new ArrayList<>(arrowCapacity);
         this.addVertexIfAbsent = k -> {
             vertices.add(k);
-            buildAddVertex();
+            g.addVertexAsInt();
             return vertices.size() - 1;
         };
     }
@@ -108,14 +108,14 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     public <VV, AA> SimpleMutableDirectedGraph(DirectedGraph<VV, AA> graph,
                                                Function<VV, V> vertexMapper,
                                                Function3<VV, VV, AA, A> arrowMapper) {
-        super(graph.getVertexCount(), graph.getArrowCount());
+        this.g = new SimpleMutableIndexedDirectedGraph(graph.getVertexCount(), graph.getArrowCount());
         final int vcount = graph.getVertexCount();
         this.vertexMap = new HashMap<>(vcount);
         this.vertices = new ArrayList<>(vcount);
         this.arrows = new ArrayList<>(graph.getArrowCount());
         this.addVertexIfAbsent = k -> {
             vertices.add(k);
-            buildAddVertex();
+            g.addVertexAsInt();
             return vertices.size() - 1;
         };
 
@@ -132,20 +132,14 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         }
     }
 
-    /**
-     * Adds a directed arrow from va to vb.
-     *
-     * @param va    vertex a
-     * @param vb    vertex b
-     * @param arrow the arrow
-     */
+
     @Override
     public void addArrow(V va, V vb, @Nullable A arrow) {
         Objects.requireNonNull(va, "va");
         Objects.requireNonNull(vb, "vb");
         int a = vertexMap.get(va);
         int b = vertexMap.get(vb);
-        int arrowIndex = super.buildAddArrow(a, b);
+        int arrowIndex = g.addArrowAsInt(a, b);
         if (arrowIndex == arrows.size()) {
             arrows.add(arrow);
         } else {
@@ -162,7 +156,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         for (Enumerator.OfInt it = nextVerticesEnumerator(vidx); it.moveNext(); ) {
             int widx = it.currentAsInt();
             if (uidx == widx && Objects.equals(a, this.getNextArrow(vidx, index))) {
-                int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
+                int indexOfRemovedArrow = g.removeNextAsInt(vertexMap.get(v), index);
                 arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
                 return;
             }
@@ -177,7 +171,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         for (Enumerator.OfInt it = nextVerticesEnumerator(vidx); it.moveNext(); ) {
             int uidx = it.currentAsInt();
             if (u.equals(vertices.get(uidx))) {
-                int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), index);
+                int indexOfRemovedArrow = g.removeNextAsInt(vertexMap.get(v), index);
                 arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
                 return;
             }
@@ -187,7 +181,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     public void removeNext(V v, int k) {
-        int indexOfRemovedArrow = buildRemoveArrowAt(vertexMap.get(v), k);
+        int indexOfRemovedArrow = g.removeNextAsInt(vertexMap.get(v), k);
         arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
     }
 
@@ -222,7 +216,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
      */
     public void addVertex(V v, int vidx) {
         Objects.requireNonNull(v, "v");
-        buildInsertVertexAt(vidx);
+        g.insertVertexAt(vidx);
         vertices.add(vidx, v);
         for (Map.Entry<V, Integer> entry : vertexMap.entrySet()) {
             Integer uidx = entry.getValue();
@@ -242,7 +236,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
         int vidx = vidxBox;
         // Remove all outgoing vertices
         for (int i = getNextCount(vidx) - 1; i >= 0; i--) {
-            int indexOfRemovedArrow = buildRemoveArrowAt(vidx, i);
+            int indexOfRemovedArrow = g.removeNextAsInt(vidx, i);
             arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
         }
         // Remove all incoming vertices
@@ -250,12 +244,12 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
             for (int i = getNextCount(uidx) - 1; i >= 0; i--) {
                 int next = getNextAsInt(uidx, i);
                 if (next == vidx) {
-                    int indexOfRemovedArrow = buildRemoveArrowAt(uidx, i);
+                    int indexOfRemovedArrow = g.removeNextAsInt(uidx, i);
                     arrows.set(indexOfRemovedArrow, TOMBSTONE_OBJECT);
                 }
             }
         }
-        buildRemoveVertexAfterArrowsHaveBeenRemoved(vidx);
+        g.removeVertexAfterArrowsHaveBeenRemoved(vidx);
         vertices.remove(vidx);
         for (Map.Entry<V, Integer> entry : vertexMap.entrySet()) {
             Integer uidx = entry.getValue();
@@ -272,9 +266,8 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     private final Function<V, Integer> addVertexIfAbsent;
 
 
-    @Override
     public void clear() {
-        super.clear();
+        g.clear();
         vertexMap.clear();
         vertices.clear();
         arrows.clear();
@@ -282,7 +275,7 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
 
     @Override
     public A getNextArrow(V v, int index) {
-        int arrowId = getNextArrowIndex(getVertexIndex(v), index);
+        int arrowId = g.getNextArrowIndex(getVertexIndex(v), index);
         @SuppressWarnings("unchecked")
         A a = (A) arrows.get(arrowId);
         return a;
@@ -296,6 +289,21 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     @Override
     public int getNextCount(V v) {
         return getNextCount(getVertexIndex(v));
+    }
+
+    @Override
+    public int getVertexCount() {
+        return g.getVertexCount();
+    }
+
+    @Override
+    public int getArrowCount() {
+        return g.getArrowCount();
+    }
+
+    @Override
+    public int getNextAsInt(int v, int i) {
+        return g.getNextAsInt(v, i);
     }
 
     @Override
@@ -329,9 +337,10 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     @Override
     @SuppressWarnings("unchecked")
     public A getNextArrow(int v, int index) {
-        int arrowId = getNextArrowIndex(v, index);
+        int arrowId = g.getNextArrowIndex(v, index);
         return (A) arrows.get(arrowId);
     }
+
 
     @Override
     public int getNextArrowAsInt(int v, int i) {
@@ -339,7 +348,17 @@ public class SimpleMutableDirectedGraph<V, A> extends AbstractDirectedGraphBuild
     }
 
     @Override
+    public int getNextCount(int v) {
+        return g.getNextCount(v);
+    }
+
+    @Override
     public Set<V> getVertices() {
         return new SetFacade<>(vertices::iterator, vertices::spliterator, vertices::size, vertices::contains, null, null, null);
+    }
+
+
+    public void setOrdered(boolean b) {
+        g.setOrdered(b);
     }
 }

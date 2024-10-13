@@ -15,7 +15,7 @@ import java.util.stream.StreamSupport;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MutableIntAttributed16BitIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
+public class MutableIntAttributed16BitIndexedBidiGraphTest extends SimpleMutableIndexedBidiGraphTest {
     @Override
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
         return new MutableIntAttributed16BitIndexedBidiGraph(0, maxArity);

@@ -23,7 +23,7 @@ import java.util.stream.StreamSupport;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 
-public class ChunkedMutableIndexedBidiGraphTest extends AbstractMutableIndexedBidiGraphTest {
+public class ChunkedMutableIndexedBidiGraphTest extends SimpleMutableIndexedBidiGraphTest {
     @Override
     protected MutableIndexedBidiGraph newInstance(int maxArity) {
         return new ChunkedMutableIndexedBidiGraph(4, 1);

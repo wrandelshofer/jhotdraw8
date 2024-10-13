@@ -111,8 +111,8 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     }
 
     /**
-     * Adds the arrow if its absent, updates the arrow data if the arrow is
-     * present. Does nothing if there is already an arrow.
+     * Adds the arrow if it is absent, updates the arrow data if the arrow is
+     * present.
      *
      * @param v    index of vertex 'v'
      * @param u    index of vertex 'u'

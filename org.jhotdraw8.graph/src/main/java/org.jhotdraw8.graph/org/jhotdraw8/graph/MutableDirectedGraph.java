@@ -29,7 +29,7 @@ public interface MutableDirectedGraph<V, A> extends DirectedGraph<V, A> {
     void removeVertex(V v);
 
     /**
-     * Adds an arrow from vertex v to vertex u.
+     * Adds a directed arrow from vertex v to vertex u.
      * <p>
      * This method adds additional an arrow if the arrow is already in the graph.
      *
