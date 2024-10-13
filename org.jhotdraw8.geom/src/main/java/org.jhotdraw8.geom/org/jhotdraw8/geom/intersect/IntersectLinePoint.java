@@ -55,7 +55,6 @@ public class IntersectLinePoint {
      * <li>{@literal 2·a·t1 + b = 0, 0 ≤ t1 ≤ 1 }<br>
      * : derivative</li>
      * </ol>
-     * <p>
      *
      * @param x0 point 0 of the line
      * @param y0 point 0 of the line

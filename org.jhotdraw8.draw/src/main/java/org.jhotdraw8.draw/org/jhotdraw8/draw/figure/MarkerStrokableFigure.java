@@ -36,7 +36,6 @@ public interface MarkerStrokableFigure extends Figure {
      * value: {@code 0}.
      * <p>
      * References:
-     * <p>
      * <dl>
      * <dt>SVG Stroke Properties</dt>
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>
@@ -47,7 +46,6 @@ public interface MarkerStrokableFigure extends Figure {
      * Defines the end cap style. Default value: {@code SQUARE}.
      * <p>
      * References:
-     * <p>
      * <dl>
      * <dt>SVG Stroke Properties</dt>
      * <dd><a href="http://www.w3.org/TR/SVG/painting.html#StrokeProperties">w3.org</a></dd>

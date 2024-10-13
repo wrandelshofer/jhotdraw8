@@ -41,21 +41,6 @@ public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
         }
     }
 
-    /**
-     * {@inheritDoc}
-     *
-     * @param startVertices        the set of start vertices
-     * @param goalPredicate        the goal predicate
-     * @param nextVerticesFunction the next vertices function
-     * @param maxDepth             the maximal depth (inclusive) of the search
-     *                             Must be {@literal >= 0}.
-     * @param zero                 the zero cost value
-     * @param costLimit            the cost limit is <b>ignored</b>
-     * @param costFunction         the cost function
-     * @param sumFunction          the sum function for adding two cost values
-     * @param visited
-     * @return
-     */
     @Override
     public @Nullable IndexedVertexBackLinkWithCost<C> search(
             Iterable<Integer> startVertices,
@@ -80,7 +65,6 @@ public class AnyIndexedVertexPathSearchAlgo<C extends Number & Comparable<C>>
      * @param nextVerticesFunction the next vertices function
      * @param visited              the set of visited vertices (see {@link AddToIntSet})
      * @param maxDepth             the maximal depth (inclusive) of the search.
-     * @return
      * @return on success: a back link, otherwise: null
      */
     public @Nullable IndexedVertexBackLink search(Iterable<Integer> startVertices,

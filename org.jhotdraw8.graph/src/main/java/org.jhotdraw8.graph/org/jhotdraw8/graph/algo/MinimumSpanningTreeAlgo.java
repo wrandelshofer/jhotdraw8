@@ -97,7 +97,6 @@ public class MinimumSpanningTreeAlgo {
     /**
      * Given an undirected graph and a cost function, returns a builder
      * with the minimum spanning tree.
-     * <p>
      *
      * @param graph the graph. This must be an undirected graph
      *              represented as a directed graph with two identical arrows for each edge.
@@ -112,7 +111,6 @@ public class MinimumSpanningTreeAlgo {
     /**
      * Given an undirected graph and a cost function, returns a builder
      * with the minimum spanning tree.
-     * <p>
      *
      * @param graph the graph. This must be an undirected graph
      *              represented as a directed graph with two identical arrows for each edge.
@@ -150,7 +148,6 @@ public class MinimumSpanningTreeAlgo {
      * Given a set of vertices and a list of arrows ordered by cost, returns a
      * builder with the minimum spanning tree. This is an undirected graph with
      * an arrow in each direction.
-     * <p>
      *
      * @param <P>            the pair data type
      * @param vertices       the list of vertices
