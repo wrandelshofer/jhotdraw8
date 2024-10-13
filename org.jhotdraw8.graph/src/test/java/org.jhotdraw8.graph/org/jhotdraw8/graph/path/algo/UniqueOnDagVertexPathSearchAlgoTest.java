@@ -9,8 +9,6 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
-import org.jhotdraw8.graph.path.SimpleVertexSequenceFinder;
-import org.jhotdraw8.graph.path.VertexSequenceFinder;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;

@@ -7,8 +7,6 @@ package org.jhotdraw8.graph.path.algo;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
-import org.jhotdraw8.graph.path.CombinedAllSequencesFinder;
-import org.jhotdraw8.graph.path.SimpleCombinedAllSequencesFinder;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;

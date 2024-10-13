@@ -3,12 +3,11 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.base.function.Function3;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
-import org.jhotdraw8.graph.path.algo.ArcReachabilityAlgo;
 
 import java.util.Collections;
 import java.util.function.BiFunction;

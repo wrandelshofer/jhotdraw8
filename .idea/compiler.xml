@@ -53,29 +53,32 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="org.jhotdraw8" options="" />
+      <module name="org.jhotdraw8" options="-Xlint" />
       <module name="org.jhotdraw8.annotation" options="" />
-      <module name="org.jhotdraw8.application" options="" />
-      <module name="org.jhotdraw8.base" options="" />
-      <module name="org.jhotdraw8.collection" options="" />
-      <module name="org.jhotdraw8.color" options="" />
+      <module name="org.jhotdraw8.application" options="-Xlint" />
+      <module name="org.jhotdraw8.base" options="-Xlint" />
+      <module name="org.jhotdraw8.collection" options="-Xlint" />
+      <module name="org.jhotdraw8.color" options="-Xlint" />
       <module name="org.jhotdraw8.color (1)" options="-Xlint:all" />
-      <module name="org.jhotdraw8.css" options="" />
+      <module name="org.jhotdraw8.css" options="-Xlint" />
       <module name="org.jhotdraw8.dock" options="-Xlint:all" />
       <module name="org.jhotdraw8.dock (1)" options="-Xlint:all" />
-      <module name="org.jhotdraw8.draw" options="" />
-      <module name="org.jhotdraw8.examples" options="" />
+      <module name="org.jhotdraw8.draw" options="-Xlint" />
+      <module name="org.jhotdraw8.examples" options="-Xlint" />
       <module name="org.jhotdraw8.font" options="-Xlint:all" />
-      <module name="org.jhotdraw8.fxbase" options="" />
-      <module name="org.jhotdraw8.fxcollection" options="" />
-      <module name="org.jhotdraw8.fxcontrols" options="" />
-      <module name="org.jhotdraw8.geom" options="" />
-      <module name="org.jhotdraw8.graph" options="" />
-      <module name="org.jhotdraw8.grapher" options="" />
-      <module name="org.jhotdraw8.os" options="" />
+      <module name="org.jhotdraw8.fxbase" options="-Xlint" />
+      <module name="org.jhotdraw8.fxcollection" options="-Xlint" />
+      <module name="org.jhotdraw8.fxcontrols" options="-Xlint" />
+      <module name="org.jhotdraw8.geom" options="-Xlint" />
+      <module name="org.jhotdraw8.graph" options="-Xlint" />
+      <module name="org.jhotdraw8.grapher" options="-Xlint" />
+      <module name="org.jhotdraw8.icollection" options="-Xlint" />
+      <module name="org.jhotdraw8.os" options="-Xlint" />
       <module name="org.jhotdraw8.precondition" options="-Xlint:all" />
-      <module name="org.jhotdraw8.teddy" options="" />
-      <module name="org.jhotdraw8.theme" options="" />
+      <module name="org.jhotdraw8.svg" options="-Xlint" />
+      <module name="org.jhotdraw8.teddy" options="-Xlint" />
+      <module name="org.jhotdraw8.theme" options="-Xlint" />
+      <module name="org.jhotdraw8.xml" options="-Xlint" />
     </option>
   </component>
 </project>

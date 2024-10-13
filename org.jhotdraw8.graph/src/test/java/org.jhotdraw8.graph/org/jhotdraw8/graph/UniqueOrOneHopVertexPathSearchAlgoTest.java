@@ -7,9 +7,9 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
-import org.jhotdraw8.graph.path.SimpleVertexSequenceFinder;
-import org.jhotdraw8.graph.path.VertexSequenceFinder;
+import org.jhotdraw8.graph.path.algo.SimpleVertexSequenceFinder;
 import org.jhotdraw8.graph.path.algo.UniqueOrOneHopVertexPathSearchAlgo;
+import org.jhotdraw8.graph.path.algo.VertexSequenceFinder;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.junit.jupiter.api.DynamicTest;

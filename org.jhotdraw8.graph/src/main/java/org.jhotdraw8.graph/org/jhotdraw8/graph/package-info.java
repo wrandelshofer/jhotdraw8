@@ -4,6 +4,8 @@
  */
 
 /**
+ * Provides data structures for graphs.
+ * <p>
  * References:
  * <dl>
  *     <dt>Wikipedia. Path (graph theory). Walk, trail, path.

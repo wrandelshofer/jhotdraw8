@@ -2,7 +2,7 @@
  * @(#)PathBuilderException.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.graph.path;
+package org.jhotdraw8.graph.path.algo;
 
 import java.io.Serial;
 
