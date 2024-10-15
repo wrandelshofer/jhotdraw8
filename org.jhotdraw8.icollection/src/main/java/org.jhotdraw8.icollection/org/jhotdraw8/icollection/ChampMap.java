@@ -69,11 +69,6 @@ import java.util.Spliterator;
  * All operations on this map can be performed concurrently, without a need for
  * synchronisation.
  * <p>
- * The immutable version of this map extends from the non-public class
- * {@code ChampBitmapIndexNode}. This design safes 16 bytes for every instance,
- * and reduces the number of redirections for finding an element in the
- * collection by 1.
- * <p>
  * References:
  * <p>
  * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.

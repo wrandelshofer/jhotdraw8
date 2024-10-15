@@ -100,11 +100,6 @@ import java.util.Spliterators;
  * If the number of tombstones exceeds half of the size of the collection, we renumber all
  * sequence numbers, and we create a new Vector.
  * <p>
- * The immutable version of this set extends from the non-public class
- * {@code ChampBitmapIndexNode}. This design safes 16 bytes for every instance,
- * and reduces the number of redirections for finding an element in the
- * collection by 1.
- * <p>
  * References:
  * <p>
  * For a similar design, see 'SimpleImmutableSequencedMap.scala'. Note, that this code is not a derivative
