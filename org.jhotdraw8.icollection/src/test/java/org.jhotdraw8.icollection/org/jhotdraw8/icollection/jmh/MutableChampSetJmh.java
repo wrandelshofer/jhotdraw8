@@ -47,7 +47,7 @@ public class MutableChampSetJmh {
         for (int i = 0; i < size; i++) {
             set.add(rng.nextInt());
         }
-        return set.toImmutable();
+        return set.toPersistent();
     }
 
     @Benchmark
