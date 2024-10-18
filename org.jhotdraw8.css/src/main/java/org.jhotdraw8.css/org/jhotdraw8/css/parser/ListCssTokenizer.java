@@ -6,8 +6,8 @@ package org.jhotdraw8.css.parser;
 
 import org.jhotdraw8.css.ast.SourceLocator;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -19,7 +19,7 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_COMMENT;
 import static org.jhotdraw8.css.parser.CssTokenType.TT_S;
 
 public class ListCssTokenizer implements CssTokenizer {
-    private final ImmutableList<CssToken> in;
+    private final PersistentList<CssToken> in;
     private int index = 0;
     private boolean pushBack = true;
     private @Nullable CssToken current;
@@ -29,7 +29,7 @@ public class ListCssTokenizer implements CssTokenizer {
         this(VectorList.copyOf(in));
     }
 
-    public ListCssTokenizer(ReadOnlyList<CssToken> in) {
+    public ListCssTokenizer(ReadableList<CssToken> in) {
         this.in = VectorList.copyOf(in);
         current = in.isEmpty() ? EOF : in.get(0);
     }

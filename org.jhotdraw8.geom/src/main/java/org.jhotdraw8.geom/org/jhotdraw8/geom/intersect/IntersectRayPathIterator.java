@@ -6,7 +6,7 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.Rectangles;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.awt.geom.PathIterator;
 import java.awt.geom.Point2D;
@@ -47,7 +47,7 @@ public class IntersectRayPathIterator {
      * @return the intersection result
      */
     public static IntersectionResultEx intersectRayPathIteratorEx(double aox, double aoy, double adx, double ady, PathIterator pit, double maxT) {
-        ImmutableList<IntersectionPointEx> lineIntersections = VectorList.of();
+        PersistentList<IntersectionPointEx> lineIntersections = VectorList.of();
         final double[] coords = new double[6];
         double firstX = 0, firstY = 0;
         double lastX = 0, lastY = 0;

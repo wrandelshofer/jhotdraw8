@@ -12,7 +12,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -157,7 +157,7 @@ public interface CssConverter<T> extends Converter<T> {
     @Override
     @Nullable String getHelpText();
 
-    default ImmutableList<String> getExamples() {
+    default PersistentList<String> getExamples() {
         return VectorList.of();
     }
 

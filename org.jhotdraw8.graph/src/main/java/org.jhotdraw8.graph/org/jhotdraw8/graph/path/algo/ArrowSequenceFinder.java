@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -43,7 +43,8 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
+    @Nullable
+    SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -62,7 +63,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -80,7 +81,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             C costLimit) {
@@ -99,7 +100,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable OrderedPair<PersistentList<A>, C> findArrowSequence(
             V start,
             V goal,
             int maxDepth,
@@ -118,7 +119,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
             V start,
             V goal,
             int maxDepth,
@@ -135,7 +136,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequence(
             V start,
             V goal,
             C costLimit) {
@@ -153,7 +154,8 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
+    @Nullable
+    SimpleOrderedPair<PersistentList<A>, C> findArrowSequenceOverWaypoints(
             Iterable<V> waypoints, int maxDepth, C costLimit,
             Supplier<AddToSet<V>> visitedSetFactory);
 
@@ -167,7 +169,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequenceOverWaypoints(
             Iterable<V> waypoints, int maxDepth, C costLimit) {
         return findArrowSequenceOverWaypoints(waypoints, maxDepth, costLimit, () -> new HashSet<>()::add);
     }
@@ -180,7 +182,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arrow sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<A>, C> findArrowSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<PersistentList<A>, C> findArrowSequenceOverWaypoints(
             Iterable<V> waypoints, C costLimit) {
         return findArrowSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
     }
@@ -196,9 +198,9 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @param sumFunction               the sum function
      * @return an ordered pair with the combined sequence
      */
-    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<ImmutableList<AA>, CC> findArrowSequenceOverWaypoints(
+    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<PersistentList<AA>, CC> findArrowSequenceOverWaypoints(
             Iterable<VV> waypoints,
-            BiFunction<VV, VV, OrderedPair<ImmutableList<AA>, CC>> findArrowSequenceFunction,
+            BiFunction<VV, VV, OrderedPair<PersistentList<AA>, CC>> findArrowSequenceFunction,
             CC zero,
             BiFunction<CC, CC, CC> sumFunction) {
         List<AA> sequence = new ArrayList<>();
@@ -207,7 +209,7 @@ public interface ArrowSequenceFinder<V, A, C extends Number & Comparable<C>> {
         int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
-                final OrderedPair<ImmutableList<AA>, CC> result = findArrowSequenceFunction.apply(prev, next);
+                final OrderedPair<PersistentList<AA>, CC> result = findArrowSequenceFunction.apply(prev, next);
                 if (result == null) {
                     return null;
                 } else {

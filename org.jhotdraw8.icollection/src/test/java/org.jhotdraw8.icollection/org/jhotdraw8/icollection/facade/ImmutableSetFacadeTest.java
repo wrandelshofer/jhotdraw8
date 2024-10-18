@@ -6,8 +6,8 @@
 package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.icollection.AbstractImmutableSetTest;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -18,43 +18,43 @@ public class ImmutableSetFacadeTest extends AbstractImmutableSetTest {
 
     @SuppressWarnings("unchecked")
     @Override
-    protected <E> ImmutableSet<E> newInstance() {
+    protected <E> PersistentSet<E> newInstance() {
         Function<Set<E>, Set<E>> cloneFunction = e ->
                 (Set<E>) ((LinkedHashSet<?>) e).clone();
-        return new ImmutableSetFacade<>(new LinkedHashSet<>(), cloneFunction);
+        return new PersistentSetFacade<>(new LinkedHashSet<>(), cloneFunction);
     }
 
 
     @Override
-    protected <E> Set<E> toMutableInstance(ImmutableSet<E> m) {
+    protected <E> Set<E> toMutableInstance(PersistentSet<E> m) {
         return m.toMutable();
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    protected <E> ImmutableSet<E> toImmutableInstance(Set<E> m) {
+    protected <E> PersistentSet<E> toImmutableInstance(Set<E> m) {
         Function<Set<E>, Set<E>> cloneFunction = e ->
                 (Set<E>) ((LinkedHashSet<?>) e).clone();
-        return new ImmutableSetFacade<>(m, cloneFunction);
+        return new PersistentSetFacade<>(m, cloneFunction);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    protected <E> ImmutableSet<E> toClonedInstance(ImmutableSet<E> m) {
+    protected <E> PersistentSet<E> toClonedInstance(PersistentSet<E> m) {
         Function<Set<E>, Set<E>> cloneFunction = e ->
                 (Set<E>) ((LinkedHashSet<?>) e).clone();
-        return new ImmutableSetFacade<>(m.toMutable(), cloneFunction);
+        return new PersistentSetFacade<>(m.toMutable(), cloneFunction);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    protected <E> ImmutableSet<E> newInstance(Iterable<E> m) {
+    protected <E> PersistentSet<E> newInstance(Iterable<E> m) {
         Function<Set<E>, Set<E>> cloneFunction = e ->
                 (Set<E>) ((LinkedHashSet<?>) e).clone();
-        if (m instanceof ReadOnlySet<E>) {
-            return new ImmutableSetFacade<>(new LinkedHashSet<>(((ReadOnlySet<E>) m).asSet()), cloneFunction);
+        if (m instanceof ReadableSet<E>) {
+            return new PersistentSetFacade<>(new LinkedHashSet<>(((ReadableSet<E>) m).asSet()), cloneFunction);
         }
-        return new ImmutableSetFacade<>((Set<E>) m, cloneFunction);
+        return new PersistentSetFacade<>((Set<E>) m, cloneFunction);
     }
 
     @Override

@@ -11,7 +11,7 @@ import org.jhotdraw8.draw.css.value.CssDimension2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -73,7 +73,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable CssDimension2D value) {
+    public PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable CssDimension2D value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -83,7 +83,7 @@ public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
+    public PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         a = widthKey.remove(a);
         return heightKey.remove(a);
     }

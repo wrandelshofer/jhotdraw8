@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
@@ -37,7 +37,7 @@ public class MapFacade<K, V> extends AbstractMap<K, V> {
     protected final BiFunction<K, V, V> putFunction;
 
 
-    public MapFacade(ReadOnlyMap<K, V> m) {
+    public MapFacade(ReadableMap<K, V> m) {
         this(m::iterator, m::spliterator, m::size, m::containsKey, m::get, null, null, null);
     }
 

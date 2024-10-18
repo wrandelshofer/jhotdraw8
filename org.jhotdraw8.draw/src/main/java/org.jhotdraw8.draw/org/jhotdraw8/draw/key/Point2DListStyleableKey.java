@@ -12,18 +12,18 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 /**
  * Point2DListStyleableKey.
  *
  * @author Werner Randelshofer
  */
-public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<Point2D>>
-        implements WritableStyleableMapAccessor<ImmutableList<Point2D>>, NonNullKey<ImmutableList<Point2D>> {
+public class Point2DListStyleableKey extends AbstractStyleableKey<PersistentList<Point2D>>
+        implements WritableStyleableMapAccessor<PersistentList<Point2D>>, NonNullKey<PersistentList<Point2D>> {
 
 
-    private final Converter<ImmutableList<Point2D>> converter;
+    private final Converter<PersistentList<Point2D>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -41,15 +41,15 @@ public class Point2DListStyleableKey extends AbstractStyleableKey<ImmutableList<
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public Point2DListStyleableKey(String name, ImmutableList<Point2D> defaultValue) {
-        super(name, new SimpleParameterizedType(ImmutableList.class, Point2D.class), defaultValue);
+    public Point2DListStyleableKey(String name, PersistentList<Point2D> defaultValue) {
+        super(name, new SimpleParameterizedType(PersistentList.class, Point2D.class), defaultValue);
 
         this.converter = new ListCssConverter<>(
                 new Point2DConverter(false, false));
     }
 
     @Override
-    public Converter<ImmutableList<Point2D>> getCssConverter() {
+    public Converter<PersistentList<Point2D>> getCssConverter() {
         return converter;
     }
 

@@ -6,8 +6,8 @@
 package org.jhotdraw8.icollection.impl.champmap;
 
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
@@ -26,7 +26,7 @@ import java.util.function.Predicate;
  * @param <V> the value typeof the map
  */
 public abstract class AbstractMutableChampMap<K, V> extends AbstractMap<K, V> implements Serializable, Cloneable,
-        ReadOnlyMap<K, V> {
+        ReadableMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -162,14 +162,14 @@ public abstract class AbstractMutableChampMap<K, V> extends AbstractMap<K, V> im
             return false;
         }
         if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             clear();
             return true;
         }
         Predicate<K> predicate;
         if (c instanceof Collection<?> that) {
             predicate = that::contains;
-        } else if (c instanceof ReadOnlyCollection<?> that) {
+        } else if (c instanceof ReadableCollection<?> that) {
             predicate = that::contains;
         } else {
             HashSet<Object> that = new HashSet<>();

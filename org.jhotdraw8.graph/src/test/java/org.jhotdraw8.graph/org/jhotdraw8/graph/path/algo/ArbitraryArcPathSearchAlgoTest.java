@@ -10,7 +10,7 @@ import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -96,10 +96,10 @@ public class ArbitraryArcPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    public void testFindVertexPath_3args(Integer start, Integer goal, ImmutableList<Integer> expected) throws Exception {
+    public void testFindVertexPath_3args(Integer start, Integer goal, PersistentList<Integer> expected) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
-        @Nullable SimpleOrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
+        @Nullable SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequence(start, goal,
                 Integer.MAX_VALUE, Integer.MAX_VALUE, new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expected, actual.first());
@@ -132,10 +132,10 @@ public class ArbitraryArcPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindVertexPathOverWaypoints(List<Integer> waypoints, ImmutableList<Integer> expResult) throws Exception {
+    private void testFindVertexPathOverWaypoints(List<Integer> waypoints, PersistentList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Integer> instance = newInstance(graph);
-        SimpleOrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE,
+        SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, Integer.MAX_VALUE,
                 () -> new LinkedHashSet<>()::add);
         assertNotNull(actual);
         assertEquals(expResult, actual.first());

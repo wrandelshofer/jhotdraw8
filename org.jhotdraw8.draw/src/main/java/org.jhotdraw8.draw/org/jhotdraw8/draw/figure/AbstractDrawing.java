@@ -26,7 +26,7 @@ import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
@@ -114,13 +114,13 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         }
     }
 
-    private List<URI> getList(Key<? extends ImmutableList<URI>> key) {
-        ImmutableList<URI> list = get(key);
+    private List<URI> getList(Key<? extends PersistentList<URI>> key) {
+        PersistentList<URI> list = get(key);
         return list == null ? Collections.emptyList() : list.asList();
     }
 
-    private List<String> getStringList(Key<? extends ImmutableList<String>> key) {
-        ImmutableList<String> list = get(key);
+    private List<String> getStringList(Key<? extends PersistentList<String>> key) {
+        PersistentList<String> list = get(key);
         return list == null ? Collections.emptyList() : list.asList();
     }
 

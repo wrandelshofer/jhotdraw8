@@ -10,7 +10,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -77,7 +77,7 @@ public class VarCssFunction<T> extends AbstractCssFunction<T> {
         if (!customPropertyName.startsWith("--")) {
             throw tt.createParseException(getName() + "(): custom-property-name starting with two dashes \"--\" expected.");
         }
-        ReadOnlyList<CssToken> customValue = functionProcessor.getCustomProperties().get(customPropertyName);
+        ReadableList<CssToken> customValue = functionProcessor.getCustomProperties().get(customPropertyName);
         recursionStack.push(this);
         if (customValue == null) {
             if (attrFallback.isEmpty()) {

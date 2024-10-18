@@ -7,7 +7,7 @@ package org.jhotdraw8.graph;
 
 import org.jhotdraw8.graph.iterator.BfsDfsArcSpliterator;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -87,7 +87,7 @@ public class BfsDfsArcSpliteratorTest {
 
     private void testPathBuilding(DirectedGraph<Integer, Integer> graph, List<Integer> waypoints,
                                   String expected) {
-        List<ImmutableList<Integer>> paths = new ArrayList<>();
+        List<PersistentList<Integer>> paths = new ArrayList<>();
         List<Integer> path = null;
         for (Integer root : waypoints) {
             BfsDfsArcSpliterator<Integer, Integer> itr = new BfsDfsArcSpliterator<>(graph::getNextArcs, root, true);

@@ -10,8 +10,8 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableList;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
@@ -99,14 +99,14 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public ReadOnlySet<String> getStyleClasses(Element elem) {
+    public ReadableSet<String> getStyleClasses(Element elem) {
         String value = elem.getAttribute("class");
         String[] clazzes = value.split(" +");
         return ChampSet.copyOf(Arrays.asList(clazzes));
     }
 
     @Override
-    public ReadOnlySet<String> getPseudoClasses(Element elem) {
+    public ReadableSet<String> getPseudoClasses(Element elem) {
         return ChampSet.of();
     }
 
@@ -277,7 +277,7 @@ public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
     }
 
     @Override
-    public void setAttribute(Element element, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadOnlyList<CssToken> value) {
+    public void setAttribute(Element element, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadableList<CssToken> value) {
         StringBuilder buf = new StringBuilder();
         for (CssToken t : value) {
             buf.append(t.fromToken());

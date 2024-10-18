@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -43,7 +43,8 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
+    @Nullable
+    SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -62,7 +63,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable OrderedPair<PersistentList<V>, C> findVertexSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -80,7 +81,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             C costLimit) {
@@ -100,7 +101,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable OrderedPair<PersistentList<V>, C> findVertexSequence(
             V start,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -120,7 +121,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable OrderedPair<PersistentList<V>, C> findVertexSequence(
             V start,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -138,7 +139,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
             V start,
             Predicate<V> goalPredicate,
             C costLimit) {
@@ -158,7 +159,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     @SuppressWarnings("unchecked")
-    default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
             V start,
             V goal,
             int maxDepth,
@@ -179,7 +180,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     @SuppressWarnings("unchecked")
-    default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
             V start,
             V goal,
             int maxDepth,
@@ -197,7 +198,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * or null if no sequence was found.
      */
     @SuppressWarnings("unchecked")
-    default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequence(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequence(
             V start,
             V goal,
             C costLimit) {
@@ -215,7 +216,8 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(
+    @Nullable
+    SimpleOrderedPair<PersistentList<V>, C> findVertexSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
             C costLimit,
@@ -232,7 +234,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
             C costLimit) {
@@ -247,7 +249,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      * @return an ordered pair (vertex sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable SimpleOrderedPair<ImmutableList<V>, C> findVertexSequenceOverWaypoints(
+    default @Nullable SimpleOrderedPair<PersistentList<V>, C> findVertexSequenceOverWaypoints(
             Iterable<V> waypoints,
             C costLimit) {
         return findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
@@ -266,9 +268,9 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
      */
 
     @SuppressWarnings("unchecked")
-    static <VV, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<ImmutableList<VV>, CC> findVertexSequenceOverWaypoints(
+    static <VV, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<PersistentList<VV>, CC> findVertexSequenceOverWaypoints(
             Iterable<VV> waypoints,
-            BiFunction<VV, VV, OrderedPair<ImmutableList<VV>, CC>> findVertexSequenceFunction,
+            BiFunction<VV, VV, OrderedPair<PersistentList<VV>, CC>> findVertexSequenceFunction,
             CC zero,
             BiFunction<CC, CC, CC> sumFunction) {
         List<VV> sequence = new ArrayList<>();
@@ -277,7 +279,7 @@ public interface VertexSequenceFinder<V, C extends Number & Comparable<C>> {
         int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
-                final OrderedPair<ImmutableList<VV>, CC> result = findVertexSequenceFunction.apply(prev, next);
+                final OrderedPair<PersistentList<VV>, CC> result = findVertexSequenceFunction.apply(prev, next);
                 if (result == null) {
                     return null;
                 } else {

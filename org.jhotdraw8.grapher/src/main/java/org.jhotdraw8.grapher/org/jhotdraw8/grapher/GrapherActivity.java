@@ -132,7 +132,7 @@ import org.jhotdraw8.fxcontrols.dock.TabbedAccordionTrack;
 import org.jhotdraw8.fxcontrols.dock.Track;
 import org.jhotdraw8.fxcontrols.dock.VBoxTrack;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.svg.gui.SvgDrawingExportOptionsPane;
 import org.jhotdraw8.svg.io.FXSvgFullWriter;
 import org.jhotdraw8.svg.io.FXSvgTinyWriter;
@@ -479,7 +479,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public CompletionStage<DataFormat> read(URI uri, DataFormat format, ImmutableMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState) {
+    public CompletionStage<DataFormat> read(URI uri, DataFormat format, PersistentMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState) {
         return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
             IdFactory idFactory = new SimpleFigureIdFactory();
             FigureFactory factory = new DefaultFigureFactory(idFactory);
@@ -495,7 +495,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
     }
 
     @Override
-    public CompletionStage<Void> write(URI uri, DataFormat format, ImmutableMap<Key<?>, Object> options, WorkState<Void> workState) {
+    public CompletionStage<Void> write(URI uri, DataFormat format, PersistentMap<Key<?>, Object> options, WorkState<Void> workState) {
         Drawing drawing = drawingView.getDrawing();
         return FXWorker.run(Executors.newSingleThreadExecutor(), () -> {
             if (registerDataFormat(FXSvgTinyWriter.SVG_MIME_TYPE_WITH_VERSION).equals(format)) {

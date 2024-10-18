@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.spliterator.SpliteratorIterable;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -51,7 +51,7 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
 
 
     @Override
-    public Iterable<OrderedPair<ImmutableList<Arc<V, A>>, C>> findAllArcSequences(
+    public Iterable<OrderedPair<PersistentList<Arc<V, A>>, C>> findAllArcSequences(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -65,7 +65,7 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
 
 
     @Override
-    public Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
+    public Iterable<OrderedPair<PersistentList<A>, C>> findAllArrowSequences(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,
@@ -79,7 +79,7 @@ public class SimpleCombinedAllSequencesFinder<V, A, C extends Number & Comparabl
 
 
     @Override
-    public Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(
+    public Iterable<OrderedPair<PersistentList<V>, C>> findAllVertexSequences(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth,

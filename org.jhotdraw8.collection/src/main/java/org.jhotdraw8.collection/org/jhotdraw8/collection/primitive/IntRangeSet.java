@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.collection.primitive;
 
-import org.jhotdraw8.icollection.readonly.AbstractReadOnlySet;
+import org.jhotdraw8.icollection.readable.AbstractReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
@@ -14,7 +14,7 @@ import java.util.stream.IntStream;
 /**
  * Represents a set of integers in a given range.
  */
-public class IntRangeSet extends AbstractReadOnlySet<Integer> {
+public class IntRangeSet extends AbstractReadableSet<Integer> {
     private final int from;
     private final int to;
 

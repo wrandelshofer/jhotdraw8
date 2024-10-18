@@ -8,7 +8,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 
 import java.lang.reflect.Type;
 
@@ -18,9 +18,9 @@ import java.lang.reflect.Type;
  * @param <T> the element type of the set
  * @author Werner Randelshofer
  */
-public class NonNullSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSequencedSet<T>>
-        implements WritableStyleableMapAccessor<ImmutableSequencedSet<T>>,
-        NonNullKey<ImmutableSequencedSet<T>> {
+public class NonNullSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentSequencedSet<T>>
+        implements WritableStyleableMapAccessor<PersistentSequencedSet<T>>,
+        NonNullKey<PersistentSequencedSet<T>> {
 
 
     /**
@@ -31,7 +31,7 @@ public class NonNullSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<Immu
      * @param type      the class of the type
      * @param converter String converter for a list element
      */
-    public NonNullSetStyleableKey(String name, Type type, CssConverter<ImmutableSequencedSet<T>> converter) {
+    public NonNullSetStyleableKey(String name, Type type, CssConverter<PersistentSequencedSet<T>> converter) {
         super(name, type, converter, ChampVectorSet.of());
     }
 
@@ -43,15 +43,15 @@ public class NonNullSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<Immu
      * @param converter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public NonNullSetStyleableKey(String name, Type type, CssConverter<ImmutableSequencedSet<T>> converter, ImmutableSequencedSet<T> defaultValue) {
+    public NonNullSetStyleableKey(String name, Type type, CssConverter<PersistentSequencedSet<T>> converter, PersistentSequencedSet<T> defaultValue) {
         super(name, type, converter, defaultValue);
     }
 /*
-    public NonNullSetStyleableKey(String xmlName, String cssName, TypeToken<ImmutableSequencedSet<T>> type, CssConverter<T> converter, ImmutableSequencedSet<T> defaultValue) {
+    public NonNullSetStyleableKey(String xmlName, String cssName, TypeToken<PersistentSequencedSet<T>> type, CssConverter<T> converter, PersistentSequencedSet<T> defaultValue) {
         super(xmlName, cssName, type.getType(), new XmlSetConverter<>(converter), defaultValue);
     }
-    public NonNullSetStyleableKey(String xmlName, String cssName, TypeToken<ImmutableSequencedSet<T>> type, CssConverter<T> converter,
-                           @Nullable String delimiter, ImmutableSequencedSet<T> defaultValue) {
+    public NonNullSetStyleableKey(String xmlName, String cssName, TypeToken<PersistentSequencedSet<T>> type, CssConverter<T> converter,
+                           @Nullable String delimiter, PersistentSequencedSet<T> defaultValue) {
         super(xmlName, cssName, type.getType(), new XmlSetConverter<>(converter,delimiter), defaultValue);
     }
 */

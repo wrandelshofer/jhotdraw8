@@ -10,7 +10,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 
 import java.lang.reflect.Type;
 
@@ -20,9 +20,9 @@ import java.lang.reflect.Type;
  * @param <T> the element type of the set
  * @author Werner Randelshofer
  */
-public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableSequencedSet<T>>
-        implements WritableStyleableMapAccessor<ImmutableSequencedSet<T>>,
-        NullableKey<ImmutableSequencedSet<T>> {
+public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentSequencedSet<T>>
+        implements WritableStyleableMapAccessor<PersistentSequencedSet<T>>,
+        NullableKey<PersistentSequencedSet<T>> {
 
 
     /**
@@ -34,6 +34,6 @@ public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * @param elementConverter String converter for a list element
      */
     public NullableSetStyleableKey(String name, Type elementType, CssConverter<T> elementConverter) {
-        super(name, new SimpleParameterizedType(ImmutableSequencedSet.class, elementType), new SetCssConverter<>(elementConverter), ChampVectorSet.of());
+        super(name, new SimpleParameterizedType(PersistentSequencedSet.class, elementType), new SetCssConverter<>(elementConverter), ChampVectorSet.of());
     }
 }

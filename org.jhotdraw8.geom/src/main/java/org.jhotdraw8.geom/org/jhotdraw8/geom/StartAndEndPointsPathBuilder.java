@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom;
 
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,8 +17,8 @@ import java.util.List;
  * @author Werner Randelshofer
  */
 public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<StartAndEndPointsPathBuilder.StartAndEndPoints> {
-    public record StartAndEndPoints(ImmutableList<PointAndDerivative> startPoints,
-                                    ImmutableList<PointAndDerivative> endPoints) {
+    public record StartAndEndPoints(PersistentList<PointAndDerivative> startPoints,
+                                    PersistentList<PointAndDerivative> endPoints) {
     }
 
     private final List<PointAndDerivative> startPoints = new ArrayList<>();

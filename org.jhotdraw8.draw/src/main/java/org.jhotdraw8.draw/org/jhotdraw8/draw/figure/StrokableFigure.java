@@ -24,10 +24,10 @@ import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -154,7 +154,7 @@ public interface StrokableFigure extends Figure {
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        ImmutableList<CssSize> dashArray = getStyledNonNull(STROKE_DASH_ARRAY);
+        PersistentList<CssSize> dashArray = getStyledNonNull(STROKE_DASH_ARRAY);
         if (dashArray.isEmpty()) {
             shape.getStrokeDashArray().clear();
         } else {
@@ -214,7 +214,7 @@ public interface StrokableFigure extends Figure {
             case ROUND -> BasicStroke.CAP_ROUND;
             case SQUARE -> BasicStroke.CAP_SQUARE;
         };
-        final ImmutableList<CssSize> dashlist = getStyledNonNull(STROKE_DASH_ARRAY);
+        final PersistentList<CssSize> dashlist = getStyledNonNull(STROKE_DASH_ARRAY);
         float[] dasharray;
         if (dashlist.isEmpty()) {
             dasharray = null;

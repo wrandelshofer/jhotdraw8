@@ -37,8 +37,8 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Field;
@@ -175,9 +175,9 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
     /**
      * FIXME should be private!
      */
-    Map<Class<?>, ImmutableSet<MapAccessor<?>>> declaredAndInheritedKeys = new ConcurrentHashMap<>();
+    Map<Class<?>, PersistentSet<MapAccessor<?>>> declaredAndInheritedKeys = new ConcurrentHashMap<>();
 
-    static ImmutableSet<MapAccessor<?>> getDeclaredMapAccessors(Class<?> clazz, ImmutableSet<MapAccessor<?>> keys) {
+    static PersistentSet<MapAccessor<?>> getDeclaredMapAccessors(Class<?> clazz, PersistentSet<MapAccessor<?>> keys) {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (Modifier.isStatic(f.getModifiers())
@@ -215,8 +215,8 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * @param clazz A figure class.
      * @return an unmodifiable set of the keys
      */
-    static ImmutableSet<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
-        ImmutableSet<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
+    static PersistentSet<MapAccessor<?>> getDeclaredAndInheritedMapAccessors(Class<?> clazz) {
+        PersistentSet<MapAccessor<?>> keys = declaredAndInheritedKeys.get(clazz);
         if (keys == null) {
             keys = ChampSet.of();
             ArrayDeque<Class<?>> todo = new ArrayDeque<>();
@@ -640,7 +640,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      */
     Set<Figure> getLayoutObservers();
 
-    ReadOnlySet<Figure> getReadOnlyLayoutObservers();
+    ReadableSet<Figure> getReadOnlyLayoutObservers();
 
     /**
      * Returns the ancestor Drawing.
@@ -746,7 +746,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return a list of layout subjects
      */
-    default ReadOnlySet<Figure> getLayoutSubjects() {
+    default ReadableSet<Figure> getLayoutSubjects() {
         return ChampSet.of();
     }
 
@@ -780,7 +780,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      *
      * @return an unmodifiable set of keys
      */
-    default ImmutableSet<MapAccessor<?>> getSupportedKeys() {
+    default PersistentSet<MapAccessor<?>> getSupportedKeys() {
         return Figure.getDeclaredAndInheritedMapAccessors(this.getClass());
     }
 

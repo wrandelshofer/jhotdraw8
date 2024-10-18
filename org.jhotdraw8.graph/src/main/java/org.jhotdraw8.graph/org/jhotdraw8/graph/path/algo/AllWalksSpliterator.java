@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.enumerator.AbstractEnumerator;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -47,7 +47,7 @@ import java.util.function.Predicate;
  * @param <C> the cost number type
  * @param <E> the element type of the path
  */
-public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumerator<OrderedPair<ImmutableList<E>, C>> {
+public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> extends AbstractEnumerator<OrderedPair<PersistentList<E>, C>> {
     private final Queue<ArcBackLinkWithCost<V, A, C>> queue = new ArrayDeque<>();
     private final Predicate<V> goalPredicate;
     private final int maxDepth;
@@ -56,7 +56,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
     private final BiFunction<C, C, C> sumFunction;
     private final Function<V, Iterable<Arc<V, A>>> nextArcsFunction;
     private final Function<ArcBackLinkWithCost<V, A, C>,
-            OrderedPair<ImmutableList<E>, C>> sequenceFunction;
+            OrderedPair<PersistentList<E>, C>> sequenceFunction;
 
     /**
      * Creates a new instance.
@@ -77,7 +77,7 @@ public class AllWalksSpliterator<V, A, C extends Number & Comparable<C>, E> exte
                                Predicate<V> goalPredicate,
                                Function<V, Iterable<Arc<V, A>>> nextArcsFunction,
                                Function<ArcBackLinkWithCost<V, A, C>,
-                                       OrderedPair<ImmutableList<E>, C>> sequenceFunction,
+                                       OrderedPair<PersistentList<E>, C>> sequenceFunction,
                                int maxDepth,
                                C maxCost,
                                C zero,

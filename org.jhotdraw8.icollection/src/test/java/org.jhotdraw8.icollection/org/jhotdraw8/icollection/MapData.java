@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlyMapFacade;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.facade.ReadableMapFacade;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -15,11 +15,11 @@ import java.util.Set;
  */
 public final class MapData {
     private final String name;
-    public final ReadOnlyMap<Key, Value> a;
-    public final ReadOnlyMap<Key, Value> aWithDifferentValues;
-    public final ReadOnlyMap<Key, Value> c;
-    private final ReadOnlyMap<Key, Value> someAPlusSomeB;
-    public final ReadOnlyMap<Key, Value> b;
+    public final ReadableMap<Key, Value> a;
+    public final ReadableMap<Key, Value> aWithDifferentValues;
+    public final ReadableMap<Key, Value> c;
+    private final ReadableMap<Key, Value> someAPlusSomeB;
+    public final ReadableMap<Key, Value> b;
 
     /**
      * Creates a new instance with 3 maps of the same non-empty size.
@@ -32,10 +32,10 @@ public final class MapData {
      * @param c                    a map with different keys and values from a,
      *                             all values are distinct from the values in a.
      */
-    MapData(String name, ReadOnlyMap<Key, Value> a,
-            ReadOnlyMap<Key, Value> aWithDifferentValues,
-            ReadOnlyMap<Key, Value> b,
-            ReadOnlyMap<Key, Value> c) {
+    MapData(String name, ReadableMap<Key, Value> a,
+            ReadableMap<Key, Value> aWithDifferentValues,
+            ReadableMap<Key, Value> b,
+            ReadableMap<Key, Value> c) {
         this.name = name;
         this.a = a;
         this.aWithDifferentValues = aWithDifferentValues;
@@ -48,7 +48,7 @@ public final class MapData {
         aPlusB.addAll(b.readOnlyEntrySet().asSet());
         aPlusB.subList(a.size() / 2, a.size() + (b.size() + 1) / 2)
                 .iterator().forEachRemaining(e -> someAPlusSomeB.put(e.getKey(), e.getValue()));
-        this.someAPlusSomeB = new ReadOnlyMapFacade<>(someAPlusSomeB);
+        this.someAPlusSomeB = new ReadableMapFacade<>(someAPlusSomeB);
 
     }
 
@@ -61,23 +61,23 @@ public final class MapData {
         return name;
     }
 
-    public ReadOnlyMap<Key, Value> a() {
+    public ReadableMap<Key, Value> a() {
         return a;
     }
 
-    public ReadOnlyMap<Key, Value> aWithDifferentValues() {
+    public ReadableMap<Key, Value> aWithDifferentValues() {
         return aWithDifferentValues;
     }
 
-    public ReadOnlyMap<Key, Value> b() {
+    public ReadableMap<Key, Value> b() {
         return b;
     }
 
-    public ReadOnlyMap<Key, Value> someAPlusSomeB() {
+    public ReadableMap<Key, Value> someAPlusSomeB() {
         return someAPlusSomeB;
     }
 
-    public ReadOnlyMap<Key, Value> c() {
+    public ReadableMap<Key, Value> c() {
         return c;
     }
 
@@ -103,10 +103,10 @@ public final class MapData {
             c.put(new Key(keyC, hashBitMask), new Value(valueC, hashBitMask));
         }
         return new MapData(name,
-                new ReadOnlyMapFacade<>(a),
-                new ReadOnlyMapFacade<>(aWithDifferentValues),
-                new ReadOnlyMapFacade<>(b),
-                new ReadOnlyMapFacade<>(c));
+                new ReadableMapFacade<>(a),
+                new ReadableMapFacade<>(aWithDifferentValues),
+                new ReadableMapFacade<>(b),
+                new ReadableMapFacade<>(c));
     }
 
     private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {

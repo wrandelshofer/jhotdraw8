@@ -20,7 +20,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -101,7 +101,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
 
 
     default @Nullable Transform getInverseTransform() {
-        ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
+        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave null
@@ -128,7 +128,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (l2p == null) {
             Point2D center = getCenterInLocal();
 
-            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            PersistentList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             if (t != null && !t.isEmpty()) {
                 l2p = FXTransforms.concat(null, getTransform());
             }
@@ -147,7 +147,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
 
         Point2D center = getCenterInLocal();
 
-        ImmutableList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
+        PersistentList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
         if (!t.isEmpty()) {
             list.addAll(t.asList());
         }
@@ -164,7 +164,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
-            ImmutableList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            PersistentList<Transform> t = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
 
             if (t != null && !t.isEmpty()) {
                 p2l = getInverseTransform();
@@ -177,7 +177,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     }
 
     default @Nullable Transform getTransform() {
-        ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
+        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = null; // leave empty
@@ -201,7 +201,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     @Override
     default void reshapeInLocal(Transform transform) {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
-            ImmutableList<Transform> ts = getNonNull(TRANSFORMS);
+            PersistentList<Transform> ts = getNonNull(TRANSFORMS);
             if (ts.isEmpty()) {
                 set(TRANSFORMS, ts.add(transform));
             } else {
@@ -237,7 +237,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                             : parentToLocal.deltaTransform(translate.getTx(), translate.getTy());
                     reshapeInLocal(new Translate(p.getX(), p.getY()));
                 } else {
-                    ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+                    PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
                     Transform lastTransform = transforms.get(transforms.size() - 1);
                     if (lastTransform instanceof Translate) {
                         set(TRANSFORMS, transforms.set(transforms.size() - 1,
@@ -248,7 +248,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
                 }
             } else {
                 flattenTransforms();
-                ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+                PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
                 set(TRANSFORMS, transforms.add(0, transform));
             }
         } else {
@@ -273,7 +273,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
     @Override
     default void transformInLocal(Transform t) {
         flattenTransforms();
-        ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+        PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
         set(TRANSFORMS, transforms.add(t));
     }
 
@@ -284,7 +284,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
         }
         if (t instanceof Translate tr) {
             flattenTransforms();
-            ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+            PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {
                 translateInLocal(new CssPoint2D(tr.getTx(), tr.getTy()));
             } else {
@@ -298,7 +298,7 @@ public interface SvgTransformableFigure extends TransformCachingFigure {
             }
         } else {
             flattenTransforms();
-            ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+            PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
             set(TRANSFORMS, transforms.add(0, t));
         }
     }

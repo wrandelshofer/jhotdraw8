@@ -98,7 +98,7 @@ import org.jhotdraw8.draw.xml.converter.Rectangle2DXmlConverter;
 import org.jhotdraw8.draw.xml.converter.SvgPathXmlConverter;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.xml.converter.BooleanXmlConverter;
 import org.jhotdraw8.xml.converter.ObjectReferenceXmlConverter;
 import org.jhotdraw8.xml.converter.UriXmlConverter;
@@ -195,7 +195,7 @@ public class DefaultFigureFactory extends AbstractFigureFactory {
         addConverterForType(URI.class, new UriXmlConverter());
         addConverterForType(URL.class, new UrlXmlConverter());
         addConverterForType(VPos.class, new KebabCaseEnumCssConverter<>(VPos.class));
-        addConverterForType(new SimpleParameterizedType(ImmutableList.class, PathElement.class), new FXPathElementsXmlConverter());
+        addConverterForType(new SimpleParameterizedType(PersistentList.class, PathElement.class), new FXPathElementsXmlConverter());
 
         addConverter(org.jhotdraw8.draw.figure.AbstractPathConnectionWithMarkersFigure.PATH, new PathConnectionBezierPathXmlConverter());
         addConverter(PageFigure.PAPER_SIZE, new PaperSizeCssConverter());

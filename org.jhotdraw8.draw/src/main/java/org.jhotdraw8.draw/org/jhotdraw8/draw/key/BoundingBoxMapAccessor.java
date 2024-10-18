@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.key;
 import javafx.geometry.BoundingBox;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -74,7 +74,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable BoundingBox value) {
+    public PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable BoundingBox value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -86,7 +86,7 @@ public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
+    public PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         a = yKey.remove(a);
         a = widthKey.remove(a);

@@ -10,7 +10,7 @@ import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
@@ -43,7 +43,7 @@ public abstract class AbstractStyleableMapAccessor<T>
      */
     private final Type type;
 
-    private final ImmutableSequencedSet<MapAccessor<?>> subAccessors;
+    private final PersistentSequencedSet<MapAccessor<?>> subAccessors;
 
     /**
      * Creates a new instance with the specified name, type token class, default
@@ -130,7 +130,7 @@ public abstract class AbstractStyleableMapAccessor<T>
     }
 
     @Override
-    public ImmutableSequencedSet<MapAccessor<?>> getSubAccessors() {
+    public PersistentSequencedSet<MapAccessor<?>> getSubAccessors() {
         return subAccessors;
     }
 

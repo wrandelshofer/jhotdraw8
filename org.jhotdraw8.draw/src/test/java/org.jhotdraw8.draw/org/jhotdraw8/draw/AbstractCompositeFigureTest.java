@@ -14,7 +14,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.NonTransformableFigure;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -183,7 +183,7 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public ReadOnlySet<String> getStyleClasses() {
+        public ReadableSet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 
@@ -198,7 +198,7 @@ public class AbstractCompositeFigureTest {
         }
 
         @Override
-        public ReadOnlySet<String> getPseudoClassStates() {
+        public ReadableSet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet.");
         }
 

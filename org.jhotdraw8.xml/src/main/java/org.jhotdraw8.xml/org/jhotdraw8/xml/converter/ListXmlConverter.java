@@ -8,7 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  *
  * @param <T> the element type
  */
-public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
+public class ListXmlConverter<T> implements Converter<PersistentList<T>> {
 
 
     private final Converter<T> elementConverter;
@@ -69,7 +69,7 @@ public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
 
 
     @Override
-    public @Nullable ImmutableList<T> fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable PersistentList<T> fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (prefix != null) {
             if (!str.startsWith(prefix)) {
@@ -96,7 +96,7 @@ public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
     }
 
     @Override
-    public <TT extends ImmutableList<T>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends PersistentList<T>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (prefix != null) {
             out.append(prefix);
         }
@@ -117,7 +117,7 @@ public class ListXmlConverter<T> implements Converter<ImmutableList<T>> {
     }
 
     @Override
-    public @Nullable ImmutableList<T> getDefaultValue() {
+    public @Nullable PersistentList<T> getDefaultValue() {
         return null;
     }
 }

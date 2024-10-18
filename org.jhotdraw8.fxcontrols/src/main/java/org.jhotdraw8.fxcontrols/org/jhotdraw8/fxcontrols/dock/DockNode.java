@@ -6,7 +6,7 @@ package org.jhotdraw8.fxcontrols.dock;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.Node;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -28,7 +28,7 @@ public interface DockNode {
      *
      * @return the children
      */
-    ReadOnlyList<DockChild> getDockChildrenReadOnly();
+    ReadableList<DockChild> getDockChildrenReadOnly();
 
     default @Nullable DockRoot getDockRoot() {
         for (DockNode node = this; node != null; node = node.getDockParent()) {

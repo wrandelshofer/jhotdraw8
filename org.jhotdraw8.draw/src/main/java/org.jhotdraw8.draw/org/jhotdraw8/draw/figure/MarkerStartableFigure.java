@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -22,7 +22,7 @@ public interface MarkerStartableFigure extends Figure {
     NullableFXPathElementsStyleableKey MARKER_START_SHAPE = new NullableFXPathElementsStyleableKey("marker-start-shape", null);
     DoubleStyleableKey MARKER_START_SCALE_FACTOR = new DoubleStyleableKey("marker-start-scale-factor", 1.0);
 
-    default @Nullable ImmutableList<PathElement> getMarkerStartShape() {
+    default @Nullable PersistentList<PathElement> getMarkerStartShape() {
         return getStyled(MarkerStartableFigure.MARKER_START_SHAPE);
     }
 

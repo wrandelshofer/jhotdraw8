@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -44,7 +44,7 @@ import java.util.Locale;
  *
  * @author Werner Randelshofer
  */
-public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
+public class WordSetXmlConverter implements Converter<PersistentSet<String>> {
 
     private final @Nullable Comparator<String> comparator;
 
@@ -57,7 +57,7 @@ public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public <TT extends ImmutableSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends PersistentSet<String>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (value == null) {
             return;
         }
@@ -81,12 +81,12 @@ public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public ImmutableSet<String> fromString(CharBuffer buf, @Nullable IdResolver idResolver) {
+    public PersistentSet<String> fromString(CharBuffer buf, @Nullable IdResolver idResolver) {
         String[] strings = buf.toString().split("\\s+");
 
         // If there is a comparator, we do not need to use a sequenced set,
         // because we are going to sort the set in method toString() anyway.
-        ImmutableSet<String> words = comparator == null ? ChampVectorSet.of() : ChampSet.of();
+        PersistentSet<String> words = comparator == null ? ChampVectorSet.of() : ChampSet.of();
         for (String str : strings) {
             words = words.add(Normalizer.normalize(str, Normalizer.Form.NFC));
         }
@@ -95,7 +95,7 @@ public class WordSetXmlConverter implements Converter<ImmutableSet<String>> {
     }
 
     @Override
-    public @Nullable ImmutableSet<String> getDefaultValue() {
+    public @Nullable PersistentSet<String> getDefaultValue() {
         return ChampVectorSet.of();
     }
 }

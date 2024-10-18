@@ -11,8 +11,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ObservableMap;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
@@ -75,7 +75,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return The value of the attribute.
      */
     @Override
-    default @Nullable T get(ReadOnlyMap<? super Key<?>, Object> a) {
+    default @Nullable T get(ReadableMap<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow
         //return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
         @SuppressWarnings("unchecked")
@@ -140,7 +140,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return The updated map
      */
     @Override
-    default ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable T value) {
+    default PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable T value) {
         return a.put(this, value);
     }
 
@@ -168,7 +168,7 @@ public interface Key<T> extends MapAccessor<T> {
      * @return The old value.
      */
     @Override
-    default ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
+    default PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         return a.remove(this);
     }
 

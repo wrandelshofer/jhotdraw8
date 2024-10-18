@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.icollection.ChampMap;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 
 import java.util.LinkedHashMap;
 import java.util.SequencedMap;
@@ -77,10 +77,10 @@ public class SystemCssColor extends CssColor {
                 .convert(this);
     }*/
 
-    private static final ImmutableMap<String, SystemCssColor> SYSTEM_COLORS;
+    private static final PersistentMap<String, SystemCssColor> SYSTEM_COLORS;
 
     static {
-        // Workaround for Java SE 8: javac hangs if ImmutableMap.ofEntries() has many entries.
+        // Workaround for Java SE 8: javac hangs if PersistentMap.ofEntries() has many entries.
         SequencedMap<String, SystemCssColor> m = new LinkedHashMap<>();
 
 

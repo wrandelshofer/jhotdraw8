@@ -6,7 +6,7 @@ import org.jhotdraw8.icollection.facade.SetFacade;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
@@ -23,7 +23,7 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.function.IntSupplier;
 
-public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements ReadOnlyMap<K, V>, NavigableMap<K, V> {
+public class SubsetNavigableMapView<K, V> extends AbstractMap<K, V> implements ReadableMap<K, V>, NavigableMap<K, V> {
     private final NavigableMap<K, V> src;
     private final IntSupplier modCount;
     private final boolean fromStart;

@@ -59,7 +59,7 @@ import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.text.SvgPaintCssConverter;
 import org.jhotdraw8.svg.text.SvgTransformConverter;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
@@ -78,7 +78,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
-import java.awt.*;
+import java.awt.BasicStroke;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -112,10 +112,10 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     protected final IntegerXmlConverter nbi = new IntegerXmlConverter();
     protected final FloatXmlConverter nbf = new FloatXmlConverter();
     private final @Nullable Object imageUriKey;
-    private final Converter<ImmutableList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
+    private final Converter<PersistentList<Double>> doubleList = new ListCssConverter<>(new DoubleCssConverter(false));
     private final Converter<Paint> paintConverter = new SvgPaintCssConverter(true);
     private final @Nullable Object skipKey;
-    private final Converter<ImmutableList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
+    private final Converter<PersistentList<Transform>> tx = new ListCssConverter<>(new SvgTransformConverter(false));
     protected final IdFactory idFactory = new SimpleIdFactory();
 
     /**

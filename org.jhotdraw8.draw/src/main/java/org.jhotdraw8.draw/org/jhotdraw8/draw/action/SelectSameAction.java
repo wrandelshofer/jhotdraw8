@@ -12,7 +12,7 @@ import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class SelectSameAction extends AbstractDrawingViewAction {
         }
 
         String stype = prototype.getTypeSelector();
-        ReadOnlySet<String> sclass = prototype.getStyleClasses();
+        ReadableSet<String> sclass = prototype.getStyleClasses();
 
         List<Figure> selectedSame = new ArrayList<>();
         for (Figure f : view.getDrawing().preorderIterable()) {

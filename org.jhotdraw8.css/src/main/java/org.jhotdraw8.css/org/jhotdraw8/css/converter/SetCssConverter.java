@@ -12,8 +12,8 @@ import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -50,16 +50,16 @@ import java.util.function.Consumer;
  *
  * @param <T> the element type
  */
-public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>> {
+public class SetCssConverter<T> implements CssConverter<PersistentSequencedSet<T>> {
     /**
      * When nonnull this comparator is used to sort the list.
      */
     private final @Nullable Comparator<T> comparatorForSorting;
 
     private final CssConverter<T> elementConverter;
-    private final ImmutableList<CssToken> delimiter;
-    private final ImmutableList<CssToken> prefix;
-    private final ImmutableList<CssToken> suffix;
+    private final PersistentList<CssToken> delimiter;
+    private final PersistentList<CssToken> prefix;
+    private final PersistentList<CssToken> suffix;
     private final Set<Integer> delimiterChars;
 
     public SetCssConverter(CssConverter<T> elementConverter) {
@@ -142,7 +142,7 @@ public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>
 
 
     @Override
-    public ImmutableSequencedSet<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public PersistentSequencedSet<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
             return ChampVectorSet.of();
         } else {
@@ -184,7 +184,7 @@ public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     }
 
     @Override
-    public <TT extends ImmutableSequencedSet<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
+    public <TT extends PersistentSequencedSet<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if (value == null || value.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
             return;
@@ -220,7 +220,7 @@ public class SetCssConverter<T> implements CssConverter<ImmutableSequencedSet<T>
     }
 
     @Override
-    public @Nullable ImmutableSequencedSet<T> getDefaultValue() {
+    public @Nullable PersistentSequencedSet<T> getDefaultValue() {
         return ChampVectorSet.of();
     }
 

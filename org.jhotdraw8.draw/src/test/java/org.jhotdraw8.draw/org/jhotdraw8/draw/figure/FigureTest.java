@@ -13,7 +13,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.transform.Transform;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
@@ -24,8 +23,9 @@ import org.jhotdraw8.fxbase.styleable.StyleableBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -45,10 +45,10 @@ public class FigureTest {
      */
     @Test
     public void testGetDeclaredAndInheritedKeys() {
-        ImmutableSet<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
-        ImmutableSet<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
+        PersistentSet<MapAccessor<?>> figureKeys = Figure.getDeclaredAndInheritedMapAccessors(Figure.class);
+        PersistentSet<MapAccessor<?>> rectangleFigureKeys = Figure.getDeclaredAndInheritedMapAccessors(RectangleFigure.class);
         //System.out.println("rr:" + rectangleFigureKeys.asSet());
-        ImmutableSet<MapAccessor<?>> intersection = figureKeys.retainAll(rectangleFigureKeys.asSet());
+        PersistentSet<MapAccessor<?>> intersection = figureKeys.retainAll(rectangleFigureKeys.asSet());
         //System.out.println("ri:" + intersection);
         assertEquals(figureKeys, intersection);
     }
@@ -153,7 +153,7 @@ public class FigureTest {
         }
 
         @Override
-        public ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
+        public ReadableSet<Figure> getReadOnlyLayoutObservers() {
             return ChampSet.of();
         }
 
@@ -243,7 +243,7 @@ public class FigureTest {
         }
 
         @Override
-        public ReadOnlySet<String> getStyleClasses() {
+        public ReadableSet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -258,7 +258,7 @@ public class FigureTest {
         }
 
         @Override
-        public ReadOnlySet<String> getPseudoClassStates() {
+        public ReadableSet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

@@ -4,8 +4,7 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedMap;
+import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
@@ -14,8 +13,9 @@ import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator
 import org.jhotdraw8.icollection.impl.champ.SequencedData;
 import org.jhotdraw8.icollection.impl.champ.SequencedEntry;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
+import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -30,14 +30,14 @@ import java.util.Spliterator;
 import java.util.Spliterators;
 
 /**
- * Implements the {@link ImmutableSequencedMap} interface using a Compressed
+ * Implements the {@link PersistentSequencedMap} interface using a Compressed
  * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>
  *     <li>supports up to 2<sup>30</sup> entries</li>
  *     <li>allows null keys and null values</li>
- *     <li>is immutable</li>
+ *     <li>is persistent</li>
  *     <li>is thread-safe</li>
  *     <li>iterates in the order, in which keys were inserted</li>
  * </ul>
@@ -102,11 +102,11 @@ import java.util.Spliterators;
  * <p>
  * References:
  * <p>
- * For a similar design, see 'SimpleImmutableSequencedMap.scala'. Note, that this code is not a derivative
+ * For a similar design, see 'SimplePersistentSequencedMap.scala'. Note, that this code is not a derivative
  * of that code.
  * <dl>
- *     <dt>The Scala library. SimpleImmutableSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
- *     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a>
+ *     <dt>The Scala library. SimplePersistentSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+ *     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
  *     </dd>
  * </dl>
  *
@@ -114,7 +114,7 @@ import java.util.Spliterators;
  * @param <V> the value type
  */
 @SuppressWarnings("exports")
-public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serializable {
+public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Serializable {
     private static final ChampVectorMap<?, ?> EMPTY = new ChampVectorMap<>(
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
@@ -184,35 +184,35 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
     }
 
     /**
-     * Returns an immutable copy of the provided map.
+     * Returns an persistent copy of the provided map.
      *
      * @param map a map
      * @param <K> the key type
      * @param <V> the value type
-     * @return an immutable copy
+     * @return an persistent copy
      */
     public static <K, V> ChampVectorMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> map) {
         return ChampVectorMap.<K, V>of().putAll(map);
     }
 
     /**
-     * Returns an immutable copy of the provided map.
+     * Returns an persistent copy of the provided map.
      *
      * @param map a map
      * @param <K> the key type
      * @param <V> the value type
-     * @return an immutable copy
+     * @return an persistent copy
      */
     public static <K, V> ChampVectorMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return ChampVectorMap.<K, V>of().putAll(map);
     }
 
     /**
-     * Returns an empty immutable map.
+     * Returns an empty persistent map.
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @return an empty immutable map
+     * @return an empty persistent map
      */
     @SuppressWarnings("unchecked")
     public static <K, V> ChampVectorMap<K, V> of() {
@@ -243,7 +243,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
         if (other instanceof ChampVectorMap<?, ?> that) {
             return size == that.size && root.equivalent(that.root);
         } else {
-            return ReadOnlyMap.mapEquals(this, other);
+            return ReadableMap.mapEquals(this, other);
         }
     }
 
@@ -268,7 +268,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
 
     @Override
     public int hashCode() {
-        return ReadOnlyMap.iteratorToHashCode(iterator());
+        return ReadableMap.iteratorToHashCode(iterator());
     }
 
     @Override
@@ -293,14 +293,14 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
 
     @Override
     public ChampVectorMap<K, V> putAll(Map<? extends K, ? extends V> m) {
-        return (ChampVectorMap<K, V>) ImmutableSequencedMap.super.putAll(m);
+        return (ChampVectorMap<K, V>) PersistentSequencedMap.super.putAll(m);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public ChampVectorMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
-        return m.putAll(c) ? m.toImmutable() : this;
+        return m.putAll(c) ? m.toPersistent() : this;
     }
 
     @Override
@@ -383,8 +383,8 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
     }
 
     @Override
-    public ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return new ReadOnlySequencedMapFacade<>(
+    public ReadableSequencedMap<K, V> readOnlyReversed() {
+        return new ReadableSequencedMapFacade<>(
                 this::reverseIterator,
                 this::iterator,
                 this::size,
@@ -414,7 +414,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
     @Override
     public ChampVectorMap<K, V> removeAll(Iterable<? extends K> c) {
         var t = toMutable();
-        return t.removeAll(c) ? t.toImmutable() : this;
+        return t.removeAll(c) ? t.toPersistent() : this;
     }
 
     private ChampVectorMap<K, V> renumber(
@@ -437,7 +437,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
     @Override
     public ChampVectorMap<K, V> retainAll(Iterable<? extends K> c) {
         var m = toMutable();
-        return m.retainAll(c) ? m.toImmutable() : this;
+        return m.retainAll(c) ? m.toPersistent() : this;
     }
 
     Iterator<Map.Entry<K, V>> reverseIterator() {
@@ -490,7 +490,7 @@ public class ChampVectorMap<K, V> implements ImmutableSequencedMap<K, V>, Serial
      */
     @Override
     public String toString() {
-        return ReadOnlyMap.mapToString(this);
+        return ReadableMap.mapToString(this);
     }
 
     @Serial

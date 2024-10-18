@@ -2,7 +2,7 @@
 package org.jhotdraw8.collection.computed;
 
 import org.jhotdraw8.icollection.exception.SizeLimitExceededException;
-import org.jhotdraw8.icollection.readonly.AbstractReadOnlyList;
+import org.jhotdraw8.icollection.readable.AbstractReadableList;
 
 import java.util.function.LongFunction;
 
@@ -12,7 +12,7 @@ import static java.util.Objects.checkIndex;
 /**
  * A read-only list over values that are computed from the indices of the list.
  */
-public class ComputedList<E> extends AbstractReadOnlyList<E> {
+public class ComputedList<E> extends AbstractReadableList<E> {
     private final boolean descending;
     private final long size;
     private final long from;

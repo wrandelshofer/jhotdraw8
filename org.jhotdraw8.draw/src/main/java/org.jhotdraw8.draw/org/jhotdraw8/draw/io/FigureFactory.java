@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.io;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Node;
 
@@ -223,7 +223,7 @@ public interface FigureFactory {
      * stylesheets shall not be supported. The default implementation returns
      * {@link Drawing#AUTHOR_STYLESHEETS}.
      */
-    default MapAccessor<ImmutableList<URI>> getStylesheetsKey() {
+    default MapAccessor<PersistentList<URI>> getStylesheetsKey() {
         return Drawing.AUTHOR_STYLESHEETS;
     }
 

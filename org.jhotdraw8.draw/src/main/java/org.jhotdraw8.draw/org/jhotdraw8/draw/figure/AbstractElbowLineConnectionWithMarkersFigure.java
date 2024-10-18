@@ -32,7 +32,7 @@ import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.intersect.IntersectRayRay;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -155,7 +155,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
             final double startInset = getStrokeCutStart(ctx);
             final double endInset = getStrokeCutEnd(ctx);
-            final ImmutableList<PathElement> startMarkerShape = getMarkerStartShape();
+            final PersistentList<PathElement> startMarkerShape = getMarkerStartShape();
 
             ObservableList<Double> points = lineNode.getPoints();
 
@@ -176,7 +176,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
             updateMarkerNode(ctx, g, startMarkerNode,
                     new PointAndDerivative(p0.getX(), p0.getY(), p1.getX() - p0.getX(), p1.getY() - p0.getY()),
                     startMarkerShape, getMarkerStartScaleFactor());
-            final ImmutableList<PathElement> endMarkerShape = getMarkerEndShape();
+            final PersistentList<PathElement> endMarkerShape = getMarkerEndShape();
             updateMarkerNode(ctx, g, endMarkerNode,
                     new PointAndDerivative(p3.getX(), p3.getY(), p2.getX() - p3.getX(), p2.getY() - p3.getY()),
                     endMarkerShape, getMarkerEndScaleFactor());
@@ -191,7 +191,7 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     protected void updateMarkerNode(RenderContext ctx, Group group,
                                     Path markerNode,
-                                    PointAndDerivative pd, @Nullable ImmutableList<PathElement> shapeElements, double markerScaleFactor) {
+                                    PointAndDerivative pd, @Nullable PersistentList<PathElement> shapeElements, double markerScaleFactor) {
         if (shapeElements != null) {
             markerNode.getElements().setAll(shapeElements.toMutable());
             double angle = Math.PI + pd.getAngle();
@@ -216,11 +216,11 @@ public abstract class AbstractElbowLineConnectionWithMarkersFigure extends Abstr
 
     public abstract double getStrokeCutEnd(RenderContext ctx);
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerStartShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerEndShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerEndShape();
 
     public abstract double getMarkerEndScaleFactor();
 

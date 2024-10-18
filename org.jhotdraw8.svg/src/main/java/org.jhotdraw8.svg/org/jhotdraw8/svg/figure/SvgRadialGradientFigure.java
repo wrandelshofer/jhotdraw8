@@ -13,7 +13,7 @@ import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
 import org.jspecify.annotations.Nullable;
 
@@ -46,7 +46,7 @@ public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
         double cy = getStyledNonNull(CY).getConvertedValue(unit);
         SvgGradientUnits gradientUnits = getStyledNonNull(GRADIENT_UNITS);
 
-        ImmutableList<SvgStop> cssStops = getNonNull(STOPS);
+        PersistentList<SvgStop> cssStops = getNonNull(STOPS);
         ArrayList<Stop> stops = getStops(cssStops);
         CycleMethod spreadMethod = getStyledNonNull(SPREAD_METHOD);
 

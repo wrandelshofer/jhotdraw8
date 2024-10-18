@@ -8,7 +8,7 @@ import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import javax.xml.stream.XMLStreamException;
@@ -27,9 +27,9 @@ import java.nio.file.Paths;
  * @author Werner Randelshofer
  */
 public interface InputFormat {
-    void setOptions(ImmutableMap<Key<?>, Object> newValue);
+    void setOptions(PersistentMap<Key<?>, Object> newValue);
 
-    ImmutableMap<Key<?>, Object> getOptions();
+    PersistentMap<Key<?>, Object> getOptions();
 
     /**
      * Reads a figure from an URI

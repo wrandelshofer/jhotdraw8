@@ -6,8 +6,8 @@
 package org.jhotdraw8.fxbase.styleable;
 
 import javafx.beans.property.ReadOnlyProperty;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
 
 /**
  * Styleable comprises the minimal interface required for a component (bean)
@@ -51,7 +51,7 @@ public interface StyleableBean {
      *
      * @return the classes of this {@code StyleableBean}
      */
-    ReadOnlySet<String> getStyleClasses();
+    ReadableSet<String> getStyleClasses();
 
     /**
      * A string representation of the CSS style associated with this
@@ -73,7 +73,7 @@ public interface StyleableBean {
      *
      * @return the style attributes
      */
-    // // ReadOnlyMap<String,String> getStyleAttributes();
+    // // ReadableMap<String,String> getStyleAttributes();
 
     /**
      * Return the parent of this {@code StyleableBean}, or null if there is no parent.
@@ -88,6 +88,6 @@ public interface StyleableBean {
      *
      * @return the pseudo-class states
      */
-    ReadOnlySet<String> getPseudoClassStates();
+    ReadableSet<String> getPseudoClassStates();
 
 }

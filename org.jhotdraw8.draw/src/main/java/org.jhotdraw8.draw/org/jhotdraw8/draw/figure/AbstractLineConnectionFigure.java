@@ -14,8 +14,8 @@ import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.facade.ReadableSetFacade;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashSet;
@@ -132,7 +132,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
      * @return an unmodifiable set of connected figures
      */
     @Override
-    public ReadOnlySet<Figure> getLayoutSubjects() {
+    public ReadableSet<Figure> getLayoutSubjects() {
         final Figure startTarget = get(START_TARGET);
         final Figure endTarget = get(END_TARGET);
         if (startTarget == null && endTarget == null) {
@@ -145,7 +145,7 @@ public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         if (endTarget != null) {
             ctf.add(endTarget);
         }
-        return new ReadOnlySetFacade<>(ctf);
+        return new ReadableSetFacade<>(ctf);
     }
 
     public boolean isConnected() {

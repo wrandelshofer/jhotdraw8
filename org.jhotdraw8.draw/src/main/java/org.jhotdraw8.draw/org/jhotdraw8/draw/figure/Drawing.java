@@ -20,7 +20,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
@@ -64,8 +64,8 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    NonNullKey<ImmutableList<URI>> AUTHOR_STYLESHEETS = new NonNullListKey<>("authorStylesheets",
-            new SimpleParameterizedType(ImmutableList.class, URI.class));
+    NonNullKey<PersistentList<URI>> AUTHOR_STYLESHEETS = new NonNullListKey<>("authorStylesheets",
+            new SimpleParameterizedType(PersistentList.class, URI.class));
     /**
      * Holds a list of user agent stylesheets. If the value is null, then no
      * stylesheets are used.
@@ -77,14 +77,14 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.</p>
      */
-    NonNullKey<ImmutableList<URI>> USER_AGENT_STYLESHEETS = new NonNullListKey<>("userAgentStylesheets", new SimpleParameterizedType(ImmutableList.class, URI.class));
+    NonNullKey<PersistentList<URI>> USER_AGENT_STYLESHEETS = new NonNullListKey<>("userAgentStylesheets", new SimpleParameterizedType(PersistentList.class, URI.class));
     /**
      * Holds a list of inline stylesheets. If the value is null, then no
      * stylesheets are used.
      * <p>
      * This property is not styleable.</p>
      */
-    NonNullKey<ImmutableList<String>> INLINE_STYLESHEETS = new NonNullListKey<>("inlineStylesheets", new SimpleParameterizedType(ImmutableList.class, String.class));
+    NonNullKey<PersistentList<String>> INLINE_STYLESHEETS = new NonNullListKey<>("inlineStylesheets", new SimpleParameterizedType(PersistentList.class, String.class));
 
 
     /**

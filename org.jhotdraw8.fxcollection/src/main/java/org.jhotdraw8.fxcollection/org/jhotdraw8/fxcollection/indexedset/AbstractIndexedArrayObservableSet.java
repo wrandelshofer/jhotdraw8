@@ -6,9 +6,9 @@ package org.jhotdraw8.fxcollection.indexedset;
 
 import javafx.collections.ObservableListBase;
 import org.jhotdraw8.collection.spliterator.ReverseListSpliterator;
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
+import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import static java.lang.Math.min;
  * @param <E> the element type
  */
 public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableListBase<E>
-        implements Set<E>, ReadOnlySequencedSet<E>, ReadOnlySet<E> {
+        implements Set<E>, ReadableSequencedSet<E>, ReadableSet<E> {
 
     private static final Object[] EMPTY_ARRAY = new Object[0];
     /**
@@ -822,8 +822,8 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(
+    public ReadableSequencedSet<E> readOnlyReversed() {
+        return new ReadableSequencedSetFacade<>(
                 () -> new ReverseListSpliterator<>(this, 0, size),
                 this::iterator,
                 this::size,

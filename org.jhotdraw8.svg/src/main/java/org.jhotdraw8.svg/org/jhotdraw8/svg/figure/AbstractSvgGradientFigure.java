@@ -30,7 +30,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.text.SvgGradientUnits;
 import org.jspecify.annotations.Nullable;
@@ -74,8 +74,8 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
             );
 
 
-    public static final NonNullKey<ImmutableList<SvgStop>> STOPS = new NonNullObjectKey<>("stops",
-            new SimpleParameterizedType(ImmutableList.class, SvgStop.class), VectorList.of());
+    public static final NonNullKey<PersistentList<SvgStop>> STOPS = new NonNullObjectKey<>("stops",
+            new SimpleParameterizedType(PersistentList.class, SvgStop.class), VectorList.of());
 
     public AbstractSvgGradientFigure() {
         set(VISIBLE, false);
@@ -96,7 +96,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
     }
 
 
-    protected ArrayList<Stop> getStops(ImmutableList<SvgStop> cssStops) {
+    protected ArrayList<Stop> getStops(PersistentList<SvgStop> cssStops) {
         ArrayList<Stop> stops = new ArrayList<>(cssStops.size());
         double maxOffset = 0;
         for (SvgStop cssStop : cssStops) {

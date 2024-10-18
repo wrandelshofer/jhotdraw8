@@ -10,7 +10,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
@@ -21,9 +21,9 @@ import java.lang.reflect.Type;
  * @param <T> the element type of the list
  * @author Werner Randelshofer
  */
-public class NonNullListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableList<T>>
-        implements WritableStyleableMapAccessor<ImmutableList<T>>,
-        NonNullKey<ImmutableList<T>> {
+public class NonNullListStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentList<T>>
+        implements WritableStyleableMapAccessor<PersistentList<T>>,
+        NonNullKey<PersistentList<T>> {
 
 
     /**
@@ -35,7 +35,7 @@ public class NonNullListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * @param elementConverter String converter for a list element
      */
     public NonNullListStyleableKey(String name, Type elementType, CssConverter<T> elementConverter) {
-        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), VectorList.of());
+        super(name, new SimpleParameterizedType(PersistentList.class, elementType), new ListCssConverter<>(elementConverter), VectorList.of());
     }
 
 
@@ -47,22 +47,22 @@ public class NonNullListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Imm
      * @param elementConverter    String converter for a list element
      * @param defaultValue The default value.
      */
-    public NonNullListStyleableKey(String name, Type elementType, CssConverter<T> elementConverter, ImmutableList<T> defaultValue) {
-        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), defaultValue);
+    public NonNullListStyleableKey(String name, Type elementType, CssConverter<T> elementConverter, PersistentList<T> defaultValue) {
+        super(name, new SimpleParameterizedType(PersistentList.class, elementType), new ListCssConverter<>(elementConverter), defaultValue);
     }
 
-    public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter, ImmutableList<T> defaultValue) {
-        super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), defaultValue);
-    }
-
-    public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter,
-                                   @Nullable String delimiter, ImmutableList<T> defaultValue) {
-        super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter, delimiter), defaultValue);
+    public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter, PersistentList<T> defaultValue) {
+        super(xmlName, cssName, new SimpleParameterizedType(PersistentList.class, elementType), new ListCssConverter<>(elementConverter), defaultValue);
     }
 
     public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter,
-                                   @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, ImmutableList<T> defaultValue) {
-        super(xmlName, cssName, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter, delimiter, prefix, suffix), defaultValue);
+                                   @Nullable String delimiter, PersistentList<T> defaultValue) {
+        super(xmlName, cssName, new SimpleParameterizedType(PersistentList.class, elementType), new ListCssConverter<>(elementConverter, delimiter), defaultValue);
+    }
+
+    public NonNullListStyleableKey(String xmlName, String cssName, Type elementType, CssConverter<T> elementConverter,
+                                   @Nullable String delimiter, @Nullable String prefix, @Nullable String suffix, PersistentList<T> defaultValue) {
+        super(xmlName, cssName, new SimpleParameterizedType(PersistentList.class, elementType), new ListCssConverter<>(elementConverter, delimiter, prefix, suffix), defaultValue);
     }
 
 }

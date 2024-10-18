@@ -42,7 +42,7 @@ import org.jhotdraw8.fxbase.tree.ExpandedTreeItemIterator;
 import org.jhotdraw8.fxbase.tree.SimpleTreePresentationModel;
 import org.jhotdraw8.fxbase.tree.TreePresentationModel;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.xml.converter.WordListXmlConverter;
 import org.jhotdraw8.xml.converter.WordSetXmlConverter;
 import org.jspecify.annotations.Nullable;
@@ -83,9 +83,9 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
     private TreePresentationModel<Figure> model;
     private Node node;
     @FXML
-    private TreeTableColumn<Figure, ImmutableSet<String>> pseudoClassesColumn;
+    private TreeTableColumn<Figure, PersistentSet<String>> pseudoClassesColumn;
     @FXML
-    private TreeTableColumn<Figure, ImmutableSet<String>> styleClassesColumn;
+    private TreeTableColumn<Figure, PersistentSet<String>> styleClassesColumn;
     @FXML
     private TreeTableView<Figure> treeView;
     private final InvalidationListener treeSelectionHandler = change -> {
@@ -200,7 +200,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         styleClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.STYLE_CLASS) {
                     @Override
-                    public @Nullable ImmutableSet<String> getValue() {
+                    public @Nullable PersistentSet<String> getValue() {
                         Figure f = figure.get();
                         return f == null ? null : ChampSet.copyOf(f.getStyleClasses());
                     }
@@ -210,7 +210,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
         pseudoClassesColumn.setCellValueFactory(cell -> new DrawingModelFigureProperty<>((DrawingModel) model.getTreeModel(),
                         cell.getValue() == null ? null : cell.getValue().getValue(), StyleableFigure.PSEUDO_CLASS) {
                     @Override
-                    public @Nullable ImmutableSet<String> getValue() {
+                    public @Nullable PersistentSet<String> getValue() {
                         Figure f = figure.get();
                         return f == null ? null : ChampSet.copyOf(f.getPseudoClassStates());
                     }
@@ -275,7 +275,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
             //   so that it updates automatically.
 
             @Override
-            public TreeTableCell<Figure, ImmutableSet<String>> call(TreeTableColumn<Figure, ImmutableSet<String>> paramTableColumn) {
+            public TreeTableCell<Figure, PersistentSet<String>> call(TreeTableColumn<Figure, PersistentSet<String>> paramTableColumn) {
                 // Type arguments needed for Java 8!
                 return new TextFieldTreeTableCell<>() {
                     private final Set<String> syntheticClasses = new HashSet<>();
@@ -292,8 +292,8 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void commitEdit(ImmutableSet<String> newValue) {
-                        ImmutableSet<String> newValueSet = newValue.removeAll(syntheticClasses);
+                    public void commitEdit(PersistentSet<String> newValue) {
+                        PersistentSet<String> newValueSet = newValue.removeAll(syntheticClasses);
                         super.commitEdit(newValueSet);
                     }
 
@@ -308,7 +308,7 @@ public class HierarchyInspector extends AbstractDrawingViewInspector {
                     }
 
                     @Override
-                    public void updateItem(ImmutableSet<String> t, boolean empty) {
+                    public void updateItem(PersistentSet<String> t, boolean empty) {
                         super.updateItem(t, empty);
                         TreeTableRow<Figure> row = getTableRow();
                         boolean isEditable = false;

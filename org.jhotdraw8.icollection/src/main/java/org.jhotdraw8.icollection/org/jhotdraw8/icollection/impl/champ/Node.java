@@ -251,7 +251,7 @@ public abstract class Node<D> {
      *                       and that this method may create new mutable nodes
      *                       with this unique id.
      *                       A null value means, that this method must not update
-     *                       any node and may only create new immutable nodes.
+     *                       any node and may only create new persistent nodes.
      * @param data           the data to be removed
      * @param dataHash       the hash-code of the data object
      * @param shift          the shift of the current node
@@ -273,7 +273,7 @@ public abstract class Node<D> {
      *                       and that this method may create new mutable nodes
      *                       with this unique id.
      *                       A null value means, that this method must not update
-     *                       any node and may only create new immutable nodes.
+     *                       any node and may only create new persistent nodes.
      * @param newData        the data to be inserted,
      *                       or to be used for merging if there is already
      *                       a matching data object in the trie

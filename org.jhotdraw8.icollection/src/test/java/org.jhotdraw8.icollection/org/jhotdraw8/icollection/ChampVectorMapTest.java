@@ -5,8 +5,8 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.Map;
 
@@ -23,12 +23,12 @@ public class ChampVectorMapTest extends AbstractImmutableSequencedMapTest {
     }
 
     @Override
-    protected <K, V> ChampVectorMap<K, V> newInstance(ReadOnlyMap<K, V> map) {
+    protected <K, V> ChampVectorMap<K, V> newInstance(ReadableMap<K, V> map) {
         return ChampVectorMap.<K, V>of().putAll(map);
     }
 
     @Override
-    protected <K, V> ChampVectorMap<K, V> toClonedInstance(ImmutableMap<K, V> m) {
+    protected <K, V> ChampVectorMap<K, V> toClonedInstance(PersistentMap<K, V> m) {
         return ChampVectorMap.copyOf(m);
     }
 

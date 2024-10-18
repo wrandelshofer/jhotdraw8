@@ -4,12 +4,12 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.icollection.immutable.ImmutableList;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.MutableListIterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.readable.ReadableList;
+import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedListView;
 import org.jspecify.annotations.Nullable;
 
@@ -22,16 +22,16 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
- * Provides a {@link List} facade to a set of {@code ImmutableList} functions.
+ * Provides a {@link List} facade to a set of {@code PersistentList} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyList<E>, List<E> {
-    private ImmutableList<E> backingList;
+public class MutableListFacade<E> extends AbstractList<E> implements ReadableList<E>, List<E> {
+    private PersistentList<E> backingList;
     private int modCount;
 
-    public MutableListFacade(ImmutableList<E> backingList) {
+    public MutableListFacade(PersistentList<E> backingList) {
         this.backingList = backingList;
     }
 
@@ -57,8 +57,8 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public ReadOnlySequencedCollection<E> readOnlyReversed() {
-        return new ReadOnlyListFacade<>(
+    public ReadableSequencedCollection<E> readOnlyReversed() {
+        return new ReadableListFacade<>(
                 () -> backingList.size(),
                 index -> get(backingList.size() - 1 - index),
                 () -> this);
@@ -68,7 +68,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
-        ImmutableList<E> oldList = backingList;
+        PersistentList<E> oldList = backingList;
         backingList = backingList.remove((E) o);
         modCount++;
         return oldList != backingList;
@@ -85,7 +85,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public void clear() {
-        ImmutableList<E> oldList = backingList;
+        PersistentList<E> oldList = backingList;
         backingList = backingList.empty();
         if (oldList != backingList) {
             modCount++;
@@ -98,10 +98,10 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
     }
 
     @Override
-    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadableList<E> readOnlySubList(int fromIndex, int toIndex) {
         int length = size();
         Objects.checkFromToIndex(fromIndex, toIndex, length);
-        return new ReadOnlyListFacade<>(
+        return new ReadableListFacade<>(
                 () -> toIndex - fromIndex,
                 i -> get(i - fromIndex));
     }
@@ -169,7 +169,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public boolean add(E e) {
-        ImmutableList<E> oldList = backingList;
+        PersistentList<E> oldList = backingList;
         backingList = backingList.add(e);
         if (oldList != backingList) {
             modCount++;
@@ -198,12 +198,12 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadOnlyLis
 
     @Override
     public E getFirst() {
-        return ReadOnlyList.super.getFirst();
+        return ReadableList.super.getFirst();
     }
 
     @Override
     public E getLast() {
-        return ReadOnlyList.super.getLast();
+        return ReadableList.super.getLast();
     }
 
     @Override

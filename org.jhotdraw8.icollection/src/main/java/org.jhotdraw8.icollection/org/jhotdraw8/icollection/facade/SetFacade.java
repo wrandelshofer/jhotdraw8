@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractSet;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
+public class SetFacade<E> extends AbstractSet<E> implements ReadableSet<E> {
     protected final Supplier<Iterator<E>> iteratorFunction;
     protected final Supplier<Spliterator<E>> spliteratorFunction;
     protected final IntSupplier sizeFunction;
@@ -32,7 +32,7 @@ public class SetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
     protected final Runnable clearFunction;
     protected final Predicate<Object> removeFunction;
 
-    public SetFacade(ReadOnlySet<E> backingSet) {
+    public SetFacade(ReadableSet<E> backingSet) {
         this(backingSet::iterator, backingSet::spliterator, backingSet::size,
                 backingSet::contains, null, null, null);
     }

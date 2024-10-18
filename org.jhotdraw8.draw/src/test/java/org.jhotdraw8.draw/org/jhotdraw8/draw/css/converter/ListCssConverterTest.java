@@ -5,13 +5,13 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -52,7 +52,7 @@ public class ListCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListCssConverter<Double> instance = new ListCssConverter<>(new DoubleCssConverter(false));
-        ImmutableList<Double> actual = instance.fromString(buf, idFactory);
+        PersistentList<Double> actual = instance.fromString(buf, idFactory);
         assertEquals(expected, actual.toMutable());
     }
 
@@ -63,7 +63,7 @@ public class ListCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListCssConverter<Double> instance = new ListCssConverter<>(new DoubleCssConverter(false), "=>");
-        ImmutableList<Double> actual = instance.fromString(buf, idFactory);
+        PersistentList<Double> actual = instance.fromString(buf, idFactory);
         assertEquals(expected, actual.toMutable());
     }
 
@@ -75,7 +75,7 @@ public class ListCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListCssConverter<String> instance = new ListCssConverter<>(new StringCssConverter(false));
-        ImmutableList<String> actual = instance.fromString(buf, idFactory);
+        PersistentList<String> actual = instance.fromString(buf, idFactory);
         assertEquals(expected, actual.toMutable());
     }
 

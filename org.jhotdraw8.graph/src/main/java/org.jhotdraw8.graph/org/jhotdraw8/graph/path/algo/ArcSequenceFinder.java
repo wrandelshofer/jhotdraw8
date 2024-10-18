@@ -10,7 +10,7 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -43,7 +43,8 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+    @Nullable
+    OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth, C costLimit, AddToSet<V> visited);
@@ -60,7 +61,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
             V start,
             V goal,
             int maxDepth, C costLimit, AddToSet<V> visited) {
@@ -79,7 +80,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
             V start,
             V goal,
             int maxDepth, C costLimit) {
@@ -95,7 +96,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequence(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequence(
             V start,
             V goal,
             C costLimit) {
@@ -114,7 +115,8 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    @Nullable
+    OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
             C costLimit,
@@ -130,7 +132,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             Iterable<V> waypoints,
             int maxDepth,
             C costLimit) {
@@ -145,7 +147,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @return an ordered pair (arc sequence, cost),
      * or null if no sequence was found.
      */
-    default @Nullable OrderedPair<ImmutableList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
+    default @Nullable OrderedPair<PersistentList<Arc<V, A>>, C> findArcSequenceOverWaypoints(
             Iterable<V> waypoints,
             C costLimit) {
         return findArcSequenceOverWaypoints(waypoints, Integer.MAX_VALUE, costLimit, () -> new HashSet<>()::add);
@@ -163,10 +165,10 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
      * @param sumFunction             the sum function
      * @return an ordered pair with the combined sequence
      */
-    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable OrderedPair<ImmutableList<Arc<VV, AA>>, CC>
+    static <VV, AA, CC extends Number & Comparable<CC>> @Nullable OrderedPair<PersistentList<Arc<VV, AA>>, CC>
     findArcSequenceOverWaypoints(
             Iterable<VV> waypoints,
-            BiFunction<VV, VV, OrderedPair<ImmutableList<Arc<VV, AA>>, CC>> findArcSequenceFunction,
+            BiFunction<VV, VV, OrderedPair<PersistentList<Arc<VV, AA>>, CC>> findArcSequenceFunction,
             CC zero,
             BiFunction<CC, CC, CC> sumFunction) {
         List<Arc<VV, AA>> sequence = new ArrayList<>();
@@ -175,7 +177,7 @@ public interface ArcSequenceFinder<V, A, C extends Number & Comparable<C>> {
         int count = 0;
         for (VV next : waypoints) {
             if (prev != null) {
-                final OrderedPair<ImmutableList<Arc<VV, AA>>, CC> result = findArcSequenceFunction.apply(prev, next);
+                final OrderedPair<PersistentList<Arc<VV, AA>>, CC> result = findArcSequenceFunction.apply(prev, next);
                 if (result == null) {
                     return null;
                 } else {

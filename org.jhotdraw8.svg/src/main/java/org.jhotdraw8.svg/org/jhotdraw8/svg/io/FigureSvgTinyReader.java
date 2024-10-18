@@ -28,7 +28,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.MapEntries;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.text.SvgDefaultablePaintConverter;
 import org.jhotdraw8.svg.figure.SvgCircleFigure;
@@ -523,7 +523,7 @@ public class FigureSvgTinyReader {
         skipElement(r, ctx);
     }
 
-    private final NonNullKey<ImmutableList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
+    private final NonNullKey<PersistentList<SvgStop>> stopsKey = SvgLinearGradientFigure.STOPS;
 
     private void readStyle(XMLStreamReader r, Figure parent, Context ctx) throws XMLStreamException {
         String id = null;

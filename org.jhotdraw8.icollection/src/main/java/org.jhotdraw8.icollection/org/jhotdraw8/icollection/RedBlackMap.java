@@ -1,13 +1,13 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
-import org.jhotdraw8.icollection.immutable.ImmutableNavigableMap;
-import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
+import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlySortedMap;
+import org.jhotdraw8.icollection.persistent.PersistentNavigableMap;
+import org.jhotdraw8.icollection.persistent.PersistentNavigableSet;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableMap;
+import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
+import org.jhotdraw8.icollection.readable.ReadableSortedMap;
 import org.jhotdraw8.icollection.serialization.SortedMapSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -24,7 +24,7 @@ import java.util.SortedMap;
 import java.util.Spliterator;
 
 /**
- * Implements the {@link ImmutableNavigableSet} interface using a Red-Black tree.
+ * Implements the {@link PersistentNavigableSet} interface using a Red-Black tree.
  * <p>
  * References:
  * <p>
@@ -39,7 +39,7 @@ import java.util.Spliterator;
  * @param <V> the value type
  */
 
-public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializable {
+public class RedBlackMap<K, V> implements PersistentNavigableMap<K, V>, Serializable {
 
     @Serial
     private static final long serialVersionUID = 0L;
@@ -81,13 +81,13 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     }
 
     /**
-     * Returns an immutable map that contains the provided entries, sorted according to the
+     * Returns an persistent map that contains the provided entries, sorted according to the
      * specified comparator.
      *
      * @param c   an iterable
      * @param <K> the key type
      * @param <V> the value type
-     * @return an immutable map of the provided elements
+     * @return an persistent map of the provided elements
      */
     @SuppressWarnings("unchecked")
     public static <K, V> RedBlackMap<K, V> copyOf(Comparator<? super K> comparator, Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
@@ -95,75 +95,75 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
             return (RedBlackMap<K, V>) r;
         }
         if (c instanceof MutableRedBlackMap<?, ?> r && r.comparator.equals(comparator)) {
-            return (RedBlackMap<K, V>) r.toImmutable();
+            return (RedBlackMap<K, V>) r.toPersistent();
         }
         return RedBlackMap.<K, V>sortedOf(comparator).putAll(c);
     }
 
     @Override
     public RedBlackMap<K, V> putAll(Map<? extends K, ? extends V> m) {
-        return (RedBlackMap<K, V>) ImmutableNavigableMap.super.putAll(m);
+        return (RedBlackMap<K, V>) PersistentNavigableMap.super.putAll(m);
     }
 
 
     @Override
     public RedBlackMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
-        return (RedBlackMap<K, V>) ImmutableNavigableMap.super.putAll(c);
+        return (RedBlackMap<K, V>) PersistentNavigableMap.super.putAll(c);
     }
 
     @Override
     public RedBlackMap<K, V> putKeyValues(Object... kv) {
-        return (RedBlackMap<K, V>) ImmutableNavigableMap.super.putKeyValues(kv);
+        return (RedBlackMap<K, V>) PersistentNavigableMap.super.putKeyValues(kv);
     }
 
     @Override
     public RedBlackMap<K, V> removeAll(Iterable<? extends K> c) {
-        return (RedBlackMap<K, V>) ImmutableNavigableMap.super.removeAll(c);
+        return (RedBlackMap<K, V>) PersistentNavigableMap.super.removeAll(c);
     }
 
     @Override
     public RedBlackMap<K, V> retainAll(Iterable<? extends K> c) {
-        return (RedBlackMap<K, V>) ImmutableNavigableMap.super.retainAll(c);
+        return (RedBlackMap<K, V>) PersistentNavigableMap.super.retainAll(c);
     }
 
     @Override
-    public RedBlackMap<K, V> retainAll(ReadOnlyCollection<? extends K> c) {
-        return (RedBlackMap<K, V>) ImmutableNavigableMap.super.retainAll(c);
+    public RedBlackMap<K, V> retainAll(ReadableCollection<? extends K> c) {
+        return (RedBlackMap<K, V>) PersistentNavigableMap.super.retainAll(c);
     }
 
     /**
-     * Returns an immutable map that contains the provided elements sorted according to the
+     * Returns an persistent map that contains the provided elements sorted according to the
      * <i>natural ordering</i> of its elements.
      *
      * @param c   an iterable
      * @param <K> the key type
      * @param <V> the value type
-     * @return an immutable map of the provided elements
+     * @return an persistent map of the provided elements
      */
     public static <K, V> RedBlackMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         return RedBlackMap.copyOf(NaturalComparator.instance(), c);
     }
 
     /**
-     * Returns an immutable copy of the provided map that contains the provided elements sorted according to the
+     * Returns an persistent copy of the provided map that contains the provided elements sorted according to the
      * <i>natural ordering</i> of its elements.
      *
      * @param map a map
      * @param <K> the key type
      * @param <V> the value type
-     * @return an immutable copy
+     * @return an persistent copy
      */
     public static <K, V> RedBlackMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return RedBlackMap.<K, V>of().putAll(map);
     }
 
     /**
-     * Returns an empty immutable map, sorted according to the
+     * Returns an empty persistent map, sorted according to the
      * specified comparator.
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @return an empty immutable map
+     * @return an empty persistent map
      */
     public static <K, V> RedBlackMap<K, V> sortedOf(@Nullable Comparator<? super K> comparator) {
         comparator = comparator == null ? NaturalComparator.instance() : comparator;
@@ -171,13 +171,13 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     }
 
     /**
-     * Returns an immutable map that contains the provided elements, sorted according to the
+     * Returns an persistent map that contains the provided elements, sorted according to the
      * specified comparator.
      *
      * @param elements elements
      * @param <K>      the key type
      * @param <V>      the value type
-     * @return an immutable map of the provided elements
+     * @return an persistent map of the provided elements
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
@@ -187,12 +187,12 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     }
 
     /**
-     * Returns an empty immutable map, sorted according to the
+     * Returns an empty persistent map, sorted according to the
      * <i>natural ordering</i> of its entries.
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @return an empty immutable map
+     * @return an empty persistent map
      */
     public static <K, V> RedBlackMap<K, V> of() {
         return new RedBlackMap<>(RedBlackTree.of(NaturalComparator.instance()), NaturalComparator.instance()
@@ -200,13 +200,13 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     }
 
     /**
-     * Returns an immutable map that contains the provided entries, sorted according to the
+     * Returns an persistent map that contains the provided entries, sorted according to the
      * <i>natural ordering</i> of its entries.
      *
      * @param entries entries
      * @param <K>     the key type
      * @param <V>     the value type
-     * @return an immutable map of the provided entries
+     * @return an persistent map of the provided entries
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
@@ -260,8 +260,8 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
     }
 
     @Override
-    public ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return new ReadOnlySequencedMapFacade<>(
+    public ReadableSequencedMap<K, V> readOnlyReversed() {
+        return new ReadableSequencedMapFacade<>(
                 this::reverseIterator,
                 this::iterator,
                 this::size,
@@ -324,17 +324,17 @@ public class RedBlackMap<K, V> implements ImmutableNavigableMap<K, V>, Serializa
 
     @Override
     public boolean equals(Object o) {
-        return ReadOnlySortedMap.sortedMapEquals(this, o);
+        return ReadableSortedMap.sortedMapEquals(this, o);
     }
 
     @Override
     public int hashCode() {
-        return ReadOnlyMap.iteratorToHashCode(iterator());
+        return ReadableMap.iteratorToHashCode(iterator());
     }
 
     @Override
     public String toString() {
-        return ReadOnlyMap.mapToString(this);
+        return ReadableMap.mapToString(this);
     }
 
     @Override

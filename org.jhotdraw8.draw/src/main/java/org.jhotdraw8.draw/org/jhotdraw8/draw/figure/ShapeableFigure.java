@@ -25,7 +25,7 @@ import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.NineRegionsScalingBuilder;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.List;
 
@@ -61,7 +61,7 @@ public interface ShapeableFigure extends Figure {
      * Performance: it would be nice if Shape was an already parsed representation. For example a JavaFX Path object.
      */
     NullableFXPathElementsStyleableKey SHAPE = new NullableFXPathElementsStyleableKey("shape", null);
-    ImmutableList<PathElement> SVG_SQUARE = VectorList.of(new MoveTo(0, 0), new LineTo(1, 0), new LineTo(1, 1), new LineTo(0, 1), new ClosePath());
+    PersistentList<PathElement> SVG_SQUARE = VectorList.of(new MoveTo(0, 0), new LineTo(1, 0), new LineTo(1, 1), new LineTo(0, 1), new ClosePath());
 
 
     default void applyShapeableProperties(RenderContext ctx, Path node) {
@@ -69,7 +69,7 @@ public interface ShapeableFigure extends Figure {
     }
 
     default void applyShapeableProperties(RenderContext ctx, Path node, Bounds b) {
-        ImmutableList<PathElement> content = getStyled(SHAPE);
+        PersistentList<PathElement> content = getStyled(SHAPE);
         if (content == null || content.isEmpty()) {
             content = SVG_SQUARE;
         }

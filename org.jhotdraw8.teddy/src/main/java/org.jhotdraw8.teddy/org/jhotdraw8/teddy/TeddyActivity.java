@@ -24,7 +24,7 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxbase.control.TextInputControlUndoAdapter;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.teddy.action.FontAction;
 import org.jhotdraw8.teddy.action.FontableActivity;
 
@@ -95,7 +95,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @Override
     public CompletionStage<DataFormat> read(
             URI uri, DataFormat format,
-            ImmutableMap<Key<?>, Object> options,
+            PersistentMap<Key<?>, Object> options,
             boolean insert,
             WorkState<Void> workState) {
         return FXWorker.supply(Executors.newSingleThreadExecutor(), () -> {
@@ -125,7 +125,7 @@ public class TeddyActivity extends AbstractFileBasedActivity implements FileBase
     @Override
     public CompletionStage<Void> write(
             URI uri, DataFormat format,
-            ImmutableMap<Key<?>, Object> options,
+            PersistentMap<Key<?>, Object> options,
             WorkState<Void> workState) {
         final String text = textArea.getText();
         return FXWorker.run(Executors.newSingleThreadExecutor(), () -> {

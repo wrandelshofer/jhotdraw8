@@ -40,7 +40,7 @@ import java.util.Spliterator;
  *     <li>put: O(log₃₂ N)</li>
  *     <li>remove: O(log₃₂ N)</li>
  *     <li>containsKey: O(log₃₂ N)</li>
- *     <li>toImmutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
+ *     <li>toPersistent: O(1) + O(log₃₂ N) distributed across subsequent updates in
  *     this map</li>
  *     <li>clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
  *     map and in the clone</li>
@@ -56,8 +56,8 @@ import java.util.Spliterator;
  * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      Efficient Persistent Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -209,9 +209,9 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     @SuppressWarnings("unchecked")
     public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c instanceof MutableChampMap<?, ?> m) {
-            c = (Iterable<? extends Entry<? extends K, ? extends V>>) m.toImmutable();
+            c = (Iterable<? extends Entry<? extends K, ? extends V>>) m.toPersistent();
         }
-        if (isEmpty() && c instanceof SimpleImmutableMap<?, ?> that) {
+        if (isEmpty() && c instanceof SimplePersistentMap<?, ?> that) {
             if (that.isEmpty()) {
                 return false;
             }
@@ -220,10 +220,10 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
             modCount++;
             return true;
         }
-        if (c instanceof SimpleImmutableMap<?, ?> that) {
+        if (c instanceof SimplePersistentMap<?, ?> that) {
             var bulkChange = new BulkChangeEvent();
-            var newRootNode = root.putAll(getOrCreateOwner(), (Node<SimpleImmutableEntry<K, V>>) (Node<?>) that.root, 0, bulkChange, SimpleImmutableMap::updateEntry, SimpleImmutableMap::entryKeyEquals,
-                    SimpleImmutableMap::entryKeyHash, new ChangeEvent<>());
+            var newRootNode = root.putAll(getOrCreateOwner(), (Node<SimpleImmutableEntry<K, V>>) (Node<?>) that.root, 0, bulkChange, SimplePersistentMap::updateEntry, SimplePersistentMap::entryKeyEquals,
+                    SimplePersistentMap::entryKeyHash, new ChangeEvent<>());
             if (bulkChange.inBoth == that.size() && !bulkChange.replaced) {
                 return false;
             }
@@ -265,7 +265,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
             return false;
         }
         if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             clear();
             return true;
         }
@@ -273,7 +273,7 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
         BitmapIndexedNode<K, V> newRootNode;
         if (c instanceof Collection<?> that) {
             newRootNode = root.filterAll(getOrCreateOwner(), e -> that.contains(e.getKey()), 0, bulkChange);
-        } else if (c instanceof ReadOnlyCollection<?> that) {
+        } else if (c instanceof ReadableCollection<?> that) {
             newRootNode = root.filterAll(getOrCreateOwner(), e -> that.contains(e.getKey()), 0, bulkChange);
         } else {
             HashSet<Object> that = new HashSet<>();
@@ -323,11 +323,11 @@ public class MutableChampMap<K, V> extends AbstractMutableChampMap<K, V> {
     }
 
     /**
-     * Returns an immutable copy of this map.
+     * Returns an persistent copy of this map.
      *
-     * @return an immutable copy
+     * @return an persistent copy
      */
-    public ChampMap<K, V> toImmutable() {
+    public ChampMap<K, V> toPersistent() {
         owner = null;
         return isEmpty() ? ChampMap.of()
                 : new ChampMap<>(root, size);

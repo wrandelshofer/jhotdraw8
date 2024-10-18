@@ -13,7 +13,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxcollection.facade.ObservableSetFacade;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -90,12 +90,12 @@ public interface StyleableFigure extends Figure {
     }
 
     @Override
-    default ReadOnlySet<String> getStyleClasses() {
+    default ReadableSet<String> getStyleClasses() {
         return getNonNull(STYLE_CLASS);
     }
 
     @Override
-    default ReadOnlySet<String> getPseudoClassStates() {
+    default ReadableSet<String> getPseudoClassStates() {
         return getNonNull(PSEUDO_CLASS);
     }
 

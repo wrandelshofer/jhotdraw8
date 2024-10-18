@@ -28,7 +28,7 @@ import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -180,7 +180,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
 
 
     default Transform getInverseTransform() {
-        ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
+        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = FXTransforms.IDENTITY;
@@ -208,7 +208,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             final Bounds layoutBounds = getLayoutBounds();
             Point2D center = FXRectangles.center(layoutBounds);
 
-            ImmutableList<Transform> transforms = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
+            PersistentList<Transform> transforms = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
             double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
             double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
             double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
@@ -247,7 +247,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
 
         Point2D center = getCenterInLocal();
 
-        ImmutableList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
+        PersistentList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
         double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
         double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
         double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
@@ -284,7 +284,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         if (p2l == null) {
             Point2D center = getCenterInLocal();
 
-            ImmutableList<Transform> transforms = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
+            PersistentList<Transform> transforms = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
             double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
             double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
             double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
@@ -323,7 +323,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      * @return the flattened transforms
      */
     default Transform getTransform() {
-        ImmutableList<Transform> list = getStyledNonNull(TRANSFORMS);
+        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
         Transform t;
         if (list.isEmpty()) {
             t = FXTransforms.IDENTITY;
@@ -348,7 +348,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     @Override
     default void reshapeInLocal(Transform transform) {
         if (hasCenterTransforms() && !(transform instanceof Translate)) {
-            ImmutableList<Transform> ts = getNonNull(TRANSFORMS);
+            PersistentList<Transform> ts = getNonNull(TRANSFORMS);
             if (ts.isEmpty()) {
                 set(TRANSFORMS, VectorList.of(transform));
             } else {
@@ -398,7 +398,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     @Override
     default void transformInLocal(Transform t) {
         flattenTransforms();
-        ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+        PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
         if (transforms.isEmpty()) {
             set(TRANSFORMS, VectorList.of(t));
         } else {
@@ -413,7 +413,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         }
         if (t instanceof Translate tr) {
             flattenTransforms();
-            ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+            PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {
                 translateInLocal(new CssPoint2D(tr.getTx(), tr.getTy()));
             } else {
@@ -422,7 +422,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
             }
         } else {
             flattenTransforms();
-            ImmutableList<Transform> transforms = getNonNull(TRANSFORMS);
+            PersistentList<Transform> transforms = getNonNull(TRANSFORMS);
             if (transforms.isEmpty()) {
                 set(TRANSFORMS, VectorList.of(t));
             } else {

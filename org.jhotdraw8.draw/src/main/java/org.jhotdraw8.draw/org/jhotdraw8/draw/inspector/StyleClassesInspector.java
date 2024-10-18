@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.model.DrawingModelEvent;
 import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -97,7 +97,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 tagName = tagName.trim();
                 for (Figure f : getSelectedFigures()) {
                     @SuppressWarnings("unchecked")
-                    ImmutableSet<String> tags = f.get(tagsKey);
+                    PersistentSet<String> tags = f.get(tagsKey);
                     Collection<String> newTags = listFactory.get();
                     boolean contains = false;
                     for (String t : tags) {
@@ -177,7 +177,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
                 tagName = tagName.trim();
                 for (Figure f : getSelectedFigures()) {
                     @SuppressWarnings("unchecked")
-                    ImmutableSet<String> tags = f.get(tagsKey);
+                    PersistentSet<String> tags = f.get(tagsKey);
                     Collection<String> newTags = listFactory.get();
                     boolean contains = false;
                     for (String t : tags) {
@@ -203,7 +203,7 @@ public class StyleClassesInspector extends AbstractSelectionInspector {
 
         boolean first = true;
         for (Figure f : newValue) {
-            ImmutableSet<String> tags = f.getNonNull(tagsKey);
+            PersistentSet<String> tags = f.getNonNull(tagsKey);
             if (first) {
                 intersection.addAll(tags.asSet());
                 first = false;

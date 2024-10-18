@@ -1,19 +1,19 @@
 /*
- * @(#)SimpleImmutableMap.java
+ * @(#)SimplePersistentMap.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.facade.ReadableSetFacade;
 import org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champmap.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champmap.EntryIterator;
 import org.jhotdraw8.icollection.impl.champmap.Node;
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -29,14 +29,14 @@ import java.util.Random;
 import java.util.Spliterator;
 
 /**
- * Implements the {@link ImmutableMap} interface using a Compressed Hash-Array
+ * Implements the {@link PersistentMap} interface using a Compressed Hash-Array
  * Mapped Prefix-tree (CHAMP).
  * <p>
  * Features:
  * <ul>
  *     <li>supports up to 2<sup>31</sup> - 1 entries</li>
  *     <li>allows null keys and null values</li>
- *     <li>is immutable</li>
+ *     <li>is persistent</li>
  *     <li>is thread-safe</li>
  *     <li>does not guarantee a specific iteration order</li>
  * </ul>
@@ -74,8 +74,8 @@ import java.util.Spliterator;
  * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      Efficient Persistent Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -86,7 +86,7 @@ import java.util.Spliterator;
  */
 @SuppressWarnings("exports")
 public class ChampMap<K, V>
-        implements ImmutableMap<K, V>, Serializable {
+        implements PersistentMap<K, V>, Serializable {
     private static final ChampMap<?, ?> EMPTY = new ChampMap<>(BitmapIndexedNode.emptyNode(), 0);
     @Serial
     private static final long serialVersionUID = 0L;
@@ -137,12 +137,12 @@ public class ChampMap<K, V>
     }
 
     /**
-     * Returns an immutable copy of the provided map.
+     * Returns an persistent copy of the provided map.
      *
      * @param c   a map
      * @param <K> the key type
      * @param <V> the value type
-     * @return an immutable copy
+     * @return an persistent copy
      */
     @SuppressWarnings("unchecked")
     public static <K, V> ChampMap<K, V> copyOf(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
@@ -150,12 +150,12 @@ public class ChampMap<K, V>
     }
 
     /**
-     * Returns an immutable copy of the provided map.
+     * Returns an persistent copy of the provided map.
      *
      * @param map a map
      * @param <K> the key type
      * @param <V> the value type
-     * @return an immutable copy
+     * @return an persistent copy
      */
     public static <K, V> ChampMap<K, V> copyOf(Map<? extends K, ? extends V> map) {
         return ChampMap.<K, V>of().putAll(map);
@@ -174,11 +174,11 @@ public class ChampMap<K, V>
     }
 
     /**
-     * Returns an empty immutable map.
+     * Returns an empty persistent map.
      *
      * @param <K> the key type
      * @param <V> the value type
-     * @return an empty immutable map
+     * @return an empty persistent map
      */
     @SuppressWarnings("unchecked")
     public static <K, V> ChampMap<K, V> of() {
@@ -210,7 +210,7 @@ public class ChampMap<K, V>
         if (other instanceof ChampMap<?, ?> that) {
             return size == that.size && root.equivalent(that.root);
         }
-        return ReadOnlyMap.mapEquals(this, other);
+        return ReadableMap.mapEquals(this, other);
     }
 
     @Override
@@ -237,7 +237,7 @@ public class ChampMap<K, V>
 
     @Override
     public int hashCode() {
-        return ReadOnlyMap.iteratorToHashCode(iterator());
+        return ReadableMap.iteratorToHashCode(iterator());
     }
 
     @Override
@@ -268,14 +268,14 @@ public class ChampMap<K, V>
 
     @Override
     public ChampMap<K, V> putAll(Map<? extends K, ? extends V> m) {
-        return (ChampMap<K, V>) ImmutableMap.super.putAll(m);
+        return (ChampMap<K, V>) PersistentMap.super.putAll(m);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public ChampMap<K, V> putAll(Iterable<? extends Map.Entry<? extends K, ? extends V>> c) {
         var m = toMutable();
-        return m.putAll(c) ? m.toImmutable() : this;
+        return m.putAll(c) ? m.toPersistent() : this;
     }
 
     @Override
@@ -293,19 +293,19 @@ public class ChampMap<K, V>
     @Override
     public ChampMap<K, V> removeAll(Iterable<? extends K> c) {
         var m = toMutable();
-        return m.removeAll(c) ? m.toImmutable() : this;
+        return m.removeAll(c) ? m.toPersistent() : this;
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public ChampMap<K, V> retainAll(Iterable<? extends K> c) {
         var m = toMutable();
-        return m.retainAll(c) ? m.toImmutable() : this;
+        return m.retainAll(c) ? m.toPersistent() : this;
     }
 
     @Override
-    public ReadOnlySet<K> readOnlyKeySet() {
-        return new ReadOnlySetFacade<>(
+    public ReadableSet<K> readOnlyKeySet() {
+        return new ReadableSetFacade<>(
                 () -> new MappedIterator<>(new EntryIterator<>(root, null, null), Map.Entry::getKey),
                 this::size,
                 this::containsKey,
@@ -346,7 +346,7 @@ public class ChampMap<K, V>
      */
     @Override
     public String toString() {
-        return ReadOnlyMap.mapToString(this);
+        return ReadableMap.mapToString(this);
     }
 
     @Serial

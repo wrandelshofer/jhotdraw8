@@ -8,7 +8,7 @@ import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import java.util.function.Consumer;
  */
 public class SelectorGroup extends Selector {
 
-    private final ReadOnlyList<Selector> selectors;
+    private final ReadableList<Selector> selectors;
 
     public SelectorGroup(@Nullable SourceLocator sourceLocator, Selector selector) {
         super(sourceLocator);

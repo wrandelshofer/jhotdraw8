@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.collection.pair.OrderedPair;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.function.Predicate;
 
@@ -31,7 +31,7 @@ public interface AllVertexSequencesFinder<V, A, C extends Number & Comparable<C>
      * @param costLimit     the algorithm-specific search limit
      * @return all paths
      */
-    Iterable<OrderedPair<ImmutableList<V>, C>> findAllVertexSequences(
+    Iterable<OrderedPair<PersistentList<V>, C>> findAllVertexSequences(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth, C costLimit);

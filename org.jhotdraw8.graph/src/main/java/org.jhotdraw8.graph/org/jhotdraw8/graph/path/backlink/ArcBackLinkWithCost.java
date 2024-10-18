@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -52,8 +52,8 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
      * @param <XX>            the vertex sequence element type
      * @return the vertex sequence
      */
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable SimpleOrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable ArcBackLinkWithCost<VV, AA, CC> node,
-                                                                                                                                       Function<ArcBackLinkWithCost<VV, AA, CC>, XX> mappingFunction) {
+    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable SimpleOrderedPair<PersistentList<XX>, CC> toVertexSequence(@Nullable ArcBackLinkWithCost<VV, AA, CC> node,
+                                                                                                                                        Function<ArcBackLinkWithCost<VV, AA, CC>, XX> mappingFunction) {
         if (node == null) {
             return null;
         }
@@ -76,7 +76,7 @@ public class ArcBackLinkWithCost<V, A, C extends Number & Comparable<C>> extends
      * @param <XX>            the arrow sequence element type
      * @return the arrow sequence
      */
-    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable SimpleOrderedPair<ImmutableList<XX>, CC> toArrowSequence(
+    public static <VV, AA, CC extends Number & Comparable<CC>, XX> @Nullable SimpleOrderedPair<PersistentList<XX>, CC> toArrowSequence(
             @Nullable ArcBackLinkWithCost<VV, AA, CC> node,
             BiFunction<ArcBackLinkWithCost<VV, AA, CC>, ArcBackLinkWithCost<VV, AA, CC>, XX> mappingFunction) {
         if (node == null) {

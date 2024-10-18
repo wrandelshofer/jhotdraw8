@@ -31,7 +31,7 @@ import org.jhotdraw8.draw.key.DefaultableStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.SvgPaintDefaulting;
 import org.jhotdraw8.svg.io.SvgFontFamilyConverter;
@@ -107,8 +107,8 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * <p>
      * <a href="https://www.w3.org/TR/SVGTiny12/text.html#FontPropertiesUsedBySVG">link</a>
      */
-    DefaultableStyleableKey<ImmutableList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
-            new SimpleParameterizedType(CssDefaultableValue.class, new SimpleParameterizedType(ImmutableList.class, String.class)), new SvgFontFamilyConverter(),
+    DefaultableStyleableKey<PersistentList<String>> FONT_FAMILY_KEY = new DefaultableStyleableKey<>("font-family",
+            new SimpleParameterizedType(CssDefaultableValue.class, new SimpleParameterizedType(PersistentList.class, String.class)), new SvgFontFamilyConverter(),
             new CssDefaultableValue<>(CssDefaulting.INHERIT),
             VectorList.of(GENERIC_FONT_FAMILY_SANS_SERIF)
     );
@@ -144,8 +144,8 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
      * stroke-dasharray.
      * <a href="https://www.w3.org/TR/SVGMobile12/painting.html#StrokeDasharrayProperty">link</a>
      */
-    DefaultableStyleableKey<ImmutableList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
-            new SimpleParameterizedType(CssDefaultableValue.class, new SimpleParameterizedType(ImmutableList.class, Double.class)), new ListCssConverter<>(new DoubleCssConverter(false), ", "),
+    DefaultableStyleableKey<PersistentList<Double>> STROKE_DASHARRAY_KEY = new DefaultableStyleableKey<>("stroke-dasharray",
+            new SimpleParameterizedType(CssDefaultableValue.class, new SimpleParameterizedType(PersistentList.class, Double.class)), new ListCssConverter<>(new DoubleCssConverter(false), ", "),
             new CssDefaultableValue<>(CssDefaulting.INHERIT, null), null);
     /**
      * stroke-dashoffset.
@@ -377,7 +377,7 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
         shape.setStrokeLineJoin(getDefaultableStyledNonNull(STROKE_LINEJOIN_KEY));
         shape.setStrokeMiterLimit(getDefaultableStyledNonNull(STROKE_MITERLIMIT_KEY));
         shape.setStrokeDashOffset(getDefaultableStyledNonNull(STROKE_DASHOFFSET_KEY));
-        ImmutableList<Double> dasharray = getDefaultableStyled(STROKE_DASHARRAY_KEY);
+        PersistentList<Double> dasharray = getDefaultableStyled(STROKE_DASHARRAY_KEY);
         if (dasharray == null) {
             shape.getStrokeDashArray().clear();
         } else {

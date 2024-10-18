@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.icollection.impl.iteration;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ListIterator;
@@ -14,22 +14,22 @@ import java.util.function.Consumer;
 
 /**
  * A {@link ListIterator}, and {@link Spliterator} for a
- * {@link ReadOnlyList}.
+ * {@link ReadableList}.
  * <p>
  * Does not perform modification checks.
  *
  * @param <E> the element type
  */
 public class ReadOnlyListSpliterator<E> extends AbstractListIteratorSpliterator<E> {
-    private final ReadOnlyList<E> list;
+    private final ReadableList<E> list;
     private int index;
     private final int size;
 
-    public ReadOnlyListSpliterator(ReadOnlyList<E> list) {
+    public ReadOnlyListSpliterator(ReadableList<E> list) {
         this(list, 0, list.size());
     }
 
-    public ReadOnlyListSpliterator(ReadOnlyList<E> list, int index, int size) {
+    public ReadOnlyListSpliterator(ReadableList<E> list, int index, int size) {
         this.list = list;
         this.size = size;
         this.index = index;

@@ -9,7 +9,7 @@ import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -35,7 +35,7 @@ public class MappedCssConverter<E> implements CssConverter<E> {
         this(name, fromStringMap, false);
     }
 
-    public MappedCssConverter(String name, ReadOnlyMap<String, E> fromStringMap) {
+    public MappedCssConverter(String name, ReadableMap<String, E> fromStringMap) {
         this(name, fromStringMap, false);
     }
 
@@ -50,7 +50,7 @@ public class MappedCssConverter<E> implements CssConverter<E> {
         this.nullable = nullable;
     }
 
-    public MappedCssConverter(String name, ReadOnlyMap<String, E> fromStringMap, boolean nullable) {
+    public MappedCssConverter(String name, ReadableMap<String, E> fromStringMap, boolean nullable) {
         this(name, fromStringMap.asMap(), nullable);
     }
 

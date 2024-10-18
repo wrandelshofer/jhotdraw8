@@ -11,8 +11,8 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -34,7 +34,7 @@ import java.util.logging.Logger;
  */
 public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     protected SelectorModel<T> model;
-    protected @Nullable Map<String, ImmutableList<CssToken>> customProperties;
+    protected @Nullable Map<String, PersistentList<CssToken>> customProperties;
     private final Map<String, CssFunction<T>> functions;
     /**
      * Value must be greater equal to zero.
@@ -45,7 +45,7 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
         this(functions, null, null);
     }
 
-    public SimpleCssFunctionProcessor(List<CssFunction<T>> functions, @Nullable SelectorModel<T> model, @Nullable Map<String, @Nullable ImmutableList<CssToken>> customProperties) {
+    public SimpleCssFunctionProcessor(List<CssFunction<T>> functions, @Nullable SelectorModel<T> model, @Nullable Map<String, @Nullable PersistentList<CssToken>> customProperties) {
         this.model = model;
         this.customProperties = customProperties;
         this.functions = new LinkedHashMap<>();
@@ -76,16 +76,16 @@ public class SimpleCssFunctionProcessor<T> implements CssFunctionProcessor<T> {
     }
 
     @Override
-    public Map<String, ImmutableList<CssToken>> getCustomProperties() {
+    public Map<String, PersistentList<CssToken>> getCustomProperties() {
         return customProperties;
     }
 
     @Override
-    public void setCustomProperties(Map<String, ImmutableList<CssToken>> customProperties) {
+    public void setCustomProperties(Map<String, PersistentList<CssToken>> customProperties) {
         this.customProperties = customProperties;
     }
 
-    public final ReadOnlyList<CssToken> process(T element, ImmutableList<CssToken> in) throws ParseException {
+    public final ReadableList<CssToken> process(T element, PersistentList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {

@@ -5,7 +5,7 @@
 package org.jhotdraw8.fxbase.styleable;
 
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 /**
  * Interface for keys which support styled values from CSS.
@@ -22,7 +22,7 @@ public interface WritableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAcc
      *
      * @return a help text.
      */
-    default ImmutableList<String> getExamples() {
+    default PersistentList<String> getExamples() {
         return VectorList.of();
     }
 

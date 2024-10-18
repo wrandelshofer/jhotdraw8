@@ -8,21 +8,21 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.jhotdraw8.icollection.facade.ListFacade;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 
 import java.util.Collection;
 
 /**
- * Wraps a {@link ReadOnlyList} in the {@link ObservableList} interface.
+ * Wraps a {@link ReadableList} in the {@link ObservableList} interface.
  * <p>
- * The underlying ReadOnlyList is referenced - not copied. This allows to pass a
- * ReadOnlyList to a client who does not understand the ReadOnlyList APi.
+ * The underlying ReadableList is referenced - not copied. This allows to pass a
+ * ReadableList to a client who does not understand the ReadableList APi.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ObservableListFacade<E> extends ListFacade<E> implements ObservableList<E> {
-    public ObservableListFacade(ReadOnlyList<E> backingList) {
+    public ObservableListFacade(ReadableList<E> backingList) {
         super(backingList);
     }
 

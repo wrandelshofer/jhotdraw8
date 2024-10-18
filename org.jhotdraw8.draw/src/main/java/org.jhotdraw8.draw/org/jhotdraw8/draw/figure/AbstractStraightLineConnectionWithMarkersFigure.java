@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.PointAndDerivative;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -101,15 +101,15 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
     public abstract double getMarkerCenterScaleFactor();
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerCenterShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerCenterShape();
 
     public abstract double getMarkerEndScaleFactor();
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerEndShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerEndShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerStartShape();
 
     @Override
     public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
@@ -186,7 +186,7 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
                                     Group group,
                                     Path markerNode,
                                     PointAndDerivative pd,
-                                    @Nullable ImmutableList<PathElement> markerPath, double markerScaleFactor) {
+                                    @Nullable PersistentList<PathElement> markerPath, double markerScaleFactor) {
         if (markerPath != null) {
                 // Note: we must not add individual elements to the ObservableList
                 // of the markerNode, because this fires too many change events.
@@ -216,8 +216,8 @@ public abstract class AbstractStraightLineConnectionWithMarkersFigure extends Ab
 
         final double startInset = getStrokeCutStart(ctx);
         final double endInset = getStrokeCutEnd(ctx);
-        final ImmutableList<PathElement> startMarkerStr = getMarkerStartShape();
-        final ImmutableList<PathElement> endMarkerStr = getMarkerEndShape();
+        final PersistentList<PathElement> startMarkerStr = getMarkerStartShape();
+        final PersistentList<PathElement> endMarkerStr = getMarkerEndShape();
 
         Point2D endMinusStart = end.subtract(start);
         Point2D startMinusEnd = start.subtract(end);

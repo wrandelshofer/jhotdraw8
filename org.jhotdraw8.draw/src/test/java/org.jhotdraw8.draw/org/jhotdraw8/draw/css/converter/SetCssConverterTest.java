@@ -5,13 +5,13 @@
 
 package org.jhotdraw8.draw.css.converter;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -53,7 +53,7 @@ public class SetCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetCssConverter<Double> instance = new SetCssConverter<>(new DoubleCssConverter(false));
-        ImmutableSequencedSet<Double> actual = instance.fromString(buf, idFactory);
+        PersistentSequencedSet<Double> actual = instance.fromString(buf, idFactory);
         assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 
@@ -64,7 +64,7 @@ public class SetCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetCssConverter<Double> instance = new SetCssConverter<>(new DoubleCssConverter(false), "=>");
-        ImmutableSequencedSet<Double> actual = instance.fromString(buf, idFactory);
+        PersistentSequencedSet<Double> actual = instance.fromString(buf, idFactory);
         assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 
@@ -76,7 +76,7 @@ public class SetCssConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetCssConverter<String> instance = new SetCssConverter<>(new StringCssConverter(false));
-        ImmutableSequencedSet<String> actual = instance.fromString(buf, idFactory);
+        PersistentSequencedSet<String> actual = instance.fromString(buf, idFactory);
         assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 

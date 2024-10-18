@@ -23,7 +23,7 @@ import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.awt.geom.Point2D;
 import java.util.Deque;
@@ -505,7 +505,7 @@ public class ContourIntersections {
                 return new NonNullOrderedPair<>(withinSweep, p);
             };
 
-            ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
+            PersistentList<IntersectionPoint> intersections = intrResult.intersections();
             if (intersections.isEmpty()) {
                 result.intrType = PlineSegIntrType.NoIntersect;
             } else if (intersections.size() == 1) {
@@ -539,7 +539,7 @@ public class ContourIntersections {
 
         if (vIsLine && uIsLine) {
             IntersectionResultEx intrResult = intrLineSeg2LineSeg2(v1.pos(), v2.pos(), u1.pos(), u2.pos());
-            ImmutableList<IntersectionPointEx> intersections = intrResult.intersections();
+            PersistentList<IntersectionPointEx> intersections = intrResult.intersections();
             switch (intrResult.getStatus()) {
                 case NO_INTERSECTION_PARALLEL, NO_INTERSECTION:
                     result.intrType = PlineSegIntrType.NoIntersect;
@@ -589,7 +589,7 @@ public class ContourIntersections {
                     result.intrType = PlineSegIntrType.NoIntersect;
                     break;
                 case INTERSECTION:
-                    ImmutableList<IntersectionPoint> intersections = intrResult.intersections();
+                    PersistentList<IntersectionPoint> intersections = intrResult.intersections();
                     if (intersections.size() == 1) {
                         if (bothArcsSweepPoint.test(intersections.getFirst())) {
                             result.intrType = PlineSegIntrType.OneIntersect;

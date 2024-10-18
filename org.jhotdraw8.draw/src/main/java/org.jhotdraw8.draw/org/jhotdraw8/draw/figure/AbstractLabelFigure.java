@@ -37,7 +37,7 @@ import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -366,7 +366,7 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * @param iconGroupNode the group node that holds the icon image
      */
     protected void updateIconNodeImage(final RenderContext ctx, final Group iconGroupNode) {
-        final ImmutableList<PathElement> elements = getStyled(ICON_SHAPE);
+        final PersistentList<PathElement> elements = getStyled(ICON_SHAPE);
         iconGroupNode.setVisible(elements != null);
         if (elements == null) {
             return;

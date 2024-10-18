@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.Map;
 import java.util.Objects;
@@ -36,7 +36,7 @@ public interface NonNullMapAccessor<T> extends MapAccessor<T> {
      * @param a A Map.
      * @return The value of the attribute.
      */
-    default T getNonNull(ReadOnlyMap<? super Key<?>, Object> a) {
+    default T getNonNull(ReadableMap<? super Key<?>, Object> a) {
         T t = get(a);
         assert t != null;
         return t;

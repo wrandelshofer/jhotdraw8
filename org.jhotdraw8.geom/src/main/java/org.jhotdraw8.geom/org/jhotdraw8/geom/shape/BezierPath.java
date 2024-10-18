@@ -17,10 +17,11 @@ import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
 import org.jhotdraw8.icollection.PrivateData;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.FlatteningPathIterator;
 import java.awt.geom.PathIterator;
@@ -140,7 +141,7 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
 
     public BezierPath split(double x, double y, double tolerance) {
         IntersectionResult isect = IntersectPathIteratorPoint.intersectPathIteratorPoint(getPathIterator(null), x, y, tolerance);
-        ImmutableList<IntersectionPoint> intersections = isect.intersections();
+        PersistentList<IntersectionPoint> intersections = isect.intersections();
         //noinspection RedundantSuppression
         @SuppressWarnings({"unchecked", "rawtypes"}) VectorList<BezierNode>[] result = new VectorList[]{this};
         if (intersections.size() == 1) {

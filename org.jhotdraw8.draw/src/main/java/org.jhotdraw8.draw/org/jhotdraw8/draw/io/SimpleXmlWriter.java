@@ -18,8 +18,8 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.icollection.ChampMap;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jhotdraw8.xml.IndentingXMLStreamWriter;
 import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
@@ -71,7 +71,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     final protected IdFactory idFactory;
     final protected String namespaceQualifier;
     protected String namespaceURI;
-    private ImmutableMap<Key<?>, Object> options = ChampMap.of();
+    private PersistentMap<Key<?>, Object> options = ChampMap.of();
 
     /**
      * Specifies the number of characters that should be used for indentation.
@@ -156,12 +156,12 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     }
 
     @Override
-    public void setOptions(ImmutableMap<Key<?>, Object> newValue) {
+    public void setOptions(PersistentMap<Key<?>, Object> newValue) {
         options = newValue;
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> getOptions() {
+    public PersistentMap<Key<?>, Object> getOptions() {
         return options;
     }
 
@@ -332,7 +332,7 @@ public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     // XXX maybe this should not be in SimpleXmlIO?
     protected void writeProcessingInstructions(XMLStreamWriter w, Drawing external) throws XMLStreamException {
         if (figureFactory.getStylesheetsKey() != null) {
-            ImmutableList<URI> stylesheets = external.get(figureFactory.getStylesheetsKey());
+            PersistentList<URI> stylesheets = external.get(figureFactory.getStylesheetsKey());
             if (stylesheets != null) {
                 for (URI stylesheet : stylesheets) {
                     stylesheet = idFactory.relativize(stylesheet);

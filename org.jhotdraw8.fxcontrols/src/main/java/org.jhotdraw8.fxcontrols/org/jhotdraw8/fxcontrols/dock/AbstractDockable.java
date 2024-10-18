@@ -13,7 +13,7 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 
 /**
  * Abstract base class for implementations of {@link Dockable}.
@@ -48,7 +48,7 @@ public abstract class AbstractDockable implements Dockable {
     }
 
     @Override
-    public ReadOnlyList<DockChild> getDockChildrenReadOnly() {
+    public ReadableList<DockChild> getDockChildrenReadOnly() {
         return VectorList.of();
     }
 

@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -52,7 +52,7 @@ public abstract class AbstractMapTest {
         return false;
     }
 
-    protected <K, V> void assertEqualMap(ReadOnlyMap<K, V> expected, Map<K, V> actual) {
+    protected <K, V> void assertEqualMap(ReadableMap<K, V> expected, Map<K, V> actual) {
         assertEqualMap(expected.asMap(), actual);
     }
 

@@ -7,7 +7,7 @@ package org.jhotdraw8.xml.converter;
 
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
@@ -51,7 +51,7 @@ public class SetXmlConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false));
-        ImmutableSequencedSet<Double> actual = instance.fromString(buf, idFactory);
+        PersistentSequencedSet<Double> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 
@@ -72,7 +72,7 @@ public class SetXmlConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetXmlConverter<Double> instance = new SetXmlConverter<>(new DoubleXmlConverter(false), "=>");
-        ImmutableSequencedSet<Double> actual = instance.fromString(buf, idFactory);
+        PersistentSequencedSet<Double> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 
@@ -94,7 +94,7 @@ public class SetXmlConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         SetXmlConverter<String> instance = new SetXmlConverter<>(new StringXmlConverter(false));
-        ImmutableSequencedSet<String> actual = instance.fromString(buf, idFactory);
+        PersistentSequencedSet<String> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, new ArrayList<>(actual.toMutable()));
     }
 

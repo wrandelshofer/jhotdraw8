@@ -1,16 +1,16 @@
 /*
- * @(#)SimpleImmutableAddOnlySet.java
+ * @(#)SimplePersistentAddOnlySet.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.immutable.ImmutableAddOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentAddOnlySet;
 
 import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * Implements the {@link ImmutableAddOnlySet} interface using a Compressed
+ * Implements the {@link PersistentAddOnlySet} interface using a Compressed
  * Hash-Array Mapped Prefix-tree (CHAMP).
  * <p>
  * Performance characteristics:
@@ -21,8 +21,8 @@ import java.util.Objects;
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      Efficient Persistent Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
  *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
@@ -31,7 +31,7 @@ import java.util.Objects;
  *
  * @param <E> the element type
  */
-public abstract class ChampAddOnlySet<E> implements ImmutableAddOnlySet<E> {
+public abstract class ChampAddOnlySet<E> implements PersistentAddOnlySet<E> {
     private static final int ENTRY_LENGTH = 1;
     private static final int HASH_CODE_LENGTH = 32;
     private static final int BIT_PARTITION_SIZE = 5;

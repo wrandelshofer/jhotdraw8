@@ -9,17 +9,17 @@ import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 /**
  * DoubleListStyleableKey.
  *
  * @author Werner Randelshofer
  */
-public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<Double>> implements WritableStyleableMapAccessor<ImmutableList<Double>> {
+public class DoubleListStyleableKey extends AbstractStyleableKey<PersistentList<Double>> implements WritableStyleableMapAccessor<PersistentList<Double>> {
 
 
-    private final Converter<ImmutableList<Double>> converter;
+    private final Converter<PersistentList<Double>> converter;
 
     /**
      * Creates a new instance with the specified name and with null as the
@@ -37,14 +37,14 @@ public class DoubleListStyleableKey extends AbstractStyleableKey<ImmutableList<D
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public DoubleListStyleableKey(String name, ImmutableList<Double> defaultValue) {
-        super(name, new SimpleParameterizedType(ImmutableList.class, Double.class), defaultValue);
+    public DoubleListStyleableKey(String name, PersistentList<Double> defaultValue) {
+        super(name, new SimpleParameterizedType(PersistentList.class, Double.class), defaultValue);
 
         converter = new ListCssConverter<>(new DoubleCssConverter(false));
     }
 
     @Override
-    public Converter<ImmutableList<Double>> getCssConverter() {
+    public Converter<PersistentList<Double>> getCssConverter() {
         return converter;
     }
 

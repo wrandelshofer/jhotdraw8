@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -35,7 +35,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
      */
     protected abstract <E> SequencedSet<E> newInstance(SequencedSet<E> m);
 
-    protected abstract <E> SequencedSet<E> newInstance(ReadOnlySequencedSet<E> m);
+    protected abstract <E> SequencedSet<E> newInstance(ReadableSequencedSet<E> m);
 
 
     protected abstract <E> SequencedSet<E> toClonedInstance(SequencedSet<E> m);
@@ -46,7 +46,7 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
      */
     protected abstract <E> SequencedSet<E> newInstance(Set<E> m);
 
-    protected abstract <E> SequencedSet<E> newInstance(ReadOnlySet<E> m);
+    protected abstract <E> SequencedSet<E> newInstance(ReadableSet<E> m);
 
 
     protected abstract <E> SequencedSet<E> toClonedInstance(Set<E> m);
@@ -412,8 +412,8 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @MethodSource("dataProvider")
     public void readOnlyReversedOfReadOnlyReversedShouldHaveSameSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
-        if (instance instanceof ReadOnlySequencedSet<?>) {
-            ReadOnlySequencedSet<Key> readOnlyInstance = (ReadOnlySequencedSet<Key>) instance;
+        if (instance instanceof ReadableSequencedSet<?>) {
+            ReadableSequencedSet<Key> readOnlyInstance = (ReadableSequencedSet<Key>) instance;
             List<Key> expected = new ArrayList<>(data.a().asSet());
             ArrayList<Key> actual = new ArrayList<>(readOnlyInstance.readOnlyReversed().readOnlyReversed().asSet());
             assertEquals(expected, actual);
@@ -425,8 +425,8 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @MethodSource("dataProvider")
     public void readOnlyReversedShouldHaveReversedSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
-        if (instance instanceof ReadOnlySequencedSet<?>) {
-            ReadOnlySequencedSet<Key> readOnlyInstance = (ReadOnlySequencedSet<Key>) instance;
+        if (instance instanceof ReadableSequencedSet<?>) {
+            ReadableSequencedSet<Key> readOnlyInstance = (ReadableSequencedSet<Key>) instance;
             List<Key> expected = new ArrayList<>(data.a().asSet());
             Collections.reverse(expected);
             ArrayList<Key> actual = new ArrayList<>(readOnlyInstance.readOnlyReversed().asSet());

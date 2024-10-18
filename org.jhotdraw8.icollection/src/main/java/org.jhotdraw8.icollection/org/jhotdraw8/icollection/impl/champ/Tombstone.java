@@ -60,11 +60,11 @@ import org.jhotdraw8.icollection.ChampVectorSet;
  * </pre>
  * References:
  * <p>
- * The design of this class is inspired by 'SimpleImmutableSequencedMap.scala'.
+ * The design of this class is inspired by 'SimplePersistentSequencedMap.scala'.
  * <dl>
- *      <dt>SimpleImmutableSequencedMap.scala
+ *      <dt>SimplePersistentSequencedMap.scala
  *      <br>The Scala library. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
- *      <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a>
+ *      <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
  *      </dd>
  * </dl>
  *

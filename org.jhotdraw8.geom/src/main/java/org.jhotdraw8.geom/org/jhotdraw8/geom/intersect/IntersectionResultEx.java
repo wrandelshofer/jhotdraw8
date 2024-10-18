@@ -6,13 +6,13 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.Collections;
 import java.util.List;
 
 public class IntersectionResultEx {
-    private final ImmutableList<IntersectionPointEx> intersections;
+    private final PersistentList<IntersectionPointEx> intersections;
     private final IntersectionStatus status;
 
     public IntersectionResultEx(List<IntersectionPointEx> intersections) {
@@ -45,7 +45,7 @@ public class IntersectionResultEx {
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
     }
 
-    public ImmutableList<IntersectionPointEx> intersections() {
+    public PersistentList<IntersectionPointEx> intersections() {
         return intersections;
     }
 }

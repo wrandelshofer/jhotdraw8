@@ -4,8 +4,8 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 import org.jspecify.annotations.Nullable;
 
@@ -35,7 +35,7 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
     private final Supplier<Spliterator<E>> reverseSpliteratorFunction;
     private final Predicate<E> reversedAddFunction;
 
-    public SequencedSetFacade(ReadOnlyCollection<E> backingSet,
+    public SequencedSetFacade(ReadableCollection<E> backingSet,
                               Supplier<Iterator<E>> reverseIteratorFunction) {
         this(backingSet::iterator, backingSet::spliterator,
                 reverseIteratorFunction,
@@ -44,7 +44,7 @@ public class SequencedSetFacade<E> extends SetFacade<E> implements SequencedSet<
                 backingSet::contains, null, null, null, null, null, null, null, null);
     }
 
-    public SequencedSetFacade(ReadOnlySequencedCollection<E> backingSet) {
+    public SequencedSetFacade(ReadableSequencedCollection<E> backingSet) {
         this(backingSet::iterator, backingSet::spliterator, () -> backingSet.readOnlyReversed().iterator(),
                 () -> backingSet.readOnlyReversed().spliterator(), backingSet::size,
                 backingSet::contains, null, null,

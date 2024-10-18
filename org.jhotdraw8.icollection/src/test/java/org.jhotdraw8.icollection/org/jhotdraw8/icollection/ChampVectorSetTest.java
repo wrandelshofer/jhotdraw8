@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 
 import java.util.SequencedSet;
 import java.util.Set;
@@ -20,17 +20,17 @@ public class ChampVectorSetTest extends AbstractImmutableSequencedSetTest {
 
 
     @Override
-    protected <E> SequencedSet<E> toMutableInstance(ImmutableSet<E> m) {
+    protected <E> SequencedSet<E> toMutableInstance(PersistentSet<E> m) {
         return ((ChampVectorSet<E>) m).toMutable();
     }
 
     @Override
     protected <E> ChampVectorSet<E> toImmutableInstance(Set<E> m) {
-        return ((MutableChampVectorSet<E>) m).toImmutable();
+        return ((MutableChampVectorSet<E>) m).toPersistent();
     }
 
     @Override
-    protected <E> ChampVectorSet<E> toClonedInstance(ImmutableSet<E> m) {
+    protected <E> ChampVectorSet<E> toClonedInstance(PersistentSet<E> m) {
         return ChampVectorSet.copyOf(m.asSet());
     }
 

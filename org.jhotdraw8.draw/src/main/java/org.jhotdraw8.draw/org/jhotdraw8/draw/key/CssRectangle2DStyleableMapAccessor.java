@@ -10,7 +10,7 @@ import org.jhotdraw8.draw.css.converter.Rectangle2DCssConverter;
 import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -89,7 +89,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable CssRectangle2D value) {
+    public PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable CssRectangle2D value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -101,7 +101,7 @@ public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAcce
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
+    public PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         a = yKey.remove(a);
         a = widthKey.remove(a);

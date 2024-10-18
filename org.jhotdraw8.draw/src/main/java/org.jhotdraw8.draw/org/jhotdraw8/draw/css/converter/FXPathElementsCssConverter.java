@@ -16,7 +16,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -32,7 +32,7 @@ import java.util.function.Consumer;
  *
  * @author Werner Randelshofer
  */
-public class FXPathElementsCssConverter extends AbstractCssConverter<ImmutableList<PathElement>> {
+public class FXPathElementsCssConverter extends AbstractCssConverter<PersistentList<PathElement>> {
 
 
     public FXPathElementsCssConverter(boolean nullable) {
@@ -40,7 +40,7 @@ public class FXPathElementsCssConverter extends AbstractCssConverter<ImmutableLi
     }
 
     @Override
-    public ImmutableList<PathElement> parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public PersistentList<PathElement> parseNonNull(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         tt.requireNextToken(CssTokenType.TT_STRING, "⟨SvgPath⟩: String expected.");
         final String svgPathString = tt.currentStringNonNull();
 
@@ -59,7 +59,7 @@ public class FXPathElementsCssConverter extends AbstractCssConverter<ImmutableLi
     }
 
     @Override
-    protected <TT extends ImmutableList<PathElement>> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
+    protected <TT extends PersistentList<PathElement>> void produceTokensNonNull(TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         out.accept(new CssToken(CssTokenType.TT_STRING, FXSvgPaths.pathElementsToDoubleSvgString(value.asList())));
     }
 
@@ -78,7 +78,7 @@ public class FXPathElementsCssConverter extends AbstractCssConverter<ImmutableLi
 
 
     @Override
-    public @Nullable ImmutableList<PathElement> getDefaultValue() {
+    public @Nullable PersistentList<PathElement> getDefaultValue() {
         return isNullable() ? null : VectorList.of();
     }
 

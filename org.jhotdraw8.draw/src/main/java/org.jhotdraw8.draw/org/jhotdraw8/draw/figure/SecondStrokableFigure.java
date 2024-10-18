@@ -19,7 +19,7 @@ import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.draw.key.StrokeStyleableMapAccessor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -163,7 +163,7 @@ public interface SecondStrokableFigure extends Figure {
         if (shape.getStrokeDashOffset() != d) {
             shape.setStrokeDashOffset(d);
         }
-        ImmutableList<CssSize> dashArray = getStyledNonNull(SECOND_STROKE_DASH_ARRAY);
+        PersistentList<CssSize> dashArray = getStyledNonNull(SECOND_STROKE_DASH_ARRAY);
         if (dashArray.isEmpty()) {
             shape.getStrokeDashArray().clear();
         } else {

@@ -4,10 +4,10 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 
 import java.util.AbstractSet;
 import java.util.Iterator;
@@ -16,16 +16,16 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
- * Provides a {@link Set} facade to a set of {@code ImmutableSet} functions.
+ * Provides a {@link Set} facade to a set of {@code PersistentSet} functions.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E> {
-    private ImmutableSet<E> backingSet;
+public class MutableSetFacade<E> extends AbstractSet<E> implements ReadableSet<E> {
+    private PersistentSet<E> backingSet;
     private int modCount;
 
-    public MutableSetFacade(ImmutableSet<E> backingSet) {
+    public MutableSetFacade(PersistentSet<E> backingSet) {
         this.backingSet = backingSet;
     }
 
@@ -33,7 +33,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
     @SuppressWarnings("unchecked")
     @Override
     public boolean remove(Object o) {
-        ImmutableSet<E> oldSet = backingSet;
+        PersistentSet<E> oldSet = backingSet;
         backingSet = backingSet.remove((E) o);
         if (oldSet != backingSet) {
             modCount++;
@@ -44,7 +44,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
 
     @Override
     public void clear() {
-        ImmutableSet<E> oldSet = backingSet;
+        PersistentSet<E> oldSet = backingSet;
         backingSet = backingSet.empty();
         if (oldSet != backingSet) {
             modCount++;
@@ -107,7 +107,7 @@ public class MutableSetFacade<E> extends AbstractSet<E> implements ReadOnlySet<E
 
     @Override
     public boolean add(E e) {
-        ImmutableSet<E> oldSet = backingSet;
+        PersistentSet<E> oldSet = backingSet;
         backingSet = backingSet.add(e);
         if (oldSet != backingSet) {
             modCount++;

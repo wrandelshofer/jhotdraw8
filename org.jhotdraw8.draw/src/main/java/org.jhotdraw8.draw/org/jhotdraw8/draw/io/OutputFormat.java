@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.io;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.io.BufferedOutputStream;
@@ -24,9 +24,9 @@ import java.nio.file.Paths;
  * @author Werner Randelshofer
  */
 public interface OutputFormat {
-    void setOptions(ImmutableMap<Key<?>, Object> newValue);
+    void setOptions(PersistentMap<Key<?>, Object> newValue);
 
-    ImmutableMap<Key<?>, Object> getOptions();
+    PersistentMap<Key<?>, Object> getOptions();
 
     /**
      * Writes a Drawing into the resource identified by the given URI.

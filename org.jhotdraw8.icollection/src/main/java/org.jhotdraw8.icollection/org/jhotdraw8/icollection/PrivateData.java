@@ -5,19 +5,19 @@ import org.jspecify.annotations.Nullable;
 /**
  * This record holds an object that contains private data.
  * <p>
- * This record is used to allow subclassing of immutable classes
+ * This record is used to allow subclassing of persistent classes
  * that need to create new instances of subclasses,
  * but that do not want to export their internal data structures.
  * <p>
  * <b>Example:</b>
  * <p>
  * The module 'foo' exports the package that contains class
- * ImmutableFoo.
+ * PersistentFoo.
  * The module 'foo' does not export the package that contains InternalHashtable
- * used by ImmutableFoo.
+ * used by PersistentFoo.
  * <p>
- * To allow subclassing of ImmutableFoo by other modules,
- * class ImmutableFoo provides a protected constructor and
+ * To allow subclassing of PersistentFoo by other modules,
+ * class PersistentFoo provides a protected constructor and
  * a protected {@code newInstance} method that take an PrivateData object
  * as parameters.
  * <pre>{@literal
@@ -35,16 +35,16 @@ import java.util.logging.Logger;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
- * public class ImmutableFoo {
+ * public class PersistentFoo {
  *     private final InternalHashtable table;
- *     public ImmutableFoo() {
+ *     public PersistentFoo() {
  *        table = new InternalHashtable();
  *     }
- *     protected ImmutableFoo(PrivateData opaque) {
+ *     protected PersistentFoo(PrivateData opaque) {
  *         this.table = opaque.get();
  *     }
- *     protected ImmutableFoo newInstance(PrivateData opaque) {
- *         return new ImmutableFoo(opaque);
+ *     protected PersistentFoo newInstance(PrivateData opaque) {
+ *         return new PersistentFoo(opaque);
  *     }
  * }
  *
@@ -57,17 +57,17 @@ import java.util.logging.Logger;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
- * public class ImmutableBar extends ImmutableFoo {
+ * public class PersistentBar extends PersistentFoo {
  *     private final int bar;
- *     public ImmutableBar(int bar) {
+ *     public PersistentBar(int bar) {
  *         this.bar=bar;
  *     }
- *     protected ImmutableBar(PrivateData opaque, int bar) {
+ *     protected PersistentBar(PrivateData opaque, int bar) {
  *         super(opaque);
  *         this.bar=bar;
  *     }
  *     protected newInstance(PrivateData opaque) {
- *         return new ImmutableBar(opaque,this.bar);
+ *         return new PersistentBar(opaque,this.bar);
  *     }
  * }
  * }</pre>

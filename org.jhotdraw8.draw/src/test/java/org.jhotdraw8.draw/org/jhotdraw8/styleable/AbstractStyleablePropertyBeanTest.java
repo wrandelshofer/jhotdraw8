@@ -9,7 +9,7 @@ import org.jhotdraw8.draw.figure.FillableFigure;
 import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
 import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -68,7 +68,7 @@ public class AbstractStyleablePropertyBeanTest {
         }
 
         @Override
-        public ReadOnlySet<String> getStyleClasses() {
+        public ReadableSet<String> getStyleClasses() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 
@@ -84,7 +84,7 @@ public class AbstractStyleablePropertyBeanTest {
         }
 
         @Override
-        public ReadOnlySet<String> getPseudoClassStates() {
+        public ReadableSet<String> getPseudoClassStates() {
             throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         }
 

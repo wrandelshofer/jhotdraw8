@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.icollection.impl.redblack;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
@@ -26,7 +26,7 @@ import java.util.Set;
  *
  * @param <T> The type of the optional value.
  */
-public interface Option<T> extends ReadOnlyCollection<T> {
+public interface Option<T> extends ReadableCollection<T> {
     @SuppressWarnings("unchecked")
     static <T> Option<T> none() {
         return (Option<T>) None.INSTANCE;

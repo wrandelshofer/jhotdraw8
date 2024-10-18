@@ -12,7 +12,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ import java.util.function.Consumer;
  *     <dd><a href="https://www.w3.org/TR/2008/REC-CSS2-20080411/fonts.html#propdef-font-family">w3.org</a></dd>
  * </dl>
  */
-public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String>> {
+public class SvgFontFamilyConverter implements CssConverter<PersistentList<String>> {
 
     public static final String GENERIC_FONT_FAMILY_SERIF = "serif";
     public static final String GENERIC_FONT_FAMILY_SANS_SERIF = "sans-serif";
@@ -57,7 +57,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public @Nullable ImmutableList<String> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public @Nullable PersistentList<String> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         List<String> list = new ArrayList<>();
         StringBuilder buf = new StringBuilder();
         Loop:
@@ -94,7 +94,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public <TT extends ImmutableList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
+    public <TT extends PersistentList<String>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) {
         boolean first = true;
         for (String s : value) {
             if (first) {
@@ -119,7 +119,7 @@ public class SvgFontFamilyConverter implements CssConverter<ImmutableList<String
     }
 
     @Override
-    public @Nullable ImmutableList<String> getDefaultValue() {
+    public @Nullable PersistentList<String> getDefaultValue() {
         return VectorList.of("serif");
     }
 

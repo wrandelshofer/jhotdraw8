@@ -9,7 +9,7 @@ import org.jhotdraw8.css.converter.SetCssConverter;
 import org.jhotdraw8.draw.css.converter.IdentCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 
 /**
  * WordSetStyleableKey.
@@ -35,7 +35,7 @@ public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public WordSetStyleableKey(String name, ImmutableSequencedSet<String> defaultValue) {
+    public WordSetStyleableKey(String name, PersistentSequencedSet<String> defaultValue) {
         this(name,
                 new SetCssConverter<>(new IdentCssConverter(false)),
                 defaultValue);
@@ -47,9 +47,9 @@ public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public WordSetStyleableKey(String name, CssConverter<ImmutableSequencedSet<String>> converter, ImmutableSequencedSet<String> defaultValue) {
+    public WordSetStyleableKey(String name, CssConverter<PersistentSequencedSet<String>> converter, PersistentSequencedSet<String> defaultValue) {
         super(name,
-                new SimpleParameterizedType(ImmutableSequencedSet.class, String.class),
+                new SimpleParameterizedType(PersistentSequencedSet.class, String.class),
                 converter,
                 defaultValue);
     }

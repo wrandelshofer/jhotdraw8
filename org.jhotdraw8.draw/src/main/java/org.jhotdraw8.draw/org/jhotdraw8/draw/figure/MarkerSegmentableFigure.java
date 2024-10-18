@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.shape.PathElement;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -22,7 +22,7 @@ public interface MarkerSegmentableFigure extends Figure {
     @Nullable NullableFXPathElementsStyleableKey MARKER_SEGMENT_SHAPE = new NullableFXPathElementsStyleableKey("marker-segment-shape", null);
     DoubleStyleableKey MARKER_SEGMENT_SCALE_FACTOR = new DoubleStyleableKey("marker-segment-scale-factor", 1.0);
 
-    default @Nullable ImmutableList<PathElement> getMarkerSegmentShape() {
+    default @Nullable PersistentList<PathElement> getMarkerSegmentShape() {
         return getStyled(MARKER_SEGMENT_SHAPE);
     }
 

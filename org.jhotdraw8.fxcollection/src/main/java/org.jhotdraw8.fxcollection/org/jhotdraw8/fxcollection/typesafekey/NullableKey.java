@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -31,7 +31,7 @@ public interface NullableKey<T> extends Key<T> {
      * @return The value of the attribute.
      */
     @Override
-    default @Nullable T get(ReadOnlyMap<? super Key<?>, Object> a) {
+    default @Nullable T get(ReadableMap<? super Key<?>, Object> a) {
         // Performance: explicit cast is nice, but is very slow
         //return getRawValueType().cast(a.getOrDefault(this, getDefaultValue()));
         @SuppressWarnings("unchecked")

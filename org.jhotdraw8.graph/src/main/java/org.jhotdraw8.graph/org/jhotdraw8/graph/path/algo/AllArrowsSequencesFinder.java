@@ -6,7 +6,7 @@
 package org.jhotdraw8.graph.path.algo;
 
 import org.jhotdraw8.collection.pair.OrderedPair;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.function.Predicate;
 
@@ -30,7 +30,7 @@ public interface AllArrowsSequencesFinder<V, A, C extends Number & Comparable<C>
      * @param costLimit     the algorithm-specific cost limit
      * @return all paths
      */
-    Iterable<OrderedPair<ImmutableList<A>, C>> findAllArrowSequences(
+    Iterable<OrderedPair<PersistentList<A>, C>> findAllArrowSequences(
             Iterable<V> startVertices,
             Predicate<V> goalPredicate,
             int maxDepth, C costLimit);

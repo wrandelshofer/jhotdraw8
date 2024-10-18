@@ -8,7 +8,7 @@ import javafx.scene.effect.Effect;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.draw.css.converter.EffectCssConverter;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 /**
  * EffectStyleableKey.
@@ -46,7 +46,7 @@ public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements 
     }
 
     @Override
-    public ImmutableList<String> getExamples() {
+    public PersistentList<String> getExamples() {
         return converter.getExamples();
     }
 }

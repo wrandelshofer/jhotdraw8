@@ -6,7 +6,7 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -20,7 +20,7 @@ import java.util.List;
 public class Declaration extends AbstractSyntaxTree {
     private final @Nullable String namespace;
     private final String propertyName;
-    private final ImmutableList<CssToken> terms;
+    private final PersistentList<CssToken> terms;
     private final int startPos;
     private final int endPos;
     private final int lineNumber;
@@ -47,7 +47,7 @@ public class Declaration extends AbstractSyntaxTree {
         return propertyName;
     }
 
-    public ImmutableList<CssToken> getTerms() {
+    public PersistentList<CssToken> getTerms() {
         return terms;
     }
 

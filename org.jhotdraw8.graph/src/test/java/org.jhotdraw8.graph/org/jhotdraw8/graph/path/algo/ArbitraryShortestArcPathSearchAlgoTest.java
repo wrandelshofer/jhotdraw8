@@ -11,7 +11,7 @@ import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestFactory;
@@ -102,10 +102,10 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
-    public void doFindShortestVertexPath(Integer start, Integer goal, ImmutableList<Integer> expPath, double expCost) throws Exception {
+    public void doFindShortestVertexPath(Integer start, Integer goal, PersistentList<Integer> expPath, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        SimpleOrderedPair<ImmutableList<Integer>, Double> result = instance.findVertexSequence(start, goal,
+        SimpleOrderedPair<PersistentList<Integer>, Double> result = instance.findVertexSequence(start, goal,
                 Double.MAX_VALUE);
         if (result == null) {
             assertNull(expPath);
@@ -139,18 +139,18 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
-    public void doFindShortestEdgeMultiGoalPath(Integer start, List<Integer> multiGoal, ImmutableList<Double> expResult) throws Exception {
+    public void doFindShortestEdgeMultiGoalPath(Integer start, List<Integer> multiGoal, PersistentList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
 
         // Find a path for each individual goal, and remember the shortest path
-        ImmutableList<Double> individualShortestPath = VectorList.of();
+        PersistentList<Double> individualShortestPath = VectorList.of();
         double individualShortestCost = Double.POSITIVE_INFINITY;
         for (Integer goal : multiGoal) {
-            SimpleOrderedPair<ImmutableList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal,
+            SimpleOrderedPair<PersistentList<Double>, Double> resultEntry = instance.findArrowSequence(start, goal,
                     Double.MAX_VALUE);
             assertNotNull(resultEntry);
-            ImmutableList<Double> result = resultEntry.first();
+            PersistentList<Double> result = resultEntry.first();
             double resultLength = result.stream().mapToDouble(Double::doubleValue).sum();
             if (resultLength < individualShortestCost
                     || resultLength == individualShortestCost && result.size() < individualShortestPath.size()
@@ -161,7 +161,7 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
         }
 
         // Find shortest path to any of the goals
-        SimpleOrderedPair<ImmutableList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains,
+        SimpleOrderedPair<PersistentList<Double>, Double> actualShortestPath = instance.findArrowSequence(List.of(start), multiGoal::contains,
                 Double.MAX_VALUE);
         assertNotNull(actualShortestPath);
         double actualCost = actualShortestPath.second();
@@ -181,10 +181,10 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class AnyShortestPathBuilder.
      */
-    private void doFindShortestArrowPath(Integer start, Integer goal, ImmutableList<Double> expResult) throws Exception {
+    private void doFindShortestArrowPath(Integer start, Integer goal, PersistentList<Double> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        SimpleOrderedPair<ImmutableList<Double>, Double> result = instance.findArrowSequence(start, goal,
+        SimpleOrderedPair<PersistentList<Double>, Double> result = instance.findArrowSequence(start, goal,
                 Double.MAX_VALUE);
         assertEquals(expResult, result.first());
     }
@@ -220,11 +220,11 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void doFindShortestVertexPathOverWaypoints(List<Integer> waypoints, ImmutableList<Integer> expResult, double expCost) throws Exception {
+    private void doFindShortestVertexPathOverWaypoints(List<Integer> waypoints, PersistentList<Integer> expResult, double expCost) throws Exception {
         ToDoubleFunction<Double> costf = arg -> arg;
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        SimpleOrderedPair<ImmutableList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
+        SimpleOrderedPair<PersistentList<Integer>, Double> actual = instance.findVertexSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         assertEquals(expResult, actual.first());
         assertEquals(expCost, actual.second().doubleValue());
     }
@@ -242,10 +242,10 @@ public class ArbitraryShortestArcPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void doFindArrowPathOverWaypoints(List<Integer> waypoints, ImmutableList<Double> expResult, double expCost) throws Exception {
+    private void doFindArrowPathOverWaypoints(List<Integer> waypoints, PersistentList<Double> expResult, double expCost) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         CombinedSequenceFinder<Integer, Double, Double> instance = newInstance(graph);
-        SimpleOrderedPair<ImmutableList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
+        SimpleOrderedPair<PersistentList<Double>, Double> actual = instance.findArrowSequenceOverWaypoints(waypoints, Double.MAX_VALUE);
         assertEquals(expResult, actual.first());
         assertEquals(expCost, actual.second().doubleValue());
     }

@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * A spliterator for a {@code SimpleImmutableSequencedMap} or {@code SimpleImmutableSequencedSet} that skips
+ * A spliterator for a {@code SimplePersistentSequencedMap} or {@code SimplePersistentSequencedSet} that skips
  * tombstones.
  *
  * @param <E> the element type

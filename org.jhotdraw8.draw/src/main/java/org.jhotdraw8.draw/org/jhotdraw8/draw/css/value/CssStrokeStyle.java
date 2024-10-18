@@ -9,14 +9,14 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
 public class CssStrokeStyle {
     private final CssSize dashOffset;
-    private final ImmutableList<CssSize> dashArray;
+    private final PersistentList<CssSize> dashArray;
     private final StrokeType type;
     private final StrokeLineJoin lineJoin;
     private final StrokeLineCap lineCap;
@@ -29,7 +29,7 @@ public class CssStrokeStyle {
 
     public CssStrokeStyle(StrokeType type, StrokeLineCap lineCap, StrokeLineJoin lineJoin, CssSize miterLimit,
                           CssSize dashOffset,
-                          ImmutableList<CssSize> dashArray) {
+                          PersistentList<CssSize> dashArray) {
         this.dashOffset = dashOffset;
         this.dashArray = dashArray;
         this.type = type;
@@ -42,7 +42,7 @@ public class CssStrokeStyle {
         return dashOffset;
     }
 
-    public ImmutableList<CssSize> getDashArray() {
+    public PersistentList<CssSize> getDashArray() {
         return dashArray;
     }
 

@@ -6,8 +6,8 @@
 
 package org.jhotdraw8.icollection.impl.vector;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
@@ -120,7 +120,7 @@ public class BitMappedTrie<T> {
         if (iterable instanceof SequencedCollection<?> s) {
             return prepend((Iterator<? extends T>) s.reversed().iterator(), s.size());
         }
-        if (iterable instanceof ReadOnlySequencedCollection<?> c) {
+        if (iterable instanceof ReadableSequencedCollection<?> c) {
             return append(iterable.iterator(), c.size());
         }
 
@@ -200,7 +200,7 @@ public class BitMappedTrie<T> {
         if (iterable instanceof Collection<?> c) {
             return append(iterable.iterator(), c.size());
         }
-        if (iterable instanceof ReadOnlyCollection<?> c) {
+        if (iterable instanceof ReadableCollection<?> c) {
             return append(iterable.iterator(), c.size());
         }
         BitMappedTrie<T> result = this;

@@ -20,7 +20,7 @@ import org.jhotdraw8.geom.AwtShapes;
 import org.jhotdraw8.geom.ConcatenatedPathIterator;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.BasicStroke;
@@ -83,7 +83,7 @@ public class CombinedPathFigure extends AbstractCompositeFigure
                 double strokeWidth = f.getStyledNonNull(STROKE_WIDTH).getConvertedValue();
                 if (strokeWidth > 0.0) {
                     BasicStroke basicStroke;
-                    final ImmutableList<CssSize> dashArray = f.getStyledNonNull(STROKE_DASH_ARRAY);
+                    final PersistentList<CssSize> dashArray = f.getStyledNonNull(STROKE_DASH_ARRAY);
                     if (!dashArray.isEmpty()) {
                         double dashOffset = f.getStyledNonNull(STROKE_DASH_OFFSET).getConvertedValue();
                         float[] dash = new float[dashArray.size()];

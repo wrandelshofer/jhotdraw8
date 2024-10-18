@@ -17,8 +17,8 @@ module org.jhotdraw8.icollection {
     requires java.logging;
     exports org.jhotdraw8.icollection.exception;
     exports org.jhotdraw8.icollection.facade;
-    exports org.jhotdraw8.icollection.immutable;
-    exports org.jhotdraw8.icollection.readonly;
+    exports org.jhotdraw8.icollection.persistent;
+    exports org.jhotdraw8.icollection.readable;
     exports org.jhotdraw8.icollection.sequenced;
     exports org.jhotdraw8.icollection;
 }

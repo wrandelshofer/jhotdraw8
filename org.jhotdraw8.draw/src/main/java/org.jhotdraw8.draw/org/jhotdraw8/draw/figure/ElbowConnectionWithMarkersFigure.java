@@ -8,7 +8,7 @@ import javafx.scene.shape.Polyline;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -66,7 +66,7 @@ public class ElbowConnectionWithMarkersFigure extends AbstractElbowLineConnectio
     }
 
     @Override
-    public @Nullable ImmutableList<PathElement> getMarkerStartShape() {
+    public @Nullable PersistentList<PathElement> getMarkerStartShape() {
         return getStyled(MarkerStartableFigure.MARKER_START_SHAPE);
     }
 
@@ -76,7 +76,7 @@ public class ElbowConnectionWithMarkersFigure extends AbstractElbowLineConnectio
     }
 
     @Override
-    public @Nullable ImmutableList<PathElement> getMarkerEndShape() {
+    public @Nullable PersistentList<PathElement> getMarkerEndShape() {
         return getStyled(MarkerEndableFigure.MARKER_END_SHAPE);
     }
 

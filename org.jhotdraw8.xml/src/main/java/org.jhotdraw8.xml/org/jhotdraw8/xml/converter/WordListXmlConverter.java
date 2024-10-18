@@ -8,7 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ import java.util.TreeSet;
  *
  * @author Werner Randelshofer
  */
-public class WordListXmlConverter implements Converter<ImmutableList<String>> {
+public class WordListXmlConverter implements Converter<PersistentList<String>> {
 
     public static final Comparator<String> NFD_COMPARATOR
             = Comparator.comparing(o -> Normalizer.normalize(o, Normalizer.Form.NFD));
@@ -48,9 +48,9 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public <TT extends ImmutableList<String>> void toString(Appendable out,
-                                                            @Nullable IdSupplier idSupplier,
-                                                            @Nullable TT value) throws IOException {
+    public <TT extends PersistentList<String>> void toString(Appendable out,
+                                                             @Nullable IdSupplier idSupplier,
+                                                             @Nullable TT value) throws IOException {
         if (value == null) {
             return;
         }
@@ -69,7 +69,7 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public ImmutableList<String> fromString(CharBuffer buf, @Nullable IdResolver idResolver) {
+    public PersistentList<String> fromString(CharBuffer buf, @Nullable IdResolver idResolver) {
         final TreeSet<String> tree = new TreeSet<>(NFD_COMPARATOR);
         tree.addAll(Arrays.asList(buf.toString().split("\\s+")));
         buf.position(buf.length());// consume buffer
@@ -77,7 +77,7 @@ public class WordListXmlConverter implements Converter<ImmutableList<String>> {
     }
 
     @Override
-    public @Nullable ImmutableList<String> getDefaultValue() {
+    public @Nullable PersistentList<String> getDefaultValue() {
         return VectorList.of();
     }
 }

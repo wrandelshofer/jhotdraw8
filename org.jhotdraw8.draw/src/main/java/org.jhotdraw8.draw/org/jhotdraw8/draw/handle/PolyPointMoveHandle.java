@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.HashSet;
@@ -50,9 +50,9 @@ public class PolyPointMoveHandle extends AbstractHandle {
     private @Nullable Point2D oldPoint;
     private @Nullable Point2D pickLocation;
     private final int pointIndex;
-    private final MapAccessor<ImmutableList<Point2D>> pointKey;
+    private final MapAccessor<PersistentList<Point2D>> pointKey;
 
-    public PolyPointMoveHandle(Figure figure, MapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
+    public PolyPointMoveHandle(Figure figure, MapAccessor<PersistentList<Point2D>> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -76,7 +76,7 @@ public class PolyPointMoveHandle extends AbstractHandle {
     }
 
     private Point2D getLocation() {
-        ImmutableList<Point2D> list = owner.get(pointKey);
+        PersistentList<Point2D> list = owner.get(pointKey);
         return list.get(pointIndex);
 
     }

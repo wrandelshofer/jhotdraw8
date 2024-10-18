@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
+import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SequencedSetFacade;
 import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampMap;
@@ -17,7 +17,7 @@ import org.jhotdraw8.icollection.impl.champ.SequencedData;
 import org.jhotdraw8.icollection.impl.champ.SequencedEntry;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedMapView;
 import org.jhotdraw8.icollection.serialization.MapSerializationProxy;
 import org.jspecify.annotations.Nullable;
@@ -52,7 +52,7 @@ import java.util.Spliterators;
  *     renumber the elements.</li>
  *     <li>remove: O(1) in an amortized sense, because we sometimes have to renumber the elements.</li>
  *     <li>containsKey: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
+ *     <li>toPersistent: O(1) + O(log N) distributed across subsequent updates in
  *     this mutable map</li>
  *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
  *     mutable map and in the clone</li>
@@ -68,8 +68,8 @@ import java.util.Spliterators;
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      Efficient Persistent Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -80,7 +80,7 @@ import java.util.Spliterators;
  */
 @SuppressWarnings("exports")
 public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, SequencedEntry<K, V>>
-        implements SequencedMap<K, V>, ReadOnlySequencedMap<K, V> {
+        implements SequencedMap<K, V>, ReadableSequencedMap<K, V> {
     @Serial
     private static final long serialVersionUID = 0L;
     /**
@@ -112,7 +112,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     @SuppressWarnings("unchecked")
     public MutableChampVectorMap(Map<? extends K, ? extends V> c) {
         this((c instanceof MutableChampVectorMap<?, ?> mvm)
-                ? ((MutableChampVectorMap<K, V>) mvm).toImmutable()
+                ? ((MutableChampVectorMap<K, V>) mvm).toPersistent()
                 : c.entrySet());
     }
 
@@ -344,7 +344,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     @Override
     public boolean putAll(Iterable<? extends Entry<? extends K, ? extends V>> c) {
         if (c instanceof MutableChampVectorMap<?, ?> that) {
-            c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toImmutable();
+            c = (Iterable<? extends Entry<? extends K, ? extends V>>) that.toPersistent();
         }
         if (isEmpty() && c instanceof ChampVectorMap<?, ?> that) {
             if (that.isEmpty()) {
@@ -394,8 +394,8 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return new ReadOnlySequencedMapFacade<>(
+    public ReadableSequencedMap<K, V> readOnlyReversed() {
+        return new ReadableSequencedMapFacade<>(
                 this::iterator,
                 this::reverseIterator,
                 this::size,
@@ -455,11 +455,11 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     /**
-     * Returns an immutable copy of this map.
+     * Returns an persistent copy of this map.
      *
-     * @return an immutable copy
+     * @return an persistent copy
      */
-    public ChampVectorMap<K, V> toImmutable() {
+    public ChampVectorMap<K, V> toPersistent() {
         owner = null;
         return size == 0 ? ChampVectorMap.of()
                 : new ChampVectorMap<>(root, vector, size, offset);

@@ -7,7 +7,7 @@ package org.jhotdraw8.xml.converter;
 
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DynamicTest;
@@ -50,7 +50,7 @@ public class ListXmlConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<Double> instance = new ListXmlConverter<>(new DoubleXmlConverter(false));
-        ImmutableList<Double> actual = instance.fromString(buf, idFactory);
+        PersistentList<Double> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, actual.toMutable());
     }
 
@@ -71,7 +71,7 @@ public class ListXmlConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<Double> instance = new ListXmlConverter<>(new DoubleXmlConverter(false), "=>");
-        ImmutableList<Double> actual = instance.fromString(buf, idFactory);
+        PersistentList<Double> actual = instance.fromString(buf, idFactory);
         Assertions.assertEquals(expected, actual.toMutable());
     }
 
@@ -94,7 +94,7 @@ public class ListXmlConverterTest {
         CharBuffer buf = CharBuffer.wrap(string);
         IdFactory idFactory = null;
         ListXmlConverter<String> instance = new ListXmlConverter<>(new StringXmlConverter());
-        ImmutableList<String> actual = instance.fromString(buf, idFactory);
+        PersistentList<String> actual = instance.fromString(buf, idFactory);
         List<String> actualMutable = actual.toMutable();
         boolean eq = expected.equals(actualMutable);
         Assertions.assertEquals(expected, actualMutable);

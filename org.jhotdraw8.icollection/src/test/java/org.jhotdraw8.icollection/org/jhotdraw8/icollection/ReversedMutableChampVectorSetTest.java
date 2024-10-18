@@ -5,8 +5,8 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 
 import java.util.SequencedSet;
 import java.util.Set;
@@ -33,7 +33,7 @@ public class ReversedMutableChampVectorSetTest extends AbstractSequencedSetTest 
     }
 
     @Override
-    protected <E> SequencedSet<E> newInstance(ReadOnlySet<E> m) {
+    protected <E> SequencedSet<E> newInstance(ReadableSet<E> m) {
         MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());
@@ -54,7 +54,7 @@ public class ReversedMutableChampVectorSetTest extends AbstractSequencedSetTest 
     }
 
     @Override
-    protected <E> SequencedSet<E> newInstance(ReadOnlySequencedSet<E> m) {
+    protected <E> SequencedSet<E> newInstance(ReadableSequencedSet<E> m) {
         MutableChampVectorSet<E> es = new MutableChampVectorSet<>();
         SequencedSet<E> es1 = es.reversed();
         es1.addAll(m.asSet());

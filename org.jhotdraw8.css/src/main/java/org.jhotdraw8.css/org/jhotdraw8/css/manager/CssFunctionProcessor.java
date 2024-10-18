@@ -10,8 +10,8 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -66,7 +66,7 @@ public interface CssFunctionProcessor<T> {
      * @return the processed tokens
      * @throws ParseException in case of a parsing failure
      */
-    default ImmutableList<CssToken> process(T element, ReadOnlyList<CssToken> in) throws ParseException {
+    default PersistentList<CssToken> process(T element, ReadableList<CssToken> in) throws ParseException {
         ListCssTokenizer tt = new ListCssTokenizer(in);
         ArrayList<CssToken> out = new ArrayList<>(in.size());
         try {
@@ -86,8 +86,8 @@ public interface CssFunctionProcessor<T> {
 
     void setModel(SelectorModel<T> model);
 
-    void setCustomProperties(Map<String, ImmutableList<CssToken>> customProperties);
+    void setCustomProperties(Map<String, PersistentList<CssToken>> customProperties);
 
-    Map<String, ImmutableList<CssToken>> getCustomProperties();
+    Map<String, PersistentList<CssToken>> getCustomProperties();
 
 }

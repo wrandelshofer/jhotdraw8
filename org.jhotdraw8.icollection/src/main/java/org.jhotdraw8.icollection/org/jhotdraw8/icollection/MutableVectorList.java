@@ -5,10 +5,10 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
+import org.jhotdraw8.icollection.facade.ReadableListFacade;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.icollection.readable.ReadableList;
+import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jhotdraw8.icollection.sequenced.ReversedListView;
 import org.jhotdraw8.icollection.serialization.ListSerializationProxy;
 
@@ -29,7 +29,7 @@ import java.util.stream.Stream;
  * <ul>
  *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
  *     <li>allows null elements</li>
- *     <li>is immutable</li>
+ *     <li>is persistent</li>
  *     <li>is thread-safe</li>
  *     <li>iterates in the order of the list</li>
  * </ul>
@@ -41,7 +41,7 @@ import java.util.stream.Stream;
  *     <li>removeAt: O(N)</li>
  *     <li>removeFirst,removeLast: O(log N)</li>
  *     <li>contains: O(N)</li>
- *     <li>toImmutable: O(1)</li>
+ *     <li>toPersistent: O(1)</li>
  *     <li>clone: O(1)</li>
  *     <li>iterator.next(): O(1)</li>
  * </ul>
@@ -56,7 +56,7 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadOnlyList<E>, List<E>, Cloneable {
+public class MutableVectorList<E> extends AbstractList<E> implements Serializable, ReadableList<E>, List<E>, Cloneable {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -82,8 +82,8 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public ReadOnlySequencedCollection<E> readOnlyReversed() {
-        return new ReadOnlyListFacade<>(
+    public ReadableSequencedCollection<E> readOnlyReversed() {
+        return new ReadableListFacade<>(
                 this::size,
                 index -> get(root.length - 1 - index),
                 () -> this
@@ -112,26 +112,26 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     public E getFirst() {
-        return ReadOnlyList.super.getFirst();
+        return ReadableList.super.getFirst();
     }
 
     @Override
     public E getLast() {
-        return ReadOnlyList.super.getLast();
+        return ReadableList.super.getLast();
     }
 
     @Override
-    public ReadOnlyList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new ReadOnlyListFacade<>(() -> toIndex - fromIndex, i -> get(i - fromIndex));
+    public ReadableList<E> readOnlySubList(int fromIndex, int toIndex) {
+        return new ReadableListFacade<>(() -> toIndex - fromIndex, i -> get(i - fromIndex));
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
-        VectorList<E> immutable = toImmutable().addAll(index, c);
-        if (oldSize != immutable.size()) {
-            root = immutable.trie;
+        VectorList<E> persistent = toPersistent().addAll(index, c);
+        if (oldSize != persistent.size()) {
+            root = persistent.trie;
             modCount++;
             return true;
         }
@@ -148,9 +148,9 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     public boolean addAll(int index, Iterable<? extends E> c) {
         Objects.checkIndex(index, root.length + 1);
         int oldSize = root.length;
-        VectorList<E> immutable = toImmutable().addAll(index, c);
-        if (oldSize != immutable.size()) {
-            root = immutable.trie;
+        VectorList<E> persistent = toPersistent().addAll(index, c);
+        if (oldSize != persistent.size()) {
+            root = persistent.trie;
             modCount++;
             return true;
         }
@@ -170,9 +170,9 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean removeAll(Collection<?> c) {
         int oldSize = root.length;
-        VectorList<E> immutable = toImmutable().removeAll(c);
-        if (oldSize != immutable.size()) {
-            root = immutable.trie;
+        VectorList<E> persistent = toPersistent().removeAll(c);
+        if (oldSize != persistent.size()) {
+            root = persistent.trie;
             modCount++;
             return true;
         }
@@ -182,9 +182,9 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @Override
     public boolean retainAll(Collection<?> c) {
         int oldSize = root.length;
-        VectorList<E> immutable = toImmutable().retainAll(c);
-        if (oldSize != immutable.size()) {
-            root = immutable.trie;
+        VectorList<E> persistent = toPersistent().retainAll(c);
+        if (oldSize != persistent.size()) {
+            root = persistent.trie;
             modCount++;
             return true;
         }
@@ -199,7 +199,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableVectorList(Iterable<? extends E> c) {
         if (c instanceof MutableVectorList<?>) {
-            c = ((MutableVectorList<? extends E>) c).toImmutable();
+            c = ((MutableVectorList<? extends E>) c).toPersistent();
         }
         if (c instanceof VectorList<?>) {
             VectorList<E> that = (VectorList<E>) c;
@@ -210,7 +210,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
         }
     }
 
-    public VectorList<E> toImmutable() {
+    public VectorList<E> toPersistent() {
         return root.length == 0 ? VectorList.of() : new VectorList<>(root);
     }
 
@@ -269,7 +269,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
 
     @Override
     protected void removeRange(int fromIndex, int toIndex) {
-        root = toImmutable().removeRange(fromIndex, toIndex).trie;
+        root = toPersistent().removeRange(fromIndex, toIndex).trie;
         modCount++;
     }
 

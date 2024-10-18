@@ -17,7 +17,7 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -68,7 +68,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         StrokeLineJoin lineJoin = StrokeLineJoin.MITER;
         CssSize miterLimit = CssSize.of(4);
         CssSize dashOffset = CssSize.of(0);
-        ImmutableList<CssSize> dashArray = VectorList.of();
+        PersistentList<CssSize> dashArray = VectorList.of();
 
         while (tt.next() == CssTokenType.TT_FUNCTION) {
             tt.pushBack();
@@ -150,7 +150,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
         return type;
     }
 
-    private ImmutableList<CssSize> parseDashArray(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    private PersistentList<CssSize> parseDashArray(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() != CssTokenType.TT_FUNCTION || !DASHARRAY.equals(tt.currentStringNonNull())) {
             throw new ParseException("⟨StrokeStyle⟩: Function " + DASHARRAY + "() expected.", tt.getStartPosition());
         }
@@ -208,7 +208,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
     }
 
     @Override
-    public ImmutableList<String> getExamples() {
+    public PersistentList<String> getExamples() {
         return VectorList.of(
                 "type(inside)",
                 "type(centered)",
@@ -289,7 +289,7 @@ public class StrokeStyleCssConverter extends AbstractCssConverter<CssStrokeStyle
             out.accept(new CssToken(CssTokenType.TT_RIGHT_BRACKET));
         }
 
-        ImmutableList<CssSize> dashArray = value.getDashArray();
+        PersistentList<CssSize> dashArray = value.getDashArray();
         if (printAllValues || !dashArray.isEmpty()) {
             out.accept(new CssToken(CssTokenType.TT_S, " "));
             out.accept(new CssToken(CssTokenType.TT_FUNCTION, DASHARRAY));

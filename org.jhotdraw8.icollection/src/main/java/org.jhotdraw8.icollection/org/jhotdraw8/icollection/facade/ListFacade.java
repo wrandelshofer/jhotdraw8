@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.icollection.facade;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractList;
@@ -30,7 +30,7 @@ public class ListFacade<E> extends AbstractList<E>
     private final IntFunction<E> removeFunction;
     private final Runnable clearFunction;
 
-    public ListFacade(ReadOnlyList<E> backingList) {
+    public ListFacade(ReadableList<E> backingList) {
         this(backingList::size, backingList::get, null, null, null);
     }
 

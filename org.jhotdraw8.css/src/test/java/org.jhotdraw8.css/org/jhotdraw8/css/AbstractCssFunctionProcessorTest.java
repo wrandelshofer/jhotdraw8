@@ -11,7 +11,7 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 abstract class AbstractCssFunctionProcessorTest {
 
-    protected abstract CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties);
+    protected abstract CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, PersistentList<CssToken>> customProperties);
 
 
     protected void doTestProcess(String expression, @Nullable String expected) throws Exception {
@@ -57,7 +57,7 @@ abstract class AbstractCssFunctionProcessorTest {
         Consumer<CssToken> consumer = t -> buf.append(t.fromToken());
 
         DocumentSelectorModel model = new DocumentSelectorModel();
-        SequencedMap<String, ImmutableList<CssToken>> customProperties = new LinkedHashMap<>();
+        SequencedMap<String, PersistentList<CssToken>> customProperties = new LinkedHashMap<>();
         customProperties.put("--blarg", VectorList.of(new CssToken(CssTokenType.TT_STRING, "blarg")));
         customProperties.put("--recursion-base", VectorList.of(new CssToken(CssTokenType.TT_STRING, "recursion base")));
         customProperties.put("--recursive-1", VectorList.of(new CssToken(CssTokenType.TT_FUNCTION, "var"),

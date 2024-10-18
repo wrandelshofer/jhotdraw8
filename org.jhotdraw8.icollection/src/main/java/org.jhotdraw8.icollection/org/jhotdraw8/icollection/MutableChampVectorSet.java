@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
+import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
 import org.jhotdraw8.icollection.impl.champ.AbstractMutableChampSet;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
@@ -16,7 +16,7 @@ import org.jhotdraw8.icollection.impl.champ.SequencedElement;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
 import org.jhotdraw8.icollection.sequenced.ReversedSequencedSetView;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 import org.jspecify.annotations.Nullable;
@@ -49,7 +49,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
  *     <li>add: O(1) amortized</li>
  *     <li>remove: O(1)</li>
  *     <li>contains: O(1)</li>
- *     <li>toImmutable: O(1) + O(log N) distributed across subsequent updates in
+ *     <li>toPersistent: O(1) + O(log N) distributed across subsequent updates in
  *     this set</li>
  *     <li>clone: O(1) + O(log N) distributed across subsequent updates in this
  *     set and in the clone</li>
@@ -65,8 +65,8 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
  * References:
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      Efficient Persistent Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
  *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
@@ -76,7 +76,7 @@ import static org.jhotdraw8.icollection.impl.champ.SequencedData.vecRemove;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadOnlySequencedSet<E>,
+public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, SequencedElement<E>> implements ReadableSequencedSet<E>,
         SequencedSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
@@ -109,7 +109,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampVectorSet(Iterable<? extends E> c) {
         if (c instanceof MutableChampVectorSet<?>) {
-            c = ((MutableChampVectorSet<? extends E>) c).toImmutable();
+            c = ((MutableChampVectorSet<? extends E>) c).toPersistent();
         }
         if (c instanceof ChampVectorSet<?>) {
             ChampVectorSet<E> that = (ChampVectorSet<E>) c;
@@ -241,7 +241,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     public boolean removeAll(Iterable<?> c) {
         if (isEmpty()
                 || (c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             return false;
         }
         if (c == this) {
@@ -251,7 +251,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
         Predicate<E> predicate;
         if (c instanceof Collection<?> that) {
             predicate = that::contains;
-        } else if (c instanceof ReadOnlyCollection<?> that) {
+        } else if (c instanceof ReadableCollection<?> that) {
             predicate = that::contains;
         } else {
             HashSet<Object> that = new HashSet<>();
@@ -266,14 +266,14 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
             return false;
         }
         if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             clear();
             return true;
         }
         Predicate<E> predicate;
         if (c instanceof Collection<?> that) {
             predicate = that::contains;
-        } else if (c instanceof ReadOnlyCollection<?> that) {
+        } else if (c instanceof ReadableCollection<?> that) {
             predicate = that::contains;
         } else {
             HashSet<Object> that = new HashSet<>();
@@ -284,13 +284,13 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
     boolean filterAll(Predicate<E> predicate) {
         class VectorPredicate implements Predicate<SequencedElement<E>> {
-            SimpleImmutableList<Object> newVector = vector;
+            SimplePersistentList<Object> newVector = vector;
             int newOffset = offset;
 
             @Override
             public boolean test(SequencedElement<E> e) {
                 if (!predicate.test(e.getElement())) {
-                    OrderedPair<SimpleImmutableList<Object>, Integer> result = vecRemove(newVector, e, newOffset);
+                    OrderedPair<SimplePersistentList<Object>, Integer> result = vecRemove(newVector, e, newOffset);
                     newVector = result.first();
                     newOffset = result.second();
                     return false;
@@ -342,8 +342,8 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
 
     @Override
-    public ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(this.reversed());
+    public ReadableSequencedSet<E> readOnlyReversed() {
+        return new ReadableSequencedSetFacade<>(this.reversed());
     }
 
     @SuppressWarnings("unchecked")
@@ -400,11 +400,11 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
 
     /**
-     * Returns an immutable copy of this set.
+     * Returns an persistent copy of this set.
      *
-     * @return an immutable copy
+     * @return an persistent copy
      */
-    public ChampVectorSet<E> toImmutable() {
+    public ChampVectorSet<E> toPersistent() {
         owner = null;
         return size == 0
                 ? ChampVectorSet.of()

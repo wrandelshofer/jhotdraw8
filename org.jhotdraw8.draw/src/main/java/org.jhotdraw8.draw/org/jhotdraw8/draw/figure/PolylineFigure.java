@@ -24,7 +24,7 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -147,7 +147,7 @@ public class PolylineFigure extends AbstractLeafFigure
         applyFillableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, lineNode);
-        final ImmutableList<Point2D> points = getStyledNonNull(POINTS);
+        final PersistentList<Point2D> points = getStyledNonNull(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {
             list.add(p.getX());
@@ -157,8 +157,8 @@ public class PolylineFigure extends AbstractLeafFigure
         lineNode.applyCss();
     }
 
-    public static double[] toPointArray(Figure f, NonNullMapAccessor<? extends ImmutableList<Point2D>> key) {
-        ImmutableList<Point2D> points = f.getNonNull(key);
+    public static double[] toPointArray(Figure f, NonNullMapAccessor<? extends PersistentList<Point2D>> key) {
+        PersistentList<Point2D> points = f.getNonNull(key);
         double[] a = new double[points.size() * 2];
         for (int i = 0, n = points.size(), j = 0; i < n; i++, j += 2) {
             Point2D p = points.get(i);

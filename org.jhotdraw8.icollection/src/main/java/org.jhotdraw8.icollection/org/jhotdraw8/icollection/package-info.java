@@ -3,7 +3,7 @@
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 /**
- * Provides mutable and immutable collections.
+ * Provides mutable and persistent collections.
  */
 package org.jhotdraw8.icollection;
 

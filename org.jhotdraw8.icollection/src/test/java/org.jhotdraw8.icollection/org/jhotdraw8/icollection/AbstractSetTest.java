@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -48,7 +48,7 @@ public abstract class AbstractSetTest {
     protected abstract boolean supportsNullKeys();
 
 
-    protected void assertEqualSet(ReadOnlySet<Key> expected, Set<Key> actual) {
+    protected void assertEqualSet(ReadableSet<Key> expected, Set<Key> actual) {
         assertEqualSet(expected.asSet(), actual);
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractSetTest {
      */
     protected abstract <E> Set<E> newInstance(Set<E> m);
 
-    protected abstract <E> Set<E> newInstance(ReadOnlySet<E> m);
+    protected abstract <E> Set<E> newInstance(ReadableSet<E> m);
 
     /**
      * Creates a new instance with the specified map.

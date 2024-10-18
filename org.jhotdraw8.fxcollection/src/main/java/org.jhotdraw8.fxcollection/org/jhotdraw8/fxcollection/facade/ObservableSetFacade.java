@@ -8,19 +8,19 @@ import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
 import org.jhotdraw8.icollection.facade.SetFacade;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 
 /**
- * Wraps a {@link ReadOnlySet} in the {@link ObservableSet} interface.
+ * Wraps a {@link ReadableSet} in the {@link ObservableSet} interface.
  * <p>
- * The underlying ReadOnlySet is referenced - not copied. This allows to pass a
- * ReadOnlySet to a client who does not understand the ReadOnlySet APi.
+ * The underlying ReadableSet is referenced - not copied. This allows to pass a
+ * ReadableSet to a client who does not understand the ReadableSet APi.
  *
  * @param <E> the element type
  * @author Werner Randelshofer
  */
 public class ObservableSetFacade<E> extends SetFacade<E> implements ObservableSet<E> {
-    public ObservableSetFacade(ReadOnlySet<E> backingSet) {
+    public ObservableSetFacade(ReadableSet<E> backingSet) {
         super(backingSet);
     }
 

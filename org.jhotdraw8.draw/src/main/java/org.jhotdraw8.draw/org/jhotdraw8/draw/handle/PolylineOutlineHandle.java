@@ -32,7 +32,7 @@ import org.jhotdraw8.geom.intersect.IntersectPathIteratorPoint;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.PathIterator;
@@ -47,17 +47,17 @@ import java.awt.geom.PathIterator;
 public class PolylineOutlineHandle extends AbstractHandle {
 
     private final boolean editable;
-    private final NonNullMapAccessor<ImmutableList<Point2D>> key;
+    private final NonNullMapAccessor<PersistentList<Point2D>> key;
 
     private final Group node;
     private final Polyline poly1;
     private final Polyline poly2;
 
-    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key) {
+    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<PersistentList<Point2D>> key) {
         this(figure, key, true);
     }
 
-    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> key, boolean editable) {
+    public PolylineOutlineHandle(Figure figure, NonNullMapAccessor<PersistentList<Point2D>> key, boolean editable) {
         super(figure);
         this.key = key;
         node = new Group();
@@ -125,7 +125,7 @@ public class PolylineOutlineHandle extends AbstractHandle {
     }
 
     private void addPoint(MouseEvent event, DrawingView view) {
-        ImmutableList<Point2D> points = owner.get(key);
+        PersistentList<Point2D> points = owner.get(key);
 
         Point2D pInDrawing = view.viewToWorld(new Point2D(event.getX(), event.getY()));
         Point2D pInLocal = owner.worldToLocal(pInDrawing);

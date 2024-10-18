@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.key.DoubleListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -62,7 +62,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
     @Override
     public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
         Path2D.Double p = new Path2D.Double();
-        ImmutableList<Double> points = get(POINTS);
+        PersistentList<Double> points = get(POINTS);
         if (points != null) {
             for (int i = 0, n = points.size(); i < n - 1; i += 2) {
                 if (i == 0) {
@@ -81,7 +81,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
     public Bounds getBoundsInLocal() {
         double minx = Double.POSITIVE_INFINITY, miny = Double.POSITIVE_INFINITY,
                 maxx = Double.NEGATIVE_INFINITY, maxy = Double.NEGATIVE_INFINITY;
-        ImmutableList<Double> points = get(POINTS);
+        PersistentList<Double> points = get(POINTS);
         if (points != null) {
             for (int i = 0, n = points.size(); i < n - 1; i += 2) {
                 double x = points.get(i);
@@ -104,7 +104,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
 
     @Override
     public void reshapeInLocal(Transform transform) {
-        ImmutableList<Double> points = get(POINTS);
+        PersistentList<Double> points = get(POINTS);
         if (points != null) {
             List<Double> t = new ArrayList<>(points.size());
             for (int i = 0, n = points.size(); i < n - 1; i += 2) {
@@ -130,7 +130,7 @@ public class SvgPolylineFigure extends AbstractLeafFigure
     public void updateNode(RenderContext ctx, Node node) {
         Group g = (Group) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
-        ImmutableList<Double> points = get(POINTS);
+        PersistentList<Double> points = get(POINTS);
         if (points == null || points.isEmpty() || points.size() % 2 == 1) {
             g.setVisible(false);
             return;

@@ -4,14 +4,14 @@
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChampIterator;
 import org.jhotdraw8.icollection.impl.champ.ChampSpliterator;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champ.Node;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -28,14 +28,14 @@ import java.util.Spliterator;
 
 
 /**
- * Implements the {@link ImmutableSet} interface using a Compressed Hash-Array
+ * Implements the {@link PersistentSet} interface using a Compressed Hash-Array
  * Mapped Prefix-tree (CHAMP).
  * <p>
  * Features:
  * <ul>
  *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
  *     <li>allows null elements</li>
- *     <li>is immutable</li>
+ *     <li>is persistent</li>
  *     <li>is thread-safe</li>
  *     <li>does not guarantee a specific iteration order</li>
  * </ul>
@@ -73,8 +73,8 @@ import java.util.Spliterator;
  * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a></dd>
+ *      Efficient Persistent Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a></dd>
  *
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
@@ -84,7 +84,7 @@ import java.util.Spliterator;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ChampSet<E> implements ImmutableSet<E>, Serializable {
+public class ChampSet<E> implements PersistentSet<E>, Serializable {
     /**
      * We do not guarantee an iteration order. Make sure that nobody accidentally relies on it.
      */
@@ -131,11 +131,11 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
 
     /**
-     * Returns an immutable set that contains the provided elements.
+     * Returns an persistent set that contains the provided elements.
      *
      * @param c   an iterable
      * @param <E> the element type
-     * @return an immutable set of the provided elements
+     * @return an persistent set of the provided elements
      */
     @SuppressWarnings("unchecked")
     public static <E> ChampSet<E> copyOf(Iterable<? extends E> c) {
@@ -143,10 +143,10 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     }
 
     /**
-     * Returns an empty immutable set.
+     * Returns an empty persistent set.
      *
      * @param <E> the element type
-     * @return an empty immutable set
+     * @return an empty persistent set
      */
     @SuppressWarnings("unchecked")
     public static <E> ChampSet<E> of() {
@@ -158,11 +158,11 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         return ChampSet.<T>of().addAll(() -> iterator);
     }
     /**
-     * Returns an immutable set that contains the provided elements.
+     * Returns an persistent set that contains the provided elements.
      *
      * @param elements elements
      * @param <E>      the element type
-     * @return an immutable set of the provided elements
+     * @return an persistent set of the provided elements
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
@@ -205,7 +205,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
             return (ChampSet<E>) s;
         }
         var m = toMutable();
-        return m.addAll(c) ? m.toImmutable() : this;
+        return m.addAll(c) ? m.toPersistent() : this;
     }
 
     /**
@@ -233,12 +233,12 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
         if (other instanceof ChampSet<?> that) {
             return size == that.size && root.equivalent(that.root);
         }
-        return ReadOnlySet.setEquals(this, other);
+        return ReadableSet.setEquals(this, other);
     }
 
     @Override
     public int hashCode() {
-        return ReadOnlySet.iteratorToHashCode(iterator());
+        return ReadableSet.iteratorToHashCode(iterator());
     }
 
     @Override
@@ -266,7 +266,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     @Override
     public ChampSet<E> removeAll(Iterable<?> c) {
         var m = toMutable();
-        return m.removeAll(c) ? m.toImmutable() : this;
+        return m.removeAll(c) ? m.toPersistent() : this;
     }
 
 
@@ -274,7 +274,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
     @Override
     public ChampSet<E> retainAll(Iterable<?> c) {
         var m = toMutable();
-        return m.retainAll(c) ? m.toImmutable() : this;
+        return m.retainAll(c) ? m.toPersistent() : this;
     }
 
     @Override
@@ -293,7 +293,7 @@ public class ChampSet<E> implements ImmutableSet<E>, Serializable {
 
     @Override
     public String toString() {
-        return ReadOnlyCollection.iterableToString(this);
+        return ReadableCollection.iterableToString(this);
     }
 
     @Serial

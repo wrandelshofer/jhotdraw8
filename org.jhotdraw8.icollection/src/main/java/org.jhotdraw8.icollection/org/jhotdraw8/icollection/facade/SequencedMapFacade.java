@@ -7,7 +7,7 @@ package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
@@ -40,7 +40,7 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
     private final Supplier<Iterator<Entry<K, V>>> reverseIteratorFunction;
     private final Supplier<Spliterator<Entry<K, V>>> reverseSpliteratorFunction;
 
-    public SequencedMapFacade(ReadOnlySequencedMap<K, V> m) {
+    public SequencedMapFacade(ReadableSequencedMap<K, V> m) {
         super(m);
         this.firstEntryFunction = m::firstEntry;
         this.lastEntryFunction = m::lastEntry;

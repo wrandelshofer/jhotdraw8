@@ -7,7 +7,7 @@ package org.jhotdraw8.graph.path.backlink;
 
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -49,8 +49,8 @@ public class IndexedVertexBackLinkWithCost<C extends Number & Comparable<C>> ext
      * @param <XX>            the vertex sequence element type
      * @return the vertex sequence
      */
-    public static <XX, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<ImmutableList<XX>, CC> toVertexSequence(@Nullable IndexedVertexBackLinkWithCost<CC> node,
-                                                                                                                               Function<IndexedVertexBackLinkWithCost<CC>, XX> mappingFunction) {
+    public static <XX, CC extends Number & Comparable<CC>> @Nullable SimpleOrderedPair<PersistentList<XX>, CC> toVertexSequence(@Nullable IndexedVertexBackLinkWithCost<CC> node,
+                                                                                                                                Function<IndexedVertexBackLinkWithCost<CC>, XX> mappingFunction) {
         if (node == null) {
             return null;
         }

@@ -17,7 +17,7 @@ import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxbase.control.Disableable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
@@ -134,7 +134,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed with the data format that was
      * actually used for reading the file.
      */
-    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, ImmutableMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState);
+    CompletionStage<DataFormat> read(URI uri, @Nullable DataFormat format, PersistentMap<Key<?>, Object> options, boolean insert, WorkState<Void> workState);
 
     /**
      * Sets the content of this activity by asynchronously reading the data from
@@ -154,7 +154,7 @@ public interface FileBasedActivity extends Activity {
      * @param options reading options
      * @return a completable worker for monitoring the progress of the read operation
      */
-    default CompletableWorker<Void> read(URI uri, ImmutableMap<Key<?>, Object> options) {
+    default CompletableWorker<Void> read(URI uri, PersistentMap<Key<?>, Object> options) {
         SimpleCompletableWorker<Void> worker = new SimpleCompletableWorker<>(new SimpleWorkState<>(getApplication().getResources().getFormatted("file.reading.worker.title", uri.getPath())));
         worker.completeExceptionally(new UnsupportedOperationException());
         return worker;
@@ -178,7 +178,7 @@ public interface FileBasedActivity extends Activity {
      * @return Returns a CompletionStage which is completed when the write
      * operation has finished.
      */
-    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, ImmutableMap<Key<?>, Object> options, WorkState<Void> workState);
+    CompletionStage<Void> write(URI uri, @Nullable DataFormat format, PersistentMap<Key<?>, Object> options, WorkState<Void> workState);
 
     /**
      * Asynchronously writes the content of this activity into the specified uri.
@@ -197,7 +197,7 @@ public interface FileBasedActivity extends Activity {
      * @param options writing options
      * @return a completable worker for monitoring the progress of the write operation
      */
-    default CompletableWorker<Void> write(URI uri, ImmutableMap<Key<?>, Object> options, WorkState<Void> state) {
+    default CompletableWorker<Void> write(URI uri, PersistentMap<Key<?>, Object> options, WorkState<Void> state) {
         return FXWorker.work(getApplication().getExecutor(), s -> null, state);
     }
 

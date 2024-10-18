@@ -5,7 +5,7 @@
 package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 public class StyleRule extends Rule {
 
     private final SelectorGroup selectorList;
-    private final ImmutableList<Declaration> declarations;
+    private final PersistentList<Declaration> declarations;
 
     public StyleRule(@Nullable SourceLocator sourceLocator, SelectorGroup selectorGroup, List<Declaration> declarations) {
         super(sourceLocator);
@@ -43,7 +43,7 @@ public class StyleRule extends Rule {
         return selectorList;
     }
 
-    public ImmutableList<Declaration> getDeclarations() {
+    public PersistentList<Declaration> getDeclarations() {
         return declarations;
     }
 }

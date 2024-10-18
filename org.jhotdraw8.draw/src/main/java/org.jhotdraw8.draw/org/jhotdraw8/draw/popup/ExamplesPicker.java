@@ -12,7 +12,7 @@ import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.draw.DrawLabels;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.text.ParseException;
 import java.util.function.BiConsumer;
@@ -28,10 +28,10 @@ public class ExamplesPicker<T> extends AbstractPicker<T> {
     private ContextMenu contextMenu;
     private MenuItem noneItem;
     private BiConsumer<Boolean, T> callback;
-    private final ImmutableList<String> examples;
+    private final PersistentList<String> examples;
     private final Converter<T> converter;
 
-    public ExamplesPicker(ImmutableList<String> examples, Converter<T> converter) {
+    public ExamplesPicker(PersistentList<String> examples, Converter<T> converter) {
         this.examples = examples;
         this.converter = converter;
     }

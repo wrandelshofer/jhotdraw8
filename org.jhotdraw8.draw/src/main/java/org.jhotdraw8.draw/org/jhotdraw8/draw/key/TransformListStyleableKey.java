@@ -12,18 +12,18 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 /**
  * TransformListStyleableKey.
  *
  * @author Werner Randelshofer
  */
-public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableList<Transform>>
-        implements WritableStyleableMapAccessor<ImmutableList<Transform>>, NonNullKey<ImmutableList<Transform>> {
+public class TransformListStyleableKey extends AbstractStyleableKey<PersistentList<Transform>>
+        implements WritableStyleableMapAccessor<PersistentList<Transform>>, NonNullKey<PersistentList<Transform>> {
 
 
-    private final Converter<ImmutableList<Transform>> converter;
+    private final Converter<PersistentList<Transform>> converter;
 
     /**
      * Creates a new instance with the specified name and with an empty list as the
@@ -41,13 +41,13 @@ public class TransformListStyleableKey extends AbstractStyleableKey<ImmutableLis
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public TransformListStyleableKey(String name, ImmutableList<Transform> defaultValue) {
-        super(name, new SimpleParameterizedType(ImmutableList.class, Transform.class), defaultValue);
+    public TransformListStyleableKey(String name, PersistentList<Transform> defaultValue) {
+        super(name, new SimpleParameterizedType(PersistentList.class, Transform.class), defaultValue);
         converter = new ListCssConverter<>(new TransformCssConverter());
     }
 
     @Override
-    public Converter<ImmutableList<Transform>> getCssConverter() {
+    public Converter<PersistentList<Transform>> getCssConverter() {
         return converter;
     }
 

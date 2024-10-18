@@ -14,7 +14,7 @@ import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
 import org.jhotdraw8.icollection.impl.champ.Node;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -45,7 +45,7 @@ import java.util.function.Function;
  *     <li>add: O(log₃₂ N)</li>
  *     <li>remove: O(log₃₂ N)</li>
  *     <li>contains: O(log₃₂ N)</li>
- *     <li>toImmutable: O(1) + O(log₃₂ N) distributed across subsequent updates in
+ *     <li>toPersistent: O(1) + O(log₃₂ N) distributed across subsequent updates in
  *     this set</li>
  *     <li>clone: O(1) + O(log₃₂ N) distributed across subsequent updates in this
  *     set and in the clone</li>
@@ -61,8 +61,8 @@ import java.util.function.Function;
  * Portions of the code in this class has been derived from 'The Capsule Hash Trie Collections Library'.
  * <dl>
  *      <dt>Michael J. Steindorfer (2017).
- *      Efficient Immutable Collections.</dt>
- *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-immutable-collections">michael.steindorfer.name</a>
+ *      Efficient Persistent Collections.</dt>
+ *      <dd><a href="https://michael.steindorfer.name/publications/phd-thesis-efficient-persistent-collections">michael.steindorfer.name</a>
  *      <dt>The Capsule Hash Trie Collections Library.
  *      <br>Copyright (c) Michael Steindorfer. <a href="https://github.com/usethesource/capsule/blob/3856cd65fa4735c94bcfa94ec9ecf408429b54f4/LICENSE">BSD-2-Clause License</a></dt>
  *      <dd><a href="https://github.com/usethesource/capsule">github.com</a>
@@ -89,7 +89,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @SuppressWarnings({"unchecked", "this-escape"})
     public MutableChampSet(Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?>) {
-            c = ((MutableChampSet<? extends E>) c).toImmutable();
+            c = ((MutableChampSet<? extends E>) c).toPersistent();
         }
         if (c instanceof ChampSet<?>) {
             ChampSet<E> that = (ChampSet<E>) c;
@@ -124,7 +124,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     @SuppressWarnings("unchecked")
     public boolean addAll(Iterable<? extends E> c) {
         if (c instanceof MutableChampSet<?> m) {
-            c = (Iterable<? extends E>) m.toImmutable();
+            c = (Iterable<? extends E>) m.toPersistent();
         }
         if (isEmpty() && (c instanceof ChampSet<?> cc)) {
             root = (BitmapIndexedNode<E>) cc.root;
@@ -155,7 +155,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     public boolean removeAll(Iterable<?> c) {
         if (isEmpty()
                 || (c instanceof Collection<?> cc) && cc.isEmpty()
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             return false;
         }
         if (c == this) {
@@ -163,7 +163,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             return true;
         }
         if (c instanceof MutableChampSet<?> m) {
-            c = m.toImmutable();
+            c = m.toPersistent();
         }
         if (c instanceof ChampSet<?> that) {
             BulkChangeEvent bulkChange = new BulkChangeEvent();
@@ -190,7 +190,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             return true;
         }
         if (c instanceof MutableChampSet<?> m) {
-            ChampSet<?> that = m.toImmutable();
+            ChampSet<?> that = m.toPersistent();
             BulkChangeEvent bulkChange = new BulkChangeEvent();
             BitmapIndexedNode<E> newRootNode = root.retainAll(makeOwner(), (BitmapIndexedNode<E>) that.root, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             if (bulkChange.removed == 0) {
@@ -211,7 +211,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             return false;
         }
         if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             clear();
             return true;
         }
@@ -221,7 +221,7 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
             case ChampSet<?> that ->
                     newRootNode = root.retainAll(makeOwner(), (BitmapIndexedNode<E>) that.root, 0, bulkChange, ChampSet::updateElement, Objects::equals, ChampSet::keyHash, new ChangeEvent<>());
             case Collection<?> that -> newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
-            case ReadOnlyCollection<?> that -> newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
+            case ReadableCollection<?> that -> newRootNode = root.filterAll(makeOwner(), that::contains, 0, bulkChange);
             default -> {
                 HashSet<Object> that = new HashSet<>();
                 c.forEach(that::add);
@@ -294,11 +294,11 @@ public class MutableChampSet<E> extends AbstractMutableChampSet<E, E> {
     }
 
     /**
-     * Returns an immutable copy of this set.
+     * Returns an persistent copy of this set.
      *
-     * @return an immutable copy
+     * @return an persistent copy
      */
-    public ChampSet<E> toImmutable() {
+    public ChampSet<E> toPersistent() {
         owner = null;
         return size == 0
                 ? ChampSet.of()

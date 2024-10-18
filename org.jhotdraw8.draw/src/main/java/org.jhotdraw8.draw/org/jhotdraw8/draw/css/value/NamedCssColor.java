@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.css.value;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.icollection.ChampMap;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.LinkedHashMap;
@@ -197,10 +197,10 @@ public class NamedCssColor extends CssColor {
     public static final NamedCssColor YELLOW = new NamedCssColor(NamedColorName.YELLOW, 0xFFFF00);
     public static final NamedCssColor YELLOWGREEN = new NamedCssColor(NamedColorName.YELLOWGREEN, 0x9ACD32);
 
-    private static final ImmutableMap<String, NamedCssColor> NAMED_COLORS;
+    private static final PersistentMap<String, NamedCssColor> NAMED_COLORS;
 
     static {
-        // Workaround for Java SE 8: javac hangs if ImmutableMap.ofEntries() has many entries.
+        // Workaround for Java SE 8: javac hangs if PersistentMap.ofEntries() has many entries.
         SequencedMap<String, NamedCssColor> m = new LinkedHashMap<>();
 
         m.put(TRANSPARENT.getName(), TRANSPARENT);

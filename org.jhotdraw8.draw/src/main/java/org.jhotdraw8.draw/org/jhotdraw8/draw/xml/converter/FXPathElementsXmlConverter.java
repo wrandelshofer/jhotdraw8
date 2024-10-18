@@ -5,13 +5,13 @@
 package org.jhotdraw8.draw.xml.converter;
 
 import javafx.scene.shape.PathElement;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -22,13 +22,13 @@ import java.text.ParseException;
  *
  * @author Werner Randelshofer
  */
-public class FXPathElementsXmlConverter implements Converter<ImmutableList<PathElement>> {
+public class FXPathElementsXmlConverter implements Converter<PersistentList<PathElement>> {
 
     public FXPathElementsXmlConverter() {
     }
 
     @Override
-    public @Nullable ImmutableList<PathElement> fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable PersistentList<PathElement> fromString(CharBuffer buf, @Nullable IdResolver idResolver) throws ParseException {
         CharBuffer out = CharBuffer.allocate(buf.remaining());
         int count = 0;
         try {
@@ -46,13 +46,13 @@ public class FXPathElementsXmlConverter implements Converter<ImmutableList<PathE
     }
 
     @Override
-    public <TT extends ImmutableList<PathElement>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends PersistentList<PathElement>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         final String content = value == null ? null : FXSvgPaths.pathElementsToDoubleSvgString(value.asList());
         out.append(content == null ? "none" : content);
     }
 
     @Override
-    public @Nullable ImmutableList<PathElement> getDefaultValue() {
+    public @Nullable PersistentList<PathElement> getDefaultValue() {
         return VectorList.of();
     }
 }

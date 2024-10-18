@@ -10,7 +10,7 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.lang.reflect.Type;
 
@@ -20,8 +20,8 @@ import java.lang.reflect.Type;
  * @param <T> the element type of the list
  * @author Werner Randelshofer
  */
-public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<ImmutableList<T>>
-        implements WritableStyleableMapAccessor<ImmutableList<T>>, NullableKey<ImmutableList<T>> {
+public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentList<T>>
+        implements WritableStyleableMapAccessor<PersistentList<T>>, NullableKey<PersistentList<T>> {
 
 
     /**
@@ -33,6 +33,6 @@ public class NullableListStyleableKey<T> extends AbstractReadOnlyStyleableKey<Im
      * @param elementConverter String converter for a list element
      */
     public NullableListStyleableKey(String name, Type elementType, CssConverter<T> elementConverter) {
-        super(name, new SimpleParameterizedType(ImmutableList.class, elementType), new ListCssConverter<>(elementConverter), VectorList.of());
+        super(name, new SimpleParameterizedType(PersistentList.class, elementType), new ListCssConverter<>(elementConverter), VectorList.of());
     }
 }

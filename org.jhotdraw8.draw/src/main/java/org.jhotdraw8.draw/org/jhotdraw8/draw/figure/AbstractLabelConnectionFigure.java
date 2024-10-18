@@ -31,7 +31,7 @@ import org.jhotdraw8.geom.FXGeom;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -174,7 +174,7 @@ public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
      * @return a list of connected figures
      */
     @Override
-    public ReadOnlySet<Figure> getLayoutSubjects() {
+    public ReadableSet<Figure> getLayoutSubjects() {
         final Figure labelTarget = get(LABEL_TARGET);
         return labelTarget == null ? ChampSet.of() : ChampSet.of(labelTarget);
     }

@@ -15,8 +15,8 @@ import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableList;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -81,12 +81,12 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
     }
 
     @Override
-    public ReadOnlySet<String> getStyleClasses(Styleable element) {
+    public ReadableSet<String> getStyleClasses(Styleable element) {
         return ChampSet.copyOf(element.getStyleClass());
     }
 
     @Override
-    public ReadOnlySet<String> getPseudoClasses(Styleable element) {
+    public ReadableSet<String> getPseudoClasses(Styleable element) {
         return ChampSet.copyOf(element.getPseudoClassStates().stream().map(PseudoClass::getPseudoClassName)
                 .collect(Collectors.toList()));
     }
@@ -198,7 +198,7 @@ public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
     }
 
     @Override
-    public void setAttribute(Styleable elem, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadOnlyList<CssToken> valueAsTokens) {
+    public void setAttribute(Styleable elem, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadableList<CssToken> valueAsTokens) {
         String value;
         if (valueAsTokens == null) {
             value = null;

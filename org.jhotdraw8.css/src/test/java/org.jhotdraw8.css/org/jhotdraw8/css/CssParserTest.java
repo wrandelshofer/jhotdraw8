@@ -11,7 +11,7 @@ import org.jhotdraw8.css.ast.StyleRule;
 import org.jhotdraw8.css.ast.Stylesheet;
 import org.jhotdraw8.css.model.DocumentSelectorModel;
 import org.jhotdraw8.css.parser.CssParser;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Document;
@@ -257,7 +257,7 @@ public class CssParserTest {
 
         CssParser p = new CssParser();
         Stylesheet stylesheet = p.parseStylesheet(stylesheetStr, null, null);
-        ReadOnlyList<Rule> rules = stylesheet.getRules();
+        ReadableList<Rule> rules = stylesheet.getRules();
     }
 
     /**

@@ -7,7 +7,7 @@ package org.jhotdraw8.fxcollection;
 import javafx.beans.InvalidationListener;
 import javafx.collections.ObservableSet;
 import javafx.collections.SetChangeListener;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractSet;
@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E>, ReadOnlySet<E> {
+public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E>, ReadableSet<E> {
 
     private final List<SetChangeListener<? super E>> changeListeners = new CopyOnWriteArrayList<>();
     private final List<InvalidationListener> invalidationListeners = new CopyOnWriteArrayList<>();

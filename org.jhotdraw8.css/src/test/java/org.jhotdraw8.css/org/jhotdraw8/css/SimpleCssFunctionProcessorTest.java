@@ -13,7 +13,7 @@ import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.manager.SimpleCssFunctionProcessor;
 import org.jhotdraw8.css.model.DocumentSelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 import org.w3c.dom.Element;
@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 public class SimpleCssFunctionProcessorTest extends AbstractCssFunctionProcessorTest {
 
     @Override
-    protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, ImmutableList<CssToken>> customProperties) {
+    protected CssFunctionProcessor<Element> createInstance(DocumentSelectorModel model, Map<String, PersistentList<CssToken>> customProperties) {
         List<CssFunction<Element>> functions = new ArrayList<>();
         functions.add(new AttrCssFunction<>());
         functions.add(new CalcCssFunction<>());

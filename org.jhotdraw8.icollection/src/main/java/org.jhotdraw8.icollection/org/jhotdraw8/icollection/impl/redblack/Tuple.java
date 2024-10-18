@@ -2,7 +2,7 @@ package org.jhotdraw8.icollection.impl.redblack;
 
 /**
  * A Tuple combines a fixed number of elements together so that they can be passed around as a whole.
- * Unlike an array or list, a tuple can hold objects with different types, but they are also immutable.
+ * Unlike an array or list, a tuple can hold objects with different types, but they are also persistent.
  * <p>
  * This class has been derived from 'vavr' Tuple.java.
  * <dl>

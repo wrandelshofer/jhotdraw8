@@ -21,8 +21,8 @@ import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableList;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -99,12 +99,12 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public ReadOnlySet<String> getStyleClasses(Figure element) {
+    public ReadableSet<String> getStyleClasses(Figure element) {
         return element.getStyleClasses();
     }
 
     @Override
-    public ReadOnlySet<String> getPseudoClasses(final Figure element) {
+    public ReadableSet<String> getPseudoClasses(final Figure element) {
         return element.getPseudoClassStates();
     }
 
@@ -443,7 +443,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     @Override
-    public void setAttribute(Figure elem, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadOnlyList<CssToken> value) {
+    public void setAttribute(Figure elem, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadableList<CssToken> value) {
         Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>> metaMap = getWritableMetaMap(elem);
 
         List<WritableStyleableMapAccessor<Object>> ks = metaMap.get(new QualifiedName(namespace, name));
@@ -486,7 +486,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
      * @param value the token
      * @return true if the value is "initial".
      */
-    protected boolean isInitialRevertOrUnset(@Nullable ReadOnlyList<CssToken> value) {
+    protected boolean isInitialRevertOrUnset(@Nullable ReadableList<CssToken> value) {
         if (value != null) {
             boolean isInitial = false;
             Loop:

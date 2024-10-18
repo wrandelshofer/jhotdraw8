@@ -6,8 +6,8 @@ package org.jhotdraw8.css.ast;
 
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -20,8 +20,8 @@ import java.util.List;
  */
 public class AtRule extends Rule {
     private final String atKeyword;
-    private final ImmutableList<CssToken> header;
-    private final ImmutableList<CssToken> body;
+    private final PersistentList<CssToken> header;
+    private final PersistentList<CssToken> body;
 
     /**
      * Creates a new instance.
@@ -76,7 +76,7 @@ public class AtRule extends Rule {
      *
      * @return the header tokens
      */
-    public ReadOnlyList<CssToken> getHeader() {
+    public ReadableList<CssToken> getHeader() {
         return header;
     }
 
@@ -85,7 +85,7 @@ public class AtRule extends Rule {
      *
      * @return the body tokens
      */
-    public ReadOnlyList<CssToken> getBody() {
+    public ReadableList<CssToken> getBody() {
         return body;
     }
 

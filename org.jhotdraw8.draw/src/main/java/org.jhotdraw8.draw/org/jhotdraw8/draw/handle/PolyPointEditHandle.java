@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.Points;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.function.Function;
@@ -52,9 +52,9 @@ public class PolyPointEditHandle extends AbstractHandle {
 
     private Point2D pickLocation;
     private final int pointIndex;
-    private final NonNullMapAccessor<ImmutableList<Point2D>> pointKey;
+    private final NonNullMapAccessor<PersistentList<Point2D>> pointKey;
 
-    public PolyPointEditHandle(Figure figure, NonNullMapAccessor<ImmutableList<Point2D>> pointKey, int pointIndex) {
+    public PolyPointEditHandle(Figure figure, NonNullMapAccessor<PersistentList<Point2D>> pointKey, int pointIndex) {
         super(figure);
         this.pointKey = pointKey;
         this.pointIndex = pointIndex;
@@ -117,7 +117,7 @@ public class PolyPointEditHandle extends AbstractHandle {
             newPoint = view.getConstrainer().constrainPoint(getOwner(), new CssPoint2D(newPoint)).getConvertedValue();
         }
 
-        ImmutableList<Point2D> list = owner.getNonNull(pointKey);
+        PersistentList<Point2D> list = owner.getNonNull(pointKey);
         view.getModel().set(getOwner(), pointKey, list.set(pointIndex, getOwner().worldToLocal(newPoint)));
     }
 
@@ -153,7 +153,7 @@ public class PolyPointEditHandle extends AbstractHandle {
     public void updateNode(DrawingView view) {
         Figure f = getOwner();
         Transform t = FXTransforms.concat(view.getWorldToView(), f.getLocalToWorld());
-        ImmutableList<Point2D> list = f.get(pointKey);
+        PersistentList<Point2D> list = f.get(pointKey);
         if (list == null || pointIndex > list.size()) {
             node.setVisible(false);
             return;

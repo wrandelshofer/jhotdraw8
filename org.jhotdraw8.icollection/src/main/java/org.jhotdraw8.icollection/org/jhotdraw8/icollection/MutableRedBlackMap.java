@@ -2,7 +2,7 @@ package org.jhotdraw8.icollection;
 
 import org.jhotdraw8.icollection.facade.CollectionFacade;
 import org.jhotdraw8.icollection.facade.NavigableSetFacade;
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedMapFacade;
+import org.jhotdraw8.icollection.facade.ReadableSequencedMapFacade;
 import org.jhotdraw8.icollection.facade.SetFacade;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
@@ -11,8 +11,8 @@ import org.jhotdraw8.icollection.impl.iteration.MappedSpliterator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 import org.jhotdraw8.icollection.navigable.DescendingNavigableMapView;
 import org.jhotdraw8.icollection.navigable.SubsetNavigableMapView;
-import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedMap;
+import org.jhotdraw8.icollection.readable.ReadableNavigableMap;
+import org.jhotdraw8.icollection.readable.ReadableSequencedMap;
 import org.jhotdraw8.icollection.serialization.SortedMapSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -33,7 +33,7 @@ import java.util.SortedMap;
 import java.util.Spliterator;
 import java.util.Spliterators;
 
-public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadOnlyNavigableMap<K, V>, Cloneable, Serializable {
+public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements NavigableMap<K, V>, ReadableNavigableMap<K, V>, Cloneable, Serializable {
     @Serial
     private final static long serialVersionUID = 0L;
     transient RedBlackTree<K, V> root;
@@ -181,8 +181,8 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Override
-    public ReadOnlySequencedMap<K, V> readOnlyReversed() {
-        return new ReadOnlySequencedMapFacade<>(
+    public ReadableSequencedMap<K, V> readOnlyReversed() {
+        return new ReadableSequencedMapFacade<>(
                 this::iterator,
                 this::reverseIterator,
                 this::size,
@@ -367,7 +367,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
 
-    public RedBlackMap<K, V> toImmutable() {
+    public RedBlackMap<K, V> toPersistent() {
         return new RedBlackMap<>(root, comparator);
     }
 

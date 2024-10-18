@@ -1,6 +1,6 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 
 import java.util.Set;
 
@@ -21,7 +21,7 @@ public class MutableRedBlackSetTest extends AbstractSetTest {
     }
 
     @Override
-    protected <E> Set<E> newInstance(ReadOnlySet<E> m) {
+    protected <E> Set<E> newInstance(ReadableSet<E> m) {
         return new MutableRedBlackSet<>(m);
     }
 

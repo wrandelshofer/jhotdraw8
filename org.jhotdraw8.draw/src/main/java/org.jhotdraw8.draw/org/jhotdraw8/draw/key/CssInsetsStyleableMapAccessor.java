@@ -10,7 +10,7 @@ import org.jhotdraw8.draw.css.converter.InsetsCssConverter;
 import org.jhotdraw8.draw.css.value.CssInsets;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -96,7 +96,7 @@ public class CssInsetsStyleableMapAccessor
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable CssInsets value) {
+    public PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable CssInsets value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -108,7 +108,7 @@ public class CssInsetsStyleableMapAccessor
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
+    public PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         a = topKey.remove(a);
         a = rightKey.remove(a);
         a = bottomKey.remove(a);

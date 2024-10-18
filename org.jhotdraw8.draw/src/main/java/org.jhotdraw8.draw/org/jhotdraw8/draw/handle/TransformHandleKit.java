@@ -29,7 +29,7 @@ import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
@@ -204,7 +204,8 @@ public class TransformHandleKit {
 
     private abstract static class AbstractTransformHandle extends AbstractResizeTransformHandle {
 
-        @Nullable ImmutableList<Transform> startTransforms;
+        @Nullable
+        PersistentList<Transform> startTransforms;
 
         public AbstractTransformHandle(Figure owner, Locator locator, Shape shape, Background bg, Function<Color, Border> border) {
             super(owner, locator, shape, bg, border);
@@ -222,7 +223,7 @@ public class TransformHandleKit {
             }
             TransformableFigure owner = (TransformableFigure) o;
             Bounds oldBounds = startBounds.getConvertedBoundsValue();
-            ImmutableList<Transform> oldTransforms = startTransforms == null ? VectorList.of() : startTransforms;
+            PersistentList<Transform> oldTransforms = startTransforms == null ? VectorList.of() : startTransforms;
 
             double sx = width / oldBounds.getWidth();
             double sy = height / oldBounds.getHeight();

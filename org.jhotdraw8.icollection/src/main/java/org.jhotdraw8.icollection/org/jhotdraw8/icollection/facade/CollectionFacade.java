@@ -5,7 +5,7 @@
 package org.jhotdraw8.icollection.facade;
 
 import org.jhotdraw8.icollection.impl.iteration.IteratorSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
 import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractCollection;
@@ -23,7 +23,7 @@ import java.util.stream.Stream;
  * @param <E> the element type
  * @author Werner Randelshofer
  */
-public class CollectionFacade<E> extends AbstractCollection<E> implements ReadOnlyCollection<E> {
+public class CollectionFacade<E> extends AbstractCollection<E> implements ReadableCollection<E> {
     protected final Supplier<Iterator<E>> iteratorFunction;
     protected final Supplier<Spliterator<E>> spliteratorFunction;
     protected final IntSupplier sizeFunction;
@@ -32,7 +32,7 @@ public class CollectionFacade<E> extends AbstractCollection<E> implements ReadOn
     protected final Predicate<Object> removeFunction;
     protected final Predicate<E> addFunction;
 
-    public CollectionFacade(ReadOnlyCollection<E> backingCollection) {
+    public CollectionFacade(ReadableCollection<E> backingCollection) {
         this(backingCollection::iterator, backingCollection::spliterator, backingCollection::size,
                 backingCollection::contains, null, null, null);
     }

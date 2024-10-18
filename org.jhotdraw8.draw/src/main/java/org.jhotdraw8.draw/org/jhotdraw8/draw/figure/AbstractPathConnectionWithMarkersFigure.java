@@ -38,7 +38,7 @@ import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
 import org.jhotdraw8.geom.shape.PathMetrics;
 import org.jhotdraw8.geom.shape.SimplePathMetrics;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -136,15 +136,15 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     public abstract double getMarkerCenterScaleFactor();
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerCenterShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerCenterShape();
 
     public abstract double getMarkerEndScaleFactor();
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerEndShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerEndShape();
 
     public abstract double getMarkerStartScaleFactor();
 
-    public abstract @Nullable ImmutableList<PathElement> getMarkerStartShape();
+    public abstract @Nullable PersistentList<PathElement> getMarkerStartShape();
 
     @Override
     public PathIterator getPathIterator(RenderContext ctx, @Nullable AffineTransform tx) {
@@ -305,7 +305,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
 
     protected void updateMarkerNode(RenderContext ctx, Group group,
                                     Path markerNode,
-                                    PointAndDerivative pd, @Nullable ImmutableList<PathElement> markerShape, double markerScaleFactor) {
+                                    PointAndDerivative pd, @Nullable PersistentList<PathElement> markerShape, double markerScaleFactor) {
         if (markerShape != null) {
             markerNode.getElements().setAll(markerShape.asCollection());
             double angle = Math.PI + pd.getAngle();

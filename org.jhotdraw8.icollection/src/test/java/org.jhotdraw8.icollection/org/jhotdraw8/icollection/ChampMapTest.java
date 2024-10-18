@@ -5,12 +5,12 @@
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 
 import java.util.Map;
 
-public class ChampMapTest extends AbstractImmutableMapTest {
+public class ChampMapTest extends AbstractPersistentMapTest {
     @Override
     protected <K, V> ChampMap<K, V> newInstance() {
         return ChampMap.of();
@@ -18,22 +18,22 @@ public class ChampMapTest extends AbstractImmutableMapTest {
 
 
     @Override
-    protected <K, V> ImmutableMap<K, V> newInstance(Map<K, V> map) {
+    protected <K, V> PersistentMap<K, V> newInstance(Map<K, V> map) {
         return ChampMap.<K, V>of().putAll(map);
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> newInstance(ReadOnlyMap<K, V> map) {
+    protected <K, V> PersistentMap<K, V> newInstance(ReadableMap<K, V> map) {
         return ChampMap.<K, V>of().putAll(map);
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> toClonedInstance(ImmutableMap<K, V> m) {
+    protected <K, V> PersistentMap<K, V> toClonedInstance(PersistentMap<K, V> m) {
         return ChampMap.copyOf(m);
     }
 
     @Override
-    protected <K, V> ImmutableMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
+    protected <K, V> PersistentMap<K, V> newInstance(Iterable<Map.Entry<K, V>> entries) {
         return ChampMap.<K, V>of().putAll(entries);
     }
 

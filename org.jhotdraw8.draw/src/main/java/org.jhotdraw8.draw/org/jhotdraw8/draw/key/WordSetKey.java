@@ -6,14 +6,14 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 
 /**
  * WordSetKey.
  *
  * @author Werner Randelshofer
  */
-public class WordSetKey extends NonNullObjectKey<ImmutableSet<String>> {
+public class WordSetKey extends NonNullObjectKey<PersistentSet<String>> {
 
 
     /**
@@ -32,7 +32,7 @@ public class WordSetKey extends NonNullObjectKey<ImmutableSet<String>> {
      * @param name         The name of the key.
      * @param defaultValue The default value.
      */
-    public WordSetKey(String name, ImmutableSet<String> defaultValue) {
-        super(name, new SimpleParameterizedType(ImmutableSet.class, String.class), defaultValue);
+    public WordSetKey(String name, PersistentSet<String> defaultValue) {
+        super(name, new SimpleParameterizedType(PersistentSet.class, String.class), defaultValue);
     }
 }

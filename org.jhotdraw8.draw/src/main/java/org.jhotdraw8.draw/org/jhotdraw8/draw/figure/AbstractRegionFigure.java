@@ -29,7 +29,7 @@ import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.FXTransformPathBuilder;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -52,7 +52,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
 
     public static final NonNullBooleanStyleableKey SHAPE_PRESERVE_RATIO_KEY = new NonNullBooleanStyleableKey("ShapePreserveRatio", false);
 
-    private transient ImmutableList<PathElement> pathElements;
+    private transient PersistentList<PathElement> pathElements;
 
     public AbstractRegionFigure() {
         this(0, 0, 1, 1);
@@ -118,7 +118,7 @@ public abstract class AbstractRegionFigure extends AbstractLeafFigure
             pathElements = VectorList.of();
         }
 
-        ImmutableList<PathElement> shape = getStyled(SHAPE);
+        PersistentList<PathElement> shape = getStyled(SHAPE);
         if (shape == null || shape.isEmpty()) {
             return;
         }

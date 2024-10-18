@@ -25,7 +25,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -121,7 +121,7 @@ public class PolygonFigure extends AbstractLeafFigure
         applyStrokableFigureProperties(ctx, lineNode);
         applyTransformableFigureProperties(ctx, node);
         applyCompositableFigureProperties(ctx, lineNode);
-        final ImmutableList<Point2D> points = getStyled(POINTS);
+        final PersistentList<Point2D> points = getStyled(POINTS);
         List<Double> list = new ArrayList<>(points.size() * 2);
         for (Point2D p : points) {
             if (p != null) {

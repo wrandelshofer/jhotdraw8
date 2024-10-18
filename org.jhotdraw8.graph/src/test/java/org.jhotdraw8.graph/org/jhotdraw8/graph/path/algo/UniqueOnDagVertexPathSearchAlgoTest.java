@@ -9,7 +9,7 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.Test;
@@ -124,10 +124,10 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, ImmutableList<Integer> expPath) throws Exception {
+    public void testFindUniqueVertexPath(DirectedGraph<Integer, Double> graph, Integer start, Integer goal, PersistentList<Integer> expPath) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(
                 graph::getNextVertices, new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
-        SimpleOrderedPair<ImmutableList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
+        SimpleOrderedPair<PersistentList<Integer>, Integer> result = instance.findVertexSequence(start, goal::equals,
                 Integer.MAX_VALUE);
         if (expPath == null) {
             assertNull(result);
@@ -157,12 +157,12 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     /**
      * Test of findAnyPath method, of class UniqueShortestPathBuilder.
      */
-    public void testFindUniqueMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, List<Integer> multiGoal, ImmutableList<Integer> expResult) throws Exception {
+    public void testFindUniqueMultiGoalPath(DirectedGraph<Integer, Double> graph, Integer start, List<Integer> multiGoal, PersistentList<Integer> expResult) throws Exception {
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
                 new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
 
         // Find unique path to any of the goals
-        SimpleOrderedPair<ImmutableList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains,
+        SimpleOrderedPair<PersistentList<Integer>, Integer> actualPath = instance.findVertexSequence(start, multiGoal::contains,
                 Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actualPath);
@@ -204,11 +204,11 @@ public class UniqueOnDagVertexPathSearchAlgoTest {
     /**
      * Test of findAnyVertexPath method, of class AnyPathBuilder.
      */
-    private void testFindUniqueVertexPathOverWaypoints(List<Integer> waypoints, @Nullable ImmutableList<Integer> expResult) throws Exception {
+    private void testFindUniqueVertexPathOverWaypoints(List<Integer> waypoints, @Nullable PersistentList<Integer> expResult) throws Exception {
         DirectedGraph<Integer, Double> graph = createGraph();
         VertexSequenceFinder<Integer, Integer> instance = SimpleVertexSequenceFinder.newIntCostInstance(graph::getNextVertices,
                 new UniqueOnAcyclicGraphVertexPathSearchAlgo<>());
-        SimpleOrderedPair<ImmutableList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
+        SimpleOrderedPair<PersistentList<Integer>, Integer> actual = instance.findVertexSequenceOverWaypoints(waypoints, Integer.MAX_VALUE);
         if (expResult == null) {
             assertNull(actual);
         } else {

@@ -1,13 +1,13 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.icollection.immutable.ImmutableCollection;
-import org.jhotdraw8.icollection.immutable.ImmutableNavigableSet;
+import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentCollection;
+import org.jhotdraw8.icollection.persistent.PersistentNavigableSet;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jhotdraw8.icollection.serialization.SortedSetSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -26,7 +26,7 @@ import java.util.function.Consumer;
 
 
 /**
- * Implements the {@link ImmutableNavigableSet} interface using a Red-Black tree.
+ * Implements the {@link PersistentNavigableSet} interface using a Red-Black tree.
  * <p>
  * References:
  * <p>
@@ -39,7 +39,7 @@ import java.util.function.Consumer;
  *
  * @param <E> the element type
  */
-public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
+public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     final transient RedBlackTree<E, Void> root;
@@ -81,13 +81,13 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     /**
-     * Returns an immutable set that contains the provided elements, sorted according to the
+     * Returns an persistent set that contains the provided elements, sorted according to the
      * specified comparator.
      *
      * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param c          an iterable
      * @param <E>        the element type
-     * @return an immutable set of the provided elements
+     * @return an persistent set of the provided elements
      */
     @SuppressWarnings("unchecked")
     public static <E> RedBlackSet<E> copyOf(@Nullable Comparator<E> comparator, Iterable<? extends E> c) {
@@ -98,30 +98,30 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
             return (RedBlackSet<E>) r;
         }
         if (c instanceof MutableRedBlackSet<? extends E> r && r.comparator.equals(comparator)) {
-            return (RedBlackSet<E>) r.toImmutable();
+            return (RedBlackSet<E>) r.toPersistent();
         }
         return RedBlackSet.sortedOf(comparator).addAll(c);
     }
 
     /**
-     * Returns an immutable set that contains the provided elements sorted according to the
+     * Returns an persistent set that contains the provided elements sorted according to the
      * <i>natural ordering</i> of its elements.
      *
      * @param c   an iterable
      * @param <E> the element type
-     * @return an immutable set of the provided elements
+     * @return an persistent set of the provided elements
      */
     public static <E> RedBlackSet<E> copyOf(Iterable<? extends E> c) {
         return RedBlackSet.copyOf(NaturalComparator.instance(), c);
     }
 
     /**
-     * Returns an empty immutable set, sorted according to the
+     * Returns an empty persistent set, sorted according to the
      * specified comparator.
      *
      * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param <E>        the element type
-     * @return an empty immutable set
+     * @return an empty persistent set
      */
     public static <E> RedBlackSet<E> sortedOf(@Nullable Comparator<E> comparator) {
         if (comparator == null) {
@@ -131,13 +131,13 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     /**
-     * Returns an immutable set that contains the provided elements, sorted according to the
+     * Returns an persistent set that contains the provided elements, sorted according to the
      * specified comparator.
      *
      * @param comparator a comparator, if {@code null} the natural ordering of the elements is used
      * @param elements   elements
      * @param <E>        the element type
-     * @return an immutable set of the provided elements
+     * @return an persistent set of the provided elements
      */
     @SuppressWarnings({"varargs"})
     @SafeVarargs
@@ -150,18 +150,18 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     /**
-     * Returns an empty immutable set, sorted according to the
+     * Returns an empty persistent set, sorted according to the
      * <i>natural ordering</i> of its elements.
      *
      * @param <E> the element type
-     * @return an empty immutable set
+     * @return an empty persistent set
      */
     public static <E> RedBlackSet<E> of() {
         return new RedBlackSet<>(NaturalComparator.instance(), RedBlackTree.of(NaturalComparator.instance()));
     }
 
     /**
-     * Returns an immutable set that contains the provided elements, sorted according to the
+     * Returns an persistent set that contains the provided elements, sorted according to the
      * <i>natural ordering</i> of its elements.
      *
      * @param elements elements
@@ -192,7 +192,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public RedBlackSet<E> addAll(Iterable<? extends E> c) {
-        return (RedBlackSet<E>) ImmutableNavigableSet.super.addAll(c);
+        return (RedBlackSet<E>) PersistentNavigableSet.super.addAll(c);
     }
 
     @Override
@@ -206,7 +206,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public <T> ImmutableCollection<T> empty(@Nullable Comparator<T> comparator) {
+    public <T> PersistentCollection<T> empty(@Nullable Comparator<T> comparator) {
         return sortedOf(comparator);
     }
 
@@ -268,8 +268,8 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
     }
 
     @Override
-    public ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(
+    public ReadableSequencedSet<E> readOnlyReversed() {
+        return new ReadableSequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,
                 this::size,
@@ -287,12 +287,12 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public RedBlackSet<E> removeAll(Iterable<?> c) {
-        return (RedBlackSet<E>) ImmutableNavigableSet.super.removeAll(c);
+        return (RedBlackSet<E>) PersistentNavigableSet.super.removeAll(c);
     }
 
     @Override
     public RedBlackSet<E> retainAll(Iterable<?> c) {
-        return (RedBlackSet<E>) ImmutableNavigableSet.super.retainAll(c);
+        return (RedBlackSet<E>) PersistentNavigableSet.super.retainAll(c);
     }
 
     Iterator<E> reverseIterator() {
@@ -306,12 +306,12 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public int hashCode() {
-        return ReadOnlySet.iteratorToHashCode(iterator());
+        return ReadableSet.iteratorToHashCode(iterator());
     }
 
     @Override
     public boolean equals(@Nullable Object other) {
-        return ReadOnlySet.setEquals(this, other);
+        return ReadableSet.setEquals(this, other);
     }
 
     @Override
@@ -321,7 +321,7 @@ public class RedBlackSet<E> implements ImmutableNavigableSet<E>, Serializable {
 
     @Override
     public String toString() {
-        return ReadOnlyCollection.iterableToString(this);
+        return ReadableCollection.iterableToString(this);
     }
 
     @Serial

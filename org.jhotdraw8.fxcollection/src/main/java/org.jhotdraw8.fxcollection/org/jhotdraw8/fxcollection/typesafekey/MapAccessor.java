@@ -4,8 +4,8 @@
  */
 package org.jhotdraw8.fxcollection.typesafekey;
 
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
-import org.jhotdraw8.icollection.readonly.ReadOnlyMap;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
+import org.jhotdraw8.icollection.readable.ReadableMap;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.ParameterizedType;
@@ -46,7 +46,7 @@ public interface MapAccessor<T> {
     @Nullable
     T get(Map<? super Key<?>, Object> a);
 
-    default @Nullable T get(ReadOnlyMap<? super Key<?>, Object> a) {
+    default @Nullable T get(ReadableMap<? super Key<?>, Object> a) {
         return get(a.asMap());
     }
 
@@ -67,7 +67,7 @@ public interface MapAccessor<T> {
      * @param value The new value. Subclasses may require that the value is non-null.
      * @return The updated map.
      */
-    ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable T value);
+    PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable T value);
 
     /**
      * Sets the value of the attribute denoted by this accessor from a Map.
@@ -94,7 +94,7 @@ public interface MapAccessor<T> {
      * @param a A map.
      * @return The old value.
      */
-    ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a);
+    PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a);
 
     /**
      * Returns the value type of this map accessor.

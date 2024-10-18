@@ -17,9 +17,9 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 import org.jhotdraw8.icollection.ChampSet;
-import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
-import org.jhotdraw8.icollection.immutable.ImmutableSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.facade.ReadableSetFacade;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collections;
@@ -55,7 +55,7 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
         return keyMaps.computeIfAbsent(getClass(), k -> {
             int index = 0;
 
-            ImmutableSet<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
+            PersistentSet<MapAccessor<?>> accessors = Figure.getDeclaredAndInheritedMapAccessors(getClass());
             Map<Key<?>, Integer> m = new IdentityHashMap<>(accessors.size());
             for (MapAccessor<?> accessor : accessors) {
                 if (accessor instanceof Key<?>) {
@@ -112,11 +112,11 @@ public abstract class AbstractFigure extends AbstractStyleablePropertyBean
     }
 
     @Override
-    public ReadOnlySet<Figure> getReadOnlyLayoutObservers() {
+    public ReadableSet<Figure> getReadOnlyLayoutObservers() {
         if (layoutObservers == null) {
             return ChampSet.of();
         }
-        return new ReadOnlySetFacade<>(layoutObservers);
+        return new ReadableSetFacade<>(layoutObservers);
     }
 
     @Override

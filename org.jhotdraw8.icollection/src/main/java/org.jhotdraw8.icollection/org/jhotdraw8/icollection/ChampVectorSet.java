@@ -1,11 +1,10 @@
 /*
- * @(#)SimpleImmutableSequencedSet.java
+ * @(#)SimplePersistentSequencedSet.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
 import org.jhotdraw8.icollection.impl.IdentityObject;
 import org.jhotdraw8.icollection.impl.champ.BitmapIndexedNode;
 import org.jhotdraw8.icollection.impl.champ.ChangeEvent;
@@ -14,9 +13,10 @@ import org.jhotdraw8.icollection.impl.champ.ReverseTombSkippingVectorSpliterator
 import org.jhotdraw8.icollection.impl.champ.SequencedData;
 import org.jhotdraw8.icollection.impl.champ.SequencedElement;
 import org.jhotdraw8.icollection.impl.champ.TombSkippingVectorSpliterator;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jhotdraw8.icollection.serialization.SetSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -32,14 +32,14 @@ import java.util.Spliterators;
 
 
 /**
- * Implements the {@link ImmutableSequencedSet} interface using a Compressed
+ * Implements the {@link PersistentSequencedSet} interface using a Compressed
  * Hash-Array Mapped Prefix-tree (CHAMP) and a bit-mapped trie (Vector).
  * <p>
  * Features:
  * <ul>
  *     <li>supports up to 2<sup>30</sup> elements</li>
  *     <li>allows null elements</li>
- *     <li>is immutable</li>
+ *     <li>is persistent</li>
  *     <li>is thread-safe</li>
  *     <li>iterates in the order, in which elements were inserted</li>
  * </ul>
@@ -105,11 +105,11 @@ import java.util.Spliterators;
  * <p>
  * References:
  * <p>
- * For a similar design, see 'SimpleImmutableSequencedMap.scala'. Note, that this code is not a derivative
+ * For a similar design, see 'SimplePersistentSequencedMap.scala'. Note, that this code is not a derivative
  * of that code.
  * <dl>
- *     <dt>The Scala library. SimpleImmutableSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
- *     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/immutable/VectorMap.scala">github.com</a>
+ *     <dt>The Scala library. SimplePersistentSequencedMap.scala. Copyright EPFL and Lightbend, Inc. Apache License 2.0.</dt>
+ *     <dd><a href="https://github.com/scala/scala/blob/28eef15f3cc46f6d3dd1884e94329d7601dc20ee/src/library/scala/collection/persistent/VectorMap.scala">github.com</a>
  *     </dd>
  * </dl>
  *
@@ -118,7 +118,7 @@ import java.util.Spliterators;
 @SuppressWarnings("exports")
 public class ChampVectorSet<E>
 
-        implements Serializable, ImmutableSequencedSet<E> {
+        implements Serializable, PersistentSequencedSet<E> {
     private static final ChampVectorSet<?> EMPTY = new ChampVectorSet<>(
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
@@ -191,11 +191,11 @@ public class ChampVectorSet<E>
 
 
     /**
-     * Returns an immutable set that contains the provided elements.
+     * Returns an persistent set that contains the provided elements.
      *
      * @param c   an iterable
      * @param <E> the element type
-     * @return an immutable set of the provided elements
+     * @return an persistent set of the provided elements
      */
 
     @SuppressWarnings("unchecked")
@@ -205,10 +205,10 @@ public class ChampVectorSet<E>
 
 
     /**
-     * Returns an empty immutable set.
+     * Returns an empty persistent set.
      *
      * @param <E> the element type
-     * @return an empty immutable set
+     * @return an empty persistent set
      */
 
     @SuppressWarnings("unchecked")
@@ -218,11 +218,11 @@ public class ChampVectorSet<E>
 
 
     /**
-     * Returns an immutable set that contains the provided elements.
+     * Returns an persistent set that contains the provided elements.
      *
      * @param elements elements
      * @param <E>      the element type
-     * @return an immutable set of the provided elements
+     * @return an persistent set of the provided elements
      */
 
     @SuppressWarnings({"unchecked", "varargs"})
@@ -244,7 +244,7 @@ public class ChampVectorSet<E>
             return (ChampVectorSet<E>) s;
         }
         var m = toMutable();
-        return m.addAll(c) ? m.toImmutable() : this;
+        return m.addAll(c) ? m.toPersistent() : this;
     }
 
     public ChampVectorSet<E> addFirst(@Nullable E element) {
@@ -334,7 +334,7 @@ public class ChampVectorSet<E>
         if (other instanceof ChampVectorSet<?> that) {
             return size == that.size && root.equivalent(that.root);
         } else {
-            return ReadOnlySet.setEquals(this, other);
+            return ReadableSet.setEquals(this, other);
         }
     }
 
@@ -352,7 +352,7 @@ public class ChampVectorSet<E>
 
     @Override
     public int hashCode() {
-        return ReadOnlySet.iteratorToHashCode(iterator());
+        return ReadableSet.iteratorToHashCode(iterator());
     }
 
     @Override
@@ -366,8 +366,8 @@ public class ChampVectorSet<E>
     }
 
     @Override
-    public ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(
+    public ReadableSequencedSet<E> readOnlyReversed() {
+        return new ReadableSequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,
                 this::size,
@@ -397,7 +397,7 @@ public class ChampVectorSet<E>
     @Override
     public ChampVectorSet<E> removeAll(Iterable<?> c) {
         var m = toMutable();
-        return m.removeAll(c) ? m.toImmutable() : this;
+        return m.removeAll(c) ? m.toPersistent() : this;
     }
 
     @SuppressWarnings("unchecked")
@@ -442,7 +442,7 @@ public class ChampVectorSet<E>
     @Override
     public ChampVectorSet<E> retainAll(Iterable<?> c) {
         var m = toMutable();
-        return m.retainAll(c) ? m.toImmutable() : this;
+        return m.retainAll(c) ? m.toPersistent() : this;
     }
 
     Iterator<E> reverseIterator() {
@@ -484,7 +484,7 @@ public class ChampVectorSet<E>
      */
     @Override
     public String toString() {
-        return ReadOnlyCollection.iterableToString(this);
+        return ReadableCollection.iterableToString(this);
     }
 
     @Serial

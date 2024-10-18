@@ -11,7 +11,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -48,16 +48,16 @@ import java.util.function.Consumer;
  *
  * @param <T> the element type
  */
-public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
+public class ListCssConverter<T> implements CssConverter<PersistentList<T>> {
     /**
      * When nonnull this comparator is used to sort the list.
      */
     private final @Nullable Comparator<T> comparatorForSorting;
 
     private final CssConverter<T> elementConverter;
-    private final ImmutableList<CssToken> delimiter;
-    private final ImmutableList<CssToken> prefix;
-    private final ImmutableList<CssToken> suffix;
+    private final PersistentList<CssToken> delimiter;
+    private final PersistentList<CssToken> prefix;
+    private final PersistentList<CssToken> suffix;
     private final Set<Integer> delimiterChars;
 
     public ListCssConverter(CssConverter<T> elementConverter) {
@@ -140,7 +140,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
 
 
     @Override
-    public ImmutableList<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
+    public PersistentList<T> parse(CssTokenizer tt, @Nullable IdResolver idResolver) throws ParseException, IOException {
         if (tt.next() == CssTokenType.TT_IDENT && CssTokenType.IDENT_NONE.equals(tt.currentString())) {
             return VectorList.of();
         } else {
@@ -187,7 +187,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public <TT extends ImmutableList<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
+    public <TT extends PersistentList<T>> void produceTokens(@Nullable TT value, @Nullable IdSupplier idSupplier, Consumer<CssToken> out) throws IOException {
         if (value == null) {
             out.accept(new CssToken(CssTokenType.TT_IDENT, CssTokenType.IDENT_NONE));
         } else if (value.isEmpty()) {
@@ -225,7 +225,7 @@ public class ListCssConverter<T> implements CssConverter<ImmutableList<T>> {
     }
 
     @Override
-    public @Nullable ImmutableList<T> getDefaultValue() {
+    public @Nullable PersistentList<T> getDefaultValue() {
         return VectorList.of();
     }
 

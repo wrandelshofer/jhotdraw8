@@ -26,7 +26,7 @@ import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -90,7 +90,7 @@ import java.util.function.Consumer;
  * @author Werner Randelshofer
  */
 public class EffectCssConverter implements CssConverter<Effect> {
-    private static final ImmutableList<String> examples = VectorList.of(
+    private static final PersistentList<String> examples = VectorList.of(
             "blend(hard-light)",
             "bloom(10%)",
             "box-blur(10,3,3)",
@@ -125,7 +125,7 @@ public class EffectCssConverter implements CssConverter<Effect> {
     }
 
     @Override
-    public ImmutableList<String> getExamples() {
+    public PersistentList<String> getExamples() {
         return examples;
     }
 

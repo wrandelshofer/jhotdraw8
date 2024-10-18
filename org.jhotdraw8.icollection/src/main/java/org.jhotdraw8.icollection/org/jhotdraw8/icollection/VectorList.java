@@ -1,16 +1,16 @@
 /*
- * @(#)SimpleImmutableList.java
+ * @(#)SimplePersistentList.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlyListFacade;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.facade.ReadableListFacade;
 import org.jhotdraw8.icollection.impl.vector.BitMappedTrie;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedCollection;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableList;
+import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jhotdraw8.icollection.serialization.ListSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -27,7 +27,7 @@ import java.util.Spliterator;
 import java.util.stream.Stream;
 
 /**
- * Implements the {@link ImmutableList} interface using a bit-mapped trie
+ * Implements the {@link PersistentList} interface using a bit-mapped trie
  * (Vector).
  * <p>
  * The code has been derived from Vavr Vector.java.
@@ -36,7 +36,7 @@ import java.util.stream.Stream;
  * <ul>
  *     <li>supports up to 2<sup>31</sup> - 1 elements</li>
  *     <li>allows null elements</li>
- *     <li>is immutable</li>
+ *     <li>is persistent</li>
  *     <li>is thread-safe</li>
  *     <li>iterates in the order of the list</li>
  * </ul>
@@ -67,7 +67,7 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class VectorList<E> implements ImmutableList<E>, Serializable {
+public class VectorList<E> implements PersistentList<E>, Serializable {
     @Serial
     private static final long serialVersionUID = 0L;
     private static final VectorList<?> EMPTY = new VectorList<>();
@@ -91,12 +91,12 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         if (iterable == null) {
             this.trie = BitMappedTrie.empty();
         } else if (iterable instanceof Collection<?> c && c.isEmpty()
-                || iterable instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+                || iterable instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             this.trie = BitMappedTrie.empty();
         } else if (iterable instanceof VectorList<? extends E> that) {
             this.trie = (BitMappedTrie<E>) that.trie;
         } else if (iterable instanceof MutableVectorList<? extends E> mc) {
-            VectorList<? extends E> that = mc.toImmutable();
+            VectorList<? extends E> that = mc.toPersistent();
             this.trie = (BitMappedTrie<E>) that.trie;
         } else if (iterable instanceof Collection<?> c) {
             this.trie = BitMappedTrie.ofAll(c.toArray());
@@ -164,14 +164,14 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     public static <T> VectorList<T> copyOf(Iterable<? extends T> iterable) {
         Objects.requireNonNull(iterable, "iterable is null");
         if (iterable instanceof Collection<?> c && c.isEmpty()
-                || iterable instanceof ReadOnlyCollection<?> rc && rc.isEmpty()) {
+                || iterable instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return of();
         }
         if (iterable instanceof VectorList) {
             return (VectorList<T>) iterable;
         }
         if (iterable instanceof MutableVectorList<?> mc) {
-            return (VectorList<T>) mc.toImmutable();
+            return (VectorList<T>) mc.toPersistent();
         }
         if (iterable instanceof Collection<?> c) {
             return new VectorList<>(BitMappedTrie.ofAll(c.toArray()));
@@ -206,7 +206,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
             return copyOf(c);
         }
         int cSize = c instanceof Collection<?> cc ? cc.size() :
-                c instanceof ReadOnlyCollection<?> rcc ? rcc.size() : -1;
+                c instanceof ReadableCollection<?> rcc ? rcc.size() : -1;
         if (cSize == 0) {
             return this;
         }
@@ -245,8 +245,8 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
     }
 
     @Override
-    public ReadOnlySequencedCollection<E> readOnlyReversed() {
-        return new ReadOnlyListFacade<>(
+    public ReadableSequencedCollection<E> readOnlyReversed() {
+        return new ReadableListFacade<>(
                 this::size,
                 index -> get(size() - 1 - index),
                 () -> this);
@@ -269,12 +269,12 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public VectorList<E> removeFirst() {
-        return (VectorList<E>) ImmutableList.super.removeFirst();
+        return (VectorList<E>) PersistentList.super.removeFirst();
     }
 
     @Override
     public VectorList<E> removeLast() {
-        return (VectorList<E>) ImmutableList.super.removeLast();
+        return (VectorList<E>) PersistentList.super.removeLast();
     }
 
     @SuppressWarnings("unchecked")
@@ -286,7 +286,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
         final Collection<E> set;
         if (c instanceof Collection<?> cc) {
             set = (Collection<E>) cc;
-        } else if (c instanceof ReadOnlyCollection<?> rc) {
+        } else if (c instanceof ReadableCollection<?> rc) {
             set = (Collection<E>) rc.asCollection();
         } else {
             set = new HashSet<>();
@@ -303,7 +303,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
                 modified = true;
             }
         }
-        return modified ? t.toImmutable() : this;
+        return modified ? t.toPersistent() : this;
     }
 
     @Override
@@ -398,7 +398,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public int hashCode() {
-        return ReadOnlyList.iteratorToHashCode(iterator());
+        return ReadableList.iteratorToHashCode(iterator());
     }
 
     @Override
@@ -428,7 +428,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
 
     @Override
     public boolean equals(Object obj) {
-        return ReadOnlyList.listEquals(this, obj);
+        return ReadableList.listEquals(this, obj);
     }
 
     /**
@@ -441,7 +441,7 @@ public class VectorList<E> implements ImmutableList<E>, Serializable {
      */
     @Override
     public String toString() {
-        return ReadOnlyCollection.iterableToString(this);
+        return ReadableCollection.iterableToString(this);
     }
 
     private static class SerializationProxy<E> extends ListSerializationProxy<E> {

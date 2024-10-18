@@ -13,8 +13,8 @@ import org.jhotdraw8.draw.css.converter.StrokeStyleCssConverter;
 import org.jhotdraw8.draw.css.value.CssStrokeStyle;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
-import org.jhotdraw8.icollection.immutable.ImmutableMap;
+import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -28,7 +28,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
 
 
     private final MapAccessor<CssSize> dashOffsetKey;
-    private final MapAccessor<ImmutableList<CssSize>> dashArrayKey;
+    private final MapAccessor<PersistentList<CssSize>> dashArrayKey;
     private final MapAccessor<StrokeType> typeKey;
     private final MapAccessor<StrokeLineJoin> lineJoinKey;
     private final MapAccessor<StrokeLineCap> lineCapKey;
@@ -41,7 +41,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
                                       MapAccessor<StrokeLineJoin> lineJoinKey,
                                       MapAccessor<CssSize> miterLimitKey,
                                       MapAccessor<CssSize> dashOffsetKey,
-                                      MapAccessor<ImmutableList<CssSize>> dashArrayKey
+                                      MapAccessor<PersistentList<CssSize>> dashArrayKey
     ) {
         super(name, CssStrokeStyle.class, new MapAccessor<?>[]{
                         typeKey,
@@ -121,7 +121,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> put(ImmutableMap<Key<?>, Object> a, @Nullable CssStrokeStyle value) {
+    public PersistentMap<Key<?>, Object> put(PersistentMap<Key<?>, Object> a, @Nullable CssStrokeStyle value) {
         if (value == null) {
             return remove(a);
         } else {
@@ -135,7 +135,7 @@ public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<Css
     }
 
     @Override
-    public ImmutableMap<Key<?>, Object> remove(ImmutableMap<Key<?>, Object> a) {
+    public PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         a = typeKey.remove(a);
         a = lineJoinKey.remove(a);
         a = lineCapKey.remove(a);

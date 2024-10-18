@@ -1,7 +1,7 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySetFacade;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.facade.ReadableSetFacade;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -13,10 +13,10 @@ import java.util.Set;
  */
 public final class SetData {
     private final String name;
-    public final ReadOnlySet<Key> a;
-    public final ReadOnlySet<Key> b;
-    public final ReadOnlySet<Key> someAPlusSomeB;
-    public final ReadOnlySet<Key> c;
+    public final ReadableSet<Key> a;
+    public final ReadableSet<Key> b;
+    public final ReadableSet<Key> someAPlusSomeB;
+    public final ReadableSet<Key> c;
 
     /**
      * Creates a new instance with 3 maps of the same non-empty size.
@@ -26,9 +26,9 @@ public final class SetData {
      * @param b    a non-empty set that is disjoint from the other sets
      * @param c    a non-empty set that is disjoint from the other sets
      */
-    SetData(String name, ReadOnlySet<Key> a,
-            ReadOnlySet<Key> b,
-            ReadOnlySet<Key> c) {
+    SetData(String name, ReadableSet<Key> a,
+            ReadableSet<Key> b,
+            ReadableSet<Key> c) {
         this.name = name;
         this.a = a;
         this.b = b;
@@ -39,22 +39,22 @@ public final class SetData {
         aPlusB.addAll(a.asSet());
         aPlusB.addAll(b.asSet());
         someAPlusSomeB.addAll(aPlusB.subList(a.size() / 2, a.size() + (b.size() + 1) / 2));
-        this.someAPlusSomeB = new ReadOnlySetFacade<>(someAPlusSomeB);
+        this.someAPlusSomeB = new ReadableSetFacade<>(someAPlusSomeB);
     }
 
-    public ReadOnlySet<Key> a() {
+    public ReadableSet<Key> a() {
         return a;
     }
 
-    public ReadOnlySet<Key> c() {
+    public ReadableSet<Key> c() {
         return c;
     }
 
-    public ReadOnlySet<Key> b() {
+    public ReadableSet<Key> b() {
         return b;
     }
 
-    public ReadOnlySet<Key> someAPlusSomeB() {
+    public ReadableSet<Key> someAPlusSomeB() {
         return someAPlusSomeB;
     }
 
@@ -84,9 +84,9 @@ public final class SetData {
         }
 
         return new SetData(name,
-                new ReadOnlySetFacade<>(a),
-                new ReadOnlySetFacade<>(b),
-                new ReadOnlySetFacade<>(c));
+                new ReadableSetFacade<>(a),
+                new ReadableSetFacade<>(b),
+                new ReadableSetFacade<>(c));
     }
 
     public static SetData newNiceData(String name, int hashBitMask, int size, int bound) {
@@ -101,9 +101,9 @@ public final class SetData {
             c.add(new Key(keyA + size * 2, hashBitMask));
         }
         return new SetData(name,
-                new ReadOnlySetFacade<>(a),
-                new ReadOnlySetFacade<>(b),
-                new ReadOnlySetFacade<>(c));
+                new ReadableSetFacade<>(a),
+                new ReadableSetFacade<>(b),
+                new ReadableSetFacade<>(c));
     }
 
     private static int createNewValue(Random rng, Set<Integer> usedValues, int bound) {

@@ -8,8 +8,8 @@ import javafx.beans.property.MapProperty;
 import javafx.css.StyleOrigin;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.value.QualifiedName;
-import org.jhotdraw8.icollection.readonly.ReadOnlyList;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableList;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.text.ParseException;
@@ -240,7 +240,7 @@ public interface SelectorModel<T> {
      * @param element the element
      * @return the style classes or an empty set.
      */
-    ReadOnlySet<String> getStyleClasses(T element);
+    ReadableSet<String> getStyleClasses(T element);
 
     /**
      * Returns the pseudo classes of the element.
@@ -248,7 +248,7 @@ public interface SelectorModel<T> {
      * @param element the element
      * @return the pseudo classes or an empty set.
      */
-    ReadOnlySet<String> getPseudoClasses(T element);
+    ReadableSet<String> getPseudoClasses(T element);
 
     /**
      * Returns the style type of the element.
@@ -329,7 +329,7 @@ public interface SelectorModel<T> {
      *                  keyword "unset".
      * @throws ParseException if parsing the value failed
      */
-    void setAttribute(T element, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadOnlyList<CssToken> value) throws ParseException;
+    void setAttribute(T element, StyleOrigin origin, @Nullable String namespace, String name, @Nullable ReadableList<CssToken> value) throws ParseException;
 
 
 }

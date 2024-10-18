@@ -6,8 +6,8 @@
 package org.jhotdraw8.icollection.impl.champ;
 
 import org.jhotdraw8.icollection.impl.IdentityObject;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlySet;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
@@ -26,7 +26,7 @@ import java.util.stream.Stream;
  * @param <D> the data type of the CHAMP trie
  */
 public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> implements Serializable, Cloneable,
-        ReadOnlySet<E> {
+        ReadableSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
 
@@ -86,14 +86,14 @@ public abstract class AbstractMutableChampSet<E, D> extends AbstractSet<E> imple
             return false;
         }
         if ((c instanceof Collection<?> cc && cc.isEmpty())
-                || (c instanceof ReadOnlyCollection<?> rc) && rc.isEmpty()) {
+                || (c instanceof ReadableCollection<?> rc) && rc.isEmpty()) {
             clear();
             return true;
         }
         Predicate<E> predicate;
         if (c instanceof Collection<?> that) {
             predicate = that::contains;
-        } else if (c instanceof ReadOnlyCollection<?> that) {
+        } else if (c instanceof ReadableCollection<?> that) {
             predicate = that::contains;
         } else {
             HashSet<Object> that = new HashSet<>();

@@ -8,7 +8,7 @@ import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -105,9 +105,9 @@ public class AllWalksSpliteratorTest {
         );
     }
 
-    private void testFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<ImmutableList<Integer>> expected) {
+    private void testFindAllPaths(DirectedGraph<Integer, Double> graph, int start, int goal, double maxCost, List<PersistentList<Integer>> expected) {
         CombinedAllSequencesFinder<Integer, Double, Double> instance = newAllInstance(graph);
-        List<ImmutableList<Integer>> actual = StreamSupport.stream(instance.findAllVertexSequences(
+        List<PersistentList<Integer>> actual = StreamSupport.stream(instance.findAllVertexSequences(
                         Collections.singletonList(start),
                         a -> a == goal, Integer.MAX_VALUE, maxCost).spliterator(), false)
                 .map(OrderedPair::first).collect(Collectors.toList());

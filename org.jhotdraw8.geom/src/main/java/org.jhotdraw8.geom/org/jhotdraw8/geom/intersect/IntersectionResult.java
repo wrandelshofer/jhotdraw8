@@ -6,21 +6,21 @@ package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableCollection;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentCollection;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 
 import java.util.Collection;
 
 public class IntersectionResult {
     private final IntersectionStatus status;
-    private final ImmutableList<IntersectionPoint> intersections;
+    private final PersistentList<IntersectionPoint> intersections;
 
     public IntersectionResult(IntersectionStatus status, Collection<? extends IntersectionPoint> copyItems) {
         this.intersections = VectorList.copyOf(copyItems);
         this.status = status;
     }
 
-    public IntersectionResult(IntersectionStatus status, ImmutableCollection<? extends IntersectionPoint> copyItems) {
+    public IntersectionResult(IntersectionStatus status, PersistentCollection<? extends IntersectionPoint> copyItems) {
         this.intersections = VectorList.copyOf(copyItems);
         this.status = status;
     }
@@ -40,7 +40,7 @@ public class IntersectionResult {
                 .collect(DoubleArrayList::new, DoubleArrayList::add, DoubleArrayList::addAll);
     }
 
-    public ImmutableList<IntersectionPoint> intersections() {
+    public PersistentList<IntersectionPoint> intersections() {
         return intersections;
     }
 }

@@ -31,7 +31,7 @@ import org.jhotdraw8.fxbase.concurrent.PlatformUtil;
 import org.jhotdraw8.fxbase.control.ListViewUtil;
 import org.jhotdraw8.fxbase.converter.StringConverterAdapter;
 import org.jhotdraw8.icollection.VectorList;
-import org.jhotdraw8.icollection.immutable.ImmutableList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.xml.converter.UriXmlConverter;
 import org.jspecify.annotations.Nullable;
 
@@ -202,7 +202,7 @@ public class StylesheetsInspector extends AbstractDrawingInspector {
         }
         if (newValue != null) {
             // FIXME should listen to property changes of the Drawing object
-            ImmutableList<URI> stylesheets = newValue.get(Drawing.AUTHOR_STYLESHEETS);
+            PersistentList<URI> stylesheets = newValue.get(Drawing.AUTHOR_STYLESHEETS);
             if (stylesheets == null) {
                 listView.getItems().clear();
             } else {

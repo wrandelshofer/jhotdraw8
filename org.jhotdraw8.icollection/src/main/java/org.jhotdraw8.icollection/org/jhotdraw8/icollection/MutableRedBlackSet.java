@@ -1,15 +1,15 @@
 package org.jhotdraw8.icollection;
 
-import org.jhotdraw8.icollection.facade.ReadOnlySequencedSetFacade;
+import org.jhotdraw8.icollection.facade.ReadableSequencedSetFacade;
 import org.jhotdraw8.icollection.impl.iteration.FailFastIterator;
 import org.jhotdraw8.icollection.impl.iteration.FailFastSpliterator;
 import org.jhotdraw8.icollection.impl.iteration.MappedIterator;
 import org.jhotdraw8.icollection.impl.redblack.RedBlackTree;
 import org.jhotdraw8.icollection.navigable.DescendingNavigableSetView;
 import org.jhotdraw8.icollection.navigable.SubsetNavigableSetView;
-import org.jhotdraw8.icollection.readonly.ReadOnlyCollection;
-import org.jhotdraw8.icollection.readonly.ReadOnlyNavigableSet;
-import org.jhotdraw8.icollection.readonly.ReadOnlySequencedSet;
+import org.jhotdraw8.icollection.readable.ReadableCollection;
+import org.jhotdraw8.icollection.readable.ReadableNavigableSet;
+import org.jhotdraw8.icollection.readable.ReadableSequencedSet;
 import org.jhotdraw8.icollection.serialization.SortedSetSerializationProxy;
 import org.jspecify.annotations.Nullable;
 
@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  *
  * @param <E> the element type
  */
-public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSet<E>, Serializable, Cloneable, ReadOnlyNavigableSet<E> {
+public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSet<E>, Serializable, Cloneable, ReadableNavigableSet<E> {
     @Serial
     private static final long serialVersionUID = 0L;
     @SuppressWarnings({"serial", "RedundantSuppression"})// Conditionally serializable
@@ -264,8 +264,8 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     }
 
     @Override
-    public ReadOnlySequencedSet<E> readOnlyReversed() {
-        return new ReadOnlySequencedSetFacade<>(
+    public ReadableSequencedSet<E> readOnlyReversed() {
+        return new ReadableSequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,
                 this::size,
@@ -336,17 +336,17 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
 
 
     /**
-     * Returns an immutable copy of this set.
+     * Returns an persistent copy of this set.
      *
-     * @return an immutable copy
+     * @return an persistent copy
      */
-    public RedBlackSet<E> toImmutable() {
+    public RedBlackSet<E> toPersistent() {
         return new RedBlackSet<>(comparator, root);
     }
 
     @Override
     public String toString() {
-        return ReadOnlyCollection.iterableToString(this);
+        return ReadableCollection.iterableToString(this);
     }
 
     @Serial

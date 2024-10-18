@@ -8,7 +8,7 @@ import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.icollection.ChampVectorSet;
-import org.jhotdraw8.icollection.immutable.ImmutableSequencedSet;
+import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -28,7 +28,7 @@ import java.util.regex.Pattern;
  *
  * @param <T> the element type
  */
-public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
+public class SetXmlConverter<T> implements Converter<PersistentSequencedSet<T>> {
     private final Converter<T> elementConverter;
     private final @Nullable Pattern delimiterPattern;
     private final @Nullable String delimiter;
@@ -61,7 +61,7 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
     }
 
     @Override
-    public @Nullable ImmutableSequencedSet<T> fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
+    public @Nullable PersistentSequencedSet<T> fromString(CharBuffer in, @Nullable IdResolver idResolver) throws ParseException {
         String str = in.toString();
         if (prefix != null) {
             if (!str.startsWith(prefix)) {
@@ -93,7 +93,7 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
     }
 
     @Override
-    public <TT extends ImmutableSequencedSet<T>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
+    public <TT extends PersistentSequencedSet<T>> void toString(Appendable out, @Nullable IdSupplier idSupplier, @Nullable TT value) throws IOException {
         if (prefix != null) {
             out.append(prefix);
         }
@@ -114,7 +114,7 @@ public class SetXmlConverter<T> implements Converter<ImmutableSequencedSet<T>> {
     }
 
     @Override
-    public @Nullable ImmutableSequencedSet<T> getDefaultValue() {
+    public @Nullable PersistentSequencedSet<T> getDefaultValue() {
         return null;
     }
 }
