@@ -431,11 +431,11 @@ public class StaticSpatialIndex {
     /**
      * {@link #query(double, double, double, double, IntArrayList, IntArrayDeque)}
      *
-     * @param minX
-     * @param minY
-     * @param maxX
-     * @param maxY
-     * @param results
+     * @param minX query rectangle min x coordinate
+     * @param minY query rectangle min y coordinate
+     * @param maxX query rectangle max x coordinate
+     * @param maxY query rectangle max y coordinate
+     * @param results result indices
      */
     // See other overloads for details.
     public void query(double minX, double minY, double maxX, double maxY, IntArrayList results) {
@@ -450,6 +450,13 @@ public class StaticSpatialIndex {
     /**
      * Query the spatial index adding indexes to the results vector given. This overload accepts an
      * existing vector to use as a stack and takes care of clearing the stack before use.
+     *
+     * @param minX query rectangle min x coordinate
+     * @param minY query rectangle min y coordinate
+     * @param maxX query rectangle max x coordinate
+     * @param maxY query rectangle max y coordinate
+     * @param results result indices
+     * @param stack stack for reuse
      */
     public void query(double minX, double minY, double maxX, double maxY, IntArrayList results,
                       IntArrayDeque stack) {
@@ -464,11 +471,12 @@ public class StaticSpatialIndex {
     /**
      * {@link #visitQuery(double, double, double, double, IntPredicate, IntArrayDeque)}
      *
-     * @param minX
-     * @param minY
-     * @param maxX
-     * @param maxY
-     * @param visitor
+     *
+     * @param minX query rectangle min x coordinate
+     * @param minY query rectangle min y coordinate
+     * @param maxX query rectangle max x coordinate
+     * @param maxY query rectangle max y coordinate
+     * @param visitor visitor
      */
     public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor) {
         IntArrayDeque stack = new IntArrayDeque(16);
@@ -480,6 +488,13 @@ public class StaticSpatialIndex {
      * box given. Visitor function has the signature boolean(int index), if visitor returns false
      * the query stops early, otherwise the query continues. This overload accepts an existing vector
      * to use as a stack and takes care of clearing the stack before use.
+     *
+     * @param minX query rectangle min x coordinate
+     * @param minY query rectangle min y coordinate
+     * @param maxX query rectangle max x coordinate
+     * @param maxY query rectangle max y coordinate
+     * @param visitor visitor
+     * @param stack stack for reuse
      */
     public void visitQuery(double minX, double minY, double maxX, double maxY, IntPredicate visitor,
                            IntArrayDeque stack) {
