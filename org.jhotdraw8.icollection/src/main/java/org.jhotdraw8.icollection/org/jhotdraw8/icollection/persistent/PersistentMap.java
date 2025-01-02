@@ -12,6 +12,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.BiFunction;
 
 /**
  * An interface to an persistent map; the implementation guarantees that the state
@@ -203,4 +205,36 @@ public interface PersistentMap<K, V> extends ReadableMap<K, V> {
      * @return the maximal size
      */
     int maxSize();
+
+    /**
+     * If the specified key is not already associated with a value or is associated with null,
+     * associates it with the given non-null value.
+     * <p>
+     * Otherwise, replaces the associated value with the results of the given remapping function,
+     * or removes if the result is null. This method may be of use when combining multiple mapped
+     * values for a key. For example, to either create or append a String msg to a value mapping:
+     * <pre>
+     * map.merge(key, msg, String::concat)
+     * </pre>
+     *
+     * @param key               key with which the resulting value is to be associated
+     * @param value             the non-null value to be merged with the existing value associated with the key or,
+     *                          if no existing value or a null value is associated with the key,
+     *                          to be associated with the key
+     * @param remappingFunction – the remapping function to recompute a value if present
+     * @return
+     */
+    default PersistentMap<K, V> merge(K key, V value,
+                                      BiFunction<? super V, ? super V, ? extends @Nullable V> remappingFunction) {
+        Objects.requireNonNull(remappingFunction);
+        Objects.requireNonNull(value);
+        V oldValue = get(key);
+        V newValue = (oldValue == null) ? value :
+                remappingFunction.apply(oldValue, value);
+        if (newValue == null) {
+            return remove(key);
+        } else {
+            return put(key, newValue);
+        }
+    }
 }
