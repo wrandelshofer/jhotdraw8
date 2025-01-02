@@ -47,37 +47,21 @@ public class ChampMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class org.jhotdraw8.icollection.SimpleImmutableMap with 1000 elements.
+     * class org.jhotdraw8.icollection.ChampMap with 1000 elements.
      * total size              : 68528
      * element size            : 48
      * data size               : 48000 70%
      * data structure size     : 20528 29%
      * overhead per element    : 20.528 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.SimpleImmutableMap@95e33ccd footprint:
+     * org.jhotdraw8.icollection.ChampMap@e383572d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
      *        283        48     13712   [Ljava.lang.Object;
-     *          1        24        24   org.jhotdraw8.icollection.SimpleImmutableMap
+     *          1        24        24   org.jhotdraw8.icollection.ChampMap
      *        283        24      6792   org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
      *       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
      *       2567               68528   (total)
-     * </pre>
-     * <pre>
-     * class org.jhotdraw8.icollection.SimpleImmutableMap with 1 elements.
-     * total size              : 120
-     * element size            : 48
-     * data size               : 48 40%
-     * data structure size     : 72 60%
-     * overhead per element    : 72.0 bytes
-     * ----footprint---
-     * org.jhotdraw8.icollection.SimpleImmutableMap@6c2ed0cdd footprint:
-     *      COUNT       AVG       SUM   DESCRIPTION
-     *          1        24        24   [Ljava.lang.Object;
-     *          1        24        24   org.jhotdraw8.icollection.SimpleImmutableMap
-     *          1        24        24   org.jhotdraw8.icollection.impl.champmap.BitmapIndexedNode
-     *          2        24        48   org.jhotdraw8.icollection.jmh.Key
-     *          5                 120   (total)
      * </pre>
      */
     @Test

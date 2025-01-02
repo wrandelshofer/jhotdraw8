@@ -16,33 +16,33 @@ public class ChampVectorMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class org.jhotdraw8.icollection.SimpleImmutableSequencedMap with 1000 elements.
-     * total size              : 97216
+     * class org.jhotdraw8.icollection.ChampVectorMap with 1000 elements.
+     * total size              : 95736
      * element size            : 48
-     * data size               : 48000 49%
-     * data structure size     : 49216 50%
-     * overhead per element    : 49.216 bytes
+     * data size               : 48000 50%
+     * data structure size     : 47736 49%
+     * overhead per element    : 47.736 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.SimpleImmutableSequencedMap@42530531d footprint:
+     * org.jhotdraw8.icollection.ChampVectorMap@512baff6d footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *        343        44     15176   [Ljava.lang.Object;
-     *          1        24        24   org.jhotdraw8.icollection.SimpleImmutableList
-     *          1        32        32   org.jhotdraw8.icollection.SimpleImmutableSequencedMap
+     *        316        46     14568   [Ljava.lang.Object;
+     *          1        32        32   org.jhotdraw8.icollection.ChampVectorMap
+     *          1        16        16   org.jhotdraw8.icollection.VectorList
      *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *        310        32      9920   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *        283        32      9056   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
      *       1000        24     24000   org.jhotdraw8.icollection.impl.champ.SequencedEntry
      *          1        16        16   org.jhotdraw8.icollection.impl.vector.ArrayType$ObjectArrayType
      *          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
-     *       2000        24     48000   org.jhotdraw8.icollection.jmh.Key
-     *       3658               97216   (total)
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Key
+     *       1000        24     24000   org.jhotdraw8.icollection.jmh.Value
+     *       3604               95736   (total)
      * </pre>
      */
     @Test
     @Disabled
-
     public void estimateMemoryUsage() {
         int size = 1_000;
-            final int mask = -1;//~64;
+        final int mask = -1;
         var data = generateMap(size, mask, size * 10);
         ChampVectorMap<Key, Value> mapA = ChampVectorMap.copyOf(data);
             estimateMemoryUsage(mapA, mapA.iterator().next(), mapA.size());
@@ -50,27 +50,28 @@ public class ChampVectorMapJol extends AbstractJol {
 
     /**
      * <pre>
-     * class org.jhotdraw8.icollection.SimpleImmutableSequencedMap with 250 elements.
-     * total size              : 25752
+     * class org.jhotdraw8.icollection.ChampVectorMap with 250 elements.
+     * total size              : 26832
      * element size            : 48
-     * data size               : 12000 46%
-     * data structure size     : 13752 53%
-     * overhead per element    : 55.008 bytes
+     * data size               : 12000 44%
+     * data structure size     : 14832 55%
+     * overhead per element    : 59.328 bytes
      * ----footprint---
-     * org.jhotdraw8.icollection.SimpleImmutableSequencedMap@62010f5cd footprint:
+     * org.jhotdraw8.icollection.ChampVectorMap@32c726eed footprint:
      *      COUNT       AVG       SUM   DESCRIPTION
-     *         92        53      4944   [Ljava.lang.Object;
-     *          1        16        16   org.jhotdraw8.icollection.SimpleImmutableList
-     *          1        32        32   org.jhotdraw8.icollection.SimpleImmutableSequencedMap
+     *        115        47      5432   [Ljava.lang.Object;
+     *          1        32        32   org.jhotdraw8.icollection.ChampVectorMap
+     *          1        16        16   org.jhotdraw8.icollection.VectorList
      *          1        16        16   org.jhotdraw8.icollection.impl.IdentityObject
-     *         75        32      2400   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
-     *        251        24      6024   org.jhotdraw8.icollection.impl.champ.SequencedEntry
-     *         14        16       224   org.jhotdraw8.icollection.impl.champ.Tombstone
+     *         95        32      3040   org.jhotdraw8.icollection.impl.champ.MutableBitmapIndexedNode
+     *          3        24        72   org.jhotdraw8.icollection.impl.champ.MutableHashCollisionNode
+     *        250        24      6000   org.jhotdraw8.icollection.impl.champ.SequencedEntry
+     *         11        16       176   org.jhotdraw8.icollection.impl.champ.Tombstone
      *          1        16        16   org.jhotdraw8.icollection.impl.vector.ArrayType$ObjectArrayType
      *          1        32        32   org.jhotdraw8.icollection.impl.vector.BitMappedTrie
-     *        251        24      6024   org.jhotdraw8.icollection.jmh.Key
-     *        251        24      6024   org.jhotdraw8.icollection.jmh.Value
-     *        939               25752   (total)
+     *        250        24      6000   org.jhotdraw8.icollection.jmh.Key
+     *        250        24      6000   org.jhotdraw8.icollection.jmh.Value
+     *        979               26832   (total)
      * </pre>
      */
     @Test
