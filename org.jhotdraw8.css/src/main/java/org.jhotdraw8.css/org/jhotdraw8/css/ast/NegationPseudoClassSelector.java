@@ -61,4 +61,9 @@ public class NegationPseudoClassSelector extends FunctionPseudoClassSelector {
     public int hashCode() {
         return Objects.hash(super.hashCode(), selector);
     }
+
+    @Override
+    public int getSpecificity() {
+        return selector.getSpecificity();
+    }
 }
