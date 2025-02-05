@@ -19,8 +19,8 @@ public abstract class PseudoClassSelector extends SimpleSelector {
     }
 
     @Override
-    public final int getSpecificity() {
-        return 10;
+    public int getSpecificity() {
+        return 1;
     }
 
 }
