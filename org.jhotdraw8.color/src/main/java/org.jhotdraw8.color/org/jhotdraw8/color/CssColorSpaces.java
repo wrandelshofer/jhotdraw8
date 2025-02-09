@@ -11,7 +11,7 @@ import java.util.Map;
  * References:
  * <dl>
  *     <dt>CSS Color Module Level 4. Chapter 4. Representing Colors: the &lt;color&gt; type.</dt>
- *     <dd><a href="https://www.w3.org/TR/2022/CRD-css-color-4-20221101/#color-type">w3.org</a></dd>
+ *     <dd><a href="https://www.w3.org/TR/2024/CRD-css-color-4-20240213/#typedef-colorspace-params">w3.org</a></dd>
  * </dl>
  */
 public class CssColorSpaces {
@@ -28,7 +28,7 @@ public class CssColorSpaces {
     public final static Map<String, NamedColorSpace> COLOR_SPACES;
 
     static {
-        D50XyzColorSpace cieXyzColorSpace = new D50XyzColorSpace();
+        D65XyzColorSpace d65XyzColorSpace = new D65XyzColorSpace();
         COLOR_SPACES = Map.of(
                 "srgb", new SrgbColorSpace(),
                 "srgb-linear", new LinearSrgbColorSpace(),
@@ -36,9 +36,9 @@ public class CssColorSpaces {
                 "a98-rgb", new A98RgbColorSpace(),
                 "prophoto-rgb", new ProPhotoRgbColorSpace(),
                 "rec2020", new Rec2020ColorSpace(),
-                "xyz", cieXyzColorSpace,
-                "xyz-d50", new D65XyzColorSpace(),
-                "xyz-d65", cieXyzColorSpace
+                "xyz", d65XyzColorSpace,
+                "xyz-d65", d65XyzColorSpace,
+                "xyz-d50", new D50XyzColorSpace()
         );
     }
 }

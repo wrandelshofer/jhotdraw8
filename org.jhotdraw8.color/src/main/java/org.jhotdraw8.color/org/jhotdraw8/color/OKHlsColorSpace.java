@@ -224,7 +224,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
         // Approximate max saturation using a polynomial:
         double S = k0 + k1 * a + k2 * b + k3 * a * a + k4 * a * b;
 
-        // Do one step Halley's method to get closer
+        // Do one-step Halley's method to get closer
         // this gives an error less than 10e6, except for some blue hues where the dS/dh is close to infinite
         // this should be sufficient for most applications, otherwise do two/three steps
 
@@ -327,7 +327,7 @@ public class OKHlsColorSpace extends AbstractNamedColorSpace {
             // First intersect with triangle
             t = cusp.C * (L0 - 1.0) / (C1 * (cusp.L - 1.0) + cusp.C * (L0 - L1));
 
-            // Then one step Halley's method
+            // Then one-step Halley's method
             {
                 double dL = L1 - L0;
                 double dC = C1;
