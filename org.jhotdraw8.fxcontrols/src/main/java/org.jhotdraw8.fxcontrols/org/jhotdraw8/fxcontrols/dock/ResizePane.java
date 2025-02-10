@@ -12,7 +12,6 @@ import javafx.scene.layout.BorderPane;
 /**
  * ResizePane.
  *
- * @author Werner Randelshofer
  */
 public class ResizePane extends BorderPane {
 

@@ -25,7 +25,6 @@ import java.util.Map;
  * subclass.
  * </p>
  *
- * @author Werner Randelshofer
  */
 public class FigureSpecificConstrainer extends AbstractConstrainer implements Constrainer {
 

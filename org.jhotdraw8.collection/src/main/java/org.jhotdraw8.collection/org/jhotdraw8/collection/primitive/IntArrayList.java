@@ -25,7 +25,6 @@ import java.util.stream.IntStream;
 /**
  * A {@code int}-valued list backed by a primitive array.
  *
- * @author Werner Randelshofer
  */
 public class IntArrayList extends AbstractList<Integer> implements IntList {
     private static final int[] EMPTY = new int[0];

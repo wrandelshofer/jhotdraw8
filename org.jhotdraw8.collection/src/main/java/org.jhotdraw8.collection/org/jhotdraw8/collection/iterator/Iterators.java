@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * Provides static utility methods for iterators.
  *
- * @author Werner Randelshofer
  */
 public class Iterators {
 

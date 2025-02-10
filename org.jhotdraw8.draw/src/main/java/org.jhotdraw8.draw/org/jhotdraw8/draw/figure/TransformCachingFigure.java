@@ -15,7 +15,6 @@ import org.jspecify.annotations.Nullable;
  * This implementation is somewhat inefficient because we store the cached
  * values in a map.
  *
- * @author Werner Randelshofer
  */
 public interface TransformCachingFigure extends Figure {
     boolean CACHE = true;

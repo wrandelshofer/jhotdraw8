@@ -37,7 +37,6 @@ import static org.jhotdraw8.geom.Lines.lerp;
  *     <dd><a href="https://malczak.info/blog/quadratic-bezier-curve-length">malczak.info</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class QuadCurves {
 

@@ -27,7 +27,6 @@ import java.util.function.Consumer;
  * Replace := TT_STRING;
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class RegexCssConverter extends AbstractCssConverter<RegexReplace> {
 

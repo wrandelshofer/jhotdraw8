@@ -42,7 +42,6 @@ import java.awt.geom.PathIterator;
  * <p>
  * The user can insert a new point by double clicking the line.
  *
- * @author Werner Randelshofer
  */
 public class PolygonOutlineHandle extends AbstractHandle {
 

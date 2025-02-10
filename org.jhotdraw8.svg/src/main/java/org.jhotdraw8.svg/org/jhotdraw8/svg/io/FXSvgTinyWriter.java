@@ -27,7 +27,6 @@ import java.util.List;
  *     <dd><a href="https://www.w3.org/TR/SVGTiny12/">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class FXSvgTinyWriter extends AbstractFXSvgWriter {
 

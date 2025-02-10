@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * CssStrokeConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class CssStrokeConverterTest {
 

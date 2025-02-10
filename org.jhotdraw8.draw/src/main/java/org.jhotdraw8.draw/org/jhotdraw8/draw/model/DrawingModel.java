@@ -49,7 +49,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * {@code DrawingModel}.
  * </p>
  *
- * @author Werner Randelshofer
  */
 public interface DrawingModel extends Observable, TreeModel<Figure> {
 

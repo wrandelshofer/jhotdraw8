@@ -44,7 +44,6 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 /**
  * PrinterExportFormat.
  *
- * @author Werner Randelshofer
  */
 public class PrinterExportFormat extends AbstractExportOutputFormat {
 

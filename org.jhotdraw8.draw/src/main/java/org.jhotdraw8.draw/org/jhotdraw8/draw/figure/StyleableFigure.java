@@ -20,7 +20,6 @@ import org.jspecify.annotations.Nullable;
  * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
  * and a non-user-editable "pseudo-class" property.
  *
- * @author Werner Randelshofer
  */
 public interface StyleableFigure extends Figure {
 

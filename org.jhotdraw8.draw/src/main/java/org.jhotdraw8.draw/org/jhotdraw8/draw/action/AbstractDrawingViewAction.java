@@ -24,7 +24,6 @@ import javax.swing.event.UndoableEditEvent;
  * the active {@code DrawingView}. If no drawing view is active, this action is
  * disabled.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingViewAction extends AbstractAction {
 

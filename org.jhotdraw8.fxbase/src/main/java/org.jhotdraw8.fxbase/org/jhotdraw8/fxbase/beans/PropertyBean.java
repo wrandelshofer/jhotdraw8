@@ -8,11 +8,11 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableMap;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.MapEntryProperty;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -39,7 +39,6 @@ import java.util.Objects;
  * }
  * }</code></pre>
  *
- * @author Werner Randelshofer
  */
 public interface PropertyBean {
 

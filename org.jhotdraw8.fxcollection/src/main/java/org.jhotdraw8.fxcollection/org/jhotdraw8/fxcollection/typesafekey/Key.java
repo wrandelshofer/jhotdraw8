@@ -41,7 +41,6 @@ import java.util.Objects;
  * of a Key will result in two distinct entries in the hash map, even if both
  * keys have the same name.
  *
- * @author Werner Randelshofer
  * @param <T> the value type
  */
 public interface Key<T> extends MapAccessor<T> {

@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * A "class selector" matches an element if the element has a style class with
  * the specified value.
  *
- * @author Werner Randelshofer
  */
 public class ClassSelector extends SimpleSelector {
 

@@ -16,7 +16,6 @@ import org.jspecify.annotations.Nullable;
  * BooleanPropertyCheckBoxTreeTableCell.
  *
  * @param <S> the row type
- * @author Werner Randelshofer
  */
 public class BooleanPropertyCheckBoxTreeTableCell<S> extends TreeTableCell<S, Boolean> {
 

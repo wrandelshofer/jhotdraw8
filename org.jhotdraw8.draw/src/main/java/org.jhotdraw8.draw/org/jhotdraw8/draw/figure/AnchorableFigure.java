@@ -13,7 +13,6 @@ import org.jhotdraw8.draw.key.SymmetricPoint2DStyleableMapAccessor;
  * to the bounds of the figure. The anchor is used when the figure is aligned
  * with the grid constrainer.
  *
- * @author Werner Randelshofer
  */
 public interface AnchorableFigure extends Figure {
     /**

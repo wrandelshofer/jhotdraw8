@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * attribute with the specified name and its value ends with the specified
  * substring.
  *
- * @author Werner Randelshofer
  */
 public class SuffixMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;

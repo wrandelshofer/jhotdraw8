@@ -20,7 +20,6 @@ import java.util.stream.Stream;
  * Provides a {@link List} facade to a set of {@code List} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ListFacade<E> extends AbstractList<E>
         implements SequencedCollection<E> {

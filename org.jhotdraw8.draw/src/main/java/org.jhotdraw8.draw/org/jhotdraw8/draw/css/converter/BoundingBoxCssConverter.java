@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * Converts a {@code javafx.geometry.BoundingBox} into a {@code String} and vice
  * versa.
  *
- * @author Werner Randelshofer
  */
 public class BoundingBoxCssConverter extends AbstractCssConverter<BoundingBox> {
     private final boolean withSpace;

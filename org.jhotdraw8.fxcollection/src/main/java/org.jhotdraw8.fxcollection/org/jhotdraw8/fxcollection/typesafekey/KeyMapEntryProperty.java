@@ -15,7 +15,6 @@ import org.jspecify.annotations.Nullable;
  * of Key.
  *
  * @param <V> the value type
- * @author Werner Randelshofer
  */
 public class KeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
     private final MapAccessor<V> accessor;

@@ -24,7 +24,6 @@ import java.util.List;
  *     <dd><a href="https://www.w3.org/TR/SVG11/">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class FXSvgFullWriter extends AbstractFXSvgWriter {
     private static final String SVG_VERSION = "1.1";

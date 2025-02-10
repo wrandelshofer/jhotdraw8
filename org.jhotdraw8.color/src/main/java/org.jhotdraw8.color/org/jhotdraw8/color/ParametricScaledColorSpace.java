@@ -11,7 +11,6 @@ import java.io.Serial;
  * A parametric color space with scaled components computed from an RGB color space
  * with component values in the range {@code [0, 1]}.
  *
- * @author Werner Randelshofer
  */
 public class ParametricScaledColorSpace extends AbstractNamedColorSpace {
 

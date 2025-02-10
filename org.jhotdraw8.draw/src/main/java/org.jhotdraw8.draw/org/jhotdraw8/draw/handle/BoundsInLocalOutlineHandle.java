@@ -24,7 +24,6 @@ import org.jspecify.annotations.Nullable;
  * Draws the {@code boundsInLocal} of a {@code Figure}, but does not provide any
  * interactions.
  *
- * @author Werner Randelshofer
  */
 public class BoundsInLocalOutlineHandle extends AbstractHandle {
 

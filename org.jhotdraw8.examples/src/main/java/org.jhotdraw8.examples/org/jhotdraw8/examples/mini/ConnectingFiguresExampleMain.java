@@ -20,7 +20,6 @@ import org.jhotdraw8.draw.tool.Tool;
  * ConnectingFiguresSample demonstrates how to connect two figures with a
  * LineConnectionFigure.
  *
- * @author Werner Randelshofer
  */
 public class ConnectingFiguresExampleMain extends Application {
 

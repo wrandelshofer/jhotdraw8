@@ -12,7 +12,6 @@ import java.util.Objects;
  * ReadOnlyNonNullWrapper.
  *
  * @param <T> the type of the wrapped object
- * @author Werner Randelshofer
  */
 public class ReadOnlyNonNullWrapper<T> extends ReadOnlyObjectWrapper<T> {
 

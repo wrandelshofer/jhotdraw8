@@ -12,7 +12,6 @@ import javafx.collections.ObservableList;
 /**
  * FontFamily.
  *
- * @author Werner Randelshofer
  */
 public class FontFamily {
     private final StringProperty name = new SimpleStringProperty();

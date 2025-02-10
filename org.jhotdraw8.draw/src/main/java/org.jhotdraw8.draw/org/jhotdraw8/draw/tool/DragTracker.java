@@ -4,15 +4,14 @@
  */
 package org.jhotdraw8.draw.tool;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A <em>drag tracker</em> provides the behavior for dragging selected figures
  * to the {@link SelectionTool}.
  *
- * @author Werner Randelshofer
  */
 public interface DragTracker extends Tracker {
 

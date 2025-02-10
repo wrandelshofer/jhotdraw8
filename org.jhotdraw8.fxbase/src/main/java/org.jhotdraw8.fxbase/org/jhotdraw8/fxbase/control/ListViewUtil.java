@@ -18,9 +18,9 @@ import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.util.Callback;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxbase.clipboard.ClipboardIO;
 import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 import java.util.ArrayList;
@@ -34,7 +34,6 @@ import static java.lang.Math.min;
 /**
  * Provides static utility methods for {@link ListView}.
  *
- * @author Werner Randelshofer
  */
 public class ListViewUtil {
 

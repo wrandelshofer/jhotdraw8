@@ -13,7 +13,6 @@ import java.util.NoSuchElementException;
 /**
  * BezierPathIterator.
  *
- * @author Werner Randelshofer
  */
 public class BezierPathIterator implements PathIterator {
     enum State {

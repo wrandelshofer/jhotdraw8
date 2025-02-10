@@ -21,7 +21,6 @@ import java.util.function.Supplier;
  *
  * @param <K> the key type
  * @param <V> the value type
- * @author Werner Randelshofer
  */
 public class ReadableMapFacade<K, V> implements ReadableMap<K, V> {
     protected final Supplier<Iterator<Map.Entry<K, V>>> iteratorFunction;

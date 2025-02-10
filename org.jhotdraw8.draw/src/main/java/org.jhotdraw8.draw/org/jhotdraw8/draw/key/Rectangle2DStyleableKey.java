@@ -12,7 +12,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 /**
  * Rectangle2DStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class Rectangle2DStyleableKey extends AbstractStyleableKey<Rectangle2D> implements WritableStyleableMapAccessor<Rectangle2D> {
 

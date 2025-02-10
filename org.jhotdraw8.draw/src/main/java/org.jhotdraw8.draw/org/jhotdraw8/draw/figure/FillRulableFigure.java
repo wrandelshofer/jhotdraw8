@@ -15,7 +15,6 @@ import org.jspecify.annotations.Nullable;
  * Interface figures which render a {@code javafx.scene.shape.Shape} and can have
  * a fill rule.
  *
- * @author Werner Randelshofer
  */
 public interface FillRulableFigure extends Figure {
 

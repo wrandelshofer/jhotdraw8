@@ -22,7 +22,6 @@ import java.util.ArrayList;
 /**
  * Represents an SVG 'radialGradient' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgRadialGradientFigure extends AbstractSvgGradientFigure {
 

@@ -11,7 +11,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * SimpleObservable.
  *
- * @author Werner Randelshofer
  */
 public class SimpleObservable implements ObservableMixin {
 

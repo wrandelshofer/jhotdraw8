@@ -14,7 +14,6 @@ import org.jhotdraw8.geom.Points;
  * A LocatorHandle implements a Handle by delegating the location requests to a
  * Locator object.
  *
- * @author Werner Randelshofer
  * @see Locator
  */
 public abstract class LocatorHandle extends AbstractHandle {

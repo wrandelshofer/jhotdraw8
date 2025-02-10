@@ -56,7 +56,6 @@ import java.util.function.Predicate;
  * out and that CSS styles are applied before rendering the drawing.
  * </p>
  *
- * @author Werner Randelshofer
  * Responsibility, Handler.
  */
 public interface DrawingView extends WritableRenderContext {

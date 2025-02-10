@@ -11,7 +11,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 /**
  * PrintRenderContext.
  *
- * @author Werner Randelshofer
  */
 public interface PrintRenderContext extends RenderContext {
 

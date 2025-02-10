@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * AnyPathBuilderTest.
  *
- * @author Werner Randelshofer
  */
 public class ArbitraryArcPathSearchAlgoTest {
 

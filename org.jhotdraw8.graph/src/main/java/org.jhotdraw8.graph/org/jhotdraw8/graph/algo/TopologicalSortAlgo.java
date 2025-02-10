@@ -26,7 +26,6 @@ import java.util.function.Function;
 /**
  * Provides topological sort algorithms for directed graphs.
  *
- * @author Werner Randelshofer
  */
 public class TopologicalSortAlgo {
     public TopologicalSortAlgo() {

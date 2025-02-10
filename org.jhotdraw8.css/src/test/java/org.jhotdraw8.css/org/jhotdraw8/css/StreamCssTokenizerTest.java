@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * StreamCssTokenizerTest.
  *
- * @author Werner Randelshofer
  */
 public class StreamCssTokenizerTest {
 

@@ -22,7 +22,6 @@ import java.util.stream.StreamSupport;
  * StylesheetsManager.
  *
  * @param <E> the element type that can be styled by this style manager
- * @author Werner Randelshofer
  */
 public interface StylesheetsManager<E> {
 

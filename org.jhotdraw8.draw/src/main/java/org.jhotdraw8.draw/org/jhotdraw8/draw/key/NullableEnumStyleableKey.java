@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
  * NullableEnumStyleableKey.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public class NullableEnumStyleableKey<T extends Enum<T>> extends NullableObjectStyleableKey<T> implements WritableStyleableMapAccessor<T> {
 

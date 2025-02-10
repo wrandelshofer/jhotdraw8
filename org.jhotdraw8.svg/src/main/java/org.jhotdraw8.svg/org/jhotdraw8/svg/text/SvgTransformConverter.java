@@ -51,7 +51,6 @@ import static java.lang.Math.tan;
  *     <dd><a href="http://www.w3.org/TR/2008/REC-SVGTiny12-20081222/coords.html#TransformAttribute">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class SvgTransformConverter extends AbstractCssConverter<Transform> {
 

@@ -13,7 +13,6 @@ import java.awt.geom.Point2D;
  * TransformPathBuilder.
  *
  * @param <T> the product type
- * @author Werner Randelshofer
  */
 public class AffineTransformPathBuilder<T> extends AbstractPathBuilder<T> {
 

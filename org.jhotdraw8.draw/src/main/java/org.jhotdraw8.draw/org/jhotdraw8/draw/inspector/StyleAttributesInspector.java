@@ -28,7 +28,6 @@ import javax.swing.event.UndoableEditEvent;
 /**
  * FXML Controller class
  *
- * @author Werner Randelshofer
  */
 public class StyleAttributesInspector extends AbstractStyleAttributesInspector<Figure>
         implements Inspector<DrawingView> {

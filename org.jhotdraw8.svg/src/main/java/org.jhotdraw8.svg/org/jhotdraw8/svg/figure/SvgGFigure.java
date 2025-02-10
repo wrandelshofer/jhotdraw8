@@ -25,7 +25,6 @@ import java.util.List;
 /**
  * Represents an SVG 'g' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgGFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, SvgTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,

@@ -17,7 +17,6 @@ import java.util.function.Function;
  * PostorderSpliterator.
  *
  * @param <T> the element type
- * @author Werner Randelshofer
  */
 public class PostorderSpliterator<T> extends AbstractSpliterator<T> {
     private final Function<T, Iterable<T>> getChildrenFunction;

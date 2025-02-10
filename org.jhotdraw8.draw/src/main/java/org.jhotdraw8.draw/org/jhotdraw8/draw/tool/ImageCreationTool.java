@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.geometry.Dimension2D;
 import javafx.stage.FileChooser;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.application.resources.Resources;
@@ -15,6 +14,7 @@ import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jspecify.annotations.Nullable;
 
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
@@ -35,7 +35,6 @@ import java.util.function.Supplier;
 /**
  * ImageCreationTool.
  *
- * @author Werner Randelshofer
  */
 public class ImageCreationTool extends CreationTool {
 

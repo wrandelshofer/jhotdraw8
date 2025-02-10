@@ -22,7 +22,6 @@ import java.util.function.Supplier;
  * Provides a {@link SequencedCollection} facade to a set of {@code Collection} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements SequencedCollection<E> {
     private final Supplier<E> getFirstFunction;

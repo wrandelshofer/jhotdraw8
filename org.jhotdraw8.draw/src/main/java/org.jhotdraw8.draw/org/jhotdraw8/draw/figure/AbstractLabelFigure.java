@@ -94,7 +94,6 @@ import java.util.Objects;
  *   +---------+   ┆   +---------+  ┆   +---------+ ┆ y +---------+
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractLabelFigure extends AbstractLeafFigure
         implements TextFillableFigure, FillableFigure, StrokableFigure,

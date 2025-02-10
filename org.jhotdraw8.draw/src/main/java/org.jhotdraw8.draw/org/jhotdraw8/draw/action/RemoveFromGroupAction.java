@@ -22,7 +22,6 @@ import java.util.List;
 /**
  * AddToGroupAction.
  *
- * @author Werner Randelshofer
  */
 public class RemoveFromGroupAction extends AbstractDrawingViewAction {
 

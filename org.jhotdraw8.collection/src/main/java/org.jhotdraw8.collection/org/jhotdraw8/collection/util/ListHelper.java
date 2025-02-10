@@ -14,7 +14,6 @@ import static java.lang.Integer.max;
 /**
  * Provides static methods for lists that are based on arrays.
  *
- * @author Werner Randelshofer
  */
 public class ListHelper {
     /**

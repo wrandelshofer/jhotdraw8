@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which supports markers in the middle of a path segment.
  *
- * @author Werner Randelshofer
  */
 public interface MarkerSegmentableFigure extends Figure {
     /**

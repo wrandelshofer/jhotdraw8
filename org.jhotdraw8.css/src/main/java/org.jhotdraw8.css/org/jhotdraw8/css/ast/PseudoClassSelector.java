@@ -10,7 +10,6 @@ import org.jspecify.annotations.Nullable;
  * A "pseudo class selector" matches an element based on criteria which are not
  * directly encoded in the element.
  *
- * @author Werner Randelshofer
  */
 public abstract class PseudoClassSelector extends SimpleSelector {
 

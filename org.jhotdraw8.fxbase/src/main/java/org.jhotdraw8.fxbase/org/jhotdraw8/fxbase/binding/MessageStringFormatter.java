@@ -22,7 +22,6 @@ import java.util.Objects;
  * Boolean values are converted to 0 and 1. This allows to format the boolean
  * value using a choice: {@code {0,choice,0#false|1#true} }
  *
- * @author Werner Randelshofer
  */
 public abstract class MessageStringFormatter extends StringBinding {
 

@@ -19,7 +19,6 @@ import java.util.function.Supplier;
  * Provides a {@link ReadableSortedSet} facade to a set of {@code SortedSet} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ReadableSortedSetFacade<E> extends ReadableSetFacade<E>
         implements ReadableSortedSet<E> {

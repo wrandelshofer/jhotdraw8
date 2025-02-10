@@ -15,7 +15,6 @@ import java.util.Objects;
 /**
  * CssStop.
  *
- * @author Werner Randelshofer
  */
 public record SvgStop(double offset, SvgDefaultablePaint<CssColor> color, CssDefaultableValue<CssSize> opacity) {
 

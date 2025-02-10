@@ -19,7 +19,6 @@ import java.util.List;
 /**
  * BringToFrontAction.
  *
- * @author Werner Randelshofer
  */
 public class BringToFrontAction extends AbstractDrawingViewAction {
 

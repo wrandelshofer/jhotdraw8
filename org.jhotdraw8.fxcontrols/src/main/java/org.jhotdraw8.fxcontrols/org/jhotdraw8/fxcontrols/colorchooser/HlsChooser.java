@@ -106,8 +106,8 @@ public class HlsChooser extends HBox {
         hueSlider.c0Property().bind(model.flatMap(ColorChooserPaneModel::hueSliderC0Property));
         hueSlider.c1Property().bind(model.flatMap(ColorChooserPaneModel::hueSliderC1Property));
         hueSlider.c2Property().bind(model.flatMap(ColorChooserPaneModel::hueSliderC2Property));
-        hueSlider.setMinorTickUnit(0.1);// foolishly assumes that hue goes from 0 to 360
-        hueSlider.setMajorTickUnit(1);// foolishly assumes that hue goes from 0 to 360
+        hueSlider.minorTickUnitProperty().bind(model.flatMap(ColorChooserPaneModel::minorTicksC2Property));
+        hueSlider.majorTickUnitProperty().bind(model.flatMap(ColorChooserPaneModel::majorTicksC2Property));
 
         hueSlider.componentIndexProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceHueIndexProperty));
         hueSlider.sourceColorSpaceProperty().bind(model.flatMap(ColorChooserPaneModel::sourceColorSpaceProperty));

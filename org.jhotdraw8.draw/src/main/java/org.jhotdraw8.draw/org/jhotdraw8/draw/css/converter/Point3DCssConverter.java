@@ -23,7 +23,6 @@ import java.util.function.Consumer;
  * Converts a {@code javafx.geometry.CssPoint3D} into a {@code String} and vice
  * versa.
  *
- * @author Werner Randelshofer
  */
 public class Point3DCssConverter extends AbstractCssConverter<CssPoint3D> {
     private final boolean withSpace;

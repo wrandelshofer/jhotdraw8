@@ -22,7 +22,6 @@ import java.util.ArrayList;
 /**
  * Represents an SVG 'linearGradient' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgLinearGradientFigure extends AbstractSvgGradientFigure {
 

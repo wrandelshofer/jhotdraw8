@@ -12,7 +12,6 @@ import org.jhotdraw8.geom.PointAndDerivative;
 /**
  * LocatorConnector uses a {@link Locator} to compute its position.
  *
- * @author Werner Randelshofer
  */
 public class LocatorConnector extends AbstractConnector {
 

@@ -34,7 +34,6 @@ import java.util.logging.Logger;
 /**
  * AbstractFigureFactory.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractFigureFactory implements FigureFactory {
     private static final Logger LOGGER = Logger.getLogger(AbstractFigureFactory.class.getName());

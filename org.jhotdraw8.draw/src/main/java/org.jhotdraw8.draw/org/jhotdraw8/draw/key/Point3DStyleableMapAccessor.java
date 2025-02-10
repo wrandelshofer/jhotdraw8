@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * Point3DStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class Point3DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point3D>
         implements NonNullMapAccessor<Point3D> {

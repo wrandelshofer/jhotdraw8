@@ -24,7 +24,6 @@ import java.util.function.Consumer;
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
  * versa. If the X and the Y-value are identical, then only one value is output.
  *
- * @author Werner Randelshofer
  */
 public class SymmetricCssPoint2DCssConverter extends AbstractCssConverter<CssPoint2D> {
 

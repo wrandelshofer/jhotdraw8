@@ -23,7 +23,6 @@ import java.awt.geom.Rectangle2D;
  * A <em>connector</em> encapsulates a strategy for locating a connection point
  * for a connection figure on a target figure.
  *
- * @author Werner Randelshofer
  */
 public interface Connector {
 

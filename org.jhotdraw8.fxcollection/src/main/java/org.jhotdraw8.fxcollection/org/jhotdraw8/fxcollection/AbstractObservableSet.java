@@ -22,7 +22,6 @@ import java.util.stream.Stream;
  * overridable fire methods, saving one level of indirection.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public abstract class AbstractObservableSet<E> extends AbstractSet<E> implements ObservableSet<E>, ReadableSet<E> {
 

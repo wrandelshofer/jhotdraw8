@@ -30,7 +30,6 @@ import java.awt.color.ColorSpace;
  *     <dd><a href="http://bottosson.github.io/misc/ok_color.h">github.io</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class OKHlsColorSpace extends AbstractNamedColorSpace {
     private final static OKLabColorSpace oklab = new OKLabColorSpace();

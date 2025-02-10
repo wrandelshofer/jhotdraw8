@@ -51,7 +51,6 @@ import java.util.GregorianCalendar;
  * then not property lists, and cannot be saved and restored with the various
  * property list methods.)"
  *
- * @author Werner Randelshofer
  */
 public class BinaryPListParser {
 

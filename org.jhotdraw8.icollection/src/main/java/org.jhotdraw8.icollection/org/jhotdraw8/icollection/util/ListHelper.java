@@ -12,7 +12,6 @@ import java.util.Arrays;
 /**
  * Provides static methods for lists that are based on arrays.
  *
- * @author Werner Randelshofer
  */
 public class ListHelper {
     /**

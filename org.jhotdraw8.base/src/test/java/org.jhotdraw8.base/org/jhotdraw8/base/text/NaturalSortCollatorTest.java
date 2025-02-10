@@ -12,7 +12,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * OSXCollatorTest.
  *
- * @author Werner Randelshofer
  */
 public class NaturalSortCollatorTest {
 

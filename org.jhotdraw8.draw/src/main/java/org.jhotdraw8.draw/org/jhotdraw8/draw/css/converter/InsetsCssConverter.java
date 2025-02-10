@@ -35,7 +35,6 @@ import static org.jhotdraw8.css.converter.SizeCssConverter.parseSize;
  * insets       = top , right , bottom, left ;
  * </pre> *
  *
- * @author Werner Randelshofer
  */
 public class InsetsCssConverter extends AbstractCssConverter<CssInsets> {
     public InsetsCssConverter(boolean nullable) {

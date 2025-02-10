@@ -14,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * Non-null CssPoint2DStyleableFigureKey.
  *
- * @author Werner Randelshofer
  */
 public class CssPoint2DStyleableKey extends AbstractStyleableKey<CssPoint2D>
         implements WritableStyleableMapAccessor<CssPoint2D>, NonNullKey<CssPoint2D> {

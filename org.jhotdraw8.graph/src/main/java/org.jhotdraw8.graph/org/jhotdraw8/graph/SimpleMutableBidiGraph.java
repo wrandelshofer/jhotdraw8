@@ -66,7 +66,6 @@ import java.util.Set;
  *    4:    next={3};     prev={1}
  * </pre>
  *
- * @author Werner Randelshofer
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

@@ -24,7 +24,6 @@ import java.util.function.Supplier;
 /**
  * GroupAction.
  *
- * @author Werner Randelshofer
  */
 public class GroupAction extends AbstractDrawingViewAction {
 

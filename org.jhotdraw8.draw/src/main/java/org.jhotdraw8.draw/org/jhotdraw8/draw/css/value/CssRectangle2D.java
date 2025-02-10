@@ -15,7 +15,6 @@ import java.util.Objects;
 /**
  * Represents a rectangle with x, y, width and height values specified as {@link CssSize}s.
  *
- * @author Werner Randelshofer
  */
 public class CssRectangle2D {
 

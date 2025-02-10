@@ -12,7 +12,6 @@ import javafx.beans.value.ChangeListener;
 /**
  * ConstantStringExpression.
  *
- * @author Werner Randelshofer
  */
 public class ConstantStringExpression extends StringExpression {
 

@@ -22,7 +22,6 @@ import java.util.SequencedMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * @author werni
  */
 public class SharedKeysMapTest {
 

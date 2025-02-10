@@ -30,7 +30,6 @@ import java.util.function.Consumer;
  *     <dd><a href="https://www.w3.org/TR/css-syntax-3/#number-token-diagram">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class NumberCssConverter extends AbstractCssConverter<Number> {
     private final Class<? extends Number> clazz;

@@ -13,7 +13,6 @@ import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
  * <p>
  * XXX - A key should not define whether the user can edit the property in an inspector or not.
  *
- * @author Werner Randelshofer
  */
 public class StringReadOnlyStyleableKey extends AbstractStyleableKey<String> implements ReadOnlyStyleableMapAccessor<String> {
 

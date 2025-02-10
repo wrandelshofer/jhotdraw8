@@ -14,7 +14,6 @@ import java.util.function.Predicate;
 /**
  * DirectedGraphBuilder.
  *
- * @author Werner Randelshofer
  */
 public class DirectedGraphBuilder {
     public DirectedGraphBuilder() {

@@ -37,7 +37,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 /**
  * AbstractResizeTransformHandle.
  *
- * @author Werner Randelshofer
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);

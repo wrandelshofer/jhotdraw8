@@ -43,7 +43,6 @@ import java.util.Set;
  * be recomputed every time when the local bounds of the figure
  * change.
  *
- * @author Werner Randelshofer
  */
 public interface SvgTransformableFigure extends TransformCachingFigure {
     boolean CACHE = true;

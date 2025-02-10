@@ -36,7 +36,6 @@ import java.util.ArrayList;
 /**
  * CardinalSplineSampleMain.
  *
- * @author Werner Randelshofer
  */
 public class CardinalSplineExampleMain extends Application {
     private final Polyline polyline = new Polyline(

@@ -24,7 +24,6 @@ import javafx.concurrent.Worker;
  * The object is enabled when its "disabler" set is empty and
  * its internal state permits the invocation of actions.
  *
- * @author Werner Randelshofer
  */
 public interface Disableable {
 

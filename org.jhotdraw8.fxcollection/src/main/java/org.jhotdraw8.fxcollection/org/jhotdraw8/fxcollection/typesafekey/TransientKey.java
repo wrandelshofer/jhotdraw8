@@ -12,7 +12,6 @@ import java.lang.reflect.Type;
  * TransientKey can be used to store temporary data in an object.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public class TransientKey<T> extends AbstractKey<T> implements NullableKey<T> {
 

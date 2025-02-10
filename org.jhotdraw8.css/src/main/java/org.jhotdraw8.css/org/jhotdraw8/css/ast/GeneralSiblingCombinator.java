@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * matches the sibling of the element and if its second selector
  * matches the element.
  *
- * @author Werner Randelshofer
  */
 public class GeneralSiblingCombinator extends Combinator {
 

@@ -13,7 +13,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * Point2DStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class Point2DStyleableKey extends AbstractStyleableKey<Point2D> implements WritableStyleableMapAccessor<Point2D>,
         NonNullKey<Point2D> {

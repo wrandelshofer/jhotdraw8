@@ -11,7 +11,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 /**
  * Nullable NonNullBooleanStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NulllableBooleanStyleableKey extends NullableObjectStyleableKey<Boolean> implements WritableStyleableMapAccessor<Boolean> {
 

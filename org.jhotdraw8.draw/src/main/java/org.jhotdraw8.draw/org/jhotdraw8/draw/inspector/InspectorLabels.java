@@ -9,7 +9,6 @@ import org.jhotdraw8.application.resources.Resources;
 /**
  * InspectorLabels.
  *
- * @author Werner Randelshofer
  */
 public class InspectorLabels {
 

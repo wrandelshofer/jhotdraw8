@@ -19,7 +19,6 @@ import java.util.Map;
 /**
  * CssSize2DStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class PaperSizeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssDimension2D> {
 

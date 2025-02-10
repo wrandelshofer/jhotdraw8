@@ -4,11 +4,11 @@
  */
 package org.jhotdraw8.draw.xml.converter;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.geom.SvgPaths;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.Path2D;
 import java.io.IOException;
@@ -29,7 +29,6 @@ import java.text.ParseException;
  * string2       = "'" , { -( "'" ) | '\\' , newline |  escape } , "'" ;
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class Path2DDoubleXmlConverter implements Converter<Path2D.Double> {
 

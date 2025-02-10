@@ -162,7 +162,6 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 /**
  * GrapherActivityController.
  *
- * @author Werner Randelshofer
  */
 public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 

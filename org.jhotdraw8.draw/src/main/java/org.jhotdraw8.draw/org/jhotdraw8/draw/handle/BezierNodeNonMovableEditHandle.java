@@ -46,7 +46,6 @@ import static org.jhotdraw8.geom.shape.BezierNode.MOVE_MASK;
 /**
  * Handle for the point ofCollection a figure.
  *
- * @author Werner Randelshofer
  */
 public class BezierNodeNonMovableEditHandle extends AbstractHandle {
 

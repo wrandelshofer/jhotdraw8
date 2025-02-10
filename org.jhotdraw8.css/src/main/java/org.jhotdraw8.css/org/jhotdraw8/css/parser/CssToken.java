@@ -15,7 +15,6 @@ import java.util.Objects;
 /**
  * CssToken.
  *
- * @author Werner Randelshofer
  */
 public class CssToken {
 

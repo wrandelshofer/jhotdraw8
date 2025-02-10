@@ -12,7 +12,6 @@ import java.util.function.Consumer;
 /**
  * Abstract syntax tree for cascading style sheets.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractSyntaxTree {
     private final @Nullable SourceLocator sourceLocator;

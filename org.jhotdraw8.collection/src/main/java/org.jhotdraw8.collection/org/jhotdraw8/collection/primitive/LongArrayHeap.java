@@ -48,7 +48,6 @@ import java.util.Spliterators;
  * elements or changing the key of some element.) This is typically accomplished
  * by synchronizing on some object that naturally encapsulates the heap.
  *
- * @author Dimitrios Michail
  *
  * <dl>
  *      <dt>JHeaps Library

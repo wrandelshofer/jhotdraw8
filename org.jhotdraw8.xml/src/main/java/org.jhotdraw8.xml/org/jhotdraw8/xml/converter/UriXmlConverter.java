@@ -19,7 +19,6 @@ import java.text.ParseException;
 /**
  * XmlUriConverter.
  *
- * @author Werner Randelshofer
  */
 public class UriXmlConverter implements Converter<URI> {
 

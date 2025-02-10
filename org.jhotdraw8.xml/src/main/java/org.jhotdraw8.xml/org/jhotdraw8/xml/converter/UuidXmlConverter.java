@@ -18,7 +18,6 @@ import java.util.UUID;
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
  * versa.
  *
- * @author Werner Randelshofer
  */
 public class UuidXmlConverter implements Converter<UUID> {
 

@@ -44,7 +44,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 /**
  * Handle for moving (translating) a figure.
  *
- * @author Werner Randelshofer
  */
 public class BezierNodeMoveHandle extends AbstractHandle {
 

@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * BezierPathStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableBezierPathStyleableKey
         extends AbstractStyleableKey<BezierPath>

@@ -24,7 +24,6 @@ import java.awt.geom.PathIterator;
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.
  *
- * @author Werner Randelshofer
  */
 public class RectangleFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,

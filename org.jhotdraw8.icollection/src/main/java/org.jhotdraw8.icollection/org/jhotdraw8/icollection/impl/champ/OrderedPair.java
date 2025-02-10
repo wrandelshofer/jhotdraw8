@@ -7,7 +7,6 @@ package org.jhotdraw8.icollection.impl.champ;
  *
  * @param <U> the type of the first element of the pair
  * @param <V> the type of the second element of the pair
- * @author Werner Randelshofer
  */
 public record OrderedPair<U, V>(U first, V second) {
 }

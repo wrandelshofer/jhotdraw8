@@ -11,7 +11,6 @@ import java.io.Serial;
 /**
  * HandleEvent.
  *
- * @author Werner Randelshofer
  */
 public class HandleEvent extends Event<Handle> {
 

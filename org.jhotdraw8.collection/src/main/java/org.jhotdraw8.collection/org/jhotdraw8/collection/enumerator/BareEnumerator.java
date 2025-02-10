@@ -27,7 +27,6 @@ import java.util.Iterator;
  * }</pre>
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public interface BareEnumerator<E> {
     /**

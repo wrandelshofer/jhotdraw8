@@ -23,7 +23,6 @@ import java.util.stream.LongStream;
 /**
  * A {@code long}-valued list backed by a primitive array.
  *
- * @author Werner Randelshofer
  */
 public class LongArrayList extends AbstractList<Long> {
     private static final long[] EMPTY = new long[0];

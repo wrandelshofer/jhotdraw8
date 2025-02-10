@@ -38,7 +38,6 @@ import java.net.URL;
  * XXX all keys must be customizable FIXME property binding in this class is a
  * mess
  *
- * @author Werner Randelshofer
  */
 public class LayerCell extends ListCell<Figure> {
 

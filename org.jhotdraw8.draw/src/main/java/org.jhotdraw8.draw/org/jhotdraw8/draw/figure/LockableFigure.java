@@ -9,7 +9,6 @@ import org.jhotdraw8.draw.key.NonNullBooleanStyleableKey;
 /**
  * LockableFigure.
  *
- * @author Werner Randelshofer
  */
 public interface LockableFigure extends Figure {
 

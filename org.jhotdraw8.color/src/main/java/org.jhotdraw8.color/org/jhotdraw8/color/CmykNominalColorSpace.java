@@ -15,7 +15,6 @@ import java.io.Serial;
  * This model may not be very useful. It assumes that the color components
  * perfectly absorb the desired wavelengths.
  *
- * @author Werner Randelshofer
  */
 public class CmykNominalColorSpace extends AbstractNamedColorSpace {
     @Serial

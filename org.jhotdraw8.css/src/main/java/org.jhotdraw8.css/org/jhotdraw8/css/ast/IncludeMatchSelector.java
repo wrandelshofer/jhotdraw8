@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * an attribute with the specified name and the attribute value contains a word
  * list with the specified word.
  *
- * @author Werner Randelshofer
  */
 public class IncludeMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;

@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * FontChooserModel.
  *
- * @author Werner Randelshofer
  */
 public class FontChooserModel {
 

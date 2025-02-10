@@ -24,7 +24,6 @@ import java.util.LinkedList;
 /**
  * UngroupAction.
  *
- * @author Werner Randelshofer
  */
 public class UngroupAction extends AbstractDrawingViewAction {
 

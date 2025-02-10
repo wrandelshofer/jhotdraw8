@@ -25,7 +25,6 @@ import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
  * <li>The index of the {@code k}-th next vertex of the vertex with index {@code i}, and with {@code k ∈ {0, ..., nextCount_i - 1}}.</li>
  * </ul>
  *
- * @author Werner Randelshofer
  */
 public interface IndexedDirectedGraph {
 

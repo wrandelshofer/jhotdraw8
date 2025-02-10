@@ -16,7 +16,6 @@ import java.util.PrimitiveIterator;
 /**
  * A {@code int}-valued deque backed by a primitive array.
  *
- * @author Werner Randelshofer
  */
 public class IntArrayDeque extends AbstractCollection<Integer> implements IntDeque {
     /**

@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * PaintStyleableFigureKey.
  *
- * @author Werner Randelshofer
  */
 public class NullablePaintableStyleableKey extends AbstractStyleableKey<Paintable> implements WritableStyleableMapAccessor<Paintable> {
 

@@ -100,6 +100,10 @@ public class ColorChooserPaneModel {
     @SuppressWarnings("this-escape")
     public final FloatProperty hueSliderC2 = new SimpleFloatProperty(this, "hueSliderC2", 0.5f);
     @SuppressWarnings("this-escape")
+    public final FloatProperty minorTicksC2 = new SimpleFloatProperty(this, "minorTicksC2", 0.01f);
+    @SuppressWarnings("this-escape")
+    public final FloatProperty majorTicksC2 = new SimpleFloatProperty(this, "majorTicksC2", 0.1f);
+    @SuppressWarnings("this-escape")
     public final FloatProperty chroma = new SimpleFloatProperty(this, "chroma");
     @SuppressWarnings("this-escape")
     public final FloatProperty lightness = new SimpleFloatProperty(this, "lightness");
@@ -158,6 +162,7 @@ public class ColorChooserPaneModel {
             updateTargetColorField(o, oldv, newv);
             updateSourceColorField(o, oldv, newv);
         };
+
         c0.addListener(changeListener);
         c1.addListener(changeListener);
         c2.addListener(changeListener);
@@ -715,9 +720,16 @@ public class ColorChooserPaneModel {
             return;
         }
         NamedColorSpace oldScs = sourceColorSpace.get();
+
         switch (ct) {
-            case OK_HSL_SRGB -> sourceColorSpace.set(new OKHlsColorSpace());
-            case SLIDERS, SWATCHES -> sourceColorSpace.set(tcs);
+            case OK_HSL_SRGB -> {
+                sourceColorSpace.set(new OKHlsColorSpace());
+                minorTicksC2.set(1.0f / 359);
+            }
+            case SLIDERS, SWATCHES -> {
+                sourceColorSpace.set(tcs);
+                minorTicksC2.set(1.0f / 255);
+            }
             case HSL -> {
                 NamedColorSpace cs;
                 if (tcs.getType() == ColorSpace.TYPE_RGB) {
@@ -726,6 +738,7 @@ public class ColorChooserPaneModel {
                     cs = new SrgbColorSpace();
                 }
                 sourceColorSpace.set(new ParametricHlsColorSpace(cs.getName() + " HSL", cs));
+                minorTicksC2.set(1.0f / 359);
             }
             case HSV -> {
                 NamedColorSpace cs;
@@ -735,13 +748,21 @@ public class ColorChooserPaneModel {
                     cs = new SrgbColorSpace();
                 }
                 sourceColorSpace.set(new ParametricHsvColorSpace(cs.getName() + " HSV", cs));
+                minorTicksC2.set(1.0f / 359);
             }
-            case CIE_LCH -> sourceColorSpace.set(CIE_LCH_COLOR_SPACE);
-            case OK_LCH -> sourceColorSpace.set(new OKLchColorSpace());
+            case CIE_LCH -> {
+                sourceColorSpace.set(CIE_LCH_COLOR_SPACE);
+                minorTicksC2.set(1.0f / 359);
+            }
+            case OK_LCH -> {
+                sourceColorSpace.set(new OKLchColorSpace());
+                minorTicksC2.set(1.0f / 359);
+            }
             default -> {
                 sourceColorSpace.set(tcs);
                 hueSliderC0.set(0.5f);
                 hueSliderC1.set(0.5f);
+                minorTicksC2.set(1.0f / 255);
             }
         }
         NamedColorSpace newScs = sourceColorSpace.get();
@@ -966,5 +987,21 @@ public class ColorChooserPaneModel {
 
     public void setHueSliderC2(float hueSliderC2) {
         this.hueSliderC2.set(hueSliderC2);
+    }
+
+    public float getMinorTicksC2() {
+        return minorTicksC2.get();
+    }
+
+    public FloatProperty minorTicksC2Property() {
+        return minorTicksC2;
+    }
+
+    public float getMajorTicksC2() {
+        return majorTicksC2.get();
+    }
+
+    public FloatProperty majorTicksC2Property() {
+        return majorTicksC2;
     }
 }

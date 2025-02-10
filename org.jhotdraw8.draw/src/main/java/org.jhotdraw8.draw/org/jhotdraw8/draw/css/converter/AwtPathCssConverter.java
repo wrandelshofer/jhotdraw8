@@ -14,7 +14,7 @@ import org.jhotdraw8.geom.AwtPathBuilder;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Shape;
 import java.awt.geom.Path2D;
 import java.io.IOException;
 import java.text.ParseException;
@@ -25,7 +25,6 @@ import java.util.function.Consumer;
  * <p>
  * The null value will be converted to the CSS identifier "none".
  *
- * @author Werner Randelshofer
  */
 public class AwtPathCssConverter extends AbstractCssConverter<Path2D.Double> {
 

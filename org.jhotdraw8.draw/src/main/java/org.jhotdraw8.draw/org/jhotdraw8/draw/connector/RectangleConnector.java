@@ -23,7 +23,6 @@ import static org.jhotdraw8.draw.figure.StrokableFigure.STROKE_WIDTH;
 /**
  * RectangleConnector.
  *
- * @author Werner Randelshofer
  */
 public class RectangleConnector extends LocatorConnector {
 

@@ -19,7 +19,6 @@ import org.jhotdraw8.draw.tool.Tool;
 /**
  * FXML Controller class
  *
- * @author Werner Randelshofer
  */
 public class ToolsToolbar extends GridPane {
 

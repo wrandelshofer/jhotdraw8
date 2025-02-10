@@ -51,7 +51,6 @@ import java.util.logging.Logger;
 /**
  * SvgImageFigure presents an SVG image or a bitmap image on a drawing.
  *
- * @author Werner Randelshofer
  */
 public class SvgImageFigure extends AbstractLeafFigure
         implements ResizableFigure, TransformableFigure, StyleableFigure,

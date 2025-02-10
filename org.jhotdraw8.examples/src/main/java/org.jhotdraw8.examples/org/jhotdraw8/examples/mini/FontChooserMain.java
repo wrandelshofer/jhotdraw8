@@ -18,7 +18,6 @@ import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
 /**
  * FontChooserMain.
  *
- * @author Werner Randelshofer
  */
 public class FontChooserMain extends Application {
 

@@ -12,7 +12,6 @@ import java.util.EventObject;
  * Event.
  *
  * @param <S> the type of the event source
- * @author Werner Randelshofer
  */
 public class Event<S> extends EventObject {
 

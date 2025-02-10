@@ -11,7 +11,6 @@ import java.net.URI;
 /**
  * IdFactory.
  *
- * @author Werner Randelshofer
  */
 public interface IdFactory extends IdResolver, IdSupplier {
     void setDocumentHome(@Nullable URI documentHome);

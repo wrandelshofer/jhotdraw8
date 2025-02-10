@@ -19,7 +19,6 @@ import java.util.List;
 /**
  * BringForwardAction.
  *
- * @author Werner Randelshofer
  */
 public class BringForwardAction extends AbstractDrawingViewAction {
 

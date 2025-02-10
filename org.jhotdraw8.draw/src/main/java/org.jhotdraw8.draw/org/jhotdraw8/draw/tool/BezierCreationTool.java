@@ -8,7 +8,6 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Line;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -24,6 +23,7 @@ import org.jhotdraw8.geom.PolylineToCubicCurve;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
 import org.jhotdraw8.geom.shape.BezierPathBuilder;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,6 @@ import java.util.function.Supplier;
 /**
  * CreationTool for bezier figures.
  *
- * @author Werner Randelshofer
  */
 public class BezierCreationTool extends AbstractCreationTool<Figure> {
 

@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which supports end markers.
  *
- * @author Werner Randelshofer
  */
 public interface MarkerEndableFigure extends Figure {
 

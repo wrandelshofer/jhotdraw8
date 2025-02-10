@@ -17,7 +17,6 @@ import java.util.function.LongConsumer;
  * the {@link Spliterator} interface.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
     @Override
@@ -36,7 +35,6 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
      * {@link Iterator}, and avoids the inherent race involved in having separate methods for
      * {@code hasNext()} and {@code next()}.
      *
-     * @author Werner Randelshofer
      */
     interface OfLong extends Enumerator<Long>, Spliterator.OfLong {
 

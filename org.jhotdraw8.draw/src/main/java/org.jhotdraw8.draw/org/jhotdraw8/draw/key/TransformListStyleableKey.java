@@ -17,7 +17,6 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
 /**
  * TransformListStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class TransformListStyleableKey extends AbstractStyleableKey<PersistentList<Transform>>
         implements WritableStyleableMapAccessor<PersistentList<Transform>>, NonNullKey<PersistentList<Transform>> {

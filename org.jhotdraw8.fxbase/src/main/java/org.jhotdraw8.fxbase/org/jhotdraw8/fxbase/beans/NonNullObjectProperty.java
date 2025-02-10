@@ -14,7 +14,6 @@ import java.util.Objects;
  * attempting to set its value to null.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public class NonNullObjectProperty<T> extends SimpleObjectProperty<T> {
 

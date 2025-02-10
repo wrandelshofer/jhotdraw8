@@ -9,7 +9,6 @@ import java.util.Collection;
 /**
  * Tests {@link IndexedHashObservableSet}.
  *
- * @author Werner Randelshofer
  */
 
 public class IndexedHashSetTest extends AbstractIndexedArrayObservableSetTest {

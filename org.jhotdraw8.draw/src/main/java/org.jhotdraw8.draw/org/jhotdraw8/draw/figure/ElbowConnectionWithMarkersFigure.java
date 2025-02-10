@@ -20,7 +20,6 @@ import org.jspecify.annotations.Nullable;
  * The figure can have an optional marker shape at the start point, and at
  * the end point.
  *
- * @author Werner Randelshofer
  */
 public class ElbowConnectionWithMarkersFigure extends AbstractElbowLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,

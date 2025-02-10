@@ -14,7 +14,6 @@ import java.lang.reflect.Type;
  * A simple non-nullable StyleableKey.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<T>,
         NonNullKey<T> {

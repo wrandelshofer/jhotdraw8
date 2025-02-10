@@ -39,8 +39,6 @@ import java.util.function.Supplier;
  *     <dd><a href="http://stackoverflow.com/questions/27052927/custom-bidirectional-bindings-in-javafx">
  *   stackoverflow.com</a></dd>
  * </dl>
- *
- * @author BlackLabrador (as stated in the reference)
  */
 public class CustomBinding {
 

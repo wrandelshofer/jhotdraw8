@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * IntersectionTest.
  *
- * @author Werner Randelshofer
  */
 public class IntersectLineQuadCurveTest {
 

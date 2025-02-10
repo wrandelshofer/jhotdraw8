@@ -21,7 +21,6 @@ import java.text.ParseException;
  * Schema Part 2: Datatypes Second Edition: 3.2.5 boolean</a>
  * </p>
  *
- * @author Werner Randelshofer
  */
 public class BooleanXmlConverter implements Converter<Boolean> {
 

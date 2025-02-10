@@ -32,7 +32,6 @@ import java.util.List;
 /**
  * TransformFlattener.
  *
- * @author Werner Randelshofer
  */
 public class TransformFlattener {
 

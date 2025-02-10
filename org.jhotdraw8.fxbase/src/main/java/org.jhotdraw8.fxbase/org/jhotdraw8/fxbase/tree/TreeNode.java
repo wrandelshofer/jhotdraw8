@@ -44,7 +44,6 @@ import java.util.Spliterator;
  *     }
  * }</pre>
  *
- * @author Werner Randelshofer
  * @param <T> the type of the tree node
  */
 public interface TreeNode<T extends TreeNode<T>> {

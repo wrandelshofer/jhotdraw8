@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
  * This is a value-type.
  *
  * @param <V> the type of the elements that form the pair
- * @author Werner Randelshofer
  */
 public class NonNullUnorderedPair<V> implements UnorderedPair<V> {
 

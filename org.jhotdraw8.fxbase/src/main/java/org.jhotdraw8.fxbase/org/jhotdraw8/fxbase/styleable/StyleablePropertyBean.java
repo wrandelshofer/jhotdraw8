@@ -6,10 +6,10 @@ package org.jhotdraw8.fxbase.styleable;
 
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxbase.beans.PropertyBean;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -29,7 +29,6 @@ import java.util.Objects;
  * have the precedence as defined in {@link StyleableProperty} which is
  * {@code INLINE, AUTHOR, USER, USER_AGENT}.
  *
- * @author Werner Randelshofer
  */
 public interface StyleablePropertyBean extends PropertyBean, StyleableBean {
 

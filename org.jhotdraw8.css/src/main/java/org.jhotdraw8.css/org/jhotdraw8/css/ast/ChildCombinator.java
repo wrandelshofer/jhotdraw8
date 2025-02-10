@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * parent of the element and if its second selector matches on the element
  * itself.
  *
- * @author Werner Randelshofer
  */
 public class ChildCombinator extends Combinator {
 

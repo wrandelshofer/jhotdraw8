@@ -40,7 +40,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 /**
  * Handle for the point ofCollection a figure.
  *
- * @author Werner Randelshofer
  */
 public class PolyPointEditHandle extends AbstractHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);

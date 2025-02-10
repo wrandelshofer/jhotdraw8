@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.connector.Connector;
@@ -20,6 +19,7 @@ import org.jhotdraw8.draw.figure.LayerFigure;
 import org.jhotdraw8.draw.figure.LineConnectionFigure;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,6 @@ import java.util.function.Supplier;
 /**
  * ConnectionTool.
  *
- * @author Werner Randelshofer
  */
 public class ConnectionTool extends AbstractTool {
 

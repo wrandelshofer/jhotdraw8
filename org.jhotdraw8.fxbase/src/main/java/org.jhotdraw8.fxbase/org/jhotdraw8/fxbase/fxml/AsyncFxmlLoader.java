@@ -5,8 +5,8 @@
 package org.jhotdraw8.fxbase.fxml;
 
 import javafx.fxml.FXMLLoader;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
+import org.jspecify.annotations.Nullable;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,7 +20,6 @@ import java.util.concurrent.ForkJoinPool;
  * Note that this loader can only be used for FXML files, which do not instantiate windows (for example
  * FXML files with Tooltips can't be loaded).
  *
- * @author Werner Randelshofer
  */
 public class AsyncFxmlLoader {
 

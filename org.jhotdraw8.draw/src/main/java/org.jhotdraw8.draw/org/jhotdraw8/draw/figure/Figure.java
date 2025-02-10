@@ -111,7 +111,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * property values. The update strategy is factored out into
  * {@link DrawingModel}.
  *
- * @author Werner Randelshofer
  */
 public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 

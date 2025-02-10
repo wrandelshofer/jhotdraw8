@@ -20,7 +20,6 @@ package org.jhotdraw8.draw.locator;
  * to the right side of the path, and a negative to the left side of the path.</dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class PathLocator {
     public PathLocator() {

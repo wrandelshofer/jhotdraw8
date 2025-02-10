@@ -18,7 +18,6 @@ import java.lang.reflect.Type;
  * DefaultableStyleableKey.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public class DefaultableStyleableKey<T> extends AbstractStyleableKey<CssDefaultableValue<T>>
         implements WritableStyleableMapAccessor<CssDefaultableValue<T>>,

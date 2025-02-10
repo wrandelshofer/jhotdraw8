@@ -22,7 +22,6 @@ import java.util.Map;
 /**
  * Stroke Style combines all stroke attributes.
  *
- * @author Werner Randelshofer
  */
 public class StrokeStyleableMapAccessor extends AbstractStyleableMapAccessor<CssStrokeStyle> {
 

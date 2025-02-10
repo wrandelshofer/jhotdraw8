@@ -20,7 +20,6 @@ import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_
 /**
  * TeddyApplication.
  *
- * @author Werner Randelshofer
  */
 public class TeddyApplication extends AbstractFileBasedApplication {
 

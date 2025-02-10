@@ -23,7 +23,6 @@ import java.util.Objects;
 /**
  * Represents a linear gradient.
  *
- * @author Werner Randelshofer
  */
 public class CssLinearGradient implements Paintable {
 

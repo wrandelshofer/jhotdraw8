@@ -13,7 +13,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * CssSizeStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class CssSizeStyleableKey extends AbstractStyleableKey<CssSize> implements WritableStyleableMapAccessor<CssSize>,
         NonNullKey<CssSize> {

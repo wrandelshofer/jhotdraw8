@@ -15,7 +15,6 @@ import java.util.List;
  * A "declaration" associates a "propertyName" with a list of preserved tokens. If
  * the list of preserved tokens is empty, the declaration must be ignored.
  *
- * @author Werner Randelshofer
  */
 public class Declaration extends AbstractSyntaxTree {
     private final @Nullable String namespace;

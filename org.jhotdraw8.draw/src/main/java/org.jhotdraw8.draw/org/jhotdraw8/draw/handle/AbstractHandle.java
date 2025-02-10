@@ -9,7 +9,6 @@ import org.jhotdraw8.draw.figure.Figure;
 /**
  * AbstractHandle.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractHandle implements Handle {
 

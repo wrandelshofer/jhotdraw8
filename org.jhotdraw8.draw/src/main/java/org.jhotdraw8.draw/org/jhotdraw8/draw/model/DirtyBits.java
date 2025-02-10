@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.model;
  * {@code DirtyBits} describes how changing a property value of a {@code Figure}
  * affects dependent objects.
  *
- * @author Werner Randelshofer
  */
 public enum DirtyBits {
 

@@ -55,7 +55,6 @@ import static org.jhotdraw8.draw.figure.FillRulableFigure.FILL_RULE;
  * that allow user-definable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
  * {@link MarkerSegmentableFigure}.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure, PathMetricsFigure {

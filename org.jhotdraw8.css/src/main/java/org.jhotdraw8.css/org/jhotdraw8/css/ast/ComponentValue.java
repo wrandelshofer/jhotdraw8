@@ -10,7 +10,6 @@ import org.jspecify.annotations.Nullable;
  * A ComponentValue is the abstract base class of CssToken, CurlyBlock,
  * RoundBlock, SquareBlock and FunctionBlock.
  *
- * @author Werner Randelshofer
  */
 public abstract class ComponentValue extends AbstractSyntaxTree {
 

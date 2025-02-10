@@ -27,7 +27,6 @@ import java.util.stream.Collector;
  *     .collect(BoundsCalculator.collectBounds(Figure::getBoundsInWorld));
  * }</pre>
  *
- * @author Werner Randelshofer
  */
 public class BoundsCalculator {
     private double minX = Double.POSITIVE_INFINITY;

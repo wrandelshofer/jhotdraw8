@@ -25,7 +25,6 @@ import java.util.Objects;
  *     <dd><a href="https://drafts.csswg.org/css-color-4/">csswg.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class CssColor implements Paintable {
 

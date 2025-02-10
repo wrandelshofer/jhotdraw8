@@ -41,7 +41,6 @@ import java.util.Map;
 /**
  * Represents an SVG 'linearGradient' element.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, NonTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,

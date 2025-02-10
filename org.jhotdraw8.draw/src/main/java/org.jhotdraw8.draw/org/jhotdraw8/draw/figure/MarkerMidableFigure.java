@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which supports markers at the nodes of a path.
  *
- * @author Werner Randelshofer
  */
 public interface MarkerMidableFigure extends Figure {
     /**

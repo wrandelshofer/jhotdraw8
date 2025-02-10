@@ -15,7 +15,6 @@ import java.util.function.Consumer;
  * the {@link ListIterator} interface.
  *
  * @param <E> the element type
- * @author Adrien Grzechowiak
  */
 public abstract class AbstractListIteratorSpliterator<E> implements ListIterator<E>, Spliterator<E> {
     /**

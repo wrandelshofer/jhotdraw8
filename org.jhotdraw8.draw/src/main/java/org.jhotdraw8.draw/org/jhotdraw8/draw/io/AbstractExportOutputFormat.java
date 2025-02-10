@@ -36,7 +36,6 @@ import static org.jhotdraw8.draw.render.SimpleDrawingRenderer.toNode;
 /**
  * AbstractExportOutputFormat.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractExportOutputFormat implements ExportOutputFormat {
     private PersistentMap<Key<?>, Object> options = ChampMap.of();

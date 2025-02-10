@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * XmlListConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class ListXmlConverterTest {
 

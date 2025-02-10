@@ -16,7 +16,6 @@ import java.text.ParseException;
  * Allows to use a {@link Converter} with the {@code javafx.css.StyleConverter}
  * API.
  *
- * @author Werner Randelshofer
  * rawcoder $
  */
 public class StyleConverterAdapter<T> extends StyleConverter<String, T> {

@@ -39,7 +39,6 @@ import java.util.Objects;
 /**
  * Represents an SVG 'text' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgTextFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,

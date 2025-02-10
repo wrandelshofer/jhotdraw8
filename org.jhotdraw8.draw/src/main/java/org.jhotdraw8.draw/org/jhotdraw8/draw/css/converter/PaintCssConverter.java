@@ -37,7 +37,6 @@ import java.util.function.Consumer;
  * FIXME currently only parses the Color and the LinearGradient productions
  * </p>
  *
- * @author Werner Randelshofer
  */
 public class PaintCssConverter extends AbstractCssConverter<Paint> {
 

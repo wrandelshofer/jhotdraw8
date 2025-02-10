@@ -23,7 +23,6 @@ import java.net.URL;
  * <p>
  * XXX all keys must be customizable
  *
- * @author Werner Randelshofer
  */
 public class StyleClassCell extends ListCell<StyleClassItem> {
 

@@ -18,7 +18,6 @@ import java.net.URI;
 /**
  * XMLEncoderOutputFormat.
  *
- * @author Werner Randelshofer
  */
 public class XmlEncoderOutputFormat implements OutputFormat {
     public static final String XML_SERIALIZER_MIME_TYPE = "application/xml+ser";

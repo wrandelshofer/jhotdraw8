@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * An "attribute value selector" matches an element if the element has an
  * attribute with the specified name and value.
  *
- * @author Werner Randelshofer
  */
 public class EqualsMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;

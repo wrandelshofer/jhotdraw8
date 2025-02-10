@@ -32,7 +32,6 @@ import java.util.stream.Collectors;
  * A {@link SelectorModel} for objects that implement the {@link Styleable}
  * interface.
  *
- * @author Werner Randelshofer
  */
 public class StyleableSelectorModel extends AbstractSelectorModel<Styleable> {
 

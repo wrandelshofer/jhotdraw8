@@ -14,7 +14,6 @@ import java.util.Set;
  * this set is backed by an array and a hash set.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class IndexedHashObservableSet<E> extends AbstractIndexedArrayObservableSet<E> {
     /**

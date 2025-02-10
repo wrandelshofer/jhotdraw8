@@ -13,7 +13,6 @@ import java.util.List;
  * An interface for reading and writing data of a specific type from/to the Clipboard.
  *
  * @param <T> the type of the data that can be written and read from the clipboard
- * @author Werner Randelshofer
  */
 public interface ClipboardIO<T> {
 

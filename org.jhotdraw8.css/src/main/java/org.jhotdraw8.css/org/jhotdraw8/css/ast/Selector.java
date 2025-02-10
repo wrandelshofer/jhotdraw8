@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A "selector" is a tree of "combinator"s.
  *
- * @author Werner Randelshofer
  */
 public abstract class Selector extends AbstractSyntaxTree {
 

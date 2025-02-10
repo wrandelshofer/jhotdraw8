@@ -19,7 +19,6 @@ import java.awt.geom.PathIterator;
 /**
  * PathConnector. The target of the connection must implement {@link PathIterableFigure}.
  *
- * @author Werner Randelshofer
  * $$
  */
 public class PathConnector extends LocatorConnector {

@@ -38,7 +38,6 @@ import static java.lang.Math.min;
  * This class is useful as a base class for sub-classes that can provide
  * a faster means of the contains check, typically in {@code O(1)}.
  *
- * @author Werner Randelshofer
  * @param <E> the element type
  */
 public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableListBase<E>

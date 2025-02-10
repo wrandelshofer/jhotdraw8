@@ -9,7 +9,6 @@ import org.jhotdraw8.fxbase.beans.SimpleObservable;
 /**
  * AbstractConstrainer.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractConstrainer extends SimpleObservable implements Constrainer {
 

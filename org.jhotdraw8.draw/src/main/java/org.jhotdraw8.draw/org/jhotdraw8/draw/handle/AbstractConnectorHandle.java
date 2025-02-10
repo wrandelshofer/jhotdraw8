@@ -31,7 +31,6 @@ import java.util.Map;
  * Pressing the alt or the control key while dragging the handle prevents
  * connecting the point.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractConnectorHandle extends AbstractHandle {
     /**

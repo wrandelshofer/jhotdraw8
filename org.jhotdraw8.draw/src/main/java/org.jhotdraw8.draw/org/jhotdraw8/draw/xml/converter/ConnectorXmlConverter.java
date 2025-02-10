@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.xml.converter;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -19,6 +18,7 @@ import org.jhotdraw8.draw.connector.PathConnector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
 import org.jhotdraw8.draw.css.converter.LocatorCssConverter;
 import org.jhotdraw8.draw.locator.Locator;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -37,7 +37,6 @@ import java.util.function.Function;
  * <li>EllipseConnector</li>
  * </ul>
  *
- * @author Werner Randelshofer
  */
 public class ConnectorXmlConverter implements Converter<Connector> {
 

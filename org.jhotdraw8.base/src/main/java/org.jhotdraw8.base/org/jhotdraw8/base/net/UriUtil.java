@@ -20,7 +20,6 @@ import java.util.logging.Logger;
 /**
  * UriUtil.
  *
- * @author Werner Randelshofer
  */
 public class UriUtil {
 

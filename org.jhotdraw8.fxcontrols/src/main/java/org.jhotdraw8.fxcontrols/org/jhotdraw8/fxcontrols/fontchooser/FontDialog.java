@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 /**
  * FontDialog for selecting a font family and a font size.
  *
- * @author Werner Randelshofer
  */
 public class FontDialog extends Dialog<FontFamilySize> {
 

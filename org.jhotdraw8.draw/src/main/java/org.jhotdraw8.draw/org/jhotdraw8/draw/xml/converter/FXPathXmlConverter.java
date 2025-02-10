@@ -6,11 +6,11 @@ package org.jhotdraw8.draw.xml.converter;
 
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.geom.FXSvgPaths;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -19,7 +19,6 @@ import java.text.ParseException;
 /**
  * Converts a list of {@link PathElement} from/to an XML attribute text.
  *
- * @author Werner Randelshofer
  */
 public class FXPathXmlConverter implements Converter<Path> {
 

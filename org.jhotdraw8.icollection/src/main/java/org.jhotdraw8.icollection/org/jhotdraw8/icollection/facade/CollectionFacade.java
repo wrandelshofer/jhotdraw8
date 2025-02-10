@@ -21,7 +21,6 @@ import java.util.stream.Stream;
  * Provides a {@link Collection} facade to a set of {@code Collection} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class CollectionFacade<E> extends AbstractCollection<E> implements ReadableCollection<E> {
     protected final Supplier<Iterator<E>> iteratorFunction;

@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * NullableDoubleStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableDoubleStyleableKey extends AbstractStyleableKey<Double> implements WritableStyleableMapAccessor<Double> {
     private static final long serialVersionUID = 1L;

@@ -13,7 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * AbstractTreeModel.
  *
  * @param <N> the node type
- * @author Werner Randelshofer
  */
 public abstract class AbstractTreeModel<N> implements TreeModel<N> {
 

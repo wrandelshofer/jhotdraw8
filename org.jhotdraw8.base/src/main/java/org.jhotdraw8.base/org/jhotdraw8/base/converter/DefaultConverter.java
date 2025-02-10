@@ -25,7 +25,6 @@ import java.nio.CharBuffer;
  * {@code "null"} is returned.</li>
  * </ul>
  *
- * @author Werner Randelshofer
  */
 public class DefaultConverter implements Converter<Object> {
 

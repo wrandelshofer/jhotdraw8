@@ -17,7 +17,6 @@ import org.jspecify.annotations.Nullable;
  * Note: for performance reasons we do not expand the tree nodes by default.
  *
  * @param <N> the node type
- * @author Werner Randelshofer
  */
 public interface TreePresentationModel<N> {
 

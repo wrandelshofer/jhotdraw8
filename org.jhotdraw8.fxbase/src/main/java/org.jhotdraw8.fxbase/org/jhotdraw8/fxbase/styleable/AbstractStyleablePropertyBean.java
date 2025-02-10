@@ -7,9 +7,9 @@ package org.jhotdraw8.fxbase.styleable;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
 import javafx.css.StyleOrigin;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 import java.util.IdentityHashMap;
@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * AbstractStyleablePropertyBean.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractStyleablePropertyBean
         implements StyleablePropertyBean {

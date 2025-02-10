@@ -19,7 +19,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.application.resources.Resources;
@@ -28,6 +27,7 @@ import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.fxbase.undo.UndoableEditHelper;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 import java.util.LinkedList;
@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 /**
  * AbstractAction.
  *
- * @author Werner Randelshofer
  */
 @SuppressWarnings("this-escape")
 public abstract class AbstractTool extends AbstractDisableable implements Tool {

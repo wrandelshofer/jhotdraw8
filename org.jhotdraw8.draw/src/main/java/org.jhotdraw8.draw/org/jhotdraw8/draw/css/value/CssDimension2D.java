@@ -15,7 +15,6 @@ import java.util.Objects;
 /**
  * Represents a dimension with width, height values specified as {@link CssSize}s.
  *
- * @author Werner Randelshofer
  */
 public class CssDimension2D {
 

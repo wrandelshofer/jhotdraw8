@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * CssStop.
  *
- * @author Werner Randelshofer
  */
 public record CssStop(@Nullable CssSize offset, CssColor color) {
 }

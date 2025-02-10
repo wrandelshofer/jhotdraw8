@@ -11,7 +11,6 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
  * Interface for keys which support styled values from CSS.
  *
  * @param <T> The value type.
- * @author Werner Randelshofer
  */
 public interface WritableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAccessor<T> {
 

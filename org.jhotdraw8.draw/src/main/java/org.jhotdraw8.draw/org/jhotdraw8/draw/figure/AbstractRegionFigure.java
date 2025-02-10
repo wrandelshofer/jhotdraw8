@@ -38,7 +38,6 @@ import java.awt.geom.PathIterator;
 /**
  * Renders a Shape (either a Rectangle or an SVGPath) inside a rectangular region.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractRegionFigure extends AbstractLeafFigure
         implements PathIterableFigure {

@@ -12,7 +12,6 @@ import java.net.URI;
 /**
  * Provides utility methods for absolutizing and relativizing URIs.
  *
- * @author Werner Randelshofer
  */
 public class SimpleUriResolver implements UriResolver {
 

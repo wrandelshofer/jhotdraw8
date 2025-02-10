@@ -19,7 +19,6 @@ import java.util.Collection;
  * ReadableList to a client who does not understand the ReadableList APi.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ObservableListFacade<E> extends ListFacade<E> implements ObservableList<E> {
     public ObservableListFacade(ReadableList<E> backingList) {

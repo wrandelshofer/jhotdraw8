@@ -18,7 +18,6 @@ import org.jhotdraw8.collection.enumerator.IntRangeEnumerator;
  * {@code k ∈ {0, ..., getPrevCount(i) - 1}}.</li>
  * </ul>
  *
- * @author Werner Randelshofer
  */
 public interface IndexedBidiGraph extends IndexedDirectedGraph {
 

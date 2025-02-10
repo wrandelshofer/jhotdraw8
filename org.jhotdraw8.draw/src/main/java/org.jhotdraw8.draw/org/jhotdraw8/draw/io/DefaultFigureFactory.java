@@ -113,7 +113,6 @@ import java.util.logging.Logger;
 /**
  * DefaultFigureFactory.
  *
- * @author Werner Randelshofer
  */
 public class DefaultFigureFactory extends AbstractFigureFactory {
 

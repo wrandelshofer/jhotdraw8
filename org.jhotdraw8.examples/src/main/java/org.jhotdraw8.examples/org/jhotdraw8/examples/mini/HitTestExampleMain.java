@@ -48,7 +48,6 @@ import java.util.stream.IntStream;
 /**
  * CardinalSplineSampleMain.
  *
- * @author Werner Randelshofer
  */
 public class HitTestExampleMain extends Application {
     private final DoubleProperty width = new SimpleDoubleProperty(0.5);

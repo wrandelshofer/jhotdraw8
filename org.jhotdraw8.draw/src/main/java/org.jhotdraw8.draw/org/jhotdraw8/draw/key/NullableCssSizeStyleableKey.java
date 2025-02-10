@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * NullableCssSizeStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableCssSizeStyleableKey extends AbstractStyleableKey<CssSize>
         implements WritableStyleableMapAccessor<CssSize> {

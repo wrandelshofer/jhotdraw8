@@ -34,7 +34,6 @@ import java.util.function.Consumer;
  *     <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class PseudoClassCssConverter extends AbstractCssConverter<PseudoClass> {
 

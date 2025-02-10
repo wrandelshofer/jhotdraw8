@@ -10,15 +10,14 @@ import javafx.collections.ObservableMap;
 import javafx.css.CssMetaData;
 import javafx.css.StyleOrigin;
 import javafx.css.StyleableProperty;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.KeyMapEntryProperty;
+import org.jspecify.annotations.Nullable;
 
 /**
  * KeyMapEntryStyleableProperty.
  *
  * @param <T> the type of the value
- * @author Werner Randelshofer
  */
 public class KeyMapEntryStyleableProperty<T> extends ObjectPropertyBase<T> implements StyleableProperty<T> {
 

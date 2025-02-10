@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * An "id selector" matches an element if the element has an id with the
  * specified value.
  *
- * @author Werner Randelshofer
  */
 public class IdSelector extends SimpleSelector {
 

@@ -89,7 +89,6 @@ import static java.lang.Math.max;
  *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][SENT ] X
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirectedGraph {
 

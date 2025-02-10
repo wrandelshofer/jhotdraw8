@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 /**
  * GrapherMain.
  *
- * @author Werner Randelshofer
  */
 public class GrapherMain extends Application {
 

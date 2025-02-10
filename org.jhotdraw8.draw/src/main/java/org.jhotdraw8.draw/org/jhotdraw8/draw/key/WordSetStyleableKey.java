@@ -14,7 +14,6 @@ import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 /**
  * WordSetStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class WordSetStyleableKey extends NonNullSetStyleableKey<String> {
 

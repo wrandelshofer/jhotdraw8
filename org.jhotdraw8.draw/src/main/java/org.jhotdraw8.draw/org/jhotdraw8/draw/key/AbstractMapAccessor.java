@@ -17,7 +17,6 @@ import java.util.Objects;
  * AbstractMapAccessor.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public abstract class AbstractMapAccessor<T> implements CompositeMapAccessor<T> {
 

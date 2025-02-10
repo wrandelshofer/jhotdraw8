@@ -39,7 +39,6 @@ import java.util.stream.StreamSupport;
  * <b>Layers.</b> By convention the children of a {@code Drawing} must be
  * {@link Layer}s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.</p>
  *
- * @author Werner Randelshofer
  */
 public interface Drawing extends Figure {
 

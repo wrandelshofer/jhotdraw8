@@ -87,7 +87,6 @@ import java.util.function.Consumer;
  *     <dd><a href="https://docs.oracle.com/javafx/2/api/javafx/scene/doc-files/cssref.html">oracle.com</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class EffectCssConverter implements CssConverter<Effect> {
     private static final PersistentList<String> examples = VectorList.of(

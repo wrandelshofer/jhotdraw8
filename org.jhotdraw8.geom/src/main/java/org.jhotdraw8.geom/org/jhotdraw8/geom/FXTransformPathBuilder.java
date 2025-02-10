@@ -11,7 +11,6 @@ import javafx.scene.transform.Transform;
  * TransformPathBuilder.
  *
  * @param <T> the product type
- * @author Werner Randelshofer
  */
 public class FXTransformPathBuilder<T> extends AbstractPathBuilder<T> {
 

@@ -8,7 +8,6 @@ package org.jhotdraw8.geom;
 /**
  * DoubleSvgPathBuilder.
  *
- * @author Werner Randelshofer
  */
 public class SvgFloatPathBuilder implements PathBuilder<String> {
 

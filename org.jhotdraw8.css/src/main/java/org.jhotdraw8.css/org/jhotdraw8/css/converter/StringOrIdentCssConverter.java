@@ -19,7 +19,6 @@ import java.text.ParseException;
 /**
  * Converts an {@code String} from/to a CSS ident-token or a CSS string-token.
  *
- * @author Werner Randelshofer
  */
 public class StringOrIdentCssConverter implements Converter<String> {
 

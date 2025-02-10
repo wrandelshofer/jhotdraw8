@@ -59,7 +59,6 @@ import java.util.Properties;
 /**
  * XmlUtil.
  *
- * @author Werner Randelshofer
  */
 public class XmlUtil {
 

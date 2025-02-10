@@ -42,7 +42,6 @@ import java.util.logging.Logger;
 /**
  * AbstractDrawingView.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingView extends AbstractPropertyBean implements DrawingView {
     private final ObjectProperty<ClipboardOutputFormat> clipboardOutputFormat = new SimpleObjectProperty<>(this, CLIPBOARD_OUTPUT_FORMAT_PROPERTY,

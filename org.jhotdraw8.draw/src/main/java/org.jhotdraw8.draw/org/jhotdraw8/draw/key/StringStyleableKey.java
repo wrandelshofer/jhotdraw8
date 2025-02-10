@@ -12,7 +12,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * StringStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class StringStyleableKey extends AbstractStyleableKey<String>
         implements WritableStyleableMapAccessor<String>, NonNullKey<String> {

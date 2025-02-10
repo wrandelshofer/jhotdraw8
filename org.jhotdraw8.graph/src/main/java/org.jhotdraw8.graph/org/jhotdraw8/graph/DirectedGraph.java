@@ -22,7 +22,6 @@ import java.util.Set;
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
- * @author Werner Randelshofer
  */
 public interface DirectedGraph<V, A> extends BareDirectedGraph<V, A> {
 

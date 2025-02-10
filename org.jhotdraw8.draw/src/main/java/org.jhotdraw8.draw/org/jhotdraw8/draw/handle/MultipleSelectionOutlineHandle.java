@@ -20,7 +20,6 @@ import org.jspecify.annotations.Nullable;
  * Draws the {@code boundsInLocal} of all selected figurs, but does not provide
  * any interactions.
  *
- * @author Werner Randelshofer
  */
 public class MultipleSelectionOutlineHandle extends AbstractHandle {
 

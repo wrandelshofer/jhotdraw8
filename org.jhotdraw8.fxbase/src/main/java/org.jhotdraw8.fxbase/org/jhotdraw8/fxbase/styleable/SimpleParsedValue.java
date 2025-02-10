@@ -12,7 +12,6 @@ import javafx.css.StyleConverter;
  *
  * @param <V> type of the parsed value
  * @param <T> {@code StyleableProperty} type of the converted value
- * @author Werner Randelshofer
  */
 public class SimpleParsedValue<V, T> extends ParsedValue<V, T> {
 

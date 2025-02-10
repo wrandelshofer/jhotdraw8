@@ -30,7 +30,7 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.PathIterator;
 import java.text.ParseException;
@@ -40,7 +40,6 @@ import java.util.List;
 /**
  * Represents an SVG 'path' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgPathFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,

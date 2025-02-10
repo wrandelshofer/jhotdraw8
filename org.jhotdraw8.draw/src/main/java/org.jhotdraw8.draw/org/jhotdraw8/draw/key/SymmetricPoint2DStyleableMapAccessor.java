@@ -11,7 +11,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 /**
  * SymmetricPoint2DStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class SymmetricPoint2DStyleableMapAccessor extends Point2DStyleableMapAccessor
         implements NonNullMapAccessor<Point2D> {

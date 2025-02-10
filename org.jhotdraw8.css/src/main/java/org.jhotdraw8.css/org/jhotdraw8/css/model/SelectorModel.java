@@ -21,7 +21,6 @@ import java.util.Set;
  * operation.
  *
  * @param <T> the element type
- * @author Werner Randelshofer
  */
 public interface SelectorModel<T> {
 

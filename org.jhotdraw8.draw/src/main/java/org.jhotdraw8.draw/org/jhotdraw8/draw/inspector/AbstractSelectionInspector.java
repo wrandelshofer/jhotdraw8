@@ -22,7 +22,6 @@ import java.util.Set;
 /**
  * AbstractSelectionInspector.
  *
- * @author Werner Randelshofer
  */
 @SuppressWarnings("this-escape")
 public abstract class AbstractSelectionInspector extends AbstractInspector<DrawingView> {

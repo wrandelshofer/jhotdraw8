@@ -38,7 +38,6 @@ import java.io.IOException;
  * <dd><a href="http://www.w3.org/TR/2014/CR-css-syntax-3-20140220/">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public interface CssScanner {
     /**

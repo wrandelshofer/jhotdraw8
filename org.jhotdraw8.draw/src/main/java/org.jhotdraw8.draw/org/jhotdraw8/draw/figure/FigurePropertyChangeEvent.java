@@ -13,7 +13,6 @@ import java.io.Serial;
 /**
  * FigurePropertyChangeEvent.
  *
- * @author Werner Randelshofer
  */
 public class FigurePropertyChangeEvent extends Event<Figure> {
 

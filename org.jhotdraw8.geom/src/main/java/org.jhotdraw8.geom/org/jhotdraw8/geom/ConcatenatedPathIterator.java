@@ -16,7 +16,6 @@ import java.util.NoSuchElementException;
 /**
  * Concatenates multiple path iterators.
  *
- * @author Werner Randelshofer
  */
 public class ConcatenatedPathIterator implements PathIterator {
 

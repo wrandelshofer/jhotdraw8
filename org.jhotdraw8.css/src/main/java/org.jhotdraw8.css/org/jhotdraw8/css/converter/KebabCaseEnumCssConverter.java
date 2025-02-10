@@ -23,7 +23,6 @@ import java.util.function.Consumer;
  * {@link LiteralEnumCssConverter}.
  *
  * @param <E> the type of the enum that can be converted from/to CSS
- * @author Werner Randelshofer
  */
 public class KebabCaseEnumCssConverter<E extends Enum<E>> implements CssConverter<E> {
 

@@ -46,7 +46,6 @@ import java.util.Set;
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
- * @author Werner Randelshofer
  */
 public class ImmutableAttributed32BitIndexedBidiGraph<V, A> implements AttributedIndexedBidiGraph<V, A>, BidiGraph<V, A> {
 

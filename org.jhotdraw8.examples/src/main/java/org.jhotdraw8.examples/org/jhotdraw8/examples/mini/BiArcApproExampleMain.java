@@ -35,7 +35,6 @@ import java.util.List;
 /**
  * Example of approximation of Bézier curves by bi-arcs.
  *
- * @author Werner Randelshofer
  */
 public class BiArcApproExampleMain extends Application {
     private final Polyline polyline = new Polyline(

@@ -26,7 +26,6 @@ import java.util.function.Function;
  * </dl>
  *
  * @param <V> the vertex data type
- * @author Werner Randelshofer
  */
 public class BfsDfsVertexSpliterator<V> extends AbstractEnumerator<V> {
 

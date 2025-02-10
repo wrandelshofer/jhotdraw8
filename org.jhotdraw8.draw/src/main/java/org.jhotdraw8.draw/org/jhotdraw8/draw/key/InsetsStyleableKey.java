@@ -12,7 +12,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 /**
  * InsetsStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class InsetsStyleableKey extends AbstractStyleableKey<Insets> implements WritableStyleableMapAccessor<Insets> {
 

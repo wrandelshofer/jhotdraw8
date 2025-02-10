@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * an attribute with the specified name and its value contains the specified
  * substring.
  *
- * @author Werner Randelshofer
  */
 public class SubstringMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;

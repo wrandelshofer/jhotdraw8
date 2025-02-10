@@ -28,7 +28,6 @@ import org.jspecify.annotations.Nullable;
  * and at the end point.
  *
  *
- * @author Werner Randelshofer
  */
 public class LineConnectionWithMarkersFigure extends AbstractStraightLineConnectionWithMarkersFigure
         implements HideableFigure, StyleableFigure,

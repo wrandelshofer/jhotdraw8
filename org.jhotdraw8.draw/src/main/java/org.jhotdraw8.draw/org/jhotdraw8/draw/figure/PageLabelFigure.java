@@ -19,7 +19,6 @@ import java.time.format.FormatStyle;
 /**
  * PageLabelFigure.
  *
- * @author Werner Randelshofer
  */
 public class PageLabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure, StyleableFigure, LockableFigure, TransformableFigure, CompositableFigure {

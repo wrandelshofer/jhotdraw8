@@ -39,7 +39,6 @@ import java.util.List;
  * that allow user-definable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
  * {@link MarkerSegmentableFigure}.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractStraightLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {

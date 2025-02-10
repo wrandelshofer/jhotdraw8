@@ -37,7 +37,6 @@ import java.util.List;
 /**
  * OffsetPathSampleMain.
  *
- * @author Werner Randelshofer
  */
 public class ContourPathExampleMain extends Application {
     private final Polyline polyline = new Polyline(

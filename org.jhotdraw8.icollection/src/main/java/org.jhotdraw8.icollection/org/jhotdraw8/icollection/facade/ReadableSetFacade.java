@@ -20,7 +20,6 @@ import java.util.function.Supplier;
  * Provides a {@link ReadableSet} facade to a set of {@code Set} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ReadableSetFacade<E> extends AbstractReadableSet<E> {
 

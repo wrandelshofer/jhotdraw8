@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * Provides utility methods for computing the convex hull from a set of points.
  *
- * @author Werner Randelshofer
  */
 public class FXConvexHull {
 

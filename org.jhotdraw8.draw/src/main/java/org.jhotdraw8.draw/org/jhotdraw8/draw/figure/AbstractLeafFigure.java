@@ -11,7 +11,6 @@ import javafx.collections.ObservableList;
  * This base class can be used to implement figures which do not support child
  * figures.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractLeafFigure extends AbstractFigure {
 

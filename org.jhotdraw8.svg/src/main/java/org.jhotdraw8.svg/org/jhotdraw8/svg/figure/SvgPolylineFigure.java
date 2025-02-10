@@ -37,7 +37,6 @@ import java.util.List;
 /**
  * Represents an SVG 'polyline' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgPolylineFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,

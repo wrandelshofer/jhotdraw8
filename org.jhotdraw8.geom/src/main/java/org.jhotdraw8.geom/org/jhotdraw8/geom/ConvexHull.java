@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom;
 
 
-import java.awt.*;
+import java.awt.Point;
 import java.awt.geom.Point2D;
 import java.util.Arrays;
 import java.util.List;
@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * Provides utility methods for computing the convex hull from a set of points.
  *
- * @author Werner Randelshofer
  */
 public class ConvexHull {
     /**

@@ -13,7 +13,6 @@ import java.util.Objects;
  * NonNullMapAccessor.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public interface NonNullMapAccessor<T> extends MapAccessor<T> {
     long serialVersionUID = 1L;

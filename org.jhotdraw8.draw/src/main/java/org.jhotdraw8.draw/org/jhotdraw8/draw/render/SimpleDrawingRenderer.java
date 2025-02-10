@@ -6,11 +6,11 @@ package org.jhotdraw8.draw.render;
 
 import javafx.scene.Group;
 import javafx.scene.Node;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -20,7 +20,6 @@ import java.util.Map;
 /**
  * SimpleDrawingRenderer.
  *
- * @author Werner Randelshofer
  */
 public class SimpleDrawingRenderer extends AbstractPropertyBean implements RenderContext {
 

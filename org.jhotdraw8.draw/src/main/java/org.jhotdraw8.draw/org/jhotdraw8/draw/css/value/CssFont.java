@@ -17,7 +17,6 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * Represents a font specified with family, weight, posture and size properties.
  *
- * @author Werner Randelshofer
  */
 public class CssFont {
 

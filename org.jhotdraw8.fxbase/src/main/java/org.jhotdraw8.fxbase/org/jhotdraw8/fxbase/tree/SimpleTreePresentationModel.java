@@ -23,7 +23,6 @@ import java.util.function.Supplier;
  * Note: for performance reasons we do not expand the tree nodes by default.
  *
  * @param <N> the node type
- * @author Werner Randelshofer
  */
 public class SimpleTreePresentationModel<N> extends AbstractTreePresentationModel<N> {
     /**

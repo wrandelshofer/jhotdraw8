@@ -7,10 +7,10 @@ package org.jhotdraw8.draw.css.converter;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.css.value.Paintable;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * CssPaintConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class PaintCssConverterTest {
 

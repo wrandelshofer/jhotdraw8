@@ -17,7 +17,6 @@ import javax.swing.event.UndoableEditEvent;
 /**
  * AbstractDrawingInspector.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingInspector extends AbstractInspector<DrawingView> {
     protected @Nullable DrawingModel drawingModel;

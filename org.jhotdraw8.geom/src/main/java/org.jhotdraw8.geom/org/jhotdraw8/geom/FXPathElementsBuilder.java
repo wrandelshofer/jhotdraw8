@@ -18,7 +18,6 @@ import java.util.List;
 /**
  * FXPathElementsBuilder.
  *
- * @author Werner Randelshofer
  */
 public class FXPathElementsBuilder extends AbstractPathBuilder<List<PathElement>> {
     public static final ClosePath CLOSE_PATH = new ClosePath();

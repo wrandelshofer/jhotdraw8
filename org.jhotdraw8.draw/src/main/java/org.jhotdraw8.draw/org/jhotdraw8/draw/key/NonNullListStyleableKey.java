@@ -19,7 +19,6 @@ import java.lang.reflect.Type;
  * NonNullListStyleableKey.
  *
  * @param <T> the element type of the list
- * @author Werner Randelshofer
  */
 public class NonNullListStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentList<T>>
         implements WritableStyleableMapAccessor<PersistentList<T>>,

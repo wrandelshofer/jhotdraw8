@@ -27,7 +27,6 @@ import java.util.List;
 /**
  * A figure which draws a line connection between two figures.
  *
- * @author Werner Randelshofer
  */
 public class LineConnectionFigure extends AbstractLineConnectionFigure
         implements StrokableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure,

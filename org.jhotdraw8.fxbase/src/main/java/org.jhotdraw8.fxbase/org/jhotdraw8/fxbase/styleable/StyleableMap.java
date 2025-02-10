@@ -19,7 +19,6 @@ import java.util.Set;
  *
  * @param <K> key type
  * @param <V> value type
- * @author Werner Randelshofer
  */
 public interface StyleableMap<K, V> extends ObservableMap<K, V> {
     <T extends K> boolean containsKey(StyleOrigin origin, T key);

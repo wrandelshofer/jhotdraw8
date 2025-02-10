@@ -30,7 +30,6 @@ import java.util.Set;
  * {@code DocumentSelectorModel} provides an API for CSS
  * {@link org.jhotdraw8.css.ast.SelectorGroup}'s.
  *
- * @author Werner Randelshofer
  */
 public class DocumentSelectorModel extends AbstractSelectorModel<Element> {
 

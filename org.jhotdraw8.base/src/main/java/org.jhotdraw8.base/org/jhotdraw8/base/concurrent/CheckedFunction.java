@@ -10,7 +10,6 @@ package org.jhotdraw8.base.concurrent;
  *
  * @param <T> the type of the input to the function
  * @param <R> the type of the result of the function
- * @author Werner Randelshofer
  */
 @FunctionalInterface
 public interface CheckedFunction<T, R> {

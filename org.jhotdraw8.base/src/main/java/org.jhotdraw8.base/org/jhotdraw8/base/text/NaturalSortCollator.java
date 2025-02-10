@@ -41,7 +41,6 @@ import java.util.logging.Logger;
  * java.text.RuleBasedCollator, then the returned collator is used, and only
  * sequences of digits are changed to match the collation rules of Mac OS X.
  *
- * @author Werner Randelshofer
  */
 public class NaturalSortCollator extends Collator {
 

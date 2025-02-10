@@ -30,7 +30,6 @@ import java.util.function.Consumer;
  * <p>
  * The {@code null} value will be converted to the CSS identifier {@code none}.
  *
- * @author Werner Randelshofer
  */
 public class FXPathElementsCssConverter extends AbstractCssConverter<PersistentList<PathElement>> {
 

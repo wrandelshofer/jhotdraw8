@@ -14,7 +14,6 @@ import java.util.function.Consumer;
  * An "and combinator" matches an element if both its first selector and its
  * second selector match the element.
  *
- * @author Werner Randelshofer
  */
 public class AndCombinator extends Combinator {
 

@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * SimpleFigureIdFactory.
  *
- * @author Werner Randelshofer
  */
 public class SimpleFigureIdFactory extends SimpleIdFactory {
     public SimpleFigureIdFactory() {

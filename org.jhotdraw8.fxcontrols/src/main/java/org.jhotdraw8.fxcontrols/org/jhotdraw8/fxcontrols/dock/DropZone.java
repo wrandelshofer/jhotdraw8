@@ -7,7 +7,6 @@ package org.jhotdraw8.fxcontrols.dock;
 /**
  * Defines a drop zone for the drag and drop operation of a DockChild.
  *
- * @author Werner Randelshofer
  */
 public enum DropZone {
     /**

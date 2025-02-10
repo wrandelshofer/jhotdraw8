@@ -18,7 +18,6 @@ import java.lang.reflect.Type;
 /**
  * TListStyleableFigureKey.
  *
- * @author Werner Randelshofer
  */
 public class SvgDefaultablePaintStyleableKey<T extends Paintable> extends AbstractStyleableKey<SvgDefaultablePaint<T>>
         implements WritableStyleableMapAccessor<SvgDefaultablePaint<T>>,

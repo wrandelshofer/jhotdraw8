@@ -31,7 +31,6 @@ import java.util.Objects;
  * {@code TextStrokeableFigure} allows to change the stroke of the
  * text.
  *
- * @author Werner Randelshofer
  */
 public interface TextStrokeableFigure extends Figure {
 

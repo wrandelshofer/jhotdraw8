@@ -23,7 +23,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which supports font attributes.
  *
- * @author Werner Randelshofer
  */
 public interface TextLayoutableFigure extends Figure {
 

@@ -30,7 +30,6 @@ import java.util.function.Consumer;
  * Unit := ("px"|"mm"|"cm"|in"|"pt"|"pc"]"em"|"ex") ;
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public final class SizeCssConverter implements CssConverter<CssSize> {
     private final boolean nullable;

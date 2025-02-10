@@ -14,7 +14,6 @@ import java.util.List;
 /**
  * BezierPathBuilder.
  *
- * @author Werner Randelshofer
  */
 public class BezierPathBuilder extends AbstractPathBuilder<BezierPath> {
 

@@ -12,7 +12,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 /**
  * A {@link Locator} which locates a node on a point of a Figure.
  *
- * @author Werner Randelshofer
  */
 public class PointLocator extends AbstractLocator {
 

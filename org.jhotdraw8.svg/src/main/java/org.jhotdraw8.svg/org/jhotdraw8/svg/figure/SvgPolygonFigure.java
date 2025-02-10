@@ -35,7 +35,6 @@ import java.util.List;
 /**
  * Represents an SVG 'polygon' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgPolygonFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure, PathIterableFigure, HideableFigure, SvgPathLengthFigure, SvgDefaultableFigure,

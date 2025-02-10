@@ -20,7 +20,6 @@ import java.util.function.BiFunction;
  * </ul>
  * A bit mask specifies which control points are in use.
  *
- * @author Werner Randelshofer
  */
 public class BezierNode {
 

@@ -26,7 +26,6 @@ import static java.lang.Math.abs;
 /**
  * CreationTool.
  *
- * @author Werner Randelshofer
  */
 public class CreationTool extends AbstractCreationTool<Figure> {
 

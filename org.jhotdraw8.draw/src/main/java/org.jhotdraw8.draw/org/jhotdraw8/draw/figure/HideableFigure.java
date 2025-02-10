@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * HideableFigure.
  *
- * @author Werner Randelshofer
  */
 public interface HideableFigure extends Figure {
 

@@ -31,7 +31,6 @@ import java.awt.geom.PathIterator;
  * {@code TextFigure} is a {@code TextFontableFigure} which supports stroking and
  * filling of the text.
  *
- * @author Werner Randelshofer
  */
 public class TextFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure, TextFontableFigure, TextLayoutableFigure,

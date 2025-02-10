@@ -12,7 +12,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 /**
  * RegexStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class RegexStyleableKey extends AbstractStyleableKey<RegexReplace> implements WritableStyleableMapAccessor<RegexReplace> {
 

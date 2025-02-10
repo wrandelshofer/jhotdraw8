@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * LabelFigure presents a text on a drawing.
  *
- * @author Werner Randelshofer
  */
 public class LabelFigure extends AbstractLabelFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure,

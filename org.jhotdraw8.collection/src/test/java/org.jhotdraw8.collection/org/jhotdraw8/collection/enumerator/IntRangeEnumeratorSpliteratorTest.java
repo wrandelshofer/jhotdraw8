@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Tests {@link IntRangeEnumerator}.
  *
- * @author Werner Randelshofer
  */
 public class IntRangeEnumeratorSpliteratorTest {
 

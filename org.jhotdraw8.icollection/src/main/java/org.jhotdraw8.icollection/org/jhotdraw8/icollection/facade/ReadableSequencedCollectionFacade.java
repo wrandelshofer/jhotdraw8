@@ -19,7 +19,6 @@ import java.util.function.Supplier;
  * Provides a {@link ReadableSequencedSet} facade to a set of {@code Set} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ReadableSequencedCollectionFacade<E> extends ReadableCollectionFacade<E>
         implements ReadableSequencedCollection<E> {

@@ -16,7 +16,6 @@ import javax.swing.event.UndoableEditEvent;
 /**
  * AbstractDrawingInspector.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingViewInspector extends AbstractInspector<DrawingView> {
 

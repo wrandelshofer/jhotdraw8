@@ -19,7 +19,6 @@ import java.util.List;
 /**
  * MoveUpAction.
  *
- * @author Werner Randelshofer
  */
 public class SendBackwardAction extends AbstractDrawingViewAction {
 

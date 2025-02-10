@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.model;
 /**
  * Represents a bitmask of {@code DirtyBits}.
  *
- * @author Werner Randelshofer
  */
 public class DirtyMask {
 

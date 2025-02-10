@@ -64,7 +64,6 @@ import java.util.Set;
  * <p>
  * Does not preserve whitespace in the XML file.
  *
- * @author Werner Randelshofer
  */
 public class SimpleXmlWriter implements OutputFormat, ClipboardOutputFormat {
     protected FigureFactory figureFactory;

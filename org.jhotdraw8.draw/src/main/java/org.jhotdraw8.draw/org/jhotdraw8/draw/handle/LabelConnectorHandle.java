@@ -41,7 +41,6 @@ import static java.lang.Math.PI;
  * Pressing the alt or the control key while dragging the handle prevents
  * connecting the point.
  *
- * @author Werner Randelshofer
  */
 public class LabelConnectorHandle extends AbstractConnectorHandle {
 

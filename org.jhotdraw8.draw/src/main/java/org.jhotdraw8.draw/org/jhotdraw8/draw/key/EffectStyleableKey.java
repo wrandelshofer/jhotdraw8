@@ -13,7 +13,6 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
 /**
  * EffectStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class EffectStyleableKey extends AbstractStyleableKey<Effect> implements WritableStyleableMapAccessor<Effect> {
 

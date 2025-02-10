@@ -8,12 +8,12 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.css.value.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.undo.FXUndoManager;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The DrawingEditor can be used to edit multiple {@code DrawingView}s with a
@@ -22,7 +22,6 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
  * The DrawingEditor invokes {@code activate()} and {@code deactivate()} methods
  * on the {@code Tool} if it becomes the active tool or loses this status.
  *
- * @author Werner Randelshofer
  */
 public interface DrawingEditor {
 

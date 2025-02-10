@@ -17,7 +17,6 @@ import java.util.function.Consumer;
  * attribute with the specified name and its value starts with the specified
  * substring.
  *
- * @author Werner Randelshofer
  */
 public class PrefixMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;

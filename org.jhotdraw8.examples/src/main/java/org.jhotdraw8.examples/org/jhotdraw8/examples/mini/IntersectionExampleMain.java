@@ -29,7 +29,6 @@ import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.QuadCurves;
 import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
@@ -57,6 +56,7 @@ import org.jhotdraw8.geom.intersect.IntersectRectangleRectangle;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
 import org.jhotdraw8.geom.intersect.IntersectionStatus;
+import org.jspecify.annotations.Nullable;
 
 import java.util.AbstractMap;
 import java.util.ArrayList;
@@ -68,7 +68,6 @@ import java.util.function.Consumer;
 /**
  * IntersectionSampleMain.
  *
- * @author Werner Randelshofer
  */
 public class IntersectionExampleMain extends Application {
 

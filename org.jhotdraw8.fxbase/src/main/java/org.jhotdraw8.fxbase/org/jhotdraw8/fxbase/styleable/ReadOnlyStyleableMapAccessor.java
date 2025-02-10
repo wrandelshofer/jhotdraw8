@@ -4,9 +4,9 @@
  */
 package org.jhotdraw8.fxbase.styleable;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Generic interface for map accessors that are readable by CSS.
@@ -16,7 +16,6 @@ import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
  * convention in JavaFX for APIs that provide read methods but no write methods.
  *
  * @param <T> The value type.
- * @author Werner Randelshofer
  */
 public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
 

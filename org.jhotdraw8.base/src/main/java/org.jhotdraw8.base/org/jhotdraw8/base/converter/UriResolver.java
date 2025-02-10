@@ -11,7 +11,6 @@ import java.net.URI;
 /**
  * Provides utility methods for absolutizing and relativizing URIs.
  *
- * @author Werner Randelshofer
  */
 public interface UriResolver {
     URI relativize(@Nullable URI base, URI uri);

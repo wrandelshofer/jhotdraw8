@@ -23,7 +23,6 @@ import java.util.stream.IntStream;
 /**
  * A {@code byte}-valued list backed by a primitive array.
  *
- * @author Werner Randelshofer
  */
 public class ByteArrayList extends AbstractList<Byte> implements ByteList {
     private static final byte[] EMPTY = new byte[0];

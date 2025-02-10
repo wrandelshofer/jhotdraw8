@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * A "simple class selector" matches an element based on the value of its
  * "pseudo class" attribute.
  *
- * @author Werner Randelshofer
  */
 public class SimplePseudoClassSelector extends PseudoClassSelector {
 

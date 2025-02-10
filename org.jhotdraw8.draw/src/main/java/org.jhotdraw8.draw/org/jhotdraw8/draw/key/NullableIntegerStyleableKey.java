@@ -12,7 +12,6 @@ import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 /**
  * NullableIntegerStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableIntegerStyleableKey extends NullableObjectStyleableKey<Integer> implements WritableStyleableMapAccessor<Integer> {
 

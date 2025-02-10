@@ -16,7 +16,6 @@ import java.util.function.Function;
  * PreorderSpliterator.
  *
  * @param <T> the element type
- * @author Werner Randelshofer
  */
 public class PreorderSpliterator<T> extends AbstractEnumerator<T> {
     private final Function<T, Iterable<? extends T>> getChildrenFunction;

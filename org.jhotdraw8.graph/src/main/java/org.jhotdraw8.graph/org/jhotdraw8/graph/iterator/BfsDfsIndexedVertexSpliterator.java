@@ -17,7 +17,6 @@ import java.util.function.Function;
  * Enumerates vertices in a graph with indexed vertices starting from a root vertex in
  * breadth-first-order or in depth-first-order.
  *
- * @author Werner Randelshofer
  */
 public class BfsDfsIndexedVertexSpliterator extends AbstractIntEnumerator {
 

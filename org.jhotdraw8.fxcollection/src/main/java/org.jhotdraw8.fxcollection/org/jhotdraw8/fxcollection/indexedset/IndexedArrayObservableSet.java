@@ -14,7 +14,6 @@ import java.util.Collection;
  * this set is backed by an array.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class IndexedArrayObservableSet<E> extends AbstractIndexedArrayObservableSet<E> {
     public IndexedArrayObservableSet() {

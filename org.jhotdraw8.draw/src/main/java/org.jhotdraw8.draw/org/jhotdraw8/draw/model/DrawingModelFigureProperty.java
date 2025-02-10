@@ -5,11 +5,11 @@
 package org.jhotdraw8.draw.model;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.event.SimpleWeakListener;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 
@@ -19,7 +19,6 @@ import java.lang.ref.WeakReference;
  * If the key is not declared by the figure, then the value will always be null.
  *
  * @param <T> the value type of the property
- * @author Werner Randelshofer
  */
 public class DrawingModelFigureProperty<T> extends ReadOnlyObjectWrapper<T> {
 

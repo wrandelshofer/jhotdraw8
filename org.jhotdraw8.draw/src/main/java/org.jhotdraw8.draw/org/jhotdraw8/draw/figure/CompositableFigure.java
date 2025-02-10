@@ -24,7 +24,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  * }
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public interface CompositableFigure extends Figure {
 

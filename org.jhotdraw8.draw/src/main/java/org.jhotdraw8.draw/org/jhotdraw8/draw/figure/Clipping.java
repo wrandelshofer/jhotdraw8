@@ -14,7 +14,6 @@ package org.jhotdraw8.draw.figure;
  * A clipping can not have a parent, and thus returns false in
  * isSuitableParent(parent) for all parents except null.
  *
- * @author Werner Randelshofer
  */
 public interface Clipping extends Figure {
 

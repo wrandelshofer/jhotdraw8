@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * Converts a {@code javafx.geometry.Point3D} into a {@code String} and vice
  * versa.
  *
- * @author Werner Randelshofer
  */
 public class Translate3DCssConverter extends AbstractCssConverter<Point3D> {
 

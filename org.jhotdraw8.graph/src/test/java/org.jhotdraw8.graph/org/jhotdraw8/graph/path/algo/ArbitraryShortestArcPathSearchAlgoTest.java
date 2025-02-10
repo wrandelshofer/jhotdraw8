@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * Tests {@link CombinedSequenceFinder}.
  *
- * @author Werner Randelshofer
  */
 public class ArbitraryShortestArcPathSearchAlgoTest {
 

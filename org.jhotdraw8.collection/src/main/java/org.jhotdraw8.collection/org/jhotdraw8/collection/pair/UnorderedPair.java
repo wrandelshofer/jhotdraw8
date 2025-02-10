@@ -10,7 +10,6 @@ import java.util.Objects;
  * This is a value-type.
  *
  * @param <V> the type of the elements that form the pair
- * @author Werner Randelshofer
  */
 public interface UnorderedPair<V> {
     /**

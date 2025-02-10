@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * UniqueShortestPathBuilderTest.
  *
- * @author Werner Randelshofer
  */
 public class UniqueOnDagVertexPathSearchAlgoTest {
 

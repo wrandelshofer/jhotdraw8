@@ -24,7 +24,6 @@ import java.util.BitSet;
  *        </pre>
  *     </li>
  * </ul>
- * @author Werner Randelshofer
  */
 @FunctionalInterface
 public interface AddToIntSet extends AddToSet<Integer> {

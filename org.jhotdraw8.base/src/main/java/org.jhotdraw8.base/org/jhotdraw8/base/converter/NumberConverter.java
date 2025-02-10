@@ -22,7 +22,6 @@ import java.util.Locale;
  * Also allows to specify the minimum and maximum of integer digits, fraction
  * digits, as well as the minimum of negative and positive exponent.
  *
- * @author Werner Randelshofer
  */
 public class NumberConverter implements Converter<Number> {
 

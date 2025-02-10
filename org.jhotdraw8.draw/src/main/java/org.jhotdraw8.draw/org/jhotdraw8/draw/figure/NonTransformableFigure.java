@@ -11,7 +11,6 @@ import org.jhotdraw8.geom.FXTransforms;
 /**
  * Provides default implementations for figures which can not be transformed.
  *
- * @author Werner Randelshofer
  */
 public interface NonTransformableFigure extends TransformCachingFigure {
 

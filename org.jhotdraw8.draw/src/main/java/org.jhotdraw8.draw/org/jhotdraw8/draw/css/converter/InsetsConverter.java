@@ -32,7 +32,6 @@ import java.util.function.Consumer;
  * insets       = top , right , bottom, left ;
  * </pre> *
  *
- * @author Werner Randelshofer
  */
 public class InsetsConverter extends AbstractCssConverter<Insets> {
     public InsetsConverter(boolean nullable) {

@@ -37,7 +37,6 @@ import java.util.TreeSet;
  * <dd><a href="https://www.w3.org/TR/xmlschema-2/#token">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class WordListXmlConverter implements Converter<PersistentList<String>> {
 

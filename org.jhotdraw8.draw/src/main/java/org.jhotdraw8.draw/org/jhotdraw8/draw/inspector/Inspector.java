@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
  * Interface for inspectors.
  *
  * @param <S> the subject type
- * @author Werner Randelshofer
  */
 public interface Inspector<S> {
     /**

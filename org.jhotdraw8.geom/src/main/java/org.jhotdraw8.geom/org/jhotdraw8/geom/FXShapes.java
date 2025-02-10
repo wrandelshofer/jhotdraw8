@@ -35,7 +35,8 @@ import javafx.scene.transform.MatrixType;
 import javafx.scene.transform.Transform;
 import org.jspecify.annotations.Nullable;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Shape;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
@@ -51,7 +52,6 @@ import java.util.logging.Logger;
 /**
  * Provides conversion methods between AWT shapes and JavaFX shapes.
  *
- * @author Werner Randelshofer
  */
 public class FXShapes {
 

@@ -31,7 +31,6 @@ import static java.lang.Math.sqrt;
 /**
  * Transforms.
  *
- * @author Werner Randelshofer
  */
 public class FXTransforms {
     /**

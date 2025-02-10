@@ -140,7 +140,6 @@ import static org.jhotdraw8.css.parser.CssTokenType.TT_URL;
  * <dd><a href="https://drafts.csswg.org/css-values/#urls">drafts.csswg.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class StreamCssTokenizer implements CssTokenizer {
 

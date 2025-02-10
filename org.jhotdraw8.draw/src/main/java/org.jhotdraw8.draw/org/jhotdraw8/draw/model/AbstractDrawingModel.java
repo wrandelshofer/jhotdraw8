@@ -13,7 +13,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * AbstractDrawingModel.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractDrawingModel extends AbstractTreeModel<Figure> implements DrawingModel {
 

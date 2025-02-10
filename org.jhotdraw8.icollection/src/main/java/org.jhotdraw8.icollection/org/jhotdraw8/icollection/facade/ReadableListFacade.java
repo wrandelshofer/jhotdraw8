@@ -18,7 +18,6 @@ import java.util.function.Supplier;
  * Provides a {@link ReadableList} facade to a set of {@code ReadableList} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ReadableListFacade<E> extends AbstractReadableList<E> {
     private final IntSupplier sizeFunction;

@@ -24,7 +24,6 @@ import java.util.function.Function;
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
- * @author Werner Randelshofer
  */
 public class SimpleMutableDirectedGraph<V, A>
         implements MutableDirectedGraph<V, A>, AttributedIndexedDirectedGraph<V, A> {

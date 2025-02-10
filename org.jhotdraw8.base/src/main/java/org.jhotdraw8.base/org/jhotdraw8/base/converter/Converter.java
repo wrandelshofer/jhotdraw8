@@ -17,7 +17,6 @@ import java.text.ParseException;
  * conversion APIs in the JDK.
  *
  * @param <T> the data type
- * @author Werner Randelshofer
  */
 public interface Converter<T> {
     /**

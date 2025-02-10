@@ -10,7 +10,6 @@ import java.util.NoSuchElementException;
 /**
  * MutableIndexedBidiGraph.
  *
- * @author Werner Randelshofer
  */
 public interface MutableIndexedBidiGraph extends IndexedBidiGraph {
     /**

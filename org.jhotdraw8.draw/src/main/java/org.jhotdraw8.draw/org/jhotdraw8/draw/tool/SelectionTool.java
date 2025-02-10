@@ -10,7 +10,6 @@ import javafx.scene.Cursor;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ZoomEvent;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -18,6 +17,7 @@ import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
@@ -40,7 +40,6 @@ import java.util.Map;
  * Holding down the shift key on mouse pressed, enforces the area selection
  * function.
  *
- * @author Werner Randelshofer
  */
 public class SelectionTool extends AbstractTool {
 

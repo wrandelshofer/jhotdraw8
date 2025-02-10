@@ -24,7 +24,6 @@ import java.util.function.Consumer;
 /**
  * SvgCssPaintableConverter.
  *
- * @author Werner Randelshofer
  */
 public class SvgCssPaintableConverter extends AbstractCssConverter<Paintable> {
     /**

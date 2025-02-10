@@ -13,7 +13,6 @@ import java.lang.reflect.Type;
  * A {@link Key} that stores a list of values.
  *
  * @param <E> the element type of the list
- * @author Werner Randelshofer
  */
 public class NonNullListKey<E> extends NonNullObjectKey<PersistentList<E>> {
 

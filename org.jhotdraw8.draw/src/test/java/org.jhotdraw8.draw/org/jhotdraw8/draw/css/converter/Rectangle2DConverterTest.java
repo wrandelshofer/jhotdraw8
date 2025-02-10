@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * CssRectangle2DConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class Rectangle2DConverterTest {
 

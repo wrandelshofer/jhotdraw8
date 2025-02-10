@@ -18,7 +18,6 @@ import java.util.function.Supplier;
 /**
  * MultiClipboardOutputFormat.
  *
- * @author Werner Randelshofer
  */
 public class MultiClipboardInputFormat implements ClipboardInputFormat {
     private @Nullable List<Supplier<ClipboardInputFormat>> formatSuppliers;

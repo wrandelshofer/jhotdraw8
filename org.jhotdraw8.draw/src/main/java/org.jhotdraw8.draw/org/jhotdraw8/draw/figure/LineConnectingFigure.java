@@ -14,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
 /**
  * LineConnectingFigure.
  *
- * @author Werner Randelshofer
  */
 public interface LineConnectingFigure extends ConnectingFigure {
     /**

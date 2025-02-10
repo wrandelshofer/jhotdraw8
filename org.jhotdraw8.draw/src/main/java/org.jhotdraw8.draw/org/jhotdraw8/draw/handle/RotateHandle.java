@@ -47,7 +47,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.SCALE_Y;
  * A Handle to rotate a TransformableFigure around the center of its bounds in
  * local.
  *
- * @author Werner Randelshofer
  */
 public class RotateHandle extends AbstractHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);

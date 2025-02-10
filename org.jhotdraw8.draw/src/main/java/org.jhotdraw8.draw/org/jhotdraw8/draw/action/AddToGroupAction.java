@@ -21,7 +21,6 @@ import java.util.List;
 /**
  * AddToGroupAction.
  *
- * @author Werner Randelshofer
  */
 public class AddToGroupAction extends AbstractDrawingViewAction {
 

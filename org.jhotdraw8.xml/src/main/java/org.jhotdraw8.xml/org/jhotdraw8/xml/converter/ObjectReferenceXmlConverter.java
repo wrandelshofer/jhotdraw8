@@ -20,7 +20,6 @@ import java.util.logging.Logger;
  * Converts references to figures.
  *
  * @param <T> the type
- * @author Werner Randelshofer
  */
 public class ObjectReferenceXmlConverter<T> implements Converter<T> {
 

@@ -12,7 +12,6 @@ import java.nio.CharBuffer;
 /**
  * CharBufferReader.
  *
- * @author Werner Randelshofer
  */
 public class CharBufferReader extends Reader {
 

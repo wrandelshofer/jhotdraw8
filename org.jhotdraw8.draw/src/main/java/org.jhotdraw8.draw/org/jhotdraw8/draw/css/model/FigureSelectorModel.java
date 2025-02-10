@@ -46,7 +46,6 @@ import java.util.stream.Collectors;
 /**
  * FigureSelectorModel.
  *
- * @author Werner Randelshofer
  */
 public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     public static final String JAVA_CLASS_NAMESPACE = "http://java.net";

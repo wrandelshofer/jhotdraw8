@@ -4,10 +4,10 @@
  */
 package org.jhotdraw8.draw.xml.converter;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.geom.shape.BezierNode;
 import org.jhotdraw8.geom.shape.BezierPath;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 
@@ -18,7 +18,6 @@ import java.io.IOException;
  * <p>
  * If the path is a straight line, it will be converted to an empty String.
  *
- * @author Werner Randelshofer
  */
 public class PathConnectionBezierPathXmlConverter extends BezierPathXmlConverter {
 

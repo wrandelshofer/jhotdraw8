@@ -42,7 +42,6 @@ import java.util.function.Consumer;
  *
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class LinearGradientCssConverter extends AbstractCssConverter<CssLinearGradient> {
     private static final ColorCssConverter colorConverter = new ColorCssConverter(false);

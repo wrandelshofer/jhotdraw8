@@ -37,7 +37,6 @@ import java.util.List;
 /**
  * DrawingFigure.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractDrawing extends AbstractCompositeFigure
         implements Drawing {

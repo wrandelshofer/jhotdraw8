@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * Point2DStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullablePoint2DStyleableKey extends AbstractStyleableKey<Point2D> implements WritableStyleableMapAccessor<Point2D> {
 

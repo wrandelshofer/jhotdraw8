@@ -15,7 +15,6 @@ import java.util.function.Consumer;
 /**
  * A "type selector" matches an element if the element has a specific type.
  *
- * @author Werner Randelshofer
  */
 public class TypeSelector extends SimpleSelector {
     /**

@@ -14,7 +14,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * PropertyBeanTest.
  *
- * @author Werner Randelshofer
  */
 public class PropertyBeanTest {
 

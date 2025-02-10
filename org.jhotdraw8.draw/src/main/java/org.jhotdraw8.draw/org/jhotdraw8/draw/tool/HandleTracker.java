@@ -5,9 +5,9 @@
 package org.jhotdraw8.draw.tool;
 
 import javafx.scene.Node;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.handle.Handle;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -20,7 +20,6 @@ import java.util.Collection;
  * values of the corresponding properties in the {@link Node} provided
  * by the current {@link Handle}.
  *
- * @author Werner Randelshofer
  */
 public interface HandleTracker extends Tracker {
 

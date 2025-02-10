@@ -18,7 +18,6 @@ import java.util.LinkedList;
 /**
  * SendToBackAction.
  *
- * @author Werner Randelshofer
  */
 public class SendToBackAction extends AbstractDrawingViewAction {
 

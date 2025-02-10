@@ -12,7 +12,6 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 /**
  * LabelConnectionFigure.
  *
- * @author Werner Randelshofer
  */
 public class SimpleLabelConnectionFigure extends AbstractLabelConnectionFigure
         implements HideableFigure, TextFontableFigure, TextLayoutableFigure,

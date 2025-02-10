@@ -16,7 +16,6 @@ import java.util.NoSuchElementException;
  * Iterates in preorder sequence over all expanded tree items.
  *
  * @param <T> The type of the value property within TreeItem.
- * @author Werner Randelshofer
  */
 public class ExpandedTreeItemIterator<T> implements Iterator<TreeItem<T>> {
 

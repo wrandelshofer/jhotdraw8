@@ -28,7 +28,6 @@ import java.util.function.Consumer;
  * <p>
  * The null value will be converted to the CSS identifier "none".
  *
- * @author Werner Randelshofer
  */
 public class FXPathCssConverter extends AbstractCssConverter<Path> {
 

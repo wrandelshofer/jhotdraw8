@@ -19,7 +19,6 @@ import java.util.Objects;
  * @param <K> key type
  * @param <V> map value type
  * @param <T> entry value type
- * @author Werner Randelshofer
  */
 public class MapEntryProperty<K, V, T extends V> extends ObjectPropertyBase<T>
         implements MapChangeListener<K, V> {

@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * An "exists match" matches an element if the element has an attribute with the
  * specified name.
  *
- * @author Werner Randelshofer
  */
 public class ExistsMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;

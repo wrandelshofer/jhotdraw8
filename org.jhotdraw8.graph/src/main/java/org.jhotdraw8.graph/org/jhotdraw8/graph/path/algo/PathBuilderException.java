@@ -9,7 +9,6 @@ import java.io.Serial;
 /**
  * PathBuilderException.
  *
- * @author Werner Randelshofer
  */
 public class PathBuilderException extends Exception {
 

@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * CssScannerNGTest.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractCssScannerTest {
 

@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
  * StartAndEndPointPathBuilder gets the first start point and last end point of a path,
  * and the derivatives of these points.
  *
- * @author Werner Randelshofer
  */
 public class StartAndEndPointPathBuilder extends AbstractPathBuilder<Void> {
     private double startX;

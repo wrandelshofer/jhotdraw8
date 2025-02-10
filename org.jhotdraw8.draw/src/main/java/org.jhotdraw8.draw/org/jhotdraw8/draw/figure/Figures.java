@@ -15,7 +15,6 @@ import static java.lang.Math.min;
 /**
  * Figures.
  *
- * @author Werner Randelshofer
  */
 public class Figures {
 

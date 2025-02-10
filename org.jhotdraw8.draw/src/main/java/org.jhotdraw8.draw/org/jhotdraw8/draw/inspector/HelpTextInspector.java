@@ -20,7 +20,6 @@ import java.net.URL;
 /**
  * The help inspector displays the current help text of the drawing view.
  *
- * @author werni
  */
 public class HelpTextInspector extends AbstractDrawingViewInspector {
 

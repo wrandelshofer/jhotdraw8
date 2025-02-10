@@ -13,7 +13,6 @@ import java.net.URI;
 /**
  * NullableUriStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableUriStyleableKey extends AbstractStyleableKey<URI> implements WritableStyleableMapAccessor<URI> {
 

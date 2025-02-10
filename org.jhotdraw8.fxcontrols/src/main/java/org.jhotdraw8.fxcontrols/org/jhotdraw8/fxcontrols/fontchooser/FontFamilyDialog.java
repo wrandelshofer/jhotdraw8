@@ -24,7 +24,6 @@ import java.util.logging.Logger;
 /**
  * FontDialog for selecting a font family.
  *
- * @author Werner Randelshofer
  */
 public class FontFamilyDialog extends Dialog<String> {
 

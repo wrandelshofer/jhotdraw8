@@ -24,7 +24,6 @@ import java.util.List;
 /**
  * Represents an SVG 'defs' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgDefsFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, NonTransformableFigure, HideableFigure, StyleableFigure, LockableFigure,

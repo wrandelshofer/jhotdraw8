@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * <p>
  * Parses an attribute value of type double.
  *
- * @author Werner Randelshofer
  */
 public class DoubleCssConverter extends AbstractCssConverter<Double> {
     private final static DoubleConverter doubleConverter = new DoubleConverter();

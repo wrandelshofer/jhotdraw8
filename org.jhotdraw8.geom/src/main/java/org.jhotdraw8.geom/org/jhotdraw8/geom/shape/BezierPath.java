@@ -34,7 +34,6 @@ import java.awt.geom.Rectangle2D;
  * passes through C0. C1 controls the curve going towards C0. C2 controls the
  * curve going away from C0.
  *
- * @author Werner Randelshofer
  */
 public class BezierPath extends VectorList<BezierNode> implements Shape {
     /**

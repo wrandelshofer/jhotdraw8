@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * Rectangle2DStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class CssRectangle2DStyleableMapAccessor extends AbstractStyleableMapAccessor<CssRectangle2D>
         implements NonNullMapAccessor<CssRectangle2D> {

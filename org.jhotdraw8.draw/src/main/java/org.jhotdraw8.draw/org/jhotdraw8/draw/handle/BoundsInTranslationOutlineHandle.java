@@ -29,7 +29,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSLATE_Y;
  * Draws the {@code boundsInLocal} with applied translation of a {@code Figure},
  * but does not provide any interactions.
  *
- * @author Werner Randelshofer
  */
 public class BoundsInTranslationOutlineHandle extends AbstractHandle {
     private final Group node;

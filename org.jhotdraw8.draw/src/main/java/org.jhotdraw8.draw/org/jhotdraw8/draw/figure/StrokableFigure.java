@@ -35,7 +35,6 @@ import java.util.Objects;
  * Interface for figures which render a {@code javafx.scene.shape.Shape} and can
  * be stroked.
  *
- * @author Werner Randelshofer
  */
 public interface StrokableFigure extends Figure {
 

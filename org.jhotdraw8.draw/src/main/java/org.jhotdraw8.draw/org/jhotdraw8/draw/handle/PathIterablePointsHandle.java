@@ -27,7 +27,6 @@ import java.util.List;
  * <p>
  * Does not provide interactions. Just increases the hit area of the figure.
  *
- * @author Werner Randelshofer
  */
 public class PathIterablePointsHandle extends AbstractHandle {
 

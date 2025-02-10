@@ -18,7 +18,6 @@ import java.util.Map;
  * <p>
  * This comparator caches the collation keys.
  *
- * @author Werner Randelshofer
  */
 public class CachingCollator implements Comparator<String> {
 

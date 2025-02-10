@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
  * <p>
  * A stylesheet is identified by a {@link URI}.
  *
- * @author Werner Randelshofer
  */
 public class Stylesheet extends AbstractSyntaxTree {
 

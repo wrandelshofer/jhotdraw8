@@ -22,7 +22,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * Constrainers can draw themselves onto the drawing view to visualize the
  * constraints that they impose. Typically by drawing a grid of some kind.
  *
- * @author Werner Randelshofer
  */
 public interface Constrainer extends Observable {
 

@@ -9,7 +9,6 @@ import org.jhotdraw8.draw.css.converter.EffectCssConverter;
 /**
  * XmlEffectConverter.
  *
- * @author Werner Randelshofer
  */
 public class EffectXmlCssConverter extends EffectCssConverter {
 

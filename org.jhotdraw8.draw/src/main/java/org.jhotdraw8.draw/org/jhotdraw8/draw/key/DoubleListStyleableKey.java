@@ -14,7 +14,6 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
 /**
  * DoubleListStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class DoubleListStyleableKey extends AbstractStyleableKey<PersistentList<Double>> implements WritableStyleableMapAccessor<PersistentList<Double>> {
 

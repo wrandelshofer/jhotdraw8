@@ -33,7 +33,6 @@ import static java.lang.Integer.max;
  *
  * @param <K> key type
  * @param <V> value type
- * @author Werner Randelshofer
  */
 public class SimpleStyleableMap<K, V> extends AbstractMap<K, V> implements StyleableMap<K, V> {
     @Override

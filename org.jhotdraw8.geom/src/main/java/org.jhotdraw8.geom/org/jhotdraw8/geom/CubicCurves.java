@@ -18,7 +18,6 @@ import static org.jhotdraw8.geom.Lines.lerp;
 /**
  * Provides utility methods for Bézier curves.
  *
- * @author Werner Randelshofer
  */
 public class CubicCurves {
 

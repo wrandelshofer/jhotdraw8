@@ -19,7 +19,6 @@ import java.util.function.Consumer;
  * A "selector group" matches an element if one of its selectors matches the
  * element.
  *
- * @author Werner Randelshofer
  */
 public class SelectorGroup extends Selector {
 

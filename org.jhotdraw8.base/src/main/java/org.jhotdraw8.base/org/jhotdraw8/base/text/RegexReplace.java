@@ -15,7 +15,6 @@ import java.util.regex.Pattern;
 /**
  * Find - ReplaceAll regular expression.
  *
- * @author Werner Randelshofer
  */
 public class RegexReplace {
 

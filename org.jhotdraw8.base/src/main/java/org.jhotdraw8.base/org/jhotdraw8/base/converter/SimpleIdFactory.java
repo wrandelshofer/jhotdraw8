@@ -13,7 +13,6 @@ import java.util.Map;
 /**
  * SimpleIdFactory.
  *
- * @author Werner Randelshofer
  */
 public class SimpleIdFactory implements IdFactory {
     private final Map<String, Long> prefixToNextId = new HashMap<>(128, 0.4f);

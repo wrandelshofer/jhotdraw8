@@ -15,7 +15,6 @@ import java.util.function.Function;
  * BreadthFirstSpliterator for a tree structure.
  *
  * @param <V> the vertex data type
- * @author Werner Randelshofer
  */
 public class TreeBreadthFirstSpliterator<V> extends AbstractEnumerator<V> {
 

@@ -40,7 +40,6 @@ import java.util.function.Consumer;
  * letter        = ? 'a' through 'z' ? | ? 'A' through 'Z' ? ;
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class IdentCssConverter extends AbstractCssConverter<String> {
 

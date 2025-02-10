@@ -8,7 +8,6 @@ package org.jhotdraw8.draw.figure;
 /**
  * LabelAutorotate.
  *
- * @author Werner Randelshofer
  */
 public enum LabelAutorotate {
     /**

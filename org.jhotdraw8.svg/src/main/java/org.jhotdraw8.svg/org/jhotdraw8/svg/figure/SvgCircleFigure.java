@@ -29,7 +29,6 @@ import java.awt.geom.PathIterator;
 /**
  * Represents an SVG 'circle' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgCircleFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,

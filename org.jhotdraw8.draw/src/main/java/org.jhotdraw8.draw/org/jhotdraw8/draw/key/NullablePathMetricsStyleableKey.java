@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * PathMetricsStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullablePathMetricsStyleableKey
         extends AbstractStyleableKey<PathMetrics>

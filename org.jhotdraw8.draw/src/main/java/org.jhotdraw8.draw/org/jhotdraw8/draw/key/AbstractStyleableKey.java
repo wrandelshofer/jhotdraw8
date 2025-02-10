@@ -14,7 +14,6 @@ import java.lang.reflect.Type;
  * AbstractStyleableKey.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
 

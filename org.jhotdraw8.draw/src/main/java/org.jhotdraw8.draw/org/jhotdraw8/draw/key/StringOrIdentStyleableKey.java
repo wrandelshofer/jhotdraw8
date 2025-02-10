@@ -13,7 +13,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
  * This key has a string value which can be given as a CSS "IDENT"-token or
  * as a CSS "STRING"-token.
  *
- * @author Werner Randelshofer
  */
 public class StringOrIdentStyleableKey extends AbstractStyleableKey<String>
         implements WritableStyleableMapAccessor<String>, NonNullKey<String> {

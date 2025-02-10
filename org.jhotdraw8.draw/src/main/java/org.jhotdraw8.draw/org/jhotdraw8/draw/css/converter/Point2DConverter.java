@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * Converts a {@code javafx.geometry.Point2D} into a {@code String} and vice
  * versa.
  *
- * @author Werner Randelshofer
  */
 public class Point2DConverter extends AbstractCssConverter<Point2D> {
 

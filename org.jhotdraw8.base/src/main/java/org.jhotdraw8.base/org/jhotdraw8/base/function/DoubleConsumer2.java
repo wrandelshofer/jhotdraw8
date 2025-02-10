@@ -7,7 +7,6 @@ package org.jhotdraw8.base.function;
 /**
  * DoubleConsumer2.
  *
- * @author Werner Randelshofer
  */
 @FunctionalInterface
 public interface DoubleConsumer2 {

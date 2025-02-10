@@ -167,7 +167,6 @@ import static org.jhotdraw8.css.ast.TypeSelector.WITHOUT_NAMESPACE;
  * <p>
  * FIXME The parser does not support the !important declaration.
  *
- * @author Werner Randelshofer
  */
 public class CssParser {
 

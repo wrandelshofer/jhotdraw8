@@ -21,7 +21,6 @@ import java.util.Objects;
  * AbstractStyleableMapAccessor.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public abstract class AbstractStyleableMapAccessor<T>
         implements WritableStyleableMapAccessor<T>, CompositeMapAccessor<T> {

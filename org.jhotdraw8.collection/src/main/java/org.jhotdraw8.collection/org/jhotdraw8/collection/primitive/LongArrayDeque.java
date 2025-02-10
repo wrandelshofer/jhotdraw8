@@ -14,7 +14,6 @@ import java.util.Objects;
 /**
  * A {@code long}-valued deque backed by a primitive array.
  *
- * @author Werner Randelshofer
  */
 public class LongArrayDeque extends AbstractCollection<Long> implements LongDeque {
     /**

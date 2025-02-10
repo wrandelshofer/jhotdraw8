@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which holds text in an attribute.
  *
- * @author Werner Randelshofer
  */
 public interface TextableFigure extends Figure {
 

@@ -21,7 +21,6 @@ import java.util.Set;
 /**
  * RemoveTransformationsAction.
  *
- * @author Werner Randelshofer
  */
 public class RemoveTransformationsAction extends AbstractDrawingViewAction {
 

@@ -14,7 +14,6 @@ import java.io.Serial;
  * TreeModelEvent.
  *
  * @param <N> the node type
- * @author Werner Randelshofer
  */
 @SuppressWarnings({"serial", "RedundantSuppression"})
 public class TreeModelEvent<N> extends Event<TreeModel<N>> {

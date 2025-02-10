@@ -7,7 +7,6 @@ package org.jhotdraw8.collection.primitive;
 /**
  * ByteConsumer.
  *
- * @author Werner Randelshofer
  */
 @FunctionalInterface
 public interface ByteConsumer {

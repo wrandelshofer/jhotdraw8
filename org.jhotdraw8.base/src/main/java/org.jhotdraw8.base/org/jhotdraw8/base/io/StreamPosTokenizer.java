@@ -20,7 +20,6 @@ import static java.lang.Math.max;
  * The handling of numeric data is also different: a single dot '.' and minus
  * dot '-.' are not treated as numbers.
  *
- * @author Werner Randelshofer
  */
 public class StreamPosTokenizer /*extends StreamTokenizer*/ {
 

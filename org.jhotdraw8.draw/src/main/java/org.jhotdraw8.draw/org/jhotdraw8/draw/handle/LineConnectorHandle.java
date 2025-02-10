@@ -41,7 +41,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
  * Pressing the alt or the control key while dragging the handle prevents
  * connecting the point.
  *
- * @author Werner Randelshofer
  */
 public class LineConnectorHandle extends AbstractConnectorHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);

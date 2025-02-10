@@ -17,7 +17,6 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
 /**
  * Point2DListStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class Point2DListStyleableKey extends AbstractStyleableKey<PersistentList<Point2D>>
         implements WritableStyleableMapAccessor<PersistentList<Point2D>>, NonNullKey<PersistentList<Point2D>> {

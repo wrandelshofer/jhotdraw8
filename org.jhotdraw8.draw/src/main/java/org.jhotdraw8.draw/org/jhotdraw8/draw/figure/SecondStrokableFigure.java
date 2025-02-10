@@ -28,7 +28,6 @@ import java.util.Objects;
 /**
  * Interface for figures which can render a second stroke.
  *
- * @author Werner Randelshofer
  */
 public interface SecondStrokableFigure extends Figure {
 

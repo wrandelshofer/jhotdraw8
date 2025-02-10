@@ -15,7 +15,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * NullableFXSvgPathStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableFXPathElementsStyleableKey extends AbstractStyleableKey<PersistentList<PathElement>> implements WritableStyleableMapAccessor<PersistentList<PathElement>> {
 

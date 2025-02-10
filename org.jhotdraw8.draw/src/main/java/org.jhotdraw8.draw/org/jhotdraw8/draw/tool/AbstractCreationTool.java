@@ -5,12 +5,12 @@
 
 package org.jhotdraw8.draw.tool;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.Supplier;
 
@@ -18,7 +18,6 @@ import java.util.function.Supplier;
  * AbstractCreationTool.
  *
  * @param <F> the type of the figures that can be created by this tool
- * @author Werner Randelshofer
  */
 public abstract class AbstractCreationTool<F extends Figure> extends AbstractTool {
     protected Supplier<Layer> layerFactory;

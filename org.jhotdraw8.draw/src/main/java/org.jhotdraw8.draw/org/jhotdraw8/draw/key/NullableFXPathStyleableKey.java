@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * NullableSvgPathStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableFXPathStyleableKey extends AbstractStyleableKey<Path> implements WritableStyleableMapAccessor<Path> {
 

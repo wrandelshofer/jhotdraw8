@@ -25,7 +25,6 @@ import java.util.stream.Stream;
  * Provides a {@link List} facade to a set of {@code PersistentList} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class MutableListFacade<E> extends AbstractList<E> implements ReadableList<E>, List<E> {
     private PersistentList<E> backingList;

@@ -11,7 +11,6 @@ import java.awt.geom.Point2D;
  * AbstractPathBuilder.
  *
  * @param <T> the product type
- * @author Werner Randelshofer
  */
 public abstract class AbstractPathBuilder<T> implements PathBuilder<T> {
 

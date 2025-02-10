@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * DepthFirstSpliteratorTest.
  *
- * @author Werner Randelshofer
  */
 public class DepthFirstSpliteratorTest {
 

@@ -42,7 +42,6 @@ import java.util.concurrent.Executors;
 /**
  * TeddyActivityController.
  *
- * @author Werner Randelshofer
  */
 public class TeddyActivity extends AbstractFileBasedActivity implements FileBasedActivity, Initializable, FontableActivity {
 

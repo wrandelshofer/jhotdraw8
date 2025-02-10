@@ -13,7 +13,6 @@ import java.awt.geom.Point2D;
  * operations.
  *
  * @param <T> the product type
- * @author Werner Randelshofer
  */
 public interface PathBuilder<T> {
 

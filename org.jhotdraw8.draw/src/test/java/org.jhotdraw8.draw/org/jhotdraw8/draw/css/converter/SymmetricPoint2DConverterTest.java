@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * CssSymmetricPoint2DConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class SymmetricPoint2DConverterTest {
 

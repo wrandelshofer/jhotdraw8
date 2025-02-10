@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
  *
  * @param <U> the type of the first element of the pair
  * @param <V> the type of the second element of the pair
- * @author Werner Randelshofer
  */
 public class NonNullOrderedPair<U, V> implements OrderedPair<U, V> {
     private final U a;

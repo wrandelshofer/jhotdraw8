@@ -28,7 +28,6 @@ import java.io.Serial;
  *     <dd><a href="https://www.w3.org/TR/css-color-4/#the-hsl-notation">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class ParametricHlsColorSpace extends AbstractNamedColorSpace {
 

@@ -23,7 +23,6 @@ import java.util.function.Supplier;
  *
  * @param <K> the key type
  * @param <V> the value type
- * @author Werner Randelshofer
  */
 public class ReadableSortedMapFacade<K, V> extends ReadableMapFacade<K, V>
         implements ReadableSortedMap<K, V> {

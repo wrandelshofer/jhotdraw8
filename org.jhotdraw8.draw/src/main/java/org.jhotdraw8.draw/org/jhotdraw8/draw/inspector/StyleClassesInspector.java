@@ -44,7 +44,6 @@ import java.util.function.Supplier;
 /**
  * FXML Controller class
  *
- * @author Werner Randelshofer
  */
 public class StyleClassesInspector extends AbstractSelectionInspector {
 

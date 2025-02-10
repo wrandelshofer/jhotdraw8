@@ -25,7 +25,6 @@ import java.util.stream.DoubleStream;
 /**
  * A {@code double}-valued list backed by a primitive array.
  *
- * @author Werner Randelshofer
  */
 public class DoubleArrayList extends AbstractList<Double> implements DoubleList {
     private static final double[] EMPTY = new double[0];

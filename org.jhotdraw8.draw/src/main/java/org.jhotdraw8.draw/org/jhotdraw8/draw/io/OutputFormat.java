@@ -21,7 +21,6 @@ import java.nio.file.Paths;
 /**
  * OutputFormat.
  *
- * @author Werner Randelshofer
  */
 public interface OutputFormat {
     void setOptions(PersistentMap<Key<?>, Object> newValue);

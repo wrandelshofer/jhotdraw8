@@ -21,7 +21,6 @@ import java.util.function.Consumer;
  * Converts a {@code javafx.geometry.Rectangle2D} into a {@code String} and vice
  * versa.
  *
- * @author Werner Randelshofer
  */
 public class Rectangle2DConverter extends AbstractCssConverter<Rectangle2D> {
     private final boolean withSpace;

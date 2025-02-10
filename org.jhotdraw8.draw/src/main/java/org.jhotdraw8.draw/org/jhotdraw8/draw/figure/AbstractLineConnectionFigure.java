@@ -24,7 +24,6 @@ import java.util.SequencedSet;
 /**
  * Base class for line connection figure.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractLineConnectionFigure extends AbstractLeafFigure
         implements NonTransformableFigure, LineConnectingFigure {

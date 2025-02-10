@@ -27,7 +27,6 @@ import java.util.function.Consumer;
  * Converts a data value of type {@code T} from or to a CSS Tokenizer.
  *
  * @param <T> the type of the data that can be converted from/to CSS
- * @author Werner Randelshofer
  */
 public interface CssConverter<T> extends Converter<T> {
     /**

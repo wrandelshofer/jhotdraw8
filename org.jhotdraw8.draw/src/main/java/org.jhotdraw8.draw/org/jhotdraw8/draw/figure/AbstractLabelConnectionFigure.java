@@ -61,7 +61,6 @@ import java.util.Set;
  *
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractLabelConnectionFigure extends AbstractLabelFigure
         implements ConnectingFigure, TransformableFigure, LabelConnectionFigure {

@@ -19,7 +19,6 @@ import java.util.function.Consumer;
  * immediately followed by a dash '-' character. This is primarily intended to
  * allow language subcode matches.
  *
- * @author Werner Randelshofer
  */
 public class DashMatchSelector extends AbstractAttributeSelector {
     private final @Nullable String namespacePattern;

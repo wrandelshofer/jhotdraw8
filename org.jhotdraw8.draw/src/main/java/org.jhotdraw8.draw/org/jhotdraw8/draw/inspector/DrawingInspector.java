@@ -33,7 +33,6 @@ import java.net.URL;
 /**
  * FXML Controller class
  *
- * @author Werner Randelshofer
  */
 public class DrawingInspector extends AbstractDrawingInspector {
 

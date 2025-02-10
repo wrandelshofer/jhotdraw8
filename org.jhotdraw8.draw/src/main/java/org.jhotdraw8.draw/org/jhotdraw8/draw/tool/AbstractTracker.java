@@ -6,19 +6,18 @@ package org.jhotdraw8.draw.tool;
 
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.AbstractDisableable;
 import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
 import org.jhotdraw8.fxbase.undo.CompositeEdit;
+import org.jspecify.annotations.Nullable;
 
 import javax.swing.event.UndoableEditEvent;
 
 /**
  * AbstractAction.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractTracker extends AbstractDisableable implements Tracker {
 

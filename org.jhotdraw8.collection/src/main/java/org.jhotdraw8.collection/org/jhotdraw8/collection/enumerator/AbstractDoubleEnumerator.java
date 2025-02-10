@@ -9,7 +9,6 @@ import java.util.Spliterators;
 /**
  * Abstract base class for {@link Enumerator.OfDouble}s.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractDoubleEnumerator
         extends Spliterators.AbstractDoubleSpliterator

@@ -24,7 +24,6 @@ import org.jspecify.annotations.Nullable;
  * Draws the {@code wireframe} of a {@code LineFigure}, but does not provide any
  * interactions.
  *
- * @author Werner Randelshofer
  */
 public class LineOutlineHandle extends AbstractHandle {
     private final Group node;

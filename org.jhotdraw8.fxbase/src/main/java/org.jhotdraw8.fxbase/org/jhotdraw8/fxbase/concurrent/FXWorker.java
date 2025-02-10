@@ -18,7 +18,6 @@ import java.util.concurrent.ForkJoinPool;
  * {@code FXWorker} provides convenience methods for
  * executing {@link CheckedRunnable} objects on a
  *
- * @author Werner Randelshofer
  */
 public class FXWorker {
 

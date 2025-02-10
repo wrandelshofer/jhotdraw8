@@ -15,7 +15,6 @@ import java.util.Map;
 /**
  * BoundingBoxMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class BoundingBoxMapAccessor extends AbstractMapAccessor<BoundingBox> {
 

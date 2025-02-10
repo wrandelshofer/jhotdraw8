@@ -11,7 +11,6 @@ import org.jhotdraw8.icollection.persistent.PersistentSet;
 /**
  * WordSetKey.
  *
- * @author Werner Randelshofer
  */
 public class WordSetKey extends NonNullObjectKey<PersistentSet<String>> {
 

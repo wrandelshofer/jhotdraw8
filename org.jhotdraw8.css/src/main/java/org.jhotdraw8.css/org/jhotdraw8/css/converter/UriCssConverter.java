@@ -25,7 +25,6 @@ import java.util.function.Consumer;
  * uri =  (* css uri *) ;
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class UriCssConverter extends AbstractCssConverter<URI> {
     private final @Nullable String helpText;

@@ -15,7 +15,6 @@ import org.jhotdraw8.draw.render.RenderContext;
 /**
  * {@code TextFillableFigure} allows to change the fill of the text.
  *
- * @author Werner Randelshofer
  */
 public interface TextFillableFigure extends Figure {
 

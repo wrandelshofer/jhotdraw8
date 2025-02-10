@@ -30,7 +30,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * Handle for moving all selected figures.
  *
- * @author Werner Randelshofer
  */
 public class MultipleSelectionMoveHandle extends AbstractHandle {
 

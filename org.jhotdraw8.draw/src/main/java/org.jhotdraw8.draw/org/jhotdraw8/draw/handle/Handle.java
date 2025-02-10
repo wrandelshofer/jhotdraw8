@@ -16,7 +16,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * Handle.
  *
- * @author Werner Randelshofer
  */
 public interface Handle {
     // ---

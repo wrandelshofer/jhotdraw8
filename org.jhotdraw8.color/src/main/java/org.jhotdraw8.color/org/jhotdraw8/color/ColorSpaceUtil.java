@@ -16,7 +16,6 @@ import java.util.logging.Logger;
 /**
  * A utility class for {@code ColorSpace} objects.
  *
- * @author Werner Randelshofer
  */
 public class ColorSpaceUtil {
 

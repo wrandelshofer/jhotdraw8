@@ -12,7 +12,6 @@ import javafx.beans.property.StringProperty;
 /**
  * FontTypeface.
  *
- * @author Werner Randelshofer
  */
 public class FontTypeface {
 

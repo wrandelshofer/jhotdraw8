@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.draw.xml.converter;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.base.converter.IdResolver;
 import org.jhotdraw8.base.converter.IdSupplier;
@@ -14,6 +13,7 @@ import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.geom.SvgPaths;
 import org.jhotdraw8.geom.shape.PathMetrics;
 import org.jhotdraw8.geom.shape.PathMetricsBuilder;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.nio.CharBuffer;
@@ -24,7 +24,6 @@ import java.text.ParseException;
  * <p>
  * The null value will be converted to the CSS identifier "none".
  *
- * @author Werner Randelshofer
  */
 public class PathMetricsXmlConverter implements Converter<PathMetrics> {
 

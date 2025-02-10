@@ -11,7 +11,6 @@ import org.jhotdraw8.icollection.persistent.PersistentMap;
 /**
  * ExportOutputFormat.
  *
- * @author Werner Randelshofer
  */
 public interface ExportOutputFormat {
     void setOptions(PersistentMap<Key<?>, Object> newValue);

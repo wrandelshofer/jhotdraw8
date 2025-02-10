@@ -10,7 +10,6 @@ import java.io.Reader;
 /**
  * CharSequenceReader.
  *
- * @author Werner Randelshofer
  */
 public class CharSequenceReader extends Reader {
 

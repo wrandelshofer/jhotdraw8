@@ -290,8 +290,8 @@ public abstract class AbstractColorSlider extends Pane {
 
         Path path = new Path();
         var b = new FXPathElementsBuilder(path.getElements());
-        b.circle(4.5, 0, 0);
-        b.circle(6, 0, 0);
+        b.circle(9, 0, 0);
+        b.circle(12, 0, 0);
         path.setFillRule(FillRule.EVEN_ODD);
         thumb.setShape(path);
         thumb.setBackground(new Background(new BackgroundFill(Color.rgb(250, 250, 250),

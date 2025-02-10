@@ -14,7 +14,6 @@ import java.util.List;
  * StartAndEndPointPathBuilder gets all start and end points of a path,
  * and the derivatives of these points.
  *
- * @author Werner Randelshofer
  */
 public class StartAndEndPointsPathBuilder extends AbstractPathBuilder<StartAndEndPointsPathBuilder.StartAndEndPoints> {
     public record StartAndEndPoints(PersistentList<PointAndDerivative> startPoints,

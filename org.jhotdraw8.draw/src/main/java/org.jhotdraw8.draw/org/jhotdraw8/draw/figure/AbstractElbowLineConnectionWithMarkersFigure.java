@@ -49,7 +49,6 @@ import static org.jhotdraw8.geom.Scalars.almostEqual;
  * that allow user-defineable markers: {@link MarkerStartableFigure}, {@link MarkerEndableFigure},
  * {@link MarkerSegmentableFigure}, {@link MarkerMidableFigure}.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractElbowLineConnectionWithMarkersFigure extends AbstractLineConnectionFigure
         implements PathIterableFigure {

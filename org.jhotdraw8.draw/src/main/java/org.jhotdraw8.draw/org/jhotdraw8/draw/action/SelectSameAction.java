@@ -22,7 +22,6 @@ import java.util.Objects;
 /**
  * SelectSameAction.
  *
- * @author Werner Randelshofer
  */
 public class SelectSameAction extends AbstractDrawingViewAction {
 

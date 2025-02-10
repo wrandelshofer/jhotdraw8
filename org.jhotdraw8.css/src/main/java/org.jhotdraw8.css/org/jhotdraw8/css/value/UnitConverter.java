@@ -23,7 +23,6 @@ import static java.lang.Math.min;
  *     <dd><a href="https://www.w3.org/TR/css3-values/#absolute-length">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public interface UnitConverter {
     /**

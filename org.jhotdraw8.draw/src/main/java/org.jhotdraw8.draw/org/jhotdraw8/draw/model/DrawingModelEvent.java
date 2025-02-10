@@ -4,18 +4,17 @@
  */
 package org.jhotdraw8.draw.model;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Event;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
+import org.jspecify.annotations.Nullable;
 
 import java.io.Serial;
 
 /**
  * DrawingModelEvent.
  *
- * @author Werner Randelshofer
  */
 public class DrawingModelEvent extends Event<DrawingModel> {
 

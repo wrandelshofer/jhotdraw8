@@ -20,7 +20,6 @@ import java.util.function.Supplier;
  * Provides a {@link ReadableNavigableSet} facade to a set of {@code NavigableSet} functions.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ReadableNavigableSetFacade<E> extends ReadableSetFacade<E>
         implements ReadableNavigableSet<E> {

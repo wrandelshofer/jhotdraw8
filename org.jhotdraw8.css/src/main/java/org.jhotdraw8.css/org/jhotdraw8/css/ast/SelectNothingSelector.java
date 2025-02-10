@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
  * This selector is used, when the parser does not understand the
  * syntax of the selector.
  *
- * @author Werner Randelshofer
  */
 public class SelectNothingSelector extends SimpleSelector {
 

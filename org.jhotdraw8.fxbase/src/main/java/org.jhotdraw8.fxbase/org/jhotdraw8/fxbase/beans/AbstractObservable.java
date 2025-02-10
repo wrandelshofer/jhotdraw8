@@ -11,7 +11,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * AbstractObservable.
  *
- * @author Werner Randelshofer
  */
 public class AbstractObservable implements ObservableMixin {
 

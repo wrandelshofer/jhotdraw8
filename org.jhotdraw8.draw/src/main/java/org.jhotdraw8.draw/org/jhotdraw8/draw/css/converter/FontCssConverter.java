@@ -35,7 +35,6 @@ import java.util.function.Consumer;
  * FontFamily := Word|Quoted;
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class FontCssConverter extends AbstractCssConverter<CssFont> {
 

@@ -12,6 +12,7 @@ import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.icollection.ChampVectorSet;
 import org.jhotdraw8.icollection.persistent.PersistentSequencedSet;
 import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -27,7 +28,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * CssSetConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class SetCssConverterTest {
 

@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.tool;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.input.MouseEvent;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -19,6 +18,7 @@ import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.key.Point2DListStyleableKey;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.icollection.VectorList;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -27,7 +27,6 @@ import java.util.function.Supplier;
 /**
  * CreationTool for polyline figures.
  *
- * @author Werner Randelshofer
  */
 public class PolyCreationTool extends AbstractCreationTool<Figure> {
 

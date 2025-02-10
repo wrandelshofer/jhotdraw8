@@ -18,7 +18,6 @@ import static java.lang.Math.min;
  * reverse.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ReversedObservableList<E> extends TransformationList<E, E> {
 

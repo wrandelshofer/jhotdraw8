@@ -52,9 +52,6 @@ public class IndexedStronglyConnectedComponentsAlgo {
      */
     public List<IntList> findStronglyConnectedComponents(
             int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
-        // The following non-recursive implementation "Tarjan's strongly connected components"
-        // algorithm has been taken from
-        // https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm
 
         final List<IntList> sccs = new ArrayList<>(vertexCount);
         final int[] lows = new int[vertexCount];

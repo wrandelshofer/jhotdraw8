@@ -8,7 +8,6 @@ package org.jhotdraw8.css.value;
 /**
  * DefaultUnitConverter.
  *
- * @author Werner Randelshofer
  */
 public class DefaultUnitConverter implements UnitConverter {
 

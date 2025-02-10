@@ -13,7 +13,6 @@ import java.util.Map;
  * CompositeMapAccessor composes one or more {@link MapAccessor}s.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public interface CompositeMapAccessor<T> extends MapAccessor<T> {
 

@@ -33,7 +33,6 @@ import java.util.ArrayList;
 /**
  * CssExample..
  *
- * @author Werner Randelshofer
  */
 public class CssExample extends Application {
 

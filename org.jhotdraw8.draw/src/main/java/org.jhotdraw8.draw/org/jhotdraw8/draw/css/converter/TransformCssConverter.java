@@ -58,7 +58,6 @@ import java.util.function.Consumer;
  * S             = (* white space *)
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class TransformCssConverter extends AbstractCssConverter<Transform> {
 

@@ -13,7 +13,6 @@ import java.util.function.BiFunction;
  * <p>
  * The factory is allowed to return an already existing converter.
  *
- * @author Werner Randelshofer
  */
 public interface ConverterFactory extends BiFunction<String, String, Converter<?>> {
 

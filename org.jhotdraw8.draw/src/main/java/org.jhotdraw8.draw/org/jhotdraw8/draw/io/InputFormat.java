@@ -24,7 +24,6 @@ import java.nio.file.Paths;
 /**
  * InputFormat.
  *
- * @author Werner Randelshofer
  */
 public interface InputFormat {
     void setOptions(PersistentMap<Key<?>, Object> newValue);

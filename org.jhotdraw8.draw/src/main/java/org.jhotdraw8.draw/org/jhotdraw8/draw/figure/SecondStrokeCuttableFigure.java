@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which supports cutting off the start and end of a stroked path.
  *
- * @author Werner Randelshofer
  */
 public interface SecondStrokeCuttableFigure extends Figure {
     /**

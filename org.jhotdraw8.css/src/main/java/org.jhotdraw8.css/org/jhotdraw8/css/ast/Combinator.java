@@ -13,7 +13,6 @@ import java.util.Objects;
  * <p>
  * A combinator combines the results of two selectors.
  *
- * @author Werner Randelshofer
  */
 public abstract class Combinator extends Selector {
 

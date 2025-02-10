@@ -5,8 +5,8 @@
 package org.jhotdraw8.fxbase.converter;
 
 import javafx.util.StringConverter;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.Converter;
+import org.jspecify.annotations.Nullable;
 
 import java.text.ParseException;
 
@@ -15,7 +15,6 @@ import java.text.ParseException;
  * {@code javafx.util.StringConverter} API.
  *
  * @param <T> the value type
- * @author Werner Randelshofer
  */
 public class StringConverterAdapter<T> extends StringConverter<T> {
 

@@ -20,7 +20,6 @@ import java.util.function.Consumer;
  * <p>
  * Parses an attribute value of type double.
  *
- * @author Werner Randelshofer
  */
 public class PercentageCssConverter extends AbstractCssConverter<Double> {
 

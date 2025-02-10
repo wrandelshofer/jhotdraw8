@@ -18,7 +18,6 @@ import java.util.Map;
  * Design pattern: Strategy
  *
  * @param <T> The value type.
- * @author Werner Randelshofer
  */
 public interface MapAccessor<T> {
 

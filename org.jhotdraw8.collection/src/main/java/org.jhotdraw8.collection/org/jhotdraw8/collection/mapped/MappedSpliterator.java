@@ -18,7 +18,6 @@ import java.util.function.Function;
  *
  * @param <E> the mapped element type
  * @param <F> the original element type
- * @author Werner Randelshofer
  */
 public class MappedSpliterator<E, F> implements Spliterator<E> {
     private final Spliterator<? extends F> s;

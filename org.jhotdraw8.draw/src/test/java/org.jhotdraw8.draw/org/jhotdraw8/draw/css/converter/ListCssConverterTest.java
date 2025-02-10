@@ -12,6 +12,7 @@ import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -26,7 +27,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * CssListConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class ListCssConverterTest {
 

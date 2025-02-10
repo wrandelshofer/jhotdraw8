@@ -28,7 +28,6 @@ import java.util.function.Function;
  * A set of utility methods to create handles which resize a Figure by using its
  * {@code reshapeInLocal} method, if the Figure is transformable.
  *
- * @author Werner Randelshofer
  */
 public class ResizeHandleKit {
 

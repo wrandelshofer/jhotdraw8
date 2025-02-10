@@ -4,13 +4,13 @@
  */
 package org.jhotdraw8.draw.css.converter;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
+import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -24,7 +24,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * DimensionConverterTest.
  *
- * @author Werner Randelshofer
  * @version $$Id: CssSizeConverterNGTest_1.java 1176 2016-12-11 19:48:19Z
  * rawcoder $$
  */

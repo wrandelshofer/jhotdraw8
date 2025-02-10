@@ -6,7 +6,6 @@ package org.jhotdraw8.draw.render;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.css.value.DefaultSystemColorConverter;
@@ -18,13 +17,13 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
 import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
+import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;
 
 /**
  * RenderContext.
  *
- * @author Werner Randelshofer
  */
 public interface RenderContext extends ReadOnlyPropertyBean {
 

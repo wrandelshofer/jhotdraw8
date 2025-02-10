@@ -21,7 +21,6 @@ import java.util.Objects;
  * Interface figures which render a {@code javafx.scene.shape.Shape} and can be
  * filled.
  *
- * @author Werner Randelshofer
  */
 public interface MarkerFillableFigure extends Figure {
 

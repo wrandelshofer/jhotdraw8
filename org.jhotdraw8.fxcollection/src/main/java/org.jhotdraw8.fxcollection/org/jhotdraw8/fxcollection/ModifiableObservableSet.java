@@ -16,7 +16,6 @@ import java.util.Set;
  * level of indirection.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ModifiableObservableSet<E> extends AbstractObservableSet<E> {
 

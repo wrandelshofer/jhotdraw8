@@ -45,7 +45,6 @@ import static java.lang.Math.round;
  * Partners: {@link SelectionTool} as Context, {@link DragTracker} as State,
  * {@link HandleTracker} as State.
  *
- * @author Werner Randelshofer
  * @see SelectionTool
  */
 public class SimpleSelectAreaTracker extends AbstractTracker implements SelectAreaTracker {

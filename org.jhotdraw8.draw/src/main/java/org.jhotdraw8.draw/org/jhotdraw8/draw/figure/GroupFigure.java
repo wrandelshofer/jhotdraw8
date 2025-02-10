@@ -19,7 +19,6 @@ import java.util.List;
  * A figure which groups child figures, so that they can be edited by the user
  * as a unit.
  *
- * @author Werner Randelshofer
  */
 public class GroupFigure extends AbstractCompositeFigure
         implements Grouping, ResizableFigure, TransformableFigure, HideableFigure, StyleableFigure, LockableFigure, CompositableFigure {

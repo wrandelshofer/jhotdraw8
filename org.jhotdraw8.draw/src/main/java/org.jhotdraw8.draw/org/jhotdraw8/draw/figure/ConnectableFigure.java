@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * ConnectableFigure.
  *
- * @author Werner Randelshofer
  */
 public interface ConnectableFigure extends Figure {
 

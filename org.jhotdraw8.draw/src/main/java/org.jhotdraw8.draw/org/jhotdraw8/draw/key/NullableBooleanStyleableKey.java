@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * NonNullBooleanStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableBooleanStyleableKey extends AbstractStyleableKey<Boolean>
         implements WritableStyleableMapAccessor<Boolean> {

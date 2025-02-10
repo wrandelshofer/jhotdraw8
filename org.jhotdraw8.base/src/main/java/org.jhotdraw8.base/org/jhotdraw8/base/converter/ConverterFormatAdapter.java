@@ -14,7 +14,6 @@ import java.text.ParsePosition;
 /**
  * Allows to use a {@code java.text.Format} with the {@code Converter} API.
  *
- * @author Werner Randelshofer
  */
 public class ConverterFormatAdapter implements Converter<Object> {
 

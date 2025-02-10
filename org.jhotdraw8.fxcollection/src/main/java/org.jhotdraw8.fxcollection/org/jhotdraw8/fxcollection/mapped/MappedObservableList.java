@@ -19,7 +19,6 @@ import java.util.function.Function;
  *
  * @param <A> the element type of this list
  * @param <B> the element type of the source list
- * @author Werner Randelshofer
  */
 public class MappedObservableList<A, B> extends TransformationList<A, B> {
 

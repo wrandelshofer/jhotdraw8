@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which supports drawing an elbow.
  *
- * @author Werner Randelshofer
  */
 public interface ElbowableLineFigure extends Figure {
 

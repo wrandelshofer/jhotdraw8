@@ -20,7 +20,6 @@ import java.nio.CharBuffer;
  * Schema Part 2: Datatypes Second Edition: 3.2.5 string</a>
  * </p>
  *
- * @author Werner Randelshofer
  */
 public class StringXmlConverter implements Converter<String> {
 

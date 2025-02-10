@@ -17,7 +17,6 @@ import org.jhotdraw8.icollection.readable.ReadableSet;
  * ReadableSet to a client who does not understand the ReadableSet APi.
  *
  * @param <E> the element type
- * @author Werner Randelshofer
  */
 public class ObservableSetFacade<E> extends SetFacade<E> implements ObservableSet<E> {
     public ObservableSetFacade(ReadableSet<E> backingSet) {

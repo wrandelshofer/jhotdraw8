@@ -30,7 +30,6 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 /**
  * GrapherApplication.
  *
- * @author Werner Randelshofer
  */
 public class GrapherApplication extends AbstractFileBasedApplication {
     /**

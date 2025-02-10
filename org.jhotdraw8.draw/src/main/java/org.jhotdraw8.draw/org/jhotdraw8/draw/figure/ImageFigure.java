@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 /**
  * ImageFigure presents a bitmap image on a drawing.
  *
- * @author Werner Randelshofer
  */
 public class ImageFigure extends AbstractLeafFigure
         implements ResizableFigure, TransformableFigure, StyleableFigure, LockableFigure, CompositableFigure, ConnectableFigure,

@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * Paintable.
  *
- * @author Werner Randelshofer
  */
 public interface Paintable {
 

@@ -14,7 +14,6 @@ import java.util.function.Consumer;
 /**
  * A "universal selector" matches an element if the element exists.
  *
- * @author Werner Randelshofer
  */
 public class UniversalSelector extends SimpleSelector {
 

@@ -41,7 +41,6 @@ import static java.lang.Math.min;
 /**
  * Represents an SVG 'rect' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgRectFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,

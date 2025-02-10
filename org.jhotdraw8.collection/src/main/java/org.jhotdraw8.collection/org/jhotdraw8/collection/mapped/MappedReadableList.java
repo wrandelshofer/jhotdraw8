@@ -21,7 +21,6 @@ import java.util.function.Function;
  *
  * @param <E> the mapped element type
  * @param <F> the original element type
- * @author Werner Randelshofer
  */
 public final class MappedReadableList<E, F> extends AbstractReadableList<E> {
 

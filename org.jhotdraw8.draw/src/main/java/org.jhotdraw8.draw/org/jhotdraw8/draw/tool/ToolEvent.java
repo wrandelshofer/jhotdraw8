@@ -11,7 +11,6 @@ import java.io.Serial;
 /**
  * ToolEvent.
  *
- * @author Werner Randelshofer
  */
 public class ToolEvent extends Event<Tool> {
 

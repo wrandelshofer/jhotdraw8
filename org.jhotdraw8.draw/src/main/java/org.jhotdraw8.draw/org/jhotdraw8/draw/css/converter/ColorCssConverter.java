@@ -99,7 +99,6 @@ import java.util.function.Consumer;
  *     <dd><a href="https://openjfx.io/javadoc/20/javafx.graphics/javafx/scene/doc-files/cssref.html#typecolor">openjfx.io</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class ColorCssConverter implements CssConverter<CssColor> {
     /**

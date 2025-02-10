@@ -19,7 +19,6 @@ import java.util.List;
 /**
  * SelectChildrenAction.
  *
- * @author Werner Randelshofer
  */
 public class SelectChildrenAction extends AbstractDrawingViewAction {
 

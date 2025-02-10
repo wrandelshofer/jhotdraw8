@@ -16,7 +16,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * SimpleTreeModel.
  *
  * @param <N> the node type
- * @author Werner Randelshofer
  */
 public class SimpleTreeModel<N> implements TreeModel<N> {
     public SimpleTreeModel() {

@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * CssPoint2DStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class CssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssPoint2D>

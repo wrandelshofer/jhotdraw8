@@ -21,7 +21,6 @@ import java.util.List;
 /**
  * ClippingFigure.
  *
- * @author Werner Randelshofer
  */
 public class ClippingFigure extends AbstractCompositeFigure
         implements Clipping, StyleableFigure, LockedFigure, NonTransformableFigure {

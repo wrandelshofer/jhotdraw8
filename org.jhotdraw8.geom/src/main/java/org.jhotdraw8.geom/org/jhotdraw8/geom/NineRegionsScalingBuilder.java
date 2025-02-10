@@ -33,7 +33,6 @@ import org.jspecify.annotations.Nullable;
  * pivot</li>
  * </ul>
  *
- * @author Werner Randelshofer
  * @param <T> the product type
  */
 public class NineRegionsScalingBuilder<T> extends AbstractPathBuilder<T> {

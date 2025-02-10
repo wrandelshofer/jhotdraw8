@@ -20,7 +20,6 @@ import static java.lang.Math.min;
 /**
  * This base class can be used to implement figures which support child figures.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractCompositeFigure extends AbstractFigure {
     private final ChildList<Figure> children = new ChildList<>(this);

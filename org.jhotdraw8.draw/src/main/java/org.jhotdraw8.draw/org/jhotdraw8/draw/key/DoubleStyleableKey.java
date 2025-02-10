@@ -13,7 +13,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * DoubleStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class DoubleStyleableKey
         extends AbstractStyleableKey<Double>

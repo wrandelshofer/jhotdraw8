@@ -29,7 +29,6 @@ import java.awt.geom.PathIterator;
 /**
  * Represents an SVG 'ellipse' element.
  *
- * @author Werner Randelshofer
  */
 public class SvgEllipseFigure extends AbstractLeafFigure
         implements StyleableFigure, LockableFigure, SvgTransformableFigure,

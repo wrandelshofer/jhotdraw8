@@ -23,7 +23,6 @@ import java.util.function.Consumer;
  * <p>
  * Currently converts relative locators only.
  *
- * @author Werner Randelshofer
  */
 public class LocatorCssConverter extends AbstractCssConverter<Locator> {
     public static final String RELATIVE_FUNCTION = "relative";

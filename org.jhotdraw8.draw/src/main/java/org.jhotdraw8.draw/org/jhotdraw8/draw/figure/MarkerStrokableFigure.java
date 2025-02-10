@@ -27,7 +27,6 @@ import java.util.Objects;
 /**
  * Interface for figures which can stroke a marker.
  *
- * @author Werner Randelshofer
  */
 public interface MarkerStrokableFigure extends Figure {
 

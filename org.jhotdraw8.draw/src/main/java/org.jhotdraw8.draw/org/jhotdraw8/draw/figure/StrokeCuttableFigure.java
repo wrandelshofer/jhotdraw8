@@ -12,7 +12,6 @@ import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
 /**
  * A figure which supports cutting off the start and end of a stroked path.
  *
- * @author Werner Randelshofer
  */
 public interface StrokeCuttableFigure extends Figure {
     /**

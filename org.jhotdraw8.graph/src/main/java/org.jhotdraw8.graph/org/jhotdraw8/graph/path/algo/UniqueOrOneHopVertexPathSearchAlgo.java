@@ -26,7 +26,6 @@ import java.util.function.Predicate;
  *
  * @param <V> the vertex data type
  * @param <C> the cost number type
- * @author Werner Randelshofer
  */
 public class UniqueOrOneHopVertexPathSearchAlgo<V, C extends Number & Comparable<C>> implements VertexPathSearchAlgo<V, C> {
     public UniqueOrOneHopVertexPathSearchAlgo() {

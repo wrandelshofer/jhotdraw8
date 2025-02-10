@@ -23,7 +23,6 @@ import java.util.Objects;
  * <dd><a href="https://www.w3.org/TR/2019/CR-css-syntax-3-20190716/#tokenization">w3.org</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class CssSize {
 

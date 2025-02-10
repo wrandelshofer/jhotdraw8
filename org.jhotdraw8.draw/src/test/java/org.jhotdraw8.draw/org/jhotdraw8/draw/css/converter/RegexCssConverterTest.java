@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * Test for {@link RegexCssConverter}.
  *
- * @author Werner Randelshofer
  */
 public class RegexCssConverterTest {
 

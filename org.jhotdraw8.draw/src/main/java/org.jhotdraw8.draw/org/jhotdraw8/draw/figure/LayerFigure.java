@@ -38,7 +38,6 @@ import static java.lang.Math.max;
 /**
  * LayerFigure.
  *
- * @author Werner Randelshofer
  */
 public class LayerFigure extends AbstractCompositeFigure
         implements Layer, StyleableFigure, HideableFigure, LockableFigure, NonTransformableFigure, CompositableFigure {

@@ -20,7 +20,6 @@ import java.util.List;
 /**
  * DefaultFontCollectionsFactory.
  *
- * @author Werner Randelshofer
  */
 public class DefaultFontCollectionsFactory implements FontCollectionsFactory {
 

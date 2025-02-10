@@ -25,7 +25,6 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * SetXmlConverterTest.
  *
- * @author Werner Randelshofer
  */
 public class SetXmlConverterTest {
 

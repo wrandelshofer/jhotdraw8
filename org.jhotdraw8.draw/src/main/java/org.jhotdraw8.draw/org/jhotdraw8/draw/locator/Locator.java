@@ -11,7 +11,6 @@ import org.jhotdraw8.draw.figure.Figure;
  * A <em>locator</em> encapsulates a strategy for locating a point on a
  * {@link Figure}.
  *
- * @author Werner Randelshofer
  */
 public interface Locator {
 

@@ -17,7 +17,6 @@ import java.util.Map;
 /**
  * BoundingBoxStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class BoundingBoxStyleableMapAccessor extends AbstractStyleableMapAccessor<BoundingBox> {
 

@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * InsetsStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class CssInsetsStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssInsets>

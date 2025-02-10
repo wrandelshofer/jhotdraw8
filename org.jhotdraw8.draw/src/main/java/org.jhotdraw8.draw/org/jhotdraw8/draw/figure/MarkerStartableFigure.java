@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * A figure which supports start markers.
  *
- * @author Werner Randelshofer
  */
 public interface MarkerStartableFigure extends Figure {
     /**

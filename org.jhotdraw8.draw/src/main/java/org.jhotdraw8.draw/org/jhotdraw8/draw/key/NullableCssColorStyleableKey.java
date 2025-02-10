@@ -13,7 +13,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * NullableCssColorStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableCssColorStyleableKey extends AbstractStyleableKey<CssColor>
         implements WritableStyleableMapAccessor<CssColor> {

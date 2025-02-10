@@ -30,7 +30,6 @@ import java.util.function.Supplier;
  *
  * @param <K> the key type
  * @param <V> the value type
- * @author Werner Randelshofer
  */
 public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements SequencedMap<K, V> {
     private final Supplier<Map.Entry<K, V>> firstEntryFunction;

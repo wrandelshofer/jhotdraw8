@@ -24,7 +24,6 @@ import org.jspecify.annotations.Nullable;
  *     figure and {@code 1.0} at the bottom edge.</dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 public class BoundsLocator extends AbstractLocator {
 

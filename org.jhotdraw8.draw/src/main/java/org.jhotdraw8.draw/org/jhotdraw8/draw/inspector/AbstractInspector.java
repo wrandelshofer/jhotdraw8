@@ -13,7 +13,6 @@ import javafx.beans.property.SimpleObjectProperty;
  * AbstractInspector.
  *
  * @param <S> the subject type
- * @author Werner Randelshofer
  */
 public abstract class AbstractInspector<S> implements Inspector<S> {
 

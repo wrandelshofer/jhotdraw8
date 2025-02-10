@@ -14,7 +14,6 @@ import javafx.scene.layout.Region;
 /**
  * ResizeButton.
  *
- * @author Werner Randelshofer
  */
 public class ResizeButton extends Region {
 

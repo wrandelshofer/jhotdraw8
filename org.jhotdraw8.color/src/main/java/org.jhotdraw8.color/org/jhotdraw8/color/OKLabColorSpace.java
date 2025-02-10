@@ -54,7 +54,6 @@ import java.io.Serial;
  *     <dd><a href="https://bottosson.github.io/posts/oklab/#converting-from-linear-srgb-to-oklab">github.io</a></dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 @SuppressWarnings("UnnecessaryLocalVariable")
 public class OKLabColorSpace extends AbstractNamedColorSpace {

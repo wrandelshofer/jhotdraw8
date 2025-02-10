@@ -16,7 +16,6 @@ import java.util.function.Function;
  *
  * @param <E> the mapped element type
  * @param <F> the original element type
- * @author Werner Randelshofer
  */
 public class MappedIterator<E, F> implements Iterator<E> {
     private final Iterator<F> i;

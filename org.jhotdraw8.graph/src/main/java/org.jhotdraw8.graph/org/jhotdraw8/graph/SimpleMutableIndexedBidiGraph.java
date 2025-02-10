@@ -51,7 +51,6 @@ import java.util.Objects;
  *    4        Node.next{3}.prev{1}
  * </pre>
  *
- * @author Werner Randelshofer
  */
 
 public class SimpleMutableIndexedBidiGraph implements IndexedBidiGraph {

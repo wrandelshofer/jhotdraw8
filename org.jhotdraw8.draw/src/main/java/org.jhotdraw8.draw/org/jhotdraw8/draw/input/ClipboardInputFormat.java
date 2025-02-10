@@ -16,7 +16,6 @@ import java.util.Set;
 /**
  * InputFormat for clipboard.
  *
- * @author Werner Randelshofer
  */
 public interface ClipboardInputFormat {
 

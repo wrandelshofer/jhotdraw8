@@ -20,7 +20,6 @@ import java.util.function.Consumer;
  * SVG does not support an alpha channel in a color. The opacity must be
  * specified in a separate attribute.
  *
- * @author Werner Randelshofer
  */
 public class SvgPaintCssConverter extends PaintCssConverter {
 

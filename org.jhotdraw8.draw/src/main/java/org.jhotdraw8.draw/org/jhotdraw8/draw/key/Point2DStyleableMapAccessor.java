@@ -18,7 +18,6 @@ import java.util.Map;
 /**
  * Point2DStyleableMapAccessor.
  *
- * @author Werner Randelshofer
  */
 public class Point2DStyleableMapAccessor extends AbstractStyleableMapAccessor<Point2D> {
 

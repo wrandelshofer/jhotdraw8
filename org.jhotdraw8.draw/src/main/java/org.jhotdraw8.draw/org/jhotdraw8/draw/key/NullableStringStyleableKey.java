@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * NullableStringStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WritableStyleableMapAccessor<String> {

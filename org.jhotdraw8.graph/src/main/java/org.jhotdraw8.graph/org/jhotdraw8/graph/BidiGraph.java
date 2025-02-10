@@ -18,7 +18,6 @@ import java.util.Set;
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type
- * @author Werner Randelshofer
  */
 public interface BidiGraph<V, A> extends DirectedGraph<V, A>, BareBidiGraph<V, A> {
 

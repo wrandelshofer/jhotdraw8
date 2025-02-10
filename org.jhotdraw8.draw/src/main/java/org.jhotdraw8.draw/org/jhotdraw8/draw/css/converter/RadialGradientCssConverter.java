@@ -44,7 +44,6 @@ import java.util.function.Consumer;
  *
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class RadialGradientCssConverter extends AbstractCssConverter<CssRadialGradient> {
 

@@ -33,7 +33,6 @@ import static java.lang.Math.max;
 /**
  * TextCreationTool.
  *
- * @author Werner Randelshofer
  */
 public class TextCreationTool extends AbstractCreationTool<Figure> {
 

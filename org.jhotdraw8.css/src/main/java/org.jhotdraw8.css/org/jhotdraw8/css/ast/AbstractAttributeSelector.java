@@ -9,7 +9,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * An abstract "attribute selector" matches an element based on its attributes.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractAttributeSelector extends SimpleSelector {
 

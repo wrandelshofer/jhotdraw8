@@ -14,7 +14,6 @@ package org.jhotdraw8.draw.figure;
  * <p>
  * A layer does not have handles and is not selectable.
  *
- * @author Werner Randelshofer
  */
 public interface Layer extends Figure {
 

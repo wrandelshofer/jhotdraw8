@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 /**
  * Converts an {@code String} to a quoted CSS {@code String}.
  *
- * @author Werner Randelshofer
  */
 public class StringCssConverter extends AbstractCssConverter<String> {
     private final @Nullable String helpText;

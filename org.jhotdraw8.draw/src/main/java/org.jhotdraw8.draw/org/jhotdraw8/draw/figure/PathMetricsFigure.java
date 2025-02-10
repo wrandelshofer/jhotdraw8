@@ -10,7 +10,6 @@ import org.jhotdraw8.geom.shape.PathMetrics;
 /**
  * PathMetricsFigure.
  *
- * @author Werner Randelshofer
  */
 public interface PathMetricsFigure extends Figure {
     /**

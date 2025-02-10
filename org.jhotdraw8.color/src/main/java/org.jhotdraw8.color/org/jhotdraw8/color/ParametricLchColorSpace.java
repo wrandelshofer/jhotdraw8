@@ -23,7 +23,6 @@ import static java.lang.Math.PI;
  * b = C * sin(H)
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class ParametricLchColorSpace extends AbstractNamedColorSpace {
 

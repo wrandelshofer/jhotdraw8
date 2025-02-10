@@ -18,7 +18,6 @@ import java.lang.reflect.Type;
  * @param <K> key type
  * @param <V> map value type
  * @param <T> entry value type
- * @author Werner Randelshofer
  */
 public class ReadOnlyMapEntryProperty<K, V, T extends V> extends ReadOnlyObjectPropertyBase<T>
         implements MapChangeListener<K, V> {

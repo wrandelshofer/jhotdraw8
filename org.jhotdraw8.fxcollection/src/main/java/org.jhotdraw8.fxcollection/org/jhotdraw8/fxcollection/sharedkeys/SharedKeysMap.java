@@ -26,7 +26,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  *
  * @param <K> key type
  * @param <V> value type
- * @author Werner Randelshofer
  */
 public class SharedKeysMap<K, V> extends AbstractMap<K, V> implements ObservableMap<K, V> {
 

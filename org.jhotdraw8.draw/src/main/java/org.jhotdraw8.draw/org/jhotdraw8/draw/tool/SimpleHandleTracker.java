@@ -32,7 +32,6 @@ import java.util.Collection;
  * Partners: {@link SelectAreaTracker} as State, {@link DragTracker} as State,
  * {@link SelectionTool} as Context.
  *
- * @author Werner Randelshofer
  * @see SelectionTool
  */
 public class SimpleHandleTracker extends AbstractTracker implements HandleTracker {

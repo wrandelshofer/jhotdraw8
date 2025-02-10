@@ -14,7 +14,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 /**
  * Non-null CssDimension2DStyleableKey.
  *
- * @author Werner Randelshofer
  */
 public class CssDimension2DStyleableKey extends AbstractStyleableKey<CssDimension2D>
         implements WritableStyleableMapAccessor<CssDimension2D>, NonNullKey<CssDimension2D> {

@@ -43,7 +43,6 @@ import java.util.List;
 /**
  * A {@link Figure} which draws a {@link BezierPath}.
  *
- * @author Werner Randelshofer
  */
 public class BezierPathFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, FillRulableFigure, TransformableFigure, HideableFigure,
