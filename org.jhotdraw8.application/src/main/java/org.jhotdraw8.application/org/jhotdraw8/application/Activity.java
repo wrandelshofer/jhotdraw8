@@ -59,7 +59,6 @@ import org.jspecify.annotations.Nullable;
  * {@link Action}s can store arbitrary transient data in the activity.
  * This facility is provided by extending the interface {@link PropertyBean}.
  *
- * @author Werner Randelshofer
  */
 public interface Activity extends Disableable, PropertyBean {
     String APPLICATION_PROPERTY = "application";

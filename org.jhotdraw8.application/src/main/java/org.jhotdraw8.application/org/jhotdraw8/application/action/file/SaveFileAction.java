@@ -13,7 +13,6 @@ import java.net.URI;
  * Saves the changes in the active view. If the active view has not an URI, an
  * {@code URIChooser} is presented.
  *
- * @author Werner Randelshofer
  */
 public class SaveFileAction extends AbstractSaveFileAction {
 

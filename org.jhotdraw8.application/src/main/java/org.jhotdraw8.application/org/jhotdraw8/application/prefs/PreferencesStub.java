@@ -17,7 +17,6 @@ import java.util.prefs.Preferences;
  * {@code PreferencesStub} can be used as a stub when the system
  * preferences are not available due to security restrictions.
  *
- * @author Werner Randelshofer
  */
 public class PreferencesStub
         extends Preferences {

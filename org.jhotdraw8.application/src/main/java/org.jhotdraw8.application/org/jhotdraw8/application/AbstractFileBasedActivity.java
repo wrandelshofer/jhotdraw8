@@ -24,7 +24,6 @@ import java.net.URI;
 /**
  * AbstractFileBasedActivity.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractFileBasedActivity extends AbstractActivity implements FileBasedActivity {
 

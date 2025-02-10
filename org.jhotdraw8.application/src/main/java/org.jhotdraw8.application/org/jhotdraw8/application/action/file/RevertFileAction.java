@@ -26,7 +26,6 @@ import java.util.logging.Logger;
  * Lets the user write unsaved changes of the active view, then presents an
  * {@code URIChooser} and loads the selected URI into the active view.
  *
- * @author Werner Randelshofer
  */
 public class RevertFileAction extends AbstractActivityAction<FileBasedActivity> {
 

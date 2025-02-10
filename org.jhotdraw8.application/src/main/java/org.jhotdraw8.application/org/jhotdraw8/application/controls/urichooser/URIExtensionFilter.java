@@ -13,7 +13,6 @@ import java.util.List;
 /**
  * URIExtensionFilter.
  *
- * @author Werner Randelshofer
  */
 public class URIExtensionFilter {
 

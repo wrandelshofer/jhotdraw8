@@ -39,7 +39,6 @@ import java.util.logging.Logger;
  * Saves the changes in the active view. If the active view has not an URI, an
  * {@code URIChooser} is presented.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractSaveFileAction extends AbstractActivityAction<FileBasedActivity> {
 

@@ -22,7 +22,6 @@ import java.util.regex.Pattern;
  * prefix = "fonticon:" ;
  * </pre>
  *
- * @author Werner Randelshofer
  */
 public class FontIconDecoder implements ResourceDecoder {
 

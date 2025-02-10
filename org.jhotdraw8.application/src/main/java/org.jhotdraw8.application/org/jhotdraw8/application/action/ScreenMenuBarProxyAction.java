@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * ScreenMenuBarProxyAction.
  *
- * @author Werner Randelshofer
  */
 public class ScreenMenuBarProxyAction extends AbstractAction implements MapChangeListener<Key<?>, Object> {
 

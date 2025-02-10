@@ -31,7 +31,6 @@ import static org.jhotdraw8.application.Application.VERSION_KEY;
 /**
  * Displays a dialog showing information about the application.
  *
- * @author Werner Randelshofer
  */
 public class AboutAction extends AbstractApplicationAction {
     /**

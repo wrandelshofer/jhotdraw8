@@ -5,7 +5,6 @@
 /**
  * Provides abstract actions for applications.
  *
- * @author Werner Randelshofer
  */
 package org.jhotdraw8.application.action;
 

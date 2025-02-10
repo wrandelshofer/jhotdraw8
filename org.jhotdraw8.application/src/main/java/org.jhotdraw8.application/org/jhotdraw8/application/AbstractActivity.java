@@ -34,7 +34,6 @@ import java.util.List;
 /**
  * AbstractActivity.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractActivity extends AbstractDisableable implements Activity {
 

@@ -15,7 +15,6 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
 /**
  * Undoes the last user action.
  *
- * @author Werner Randelshofer
  */
 public class UndoAction extends AbstractActivityAction<Activity> {
 

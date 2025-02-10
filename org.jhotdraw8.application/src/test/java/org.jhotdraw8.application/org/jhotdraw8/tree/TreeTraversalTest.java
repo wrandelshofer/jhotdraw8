@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * TreeTraversalTest.
  *
- * @author Werner Randelshofer
   */
 public class TreeTraversalTest {
 

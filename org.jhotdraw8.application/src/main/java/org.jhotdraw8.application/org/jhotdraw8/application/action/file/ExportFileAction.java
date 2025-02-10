@@ -23,7 +23,6 @@ import java.util.function.Supplier;
  * Presents a file chooser to the user and then exports the contents of the
  * active view to the chosen file.
  *
- * @author Werner Randelshofer
  */
 public class ExportFileAction extends AbstractSaveFileAction {
 

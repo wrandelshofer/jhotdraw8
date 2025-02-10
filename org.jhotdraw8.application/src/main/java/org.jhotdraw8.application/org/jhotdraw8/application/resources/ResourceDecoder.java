@@ -8,7 +8,6 @@ package org.jhotdraw8.application.resources;
 /**
  * Decodes a resource value.
  *
- * @author Werner Randelshofer
  */
 public interface ResourceDecoder {
 

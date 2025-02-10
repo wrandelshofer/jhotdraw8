@@ -16,7 +16,6 @@ import org.jhotdraw8.fxbase.undo.FXUndoManager;
 /**
  * Redoes the last user action on the active view.
  *
- * @author Werner Randelshofer
  */
 public class RedoAction extends AbstractActivityAction<Activity> {
 

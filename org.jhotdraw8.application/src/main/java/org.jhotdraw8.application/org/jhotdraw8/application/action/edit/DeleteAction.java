@@ -12,7 +12,6 @@ import org.jhotdraw8.application.EditableComponent;
 /**
  * Deletes the region at (or after) the caret position.
  *
- * @author Werner Randelshofer
  */
 public class DeleteAction extends AbstractSelectionAction {
 

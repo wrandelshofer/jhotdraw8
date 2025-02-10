@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * Duplicates the selected region.
  *
- * @author Werner Randelshofer.
  */
 public class DuplicateAction extends AbstractSelectionAction {
 

@@ -36,7 +36,6 @@ import java.util.prefs.Preferences;
  * An {@code Application} handles the life-cycle of {@link Activity} objects and
  * provides windows to present them on screen.
  *
- * @author Werner Randelshofer
  */
 public interface Application extends Disableable, PropertyBean {
     String ACTIONS_PROPERTY = "actions";

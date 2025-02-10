@@ -16,7 +16,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * AbstractFocusOwnerAction.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractFocusOwnerAction extends AbstractApplicationAction {
 

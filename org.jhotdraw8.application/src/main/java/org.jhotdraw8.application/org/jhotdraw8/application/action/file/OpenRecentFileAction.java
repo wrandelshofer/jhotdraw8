@@ -55,7 +55,6 @@ import java.util.logging.Logger;
  * of the feature.
  * </p>
  *
- * @author Werner Randelshofer.
  */
 public class OpenRecentFileAction extends AbstractApplicationAction {
 

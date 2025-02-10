@@ -11,7 +11,6 @@ import java.util.Locale;
  * in order to overcome the security restriction preventing Applets from using
  * their own locale.
  *
- * @author Werner Randelshofer
  */
 public class LocaleUtil {
 

@@ -14,7 +14,6 @@ import org.jhotdraw8.application.action.AbstractActivityAction;
  * active view.
  *
  * @param <A> the activity type
- * @author Werner Randelshofer
  */
 public abstract class AbstractFindAction<A extends Activity> extends AbstractActivityAction<A> {
 

@@ -38,7 +38,6 @@ import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_
  * Exits the application after letting the user review and possibly save all
  * unsaved views.
  *
- * @author Werner Randelshofer
  */
 public class ExitAction extends AbstractApplicationAction {
 

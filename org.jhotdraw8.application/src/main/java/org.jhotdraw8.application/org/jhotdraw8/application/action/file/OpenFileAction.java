@@ -15,7 +15,6 @@ import java.util.Map;
  * Presents an {@code URIChooser} and loads the selected URI into an empty view.
  * If no empty view is available, a new view is created.
  *
- * @author Werner Randelshofer
  */
 public class OpenFileAction extends AbstractOpenFileAction {
 

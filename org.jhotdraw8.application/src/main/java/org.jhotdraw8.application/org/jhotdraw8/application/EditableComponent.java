@@ -11,7 +11,6 @@ import org.jspecify.annotations.Nullable;
  * EditableComponent defines an API for objects which can perform clipboard operations
  * and have a selection.
  *
- * @author Werner Randelshofer
  */
 public interface EditableComponent {
 

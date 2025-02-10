@@ -65,7 +65,6 @@ import java.util.ResourceBundle;
  * </li>
  * </ul>
  *
- * @author Werner Randelshofer
  */
 public interface Resources {
     String PARENT_RESOURCE_KEY = "$parent";

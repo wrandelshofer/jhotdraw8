@@ -33,7 +33,6 @@ import java.util.concurrent.CompletionStage;
  * The storage location of a file is not restricted to the file system.
  * This is why, the storage location of the file is identified by an {@link URI}.
  *
- * @author Werner Randelshofer
  */
 public interface FileBasedActivity extends Activity {
     String MODIFIED_PROPERTY = "modified";

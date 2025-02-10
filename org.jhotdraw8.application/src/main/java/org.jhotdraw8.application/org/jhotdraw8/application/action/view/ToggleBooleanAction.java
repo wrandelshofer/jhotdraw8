@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * This action toggles the state of its boolean property.
  *
- * @author Werner Randelshofer
  */
 public class ToggleBooleanAction extends AbstractActivityAction<Activity> {
     private final BooleanProperty value;

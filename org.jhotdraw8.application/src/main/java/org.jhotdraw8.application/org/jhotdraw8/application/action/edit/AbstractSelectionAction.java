@@ -19,7 +19,6 @@ import org.jspecify.annotations.Nullable;
  * {@code AbstractSelectionAction} acts on the selection of a target component
  * or of the currently focused component in the application.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractSelectionAction extends AbstractApplicationAction {
 

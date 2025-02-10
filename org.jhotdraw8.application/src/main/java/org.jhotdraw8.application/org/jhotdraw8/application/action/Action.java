@@ -19,7 +19,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * Action.
  *
- * @author Werner Randelshofer
  */
 public interface Action extends EventHandler<ActionEvent>, PropertyBean, Disableable {
 

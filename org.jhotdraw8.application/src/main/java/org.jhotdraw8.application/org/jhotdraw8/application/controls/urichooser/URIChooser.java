@@ -15,7 +15,6 @@ import java.net.URI;
 /**
  * {@code URIChooser} provides a mechanism for the user to choose an URI.
  *
- * @author Werner Randelshofer
  */
 public interface URIChooser {
 

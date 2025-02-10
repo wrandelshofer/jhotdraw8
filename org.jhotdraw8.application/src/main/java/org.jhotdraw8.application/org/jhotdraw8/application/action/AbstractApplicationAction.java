@@ -23,7 +23,6 @@ import java.util.concurrent.ExecutionException;
  * An AbstractApplicationAction is disabled when it has disablers
  * {@link Disableable} or when its application is disabled.
  *
- * @author Werner Randelshofer.
  */
 public abstract class AbstractApplicationAction extends AbstractAction {
 

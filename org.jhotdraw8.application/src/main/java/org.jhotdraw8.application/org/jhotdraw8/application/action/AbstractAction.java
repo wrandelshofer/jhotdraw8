@@ -15,7 +15,6 @@ import org.jhotdraw8.fxcollection.typesafekey.Key;
 /**
  * AbstractAction.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractAction extends AbstractDisableable implements Action {
 

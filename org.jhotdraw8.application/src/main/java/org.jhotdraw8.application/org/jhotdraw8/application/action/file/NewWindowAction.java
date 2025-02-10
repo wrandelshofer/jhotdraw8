@@ -9,7 +9,6 @@ import org.jhotdraw8.application.Application;
 /**
  * Creates a new view.
  *
- * @author Werner Randelshofer
  */
 public class NewWindowAction extends NewFileAction {
 

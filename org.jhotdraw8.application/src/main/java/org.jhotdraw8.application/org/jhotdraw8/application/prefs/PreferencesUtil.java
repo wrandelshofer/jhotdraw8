@@ -24,7 +24,6 @@ import java.util.prefs.Preferences;
  * java.util.prefs.Preferences}, and can be used as a proxy when the system
  * preferences are not available due to security restrictions.
  *
- * @author Werner Randelshofer
  */
 public class PreferencesUtil {
     private static final ConcurrentHashMap<Package, Preferences> systemNodes = new ConcurrentHashMap<>();

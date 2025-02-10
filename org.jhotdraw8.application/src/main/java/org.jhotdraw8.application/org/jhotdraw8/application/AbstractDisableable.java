@@ -19,7 +19,6 @@ import org.jhotdraw8.fxbase.control.Disableable;
  * If a subclass wants to bind {@code disabled} to additional reasons, it must
  * unbind {@code disabled} first.
  *
- * @author Werner Randelshofer
  */
 public class AbstractDisableable implements Disableable {
 

@@ -13,7 +13,6 @@ import org.jhotdraw8.application.EditableComponent;
 /**
  * Pastes the contents of the system clipboard at the caret position.
  *
- * @author Werner Randelshofer
  */
 public class PasteAction extends AbstractSelectionAction {
 

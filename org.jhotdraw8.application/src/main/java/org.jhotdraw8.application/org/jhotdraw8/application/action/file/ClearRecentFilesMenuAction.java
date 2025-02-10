@@ -19,7 +19,6 @@ import java.beans.PropertyChangeListener;
  * automatically created by the application, when the {@code ApplicationModel}
  * provides a {@code LoadFileAction} or a {@code OpenFileAction}.
  *
- * @author Werner Randelshofer.
  */
 public class ClearRecentFilesMenuAction extends AbstractApplicationAction {
 

@@ -96,7 +96,6 @@ import static java.lang.Math.min;
  * <dt>path</dt><dd>The URI to a file. Opens a {@link FileBasedActivity} for each provided path.</dd>
  * </dl>
  *
- * @author Werner Randelshofer
  */
 @SuppressWarnings("this-escape")
 public abstract class AbstractFileBasedApplication extends AbstractApplication implements FileBasedApplication {

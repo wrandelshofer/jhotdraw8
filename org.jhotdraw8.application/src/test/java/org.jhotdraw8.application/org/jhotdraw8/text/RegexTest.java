@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 /**
  * RegexTest.
  *
- * @author Werner Randelshofer
  */
 public class RegexTest {
 

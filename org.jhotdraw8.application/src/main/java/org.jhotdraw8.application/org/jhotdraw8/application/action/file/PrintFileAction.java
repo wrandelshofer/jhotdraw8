@@ -21,7 +21,6 @@ import org.jhotdraw8.fxbase.concurrent.WorkState;
  * This action requires that the view implements the {@code PrintableView}
  * interface.
  *
- * @author Werner Randelshofer
  */
 public class PrintFileAction extends AbstractActivityAction<FileBasedActivity> {
 

@@ -10,7 +10,6 @@ import org.jhotdraw8.application.FileBasedActivity;
  * Presents an {@code URIChooser} and then saves the active view to the
  * specified location.
  *
- * @author Werner Randelshofer
  */
 public class SaveFileAsAction extends SaveFileAction {
 

@@ -11,7 +11,6 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
 /**
  * Displays a preferences dialog for the application.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractPreferencesAction extends AbstractApplicationAction {
 

@@ -13,7 +13,6 @@ import org.jhotdraw8.application.action.AbstractApplicationAction;
 /**
  * Creates a new view.
  *
- * @author Werner Randelshofer
  */
 public class NewFileAction extends AbstractApplicationAction {
 

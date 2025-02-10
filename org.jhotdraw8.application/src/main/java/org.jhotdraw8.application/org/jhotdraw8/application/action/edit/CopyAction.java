@@ -13,7 +13,6 @@ import org.jhotdraw8.application.EditableComponent;
 /**
  * Copies the selected region and place its contents into the system clipboard.
  *
- * @author Werner Randelshofer
  */
 public class CopyAction extends AbstractSelectionAction {
 

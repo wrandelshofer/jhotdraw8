@@ -13,7 +13,6 @@ import org.jhotdraw8.application.EditableComponent;
 /**
  * Clears (de-selects) the selected region.
  *
- * @author Werner Randelshofer.
  */
 public class ClearSelectionAction extends AbstractSelectionAction {
 

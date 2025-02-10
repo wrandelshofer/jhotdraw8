@@ -15,7 +15,6 @@ import javafx.scene.input.KeyCombination;
 /**
  * Actions.
  *
- * @author Werner Randelshofer
  */
 public class Actions {
 

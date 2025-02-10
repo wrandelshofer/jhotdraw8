@@ -50,7 +50,6 @@ import static org.jhotdraw8.application.action.file.AbstractSaveFileAction.SAVE_
  * user chooses to write the changes, the view is saved, and {@code doIt} is
  * only invoked after the view was successfully saved.
  *
- * @author Werner Randelshofer
  */
 public abstract class AbstractSaveUnsavedChangesAction extends AbstractActivityAction<FileBasedActivity> {
 
