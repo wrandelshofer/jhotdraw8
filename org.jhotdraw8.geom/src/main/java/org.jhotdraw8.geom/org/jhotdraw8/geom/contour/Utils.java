@@ -4,13 +4,10 @@
  */
 package org.jhotdraw8.geom.contour;
 
-import org.jhotdraw8.collection.pair.OrderedPair;
-import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Lines;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Rectangles;
-import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -36,26 +33,8 @@ public class Utils {
     private Utils() {
     }
 
-
-    /// Perpendicular dot product. Equivalent to dot(v0, perp(v1)).
-    public static double perpDot(final Point2D.Double v0, final Point2D.Double v1) {
-        return v0.getX() * v1.getY() - v0.getY() * v1.getX();
-    }
-
-    public static OrderedPair<Double, Double> minmax(double a, double b) {
-        return a < b ? new SimpleOrderedPair<>(a, b) : new SimpleOrderedPair<>(b, a);
-    }
-
-    public static boolean fuzzyInRange(double minValue, double value, double maxValue) {
-        return fuzzyInRange(minValue, value, maxValue, Rectangles.REAL_THRESHOLD);
-    }
-
-    public static boolean fuzzyInRange(double minValue, double value, double maxValue, double epsilon) {
-        return (value + epsilon > minValue) && (value < maxValue + epsilon);
-    }
-
     /**
-     * Test if a point is within a arc sweep angle region defined by center, start, end, and bulge.
+     * Test if a point is within an arc sweep angle region defined by center, start, end, and bulge.
      */
     static boolean pointWithinArcSweepAngle(final Point2D.Double center, final Point2D.Double arcStart,
                                             final Point2D.Double arcEnd, double bulge, final Point2D.Double point) {
@@ -100,27 +79,6 @@ public class Utils {
                 epsilon;
     }
 
-    /**
-     * Returns the solutions to for the quadratic equation -b +/- sqrt (b * b - 4 * a * c) / (2 * a).
-     */
-    static OrderedPair<Double, Double> quadraticSolutions(double a, double b, double c, double discr) {
-        // Function avoids loss in precision due to taking the difference of two floating point values
-        // that are very near each other in value.
-        // See:
-        // https://math.stackexchange.com/questions/311382/solving-a-quadratic-equation-with-precision-when-using-floating-point-variables
-        assert Scalars.almostEqual(b * b - 4.0 * a * c, discr, Rectangles.REAL_THRESHOLD) : "discriminate is not correct";
-        double sqrtDiscr = Math.sqrt(discr);
-        double denom = 2.0 * a;
-        double sol1;
-        if (b < 0.0) {
-            sol1 = (-b + sqrtDiscr) / denom;
-        } else {
-            sol1 = (-b - sqrtDiscr) / denom;
-        }
-
-        double sol2 = (c / a) / sol1;
-        return minmax(sol1, sol2);
-    }
 
     /**
      * Return the point on the segment going from p0 to p1 at parametric value t.
@@ -131,7 +89,7 @@ public class Utils {
     }
 
     /**
-     * Counter clockwise angle of the vector going from p0 to p1.
+     * Counter-clockwise angle of the vector going from p0 to p1.
      */
     public static double angle(final Point2D.Double p0, final Point2D.Double p1) {
         return Angles.atan2(p1.getY() - p0.getY(), p1.getX() - p0.getX());
@@ -193,9 +151,6 @@ public class Utils {
         return angleIsBetween(startAngle, endAngle, testAngle, epsilon);
     }
 
-    static boolean angleIsBetween(double startAngle, double endAngle, double testAngle) {
-        return angleIsBetween(startAngle, endAngle, testAngle, Rectangles.REAL_THRESHOLD);
-    }
 
     static boolean angleIsBetween(double startAngle, double endAngle, double testAngle,
                                   double epsilon) {
