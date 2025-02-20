@@ -19,8 +19,8 @@ import javafx.stage.Window;
 import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.draw.css.value.CssColor;
-import org.jhotdraw8.draw.css.value.NamedCssColor;
+import org.jhotdraw8.css.value.CssColor;
+import org.jhotdraw8.css.value.NamedCssColor;
 
 import java.io.IOException;
 import java.util.Optional;

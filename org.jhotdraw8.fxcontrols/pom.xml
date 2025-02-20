@@ -80,5 +80,9 @@
             <groupId>ch.randelshofer</groupId>
             <artifactId>org.jhotdraw8.icollection</artifactId>
         </dependency>
+      <dependency>
+        <groupId>ch.randelshofer</groupId>
+        <artifactId>org.jhotdraw8.css</artifactId>
+      </dependency>
     </dependencies>
 </project>

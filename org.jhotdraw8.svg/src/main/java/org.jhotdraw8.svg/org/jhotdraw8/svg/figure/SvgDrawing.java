@@ -8,7 +8,7 @@ package org.jhotdraw8.svg.figure;
 import javafx.scene.Node;
 import org.jhotdraw8.css.converter.StringCssConverter;
 import org.jhotdraw8.draw.css.converter.Rectangle2DCssConverter;
-import org.jhotdraw8.draw.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractDrawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.LockableFigure;

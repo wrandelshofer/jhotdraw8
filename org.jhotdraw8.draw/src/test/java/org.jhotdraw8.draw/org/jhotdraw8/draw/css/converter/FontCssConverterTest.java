@@ -9,7 +9,7 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.value.CssFont;
+import org.jhotdraw8.css.value.CssFont;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

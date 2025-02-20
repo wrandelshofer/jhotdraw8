@@ -8,7 +8,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlySetProperty;
 import javafx.collections.ObservableSet;
-import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.tool.Tool;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;

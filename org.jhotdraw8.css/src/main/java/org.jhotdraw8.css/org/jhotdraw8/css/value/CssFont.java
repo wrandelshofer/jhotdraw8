@@ -2,12 +2,11 @@
  * @(#)CssFont.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.value;
+package org.jhotdraw8.css.value;
 
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jhotdraw8.css.value.CssSize;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;

@@ -6,7 +6,7 @@ package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
-import org.jhotdraw8.draw.css.value.CssDimension2D;
+import org.jhotdraw8.css.value.CssDimension2D;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.SvgPaths;

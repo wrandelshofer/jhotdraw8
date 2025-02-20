@@ -11,7 +11,7 @@ import javafx.scene.transform.Affine;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.TransformCachingFigure;
 import org.jhotdraw8.draw.figure.TransformableFigure;

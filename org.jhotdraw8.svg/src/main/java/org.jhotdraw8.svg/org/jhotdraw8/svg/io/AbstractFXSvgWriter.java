@@ -50,7 +50,7 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
-import org.jhotdraw8.draw.css.value.CssDimension2D;
+import org.jhotdraw8.css.value.CssDimension2D;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXRectangles;

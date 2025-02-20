@@ -6,8 +6,8 @@
 package io;
 
 import javafx.scene.paint.Color;
-import org.jhotdraw8.draw.css.converter.ColorCssConverter;
-import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.css.converter.ColorCssConverter;
+import org.jhotdraw8.css.value.CssColor;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

@@ -8,6 +8,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
+import org.jhotdraw8.css.render.BasicRenderContext;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
@@ -35,7 +36,7 @@ public class SvgLinearGradientFigure extends AbstractSvgGradientFigure {
     public static final CssSizeStyleableKey Y2 = new CssSizeStyleableKey("y2", CssSize.ZERO);
 
     @Override
-    public @Nullable Paint getPaint(@Nullable RenderContext ctx) {
+    public @Nullable Paint getPaint(@Nullable BasicRenderContext ctx) {
         UnitConverter unit = ctx == null ? null : ctx.get(RenderContext.UNIT_CONVERTER_KEY);
         if (unit == null) {
             unit = DefaultUnitConverter.getInstance();

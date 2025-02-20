@@ -17,7 +17,7 @@ import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.value.CssDimension2D;
+import org.jhotdraw8.css.value.CssDimension2D;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.ImageFigure;

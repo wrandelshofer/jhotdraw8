@@ -6,10 +6,11 @@ package org.jhotdraw8.draw.render;
 
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
+import org.jhotdraw8.css.render.BasicRenderContext;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.value.DefaultSystemColorConverter;
-import org.jhotdraw8.draw.css.value.SystemColorConverter;
+import org.jhotdraw8.css.value.DefaultSystemColorConverter;
+import org.jhotdraw8.css.value.SystemColorConverter;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Page;
 import org.jhotdraw8.fxbase.beans.ReadOnlyPropertyBean;
@@ -25,7 +26,7 @@ import java.time.Instant;
  * RenderContext.
  *
  */
-public interface RenderContext extends ReadOnlyPropertyBean {
+public interface RenderContext extends BasicRenderContext {
 
     // ---
     // keys

@@ -13,6 +13,7 @@ import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -30,10 +31,16 @@ import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Stop;
 import org.jhotdraw8.color.NamedColor;
 import org.jhotdraw8.color.NamedColorSpace;
+import org.jhotdraw8.color.SrgbColorSpace;
+import org.jhotdraw8.css.converter.ColorCssConverter;
+import org.jhotdraw8.css.parser.StreamCssTokenizer;
+import org.jhotdraw8.css.value.CssColor;
+import org.jhotdraw8.css.value.NamedCssColor;
 import org.jhotdraw8.fxbase.binding.Via;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.ParseException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ResourceBundle;
@@ -139,6 +146,31 @@ public class ColorChooserPane extends VBox {
         sourceColorField.textProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::sourceColorFieldProperty).get());
         displayColorField.textProperty().bindBidirectional(new Via<>(model).via(ColorChooserPaneModel::displayColorFieldProperty).get());
         model.flatMap(ColorChooserPaneModel::previewColorProperty).addListener((ChangeListener<? super Color>) this::updatePreviewColor);
+
+        targetColorField.setOnAction(this::onTargetColorField);
+    }
+
+    private void onTargetColorField(ActionEvent actionEvent) {
+        String text = targetColorField.getText();
+        try {
+            CssColor color = new ColorCssConverter().parse(new StreamCssTokenizer(text), null);
+            if (color == null) {
+                System.err.println("Can not parse color " + text);
+                return;
+            }
+            Color c = color.getColor();
+            model.get().setC0((float) c.getRed());
+            model.get().setC1((float) c.getGreen());
+            model.get().setC2((float) c.getBlue());
+            /*
+                    new NamedColor(
+                    (float)c.getRed(),(float)c.getGreen(),(float)c.getBlue(),0f,(float)c.getOpacity(),
+                    new SrgbColorSpace(),text));*/
+        } catch (ParseException | IOException e) {
+            System.err.println("Can not parse color " + text);
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
     }
 
     private void initSubPane() {

@@ -2,7 +2,7 @@
  * @(#)CssColorConverter.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.converter;
+package org.jhotdraw8.css.converter;
 
 import javafx.scene.paint.Color;
 import org.jhotdraw8.base.converter.FloatConverter;
@@ -14,20 +14,19 @@ import org.jhotdraw8.color.ParametricHlsColorSpace;
 import org.jhotdraw8.color.ParametricHsvColorSpace;
 import org.jhotdraw8.color.ParametricScaledColorSpace;
 import org.jhotdraw8.color.SrgbColorSpace;
-import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.NamedCssColor;
+import org.jhotdraw8.css.value.ShsbaCssColor;
+import org.jhotdraw8.css.value.SrgbaCssColor;
+import org.jhotdraw8.css.value.SystemCssColor;
+import org.jhotdraw8.css.value.Uint4HexSrgbaCssColor;
+import org.jhotdraw8.css.value.Uint8HexSrgbaCssColor;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.value.CssColor;
-import org.jhotdraw8.draw.css.value.NamedCssColor;
-import org.jhotdraw8.draw.css.value.ShsbaCssColor;
-import org.jhotdraw8.draw.css.value.SrgbaCssColor;
-import org.jhotdraw8.draw.css.value.SystemCssColor;
-import org.jhotdraw8.draw.css.value.Uint4HexSrgbaCssColor;
-import org.jhotdraw8.draw.css.value.Uint8HexSrgbaCssColor;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;

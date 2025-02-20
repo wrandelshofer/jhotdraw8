@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.locator;
 
 import javafx.geometry.Point2D;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
 

@@ -8,7 +8,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.input.MouseEvent;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.AnchorableFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;

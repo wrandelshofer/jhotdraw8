@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
-import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;

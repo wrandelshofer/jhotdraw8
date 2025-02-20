@@ -5,7 +5,7 @@
 package org.jhotdraw8.svg.io;
 
 import javafx.scene.Node;
-import org.jhotdraw8.draw.css.value.CssDimension2D;
+import org.jhotdraw8.css.value.CssDimension2D;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jspecify.annotations.Nullable;
 

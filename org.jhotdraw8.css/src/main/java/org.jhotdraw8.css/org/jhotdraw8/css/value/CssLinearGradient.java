@@ -2,17 +2,13 @@
  * @(#)CssLinearGradient.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.value;
+package org.jhotdraw8.css.value;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
 import javafx.scene.paint.Stop;
-import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.DefaultUnitConverter;
-import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.converter.CssStop;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;

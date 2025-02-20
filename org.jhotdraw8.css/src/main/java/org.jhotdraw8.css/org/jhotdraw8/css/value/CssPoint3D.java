@@ -2,10 +2,9 @@
  * @(#)CssPoint3D.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.value;
+package org.jhotdraw8.css.value;
 
 import javafx.geometry.Point3D;
-import org.jhotdraw8.css.value.CssSize;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;

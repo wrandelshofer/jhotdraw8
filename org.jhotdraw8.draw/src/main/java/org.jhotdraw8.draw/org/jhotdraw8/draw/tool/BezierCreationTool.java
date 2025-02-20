@@ -11,7 +11,7 @@ import javafx.scene.shape.Line;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.Layer;
 import org.jhotdraw8.draw.figure.LayerFigure;

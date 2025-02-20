@@ -13,8 +13,8 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.scene.control.ColorPicker;
-import org.jhotdraw8.draw.css.converter.ColorCssConverter;
-import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.css.converter.ColorCssConverter;
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 
 import java.net.URL;

@@ -12,7 +12,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.figure.ChildLayoutingFigure;
 import org.jhotdraw8.draw.figure.Drawing;
 import org.jhotdraw8.draw.figure.Figure;

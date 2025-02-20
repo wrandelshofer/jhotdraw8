@@ -11,7 +11,7 @@ import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
 import org.jhotdraw8.css.converter.SizeCssConverter;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.draw.css.value.Paintable;
+import org.jhotdraw8.css.value.Paintable;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
 import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
 import org.jhotdraw8.draw.key.NonNullListStyleableKey;

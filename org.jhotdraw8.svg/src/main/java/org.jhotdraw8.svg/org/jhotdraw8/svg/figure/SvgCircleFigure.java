@@ -11,7 +11,7 @@ import javafx.scene.Node;
 import javafx.scene.shape.Circle;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;

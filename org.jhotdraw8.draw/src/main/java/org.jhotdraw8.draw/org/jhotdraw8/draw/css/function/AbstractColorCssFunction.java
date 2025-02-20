@@ -4,14 +4,14 @@
  */
 package org.jhotdraw8.draw.css.function;
 
+import org.jhotdraw8.css.converter.ColorCssConverter;
 import org.jhotdraw8.css.function.AbstractCssFunction;
 import org.jhotdraw8.css.manager.CssFunctionProcessor;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
 import org.jhotdraw8.css.parser.ListCssTokenizer;
-import org.jhotdraw8.draw.css.converter.ColorCssConverter;
-import org.jhotdraw8.draw.css.value.CssColor;
+import org.jhotdraw8.css.value.CssColor;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;

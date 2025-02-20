@@ -9,9 +9,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
+import org.jhotdraw8.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 

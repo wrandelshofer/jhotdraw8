@@ -2,12 +2,11 @@
  * @(#)CssStrokeStyle.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.value;
+package org.jhotdraw8.css.value;
 
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
-import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;

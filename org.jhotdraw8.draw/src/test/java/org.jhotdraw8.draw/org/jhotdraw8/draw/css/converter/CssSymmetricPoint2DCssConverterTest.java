@@ -7,7 +7,7 @@ package org.jhotdraw8.draw.css.converter;
 
 import javafx.geometry.Point2D;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssPoint2D;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

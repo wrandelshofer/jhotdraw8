@@ -653,6 +653,7 @@ public class ColorChooserPaneModel {
                 String hexStr = "00000000" + Integer.toHexString(argb);
                 hexStr = hexStr.substring(hexStr.length() - 8);
                 // FIXME if NAMED_COLOR lookup map of named colors
+                b.append('#');
                 b.append(hexStr);
             }
             case RGB_FUNCTION -> {

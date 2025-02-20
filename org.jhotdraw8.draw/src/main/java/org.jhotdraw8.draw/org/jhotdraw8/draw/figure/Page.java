@@ -9,9 +9,9 @@ import javafx.print.Paper;
 import javafx.scene.Node;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.css.value.CssDimension2D;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.value.CssDimension2D;
 
 import java.util.Arrays;
 import java.util.List;

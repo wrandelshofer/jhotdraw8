@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.base.converter.Converter;
+import org.jhotdraw8.css.value.Paintable;
 import org.jhotdraw8.draw.css.converter.PaintableCssConverter;
-import org.jhotdraw8.draw.css.value.Paintable;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jspecify.annotations.Nullable;
 

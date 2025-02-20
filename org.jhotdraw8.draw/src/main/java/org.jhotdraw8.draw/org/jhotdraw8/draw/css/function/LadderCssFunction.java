@@ -10,10 +10,10 @@ import org.jhotdraw8.css.model.SelectorModel;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.draw.css.value.CssColor;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;

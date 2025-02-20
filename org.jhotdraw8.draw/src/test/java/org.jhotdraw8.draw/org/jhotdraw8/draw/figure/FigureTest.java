@@ -16,7 +16,7 @@ import javafx.scene.transform.Transform;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.connector.Connector;
-import org.jhotdraw8.draw.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxbase.styleable.AbstractStyleablePropertyBean;
 import org.jhotdraw8.fxbase.styleable.StyleableBean;
@@ -25,7 +25,6 @@ import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.ChampSet;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jhotdraw8.icollection.readable.ReadableSet;
-import org.jspecify.annotations.Nullable;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 

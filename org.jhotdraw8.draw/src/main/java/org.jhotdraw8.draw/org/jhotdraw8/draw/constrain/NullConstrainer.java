@@ -8,9 +8,9 @@ import javafx.geometry.Point2D;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
+import org.jhotdraw8.css.value.CssPoint2D;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
-import org.jhotdraw8.draw.css.value.CssPoint2D;
-import org.jhotdraw8.draw.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.Figure;
 
 /**

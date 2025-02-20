@@ -13,10 +13,10 @@ import org.jhotdraw8.base.converter.IdSupplier;
 import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.draw.css.value.CssColor;
-import org.jhotdraw8.draw.css.value.CssLinearGradient;
-import org.jhotdraw8.draw.css.value.CssRadialGradient;
-import org.jhotdraw8.draw.css.value.Paintable;
+import org.jhotdraw8.css.value.CssColor;
+import org.jhotdraw8.css.value.CssLinearGradient;
+import org.jhotdraw8.css.value.CssRadialGradient;
+import org.jhotdraw8.css.value.Paintable;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;

@@ -11,7 +11,7 @@ import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
-import org.jhotdraw8.draw.css.value.Paintable;
+import org.jhotdraw8.css.value.Paintable;
 import org.jhotdraw8.svg.css.SvgDefaultablePaint;
 import org.jhotdraw8.svg.css.SvgPaintDefaulting;
 import org.jspecify.annotations.Nullable;

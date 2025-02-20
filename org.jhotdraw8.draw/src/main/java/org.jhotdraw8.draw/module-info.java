@@ -43,7 +43,6 @@ module org.jhotdraw8.draw {
     exports org.jhotdraw8.draw.constrain;
     exports org.jhotdraw8.draw.css.converter;
     exports org.jhotdraw8.draw.css.function;
-    exports org.jhotdraw8.draw.css.value;
     exports org.jhotdraw8.draw.figure;
     exports org.jhotdraw8.draw.gui;
     exports org.jhotdraw8.draw.handle;

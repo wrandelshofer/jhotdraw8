@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.svg.css;
 
-import org.jhotdraw8.draw.css.value.Paintable;
+import org.jhotdraw8.css.value.Paintable;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;

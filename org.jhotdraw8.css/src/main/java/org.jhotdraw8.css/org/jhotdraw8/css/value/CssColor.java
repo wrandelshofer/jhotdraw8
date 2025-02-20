@@ -2,13 +2,13 @@
  * @(#)CssColor.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.value;
+package org.jhotdraw8.css.value;
 
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import org.jhotdraw8.css.converter.ColorCssConverter;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
-import org.jhotdraw8.draw.css.converter.ColorCssConverter;
-import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.css.render.BasicRenderContext;
 import org.jspecify.annotations.Nullable;
 
 import java.text.ParseException;
@@ -25,6 +25,7 @@ import java.util.Objects;
  *     <dd><a href="https://drafts.csswg.org/css-color-4/">csswg.org</a></dd>
  * </dl>
  *
+ * FIXME CssColor must support colorspaces
  */
 public class CssColor implements Paintable {
 
@@ -75,8 +76,7 @@ public class CssColor implements Paintable {
         return color;
     }
 
-    @Override
-    public @Nullable Paint getPaint(RenderContext ctx) {
+    public @Nullable Paint getPaint(BasicRenderContext ctx) {
         return color;
     }
 

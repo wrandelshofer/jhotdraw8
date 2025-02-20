@@ -81,5 +81,13 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-graphics</artifactId>
     </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.color</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>ch.randelshofer</groupId>
+      <artifactId>org.jhotdraw8.fxcollection</artifactId>
+    </dependency>
   </dependencies>
 </project>

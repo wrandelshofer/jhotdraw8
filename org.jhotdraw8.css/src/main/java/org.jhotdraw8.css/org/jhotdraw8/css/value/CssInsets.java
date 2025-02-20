@@ -2,12 +2,9 @@
  * @(#)CssInsets.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.draw.css.value;
+package org.jhotdraw8.css.value;
 
 import javafx.geometry.Insets;
-import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.DefaultUnitConverter;
-import org.jhotdraw8.css.value.UnitConverter;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Objects;
