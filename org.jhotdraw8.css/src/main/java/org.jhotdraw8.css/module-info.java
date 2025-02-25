@@ -3,6 +3,8 @@
  * Copyright © 2022 The authors and contributors of JHotDraw. MIT License.
  */
 
+import org.jspecify.annotations.NullMarked;
+
 /**
  * Defines an interpreter for CSS stylesheets.
  */
