@@ -6,6 +6,7 @@
 package org.jhotdraw8.css.value;
 
 import org.jhotdraw8.base.converter.IdFactory;
+import org.jhotdraw8.css.converter.RadialGradientCssConverter;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 

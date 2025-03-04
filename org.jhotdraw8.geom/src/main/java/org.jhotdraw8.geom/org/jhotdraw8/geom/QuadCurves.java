@@ -286,26 +286,6 @@ public class QuadCurves {
     }
 
 
-
-    /**
-     * Calculates the time {@code t} at a given arc-length {@code s} of a
-     * quadratic bézier curve using a closed form solution.
-     * <p>
-     * FIXME this method is not numerically stable!
-     *
-     * @param p       the coordinates of the control points of the bézier curve
-     * @param offset  the offset of the first control point in {@code b}
-     * @param s       the arc-length value where {@literal s >= 0}
-     * @param epsilon the error tolerance
-     */
-    public static double invArcLengthClosedForm(double[] p, int offset, double s, double epsilon) {
-        ToDoubleFunction<Double> f = t -> arcLengthClosedForm(p, offset, t);
-        return Solvers.bisectionMethod(f, s, 0, 1, epsilon);
-        //ToDoubleFunction<Double> f = t -> arcLengthClosedForm(p, offset, t);
-        //ToDoubleFunction<Double> fd = getArcLengthIntegrand(p, offset);
-        //return Solvers.hybridNewtonBisectionMethod(f, fd, s, 0, 1, s / arcLength(p, offset, 1), epsilon);
-    }
-
     /**
      * Calculates the time {@code t} at a given arc-length {@code s} of a
      * quadratic bézier curve using an integration method.

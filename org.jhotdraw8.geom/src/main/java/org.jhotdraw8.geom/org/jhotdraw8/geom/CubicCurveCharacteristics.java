@@ -231,11 +231,6 @@ public class CubicCurveCharacteristics {
      * <p>
      * References:
      * <dl>
-     *     <dt>Stackoverflow, Calculating the Inflection Point of a Cubic Bezier Curve,
-     *     Copyright MBo, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/35901079/calculating-the-inflection-point-of-a-cubic-bezier-curve">stackoverflow.com</a></dd>
-     * </dl>
-     * <dl>
      *    <dt>Zhiyi Zhang, Min Chen , Xian Zhang, Zepeng Wang.
      *    Analysis of Inflection Points for Planar Cubic Bé́zier Curve</dt>
      *    <dd><a href="https://cie.nwsuaf.edu.cn/docs/20170614173651207557.pdf">cie.nwsuaf.edu.cn</a></dd>

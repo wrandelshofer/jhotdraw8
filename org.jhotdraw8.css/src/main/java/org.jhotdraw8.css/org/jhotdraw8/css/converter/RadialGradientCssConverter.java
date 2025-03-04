@@ -31,7 +31,6 @@ import java.util.function.Consumer;
  * CSS Reference Guide</a>.
  * </p>
  * <pre>
- * Paint := (Color|RadialGradient|RadialGradient|ImagePattern RepeatingImagePattern) ;
  * RadialGradient := "radial-gradient(", RadialGradientParameters,  Cycle, ColorStop,{"," ColorStop}")"
  * RadialGradientParameters := [ FocusAngle "," ], [ FocusDistance "," ], [ Center "," ], Radius ;
  * FocusAngle = "focus-angle", CssSize"deg";
