@@ -150,15 +150,8 @@ public class CubicCurves {
     }
 
     /**
-     * Splits the provided bezier curve into two parts at the specified
+     * Splits the provided Bézier curve into two parts at the specified
      * parameter value {@code t}.
-     * <p>
-     * Reference:
-     * <dl>
-     *     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
-     * </dl>
-     * .
      */
     public static SimpleOrderedPair<CubicCurve2D.Double, CubicCurve2D.Double> split(CubicCurve2D.Double source,
                                                                                     double t) {
@@ -176,12 +169,6 @@ public class CubicCurves {
     /**
      * Splits the provided bezier curve into two parts at the specified
      * parameter value {@code t}.
-     * <p>
-     * Reference:
-     * <dl>
-     *     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
-     * </dl>
      */
     public static void split(CubicCurve2D.Double source,
                              double t,
@@ -196,12 +183,6 @@ public class CubicCurves {
     /**
      * Splits the provided bezier curve into two parts at the specified
      * parameter value {@code t}.
-     * <p>
-     * Reference:
-     * <dl>
-     *     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
-     *     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
-     * </dl>
      *
      * @param x0    point P0 of the curve
      * @param y0    point P0 of the curve
@@ -226,7 +207,7 @@ public class CubicCurves {
     }
 
     /**
-     * Splits the provided bezier curve into two parts at the specified
+     * Splits the provided Bézier curve into two parts at the specified
      * parameter value {@code t}.
      * <p>
      * Reference:
@@ -273,6 +254,23 @@ public class CubicCurves {
         }
     }
 
+    /**
+     * Splits the provided Bézier curve into two parts at the specified
+     * parameter value {@code t}.
+     * <p>
+     * Reference:
+     * <dl>
+     *     <dt>Stackoverflow, Splitting a bezier curve, Copyright Jonathan, CC BY-SA 4.0 license</dt>
+     *     <dd><a href="https://stackoverflow.com/questions/8369488/splitting-a-bezier-curve">stackoverflow.com</a></dd>
+     * </dl>
+     *
+     * @param p points of the curve
+     * @param o offset of first point in p
+     * @param t where to split
+     * @param f if not null, array that accepts the curve from x1,y1 to t
+     * @param f array that accepts the curve from x1,y1 to t
+     * @param s if not null, accepts the curve from t to x4,y4
+     */
     public static void split(double[] p, int o,
                              double t,
                              double[] f, int fo,
@@ -315,7 +313,7 @@ public class CubicCurves {
     }
 
     /**
-     * Splits the provided bezier curve into two parts.
+     * Splits the provided Bézier curve into two parts.
      * <p>
      * Reference:
      * <dl>
