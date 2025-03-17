@@ -23,7 +23,7 @@ import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
@@ -74,7 +74,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      * <p>
      * Default value: {@code Rotate.Z_AXIS}.
      */
-    NonNullObjectKey<Point3D> ROTATION_AXIS = new NonNullObjectKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
+    SimpleNonNullKey<Point3D> ROTATION_AXIS = new SimpleNonNullKey<>("rotationAxis", Point3D.class, Rotate.Z_AXIS);
     /**
      * Defines the scale factor by which coordinates are scaled on the x axis
      * about the center of the figure. Default value: {@code 1}.

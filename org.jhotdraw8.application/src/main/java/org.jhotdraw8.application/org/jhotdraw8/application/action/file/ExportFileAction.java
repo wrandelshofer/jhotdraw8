@@ -10,7 +10,7 @@ import org.jhotdraw8.application.FileBasedActivity;
 import org.jhotdraw8.application.controls.urichooser.FileURIChooser;
 import org.jhotdraw8.application.controls.urichooser.URIChooser;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jspecify.annotations.Nullable;
 
@@ -28,8 +28,8 @@ public class ExportFileAction extends AbstractSaveFileAction {
 
     public static final String ID = "file.export";
     private final @Nullable Function<DataFormat, Dialog<SequencedMap<Key<?>, Object>>> optionsDialogFactory;
-    public static final Key<URIChooser> EXPORT_CHOOSER_KEY = new NullableObjectKey<>("exportChooser", URIChooser.class);
-    public static final Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new NullableObjectKey<>("exportChooserFactory",
+    public static final Key<URIChooser> EXPORT_CHOOSER_KEY = new SimpleNullableKey<>("exportChooser", URIChooser.class);
+    public static final Key<Supplier<URIChooser>> EXPORT_CHOOSER_FACTORY_KEY = new SimpleNullableKey<>("exportChooserFactory",
             new SimpleParameterizedType(Supplier.class, URIChooser.class));
 
     /**

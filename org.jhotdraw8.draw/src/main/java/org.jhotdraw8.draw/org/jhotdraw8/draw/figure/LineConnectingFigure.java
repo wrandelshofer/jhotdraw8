@@ -9,7 +9,7 @@ import javafx.geometry.Point2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 
 /**
  * LineConnectingFigure.
@@ -23,7 +23,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
     /**
      * The end connector.
      */
-    NullableObjectKey<Connector> END_CONNECTOR = new NullableObjectKey<>("endConnector", Connector.class, null);
+    SimpleNullableKey<Connector> END_CONNECTOR = new SimpleNullableKey<>("endConnector", Connector.class, null);
     /**
      * The end target.
      * <p>
@@ -31,7 +31,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * layout observer relationship between the label and the target
      * figure.
      */
-    NullableObjectKey<Figure> END_TARGET = new NullableObjectKey<>("endTarget", Figure.class, null);
+    SimpleNullableKey<Figure> END_TARGET = new SimpleNullableKey<>("endTarget", Figure.class, null);
     /**
      * The end position of the line.
      */
@@ -47,7 +47,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
     /**
      * The start connector.
      */
-    NullableObjectKey<Connector> START_CONNECTOR = new NullableObjectKey<>("startConnector", Connector.class, null);
+    SimpleNullableKey<Connector> START_CONNECTOR = new SimpleNullableKey<>("startConnector", Connector.class, null);
     /**
      * The start target.
      * <p>
@@ -55,7 +55,7 @@ public interface LineConnectingFigure extends ConnectingFigure {
      * layout observer relationship between the label and the target
      * figure.
      */
-    NullableObjectKey<Figure> START_TARGET = new NullableObjectKey<>("startTarget", Figure.class, null);
+    SimpleNullableKey<Figure> START_TARGET = new SimpleNullableKey<>("startTarget", Figure.class, null);
     /**
      * The start position of the line.
      */

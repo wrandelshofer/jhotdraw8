@@ -16,7 +16,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullListKey;
-import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 import org.jhotdraw8.graph.algo.TopologicalSortAlgo;
@@ -47,7 +47,7 @@ public interface Drawing extends Figure {
      * <p>
      * This property is not styleable.
      */
-    Key<URI> DOCUMENT_HOME = new NullableObjectKey<>("documentHome", URI.class,
+    Key<URI> DOCUMENT_HOME = new SimpleNullableKey<>("documentHome", URI.class,
             Paths.get(System.getProperty("user.home")).toUri());
 
     /**

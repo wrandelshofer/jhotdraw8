@@ -27,7 +27,7 @@ import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
@@ -73,7 +73,7 @@ public abstract class AbstractSvgGradientFigure extends AbstractCompositeFigure
             );
 
 
-    public static final NonNullKey<PersistentList<SvgStop>> STOPS = new NonNullObjectKey<>("stops",
+    public static final NonNullKey<PersistentList<SvgStop>> STOPS = new SimpleNonNullKey<>("stops",
             new SimpleParameterizedType(PersistentList.class, SvgStop.class), VectorList.of());
 
     public AbstractSvgGradientFigure() {

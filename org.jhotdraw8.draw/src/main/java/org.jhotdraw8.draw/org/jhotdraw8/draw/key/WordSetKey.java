@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.fxcollection.typesafekey.SimpleParameterizedType;
 import org.jhotdraw8.icollection.persistent.PersistentSet;
 
@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.persistent.PersistentSet;
  * WordSetKey.
  *
  */
-public class WordSetKey extends NonNullObjectKey<PersistentSet<String>> {
+public class WordSetKey extends SimpleNonNullKey<PersistentSet<String>> {
 
 
     /**

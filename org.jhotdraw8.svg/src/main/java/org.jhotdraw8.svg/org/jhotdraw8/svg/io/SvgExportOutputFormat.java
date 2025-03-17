@@ -31,7 +31,7 @@ import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
 import org.jhotdraw8.fxbase.concurrent.WorkState;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.fxcollection.typesafekey.NonNullObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNonNullKey;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.geom.TransformFlattener;
 import org.jhotdraw8.xml.XmlUtil;
@@ -62,7 +62,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         implements ClipboardOutputFormat, OutputFormat {
     private static final Logger LOGGER = Logger.getLogger(SvgExportOutputFormat.class.getName());
 
-    public static final NonNullObjectKey<Boolean> RELATIVIZE_PATHS = new NonNullObjectKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
+    public static final SimpleNonNullKey<Boolean> RELATIVIZE_PATHS = new SimpleNonNullKey<>("relativizePaths", Boolean.class, Boolean.FALSE);
 
     public static final DataFormat SVG_FORMAT;
     public static final String SVG_MIME_TYPE = "image/svg+xml";

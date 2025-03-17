@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
  *
  * @param <E> the element type of the list
  */
-public class NonNullListKey<E> extends NonNullObjectKey<PersistentList<E>> {
+public class NonNullListKey<E> extends SimpleNonNullKey<PersistentList<E>> {
 
 
     public NonNullListKey(String key, Type elementType) {

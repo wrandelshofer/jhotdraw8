@@ -23,7 +23,7 @@ import org.jhotdraw8.fxbase.beans.PropertyBean;
 import org.jhotdraw8.fxbase.concurrent.FXWorker;
 import org.jhotdraw8.fxbase.control.Disableable;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
-import org.jhotdraw8.fxcollection.typesafekey.NullableObjectKey;
+import org.jhotdraw8.fxcollection.typesafekey.SimpleNullableKey;
 import org.jspecify.annotations.Nullable;
 
 import java.net.URI;
@@ -48,10 +48,10 @@ public interface Application extends Disableable, PropertyBean {
     String MAX_NUMBER_OF_RECENT_URIS_PROPERTY = "maxNumberOfRecentUris";
     String STYLESHEETS_PROPERTY = "stylesheets";
 
-    Key<String> NAME_KEY = new NullableObjectKey<>("name", String.class);
-    Key<String> VERSION_KEY = new NullableObjectKey<>("version", String.class);
-    Key<String> COPYRIGHT_KEY = new NullableObjectKey<>("copyright", String.class);
-    Key<String> LICENSE_KEY = new NullableObjectKey<>("license", String.class);
+    Key<String> NAME_KEY = new SimpleNullableKey<>("name", String.class);
+    Key<String> VERSION_KEY = new SimpleNullableKey<>("version", String.class);
+    Key<String> COPYRIGHT_KEY = new SimpleNullableKey<>("copyright", String.class);
+    Key<String> LICENSE_KEY = new SimpleNullableKey<>("license", String.class);
 
     /**
      * Contains all {@link Activity} objects that are managed by this

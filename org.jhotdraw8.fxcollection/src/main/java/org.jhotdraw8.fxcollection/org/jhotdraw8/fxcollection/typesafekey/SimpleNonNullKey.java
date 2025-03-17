@@ -12,7 +12,7 @@ import java.lang.reflect.Type;
  *
  * @param <T> the value type
  */
-public class NonNullObjectKey<T> extends AbstractKey<T> implements
+public class SimpleNonNullKey<T> extends AbstractKey<T> implements
         NonNullKey<T> {
 
 
@@ -24,7 +24,7 @@ public class NonNullObjectKey<T> extends AbstractKey<T> implements
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public NonNullObjectKey(String name, Type type, T defaultValue) {
+    public SimpleNonNullKey(String name, Type type, T defaultValue) {
         super(name, type, false, false, defaultValue);
     }
 }
