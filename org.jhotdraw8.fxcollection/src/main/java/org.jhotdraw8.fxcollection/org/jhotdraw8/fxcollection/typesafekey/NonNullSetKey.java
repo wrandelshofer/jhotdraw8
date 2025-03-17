@@ -11,8 +11,6 @@ import java.lang.reflect.Type;
 
 /**
  * A {@link Key} that stores a set of values.
- * <p>
- * FIXME This class is trivial. We should use {@link SimpleNonNullKey} directly.
  *
  * @param <E> the element type of the set
  */
