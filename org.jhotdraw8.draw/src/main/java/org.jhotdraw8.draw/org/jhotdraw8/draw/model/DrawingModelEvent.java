@@ -32,10 +32,6 @@ public class DrawingModelEvent extends Event<DrawingModel> {
          */
         LAYOUT_CHANGED,
         /**
-         * The style of a single figure has changed.
-         */
-        STYLE_CHANGED,
-        /**
          * The transform of a figure has changed.
          */
         TRANSFORM_CHANGED,
@@ -78,10 +74,6 @@ public class DrawingModelEvent extends Event<DrawingModel> {
 
     public static <T> DrawingModelEvent layoutChanged(DrawingModel source, Figure figure) {
         return new DrawingModelEvent(source, EventType.LAYOUT_CHANGED, figure, null, null, -1, null, null, null, false, false);
-    }
-
-    public static <T> DrawingModelEvent styleInvalidated(DrawingModel source, Figure figure) {
-        return new DrawingModelEvent(source, EventType.STYLE_CHANGED, figure, null, null, -1, null, null, null, false, false);
     }
 
     /**

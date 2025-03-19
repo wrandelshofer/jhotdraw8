@@ -376,7 +376,10 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
      */
     default <T> void firePropertyValueChanged(Figure f, Key<T> key, @Nullable T oldValue, @Nullable T newValue, boolean wasAdded, boolean wasRemoved) {
         fireDrawingModelEvent(DrawingModelEvent.propertyValueChanged(this, f, key, oldValue, newValue, wasAdded, wasRemoved));
-        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
+        // We have to fire subtreeNodesInvalidated and not just nodeChange,
+        // because a property change may affect CSS selectors that style a descendant
+        // of this node.
+        fireTreeModelEvent(TreeModelEvent.subtreeNodesInvalidated(this, f));
     }
 
     /**
@@ -399,15 +402,6 @@ public interface DrawingModel extends Observable, TreeModel<Figure> {
         fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
     }
 
-    /**
-     * Fires "style invalidated" event for the specified figure.
-     *
-     * @param f the figure
-     */
-    default void fireStyleInvalidated(Figure f) {
-        fireDrawingModelEvent(DrawingModelEvent.styleInvalidated(this, f));
-        fireTreeModelEvent(TreeModelEvent.nodeChanged(this, f));
-    }
 
     /**
      * Fires an "invalidated" event.

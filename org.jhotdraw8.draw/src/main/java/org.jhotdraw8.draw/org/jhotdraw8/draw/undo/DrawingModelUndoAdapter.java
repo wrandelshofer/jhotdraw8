@@ -33,7 +33,7 @@ public class DrawingModelUndoAdapter extends TreeModelUndoAdapter<Figure> {
             case PROPERTY_VALUE_CHANGED ->
                     new PropertyChangedEdit<>(event.getSource(), event.getNode(), event.getKey(), event.getOldValue(), event.getNewValue(),
                             event.wasAdded(), event.wasRemoved());
-            case LAYOUT_CHANGED, STYLE_CHANGED, TRANSFORM_CHANGED -> null;
+            case LAYOUT_CHANGED, TRANSFORM_CHANGED -> null;
         };
         if (edit != null) {
             fireUndoableEdit(event.getSource(), edit);
