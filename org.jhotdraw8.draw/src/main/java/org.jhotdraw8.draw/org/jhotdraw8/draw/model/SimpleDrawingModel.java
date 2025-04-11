@@ -460,7 +460,7 @@ public class SimpleDrawingModel extends AbstractDrawingModel {
         final Figure figure = event.getNode();
 
         switch (event.getEventType()) {
-            case TRANSFORM_CHANGED, STYLE_CHANGED, LAYOUT_CHANGED:
+            case TRANSFORM_CHANGED, LAYOUT_CHANGED:
                 markDirty(figure);
                 invalidate();
                 break;

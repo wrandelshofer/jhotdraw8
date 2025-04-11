@@ -66,7 +66,6 @@ public class StyleAttributesInspector extends AbstractStyleAttributesInspector<F
     @Override
     protected void fireInvalidated(Figure f) {
         DrawingModel m = getDrawingModel();
-        m.fireStyleInvalidated(f);
         m.fireNodeInvalidated(f);
         m.fireTransformInvalidated(f);
         m.fireLayoutInvalidated(f);
