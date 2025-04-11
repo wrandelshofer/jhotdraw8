@@ -63,7 +63,7 @@ public class CustomBinding {
             Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
 
         final ChangeListener<M> changeListener = new ChangeListener<>() {
-            private Property<T> strongReference;
+            private @Nullable Property<T> strongReference;
 
             @Override
             public void changed(ObservableValue<? extends M> o, M oldv, M newv) {
@@ -85,7 +85,7 @@ public class CustomBinding {
             Property<T> propertyA, Property<M> mediator, Function<M, Property<T>> propertyB) {
 
         final ChangeListener<M> changeListener = new ChangeListener<>() {
-            private Property<T> strongReference;
+            private @Nullable Property<T> strongReference;
 
             @Override
             public void changed(ObservableValue<? extends M> o, M oldv, M newv) {
@@ -390,7 +390,7 @@ public class CustomBinding {
      * @param <E>          the element type
      * @param <T>          the property type
      */
-    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Property<T> property, T unboundValue) {
+    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Property<T> property, @Nullable T unboundValue) {
         for (E elem : list) {
             Property<T> p = getter.apply(elem);
             p.unbind();
@@ -444,7 +444,7 @@ public class CustomBinding {
      * @param <E>     the element type
      * @param <T>     the property type
      */
-    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Binding<T> binding, T unboundValue) {
+    public static <E, T> void bindElements(ObservableList<E> list, Function<E, Property<T>> getter, Binding<T> binding, @Nullable T unboundValue) {
         for (E elem : list) {
             Property<T> p = getter.apply(elem);
             p.unbind();
@@ -616,7 +616,7 @@ public class CustomBinding {
         }
 
         @Override
-        public void changed(ObservableValue<? extends AA> o, AA oldValue, AA newValue) {
+        public void changed(ObservableValue<? extends AA> o, @Nullable AA oldValue, @Nullable AA newValue) {
             if (oldValue != null) {
                 unbind();
             }
