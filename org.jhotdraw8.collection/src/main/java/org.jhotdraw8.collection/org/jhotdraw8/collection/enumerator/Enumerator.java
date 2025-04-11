@@ -5,6 +5,8 @@
 package org.jhotdraw8.collection.enumerator;
 
 
+import org.jspecify.annotations.Nullable;
+
 import java.util.Iterator;
 import java.util.Spliterator;
 import java.util.function.Consumer;
@@ -34,7 +36,6 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
      * The protocol for accessing elements via a {@code Enumerator} imposes smaller per-element overhead than
      * {@link Iterator}, and avoids the inherent race involved in having separate methods for
      * {@code hasNext()} and {@code next()}.
-     *
      */
     interface OfLong extends Enumerator<Long>, Spliterator.OfLong {
 
@@ -161,4 +162,34 @@ public interface Enumerator<E> extends BareEnumerator<E>, Spliterator<E> {
         }
 
     }
+
+    class EmptyOfInt implements OfInt {
+
+        @Override
+        public int currentAsInt() {
+            return 0;
+        }
+
+        @Override
+        public boolean moveNext() {
+            return false;
+        }
+
+        @Override
+        public Spliterator.@Nullable OfInt trySplit() {
+            return null;
+        }
+
+        @Override
+        public long estimateSize() {
+            return 0;
+        }
+
+        @Override
+        public int characteristics() {
+            return 0;
+        }
+    }
+
+    OfInt EMPTY_OF_INT = new EmptyOfInt();
 }

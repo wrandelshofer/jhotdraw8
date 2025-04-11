@@ -38,7 +38,6 @@ import java.util.stream.StreamSupport;
  * <p>
  * <b>Layers.</b> By convention the children of a {@code Drawing} must be
  * {@link Layer}s. To addChild figures to a drawing, first addChild a layer, and then addChild the figures to the layer.</p>
- *
  */
 public interface Drawing extends Figure {
 
@@ -124,7 +123,8 @@ public interface Drawing extends Figure {
      *
      * @return the style manager
      */
-    @Nullable StylesheetsManager<Figure> getStyleManager();
+    @Nullable
+    StylesheetsManager<Figure> getStyleManager();
 
     /**
      * Updates the stylesheets in the style manager.

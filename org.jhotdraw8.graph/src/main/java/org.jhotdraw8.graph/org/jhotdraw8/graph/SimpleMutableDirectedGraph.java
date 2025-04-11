@@ -343,7 +343,7 @@ public class SimpleMutableDirectedGraph<V, A>
 
     @Override
     public int getNextArrowAsInt(int v, int i) {
-        return getNextAsInt(v, i);
+        return g.getNextArrowAsInt(v, i);
     }
 
     @Override
@@ -359,5 +359,10 @@ public class SimpleMutableDirectedGraph<V, A>
 
     public void setOrdered(boolean b) {
         g.setOrdered(b);
+    }
+
+    @Override
+    public Enumerator.OfInt nextVerticesEnumerator(int v) {
+        return g.nextVerticesEnumerator(v);
     }
 }

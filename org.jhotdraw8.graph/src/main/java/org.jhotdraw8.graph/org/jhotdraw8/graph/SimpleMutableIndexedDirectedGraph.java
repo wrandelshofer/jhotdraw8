@@ -88,7 +88,6 @@ import static java.lang.Math.max;
  *    3     [  0  ][  0  ] X  └───────→ 3    [  4  ][  2 ] ─┘
  *    4     [  4  ][  1  ] ───────────→ 4    [  3  ][SENT ] X
  * </pre>
- *
  */
 public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirectedGraph {
 
@@ -411,10 +410,10 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
     }
 
     public Enumerator.OfInt getNextVerticesUnordered(int vidx) {
-        class MySpliterator extends AbstractIntEnumerator {
+        class MyUnorderedEnumerator extends AbstractIntEnumerator {
             private int arrowPtr;
 
-            public MySpliterator(int vidx, int lo, int hi) {
+            public MyUnorderedEnumerator(int vidx, int lo, int hi) {
                 super(hi - lo, ORDERED | NONNULL | SIZED);
 
                 arrowPtr = lastArrow_getCount(nextLastArrow, vidx) == 0 ? -1 : lastArrow_getLast(nextLastArrow, vidx);
@@ -432,17 +431,19 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
 
 
         }
-        return new MySpliterator(vidx, 0, getNextCount(vidx));
+        return new MyUnorderedEnumerator(vidx, 0, getNextCount(vidx));
+
+
     }
 
     public Enumerator.OfInt getNextVerticesOrdered(int vidx) {
-        class MySpliterator extends AbstractIntEnumerator {
+        class MyOrderedEnumerator extends AbstractIntEnumerator {
             private int index;
             private final int limit;
             private final int vidx;
             private final int[] arrows;
 
-            public MySpliterator(int vidx, int lo, int hi) {
+            public MyOrderedEnumerator(int vidx, int lo, int hi) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
                 limit = hi;
                 index = lo;
@@ -461,7 +462,7 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
                 }
             }
 
-            private MySpliterator(int vidx, int lo, int hi, int[] arrows) {
+            private MyOrderedEnumerator(int vidx, int lo, int hi, int[] arrows) {
                 super(hi - lo, ORDERED | NONNULL | SIZED | SUBSIZED);
                 this.vidx = vidx;
                 this.index = lo;
@@ -480,14 +481,14 @@ public class SimpleMutableIndexedDirectedGraph implements MutableIndexedDirected
             }
 
             @Override
-            public @Nullable MySpliterator trySplit() {
+            public @Nullable MyOrderedEnumerator trySplit() {
                 int hi = limit, lo = index, mid = (lo + hi) >>> 1;
                 return (lo >= mid) ? null : // divide range in half unless too small
-                        new MySpliterator(vidx, lo, index = mid, arrows);
+                        new MyOrderedEnumerator(vidx, lo, index = mid, arrows);
             }
 
         }
-        return new MySpliterator(vidx, 0, getNextCount(vidx));
+        return new MyOrderedEnumerator(vidx, 0, getNextCount(vidx));
     }
 
     @Override
