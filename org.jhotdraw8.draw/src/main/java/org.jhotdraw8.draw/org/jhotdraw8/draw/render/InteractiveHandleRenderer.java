@@ -6,7 +6,6 @@
 package org.jhotdraw8.draw.render;
 
 import javafx.animation.Transition;
-import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.Property;
@@ -23,7 +22,6 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.util.Duration;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingView;
@@ -34,6 +32,7 @@ import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.draw.model.SimpleDrawingModel;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -49,7 +48,12 @@ import java.util.Set;
 
 public class InteractiveHandleRenderer {
     private static final String DRAWING_VIEW = "drawingView";
-    private final Group handlesPane = new Group();
+    private final Group handlesPane = new Group() {
+        @Override
+        protected void layoutChildren() {
+            validateHandles();
+        }
+    };
     private final ObjectProperty<DrawingView> drawingView = new SimpleObjectProperty<>(this, DRAWING_VIEW);
     /**
      * This is the set of handles which are out of sync with their JavaFX node.
@@ -88,7 +92,6 @@ public class InteractiveHandleRenderer {
             = new NonNullObjectProperty<>(this, "model", new SimpleDrawingModel());
     private boolean recreateHandles;
     private boolean handlesAreValid;
-    private @Nullable Runnable repainter = null;
 
     public InteractiveHandleRenderer() {
         handlesPane.setManaged(false);
@@ -176,7 +179,8 @@ public class InteractiveHandleRenderer {
         return Objects.requireNonNull(drawingView.get(), "drawingView");
     }
 
-    @Nullable DrawingEditor getEditor() {
+    @Nullable
+    DrawingEditor getEditor() {
         return editorProperty().get();
     }
 
@@ -304,14 +308,7 @@ public class InteractiveHandleRenderer {
     }
 
     public void repaint() {
-        if (repainter == null) {
-            repainter = () -> {
-                repainter = null;// must be set at the beginning, because we may need to repaint again
-                //updateRenderContext();
-                validateHandles();
-            };
-            Platform.runLater(repainter);
-        }
+        handlesPane.requestLayout();
     }
 
     /**
