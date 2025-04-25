@@ -6,7 +6,8 @@ package org.jhotdraw8.draw.figure;
 
 import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.Node;
-import org.jhotdraw8.draw.key.NullableStringStyleableKey;
+import org.jhotdraw8.css.converter.StringOrIdentCssConverter;
+import org.jhotdraw8.draw.key.NullableObjectStyleableKey;
 import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
 import org.jhotdraw8.draw.key.WordSetKey;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -19,7 +20,6 @@ import org.jspecify.annotations.Nullable;
 /**
  * {@code StyleableFigure} provides user-editable "id", "style class" and "style" properties,
  * and a non-user-editable "pseudo-class" property.
- *
  */
 public interface StyleableFigure extends Figure {
 
@@ -28,7 +28,7 @@ public interface StyleableFigure extends Figure {
      * <p>
      * Default value: {@code null}.
      */
-    NullableStringStyleableKey ID = new NullableStringStyleableKey("id");
+    NullableObjectStyleableKey<String> ID = new NullableObjectStyleableKey<String>("id", String.class, new StringOrIdentCssConverter());
     /**
      * Defines the style class of the figure. The style class is used for
      * styling a figure with CSS.
