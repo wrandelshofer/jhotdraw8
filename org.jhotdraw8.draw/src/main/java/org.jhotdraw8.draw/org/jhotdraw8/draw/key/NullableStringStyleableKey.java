@@ -11,12 +11,10 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * NullableStringStyleableKey.
- *
  */
 public class NullableStringStyleableKey extends AbstractStyleableKey<String>
         implements WritableStyleableMapAccessor<String> {
 
-    private static final long serialVersionUID = 1L;
     private final StringCssConverter converter;
 
     /**
