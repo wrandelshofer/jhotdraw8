@@ -28,6 +28,8 @@ import org.jhotdraw8.application.action.file.PrintFileAction;
 import org.jhotdraw8.application.action.view.ToggleBooleanAction;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.base.converter.IdFactory;
+import org.jhotdraw8.css.value.CssDimension2D;
+import org.jhotdraw8.css.value.CssInsets;
 import org.jhotdraw8.draw.DrawingEditor;
 import org.jhotdraw8.draw.DrawingEditorPreferencesHandler;
 import org.jhotdraw8.draw.DrawingView;
@@ -54,8 +56,6 @@ import org.jhotdraw8.draw.action.SendBackwardAction;
 import org.jhotdraw8.draw.action.SendToBackAction;
 import org.jhotdraw8.draw.action.UngroupAction;
 import org.jhotdraw8.draw.constrain.GridConstrainer;
-import org.jhotdraw8.css.value.CssDimension2D;
-import org.jhotdraw8.css.value.CssInsets;
 import org.jhotdraw8.draw.figure.AbstractDrawing;
 import org.jhotdraw8.draw.figure.BezierPathFigure;
 import org.jhotdraw8.draw.figure.CombinedPathFigure;
@@ -161,7 +161,6 @@ import static org.jhotdraw8.fxbase.clipboard.DataFormats.registerDataFormat;
 
 /**
  * GrapherActivityController.
- *
  */
 public class GrapherActivity extends AbstractFileBasedActivity implements FileBasedActivity, EditorActivity {
 
@@ -485,6 +484,7 @@ public class GrapherActivity extends AbstractFileBasedActivity implements FileBa
             SimpleXmlReader io = new SimpleXmlReader(factory, idFactory, GRAPHER_NAMESPACE_URI);
             AbstractDrawing drawing = (AbstractDrawing) io.read(uri, null, workState);
             applyUserAgentStylesheet(drawing);
+            drawing.layoutAll(new SimpleRenderContext());
             return drawing;
         }).thenApply(drawing -> {
             drawingView.setDrawing(drawing);
