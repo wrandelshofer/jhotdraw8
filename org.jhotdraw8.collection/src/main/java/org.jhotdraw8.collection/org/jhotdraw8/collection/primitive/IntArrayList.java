@@ -24,7 +24,6 @@ import java.util.stream.IntStream;
 
 /**
  * A {@code int}-valued list backed by a primitive array.
- *
  */
 public class IntArrayList extends AbstractList<Integer> implements IntList {
     private static final int[] EMPTY = new int[0];
@@ -72,6 +71,7 @@ public class IntArrayList extends AbstractList<Integer> implements IntList {
         this.items = items;
         this.size = items.length;
     }
+
 
     /**
      * Creates a new instance with the specified items.

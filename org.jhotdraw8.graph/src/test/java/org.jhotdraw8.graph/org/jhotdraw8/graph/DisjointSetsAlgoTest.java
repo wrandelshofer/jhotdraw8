@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.graph;
 
+import org.jhotdraw8.graph.algo.AbstractGraphAlgoTest;
 import org.jhotdraw8.graph.algo.DisjointSetsAlgo;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;

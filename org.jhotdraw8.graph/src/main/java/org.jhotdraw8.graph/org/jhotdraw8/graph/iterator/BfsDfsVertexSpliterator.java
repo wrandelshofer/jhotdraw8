@@ -21,7 +21,7 @@ import java.util.function.Function;
  * <dl>
  *     <dt>Robert Sedgewick, Kevin Wayne. (2011)</dt>
  *     <dd>Algorithms, 4th Edition. Chapter 4. Algorithm 4.1 Depth-First Search; Algorithm 4.2. Breadth-First Search.
- *          <a href="https://www.math.cmu.edu/~af1p/Teaching/MCC17/Papers/enumerate.pdf">math.cmu.edu</a>
+ *          <a href="https://algs4.cs.princeton.edu/home/">algs4.cs.princeton.edu</a>
  *     </dd>
  * </dl>
  *
