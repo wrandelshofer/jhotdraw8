@@ -139,30 +139,44 @@ public class Angles {
     public static double sinDegrees(double aDeg) {
         int aDegInt = (int) aDeg;
         if (aDeg == aDegInt) {
-            switch (aDegInt % 180) {
+            switch (aDegInt % 360) {
                 case 0:
                     return 0.0;// = sqrt(0/4)
                 case 30:
                 case 150:
+                case -210:
+                case -330:
                     return 0.5;// = sqrt(1/4)
                 case -30:
                 case -150:
+                case 210:
+                case 330:
                     return -0.5;// = sqrt(1/4)
                 case 45:
                 case 135:
+                case -315:
+                case -225:
                     return Math.sqrt(0.5);// = sqrt(2/4)
                 case -45:
                 case -135:
+                case 315:
+                case 225:
                     return -Math.sqrt(0.5);// = sqrt(2/4)
                 case 60:
                 case 120:
+                case -300:
+                case -240:
                     return Math.sqrt(0.75);// = sqrt(3/4)
                 case -60:
                 case -120:
+                case 300:
+                case 240:
                     return -Math.sqrt(0.75);// = sqrt(3/4)
                 case 90:
+                case -270:
                     return 1;// = sqrt(4/4)
                 case -90:
+                case 270:
                     return -1;// = sqrt(4/4)
 
             }

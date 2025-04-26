@@ -44,6 +44,6 @@ public class GeomTest {
     private void testCosDegrees(double aDeg) {
         double expected = Math.cos(Math.toRadians(aDeg));
         double actual = Angles.cosDegrees(aDeg);
-        assertEquals(expected, actual, 0.0001, "sin(" + aDeg + "deg)");
+        assertEquals(expected, actual, 0.0001, "cos(" + aDeg + "deg)");
     }
 }
