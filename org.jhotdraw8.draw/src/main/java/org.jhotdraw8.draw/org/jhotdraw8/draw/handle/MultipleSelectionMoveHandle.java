@@ -29,7 +29,6 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Handle for moving all selected figures.
- *
  */
 public class MultipleSelectionMoveHandle extends AbstractHandle {
 
@@ -109,7 +108,7 @@ public class MultipleSelectionMoveHandle extends AbstractHandle {
             Point2D npl = f.worldToParent(newPoint);
             Point2D opl = f.worldToParent(oldPoint);
             if (f instanceof TransformableFigure) {
-                Transform tt = ((TransformableFigure) f).getInverseTransform();
+                Transform tt = ((TransformableFigure) f).getInverseTransform(true);
                 npl = FXTransforms.transform(tt, npl);
                 opl = FXTransforms.transform(tt, opl);
             }

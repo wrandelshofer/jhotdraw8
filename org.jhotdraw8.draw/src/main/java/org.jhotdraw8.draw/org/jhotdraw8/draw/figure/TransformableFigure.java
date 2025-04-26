@@ -29,8 +29,8 @@ import org.jhotdraw8.geom.FXRectangles;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
+import org.jspecify.annotations.NonNull;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Objects;
@@ -53,7 +53,6 @@ import java.util.Set;
  * Note that transformation matrices computed from the Rotation and Scaling must
  * be recomputed every time when the local bounds of the figure
  * change.
- *
  */
 public interface TransformableFigure extends TransformCachingFigure, Figure {
     boolean CACHE = true;
@@ -178,22 +177,17 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     }
 
 
-    default Transform getInverseTransform() {
-        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
-        Transform t;
-        if (list.isEmpty()) {
-            t = FXTransforms.IDENTITY;
-        } else {
-            try {
-                t = list.get(list.size() - 1).createInverse();
-                for (int i = list.size() - 2; i >= 0; i--) {
-                    t = FXTransforms.concat(t, list.get(i).createInverse());
-                }
-            } catch (NonInvertibleTransformException e) {
-                throw new InternalError(e);
+    default Transform getInverseTransform(boolean styled) {
+        PersistentList<Transform> list = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
+        Transform t = null;
+        try {
+            for (Transform tx : list.readOnlyReversed()) {
+                t = FXTransforms.concat(t, tx.createInverse());
             }
+        } catch (NonInvertibleTransformException e) {
+            t = null;
         }
-        return t;
+        return t == null ? FXTransforms.IDENTITY : t;
     }
 
     @Override
@@ -204,36 +198,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     default Transform getLocalToParent(boolean styled) {
         Transform l2p = CACHE && styled ? getCachedLocalToParent() : null;
         if (l2p == null) {
-            final Bounds layoutBounds = getLayoutBounds();
-            Point2D center = FXRectangles.center(layoutBounds);
-
-            PersistentList<Transform> transforms = styled ? getStyled(TRANSFORMS) : get(TRANSFORMS);
-            double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
-            double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
-            double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
-            double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
-            double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
-
-            if (tx != 0.0 || ty != 0.0) {
-                Translate tt = new Translate(tx, ty);
-                l2p = FXTransforms.concat(null, tt);
-            }
-            if (r != 0) {
-                CssPoint2D cssPivot = getStyledNonNull(ROTATION_PIVOT);
-                Point2D pivot = CssPoint2D.getPointInBounds(cssPivot, layoutBounds);
-                Rotate tr = new FXPreciseRotate(r, pivot.getX(), pivot.getY());
-                l2p = FXTransforms.concat(l2p, tr);
-            }
-            if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
-                Scale ts = new Scale(sx, sy, center.getX(), center.getY());
-                l2p = FXTransforms.concat(l2p, ts);
-            }
-            if (transforms != null && !transforms.isEmpty()) {
-                l2p = FXTransforms.concat(l2p, getTransform());
-            }
-            if (l2p == null) {
-                l2p = FXTransforms.IDENTITY;
-            }
+            l2p = computeLocalToParent(styled);
             if (CACHE && styled) {
                 setCachedLocalToParent(l2p);
             }
@@ -241,34 +206,40 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         return l2p;
     }
 
-    default List<Transform> getLocalToParentAsList(boolean styled) {
-        ArrayList<Transform> list = new ArrayList<>();
+    private @NonNull Transform computeLocalToParent(boolean styled) {
+        Transform l2p = null;
+        final Bounds layoutBounds = getLayoutBounds();
+        Point2D center = FXRectangles.center(layoutBounds);
 
-        Point2D center = getCenterInLocal();
-
-        PersistentList<Transform> t = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
         double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
         double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
         double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
         double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
         double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
 
+        Transform transform = getTransform(styled);
         if (tx != 0.0 || ty != 0.0) {
             Translate tt = new Translate(tx, ty);
-            list.add(tt);
+            l2p = FXTransforms.concat(null, tt);
         }
         if (r != 0) {
-            Rotate tr = new FXPreciseRotate(r, center.getX(), center.getY());
-            list.add(tr);
+            CssPoint2D cssPivot = getStyledNonNull(ROTATION_PIVOT);
+            Point2D pivot = CssPoint2D.getPointInBounds(cssPivot, layoutBounds);
+            Point2D transformedPivot = transform.transform(pivot);
+            Rotate tr = new FXPreciseRotate(r, transformedPivot.getX(), transformedPivot.getY());
+            l2p = FXTransforms.concat(l2p, tr);
         }
         if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
             Scale ts = new Scale(sx, sy, center.getX(), center.getY());
-            list.add(ts);
+            l2p = FXTransforms.concat(l2p, ts);
         }
-        if (!t.isEmpty()) {
-            list.addAll(t.asList());
+        if (!transform.isIdentity()) {
+            l2p = FXTransforms.concat(l2p, transform);
         }
-        return list;
+        if (l2p == null) {
+            l2p = FXTransforms.IDENTITY;
+        }
+        return l2p;
     }
 
 
@@ -279,38 +250,56 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
 
 
     default Transform getParentToLocal(boolean styled) {
-        Transform p2l = CACHE ? getCachedParentToLocal() : null;
+        Transform p2l = CACHE && styled ? getCachedParentToLocal() : null;
         if (p2l == null) {
-            Point2D center = getCenterInLocal();
-
-            PersistentList<Transform> transforms = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
-            double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
-            double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
-            double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
-            double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
-            double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
-
-            if (!transforms.isEmpty()) {
-                p2l = getInverseTransform();
+            try {
+                p2l = getLocalToParent(styled).createInverse();
+            } catch (NonInvertibleTransformException e) {
+                p2l = null;
             }
-            if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
-                Scale ts = new Scale(1.0 / sx, 1.0 / sy, center.getX(), center.getY());
-                p2l = FXTransforms.concat(p2l, ts);
-            }
-            if (r != 0) {
-                Rotate tr = new FXPreciseRotate(-r, center.getX(), center.getY());
-                p2l = FXTransforms.concat(p2l, tr);
-            }
-            if (tx != 0.0 || ty != 0.0) {
-                Translate tt = new Translate(-tx, -ty);
-                p2l = FXTransforms.concat(p2l, tt);
-            }
-            if (p2l == null) {
-                p2l = FXTransforms.IDENTITY;
-            }
-            if (CACHE) {
+            if (CACHE && styled) {
                 setCachedParentToLocal(p2l);
             }
+        }
+        return p2l;
+    }
+
+    default Transform computeParentToLocal(boolean styled) {
+        Transform p2l = null;
+        final Bounds layoutBounds = getLayoutBounds();
+        Point2D center = FXRectangles.center(layoutBounds);
+
+        double sx = styled ? getStyledNonNull(SCALE_X) : getNonNull(SCALE_X);
+        double sy = styled ? getStyledNonNull(SCALE_Y) : getNonNull(SCALE_Y);
+        double r = styled ? getStyledNonNull(ROTATE) : getNonNull(ROTATE);
+        double tx = styled ? getStyledNonNull(TRANSLATE_X) : getNonNull(TRANSLATE_X);
+        double ty = styled ? getStyledNonNull(TRANSLATE_Y) : getNonNull(TRANSLATE_Y);
+
+        Transform transform = getTransform(styled);
+        if (tx != 0.0 || ty != 0.0) {
+            Translate tt = new Translate(-tx, -ty);
+            p2l = tt;
+        }
+        if (r != 0) {
+            CssPoint2D cssPivot = getStyledNonNull(ROTATION_PIVOT);
+            Point2D pivot = CssPoint2D.getPointInBounds(cssPivot, layoutBounds);
+            Point2D transformedPivot = transform.transform(pivot);
+            Rotate tr = new FXPreciseRotate(-r, transformedPivot.getX(), transformedPivot.getY());
+            p2l = FXTransforms.concat(tr, p2l);
+        }
+        if ((sx != 1.0 || sy != 1.0) && sx != 0.0 && sy != 0.0) {// check for 0.0 avoids creating a non-invertible transform
+            Scale ts = new Scale(1 / sx, 1 / sy, center.getX(), center.getY());
+            p2l = FXTransforms.concat(ts, p2l);
+        }
+        if (!transform.isIdentity()) {
+            try {
+                p2l = FXTransforms.concat(transform.createInverse(), p2l);
+            } catch (NonInvertibleTransformException e) {
+                // bail
+            }
+        }
+        if (p2l == null) {
+            p2l = FXTransforms.IDENTITY;
         }
         return p2l;
     }
@@ -321,18 +310,13 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      *
      * @return the flattened transforms
      */
-    default Transform getTransform() {
-        PersistentList<Transform> list = getStyledNonNull(TRANSFORMS);
-        Transform t;
-        if (list.isEmpty()) {
-            t = FXTransforms.IDENTITY;
-        } else {
-            t = list.get(0);
-            for (int i = 1, n = list.size(); i < n; i++) {
-                t = FXTransforms.concat(t, list.get(i));
-            }
+    default Transform getTransform(boolean styled) {
+        PersistentList<Transform> list = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
+        Transform t = null;
+        for (Transform tx : list) {
+            t = FXTransforms.concat(t, tx);
         }
-        return t;
+        return t == null ? FXTransforms.IDENTITY : t;
     }
 
     default boolean hasCenterTransforms() {
@@ -371,11 +355,11 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
     @Override
     default void reshapeInParent(Transform transform) {
         if (transform instanceof Translate) {
-            Point2D p = FXTransforms.deltaTransform(getInverseTransform(), transform.getTx(), transform.getTy());
+            Point2D p = FXTransforms.deltaTransform(getInverseTransform(true), transform.getTx(), transform.getTy());
             reshapeInLocal(new Translate(p.getX(), p.getY()));
         } else {
-            // FIXME we do not want to svgStringReshapeToBuilder!
-            Transform combined = FXTransforms.concat(transform, getTransform());
+            // FIXME we do not want to reshape!
+            Transform combined = FXTransforms.concat(transform, getTransform(true));
             set(TRANSFORMS, VectorList.of(combined));
         }
     }

@@ -49,7 +49,6 @@ import static java.lang.Double.max;
 
 /**
  * Defines a page layout for printing.
- *
  */
 public class PageFigure extends AbstractCompositeFigure
         implements Page, Grouping, TransformableFigure, ResizableFigure, HideableFigure, LockableFigure, StyleableFigure,
@@ -60,7 +59,9 @@ public class PageFigure extends AbstractCompositeFigure
      * The computed number of pages along the x-axis.
      */
     public static final DoubleStyleableKey NUM_PAGES_X = new DoubleStyleableKey("num-pages-x", 1.0);
-    /** The computed number of pages along the y-axis. */
+    /**
+     * The computed number of pages along the y-axis.
+     */
     public static final DoubleStyleableKey NUM_PAGES_Y = new DoubleStyleableKey("num-pages-y", 1.0);
     public static final Point2DStyleableMapAccessor NUM_PAGES_X_Y = new Point2DStyleableMapAccessor("num-pages", NUM_PAGES_X, NUM_PAGES_Y);
     public static final CssSizeStyleableKey PAGE_INSETS_BOTTOM = new CssSizeStyleableKey("page-insets-bottom", CssSize.ZERO);

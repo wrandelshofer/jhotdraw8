@@ -328,6 +328,7 @@ public class InteractiveHandleRenderer {
     }
 
     private void updateHandles() {
+        DrawingView drawingViewNonNull = getDrawingViewNonNull();
         if (recreateHandles) {
             for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
                 for (Handle h : entry.getValue()) {
@@ -352,12 +353,12 @@ public class InteractiveHandleRenderer {
 
             for (Map.Entry<Figure, List<Handle>> entry : handles.entrySet()) {
                 for (Handle handle : entry.getValue()) {
-                    Node n = handle.getNode(getDrawingViewNonNull());
+                    Node n = handle.getNode(drawingViewNonNull);
                     if (nodeToHandleMap.put(n, handle) == null) {
                         handlesPane.getChildren().add(n);
                         n.applyCss();
                     }
-                    handle.updateNode(getDrawingViewNonNull());
+                    handle.updateNode(drawingViewNonNull);
                 }
             }
         } else {
@@ -367,14 +368,14 @@ public class InteractiveHandleRenderer {
                 List<Handle> hh = handles.get(f);
                 if (hh != null) {
                     for (Handle h : hh) {
-                        h.updateNode(getDrawingViewNonNull());
+                        h.updateNode(drawingViewNonNull);
                     }
                 }
             }
         }
 
         for (Handle h : secondaryHandles) {
-            h.updateNode(getDrawingViewNonNull());
+            h.updateNode(drawingViewNonNull);
         }
     }
 

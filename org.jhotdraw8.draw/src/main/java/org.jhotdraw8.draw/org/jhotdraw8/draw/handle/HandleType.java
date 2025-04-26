@@ -7,7 +7,6 @@ package org.jhotdraw8.draw.handle;
 
 /**
  * {@code HandleType} is used by tools to request specific handles from figures.
- *
  */
 public class HandleType {
 
@@ -31,7 +30,7 @@ public class HandleType {
      */
     public static final HandleType MOVE = new HandleType();
     /**
-     * Handle of this type should allow to svgStringReshapeToBuilder (resize) a figure.
+     * Handle of this type should allow to reshape (resize) a figure.
      */
     public static final HandleType RESIZE = new HandleType();
     /**

@@ -36,7 +36,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_AXIS;
 
 /**
  * AbstractResizeTransformHandle.
- *
  */
 abstract class AbstractResizeTransformHandle extends LocatorHandle {
     public static final @Nullable BorderStrokeStyle INSIDE_STROKE = new BorderStrokeStyle(StrokeType.INSIDE, StrokeLineJoin.MITER, StrokeLineCap.BUTT, 1.0, 0, null);
@@ -81,11 +80,11 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
 
     @Override
     public void onMouseDragged(MouseEvent event, DrawingView view) {
-        CssPoint2D newPoint = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
+        CssPoint2D pointInWorld = new CssPoint2D(view.viewToWorld(new Point2D(event.getX(), event.getY())));
 
         if (!event.isAltDown() && !event.isControlDown()) {
             // alt or control turns the constrainer off
-            newPoint = view.getConstrainer().constrainPoint(owner, newPoint);
+            pointInWorld = view.getConstrainer().constrainPoint(owner, pointInWorld);
         }
         if (event.isMetaDown()) {
             // meta snaps the location of the handle to the grid
@@ -95,15 +94,16 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
         // shift keeps the aspect ratio
         boolean keepAspect = event.isShiftDown();
 
-        Transform t = startWorldToLocal;//owner.getWorldToLocal();
+        Transform t = startWorldToLocal;
 
         if (t == null || t.isIdentity()) {
-            resize(newPoint, owner, startBounds, view.getModel(), keepAspect);
+            resize(pointInWorld, owner, startBounds, view.getModel(), keepAspect);
         } else {
+            CssPoint2D pointInLocal = convertPoint2D(
+                    new CssPoint2D(FXTransforms.transform(t, pointInWorld.getConvertedValue())),
+                    pointInWorld.getX().getUnits(), DefaultUnitConverter.getInstance());
             resize(
-                    convertPoint2D(
-                            new CssPoint2D(FXTransforms.transform(t, newPoint.getConvertedValue())),
-                            newPoint.getX().getUnits(), DefaultUnitConverter.getInstance()),
+                    pointInLocal,
                     owner, startBounds, view.getModel(), keepAspect);
         }
     }
@@ -136,14 +136,8 @@ abstract class AbstractResizeTransformHandle extends LocatorHandle {
      * @param keepAspect whether the aspect should be preserved. The bounds of
      *                   the figure on mouse pressed can be used as a reference.
      */
-    // FIXME remove this method - we only want the variant with CssPoint2D and CssRectangle2D
-    protected void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect) {
-        throw new UnsupportedOperationException("don't want to implement this in class " + getClass());
-    }
 
-    protected void resize(CssPoint2D newPoint, Figure owner, CssRectangle2D bounds, DrawingModel model, boolean keepAspect) {
-        resize(newPoint.getConvertedValue(), owner, bounds.getConvertedBoundsValue(), model, keepAspect);
-    }
+    protected abstract void resize(CssPoint2D newPoint, Figure owner, CssRectangle2D bounds, DrawingModel model, boolean keepAspect);
 
     @Override
     public void updateNode(DrawingView view) {

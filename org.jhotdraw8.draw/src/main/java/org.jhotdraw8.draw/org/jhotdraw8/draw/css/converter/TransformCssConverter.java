@@ -17,6 +17,7 @@ import org.jhotdraw8.css.converter.AbstractCssConverter;
 import org.jhotdraw8.css.parser.CssToken;
 import org.jhotdraw8.css.parser.CssTokenType;
 import org.jhotdraw8.css.parser.CssTokenizer;
+import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
@@ -57,7 +58,6 @@ import java.util.function.Consumer;
  * C             = ( S , { S } | { S } , "," , { S } ) ;
  * S             = (* white space *)
  * </pre>
- *
  */
 public class TransformCssConverter extends AbstractCssConverter<Transform> {
 
@@ -308,28 +308,28 @@ public class TransformCssConverter extends AbstractCssConverter<Transform> {
                         throw new ParseException("1, 2, 3, 4, or 6 coefficients expected, but found " + m.size(), tt.getStartPosition());
             };
             case "rotate" -> switch (m.size()) {
-                case 0 -> Transform.rotate(//
+                case 0 -> new FXPreciseRotate(//
                         0,//
                         0, 0//
                 );
-                case 1 -> Transform.rotate(//
+                case 1 -> new FXPreciseRotate(//
                         m.get(0),//
                         0, 0//
                 );
-                case 3 -> Transform.rotate(//
+                case 3 -> new FXPreciseRotate(//
                         m.get(0),//
                         m.get(1), m.get(2)//
                 );
-                case 4 -> new Rotate(//
+                case 4 -> new FXPreciseRotate(//
                         m.get(0),//
                         m.get(1), m.get(2), m.get(3)//
                 );
-                case 6 -> new Rotate(//
+                case 6 -> new FXPreciseRotate(//
                         m.get(0),//
                         m.get(1), m.get(2), 0,//
                         new Point3D(m.get(3), m.get(4), m.get(5))//
                 );
-                case 7 -> new Rotate(//
+                case 7 -> new FXPreciseRotate(//
                         m.get(0),//
                         m.get(1), m.get(2), m.get(3),//
                         new Point3D(m.get(4), m.get(5), m.get(6))//

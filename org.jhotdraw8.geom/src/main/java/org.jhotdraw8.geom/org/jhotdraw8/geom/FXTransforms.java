@@ -15,11 +15,13 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.icollection.readable.ReadableSequencedCollection;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SequencedCollection;
 
 import static java.lang.Double.isNaN;
 import static java.lang.Math.abs;
@@ -29,8 +31,7 @@ import static java.lang.Math.min;
 import static java.lang.Math.sqrt;
 
 /**
- * Transforms.
- *
+ * FXTransforms.
  */
 public class FXTransforms {
     /**
@@ -47,6 +48,9 @@ public class FXTransforms {
     private FXTransforms() {
     }
 
+    /**
+     * Returns the concatenation of the provided transforms.
+     */
     public static Transform concat(@Nullable Transform... transforms) {
         Transform a = null;
         for (Transform b : transforms) {
@@ -116,8 +120,8 @@ public class FXTransforms {
             // tx the X coordinate translation element of the 3x4 matrix
             // ty the Y coordinate translation element of the 3x4 matrix
             //      [ xx xy tx ]    [ a b tx ]
-            //      [ yx yy ty  ] =[ c d ty ]
-            //       [  0  0  1  ]  [ 0 0 1 ]
+            //      [ yx yy ty ] =  [ c d ty ]
+            //      [  0  0  1 ]    [ 0 0  1 ]
             double a = transform.getMxx();
             double b = transform.getMxy();
             double c = transform.getMyx();
@@ -214,6 +218,57 @@ public class FXTransforms {
         }
         Point3D p = tx.transform(b.getX(), b.getY(), 0);
         return new Point2D(p.getX(), p.getY());
+    }
+
+    public static Point2D inverseTransform(@Nullable Transform tx, Point2D b) {
+        try {
+            if (tx == null || tx.isIdentity()) {
+                return b;
+            }
+            if (tx.isType2D()) {
+                return tx.inverseTransform(b);
+            }
+            Point3D p = null;
+            p = tx.inverseTransform(b.getX(), b.getY(), 0);
+            return new Point2D(p.getX(), p.getY());
+        } catch (NonInvertibleTransformException e) {
+            return b;
+        }
+    }
+
+    public static Point2D transform(Iterable<Transform> txs, Point2D b) {
+        for (Transform tx : txs) {
+            b = transform(tx, b);
+        }
+        return b;
+    }
+
+    public static Point2D deltaTransform(Iterable<Transform> txs, Point2D b) {
+        for (Transform tx : txs) {
+            b = deltaTransform(tx, b);
+        }
+        return b;
+    }
+
+    public static Point2D inverseTransform(SequencedCollection<Transform> txs, Point2D b) {
+        for (Transform tx : txs.reversed()) {
+            b = inverseTransform(tx, b);
+        }
+        return b;
+    }
+
+    public static Point2D inverseTransform(ReadableSequencedCollection<Transform> txs, Point2D b) {
+        for (Transform tx : txs.readOnlyReversed()) {
+            b = inverseTransform(tx, b);
+        }
+        return b;
+    }
+
+    public static Point2D inverseDeltaTransform(ReadableSequencedCollection<Transform> txs, Point2D b) {
+        for (Transform tx : txs.readOnlyReversed()) {
+            b = inverseDeltaTransform(tx, b);
+        }
+        return b;
     }
 
     public static Point2D transform(@Nullable Transform tx, double x, double y) {

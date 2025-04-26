@@ -18,7 +18,7 @@ import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.handle.AnchorOutlineHandle;
 import org.jhotdraw8.draw.handle.BoundsInLocalOutlineHandle;
-import org.jhotdraw8.draw.handle.BoundsInTranslationOutlineHandle;
+import org.jhotdraw8.draw.handle.BoundsInUntransformedOutlineHandle;
 import org.jhotdraw8.draw.handle.Handle;
 import org.jhotdraw8.draw.handle.HandleType;
 import org.jhotdraw8.draw.handle.MoveHandle;
@@ -110,7 +110,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
  * <b>Update Strategy.</b> A figure does not automatically update its computed
  * property values. The update strategy is factored out into
  * {@link DrawingModel}.
- *
  */
 public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
@@ -180,7 +179,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
         try {
             for (Field f : clazz.getDeclaredFields()) {
                 if (Modifier.isStatic(f.getModifiers())
-                    && MapAccessor.class.isAssignableFrom(f.getType())) {
+                        && MapAccessor.class.isAssignableFrom(f.getType())) {
                     MapAccessor<?> k = (MapAccessor<?>) f.get(null);
                     if (k == null) {
                         throw new RuntimeException(clazz + " has null value for key: " + f);
@@ -349,7 +348,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
 
             }
         } else if (handleType == HandleType.TRANSFORM) {
-            list.add(new BoundsInTranslationOutlineHandle(this));
+            list.add(new BoundsInUntransformedOutlineHandle(this));
             list.add(new BoundsInLocalOutlineHandle(this));
             if (this instanceof TransformableFigure tf) {
                 list.add(new RotateHandle(tf));
@@ -863,7 +862,7 @@ public interface Figure extends StyleablePropertyBean, TreeNode<Figure> {
      * The default implementation always returns true.
      *
      * @param others A set of figures.
-     * @return true if the user may svgStringReshapeToBuilder this figure together with
+     * @return true if the user may reshape this figure together with
      * those in the set.
      */
     default boolean isGroupReshapeableWith(Set<Figure> others) {

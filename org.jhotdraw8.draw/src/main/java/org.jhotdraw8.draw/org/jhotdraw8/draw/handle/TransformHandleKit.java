@@ -16,9 +16,11 @@ import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.color.util.MathUtil;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -27,8 +29,8 @@ import org.jhotdraw8.draw.figure.TransformableFigure;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
+import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -37,6 +39,8 @@ import java.util.function.Function;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATE;
+import static org.jhotdraw8.draw.figure.TransformableFigure.ROTATION_PIVOT;
 import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
 
 /**
@@ -44,7 +48,6 @@ import static org.jhotdraw8.draw.figure.TransformableFigure.TRANSFORMS;
  * its {@code transform} method, if the Figure is transformable.
  * <p>
  * FIXME implement me
- *
  */
 public class TransformHandleKit {
 
@@ -212,7 +215,7 @@ public class TransformHandleKit {
 
         @Override
         public void onMousePressed(MouseEvent event, DrawingView view) {
-            super.onMousePressed(event, view); //To change body of generated methods, choose Tools | Templates.
+            super.onMousePressed(event, view);
             startTransforms = owner.get(TRANSFORMS);
         }
 
@@ -221,36 +224,53 @@ public class TransformHandleKit {
                 return;
             }
             TransformableFigure owner = (TransformableFigure) o;
-            Bounds oldBounds = startBounds.getConvertedBoundsValue();
-            PersistentList<Transform> oldTransforms = startTransforms == null ? VectorList.of() : startTransforms;
+            Bounds bounds = startBounds.getConvertedBoundsValue();
 
-            double sx = width / oldBounds.getWidth();
-            double sy = height / oldBounds.getHeight();
-            double tx = x - oldBounds.getMinX();
-            double ty = y - oldBounds.getMinY();
+            // We are about to change the location of the center of the figure.
+            // If there is a rotation around the center of the figure,
+            // replace it by a rotation around a fixed pivot point.
+            double rotate = owner.get(ROTATE);
+            if (rotate != 0.0) {
+                model.set(owner, ROTATE, 0.0);
+                Point2D relativePivot = owner.get(ROTATION_PIVOT).getConvertedValue();
+                Point2D pivot = new Point2D(bounds.getMinX() + bounds.getWidth() * relativePivot.getX(),
+                        bounds.getMinY() + bounds.getHeight() * relativePivot.getY());
+                pivot = FXTransforms.transform(((TransformableFigure) o).getLocalToParent(false), pivot);
+                startTransforms = startTransforms.addFirst(
+                        new FXPreciseRotate(rotate, pivot.getX(), pivot.getY())
+                );
+            }
+            PersistentList<Transform> oldTransforms = startTransforms;
+
+            double sx = MathUtil.approximate(width / bounds.getWidth(), 1, 1e-6);
+            double sy = MathUtil.approximate(height / bounds.getHeight(), 1, 1e-6);
+            double tx = MathUtil.approximate(x - bounds.getMinX(), 0, 1e-6);
+            double ty = MathUtil.approximate(y - bounds.getMinY(), 0, 1e-6);
+
             Transform transform = new Translate(tx, ty);
             if (!Double.isNaN(sx) && !Double.isNaN(sy)
                     && !Double.isInfinite(sx) && !Double.isInfinite(sy)
                     && (sx != 1d || sy != 1d)) {
-                transform = FXTransforms.concat(transform, new Scale(sx, sy, oldBounds.getMinX(), oldBounds.getMinY()));
+                transform = FXTransforms.concat(transform, new Scale(sx, sy, bounds.getMinX(), bounds.getMinY()));
             }
-            switch (oldTransforms.size()) {
-            case 0:
-                model.set(owner, TRANSFORMS, VectorList.of(transform));
-                break;
-            default:
+            PersistentList<Transform> newTransforms;
+            if (oldTransforms.isEmpty() || (oldTransforms.getLast() instanceof Rotate)) {
+                newTransforms = oldTransforms.add(transform);
+            } else {
                 int last = oldTransforms.size() - 1;
-                model.set(owner, TRANSFORMS, oldTransforms.set(last, FXTransforms.concat(oldTransforms.get(last), transform)));
-                break;
+                Transform concat = FXTransforms.concat(oldTransforms.get(last), transform);
+                newTransforms = concat.isIdentity() ? oldTransforms.removeLast() : oldTransforms.set(last, concat);
             }
+            model.set(owner, TRANSFORMS, newTransforms);
         }
 
         @Override
         protected void resize(CssPoint2D newPoint, Figure owner, CssRectangle2D bounds, DrawingModel model, boolean keepAspect) {
-            // FIXME remove this method
             resize(newPoint.getConvertedValue(), owner, bounds.getConvertedBoundsValue(), model, keepAspect);
         }
 
+        // FIXME remove this method, because it resizes always in pixel coordinates, but we want to support coordinates in other units
+        protected abstract void resize(Point2D newPoint, Figure owner, Bounds bounds, DrawingModel model, boolean keepAspect);
     }
 
     private static class NorthEastHandle extends AbstractTransformHandle {
@@ -300,7 +320,6 @@ public class TransformHandleKit {
             double newWidth = max(newPoint.getX(), bounds.getMinX()) - bounds.getMinX();
             double newHeight = bounds.getMaxY() - bounds.getMinY();
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
                 newHeight = newWidth * preferredAspectRatio;
             }
             transform(model, owner, bounds.getMinX(), (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);
@@ -460,7 +479,6 @@ public class TransformHandleKit {
             double newWidth = bounds.getMaxX() - newX;
             double newHeight = bounds.getHeight();
             if (keepAspect) {
-                double newRatio = newHeight / newWidth;
                 newHeight = newWidth * preferredAspectRatio;
             }
             transform(model, owner, newX, (bounds.getMinY() + bounds.getMaxY() - newHeight) * 0.5, newWidth, newHeight);

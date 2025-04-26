@@ -6,7 +6,10 @@ package org.jhotdraw8.geom;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import javafx.scene.transform.Affine;
+import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Transform;
 
 import static java.lang.Math.fma;
 
@@ -19,8 +22,31 @@ public class FXPreciseRotate extends Rotate {
         super(r, x, y);
     }
 
+    public FXPreciseRotate(double r, double x, double y, double z) {
+        super(r, x, y, z);
+    }
+
+    public FXPreciseRotate(double r, Point2D pivot) {
+        super(r, pivot.getX(), pivot.getY());
+    }
+
     public FXPreciseRotate(double r) {
         this(r, 0, 0);
+    }
+
+    /**
+     * Creates a three-dimensional Rotate transform with pivot.
+     *
+     * @param angle  the angle of rotation measured in degrees
+     * @param pivotX the X coordinate of the rotation pivot point
+     * @param pivotY the Y coordinate of the rotation pivot point
+     * @param pivotZ the Z coordinate of the rotation pivot point
+     * @param axis   the axis of rotation
+     */
+    public FXPreciseRotate(double angle, double pivotX, double pivotY, double pivotZ, Point3D axis) {
+        this(angle, pivotX, pivotY);
+        setPivotZ(pivotZ);
+        setAxis(axis);
     }
 
     @Override
@@ -55,6 +81,12 @@ public class FXPreciseRotate extends Rotate {
     }
 
     @Override
+    public Transform createInverse() throws NonInvertibleTransformException {
+        return new FXPreciseRotate(-getAngle(), getPivotX(), getPivotY(), getPivotZ(),
+                getAxis());
+    }
+
+    @Override
     public double getMxx() {
         return computeMatrix().mxx;
     }
@@ -86,6 +118,32 @@ public class FXPreciseRotate extends Rotate {
 
 
     private record Matrix(double mxx, double mxy, double tx, double myx, double myy, double ty) {
+    }
+
+    @Override
+    public Transform createConcatenation(Transform transform) {
+        if (transform instanceof Rotate) {
+            Rotate r = (Rotate) transform;
+            final double px = getPivotX();
+            final double py = getPivotY();
+            final double pz = getPivotZ();
+
+            if ((r.getAxis() == getAxis() ||
+                    r.getAxis().normalize().equals(getAxis().normalize())) &&
+                    px == r.getPivotX() &&
+                    py == r.getPivotY() &&
+                    pz == r.getPivotZ()) {
+                return new FXPreciseRotate(getAngle() + r.getAngle(), px, py, pz, getAxis());
+            }
+        }
+
+        if (transform instanceof Affine) {
+            Affine a = (Affine) transform.clone();
+            a.prepend(this);
+            return a;
+        }
+
+        return super.createConcatenation(transform);
     }
 
     /**
@@ -154,18 +212,8 @@ public class FXPreciseRotate extends Rotate {
 
             // 2D case
             double angle = getAngle();
-            if (angle == 180 || angle == -180) {
-                cos = -1.0;
-                sin = 0.0;
-            } else if (angle == 90) {
-                cos = 0.0;
-                sin = 1;
-            } else if (angle == -90 || angle == 270) {
-                cos = 0.0;
-                sin = -1;
-            } else {
-                return super.transform(x, y);
-            }
+            cos = Angles.cosDegrees(angle);
+            sin = Angles.sinDegrees(angle);
 
             mxx = cos;
             mxy = -sin;
