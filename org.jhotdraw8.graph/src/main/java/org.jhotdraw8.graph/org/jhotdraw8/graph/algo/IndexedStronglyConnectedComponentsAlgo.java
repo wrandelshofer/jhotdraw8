@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
+import static java.lang.Math.min;
+
 /**
  * Computes the sets of strongly connected components in an indexed directed graph.
  * <p>
@@ -50,8 +52,6 @@ public class IndexedStronglyConnectedComponentsAlgo {
      */
     public List<IntList> findStronglyConnectedComponents(
             int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
-
-
         return new SCCAlgo(vertexCount, nextNodeFunction).findSCCs();
     }
 
@@ -146,6 +146,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
             while (!callStack.isEmpty()) {
                 int v = callStack.getFirstAsInt();
 
+                // 1) Visit a node
                 if (visited[v] == UNVISITED) {
                     // Record the visited time
                     visited[v] = earliest[v] = ++time;
@@ -153,7 +154,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
                     onStack[v] = true;
                 }
 
-                // Process neighbors 'w' until we find one that has not yet been visited yet
+                // 2) Process neighbors 'w' until we find one that has not yet been visited yet
                 for (Enumerator.OfInt neighbors = adj.apply(v); neighbors.moveNext(); ) {
                     int w = neighbors.currentAsInt();
                     if (visited[w] == UNVISITED) {
@@ -161,28 +162,29 @@ public class IndexedStronglyConnectedComponentsAlgo {
                         // Recurse into 'w' using our explicit call stack.
                         callStack.pushAsInt(w);
                         continue Outer;
+                        // Technically, after recursion completes, we continue with step 4) below.
                     } else if (onStack[w]) {
                         // We have visited neighbor 'w' before in our current stack.
                         // If this occurred at an earlier time than the earliest possible visit time of 'v',
                         // then 'v' belongs to the strongly connected component at that earlier time.
                         // If' w' is not on stack, then (v, w) is an edge pointing to a 'scc' already
                         // found and must be ignored.
-                        earliest[v] = Math.min(earliest[v], visited[w]);
+                        earliest[v] = min(earliest[v], visited[w]);
                     }
                 }
 
-                // We pop the vertex 'v' if it has no unvisited neighbors
+                // 3) Remove the recursion step from the call stack.
                 callStack.popAsInt();
 
-
-                // If it is possible to visit 'v' at an earlier time than its parent,
+                // 4) If it is possible to visit 'v' at an earlier time than its
+                // parent on the call stack,
                 // then its parent can also be visited at that earlier time.
                 if (!callStack.isEmpty()) {
                     int parent = callStack.getFirstAsInt();
-                    earliest[parent] = Math.min(earliest[parent], earliest[v]);
+                    earliest[parent] = min(earliest[parent], earliest[v]);
                 }
 
-                // If 'v' is the root of a 'scc', add the 'scc' to the result list.
+                // 5) If 'v' is the root of a 'scc', add the 'scc' to the result list.
                 if (visited[v] == earliest[v]) {
                     IntList scc = new IntArrayList();
                     int w;

@@ -180,6 +180,7 @@ public class StronglyConnectedComponentsAlgo {
             while (!callStack.isEmpty()) {
                 int v = callStack.getFirstAsInt();
 
+                // 1) Visit a node
                 if (visited[v] == UNVISITED) {
                     // Record the visited time
                     visited[v] = earliest[v] = ++time;
@@ -187,7 +188,7 @@ public class StronglyConnectedComponentsAlgo {
                     onStack[v] = true;
                 }
 
-                // Process neighbors 'w' until we find one that has not yet been visited yet
+                // 2) Process neighbors 'w' until we find one that has not yet been visited yet
                 for (V W : adj.apply(indexToVertex.get(v))) {
                     int w = vertexToIndex.get(W);
                     if (visited[w] == UNVISITED) {
@@ -195,9 +196,10 @@ public class StronglyConnectedComponentsAlgo {
                         // Recurse into 'w' using our explicit call stack.
                         callStack.pushAsInt(w);
                         continue Outer;
+                        // Technically, after recursion completes, we continue with step 4) below.
                     } else if (onStack[w]) {
                         // We have visited neighbor 'w' before in our current stack.
-                        // If this occurred at an earlier time than the earliest visit time of 'v',
+                        // If this occurred at an earlier time than the earliest possible visit time of 'v',
                         // then 'v' belongs to the strongly connected component at that earlier time.
                         // If' w' is not on stack, then (v, w) is an edge pointing to a 'scc' already
                         // found and must be ignored.
@@ -205,18 +207,18 @@ public class StronglyConnectedComponentsAlgo {
                     }
                 }
 
-                // We pop the vertex 'v' if it has no unvisited neighbors
+                // 3) Remove the recursion step from the call stack.
                 callStack.popAsInt();
 
-
-                // If it is possible to visit 'v' at an earlier time than its parent,
+                // 4) If it is possible to visit 'v' at an earlier time than its
+                // parent on the call stack,
                 // then its parent can also be visited at that earlier time.
                 if (!callStack.isEmpty()) {
                     int parent = callStack.getFirstAsInt();
                     earliest[parent] = min(earliest[parent], earliest[v]);
                 }
 
-                // If 'v' is the root of a 'scc', add the 'scc' to the result list.
+                // 5) If 'v' is the root of a 'scc', add the 'scc' to the result list.
                 if (visited[v] == earliest[v]) {
                     List<V> scc = new ArrayList<V>();
                     int w;
