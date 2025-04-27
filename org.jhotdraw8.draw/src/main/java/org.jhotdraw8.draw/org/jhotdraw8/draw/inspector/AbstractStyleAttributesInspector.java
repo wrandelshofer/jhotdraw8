@@ -567,19 +567,19 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
 
         switch (prefs.get("shownValues", "user")) {
-        case "author":
-            showStylesheetValues.setSelected(true);
-            break;
-        case "user":
-            showAttributeValues.setSelected(true);
-            break;
-        case "userAgent":
-            showUserAgentValues.setSelected(true);
-            break;
-        case "styled":
-        default:
-            showAppliedValues.setSelected(true);
-            break;
+            case "author":
+                showStylesheetValues.setSelected(true);
+                break;
+            case "user":
+                showAttributeValues.setSelected(true);
+                break;
+            case "userAgent":
+                showUserAgentValues.setSelected(true);
+                break;
+            case "styled":
+            default:
+                showAppliedValues.setSelected(true);
+                break;
         }
         shownValues.selectedToggleProperty().addListener(o -> {
             AbstractStyleAttributesInspector<E> inspector = r.get();
@@ -830,18 +830,18 @@ public abstract class AbstractStyleAttributesInspector<E> {
             final StyleOrigin origin = stylesheet.getOrigin();
             switch (origin) {
 
-            case USER_AGENT:
-                if (showUserAgentValues.isSelected()) {
-                    stylesheetInfos.add(stylesheet);
-                }
-                break;
+                case USER_AGENT:
+                    if (showUserAgentValues.isSelected()) {
+                        stylesheetInfos.add(stylesheet);
+                    }
+                    break;
                 case USER, INLINE:
-                break;
-            case AUTHOR:
-                if (showStylesheetValues.isSelected()) {
-                    stylesheetInfos.add(stylesheet);
-                }
-                break;
+                    break;
+                case AUTHOR:
+                    if (showStylesheetValues.isSelected()) {
+                        stylesheetInfos.add(stylesheet);
+                    }
+                    break;
             }
         }
 
@@ -926,14 +926,18 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         updateStylesheetInfo(pp, matchedFigures, styleManager);
 
-        textArea.setText(buf.toString());
-        int rows = 1;
-        for (int i = 0; i < buf.length(); i++) {
-            if (buf.charAt(i) == '\n') {
-                rows++;
+        // Performance: textArea.setText() is extremely slow. Do not call it unless the text has changed.
+        String string = buf.toString();
+        if (!string.equals(textArea.getText())) {
+            textArea.setText(string);
+            int rows = 1;
+            for (int i = 0; i < buf.length(); i++) {
+                if (buf.charAt(i) == '\n') {
+                    rows++;
+                }
             }
+            textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
         }
-        textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
     }
 
     private void validateTextArea() {
@@ -967,8 +971,8 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
         @Override
         public int compareTo(LookupEntry o) {
-                return this.position - o.position;
-            }
-
+            return this.position - o.position;
         }
+
+    }
 }
