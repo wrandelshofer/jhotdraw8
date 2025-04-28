@@ -24,16 +24,21 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Point2D;
+import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.control.skin.TextAreaSkin;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.text.HitInfo;
 import org.jhotdraw8.base.converter.Converter;
 import org.jhotdraw8.css.ast.AndCombinator;
 import org.jhotdraw8.css.ast.ClassSelector;
@@ -590,7 +595,21 @@ public abstract class AbstractStyleAttributesInspector<E> {
         TextArea textArea = getTextArea();
         textArea.textProperty().addListener(this::updateLookupTable);
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
-        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
+        //textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
+        ContextMenu contextMenu = new ContextMenu() {
+            @Override
+            public void show(Node anchor, double screenX, double screenY) {
+                Point2D local = textArea.screenToLocal(screenX, screenY);
+                HitInfo hitInfo = ((TextAreaSkin) textArea.getSkin()).getIndex(local.getX(), local.getY());
+                showPicker(hitInfo.getCharIndex(), screenX, screenY);
+            }
+
+            @Override
+            public void show(Node anchor, Side side, double dx, double dy) {
+                showPicker(textArea.getCaretPosition(), dx, dy);
+            }
+        };
+        textArea.setContextMenu(contextMenu);
     }
 
     protected void invalidateTextArea(Observable observable) {
