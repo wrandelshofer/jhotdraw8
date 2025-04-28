@@ -154,9 +154,9 @@ public class IndexedStronglyConnectedComponentsAlgoV1 {
             Outer:
             while (!callStack.isEmpty()) {
                 int v = callStack.getFirstAsInt();
-                vertexVisits++;
                 // 1) Visit a node
                 if (visited[v] == UNVISITED) {
+                    vertexVisits++;
                     // Record the visited time
                     visited[v] = earliest[v] = ++time;
                     stack.pushAsInt(v);

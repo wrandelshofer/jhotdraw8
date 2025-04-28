@@ -159,10 +159,10 @@ public class IndexedStronglyConnectedComponentsAlgoV2 {
                 StackFrame frame = callStack.getFirst();
                 int v = frame.v;
                 Enumerator.OfInt neighbors = frame.neighbors;
-                vertexVisits++;
 
                 // 1) Visit a node
                 if (visited[v] == UNVISITED) {
+                    vertexVisits++;
                     // Record the visited time
                     visited[v] = earliest[v] = ++time;
                     stack.pushAsInt(v);
