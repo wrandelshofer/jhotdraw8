@@ -7,11 +7,11 @@ package org.jhotdraw8.draw.popup;
 import javafx.scene.Node;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
-import org.jspecify.annotations.Nullable;
-import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.CssFont;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.fxcontrols.fontchooser.FontDialog;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilySize;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -36,5 +36,10 @@ public class CssFontPicker extends AbstractPicker<CssFont> {
         Optional<FontFamilySize> s = dialog.showAndWait(new FontFamilySize(initial.getFamily(), initial.getSize().getConvertedValue()));
         s.ifPresent(v -> callback.accept(true, new CssFont(v.family(), initial.getWeight(), initial.getPosture(),
                 CssSize.of(v.size()))));
+    }
+
+    @Override
+    public void hide() {
+        dialog.hide();
     }
 }

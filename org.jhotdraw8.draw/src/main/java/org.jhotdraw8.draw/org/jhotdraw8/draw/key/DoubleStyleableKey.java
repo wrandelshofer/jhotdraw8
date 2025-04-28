@@ -12,7 +12,6 @@ import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
 /**
  * DoubleStyleableKey.
- *
  */
 public class DoubleStyleableKey
         extends AbstractStyleableKey<Double>
@@ -45,7 +44,6 @@ public class DoubleStyleableKey
 
     public DoubleStyleableKey(String name, double defaultValue, CssConverter<Double> converter) {
         super(name, Double.class, defaultValue);
-
         this.converter = converter;
     }
 

@@ -16,6 +16,7 @@ import org.jhotdraw8.draw.key.SymmetricCssPoint2DStyleableMapAccessor;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXShapes;
+import org.jhotdraw8.icollection.VectorList;
 import org.jspecify.annotations.Nullable;
 
 import java.awt.geom.AffineTransform;
@@ -23,7 +24,6 @@ import java.awt.geom.PathIterator;
 
 /**
  * Renders a {@code javafx.scene.shape.Rectangle}.
- *
  */
 public class RectangleFigure extends AbstractLeafFigure
         implements StrokableFigure, FillableFigure, TransformableFigure,
@@ -37,7 +37,8 @@ public class RectangleFigure extends AbstractLeafFigure
 
     public static final CssSizeStyleableKey ARC_HEIGHT = new CssSizeStyleableKey("arcHeight", CssSize.ZERO);
     public static final CssSizeStyleableKey ARC_WIDTH = new CssSizeStyleableKey("arcWidth", CssSize.ZERO);
-    public static final @Nullable SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT);
+    public static final @Nullable SymmetricCssPoint2DStyleableMapAccessor ARC = new SymmetricCssPoint2DStyleableMapAccessor("arc", ARC_WIDTH, ARC_HEIGHT,
+            VectorList.of("0", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"));
 
     public RectangleFigure() {
         this(0, 0, 1, 1);

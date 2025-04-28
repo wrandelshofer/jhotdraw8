@@ -7,10 +7,11 @@ package org.jhotdraw8.draw.figure;
 import javafx.scene.Node;
 import javafx.scene.effect.BlendMode;
 import org.jhotdraw8.css.converter.PercentageCssConverter;
-import org.jhotdraw8.draw.key.DoubleStyleableKey;
 import org.jhotdraw8.draw.key.EffectStyleableKey;
 import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
+import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.render.RenderContext;
+import org.jhotdraw8.icollection.VectorList;
 
 /**
  * Provides properties for compositing a figure.
@@ -23,7 +24,6 @@ import org.jhotdraw8.draw.render.RenderContext;
  *     }
  * }
  * </pre>
- *
  */
 public interface CompositableFigure extends Figure {
 
@@ -50,7 +50,10 @@ public interface CompositableFigure extends Figure {
      * <p>
      * Default value: {@code 1}.
      */
-    DoubleStyleableKey OPACITY = new DoubleStyleableKey("opacity", 1.0, new PercentageCssConverter(false));
+    NonNullObjectStyleableKey<Double> OPACITY = new NonNullObjectStyleableKey<>("opacity", Double.class, new PercentageCssConverter(false), 1.0,
+            VectorList.of(
+                    "0%", "10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"
+            ));
 
     /**
      * Updates a figure node with all effect properties defined in this

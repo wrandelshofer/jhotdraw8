@@ -30,4 +30,9 @@ public class CssColorPicker extends AbstractPicker<CssColor> {
         update(anchor, initialValue, callback);
         dialog.show();
     }
+
+    @Override
+    public void hide() {
+        dialog.hide();
+    }
 }

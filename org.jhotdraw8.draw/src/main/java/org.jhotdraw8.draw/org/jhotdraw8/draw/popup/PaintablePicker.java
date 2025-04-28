@@ -35,4 +35,9 @@ public class PaintablePicker extends AbstractPicker<Paintable> {
         );
         dialog.show(anchor, screenX, screenY);
     }
+
+    @Override
+    public void hide() {
+        dialog.hide();
+    }
 }

@@ -25,7 +25,6 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.geometry.Side;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
@@ -597,16 +596,24 @@ public abstract class AbstractStyleAttributesInspector<E> {
         textArea.caretPositionProperty().addListener(this::onCaretPositionChanged);
         //textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
         ContextMenu contextMenu = new ContextMenu() {
+            @Nullable
+            Picker picker;
+
             @Override
             public void show(Node anchor, double screenX, double screenY) {
+                hide();
                 Point2D local = textArea.screenToLocal(screenX, screenY);
-                HitInfo hitInfo = ((TextAreaSkin) textArea.getSkin()).getIndex(local.getX(), local.getY());
-                showPicker(hitInfo.getCharIndex(), screenX, screenY);
+                TextAreaSkin skin = (TextAreaSkin) textArea.getSkin();
+                HitInfo hitInfo = skin.getIndex(local.getX() + textArea.getScrollLeft(), local.getY() + textArea.getScrollTop());
+                skin.positionCaret(hitInfo, false);
+                picker = showPicker(hitInfo.getCharIndex(), screenX, screenY);
             }
 
             @Override
-            public void show(Node anchor, Side side, double dx, double dy) {
-                showPicker(textArea.getCaretPosition(), dx, dy);
+            public void hide() {
+                if (picker != null) {
+                    picker.hide();
+                }
             }
         };
         textArea.setContextMenu(contextMenu);
@@ -723,7 +730,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
     protected abstract void setHelpText(String helpText);
 
-    private void showPicker(int caretPosition, double screenX, double screenY) {
+    private @Nullable Picker showPicker(int caretPosition, double screenX, double screenY) {
         LookupEntry entry = getLookupEntryAt(caretPosition);
         Declaration declaration = entry == null ? null : entry.declaration;
         StyleRule styleRule = entry == null ? null : entry.styleRule;
@@ -733,7 +740,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
 
             StylesheetsManager<E> sm = getStyleManager();
             if (sm == null) {
-                return;
+                return null;
             }
             SelectorModel<E> fsm = sm.getSelectorModel();
             fsm.additionalPseudoClassStatesProperty().setValue(pseudoStyles);
@@ -780,10 +787,10 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 };
                 picker.show(getTextArea(), screenX, screenY,
                         initialValue, lambda);
+                return picker;
             }
-
         }
-
+        return null;
     }
 
     /**
@@ -948,6 +955,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
         // Performance: textArea.setText() is extremely slow. Do not call it unless the text has changed.
         String string = buf.toString();
         if (!string.equals(textArea.getText())) {
+            double scrollTop = textArea.getScrollTop();
+            double scrollLeft = textArea.getScrollLeft();
+            int caretPosition = textArea.getCaretPosition();
             textArea.setText(string);
             int rows = 1;
             for (int i = 0; i < buf.length(); i++) {
@@ -956,6 +966,9 @@ public abstract class AbstractStyleAttributesInspector<E> {
                 }
             }
             textArea.setPrefRowCount(Math.min(Math.max(5, rows), 25));
+            textArea.setScrollLeft(scrollLeft);
+            textArea.setScrollTop(scrollTop);
+            textArea.positionCaret(Math.min(string.length(), caretPosition));
         }
     }
 

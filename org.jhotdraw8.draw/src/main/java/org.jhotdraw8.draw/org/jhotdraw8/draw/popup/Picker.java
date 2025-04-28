@@ -20,4 +20,6 @@ public interface Picker<T> {
     void show(Node anchor, double screenX, double screenY,
               T initialValue,
               BiConsumer<Boolean, T> callback);
+
+    void hide();
 }

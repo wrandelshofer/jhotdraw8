@@ -10,6 +10,8 @@ import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.css.converter.SymmetricCssPoint2DCssConverter;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jhotdraw8.icollection.VectorList;
+import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.icollection.persistent.PersistentMap;
 import org.jspecify.annotations.Nullable;
 
@@ -17,7 +19,6 @@ import java.util.Map;
 
 /**
  * SymmetricCssPoint2DStyleableMapAccessor.
- *
  */
 public class SymmetricCssPoint2DStyleableMapAccessor
         extends AbstractStyleableMapAccessor<CssPoint2D>
@@ -25,7 +26,7 @@ public class SymmetricCssPoint2DStyleableMapAccessor
 
 
     private final Converter<CssPoint2D> converter = new SymmetricCssPoint2DCssConverter();
-
+    private final PersistentList<String> examples;
     private final NonNullMapAccessor<CssSize> xKey;
     private final NonNullMapAccessor<CssSize> yKey;
 
@@ -39,8 +40,23 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     public SymmetricCssPoint2DStyleableMapAccessor(String name,
                                                    NonNullMapAccessor<CssSize> xKey,
                                                    NonNullMapAccessor<CssSize> yKey) {
-        super(name, CssPoint2D.class, new NonNullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
+        this(name, xKey, yKey, VectorList.of());
+    }
 
+    /**
+     * Creates a new instance with the specified name.
+     *
+     * @param name     the name of the accessor
+     * @param xKey     the key for the x coordinate of the point
+     * @param yKey     the key for the y coordinate of the point
+     * @param examples example values
+     */
+    public SymmetricCssPoint2DStyleableMapAccessor(String name,
+                                                   NonNullMapAccessor<CssSize> xKey,
+                                                   NonNullMapAccessor<CssSize> yKey,
+                                                   PersistentList<String> examples) {
+        super(name, CssPoint2D.class, new NonNullMapAccessor<?>[]{xKey, yKey}, new CssPoint2D(xKey.getDefaultValue(), yKey.getDefaultValue()));
+        this.examples = examples;
         this.xKey = xKey;
         this.yKey = yKey;
     }
@@ -88,5 +104,10 @@ public class SymmetricCssPoint2DStyleableMapAccessor
     public PersistentMap<Key<?>, Object> remove(PersistentMap<Key<?>, Object> a) {
         a = xKey.remove(a);
         return yKey.remove(a);
+    }
+
+    @Override
+    public PersistentList<String> getExamples() {
+        return examples;
     }
 }

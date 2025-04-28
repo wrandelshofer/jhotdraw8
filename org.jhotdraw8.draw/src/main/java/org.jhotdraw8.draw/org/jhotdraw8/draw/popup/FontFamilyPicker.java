@@ -5,8 +5,8 @@
 package org.jhotdraw8.draw.popup;
 
 import javafx.scene.Node;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcontrols.fontchooser.FontFamilyDialog;
+import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.BiConsumer;
@@ -32,6 +32,11 @@ public class FontFamilyPicker extends AbstractPicker<String> {
         update(anchor);
         Optional<String> s = dialog.showAndWait(initial);
         s.ifPresent(v -> callback.accept(true, v));
+    }
+
+    @Override
+    public void hide() {
+        dialog.hide();
     }
 
 

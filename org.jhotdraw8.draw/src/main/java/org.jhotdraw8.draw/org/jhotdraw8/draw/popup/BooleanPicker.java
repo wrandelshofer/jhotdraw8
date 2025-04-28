@@ -62,4 +62,9 @@ public class BooleanPicker extends AbstractPicker<Boolean> {
         update(callback);
         contextMenu.show(anchor, screenX, screenY);
     }
+
+    @Override
+    public void hide() {
+        contextMenu.hide();
+    }
 }

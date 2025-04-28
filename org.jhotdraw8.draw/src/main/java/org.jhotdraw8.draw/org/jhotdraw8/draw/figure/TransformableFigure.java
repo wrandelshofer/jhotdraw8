@@ -14,10 +14,12 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
+import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.css.converter.Translate3DCssConverter;
 import org.jhotdraw8.draw.key.CssPoint2DStyleableKey;
 import org.jhotdraw8.draw.key.DoubleStyleableKey;
+import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.key.Point3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.Scale3DStyleableMapAccessor;
 import org.jhotdraw8.draw.key.TransformListStyleableKey;
@@ -61,7 +63,8 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
      * <p>
      * Default value: {@code 0}.
      */
-    DoubleStyleableKey ROTATE = new DoubleStyleableKey("rotate", 0.0);
+    NonNullObjectStyleableKey<Double> ROTATE = new NonNullObjectStyleableKey<>("rotate", Double.class, new DoubleCssConverter(false), 0.0,
+            VectorList.of("0", "45", "90", "135", "180", "225", "270", "315"));
     /**
      * Defines the pivot of the rotation.
      * <p>

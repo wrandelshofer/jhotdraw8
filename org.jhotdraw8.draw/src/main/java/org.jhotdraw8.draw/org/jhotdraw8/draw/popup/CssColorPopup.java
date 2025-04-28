@@ -11,12 +11,12 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.resources.Resources;
-import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.NamedCssColor;
+import org.jhotdraw8.draw.DrawLabels;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
+import org.jspecify.annotations.Nullable;
 
 import java.util.function.BiConsumer;
 
@@ -58,6 +58,10 @@ public class CssColorPopup {
 
     public BiConsumer<Boolean, CssColor> getCallback() {
         return callback;
+    }
+
+    public void hide() {
+        contextMenu.hide();
     }
 
     public void setCallback(BiConsumer<Boolean, CssColor> callback) {

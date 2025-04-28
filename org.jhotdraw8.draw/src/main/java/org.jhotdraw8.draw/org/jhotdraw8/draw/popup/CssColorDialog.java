@@ -16,11 +16,11 @@ import javafx.scene.control.Label;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.ApplicationLabels;
 import org.jhotdraw8.application.resources.Resources;
 import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.NamedCssColor;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -133,4 +133,7 @@ public class CssColorDialog {
         }
     }
 
+    public void hide() {
+        dialog.hide();
+    }
 }
