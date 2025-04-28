@@ -12,7 +12,9 @@ import org.jhotdraw8.collection.primitive.IntDeque;
 import org.jhotdraw8.collection.primitive.IntList;
 import org.jhotdraw8.graph.IndexedDirectedGraph;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.List;
 import java.util.function.Function;
 
@@ -55,12 +57,15 @@ public class IndexedStronglyConnectedComponentsAlgo {
         return new SCCAlgo(vertexCount, nextNodeFunction).findSCCs();
     }
 
+    private record StackFrame(int v, Enumerator.OfInt neighbors) {
+
+    }
 
     /**
      * This object holds the algorithm and its current state.
      */
     private static class SCCAlgo {
-        final Function<Integer, Enumerator.OfInt> adj;
+        final Function<Integer, Enumerator.OfInt> getNeighbors;
         final List<IntList> SCCs;
         final int vertexCount;
 
@@ -112,11 +117,11 @@ public class IndexedStronglyConnectedComponentsAlgo {
         /**
          * The explicit call stack of the non-recursive depth first search.
          */
-        private final IntDeque callStack = new IntArrayDeque();
+        private final Deque<StackFrame> callStack = new ArrayDeque<>();
 
 
-        public SCCAlgo(int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
-            this.adj = nextNodeFunction;
+        public SCCAlgo(int vertexCount, Function<Integer, Enumerator.OfInt> nextNodesFunction) {
+            this.getNeighbors = nextNodesFunction;
             SCCs = new ArrayList<>(vertexCount);
             this.vertexCount = vertexCount;
             this.visited = new int[vertexCount];
@@ -140,11 +145,13 @@ public class IndexedStronglyConnectedComponentsAlgo {
          * Non-recursive depth-first search using an explicit call stack.
          */
         private void dfs(int start) {
-            callStack.pushAsInt(start);
+            callStack.push(new StackFrame(start, getNeighbors.apply(start)));
 
             Outer:
             while (!callStack.isEmpty()) {
-                int v = callStack.getFirstAsInt();
+                StackFrame frame = callStack.getFirst();
+                int v = frame.v;
+                Enumerator.OfInt neighbors = frame.neighbors;
 
                 // 1) Visit a node
                 if (visited[v] == UNVISITED) {
@@ -155,12 +162,12 @@ public class IndexedStronglyConnectedComponentsAlgo {
                 }
 
                 // 2) Process neighbors 'w' until we find one that has not yet been visited yet
-                for (Enumerator.OfInt neighbors = adj.apply(v); neighbors.moveNext(); ) {
+                while (neighbors.moveNext()) {
                     int w = neighbors.currentAsInt();
                     if (visited[w] == UNVISITED) {
                         // We have not visited neighbor 'w' before.
                         // Recurse into 'w' using our explicit call stack.
-                        callStack.pushAsInt(w);
+                        callStack.push(new StackFrame(w, getNeighbors.apply(w)));
                         continue Outer;
                         // Technically, after recursion completes, we continue with step 4) below.
                     } else if (onStack[w]) {
@@ -174,13 +181,13 @@ public class IndexedStronglyConnectedComponentsAlgo {
                 }
 
                 // 3) Remove the recursion step from the call stack.
-                callStack.popAsInt();
+                callStack.pop();
 
                 // 4) If it is possible to visit 'v' at an earlier time than its
                 // parent on the call stack,
                 // then its parent can also be visited at that earlier time.
                 if (!callStack.isEmpty()) {
-                    int parent = callStack.getFirstAsInt();
+                    int parent = callStack.getFirst().v;
                     earliest[parent] = min(earliest[parent], earliest[v]);
                 }
 

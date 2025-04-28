@@ -16,6 +16,7 @@ module org.jhotdraw8.graph {
     requires transitive org.jhotdraw8.base;
     requires transitive org.jhotdraw8.collection;
     requires org.jhotdraw8.icollection;
+    requires java.desktop;
 
     exports org.jhotdraw8.graph;
     exports org.jhotdraw8.graph.algo;

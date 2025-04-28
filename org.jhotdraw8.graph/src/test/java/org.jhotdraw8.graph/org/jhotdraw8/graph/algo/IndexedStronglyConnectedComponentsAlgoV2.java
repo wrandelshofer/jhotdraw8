@@ -1,85 +1,75 @@
+
 /*
- * @(#)StronglyConnectedComponentsAlgo.java
+ * @(#)IndexedStronglyConnectedComponentsAlgo.öava
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.graph.algo;
 
+import org.jhotdraw8.collection.enumerator.Enumerator;
 import org.jhotdraw8.collection.primitive.IntArrayDeque;
+import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.collection.primitive.IntDeque;
-import org.jhotdraw8.graph.DirectedGraph;
+import org.jhotdraw8.collection.primitive.IntList;
+import org.jhotdraw8.graph.IndexedDirectedGraph;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Deque;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import static java.lang.Math.min;
 
 /**
- * Computes the sets of strongly connected components in a directed graph.
+ * Computes the sets of strongly connected components in an indexed directed graph.
  * <p>
  * References:
  * <dl>
- *     <dt>Stackoverflow. Non-recursive version of Tarjan's algorithm.
- *     Copyright Ivan Stoev. CC BY-SA 4.0 license.</dt>
- *     <dd><a href="https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm">stackoverflow.com</a></dd>
+ *     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
+ *     </dt>
+ *     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
+ *
  *     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
  *     <dd><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia.org</a></dd>
- *
  * </dl>
  */
-public class StronglyConnectedComponentsAlgo {
+public class IndexedStronglyConnectedComponentsAlgoV2 {
 
-
-    public StronglyConnectedComponentsAlgo() {
+    public IndexedStronglyConnectedComponentsAlgoV2() {
 
     }
+
+    public List<IntList> findStronglyConnectedComponents(
+            final IndexedDirectedGraph graph) {
+        return findStronglyConnectedComponents(graph.getVertexCount(), graph::nextVerticesEnumerator);
+    }
+
 
     /**
      * Returns all strongly connected components in the specified graph.
      *
-     * @param graph the graph
-     * @param <V>   the vertex data type
-     * @param <A>   the arrow data type
-     * @return set of strongly connected components (sets of vertices).
-     */
-    public <V, A> List<List<V>> findStronglyConnectedComponents(
-            final DirectedGraph<V, A> graph) {
-        return findStronglyConnectedComponents(graph.getVertices(), graph::getNextVertices);
-    }
-
-    /**
-     * Returns all strongly connected components in the specified graph.
-     *
-     * @param <V>              the vertex data type
-     * @param vertices         the vertices of the graph
+     * @param vertexCount      the vertices of the graph
      * @param nextNodeFunction returns the next nodes of a given node
      * @return set of strongly connected components (sets of vertices).
      */
-    public <V> List<List<V>> findStronglyConnectedComponents(
-            final Collection<? extends V> vertices, final Function<V, Iterable<? extends V>> nextNodeFunction
-    ) {
-        return new SCCAlgo<V>(vertices, nextNodeFunction).findSCCs();
-
+    public List<IntList> findStronglyConnectedComponents(
+            int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
+        return new SCCAlgo(vertexCount, nextNodeFunction).findSCCs();
     }
 
-    private record StackFrame<V>(V vv, int v, Iterator<? extends V> neighbors) {
+    private record StackFrame(int v, Enumerator.OfInt neighbors) {
 
     }
 
     /**
      * This object holds the algorithm and its current state.
      */
-    private static class SCCAlgo<V> {
-        final Function<V, Iterable<? extends V>> getNeighbors;
-        final List<List<V>> SCCs;
+    private static class SCCAlgo {
+        final Function<Integer, Enumerator.OfInt> getNeighbors;
+        final List<IntList> SCCs;
         final int vertexCount;
-
+        int numVertexVisits;
+        int numArrowVisits;
         /**
          * This time value is used to indicate that a vertex has not yet been visited.
          */
@@ -128,51 +118,48 @@ public class StronglyConnectedComponentsAlgo {
         /**
          * The explicit call stack of the non-recursive depth first search.
          */
-        private final Deque<StackFrame<V>> callStack = new ArrayDeque<>();
+        private final Deque<StackFrame> callStack = new ArrayDeque<>();
+        private int vertexVisits, arrowVisits;
 
-        private final Map<V, Integer> vertexToIndex;
-        private final List<V> indexToVertex;
-
-        public SCCAlgo(Collection<? extends V> vertices, Function<V, Iterable<? extends V>> nextNodeFunction) {
+        public SCCAlgo(int vertexCount, Function<Integer, Enumerator.OfInt> nextNodeFunction) {
             this.getNeighbors = nextNodeFunction;
-            this.vertexCount = vertices.size();
             SCCs = new ArrayList<>(vertexCount);
+            this.vertexCount = vertexCount;
             this.visited = new int[vertexCount];
             this.earliest = new int[vertexCount];
             this.onStack = new boolean[vertexCount];
             stack = new IntArrayDeque();
-            this.vertexToIndex = new LinkedHashMap<>();
-            this.indexToVertex = new ArrayList<>();
-            for (V v : vertices) {
-                this.vertexToIndex.put(v, vertexToIndex.size());
-                this.indexToVertex.add(v);
-            }
         }
 
-        public List<List<V>> findSCCs() {
-            for (Map.Entry<V, Integer> entry : vertexToIndex.entrySet()) {
-                int vi = entry.getValue();
-                if (visited[vi] == UNVISITED) {
-                    dfs(entry.getKey());
+        public List<IntList> findSCCs() {
+            int arrowCount = 0;
+            for (int v = 0; v < vertexCount; v++) {
+                for (var neighbors = getNeighbors.apply(v); neighbors.moveNext(); ) {
+                    arrowCount++;
+                }
+                if (visited[v] == UNVISITED) {
+                    dfs(v);
                     if (!callStack.isEmpty()) throw new IllegalStateException("dfsStack is not empty");
                     if (!stack.isEmpty()) throw new IllegalStateException("stack is not empty");
                 }
             }
+            System.out.println("vertexCount =" + vertexCount + " arrowCount =" + arrowCount);
+            System.out.println("vertexVisits=" + vertexVisits + " arrowVisits=" + arrowVisits);
             return SCCs;
         }
 
         /**
          * Non-recursive depth-first search using an explicit call stack.
          */
-        private void dfs(V start) {
-            callStack.push(new StackFrame<>(start, vertexToIndex.get(start), getNeighbors.apply(start).iterator()));
-
+        private void dfs(int start) {
+            callStack.push(new StackFrame(start, getNeighbors.apply(start)));
 
             Outer:
             while (!callStack.isEmpty()) {
-                StackFrame<V> frame = callStack.getFirst();
+                StackFrame frame = callStack.getFirst();
                 int v = frame.v;
-                Iterator<? extends V> neighbors = frame.neighbors;
+                Enumerator.OfInt neighbors = frame.neighbors;
+                vertexVisits++;
 
                 // 1) Visit a node
                 if (visited[v] == UNVISITED) {
@@ -183,14 +170,13 @@ public class StronglyConnectedComponentsAlgo {
                 }
 
                 // 2) Process neighbors 'w' until we find one that has not yet been visited yet
-                while (neighbors.hasNext()) {
-                    V ww = neighbors.next();
-                    int w = vertexToIndex.get(ww);
+                while (neighbors.moveNext()) {
+                    arrowVisits++;
+                    int w = neighbors.currentAsInt();
                     if (visited[w] == UNVISITED) {
                         // We have not visited neighbor 'w' before.
                         // Recurse into 'w' using our explicit call stack.
-                        callStack.push(new StackFrame<>(ww, w, getNeighbors.apply(ww).iterator()));
-
+                        callStack.push(new StackFrame(w, getNeighbors.apply(w)));
                         continue Outer;
                         // Technically, after recursion completes, we continue with step 4) below.
                     } else if (onStack[w]) {
@@ -216,12 +202,12 @@ public class StronglyConnectedComponentsAlgo {
 
                 // 5) If 'v' is the root of a 'scc', add the 'scc' to the result list.
                 if (visited[v] == earliest[v]) {
-                    List<V> scc = new ArrayList<V>();
+                    IntList scc = new IntArrayList();
                     int w;
                     do {
                         w = stack.popAsInt();
                         onStack[w] = false;
-                        scc.add(indexToVertex.get(w));
+                        scc.add(w);
                     } while (w != v);
                     SCCs.add(scc);
                 }
