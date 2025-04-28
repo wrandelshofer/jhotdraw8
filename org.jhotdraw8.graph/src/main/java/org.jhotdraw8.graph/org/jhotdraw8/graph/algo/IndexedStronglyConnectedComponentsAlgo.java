@@ -153,7 +153,7 @@ public class IndexedStronglyConnectedComponentsAlgo {
                 int v = frame.v;
                 Enumerator.OfInt neighbors = frame.neighbors;
 
-                // 1) Visit a node
+                // 1) Visit the node, if we have not already visited it
                 if (visited[v] == UNVISITED) {
                     // Record the visited time
                     visited[v] = earliest[v] = ++time;
@@ -167,9 +167,14 @@ public class IndexedStronglyConnectedComponentsAlgo {
                     if (visited[w] == UNVISITED) {
                         // We have not visited neighbor 'w' before.
                         // Recurse into 'w' using our explicit call stack.
+                        // A recursion step is 1),2),3),4),5) with a down-call in the middle of 2)
+                        // and the up-call in 3).
+                        // We have to go through 1) multiple times in order to complete 2).
+                        // This is why have to check in 1) whether we have visited 'v' before.
                         callStack.push(new StackFrame(w, getNeighbors.apply(w)));
                         continue Outer;
-                        // Technically, after recursion completes, we continue with step 4) below.
+                        // If this was recursive code, then the code for 3) and 4) would be here.
+                        // The code of 4) would look different: The 'parent' would be 'v', and 'v' would be 'w'.
                     } else if (onStack[w]) {
                         // We have visited neighbor 'w' before in our current stack.
                         // If this occurred at an earlier time than the earliest possible visit time of 'v',

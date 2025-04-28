@@ -190,7 +190,6 @@ public class StronglyConnectedComponentsAlgo {
                         // We have not visited neighbor 'w' before.
                         // Recurse into 'w' using our explicit call stack.
                         callStack.push(new StackFrame<>(ww, w, getNeighbors.apply(ww).iterator()));
-
                         continue Outer;
                         // Technically, after recursion completes, we continue with step 4) below.
                     } else if (onStack[w]) {
