@@ -7,7 +7,6 @@ package org.jhotdraw8.css.value;
 
 /**
  * DefaultUnitConverter.
- *
  */
 public class DefaultUnitConverter implements UnitConverter {
 
@@ -23,11 +22,11 @@ public class DefaultUnitConverter implements UnitConverter {
     private final double percentageFactor;
 
     public DefaultUnitConverter(double dpi) {
-        this(dpi, 100.0, 1024, 768);
+        this(dpi, 100.0, 1000, 1000);
     }
 
     public DefaultUnitConverter(double dpi, double percentageFactor) {
-        this(dpi, percentageFactor, 1024, 768);
+        this(dpi, percentageFactor, 1000, 1000);
     }
 
     public DefaultUnitConverter(double dpi, double percentageFactor, double viewportWidth, double viewportHeight) {

@@ -23,7 +23,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.transform.Transform;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.application.EditableComponent;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.draw.constrain.Constrainer;
@@ -42,6 +41,7 @@ import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.fxbase.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -237,6 +237,7 @@ public class SimpleDrawingView extends AbstractDrawingView {
         drawingRenderer.modelProperty().bind(this.modelProperty());
         drawingRenderer.clipBoundsProperty().bind(zoomableScrollPane.visibleContentRectProperty());
         drawingRenderer.editorProperty().bind(this.editorProperty());
+        drawingRenderer.zoomFactorProperty().bind(this.zoomFactorProperty());
         drawingRenderer.setDrawingView(this);
         handleRenderer.modelProperty().bind(this.modelProperty());
         handleRenderer.setSelectedFigures(getSelectedFigures());
@@ -374,17 +375,17 @@ public class SimpleDrawingView extends AbstractDrawingView {
                 onNodeRemoved(f);
                 break;
             case NODE_CHANGED:
-            onNodeChanged(f);
-            break;
-        case ROOT_CHANGED:
-            onRootChanged();
-            break;
-        case SUBTREE_NODES_CHANGED:
-            onSubtreeNodesChanged(f);
-            break;
-        default:
-            throw new UnsupportedOperationException(event.getEventType()
-                    + " not supported");
+                onNodeChanged(f);
+                break;
+            case ROOT_CHANGED:
+                onRootChanged();
+                break;
+            case SUBTREE_NODES_CHANGED:
+                onSubtreeNodesChanged(f);
+                break;
+            default:
+                throw new UnsupportedOperationException(event.getEventType()
+                        + " not supported");
         }
     }
 

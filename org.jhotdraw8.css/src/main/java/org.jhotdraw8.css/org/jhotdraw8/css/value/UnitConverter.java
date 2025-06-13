@@ -22,7 +22,6 @@ import static java.lang.Math.min;
  *     <dt>CSS Values and Units Module Level 3. § 5.2 Absolute lengths: the cm, mm, Q, in, pt, pc, px units</dt>
  *     <dd><a href="https://www.w3.org/TR/css3-values/#absolute-length">w3.org</a></dd>
  * </dl>
- *
  */
 public interface UnitConverter {
     /**
@@ -57,19 +56,19 @@ public interface UnitConverter {
     /**
      * Gets the viewport width.
      *
-     * @return viewport width, default value: 1024.0.
+     * @return viewport width, default value: 1000.0.
      */
     default double getViewportWidth() {
-        return 1024.0;
+        return 1000;
     }
 
     /**
      * Gets the viewport height.
      *
-     * @return viewport height, default value: 768.0.
+     * @return viewport height, default value: 1000.0.
      */
     default double getViewportHeight() {
-        return 768.0;
+        return 1000.0;
     }
 
     /**

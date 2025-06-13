@@ -21,7 +21,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.base.event.Listener;
 import org.jhotdraw8.css.value.DefaultUnitConverter;
 import org.jhotdraw8.draw.DrawingEditor;
@@ -34,6 +33,7 @@ import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
 import org.jhotdraw8.fxbase.beans.NonNullObjectProperty;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -94,6 +94,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
         drawingPane.setManaged(true);
         model.addListener(this::onDrawingModelChanged);
         clipBounds.addListener(this::onClipBoundsChanged);
+        zoomFactorProperty().addListener(this::onClipBoundsChanged);
     }
 
     public ObjectProperty<Bounds> clipBoundsProperty() {
@@ -475,7 +476,12 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private void invalidateLayerNodes() {
         Drawing drawing = getDrawing();
         if (drawing != null) {
-            dirtyFigureNodes.addAll(drawing.getChildren());
+            Bounds clipBounds = getClipBounds();
+            for (Figure figure : drawing.preorderIterable()) {
+                if (figure.getVisualBoundsInWorld().intersects(clipBounds)) {
+                    dirtyFigureNodes.add(figure);
+                }
+            }
         }
     }
 
@@ -606,7 +612,8 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
 
     private void updateRenderContext() {
         getRenderContext().set(RenderContext.CLIP_BOUNDS, getClipBounds());
-        DefaultUnitConverter units = new DefaultUnitConverter(96, 1.0, 1024.0 / getZoomFactor(), 768 / getZoomFactor());
+        double viewportWidth = 1000.0 / getZoomFactor();
+        DefaultUnitConverter units = new DefaultUnitConverter(96, 1.0, viewportWidth, viewportWidth);
         getRenderContext().set(RenderContext.UNIT_CONVERTER_KEY, units);
     }
 
