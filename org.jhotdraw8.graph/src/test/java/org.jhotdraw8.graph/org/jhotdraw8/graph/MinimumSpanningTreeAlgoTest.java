@@ -8,8 +8,9 @@ package org.jhotdraw8.graph;
 import org.jhotdraw8.collection.mapped.MappedList;
 import org.jhotdraw8.collection.pair.OrderedPair;
 import org.jhotdraw8.collection.pair.SimpleOrderedPair;
-import org.jhotdraw8.graph.algo.AbstractGraphAlgoTest;
 import org.jhotdraw8.graph.algo.MinimumSpanningTreeAlgo;
+import org.jhotdraw8.graph.builder.MinimalSpanningTreeGraphBuilder;
+import org.jhotdraw8.graph.builder.NonMinimalSpanningTreeGraphBuilder;
 import org.jhotdraw8.graph.io.AdjacencyListWriter;
 import org.junit.jupiter.api.Test;
 
@@ -20,21 +21,21 @@ import java.util.function.Function;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class MinimumSpanningTreeAlgoTest extends AbstractGraphAlgoTest {
+public class MinimumSpanningTreeAlgoTest {
 
 
     @Test
     public void findMinimumSpanningTreeGraphToDoubleFunction() {
-        DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
-        DirectedGraph<String, Integer> expectedMst = createMSTGraph();
+        DirectedGraph<String, Integer> nonMst = new NonMinimalSpanningTreeGraphBuilder().build();
+        DirectedGraph<String, Integer> expectedMst = new MinimalSpanningTreeGraphBuilder().build();
         SimpleMutableDirectedGraph<String, Integer> actualMst = new MinimumSpanningTreeAlgo().findMinimumSpanningTreeGraph(nonMst, Function.identity());
         assertEquals(new AdjacencyListWriter().write(expectedMst), new AdjacencyListWriter().write(actualMst));
     }
 
     @Test
     public void findMinimumSpanningTreeGraphTriFunction() {
-        DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
-        DirectedGraph<String, Integer> expectedMst = createMSTGraph();
+        DirectedGraph<String, Integer> nonMst = new NonMinimalSpanningTreeGraphBuilder().build();
+        DirectedGraph<String, Integer> expectedMst = new MinimalSpanningTreeGraphBuilder().build();
         SimpleMutableDirectedGraph<String, Integer> actualMst = new MinimumSpanningTreeAlgo().findMinimumSpanningTreeGraph(
                 nonMst, (va, vb, a) -> a);
         assertEquals(new AdjacencyListWriter().write(expectedMst), new AdjacencyListWriter().write(actualMst));
@@ -42,8 +43,8 @@ public class MinimumSpanningTreeAlgoTest extends AbstractGraphAlgoTest {
 
     @Test
     public void findMinimumSpanningTreeCollectionArrows() {
-        DirectedGraph<String, Integer> nonMst = createNonMSTGraph();
-        DirectedGraph<String, Integer> expectedMst = createMSTGraph();
+        DirectedGraph<String, Integer> nonMst = new NonMinimalSpanningTreeGraphBuilder().build();
+        DirectedGraph<String, Integer> expectedMst = new MinimalSpanningTreeGraphBuilder().build();
         List<Arc<String, Integer>> arcs = new ArrayList<>();
         for (String vertex : nonMst.getVertices()) {
             arcs.addAll(nonMst.getNextArcs(vertex));

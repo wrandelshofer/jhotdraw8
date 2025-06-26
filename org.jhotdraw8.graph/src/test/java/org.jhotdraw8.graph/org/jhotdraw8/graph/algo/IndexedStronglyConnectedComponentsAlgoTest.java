@@ -8,6 +8,9 @@ package org.jhotdraw8.graph.algo;
 import org.jhotdraw8.collection.primitive.IntList;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.ImmutableAttributed16BitIndexedDirectedGraph;
+import org.jhotdraw8.graph.builder.DisjointGraphBuilder;
+import org.jhotdraw8.graph.builder.LoopGraphBuilder;
+import org.jhotdraw8.graph.builder.TarjanFig3GraphBuilder;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -23,15 +26,15 @@ import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 /**
  * Tests class {@link IndexedStronglyConnectedComponentsAlgo}.
  */
-public class IndexedStronglyConnectedComponentsAlgoTest extends AbstractGraphAlgoTest {
+public class IndexedStronglyConnectedComponentsAlgoTest {
 
 
     @TestFactory
     public List<DynamicTest> dynamicTestsSearchStronglyConnectedComponents() {
         return Arrays.asList(
-                dynamicTest("1", () -> testSearchStronglyConnectedComponents(createDisjointGraph(), createDisjointConnectedComponents())),
-                dynamicTest("2", () -> testSearchStronglyConnectedComponents(createLoopGraph(), createLoopConnectedComponents())),
-                dynamicTest("3", () -> testSearchStronglyConnectedComponents(createTarjanFig3Graph(), createTarjanFig3ConnectedComponents()))
+                dynamicTest("1", () -> testSearchStronglyConnectedComponents(new DisjointGraphBuilder().build(), new DisjointGraphBuilder().buildStronglyConnectedComponents())),
+                dynamicTest("2", () -> testSearchStronglyConnectedComponents(new LoopGraphBuilder().build(), new LoopGraphBuilder().buildStronglyConnectedComponents())),
+                dynamicTest("3", () -> testSearchStronglyConnectedComponents(new TarjanFig3GraphBuilder().build(), new TarjanFig3GraphBuilder().buildStronglyConnectedComponents()))
         );
     }
 
