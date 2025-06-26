@@ -25,12 +25,12 @@ import static java.lang.Math.min;
  * <p>
  * References:
  * <dl>
- *     <dt>Stackoverflow. Non-recursive version of Tarjan's algorithm.
- *     Copyright Ivan Stoev. CC BY-SA 4.0 license.</dt>
- *     <dd><a href="https://stackoverflow.com/questions/46511682/non-recursive-version-of-tarjans-algorithm">stackoverflow.com</a></dd>
+ *     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
+ *     </dt>
+ *     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
+ *
  *     <dt>Wikipedia. Tarjan's strongly connected components algorithm</dt>
  *     <dd><a href="https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm">wikipedia.org</a></dd>
- *
  * </dl>
  */
 public class StronglyConnectedComponentsAlgo {
