@@ -46,7 +46,8 @@ public class StronglyConnectedComponentsAlgo {
      * @param graph the graph
      * @param <V>   the vertex data type
      * @param <A>   the arrow data type
-     * @return set of strongly connected components (sets of vertices).
+     * @return the strongly connected components of the graph
+     * (this is actually a set of sets, but for performance reasons we return a list of lists).
      */
     public <V, A> List<List<V>> findStronglyConnectedComponents(
             final DirectedGraph<V, A> graph) {
@@ -59,12 +60,13 @@ public class StronglyConnectedComponentsAlgo {
      * @param <V>              the vertex data type
      * @param vertices         the vertices of the graph
      * @param nextNodeFunction returns the next nodes of a given node
-     * @return set of strongly connected components (sets of vertices).
+     * @return lists of strongly connected components
+     * (this is actually a set of sets, but for performance reasons we use a list of lists).
      */
     public <V> List<List<V>> findStronglyConnectedComponents(
             final Collection<? extends V> vertices, final Function<V, Iterable<? extends V>> nextNodeFunction
     ) {
-        return new SCCAlgo<V>(vertices, nextNodeFunction).findSCCs();
+        return new SCCAlgo<>(vertices, nextNodeFunction).findSCCs();
 
     }
 
@@ -76,14 +78,14 @@ public class StronglyConnectedComponentsAlgo {
      * This object holds the algorithm and its current state.
      */
     private static class SCCAlgo<V> {
-        final Function<V, Iterable<? extends V>> getNeighbors;
-        final List<List<V>> SCCs;
-        final int vertexCount;
+
+        private final Function<V, Iterable<? extends V>> getNeighbors;
+        private final List<List<V>> SCCs;
 
         /**
          * This time value is used to indicate that a vertex has not yet been visited.
          */
-        final static int UNVISITED = 0;
+        private static final int UNVISITED = 0;
         /**
          * Visit time of a vertex.
          * <p>
@@ -91,7 +93,7 @@ public class StronglyConnectedComponentsAlgo {
          * <p>
          * Note: We choose {@link #UNVISITED} = 0, so that we do not have to explicitly fill this array.
          */
-        final int[] visited;
+        private final int[] visited;
         /**
          * Visit time counter.
          */
@@ -102,11 +104,11 @@ public class StronglyConnectedComponentsAlgo {
          * This is the earliest visit time of a vertex if we had performed the depth-first search
          * using a different permutation of the 'neighbor' vertices.
          */
-        final int[] earliest;
+        private final int[] earliest;
         /**
          * Tracks vertices that lie on the current path.
          */
-        final boolean[] onStack;
+        private final boolean[] onStack;
         /**
          * The current stack.
          * <p>
@@ -135,7 +137,7 @@ public class StronglyConnectedComponentsAlgo {
 
         public SCCAlgo(Collection<? extends V> vertices, Function<V, Iterable<? extends V>> nextNodeFunction) {
             this.getNeighbors = nextNodeFunction;
-            this.vertexCount = vertices.size();
+            int vertexCount = vertices.size();
             SCCs = new ArrayList<>(vertexCount);
             this.visited = new int[vertexCount];
             this.earliest = new int[vertexCount];
@@ -215,7 +217,7 @@ public class StronglyConnectedComponentsAlgo {
 
                 // 5) If 'v' is the root of a 'scc', add the 'scc' to the result list.
                 if (visited[v] == earliest[v]) {
-                    List<V> scc = new ArrayList<V>();
+                    List<V> scc = new ArrayList<>();
                     int w;
                     do {
                         w = stack.popAsInt();

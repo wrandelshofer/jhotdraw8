@@ -3,17 +3,19 @@ package org.jhotdraw8.graph.builder;
 import org.jhotdraw8.graph.DirectedGraph;
 import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 
+/**
+ * Builds a graph with only the edges for a minimal spanning tree.
+ * <pre>
+ * A     B     C
+ * |     |     |
+ * 1     2     4
+ * |     |     |
+ * D--3--E--5--F
+ * </pre>
+ */
 public class MinimalSpanningTreeGraphBuilder {
     /**
-     * <pre>
-     * A     B     C
-     * |     |     |
-     * 1     2     4
-     * |     |     |
-     * D--3--E--5--F
-     * </pre>
-     *
-     * @return Graph with only the edges for minimal spanning tree
+     * Builds the graph.
      */
     public DirectedGraph<String, Integer> build() {
         SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();

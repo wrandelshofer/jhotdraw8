@@ -7,41 +7,43 @@ import org.jhotdraw8.graph.SimpleMutableDirectedGraph;
 
 import java.util.List;
 
+/**
+ * Builds the graph that is shown in Tarjans paper on figure 3.
+ * <pre>
+ *              ┌───┐      ┌───┐
+ *   ┌─────────→│ 1 │─────→│ 2 │───────┐
+ *   │          └───┘      └───┘       │
+ *   │                       │         │
+ * ┌───┐                     │         ↓
+ * │ 8 │←────────────────────┘       ┌───┐
+ * └───┘               ┌─────────────│ 3 │
+ *   │                 │     ┌─────→ └───┘
+ *   ↓                 │     │         ↓
+ * ┌───┐               │     │       ┌───┐
+ * │ 7 │ ←─────────────┘     │       │ 4 │
+ * └───┘                     │       └───┘
+ *   │                       │         │
+ *   │          ┌───┐      ┌───┐       │
+ *   └────────→ │ 6 │←─────│ 5 │←──────┘
+ *              └───┘      └───┘
+ * </pre>
+ * Strongly connected components:
+ * <pre>
+ *     1, 2, 8
+ *     3, 4, 5, 7
+ *     6
+ * </pre>
+ * References:
+ * <dl>
+ *     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
+ *     </dt>
+ *     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
+ * </dl>
+ */
 public class TarjanFig3GraphBuilder {
+
     /**
-     * <p>
-     * References:
-     * <dl>
-     *     <dt>Robert Tarjan (1972). Depth-first search and linear graph algorithms.
-     *     </dt>
-     *     <dd><a href="http://www.cs.ucsb.edu/~gilbert/cs240a/old/cs240aSpr2011/slides/TarjanDFS.pdf">cs.ucsb.edu</a></dd>
-     * </dl>
-     * <pre>
-     *              ┌───┐      ┌───┐
-     *   ┌─────────→│ 1 │─────→│ 2 │───────┐
-     *   │          └───┘      └───┘       │
-     *   │                       │         │
-     * ┌───┐                     │         ↓
-     * │ 8 │←────────────────────┘       ┌───┐
-     * └───┘               ┌─────────────│ 3 │
-     *   │                 │     ┌─────→ └───┘
-     *   ↓                 │     │         ↓
-     * ┌───┐               │     │       ┌───┐
-     * │ 7 │ ←─────────────┘     │       │ 4 │
-     * └───┘                     │       └───┘
-     *   │                       │         │
-     *   │          ┌───┐      ┌───┐       │
-     *   └────────→ │ 6 │←─────│ 5 │←──────┘
-     *              └───┘      └───┘
-     * </pre>
-     * Strongly connected components:
-     * <pre>
-     *     1, 2, 8
-     *     3, 4, 5, 7
-     *     6
-     * </pre>
-     *
-     * @return a graph with a loop
+     * Builds the graph.
      */
     public DirectedGraph<String, Integer> build() {
         SimpleMutableDirectedGraph<String, Integer> builder = new SimpleMutableDirectedGraph<>();
@@ -68,6 +70,9 @@ public class TarjanFig3GraphBuilder {
         return builder;
     }
 
+    /**
+     * Builds the sets of strongly connected components in the graph.
+     */
     public List<IntList> buildStronglyConnectedComponents() {
         return List.of(IntArrayList.of(0, 1, 7), IntArrayList.of(2, 3, 4, 6), IntArrayList.of(5));
     }
