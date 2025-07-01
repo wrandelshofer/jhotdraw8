@@ -156,8 +156,8 @@ public class StronglyConnectedComponentsAlgo {
                 int vi = entry.getValue();
                 if (visited[vi] == UNVISITED) {
                     dfs(entry.getKey());
-                    if (!callStack.isEmpty()) throw new IllegalStateException("dfsStack is not empty");
-                    if (!stack.isEmpty()) throw new IllegalStateException("stack is not empty");
+                    assert callStack.isEmpty() : "dfsStack is not empty";
+                    assert stack.isEmpty() : "stack is not empty";
                 }
             }
             return SCCs;
