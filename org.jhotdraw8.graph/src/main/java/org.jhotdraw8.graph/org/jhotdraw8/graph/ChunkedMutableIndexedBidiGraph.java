@@ -64,7 +64,7 @@ public class ChunkedMutableIndexedBidiGraph implements MutableIndexedBidiGraph,
     /**
      * Factory for creating new chunks.
      */
-    private BiFunction<Integer, Integer, GraphChunk> chunkFactory = SingleArrayCsrGraphChunk::new;
+    private BiFunction<Integer, Integer, GraphChunk> chunkFactory;
 
     /**
      * Creates a new ins
