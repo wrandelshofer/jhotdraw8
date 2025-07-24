@@ -157,6 +157,7 @@ public class ChampSet<E> implements PersistentSet<E>, Serializable {
     public static <T> ChampSet<T> ofIterator(Iterator<T> iterator) {
         return ChampSet.<T>of().addAll(() -> iterator);
     }
+
     /**
      * Returns an persistent set that contains the provided elements.
      *
@@ -201,7 +202,7 @@ public class ChampSet<E> implements PersistentSet<E>, Serializable {
     @Override
     @SuppressWarnings("unchecked")
     public ChampSet<E> addAll(Iterable<? extends E> c) {
-        if(isEmpty()&&c instanceof ChampSet<? extends E> s){
+        if (isEmpty() && c instanceof ChampSet<? extends E> s) {
             return (ChampSet<E>) s;
         }
         var m = toMutable();

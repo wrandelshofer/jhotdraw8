@@ -8,7 +8,8 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.VertexBackLinkWithCost;
-import org.jhotdraw8.icollection.ChampAddOnlySet;
+import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -119,7 +120,7 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
         final Queue<VertexBackLinkWithAncestorSet<V>> queue = new ArrayDeque<>(16);
         final SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
-        queue.add(new VertexBackLinkWithAncestorSet<>(startVertex, null, ChampAddOnlySet.of(startVertex)));
+        queue.add(new VertexBackLinkWithAncestorSet<>(startVertex, null, ChampSet.of(startVertex)));
 
         VertexBackLinkWithAncestorSet<V> found = null;
         while (!queue.isEmpty()) {
@@ -131,9 +132,9 @@ public class UniqueVertexPathSearchAlgo<V, C extends Number & Comparable<C>> imp
                 found = u;
             }
             if (u.getDepth() < maxDepth) {
-                ChampAddOnlySet<V> uAncestors = u.removeAncestors();
+                PersistentSet<V> uAncestors = u.removeAncestors();
                 for (final V v : nextVerticesFunction.apply(u.getVertex())) {
-                    final ChampAddOnlySet<V> vAncestors = uAncestors.add(v);
+                    final PersistentSet<V> vAncestors = uAncestors.add(v);
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v, 1, Integer::sum) == 1) {
                             queue.add(new VertexBackLinkWithAncestorSet<>(v, u, vAncestors));

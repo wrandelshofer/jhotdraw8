@@ -25,8 +25,8 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
      * Returns an empty set instance that has the specified
      * element type.
      *
-     * @return an empty set of the specified element type.
      * @param <T> the element type of the returned set
+     * @return an empty set of the specified element type.
      */
     @Override
     <T> PersistentSet<T> empty();
@@ -53,7 +53,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     @SuppressWarnings("unchecked")
     default PersistentSet<E> addAll(Iterable<? extends E> c) {
         if (c instanceof Collection<?> co && co.isEmpty()
-                || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
+            || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return this;
         }
         if (isEmpty() && c.getClass() == this.getClass()) {
@@ -88,8 +88,8 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
     @SuppressWarnings("unchecked")
     default PersistentSet<E> removeAll(Iterable<?> c) {
         if (isEmpty()
-                || c instanceof Collection<?> co && co.isEmpty()
-                || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
+            || c instanceof Collection<?> co && co.isEmpty()
+            || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return this;
         }
         var s = this;
@@ -113,7 +113,7 @@ public interface PersistentSet<E> extends ReadableSet<E>, PersistentCollection<E
             return this;
         }
         if (c instanceof Collection<?> co && co.isEmpty()
-                || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
+            || c instanceof ReadableCollection<?> rc && rc.isEmpty()) {
             return empty();
         }
         if (c instanceof Collection<?> co) {

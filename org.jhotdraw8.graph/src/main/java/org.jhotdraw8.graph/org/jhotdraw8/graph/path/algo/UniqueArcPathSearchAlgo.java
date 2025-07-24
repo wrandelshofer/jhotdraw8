@@ -10,7 +10,8 @@ import org.jhotdraw8.graph.Arc;
 import org.jhotdraw8.graph.algo.AddToSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithAncestorSet;
 import org.jhotdraw8.graph.path.backlink.ArcBackLinkWithCost;
-import org.jhotdraw8.icollection.ChampAddOnlySet;
+import org.jhotdraw8.icollection.ChampSet;
+import org.jhotdraw8.icollection.persistent.PersistentSet;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
@@ -152,7 +153,7 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
         final Queue<ArcBackLinkWithAncestorSet<V, A>> queue = new ArrayDeque<>(16);
         final SequencedMap<V, Integer> visitedCount = new LinkedHashMap<>(16);
         visitedCount.put(startVertex, 1);
-        queue.add(new ArcBackLinkWithAncestorSet<>(startVertex, null, null, ChampAddOnlySet.of(startVertex)));
+        queue.add(new ArcBackLinkWithAncestorSet<>(startVertex, null, null, ChampSet.of(startVertex)));
 
         ArcBackLinkWithAncestorSet<V, A> found = null;
         while (!queue.isEmpty()) {
@@ -164,9 +165,9 @@ public class UniqueArcPathSearchAlgo<V, A, C extends Number & Comparable<C>> imp
                 found = u;
             }
             if (u.getDepth() < maxDepth) {
-                ChampAddOnlySet<V> uAncestors = u.removeAncestors();
+                PersistentSet<V> uAncestors = u.removeAncestors();
                 for (final Arc<V, A> v : nextArcsFunction.apply(u.getVertex())) {
-                    final ChampAddOnlySet<V> vAncestors = uAncestors.add(v.getEnd());
+                    final PersistentSet<V> vAncestors = uAncestors.add(v.getEnd());
                     if (vAncestors != uAncestors) {//the sequence does not intersect with itself (it is a path!)
                         if (visitedCount.merge(v.getEnd(), 1, Integer::sum) == 1) {
                             final ArcBackLinkWithAncestorSet<V, A> backLink = new ArcBackLinkWithAncestorSet<>(v.getEnd(), v.getArrow(), u, vAncestors);
