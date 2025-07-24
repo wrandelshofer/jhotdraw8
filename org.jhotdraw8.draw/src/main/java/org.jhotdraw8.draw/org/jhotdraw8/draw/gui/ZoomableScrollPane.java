@@ -102,7 +102,7 @@ public class ZoomableScrollPane extends GridPane {
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS}.
      */
-    public static final String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-viewpprt";
+    public static final String ZOOMABLE_SCROLL_PANE_VIEWPORT_STYLE_CLASS = "jhotdraw8-zoomable-scroll-pane-viewport";
     /**
      * The style class of the ZoomableScrollPane is {@value #ZOOMABLE_SCROLL_PANE_BACKGROUND_STYLE_CLASS}.
      */
@@ -371,8 +371,8 @@ public class ZoomableScrollPane extends GridPane {
                         return true;
                     }
                     return contentWidthProperty().get() > getWidth()
-                            || contentHeightProperty().get() > getHeight()
-                            && contentWidthProperty().get() > getWidth() - verticalScrollBar.getWidth();
+                           || contentHeightProperty().get() > getHeight()
+                              && contentWidthProperty().get() > getWidth() - verticalScrollBar.getWidth();
                 },
                 scrollBarPolicy,
                 contentHeightProperty(),
@@ -396,8 +396,8 @@ public class ZoomableScrollPane extends GridPane {
                         return true;
                     }
                     return contentHeightProperty().get() > getHeight()
-                            || contentWidthProperty().get() > getWidth()
-                            && contentHeightProperty().get() > getHeight() - horizontalScrollBar.getHeight();
+                           || contentWidthProperty().get() > getWidth()
+                              && contentHeightProperty().get() > getHeight() - horizontalScrollBar.getHeight();
                 },
                 scrollBarPolicy,
                 contentHeightProperty(),
