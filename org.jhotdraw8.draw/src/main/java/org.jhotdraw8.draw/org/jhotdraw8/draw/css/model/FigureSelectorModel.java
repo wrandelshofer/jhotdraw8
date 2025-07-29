@@ -48,8 +48,6 @@ import java.util.stream.Collectors;
  */
 public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     public static final String JAVA_CLASS_NAMESPACE = "http://java.net";
-    private final int MAX_CACHE = 10_000;
-    private final Map<Object, Object> cache = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
     /**
@@ -485,24 +483,19 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                     // When 'unset is requested, we remove the key from this origin.
                     elem.remove(origin, k);
                 } else {
-                    Object convertedValue = cache.get(value);
-                    if (convertedValue == null) {
-                        @SuppressWarnings("unchecked")
-                        Converter<Object> converter = k.getCssConverter();
-                        try {
-                            if (converter instanceof CssConverter) {
-                                convertedValue = ((CssConverter<Object>) converter).parse(new ListCssTokenizer(value), null);
-                            } else {
-                                convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
-                            }
-                            if (convertedValue != null && cache.size() < MAX_CACHE) {
-                                cache.put(value, convertedValue);
-                            }
-                        } catch (ParseException | IOException ex) {
-                            Logger.getLogger(FigureSelectorModel.class.getName()).log(Level.WARNING, "error setting attribute " + name + " with tokens " + value, ex);
+                    Object convertedValue;
+                    @SuppressWarnings("unchecked")
+                    Converter<Object> converter = k.getCssConverter();
+                    try {
+                        if (converter instanceof CssConverter) {
+                            convertedValue = ((CssConverter<Object>) converter).parse(new ListCssTokenizer(value), null);
+                        } else {
+                            convertedValue = converter.fromString(value.stream().map(CssToken::fromToken).collect(Collectors.joining()));
                         }
+                        elem.setStyled(origin, k, convertedValue);
+                    } catch (ParseException | IOException ex) {
+                        Logger.getLogger(FigureSelectorModel.class.getName()).log(Level.WARNING, "error setting attribute " + name + " with tokens " + value, ex);
                     }
-                    elem.setStyled(origin, k, convertedValue);
                 }
             }
         }
