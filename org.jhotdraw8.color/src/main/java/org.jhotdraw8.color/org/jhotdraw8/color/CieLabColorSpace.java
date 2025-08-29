@@ -22,14 +22,16 @@ import java.io.Serial;
  * and pure yellow scale, where -127 represents pure blue and +127 represents
  * pure yellow.
  * <p>
- * The distance that can be calculated between two colors, is
- * directly proportional to the difference between the two colors as perceived
- * by the human eye.
+ * The {@code a*} and {@code b*} values are unbounded. CSS associates the range of ±125 to
+ * the range of -100% to +100%.
+ * <p>
+ * The distance that can be calculated between two colors, is directly proportional to
+ * the difference between the two colors as perceived by the human eye.
  * <p>
  * References:
  * <dl>
- *     <dt>OPTEL-Vision's Explanation on CIELAB color space</dt>
- *     <dd><a href="http://www.optelvision.com/documents/optel-vision-s-explanation-on-cielab-color-space.pdf">optelvision.com</a></dd>
+ *     <dt>CSS Color Module Level 4, §9.3 Specifying Lab and LCH: the lab() and lch() functional notations</dt>
+ *     <dd><a href="https://www.w3.org/TR/2025/CRD-css-color-4-20250424/#specifying-lab-lch">csswg.org</a></dd>
  * </dl>
  */
 public class CieLabColorSpace extends AbstractNamedColorSpace {
@@ -243,7 +245,7 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
     public float getMinValue(int component) {
         return switch (component) {
             case 0 -> 0f;
-            case 1, 2 -> -128f;
+            case 1, 2 -> -125f;
             default -> throw new IllegalArgumentException("Illegal component=" + component);
         };
     }
@@ -252,7 +254,7 @@ public class CieLabColorSpace extends AbstractNamedColorSpace {
     public float getMaxValue(int component) {
         return switch (component) {
             case 0 -> 100f;
-            case 1, 2 -> 127f;
+            case 1, 2 -> 125f;
             default -> throw new IllegalArgumentException("Illegal component=" + component);
         };
     }

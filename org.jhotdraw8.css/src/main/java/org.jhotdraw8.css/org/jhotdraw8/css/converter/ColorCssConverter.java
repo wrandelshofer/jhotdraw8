@@ -451,65 +451,6 @@ public class ColorCssConverter implements CssConverter<CssColor> {
         return color;
     }
 
-    //@Override
-    public @Nullable CssColor parseOld(CssTokenizer tt, @Nullable IdResolver idResolver) throws
-            ParseException, IOException {
-        CssColor color = null;
-
-        if (nullable) {
-            if (tt.nextIsIdentNone()) {
-                return null;
-            } else {
-                tt.pushBack();
-            }
-        }
-
-        switch (tt.next()) {
-            case CssTokenType.TT_DIMENSION:
-                // If the color is written with a leading "0xabcdef", then the
-                // color value is tokenized into a TT_DIMENSION. The unit
-                // contains the leading 'x' and the color value 'abcdef'.
-                if (tt.currentNumberNonNull().intValue() == 0 && (tt.currentNumber() instanceof Long)
-                        && tt.currentStringNonNull().startsWith("x")) {
-                    color = parseColorHexDigits(tt.currentStringNonNull().substring(1), tt.getStartPosition());
-                } else {
-                    throw tt.createParseException("Could not convert a string to CssColor because it does not contain the expected hex digits.");
-                }
-                break;
-            case CssTokenType.TT_HASH:
-                color = parseColorHexDigits(tt.currentStringNonNull(), tt.getStartPosition());
-                break;
-            case CssTokenType.TT_IDENT:
-                color = NamedCssColor.of(tt.currentStringNonNull());
-                if (color == null) {
-                    color = SystemCssColor.of(tt.currentStringNonNull());
-                }
-                break;
-            case CssTokenType.TT_FUNCTION:
-                switch (tt.currentStringNonNull()) {
-                    case "rgba":
-                    case "rgb": {
-                        color = parseSrgbaColor(tt);
-                        break;
-                    }
-                    case "hsba":
-                    case "hsb": {
-                        color = parseShsbaColor(tt);
-                        break;
-                    }
-                    default:
-                        throw tt.createParseException("Could not convert a string to a CssColor because it contains an unsupported function=\"" + tt.currentStringNonNull() + "()\"");
-                }
-                if (tt.next() != ')') {
-                    throw tt.createParseException("Could not convert a string to a CssColor because it does not end with a closing bracket ')' character.");
-                }
-                break;
-            default:
-                throw tt.createParseException("Could not convert a string to a CssColor because it does not contain an expected color value.");
-        }
-        return color;
-    }
-
     private CssColor parseShsbaColor(CssTokenizer tt) throws IOException, ParseException {
         CssColor color;
         int i = 0;

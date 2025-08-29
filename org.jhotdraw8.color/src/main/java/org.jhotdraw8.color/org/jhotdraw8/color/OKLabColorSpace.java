@@ -12,6 +12,19 @@ import java.io.Serial;
 /**
  * The OK Lab Color Space.
  * <p>
+ * There lightness {@code L} axis is a number in the range [0,1]. Where 0 is a deep black and 1 is a diffuse white.
+ * <p>
+ * The {@code a} and {@code b} axes convey hue; positive values along the {@code a} axis are a purplish red while
+ * negative values are the complementary color, a green.
+ * Similarly, positive values along the {@code b} axis are yellow and negative are the complementary blue/violet.
+ * <p>
+ * The {@code a} and {@code b} values are unbounded. CSS associates the range of ±0.4 to
+ * the range of -100% to +100%.
+ * <p>
+ * The distance that can be calculated between two colors, is
+ * directly proportional to the difference between the two colors as perceived
+ * by the human eye.
+ * <p>
  * Given a color in XYZ coordinates, with a D65 white point and white as Y=1,
  * OK Lab coordinates can be computed like this:
  * <p>
