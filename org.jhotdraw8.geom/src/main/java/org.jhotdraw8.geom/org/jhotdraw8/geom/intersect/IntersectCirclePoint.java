@@ -5,7 +5,6 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.Angles;
-import org.jhotdraw8.geom.Rectangles;
 import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
@@ -19,11 +18,11 @@ public class IntersectCirclePoint {
     }
 
     public static IntersectionResult intersectCirclePoint(double cx, double cy, double cr, double px, double py, double pr) {
-        return intersectCirclePoint(cx, cy, cr, px, py, pr, Rectangles.REAL_THRESHOLD);
+        return intersectCirclePoint(cx, cy, cr, px, py, pr, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectCirclePointEx(double cx, double cy, double cr, double px, double py, double pr) {
-        return intersectCirclePointEx(cx, cy, cr, px, py, pr, Rectangles.REAL_THRESHOLD);
+        return intersectCirclePointEx(cx, cy, cr, px, py, pr, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResult intersectCirclePoint(double cx, double cy, double cr, double px, double py, double pr, double epsilon) {

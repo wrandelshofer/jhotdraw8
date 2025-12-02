@@ -13,7 +13,7 @@ import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 import org.jhotdraw8.geom.intersect.IntersectionPoint;
 import org.jhotdraw8.geom.intersect.IntersectionPointEx;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
@@ -445,7 +445,7 @@ public class ContourBuilder {
 
             // collapsed arc, offset arc start and end points towards arc center and turn into line
             // handles case where offset vertexes are equal and simplifies path for clipping algorithm
-            boolean isCollapsedArc = radiusAfterOffset < Rectangles.REAL_THRESHOLD;
+            boolean isCollapsedArc = radiusAfterOffset < Scalars.REAL_THRESHOLD;
 
             PlineOffsetSegment seg = new PlineOffsetSegment(
                     new PlineVertex(Points2D.add(Points2D.multiply(v1ToCenter, offs), v1.pos()),
@@ -786,6 +786,7 @@ public class ContourBuilder {
     boolean falseIntersect(double t) {
         return t < 0.0 || t > 1.0;
     }
+
     /// Slices a raw offset polyline at all of its self intersects.
 
     void lineToArcJoin(final PlineOffsetSegment s1, final PlineOffsetSegment s2,
@@ -1024,7 +1025,7 @@ public class ContourBuilder {
      * @return list of offset polylines
      */
     private List<PlinePath> parallelOffset(PlinePath pline, double offset,
-                                                    boolean mayHaveSelfIntersects) {
+                                           boolean mayHaveSelfIntersects) {
 
         if (pline.size() < 2) {
             return new ArrayList<>();

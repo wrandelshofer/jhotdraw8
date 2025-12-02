@@ -8,7 +8,7 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -46,18 +46,18 @@ public class IntersectRayQuadCurve {
     }
 
     public static IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
-                                                                    double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
+                                                           double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         return intersectRayQuadCurve(
                 aox, aoy,
                 aox, aoy, maxT,
                 p0x, p0y,
                 p1x, p1y,
-                p2x, p2y, Rectangles.REAL_THRESHOLD);
+                p2x, p2y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResult intersectRayQuadCurve(double aox, double aoy, double adx, double ady, double maxT,
-                                                                    double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
-                                                                    double epsilon) {
+                                                           double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
+                                                           double epsilon) {
         /* steps:
          * 1. Rotate the bezier curve so that the line coincides with the x-axis.
          *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
@@ -123,7 +123,7 @@ public class IntersectRayQuadCurve {
 
     public static IntersectionResultEx intersectRayQuadCurveEx(double aox, double aoy, double adx, double ady, double maxT,
                                                                double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
-        return intersectRayQuadCurveEx(aox, aoy, adx, ady, p0x, maxT, p0y, p1x, p1y, p2x, p2y, Rectangles.REAL_THRESHOLD);
+        return intersectRayQuadCurveEx(aox, aoy, adx, ady, p0x, maxT, p0y, p1x, p1y, p2x, p2y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectRayQuadCurveEx(double aox, double aoy, double adx, double ady, double maxT,

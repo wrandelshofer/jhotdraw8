@@ -4,7 +4,6 @@
  */
 package org.jhotdraw8.geom.intersect;
 
-import org.jhotdraw8.geom.Rectangles;
 import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.PathIterator;
@@ -67,13 +66,13 @@ public class IntersectPathIteratorPoint {
             switch (type) {
                 case PathIterator.SEG_CLOSE:
                     boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, firstx, firsty, px, py, tolerance);
-                    rayCheck = IntersectRayLine.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Rectangles.REAL_THRESHOLD);
+                    rayCheck = IntersectRayLine.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, firstx, firsty, Scalars.REAL_THRESHOLD);
                     break;
                 case PathIterator.SEG_CUBICTO:
                     x = seg[4];
                     y = seg[5];
                     boundaryCheck = IntersectCubicCurvePoint.intersectCubicCurvePoint(lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, px, py, tolerance);
-                    rayCheck = IntersectRayCubicCurve.intersectRayCubicCurveEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Rectangles.REAL_THRESHOLD);
+                    rayCheck = IntersectRayCubicCurve.intersectRayCubicCurveEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, seg[0], seg[1], seg[2], seg[3], x, y, Scalars.REAL_THRESHOLD);
                     //IntersectCubicCurveRa
                     lastx = x;
                     lasty = y;
@@ -82,7 +81,7 @@ public class IntersectPathIteratorPoint {
                     x = seg[0];
                     y = seg[1];
                     boundaryCheck = IntersectLinePoint.intersectLinePoint(lastx, lasty, x, y, px, py, tolerance);
-                    rayCheck = IntersectRayLine.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Rectangles.REAL_THRESHOLD);
+                    rayCheck = IntersectRayLine.intersectRayLineEx(px, py, 1, 0, Double.MAX_VALUE, lastx, lasty, x, y, Scalars.REAL_THRESHOLD);
                     lastx = x;
                     lasty = y;
                     break;
@@ -97,7 +96,7 @@ public class IntersectPathIteratorPoint {
                     y = seg[3];
                     boundaryCheck = IntersectPointQuadCurve.intersectQuadCurvePoint(lastx, lasty, seg[0], seg[1], x, y, px, py, tolerance);
                     rayCheck = IntersectRayQuadCurve.intersectRayQuadCurveEx(px, py, 1, 0, Double.MAX_VALUE,
-                            lastx, lasty, seg[0], seg[1], x, y, Rectangles.REAL_THRESHOLD);
+                            lastx, lasty, seg[0], seg[1], x, y, Scalars.REAL_THRESHOLD);
                     lastx = x;
                     lasty = y;
                     break;

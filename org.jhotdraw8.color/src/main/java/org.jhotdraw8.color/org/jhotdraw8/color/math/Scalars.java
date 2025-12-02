@@ -1,4 +1,4 @@
-package org.jhotdraw8.geom;
+package org.jhotdraw8.color.math;
 
 public class Scalars {
     /**
@@ -27,6 +27,7 @@ public class Scalars {
     public static boolean almostZero(double a, double epsilon) {
         return Math.abs(a) < epsilon;
     }
+
 
     /**
      * Returns {@code abs(a - b) < eps ? b : a}

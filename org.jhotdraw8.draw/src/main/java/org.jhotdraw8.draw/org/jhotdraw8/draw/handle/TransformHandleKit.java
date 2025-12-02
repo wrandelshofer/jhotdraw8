@@ -20,7 +20,6 @@ import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Transform;
 import javafx.scene.transform.Translate;
-import org.jhotdraw8.color.util.MathUtil;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.DrawingView;
@@ -31,6 +30,7 @@ import org.jhotdraw8.draw.locator.Locator;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.geom.FXPreciseRotate;
 import org.jhotdraw8.geom.FXTransforms;
+import org.jhotdraw8.geom.Scalars;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jspecify.annotations.Nullable;
 
@@ -242,10 +242,10 @@ public class TransformHandleKit {
             }
             PersistentList<Transform> oldTransforms = startTransforms;
 
-            double sx = MathUtil.approximate(width / bounds.getWidth(), 1, 1e-6);
-            double sy = MathUtil.approximate(height / bounds.getHeight(), 1, 1e-6);
-            double tx = MathUtil.approximate(x - bounds.getMinX(), 0, 1e-6);
-            double ty = MathUtil.approximate(y - bounds.getMinY(), 0, 1e-6);
+            double sx = Scalars.approximate(width / bounds.getWidth(), 1, 1e-6);
+            double sy = Scalars.approximate(height / bounds.getHeight(), 1, 1e-6);
+            double tx = Scalars.approximate(x - bounds.getMinX(), 0, 1e-6);
+            double ty = Scalars.approximate(y - bounds.getMinY(), 0, 1e-6);
 
             Transform transform = new Translate(tx, ty);
             if (!Double.isNaN(sx) && !Double.isNaN(sy)

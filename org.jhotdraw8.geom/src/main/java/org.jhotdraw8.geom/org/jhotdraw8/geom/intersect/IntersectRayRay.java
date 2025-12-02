@@ -10,7 +10,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.jhotdraw8.geom.Rectangles.REAL_THRESHOLD;
+import static org.jhotdraw8.geom.Scalars.REAL_THRESHOLD;
 
 public class IntersectRayRay {
 

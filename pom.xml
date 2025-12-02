@@ -60,8 +60,8 @@
   </modules>
 
   <properties>
-    <maven.compiler.target>21</maven.compiler.target>
-    <maven.compiler.source>21</maven.compiler.source>
+    <maven.compiler.target>25</maven.compiler.target>
+    <maven.compiler.source>25</maven.compiler.source>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
@@ -486,22 +486,22 @@
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-base</artifactId>
-        <version>22.0.2</version>
+        <version>25.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-fxml</artifactId>
-        <version>22.0.2</version>
+        <version>25.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-graphics</artifactId>
-        <version>22.0.2</version>
+        <version>25.0.1</version>
       </dependency>
       <dependency>
         <groupId>org.openjfx</groupId>
         <artifactId>javafx-controls</artifactId>
-        <version>22.0.2</version>
+        <version>25.0.1</version>
       </dependency>
       <dependency>
         <groupId>io.vavr</groupId>

@@ -8,7 +8,7 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class IntersectQuadCurveLine {
      * @return the computed intersection
      */
     public static IntersectionResult intersectQuadCurveLine(Point2D p0, Point2D p1, Point2D p2, Point2D a0, Point2D a1) {
-        return intersectQuadCurveLine(p0, p1, p2, a0, a1, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveLine(p0, p1, p2, a0, a1, Scalars.REAL_THRESHOLD);
     }
 
     /**
@@ -145,7 +145,7 @@ public class IntersectQuadCurveLine {
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
             double a0x, double a0y, double a1x, double a1y
     ) {
-        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectQuadCurveLineEx(

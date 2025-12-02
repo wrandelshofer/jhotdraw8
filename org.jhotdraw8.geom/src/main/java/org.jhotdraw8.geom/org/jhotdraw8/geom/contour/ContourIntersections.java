@@ -14,7 +14,6 @@ import org.jhotdraw8.collection.primitive.IntArrayDeque;
 import org.jhotdraw8.collection.primitive.IntArrayList;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
-import org.jhotdraw8.geom.Rectangles;
 import org.jhotdraw8.geom.Scalars;
 import org.jhotdraw8.geom.intersect.IntersectCircleCircle;
 import org.jhotdraw8.geom.intersect.IntersectCircleLine;
@@ -67,14 +66,14 @@ public class ContourIntersections {
      */
     public static IntersectionResult intrCircle2Circle2(double radius1, final Point2D.Double center1,
                                                         double radius2, final Point2D.Double center2) {
-        return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Rectangles.REAL_THRESHOLD);
+        return IntersectCircleCircle.intersectCircleCircle(center1, radius1, center2, radius2, Scalars.REAL_THRESHOLD);
     }
 
 
     public static final double REAL_THRESHOLD = 1e-8;
 
     public static IntersectionResultEx intrLineSeg2LineSeg2(final Point2D.Double u1, final Point2D.Double u2, final Point2D.Double v1,
-                                                                     final Point2D.Double v2) {
+                                                            final Point2D.Double v2) {
         return IntersectLineLine.intersectLineLineEx(u1, u2, v1, v2, REAL_THRESHOLD);
     }
 
@@ -375,7 +374,7 @@ public class ContourIntersections {
             };
 
             spatialIndex.visitQuery(
-                    minX - Rectangles.REAL_THRESHOLD, minY - Rectangles.REAL_THRESHOLD, maxX + Rectangles.REAL_THRESHOLD, maxY + Rectangles.REAL_THRESHOLD,
+                    minX - Scalars.REAL_THRESHOLD, minY - Scalars.REAL_THRESHOLD, maxX + Scalars.REAL_THRESHOLD, maxY + Scalars.REAL_THRESHOLD,
                     indexVisitor, queryStack);
 
             // visit all pline indexes
@@ -495,8 +494,8 @@ public class ContourIntersections {
 
             // helper function to test and get point within arc sweep
             DoubleFunction<NonNullOrderedPair<Boolean, Point2D.Double>> pointInSweep = (double t) -> {
-                if (t + Rectangles.REAL_THRESHOLD < 0.0 ||
-                        t > 1.0 + Rectangles.REAL_THRESHOLD) {
+                if (t + Scalars.REAL_THRESHOLD < 0.0 ||
+                        t > 1.0 + Scalars.REAL_THRESHOLD) {
                     return new NonNullOrderedPair<>(false, new Point2D.Double(0, 0));
                 }
 

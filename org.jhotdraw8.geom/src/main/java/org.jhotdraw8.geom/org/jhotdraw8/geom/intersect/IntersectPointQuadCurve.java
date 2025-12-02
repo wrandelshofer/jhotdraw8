@@ -8,7 +8,7 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -119,7 +119,7 @@ public class IntersectPointQuadCurve {
 
             double dd = (p.getX() - cx) * (p.getX() - cx) + (p.getY() - cy) * (p.getY() - cy);
             if (dd < rr) {
-                if (abs(dd - bestDistance) < Rectangles.REAL_THRESHOLD) {
+                if (abs(dd - bestDistance) < Scalars.REAL_THRESHOLD) {
                     result.add(new IntersectionPoint(p, tt));
                 } else if (dd < bestDistance) {
                     bestDistance = dd;

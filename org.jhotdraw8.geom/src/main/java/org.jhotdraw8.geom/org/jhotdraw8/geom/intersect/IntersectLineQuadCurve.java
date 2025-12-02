@@ -8,7 +8,7 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -46,13 +46,13 @@ public class IntersectLineQuadCurve {
     }
 
     public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
-                                                                     double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
+                                                            double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
         return intersectLineQuadCurve(
                 a0x, a0y,
                 a1x, a1y,
                 p0x, p0y,
                 p1x, p1y,
-                p2x, p2y, Rectangles.REAL_THRESHOLD);
+                p2x, p2y, Scalars.REAL_THRESHOLD);
     }
 
     /**
@@ -70,8 +70,8 @@ public class IntersectLineQuadCurve {
      * @return
      */
     public static IntersectionResult intersectLineQuadCurve(double a0x, double a0y, double a1x, double a1y,
-                                                                     double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
-                                                                     double epsilon) {
+                                                            double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
+                                                            double epsilon) {
         /* steps:
          * 1. Rotate the bezier curve so that the line coincides with the x-axis.
          *    This will position the curve in a way that makes it cross the line at points where its y-function is zero.
@@ -135,7 +135,7 @@ public class IntersectLineQuadCurve {
 
     public static IntersectionResultEx intersectLineQuadCurveEx(double a0x, double a0y, double a1x, double a1y,
                                                                 double p0x, double p0y, double p1x, double p1y, double p2x, double p2y) {
-        return intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, p0x, p0y, p1x, p1y, p2x, p2y, Rectangles.REAL_THRESHOLD);
+        return intersectLineQuadCurveEx(a0x, a0y, a1x, a1y, p0x, p0y, p1x, p1y, p2x, p2y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectLineQuadCurveEx(double a0x, double a0y, double a1x, double a1y,
@@ -161,7 +161,7 @@ public class IntersectLineQuadCurve {
             double p0x, double p0y, double p1x, double p1y, double p2x, double p2y,
             double a0x, double a0y, double a1x, double a1y
     ) {
-        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveLineEx(p0x, p0y, p1x, p1y, p2x, p2y, a0x, a0y, a1x, a1y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectQuadCurveLineEx(

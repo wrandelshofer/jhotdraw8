@@ -9,7 +9,7 @@ import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -22,7 +22,7 @@ public class IntersectEllipseQuadCurve {
     public static IntersectionResult intersectQuadCurveEllipse(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry) {
-        return intersectQuadCurveEllipse(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveEllipse(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResult intersectQuadCurveEllipse(
@@ -34,7 +34,7 @@ public class IntersectEllipseQuadCurve {
     public static IntersectionResultEx intersectQuadCurveEllipseEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double bcx, double bcy, double brx, double bry) {
-        return intersectQuadCurveEllipseEx(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveEllipseEx(a0x, a0y, a1x, a1y, a2x, a2y, bcx, bcy, brx, bry, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectQuadCurveEllipseEx(
@@ -74,7 +74,7 @@ public class IntersectEllipseQuadCurve {
      * Status#NO_INTERSECTION_INSIDE or Status#NO_INTERSECTION_OUTSIDE}.
      */
     public static IntersectionResult intersectQuadCurveEllipse(Point2D p0, Point2D p1, Point2D p2, Point2D c, double rx, double ry) {
-        return intersectQuadCurveEllipse(p0, p1, p2, c, rx, ry, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveEllipse(p0, p1, p2, c, rx, ry, Scalars.REAL_THRESHOLD);
     }
 
     /**
@@ -153,7 +153,7 @@ public class IntersectEllipseQuadCurve {
     public static IntersectionResultEx intersectEllipseQuadCurveEx(
             double acx, double acy, double arx, double ary,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
-        return intersectEllipseQuadCurveEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, b2x, b2y, Rectangles.REAL_THRESHOLD);
+        return intersectEllipseQuadCurveEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, b2x, b2y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectEllipseQuadCurveEx(

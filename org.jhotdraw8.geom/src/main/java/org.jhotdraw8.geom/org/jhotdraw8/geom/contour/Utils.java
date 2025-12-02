@@ -7,7 +7,7 @@ package org.jhotdraw8.geom.contour;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Lines;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.List;
@@ -38,7 +38,7 @@ public class Utils {
      */
     static boolean pointWithinArcSweepAngle(final Point2D.Double center, final Point2D.Double arcStart,
                                             final Point2D.Double arcEnd, double bulge, final Point2D.Double point) {
-        assert Math.abs(bulge) > Rectangles.REAL_THRESHOLD : "expected arc";
+        assert Math.abs(bulge) > Scalars.REAL_THRESHOLD : "expected arc";
         assert Math.abs(bulge) <= 1.0 : "bulge should always be between -1 and 1";
 
         if (bulge > 0.0) {
@@ -55,7 +55,7 @@ public class Utils {
      */
     static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                       final Point2D.Double point) {
-        return isLeftOrCoincident(p0, p1, point, Rectangles.REAL_THRESHOLD);
+        return isLeftOrCoincident(p0, p1, point, Scalars.REAL_THRESHOLD);
     }
 
     static boolean isLeftOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
@@ -70,7 +70,7 @@ public class Utils {
      */
     static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
                                        final Point2D.Double point) {
-        return isRightOrCoincident(p0, p1, point, Rectangles.REAL_THRESHOLD);
+        return isRightOrCoincident(p0, p1, point, Scalars.REAL_THRESHOLD);
     }
 
     static boolean isRightOrCoincident(final Point2D.Double p0, final Point2D.Double p1,
@@ -138,7 +138,7 @@ public class Utils {
     }
 
     static boolean angleIsWithinSweep(double startAngle, double sweepAngle, double testAngle) {
-        return angleIsWithinSweep(startAngle, sweepAngle, testAngle, Rectangles.REAL_THRESHOLD);
+        return angleIsWithinSweep(startAngle, sweepAngle, testAngle, Scalars.REAL_THRESHOLD);
     }
 
     static boolean angleIsWithinSweep(double startAngle, double sweepAngle, double testAngle,
@@ -169,12 +169,12 @@ public class Utils {
         Point2D.Double v = Points2D.subtract(p1, p0);
         Point2D.Double w = Points2D.subtract(point, p0);
         double c1 = Points2D.dotProduct(w, v);
-        if (c1 < Rectangles.REAL_THRESHOLD) {
+        if (c1 < Scalars.REAL_THRESHOLD) {
             return p0;
         }
 
         double c2 = Points2D.dotProduct(v, v);
-        if (c2 < c1 + Rectangles.REAL_THRESHOLD) {
+        if (c2 < c1 + Scalars.REAL_THRESHOLD) {
             return p1;
         }
 

@@ -8,7 +8,7 @@ import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class IntersectRayCubicCurve {
         Point2D.Double p1 = new Point2D.Double(p1x, p1y);
         Point2D.Double p2 = new Point2D.Double(p2x, p2y);
         Point2D.Double p3 = new Point2D.Double(p3x, p3y);
-        return intersectRayCubicCurve(a0, a1, maxT, p0, p1, p2, p3, Rectangles.REAL_THRESHOLD);
+        return intersectRayCubicCurve(a0, a1, maxT, p0, p1, p2, p3, Scalars.REAL_THRESHOLD);
     }
 
     /**
@@ -165,7 +165,7 @@ public class IntersectRayCubicCurve {
     public static IntersectionResultEx intersectRayCubicCurveEx(
             double aox, double aoy, double adx, double ady, double maxT,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
-        return intersectRayCubicCurveEx(aox, aoy, adx, ady, maxT, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Rectangles.REAL_THRESHOLD);
+        return intersectRayCubicCurveEx(aox, aoy, adx, ady, maxT, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Scalars.REAL_THRESHOLD);
     }
 
 

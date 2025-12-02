@@ -1,7 +1,6 @@
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.color.util.FloatFunction;
-import org.junit.jupiter.api.Disabled;
+import org.jhotdraw8.color.math.FloatFunction;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -11,12 +10,11 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.IntStream;
 
-import static org.jhotdraw8.color.util.MathUtil.almostEqual;
+import static org.jhotdraw8.color.math.Scalars.almostEqual;
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@Disabled("TEST RUN NEEDS TOO MUCH TIME")
 public abstract class AbstractNamedColorSpaceTest {
     /**
      * Number of precision bits (used by most tests in this class).

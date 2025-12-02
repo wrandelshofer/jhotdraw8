@@ -529,7 +529,8 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
 
     @Override
     public void start(Stage primaryStage) {
-        //startUserAgentStylesheet();
+        initTheme();
+
         try {
             isSystemMenuSupported = false; //Toolkit.getToolkit().getSystemMenu().isSupported();
         } catch (IllegalAccessError e) {
@@ -595,15 +596,15 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 v.removeDisabler(this);
             });
         }).handle((v, ex) -> {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));
                     alert.getDialogPane().setMaxWidth(640.0);
                     alert.showAndWait();
                     exit();
-            //noinspection ReturnOfNull
-            return null;
+                    //noinspection ReturnOfNull
+                    return null;
                 }
         );
     }
@@ -637,15 +638,15 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
                 }
             });
         }).handle((v, ex) -> {
-            Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
+                    Logger.getLogger(getClass().getName()).log(Level.WARNING, "Unexpected Exception " + ex.getMessage(), ex);
 
                     final Alert alert = new Alert(Alert.AlertType.ERROR,
                             labels.getString("application.createView.error"));
                     alert.getDialogPane().setMaxWidth(640.0);
                     alert.showAndWait();
                     exit();
-            //noinspection ReturnOfNull
-            return null;
+                    //noinspection ReturnOfNull
+                    return null;
                 }
         );
     }
@@ -724,7 +725,6 @@ public abstract class AbstractFileBasedApplication extends AbstractApplication i
         initProperties();
         initFactories();
         initActions(getActions());
-        initTheme();
     }
 
     protected void initTheme() {

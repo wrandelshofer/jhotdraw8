@@ -8,7 +8,7 @@ import org.jhotdraw8.collection.primitive.DoubleArrayList;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -25,13 +25,13 @@ public class IntersectQuadCurveCubicCurve {
     public static IntersectionResult intersectQuadCurveCubicCurve(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
-        return intersectQuadCurveCubicCurve(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveCubicCurve(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectQuadCurveCubicCurveEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y, double b3x, double b3y) {
-        return intersectQuadCurveCubicCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveCubicCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, b0x, b0y, b1x, b1y, b2x, b2y, b3x, b3y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResult intersectQuadCurveCubicCurve(
@@ -60,7 +60,7 @@ public class IntersectQuadCurveCubicCurve {
      */
     public static IntersectionResult intersectQuadCurveCubicCurve(Point2D a0, Point2D a1, Point2D a2,
                                                                   Point2D b0, Point2D b1, Point2D b2, Point2D b3) {
-        return intersectQuadCurveCubicCurve(a0, a1, a2, b0, b1, b2, b3, Rectangles.REAL_THRESHOLD);
+        return intersectQuadCurveCubicCurve(a0, a1, a2, b0, b1, b2, b3, Scalars.REAL_THRESHOLD);
     }
 
     /**

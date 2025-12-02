@@ -10,7 +10,7 @@ import org.jhotdraw8.geom.CubicCurves;
 import org.jhotdraw8.geom.PointAndDerivative;
 import org.jhotdraw8.geom.Points2D;
 import org.jhotdraw8.geom.Polynomial;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -43,7 +43,7 @@ public class IntersectCubicCurveEllipse {
             double cx, double cy, double rx, double ry) {
         return intersectCubicCurveEllipseEx(
                 x0, y0, x1, y1, x2, y2, x3, y3,
-                cx, cy, rx, ry, Rectangles.REAL_THRESHOLD);
+                cx, cy, rx, ry, Scalars.REAL_THRESHOLD);
 
     }
 
@@ -86,7 +86,7 @@ public class IntersectCubicCurveEllipse {
     public static IntersectionResult intersectCubicCurveEllipse(
             Point2D p0, Point2D p1, Point2D p2, Point2D p3,
             Point2D ec, double rx, double ry) {
-        return intersectCubicCurveEllipse(p0, p1, p2, p3, ec, rx, ry, Rectangles.REAL_THRESHOLD);
+        return intersectCubicCurveEllipse(p0, p1, p2, p3, ec, rx, ry, Scalars.REAL_THRESHOLD);
     }
 
     /**

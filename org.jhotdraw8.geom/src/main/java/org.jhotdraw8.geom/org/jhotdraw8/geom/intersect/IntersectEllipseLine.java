@@ -8,7 +8,7 @@ import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Angles;
 import org.jhotdraw8.geom.Lines;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -52,17 +52,17 @@ public class IntersectEllipseLine {
     }
 
     public static IntersectionResult intersectEllipseLine(double acx, double acy, double arx, double ary,
-                                                                   double b0x, double b0y, double b1x, double b1y) {
-        return intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Rectangles.REAL_THRESHOLD);
+                                                          double b0x, double b0y, double b1x, double b1y) {
+        return intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
-                                                                       double b0x, double b0y, double b1x, double b1y) {
-        return intersectEllipseLineEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Rectangles.REAL_THRESHOLD);
+                                                              double b0x, double b0y, double b1x, double b1y) {
+        return intersectEllipseLineEx(acx, acy, arx, ary, b0x, b0y, b1x, b1y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectEllipseLineEx(double acx, double acy, double arx, double ary,
-                                                                       double b0x, double b0y, double b1x, double b1y, double epsilon) {
+                                                              double b0x, double b0y, double b1x, double b1y, double epsilon) {
         IntersectionResult result = intersectEllipseLine(acx, acy, arx, ary, b0x, b0y, b1x, b1y, epsilon);
         ArrayList<IntersectionPointEx> list = new ArrayList<>();
         for (IntersectionPoint ip : result.intersections()) {
@@ -79,7 +79,7 @@ public class IntersectEllipseLine {
     }
 
     public static IntersectionResult intersectEllipseLine(double cx, double cy, double rx, double ry,
-                                                                   double x0, double y0, double x1, double y1, double epsilon) {
+                                                          double x0, double y0, double x1, double y1, double epsilon) {
         IntersectionResult result = intersectLineEllipse(x0, y0, x1, y1, cx, cy, rx, ry, epsilon);
         // FIXME compute t for Ellipse instead for Line!
         return result;
@@ -116,26 +116,26 @@ public class IntersectEllipseLine {
      * @return computed intersection
      */
     public static IntersectionResult intersectLineEllipse(Point2D a0, Point2D a1, Point2D ec, double rx, double ry) {
-        return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Rectangles.REAL_THRESHOLD);
+        return intersectLineEllipse(a0.getX(), a0.getY(), a1.getX(), a1.getY(), ec.getX(), ec.getY(), rx, ry, Scalars.REAL_THRESHOLD);
     }
 
     /**
      * Intersects a line with an ellipse.
      *
-     * @param x0 the x-coordinate of the start point of the line
-     * @param y0 the y-coordinate of the start point of the line
-     * @param x1 the x-coordinate of the end point of the line
-     * @param y1 the y-coordinate of the end point of the line
-     * @param cx the x-coordinate of the center of the ellipse
-     * @param cy the y-coordinate of the center of the ellipse
-     * @param rx the x-radius of the ellipse
-     * @param ry the y-radius ellipse
+     * @param x0      the x-coordinate of the start point of the line
+     * @param y0      the y-coordinate of the start point of the line
+     * @param x1      the x-coordinate of the end point of the line
+     * @param y1      the y-coordinate of the end point of the line
+     * @param cx      the x-coordinate of the center of the ellipse
+     * @param cy      the y-coordinate of the center of the ellipse
+     * @param rx      the x-radius of the ellipse
+     * @param ry      the y-radius ellipse
      * @param epsilon the precision threshold
      * @return the intersection result
      */
     public static IntersectionResult intersectLineEllipse(double x0, double y0, double x1, double y1,
-                                                                   double cx, double cy, double rx, double ry,
-                                                                   double epsilon) {
+                                                          double cx, double cy, double rx, double ry,
+                                                          double epsilon) {
         List<IntersectionPoint> result = new ArrayList<>();
 
         final Point2D.Double origin, dir, center, diff, mDir, mDiff;
@@ -190,7 +190,7 @@ public class IntersectEllipseLine {
     public static IntersectionResultEx intersectLineEllipseEx(double x0, double y0, double x1, double y1,
                                                               double cx, double cy, double rx, double ry) {
 
-        return intersectLineEllipseEx(x0, y0, x1, y1, cx, cy, rx, ry, Rectangles.REAL_THRESHOLD);
+        return intersectLineEllipseEx(x0, y0, x1, y1, cx, cy, rx, ry, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectLineEllipseEx(double x0, double y0, double x1, double y1,

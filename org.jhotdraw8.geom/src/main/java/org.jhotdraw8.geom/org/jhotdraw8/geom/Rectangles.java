@@ -32,10 +32,6 @@ public class Rectangles {
      * The bitmask that indicates that a point lies above the rectangle.
      */
     public static final int OUT_TOP = 2;
-    /**
-     * Absolute threshold to be used for comparing reals generally.
-     */
-    public static final double REAL_THRESHOLD = 1e-8;
 
     /**
      * Don't let anyone instantiate this class.
@@ -80,4 +76,30 @@ public class Rectangles {
     }
 
 
+    /**
+     * Returns the direction OUT_TOP, OUT_BOTTOM, OUT_LEFT, OUT_RIGHT from one
+     * point to another one.
+     *
+     * @param x1 the x coordinate of point 1
+     * @param y1 the y coordinate of point 1
+     * @param x2 the x coordinate of point 2
+     * @param y2 the y coordinate of point 2
+     * @return the direction
+     */
+    public static int direction(double x1, double y1, double x2, double y2) {
+        int direction = 0;
+        double vx = x2 - x1;
+        double vy = y2 - y1;
+
+        if (vy < vx && vx > -vy) {
+            direction = OUT_RIGHT;
+        } else if (vy > vx && vy > -vx) {
+            direction = OUT_TOP;
+        } else if (vx < vy && vx < -vy) {
+            direction = OUT_LEFT;
+        } else {
+            direction = OUT_BOTTOM;
+        }
+        return direction;
+    }
 }

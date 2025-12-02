@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.QuadCurves;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class IntersectCubicCurveQuadCurve {
     public static IntersectionResult intersectCubicCurveQuadCurve(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
-        return intersectCubicCurveQuadCurve(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, b2x, b2y, Rectangles.REAL_THRESHOLD);
+        return intersectCubicCurveQuadCurve(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, b2x, b2y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResult intersectCubicCurveQuadCurve(
@@ -47,7 +47,7 @@ public class IntersectCubicCurveQuadCurve {
     public static IntersectionResultEx intersectCubicCurveQuadCurveEx(
             double a0x, double a0y, double a1x, double a1y, double a2x, double a2y, double a3x, double a3y,
             double b0x, double b0y, double b1x, double b1y, double b2x, double b2y) {
-        return intersectCubicCurveQuadCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, b2x, b2y, Rectangles.REAL_THRESHOLD);
+        return intersectCubicCurveQuadCurveEx(a0x, a0y, a1x, a1y, a2x, a2y, a3x, a3y, b0x, b0y, b1x, b1y, b2x, b2y, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResultEx intersectCubicCurveQuadCurveEx(

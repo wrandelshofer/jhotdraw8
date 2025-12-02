@@ -67,7 +67,7 @@ public class Points {
     }
 
     public static boolean almostEqual(Point2D v1, Point2D v2) {
-        return almostEqual(v1, v2, Rectangles.REAL_THRESHOLD);
+        return almostEqual(v1, v2, Scalars.REAL_THRESHOLD);
     }
 
     public static boolean almostEqual(Point2D v1, Point2D v2, double epsilon) {
@@ -75,7 +75,7 @@ public class Points {
     }
 
     public static boolean almostEqual(double x0, double y0, double x1, double y1) {
-        return almostEqual(x0, y0, x1, y1, Rectangles.REAL_THRESHOLD);
+        return almostEqual(x0, y0, x1, y1, Scalars.REAL_THRESHOLD);
     }
 
     public static boolean almostEqual(double x0, double y0, double x1, double y1, double epsilon) {
@@ -83,7 +83,7 @@ public class Points {
     }
 
     public static boolean almostZero(Point2D.Double v) {
-        return almostZero(v, Rectangles.REAL_THRESHOLD);
+        return almostZero(v, Scalars.REAL_THRESHOLD);
     }
 
     public static boolean almostZero(Point2D.Double v, double epsilon) {

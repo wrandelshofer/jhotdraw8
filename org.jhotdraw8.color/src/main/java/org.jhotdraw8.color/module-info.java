@@ -19,5 +19,4 @@ module org.jhotdraw8.color {
 
     exports org.jhotdraw8.color;
     exports org.jhotdraw8.color.math;
-    exports org.jhotdraw8.color.util;
 }

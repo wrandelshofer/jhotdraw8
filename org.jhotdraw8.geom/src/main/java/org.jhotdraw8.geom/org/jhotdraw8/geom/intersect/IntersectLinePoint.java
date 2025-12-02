@@ -111,7 +111,7 @@ public class IntersectLinePoint {
     public static boolean lineContainsPoint(double x1, double y1,
                                             double x2, double y2,
                                             double px, double py) {
-        return lineContainsPoint(x1, y1, x2, y2, px, py, Rectangles.REAL_THRESHOLD);
+        return lineContainsPoint(x1, y1, x2, y2, px, py, Scalars.REAL_THRESHOLD);
     }
 
     /**

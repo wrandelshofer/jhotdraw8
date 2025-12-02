@@ -8,7 +8,8 @@ package org.jhotdraw8.color.math;
 import javafx.geometry.Point3D;
 
 import static java.lang.Math.fma;
-import static org.jhotdraw8.color.util.MathUtil.almostEqual;
+import static org.jhotdraw8.color.math.Scalars.almostEqual;
+
 
 /**
  * A 3x3 matrix with double precision.

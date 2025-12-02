@@ -11,7 +11,6 @@ import org.jhotdraw8.collection.pair.SimpleOrderedPair;
 import org.jhotdraw8.geom.AABB;
 import org.jhotdraw8.geom.Points;
 import org.jhotdraw8.geom.Points2D;
-import org.jhotdraw8.geom.Rectangles;
 import org.jhotdraw8.geom.Scalars;
 import org.jhotdraw8.geom.intersect.IntersectionResult;
 import org.jhotdraw8.geom.intersect.IntersectionResultEx;
@@ -306,8 +305,8 @@ public class PlineVertex implements Cloneable {
 
             // helper function to test and get point within arc sweep
             Function<Double, OrderedPair<Boolean, Point2D.Double>> pointInSweep = (Double t) -> {
-                if (t + Rectangles.REAL_THRESHOLD < 0.0 ||
-                        t > 1.0 + Rectangles.REAL_THRESHOLD) {
+                if (t + Scalars.REAL_THRESHOLD < 0.0 ||
+                        t > 1.0 + Scalars.REAL_THRESHOLD) {
                     return new SimpleOrderedPair<>(false, new Point2D.Double(0, 0));
                 }
 

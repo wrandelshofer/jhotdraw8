@@ -5,7 +5,7 @@
 package org.jhotdraw8.geom.intersect;
 
 import org.jhotdraw8.geom.Angles;
-import org.jhotdraw8.geom.Rectangles;
+import org.jhotdraw8.geom.Scalars;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
@@ -200,7 +200,7 @@ public class IntersectCircleLine {
     }
 
     public static IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r) {
-        return intersectLineCircle(x0, y0, x1, y1, cx, cy, r, Rectangles.REAL_THRESHOLD);
+        return intersectLineCircle(x0, y0, x1, y1, cx, cy, r, Scalars.REAL_THRESHOLD);
     }
 
     public static IntersectionResult intersectLineCircle(double x0, double y0, double x1, double y1, double cx, double cy, double r, double epsilon) {

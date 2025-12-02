@@ -5,7 +5,7 @@
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.color.util.FloatFunction;
+import org.jhotdraw8.color.math.FloatFunction;
 
 import java.awt.color.ColorSpace;
 

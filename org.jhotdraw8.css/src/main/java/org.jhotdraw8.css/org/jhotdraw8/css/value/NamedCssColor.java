@@ -380,7 +380,7 @@ public class NamedCssColor extends CssColor {
     /**
      * Returns a named color for the given name.
      * <p>
-     * The name is not case sensitive.
+     * The name is not case-sensitive.
      * <p>
      * If the name is unknown, then null is returned.
      *
@@ -394,7 +394,7 @@ public class NamedCssColor extends CssColor {
     /**
      * Returns true if the given name is a known system color.
      * <p>
-     * The name is not case sensitive.
+     * The name is not case-sensitive.
      *
      * @param name a name
      * @return true if known

@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
-@Disabled("TEST RUN NEEDS TOO MUCH TIME")
 
 public class DisplayP3ColorSpaceTest extends AbstractNamedColorSpaceTest {
 
