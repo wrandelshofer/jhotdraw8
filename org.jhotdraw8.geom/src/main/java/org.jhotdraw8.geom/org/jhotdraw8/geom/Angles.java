@@ -141,6 +141,8 @@ public class Angles {
         if (aDeg == aDegInt) {
             switch (aDegInt % 360) {
                 case 0:
+                case 180:
+                case -180:
                     return 0.0;// = sqrt(0/4)
                 case 30:
                 case 150:

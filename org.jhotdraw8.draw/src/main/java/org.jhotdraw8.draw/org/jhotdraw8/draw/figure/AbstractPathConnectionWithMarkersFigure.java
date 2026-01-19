@@ -15,18 +15,7 @@ import javafx.scene.transform.Translate;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.css.converter.BezierPathCssConverter;
-import org.jhotdraw8.draw.handle.BezierControlPointEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeNonMovableEditHandle;
-import org.jhotdraw8.draw.handle.BezierNodeTangentHandle;
-import org.jhotdraw8.draw.handle.BezierPathEditHandle;
-import org.jhotdraw8.draw.handle.Handle;
-import org.jhotdraw8.draw.handle.HandleType;
-import org.jhotdraw8.draw.handle.LineConnectorHandle;
-import org.jhotdraw8.draw.handle.LineOutlineHandle;
-import org.jhotdraw8.draw.handle.MoveHandle;
-import org.jhotdraw8.draw.handle.PathIterableOutlineHandle;
-import org.jhotdraw8.draw.handle.SelectionHandle;
+import org.jhotdraw8.draw.handle.*;
 import org.jhotdraw8.draw.key.NonNullObjectStyleableKey;
 import org.jhotdraw8.draw.locator.PointLocator;
 import org.jhotdraw8.draw.render.RenderContext;
@@ -186,12 +175,12 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
         Figure startTarget = get(START_TARGET);
         Figure endTarget = get(END_TARGET);
         Point2D intialStart = start;
-        Point2D initalEnd = end;
+        Point2D initialEnd = end;
         if (startConnector != null && startTarget != null) {
             intialStart = startConnector.getPointAndDerivativeInWorld(this, startTarget).getPoint(Point2D::new);
         }
         if (endConnector != null && endTarget != null) {
-            initalEnd = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
+            initialEnd = endConnector.getPointAndDerivativeInWorld(this, endTarget).getPoint(Point2D::new);
         }
         if (startConnector != null && startTarget != null) {
             IntersectionPointEx chp;
@@ -199,7 +188,7 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
                 PointAndDerivative pd = path.evalFirst();
                 chp = startConnector.chopStart(ctx, this, startTarget, intialStart.getX(), intialStart.getY(), intialStart.getX() + pd.dx(), intialStart.getY() + pd.dy());
             } else {
-                chp = startConnector.chopStart(ctx, this, startTarget, intialStart, initalEnd);
+                chp = startConnector.chopStart(ctx, this, startTarget, intialStart, initialEnd);
             }
             start = worldToParent(chp.getX(), chp.getY());
             set(START, new CssPoint2D(start));
@@ -209,11 +198,11 @@ public abstract class AbstractPathConnectionWithMarkersFigure extends AbstractLi
             if (path.size() > 2 || path.size() == 2 && (path.getLast().hasIn() || path.getLast(1).hasOut())) {
                 PointAndDerivative pd = path.evalLastInReverse();
                 chp = endConnector.chopStart(ctx, this, endTarget,
-                        initalEnd.getX(), initalEnd.getY(),
-                        initalEnd.getX() + pd.dx(), initalEnd.getY() + pd.dy()
+                        initialEnd.getX(), initialEnd.getY(),
+                        initialEnd.getX() + pd.dx(), initialEnd.getY() + pd.dy()
                 );
             } else {
-                chp = endConnector.chopStart(ctx, this, endTarget, initalEnd, intialStart);
+                chp = endConnector.chopStart(ctx, this, endTarget, initialEnd, intialStart);
             }
             end = worldToParent(chp.getX(), chp.getY());
             set(END, new CssPoint2D(end));

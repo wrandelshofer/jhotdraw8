@@ -39,7 +39,7 @@ import java.util.Objects;
  * <p>
  * Note that {@code Key} is not a value type. Thus using two distinct instances
  * of a Key will result in two distinct entries in the hash map, even if both
- * keys have the same name.
+ * keys have the same name, type, nullity and default value.
  *
  * @param <T> the value type
  */

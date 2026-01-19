@@ -26,7 +26,7 @@ import java.util.Objects;
  * <p>
  * Note that {@code Key} is not a value type. Thus using two distinct instances
  * of a Key will result in two distinct entries in the hash map, even if both
- * keys have the same name.
+ * keys have the same name, type, nullity and default value.
  *
  * @param <T> the value type
  */
@@ -150,5 +150,20 @@ public abstract class AbstractKey<T> implements Key<T> {
     public String toString() {
         String keyClass = getClass().getName();
         return keyClass.substring(keyClass.lastIndexOf('.') + 1) + "@" + System.identityHashCode(this) + " {\"" + name + "\"}";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof AbstractKey)) return false;
+        AbstractKey<?> that = (AbstractKey<?>) o;
+        return isNullable() == that.isNullable()
+                && Objects.equals(getName(), that.getName())
+                && Objects.equals(initialValue, that.initialValue)
+                && Objects.equals(type, that.type);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), initialValue, type, isNullable());
     }
 }
