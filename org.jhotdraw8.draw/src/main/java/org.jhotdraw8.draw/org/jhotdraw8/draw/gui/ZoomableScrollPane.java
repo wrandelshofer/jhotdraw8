@@ -369,7 +369,7 @@ public class ZoomableScrollPane extends GridPane {
                 contentWidthProperty(),
                 heightProperty(),
                 widthProperty(),
-                verticalScrollBar.prefWidthProperty()
+                verticalScrollBar.widthProperty()
         );
         scrollBar.visibleProperty().bind(visibilityBinding);
         rowConstraints.prefHeightProperty().bind(
@@ -394,7 +394,7 @@ public class ZoomableScrollPane extends GridPane {
                 contentWidthProperty(),
                 heightProperty(),
                 widthProperty(),
-                verticalScrollBar.prefWidthProperty()
+                horizontalScrollBar.heightProperty()
         );
         scrollBar.visibleProperty().bind(visibilityBinding);
         colConstraints.prefWidthProperty().bind(
