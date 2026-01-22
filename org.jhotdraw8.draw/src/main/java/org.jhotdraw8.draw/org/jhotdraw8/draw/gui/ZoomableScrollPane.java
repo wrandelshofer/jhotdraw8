@@ -9,22 +9,9 @@ import javafx.beans.Observable;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.binding.DoubleBinding;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.Property;
-import javafx.beans.property.ReadOnlyDoubleProperty;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
-import javafx.css.CssMetaData;
-import javafx.css.PseudoClass;
-import javafx.css.StyleConverter;
-import javafx.css.Styleable;
-import javafx.css.StyleableBooleanProperty;
-import javafx.css.StyleableObjectProperty;
-import javafx.css.StyleableProperty;
+import javafx.css.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.BoundingBox;
@@ -36,17 +23,9 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.input.ZoomEvent;
-import javafx.scene.layout.ColumnConstraints;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.transform.Affine;
-import javafx.scene.transform.NonInvertibleTransformException;
-import javafx.scene.transform.Scale;
-import javafx.scene.transform.Transform;
-import javafx.scene.transform.Translate;
+import javafx.scene.transform.*;
 import org.jhotdraw8.fxbase.binding.CustomBinding;
 import org.jhotdraw8.geom.FXTransforms;
 import org.jspecify.annotations.Nullable;
@@ -118,32 +97,42 @@ public class ZoomableScrollPane extends GridPane {
     private final DoubleProperty zoomFactor = new SimpleDoubleProperty(this, "zoomFactor", 1.0);
     private final ObjectProperty<Bounds> visibleContentRect = new SimpleObjectProperty<>(this, "contentRect");
 
+    @SuppressWarnings({"unused", "NotNullFieldNotInitialized"})
     @FXML // ResourceBundle that was given to the FXMLLoader
     private ResourceBundle resources;
 
+    @SuppressWarnings({"unused", "NotNullFieldNotInitialized"})
     @FXML // URL location of the FXML file that was given to the FXMLLoader
     private URL location;
 
+    @SuppressWarnings({"unused", "NotNullFieldNotInitialized"})
     @FXML // fx:id="horizontalScrollBar"
     private ScrollBar horizontalScrollBar; // Value injected by FXMLLoader
 
+    @SuppressWarnings({"unused", "NotNullFieldNotInitialized"})
     @FXML // fx:id="verticalScrollBar"
     private ScrollBar verticalScrollBar; // Value injected by FXMLLoader
 
+    @SuppressWarnings({"unused", "NotNullFieldNotInitialized"})
     @FXML // fx:id="backgroundPane"
     private Pane background; // Value injected by FXMLLoader
 
+    @SuppressWarnings({"unused", "NotNullFieldNotInitialized"})
     @FXML // fx:id="subScene"
     private SubScene subScene; // Value injected by FXMLLoader
 
 
+    @SuppressWarnings("NotNullFieldNotInitialized")
     private Pane content;
+
+    @SuppressWarnings({"unused", "NotNullFieldNotInitialized"})
     @FXML // fx:id="foregroundPane"
     private Pane foreground; // Value injected by FXMLLoader
 
     public ZoomableScrollPane() {
     }
 
+    @SuppressWarnings("unused")
     @FXML
         // This method is called by the FXMLLoader when initialization is complete
     void initialize() {
@@ -349,6 +338,7 @@ public class ZoomableScrollPane extends GridPane {
                     }
                 };
 
+        @SuppressWarnings("unused")
         private static final List<CssMetaData<? extends Styleable, ?>> STYLEABLES;
 
         static {
@@ -371,8 +361,8 @@ public class ZoomableScrollPane extends GridPane {
                         return true;
                     }
                     return contentWidthProperty().get() > getWidth()
-                           || contentHeightProperty().get() > getHeight()
-                              && contentWidthProperty().get() > getWidth() - verticalScrollBar.getWidth();
+                            || contentHeightProperty().get() > getHeight()
+                            && contentWidthProperty().get() > getWidth() - verticalScrollBar.getWidth();
                 },
                 scrollBarPolicy,
                 contentHeightProperty(),
@@ -396,8 +386,8 @@ public class ZoomableScrollPane extends GridPane {
                         return true;
                     }
                     return contentHeightProperty().get() > getHeight()
-                           || contentWidthProperty().get() > getWidth()
-                              && contentHeightProperty().get() > getHeight() - horizontalScrollBar.getHeight();
+                            || contentWidthProperty().get() > getWidth()
+                            && contentHeightProperty().get() > getHeight() - horizontalScrollBar.getHeight();
                 },
                 scrollBarPolicy,
                 contentHeightProperty(),
@@ -689,7 +679,7 @@ public class ZoomableScrollPane extends GridPane {
         return verticalScrollBar.visibleAmountProperty();
     }
 
-    private ObjectProperty<ScrollPane.ScrollBarPolicy> hbarPolicy;
+    private @Nullable ObjectProperty<ScrollPane.ScrollBarPolicy> hbarPolicy;
 
     public final void setHbarPolicy(ScrollPane.ScrollBarPolicy value) {
         hbarPolicyProperty().set(value);
@@ -725,7 +715,7 @@ public class ZoomableScrollPane extends GridPane {
     /**
      * Specifies the policy for showing the vertical scroll bar.
      */
-    private ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicy;
+    private @Nullable ObjectProperty<ScrollPane.ScrollBarPolicy> vbarPolicy;
 
     public final void setVbarPolicy(ScrollPane.ScrollBarPolicy value) {
         vbarPolicyProperty().set(value);
@@ -765,7 +755,7 @@ public class ZoomableScrollPane extends GridPane {
      * then {@link #pannableProperty pannable} is consulted to determine if the events should be
      * used for panning.
      */
-    private StyleableBooleanProperty pannable;
+    private @Nullable StyleableBooleanProperty pannable;
 
     public final void setPannable(boolean value) {
         pannableProperty().set(value);

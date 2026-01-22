@@ -7,14 +7,7 @@ package org.jhotdraw8.draw;
 
 import javafx.application.Platform;
 import javafx.beans.Observable;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyBooleanProperty;
-import javafx.beans.property.ReadOnlyBooleanWrapper;
-import javafx.beans.property.ReadOnlyObjectProperty;
-import javafx.beans.property.ReadOnlyObjectWrapper;
-import javafx.beans.property.ReadOnlySetProperty;
-import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableSet;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
@@ -43,13 +36,7 @@ import org.jhotdraw8.fxbase.tree.TreeBreadthFirstSpliterator;
 import org.jhotdraw8.fxbase.tree.TreeModelEvent;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Deque;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.StreamSupport;
 
@@ -484,7 +471,6 @@ public class SimpleDrawingView extends AbstractDrawingView {
     private void updateLayout() {
         Drawing drawing = getDrawing();
         Bounds bounds = drawing == null ? new BoundingBox(0, 0, 10, 10) : drawing.getLayoutBounds();
-        double f = getZoomFactor();
         double w = bounds.getWidth();
         double h = bounds.getHeight();
         zoomableScrollPane.setContentSize(w, h);
