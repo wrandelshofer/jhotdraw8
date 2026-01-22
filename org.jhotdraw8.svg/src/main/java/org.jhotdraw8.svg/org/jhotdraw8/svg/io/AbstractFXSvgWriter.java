@@ -76,7 +76,6 @@ import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implements SvgSceneGraphWriter {
     public static final String SVG_MIME_TYPE = "image/svg+xml";
     public static final String SVG_NS = "http://www.w3.org/2000/svg";
-    protected static final String XLINK_NS = "http://www.w3.org/1999/xlink";
     protected static final String XLINK_PREFIX = "xlink";
     protected final DoubleXmlConverter nb = new DoubleXmlConverter();
     protected final IntegerXmlConverter nbi = new IntegerXmlConverter();
@@ -540,6 +539,9 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         styleClass.addAll(getAdditionalNodeClasses(node));
 
         if (!styleClass.isEmpty()) {
+            // sort the style class, so that we get the same output in all runs
+            styleClass.sort(null);
+
             StringBuilder buf = new StringBuilder();
             for (String clazz : styleClass) {
                 if (!buf.isEmpty()) {
@@ -627,7 +629,6 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.setDefaultNamespace(SVG_NS);
         w.writeStartElement("svg");
         w.writeDefaultNamespace(SVG_NS);
-        w.writeNamespace(XLINK_PREFIX, XLINK_NS);
         writeDocumentElementAttributes(w, drawingNode, size, viewBox);
 
         if (shouldWriteDefs(drawingNode)) {
@@ -736,7 +737,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             }
         }
         if (href != null) {
-            w.writeAttribute(XLINK_PREFIX, XLINK_NS, "href", href);
+            w.writeAttribute("href", href);
         }
     }
 
