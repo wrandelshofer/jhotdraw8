@@ -15,12 +15,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.jhotdraw8.collection.pair.OrderedPair;
@@ -136,7 +131,7 @@ public class SvgReadWriteAndCompareTest {
 
         CssRectangle2D drawing1Bounds = drawing1.getCssLayoutBounds();
         CssDimension2D drawing1Size = new CssDimension2D(drawing1Bounds.getWidth(), drawing1Bounds.getHeight());
-        writer.write(bufOutputStream, drawing1Node, drawing1Size);
+        writer.write(bufOutputStream, drawing1Node, drawing1Size, null);
 
         ByteArrayInputStream bufInputStream = new ByteArrayInputStream(bufOutputStream.toByteArray());
         reader.setBestEffort(false);

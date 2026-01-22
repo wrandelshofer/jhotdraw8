@@ -16,14 +16,10 @@ import org.jhotdraw8.base.converter.IdFactory;
 import org.jhotdraw8.base.converter.NumberConverter;
 import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.converter.SizeCssConverter;
-import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.CssDimension2D;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.ImageFigure;
-import org.jhotdraw8.draw.figure.Page;
-import org.jhotdraw8.draw.figure.PageFigure;
-import org.jhotdraw8.draw.figure.Slice;
+import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.input.ClipboardOutputFormat;
 import org.jhotdraw8.draw.io.AbstractExportOutputFormat;
 import org.jhotdraw8.draw.io.OutputFormat;
@@ -133,7 +129,15 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         Document doc = exporter.toDocument(drawingNode,
                 new CssDimension2D(
                         external.getNonNull(Drawing.WIDTH),
-                        external.getNonNull(Drawing.HEIGHT)));
+                        external.getNonNull(Drawing.HEIGHT)
+                ),
+                new CssRectangle2D(
+                        external.getNonNull(ViewBoxableDrawing.VIEW_BOX_X),
+                        external.getNonNull(ViewBoxableDrawing.VIEW_BOX_Y),
+                        external.getNonNull(Drawing.WIDTH),
+                        external.getNonNull(Drawing.HEIGHT)
+                )
+        );
         writeDrawingElementAttributes(doc.getDocumentElement(), external);
         return doc;
     }
@@ -151,7 +155,15 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         exporter.write(out, drawingNode,
                 new CssDimension2D(
                         drawing.getNonNull(Drawing.WIDTH),
-                        drawing.getNonNull(Drawing.HEIGHT)));
+                        drawing.getNonNull(Drawing.HEIGHT)
+                ),
+                new CssRectangle2D(
+                        drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_X),
+                        drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_Y),
+                        drawing.getNonNull(Drawing.WIDTH),
+                        drawing.getNonNull(Drawing.HEIGHT)
+                )
+        );
 
         clipboard.put(SVG_FORMAT, out.toString());
     }
@@ -168,7 +180,16 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
                 exporter.setRelativizePaths(isRelativizePaths());
                 Node drawingNode = toNode(drawing, Collections.singletonList(drawing), hints);
                 exporter.write(w, drawingNode,
-                        new CssDimension2D(drawing.getNonNull(Drawing.WIDTH), drawing.getNonNull(Drawing.HEIGHT)));
+                        new CssDimension2D(
+                                drawing.getNonNull(Drawing.WIDTH),
+                                drawing.getNonNull(Drawing.HEIGHT)
+                        ),
+                        new CssRectangle2D(
+                                drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_X),
+                                drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_Y),
+                                drawing.getNonNull(Drawing.WIDTH),
+                                drawing.getNonNull(Drawing.HEIGHT)
+                        ));
             }
         }
         if (isExportSlices()) {
@@ -200,7 +221,14 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         exporter.write(out, drawingNode,
                 new CssDimension2D(
                         drawing.getNonNull(Drawing.WIDTH),
-                        drawing.getNonNull(Drawing.HEIGHT)));
+                        drawing.getNonNull(Drawing.HEIGHT)
+                ),
+                new CssRectangle2D(
+                        drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_X),
+                        drawing.getNonNull(ViewBoxableDrawing.VIEW_BOX_Y),
+                        drawing.getNonNull(Drawing.WIDTH),
+                        drawing.getNonNull(Drawing.HEIGHT)
+                ));
     }
 
     private boolean isRelativizePaths() {
@@ -222,7 +250,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         markNodesOutsideBoundsWithSkip(node, FXTransforms.transform(page.getLocalToWorld(), page.getPageBounds(internalPageNumber)));
         node.getTransforms().setAll(page.getWorldToLocal());
         final AbstractFXSvgWriter exporter = createExporter();
-        final Document doc = exporter.toDocument(node, new CssDimension2D(pw, ph));
+        final Document doc = exporter.toDocument(node, new CssDimension2D(pw, ph), null);
         writePageElementAttributes(doc.getDocumentElement(), page, internalPageNumber);
         node.getTransforms().clear();
         XmlUtil.write(file, doc);
@@ -252,7 +280,7 @@ public class SvgExportOutputFormat extends AbstractExportOutputFormat
         new TransformFlattener().flattenTranslates(node);
         final AbstractFXSvgWriter exporter = createExporter();
         Bounds bounds = slice.getBoundsInLocal();
-        final Document doc = exporter.toDocument(node, new CssDimension2D(bounds.getWidth(), bounds.getHeight()));
+        final Document doc = exporter.toDocument(node, new CssDimension2D(bounds.getWidth(), bounds.getHeight()), null);
         writeSliceElementAttributes(doc.getDocumentElement(), slice);
         node.getTransforms().clear();
         XmlUtil.write(file, doc);

@@ -12,33 +12,14 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.BorderStroke;
-import javafx.scene.layout.BorderStrokeStyle;
-import javafx.scene.layout.CornerRadii;
-import javafx.scene.layout.Region;
+import javafx.scene.layout.*;
+import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.LinearGradient;
 import javafx.scene.paint.Paint;
-import javafx.scene.paint.RadialGradient;
-import javafx.scene.paint.Stop;
-import javafx.scene.shape.Arc;
-import javafx.scene.shape.ArcType;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.CubicCurve;
-import javafx.scene.shape.Ellipse;
-import javafx.scene.shape.FillRule;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Path;
+import javafx.scene.shape.*;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Polyline;
-import javafx.scene.shape.QuadCurve;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.SVGPath;
 import javafx.scene.shape.Shape;
-import javafx.scene.shape.StrokeLineCap;
-import javafx.scene.shape.StrokeLineJoin;
-import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -51,13 +32,9 @@ import org.jhotdraw8.base.converter.SimpleIdFactory;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.css.value.CssDimension2D;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.fxbase.beans.AbstractPropertyBean;
-import org.jhotdraw8.geom.FXPreciseRotate;
-import org.jhotdraw8.geom.FXRectangles;
-import org.jhotdraw8.geom.FXShapes;
-import org.jhotdraw8.geom.FXSvgPaths;
-import org.jhotdraw8.geom.FXTransforms;
-import org.jhotdraw8.geom.SvgPaths;
+import org.jhotdraw8.geom.*;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
 import org.jhotdraw8.svg.text.SvgPaintCssConverter;
@@ -78,7 +55,7 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 import javax.xml.transform.dom.DOMResult;
-import java.awt.BasicStroke;
+import java.awt.*;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineBreakMeasurer;
 import java.awt.font.TextAttribute;
@@ -87,19 +64,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.StringReader;
-import java.io.Writer;
+import java.io.*;
 import java.net.URI;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Iterator;
+import java.util.*;
 import java.util.List;
-import java.util.Objects;
 
 import static org.jhotdraw8.draw.io.BitmapExportOutputFormat.fromFXImage;
 
@@ -147,7 +117,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     private Rectangle2D.Double drawParagraph(XMLStreamWriter w,
                                              FontRenderContext frc, String
                                                      paragraph, AttributedCharacterIterator styledText,
-                                                      float verticalPos, float maxVerticalPos, float leftMargin,
+                                             float verticalPos, float maxVerticalPos, float leftMargin,
                                              float rightMargin, float[] tabStops, int tabCount,
                                              TextAlignment textAlignment, float lineSpacing) throws XMLStreamException {
         // This method is based on the code sample given
@@ -455,7 +425,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         return true;
     }
 
-    public Document toDocument(Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public Document toDocument(Node drawingNode, @Nullable CssDimension2D size, @Nullable CssRectangle2D viewBox) throws IOException {
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             builderFactory.setNamespaceAware(true);
@@ -466,7 +436,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
             DOMResult result = new DOMResult(doc);
             XMLOutputFactory xmlOutputFactory = XMLOutputFactory.newInstance();
             XMLStreamWriter w = xmlOutputFactory.createXMLStreamWriter(result);
-            writeDocument(w, drawingNode, size);
+            writeDocument(w, drawingNode, size, viewBox);
             w.close();
             return doc;
         } catch (XMLStreamException | ParserConfigurationException e) {
@@ -474,20 +444,20 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    public void write(OutputStream out, Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public void write(OutputStream out, Node drawingNode, @Nullable CssDimension2D size, @Nullable CssRectangle2D viewBox) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
-            writeDocument(w, drawingNode, size);
+            writeDocument(w, drawingNode, size, viewBox);
             w.flush();
         } catch (XMLStreamException e) {
             throw new IOException("Error writing to Writer.", e);
         }
     }
 
-    public void write(Writer out, Node drawingNode, @Nullable CssDimension2D size) throws IOException {
+    public void write(Writer out, Node drawingNode, @Nullable CssDimension2D size, @Nullable CssRectangle2D viewBox) throws IOException {
         IndentingXMLStreamWriter w = new IndentingXMLStreamWriter(out);
         try {
-            writeDocument(w, drawingNode, size);
+            writeDocument(w, drawingNode, size, viewBox);
             w.flush();
         } catch (XMLStreamException e) {
             throw new IOException("Error writing to Writer.", e);
@@ -649,7 +619,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         }
     }
 
-    private void writeDocument(XMLStreamWriter w, Node drawingNode, CssDimension2D size) throws XMLStreamException, IOException {
+    private void writeDocument(XMLStreamWriter w, Node drawingNode, @Nullable CssDimension2D size, @Nullable CssRectangle2D viewBox) throws XMLStreamException, IOException {
         idFactory.reset();
         initIdFactoryRecursively(drawingNode);
 
@@ -658,7 +628,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
         w.writeStartElement("svg");
         w.writeDefaultNamespace(SVG_NS);
         w.writeNamespace(XLINK_PREFIX, XLINK_NS);
-        writeDocumentElementAttributes(w, drawingNode, size);
+        writeDocumentElementAttributes(w, drawingNode, size, viewBox);
 
         if (shouldWriteDefs(drawingNode)) {
             writeDefs(w, drawingNode);
@@ -669,7 +639,7 @@ public abstract class AbstractFXSvgWriter extends AbstractPropertyBean implement
     }
 
     protected abstract void writeDocumentElementAttributes(XMLStreamWriter
-                                                                   w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException;
+                                                                   w, Node drawingNode, @Nullable CssDimension2D size, @Nullable CssRectangle2D viewBox) throws XMLStreamException;
 
     private void writeEllipseStartElement(XMLStreamWriter w, Ellipse node) throws XMLStreamException {
         w.writeStartElement("ellipse");

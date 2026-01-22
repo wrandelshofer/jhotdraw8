@@ -7,6 +7,7 @@ package org.jhotdraw8.svg.io;
 import javafx.scene.Node;
 import javafx.scene.shape.Path;
 import org.jhotdraw8.css.value.CssDimension2D;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.geom.FXShapes;
 import org.jhotdraw8.geom.FXSvgPaths;
 import org.jhotdraw8.geom.SvgPaths;
@@ -55,12 +56,19 @@ public class FXSvgTinyWriter extends AbstractFXSvgWriter {
 
     @Override
     protected void writeDocumentElementAttributes(XMLStreamWriter
-                                                          w, Node drawingNode, @Nullable CssDimension2D size) throws XMLStreamException {
+                                                          w, Node drawingNode,
+                                                  @Nullable CssDimension2D size, @Nullable CssRectangle2D viewBox) throws XMLStreamException {
         w.writeAttribute("version", getSvgVersion());
         w.writeAttribute("baseProfile", getSvgBaseProfile());
         if (size != null) {
             w.writeAttribute("width", nb.toString(size.getWidth().getValue()) + size.getWidth().getUnits());
             w.writeAttribute("height", nb.toString(size.getHeight().getValue()) + size.getHeight().getUnits());
+        }
+        if (viewBox != null) {
+            w.writeAttribute("viewBox", nb.toString(viewBox.getMinX().getValue()) + viewBox.getMinX().getUnits()
+                    + " " + nb.toString(viewBox.getMinY().getValue()) + viewBox.getMinY().getUnits()
+                    + " " + nb.toString(viewBox.getWidth().getValue()) + viewBox.getWidth().getUnits()
+                    + " " + nb.toString(viewBox.getHeight().getValue()) + viewBox.getHeight().getUnits());
         }
     }
 
