@@ -19,6 +19,6 @@ for module in org.jhotdraw8.*; do
   for file in target/deploy/$module/*.jar; do gpg -ab "$file"; done
   for file in target/deploy/$module/*.pom; do gpg -ab "$file"; done
   cd target/deploy/$module
-  jar -cf ../$module-$revision-bundle.jar $(ls -1 $module*|xargs)
+  jar -cfM ../$module-$revision-bundle.jar $(ls -1 $module*|xargs)
   cd ../../..
 done
