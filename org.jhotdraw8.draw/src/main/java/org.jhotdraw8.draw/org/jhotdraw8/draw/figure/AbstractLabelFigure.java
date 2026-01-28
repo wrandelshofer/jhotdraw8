@@ -4,12 +4,7 @@
  */
 package org.jhotdraw8.draw.figure;
 
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.HPos;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
-import javafx.geometry.VPos;
+import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
@@ -17,22 +12,10 @@ import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextBoundsType;
-import org.jhotdraw8.css.value.CssColor;
-import org.jhotdraw8.css.value.CssDimension2D;
-import org.jhotdraw8.css.value.CssPoint2D;
-import org.jhotdraw8.css.value.CssRectangle2D;
-import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.Paintable;
-import org.jhotdraw8.css.value.UnitConverter;
+import org.jhotdraw8.css.value.*;
 import org.jhotdraw8.draw.connector.Connector;
 import org.jhotdraw8.draw.connector.RectangleConnector;
-import org.jhotdraw8.draw.key.CssDimension2DStyleableKey;
-import org.jhotdraw8.draw.key.CssPoint2DStyleableMapAccessor;
-import org.jhotdraw8.draw.key.CssSizeStyleableKey;
-import org.jhotdraw8.draw.key.DoubleStyleableKey;
-import org.jhotdraw8.draw.key.NonNullEnumStyleableKey;
-import org.jhotdraw8.draw.key.NullableFXPathElementsStyleableKey;
-import org.jhotdraw8.draw.key.NullablePaintableStyleableKey;
+import org.jhotdraw8.draw.key.*;
 import org.jhotdraw8.draw.locator.BoundsLocator;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.geom.FXPreciseRotate;
@@ -75,7 +58,7 @@ import java.util.Objects;
  * </pre>
  * <p>
  * The placement of the label is controlled by {@link #ORIGIN},
- * {@link TextLayoutableFigure#TEXT_VPOS}, {@link #TEXT_HPOS}.
+ * {@link TextLayoutableFigure#TEXT_VPOS}, {@link TextLayoutableFigure#TEXT_HPOS}.
  * Note that the placement affects the content box.
  * <pre>
  * text-hpos: left;  ┆ center;            ┆ right;
@@ -122,11 +105,6 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
      * The position relative to the parent (respectively the offset).
      */
     public static final CssPoint2DStyleableMapAccessor ICON_TRANSLATE = new CssPoint2DStyleableMapAccessor("iconTranslate", ICON_TRANSLATE_X, ICON_TRANSLATE_Y);
-    /**
-     * The horizontal position of the text. Default value: {@link HPos#LEFT}.
-     * FIXME Move this to {@link TextLayoutableFigure}.
-     */
-    public static final NonNullEnumStyleableKey<HPos> TEXT_HPOS = new NonNullEnumStyleableKey<>("textHPos", HPos.class, HPos.LEFT);
 
     private @Nullable Bounds cachedLayoutBounds;
 
@@ -261,12 +239,12 @@ public abstract class AbstractLabelFigure extends AbstractLeafFigure
         } else {
             width = textBounds.getWidth();
         }
-            height = textBounds.getHeight();
+        height = textBounds.getHeight();
 
         final double originX = getNonNull(ORIGIN_X).getConvertedValue(units);
         final double originY = getNonNull(ORIGIN_Y).getConvertedValue(units);
         final double x, y;
-        x = switch (getStyledNonNull(TEXT_HPOS)) {
+        x = switch (getStyledNonNull(TextLayoutableFigure.TEXT_HPOS)) {
             default -> originX;
             case CENTER -> originX - width * 0.5;
             case RIGHT -> originX - width;

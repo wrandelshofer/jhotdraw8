@@ -26,12 +26,12 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements 
      * Creates a new instance with the specified name, type token class, default
      * value.
      *
-     * @param key          The name of the name.
+     * @param name         The name of the key.
      * @param type         The type of the value.
      * @param defaultValue The default value.
      */
-    public AbstractStyleableKey(String key, Type type, @Nullable T defaultValue) {
-        this(null, key, ReadOnlyStyleableMapAccessor.toCssName(key), type, defaultValue == null, defaultValue);
+    public AbstractStyleableKey(String name, Type type, @Nullable T defaultValue) {
+        this(null, name, ReadOnlyStyleableMapAccessor.toCssName(name), type, defaultValue == null, defaultValue);
     }
 
     /**
