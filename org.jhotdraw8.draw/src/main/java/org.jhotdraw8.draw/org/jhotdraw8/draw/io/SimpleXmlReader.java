@@ -43,7 +43,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
     private @Nullable String namespaceURI;
     private FigureFactory figureFactory;
     private final String idAttribute = "id";
-    private Supplier<Layer> layerFactory;
+    private @Nullable Supplier<Layer> layerFactory;
     private final boolean invokeAddedToDrawing;
 
     public SimpleXmlReader(FigureFactory figureFactory, IdFactory idFactory, @Nullable String namespaceURI) {
