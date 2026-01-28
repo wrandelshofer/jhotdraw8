@@ -8,11 +8,7 @@ package org.jhotdraw8.draw.io;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import org.jhotdraw8.base.converter.IdFactory;
-import org.jhotdraw8.draw.figure.Drawing;
-import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.draw.figure.GroupFigure;
-import org.jhotdraw8.draw.figure.Layer;
-import org.jhotdraw8.draw.figure.StyleableFigure;
+import org.jhotdraw8.draw.figure.*;
 import org.jhotdraw8.draw.input.ClipboardInputFormat;
 import org.jhotdraw8.draw.model.DrawingModel;
 import org.jhotdraw8.fxbase.concurrent.SimpleWorkState;
@@ -27,18 +23,9 @@ import javax.xml.stream.Location;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.transform.stream.StreamSource;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Reader;
-import java.io.StringReader;
-import java.io.UncheckedIOException;
+import java.io.*;
 import java.net.URI;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.SequencedSet;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.FutureTask;
@@ -48,7 +35,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * This reader does not support {@link FigureFactory#nodeListToValue(MapAccessor, List)}.
+ * Simple XML Reader for {@link Drawing}s.
  */
 public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInputFormat {
     private static final Pattern hrefPattern = Pattern.compile("\\s+href=\"([^\"]*?)\"");
@@ -57,11 +44,17 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
     private FigureFactory figureFactory;
     private final String idAttribute = "id";
     private Supplier<Layer> layerFactory;
+    private final boolean invokeAddedToDrawing;
 
     public SimpleXmlReader(FigureFactory figureFactory, IdFactory idFactory, @Nullable String namespaceURI) {
+        this(figureFactory, idFactory, namespaceURI, true);
+    }
+
+    public SimpleXmlReader(FigureFactory figureFactory, IdFactory idFactory, @Nullable String namespaceURI, boolean invokeAddedToDrawing) {
         this.idFactory = idFactory;
         this.figureFactory = figureFactory;
         this.namespaceURI = namespaceURI;
+        this.invokeAddedToDrawing = invokeAddedToDrawing;
     }
 
     private Figure createFigure(XMLStreamReader r, Deque<Figure> stack) throws IOException {
@@ -127,7 +120,7 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         try {
             XMLStreamReader xmlStreamReader = XmlUtil.streamReader(
                     (in instanceof InputStream inputStream) ? new StreamSource(inputStream)
-                            : new StreamSource((Reader)in));
+                            : new StreamSource((Reader) in));
             while (xmlStreamReader.hasNext()) {
                 readNode(xmlStreamReader, xmlStreamReader.next(), stack, processingInstructions,
                         secondPass, parallelPass, futures);
@@ -173,13 +166,14 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
         if (figure == null) {
             throw new IOException("Input file is empty.");
         }
-        if ((figure instanceof Drawing d)) {
-            figure.set(Drawing.DOCUMENT_HOME, documentHome);
+        if (invokeAddedToDrawing) {
+            if ((figure instanceof Drawing d)) {
+                figure.set(Drawing.DOCUMENT_HOME, documentHome);
 
-            for (Figure f : figure.preorderIterable()) {
-                f.addedToDrawing(d);
+                for (Figure f : figure.preorderIterable()) {
+                    f.addedToDrawing(d);
+                }
             }
-
         }
         workState.updateProgress(1.0);
         return figure;
@@ -267,33 +261,33 @@ public class SimpleXmlReader extends AbstractInputFormat implements ClipboardInp
                           List<Runnable> secondPass, List<Runnable> parallelPass,
                           List<FutureTask<Void>> futures) throws IOException {
         switch (next) {
-        case XMLStreamReader.START_ELEMENT:
-            readStartElement(r, stack, secondPass, parallelPass);
-            break;
-        case XMLStreamReader.END_ELEMENT:
-            readEndElement(r, stack);
-            break;
-        case XMLStreamReader.PROCESSING_INSTRUCTION:
-            Consumer<Figure> processingInstruction = readProcessingInstruction(r, stack, secondPass);
-            if (processingInstruction != null) {
-                processingInstructions.add(processingInstruction);
-            }
-            break;
-        case XMLStreamReader.CHARACTERS:
-        case XMLStreamReader.ENTITY_DECLARATION:
-        case XMLStreamReader.NOTATION_DECLARATION:
-        case XMLStreamReader.NAMESPACE:
-        case XMLStreamReader.CDATA:
-        case XMLStreamReader.DTD:
-        case XMLStreamReader.ATTRIBUTE:
-        case XMLStreamReader.ENTITY_REFERENCE:
-        case XMLStreamReader.END_DOCUMENT:
-        case XMLStreamReader.START_DOCUMENT:
-        case XMLStreamReader.SPACE:
-        case XMLStreamReader.COMMENT:
-            break;
-        default:
-            throw new IOException("unsupported XMLStream event: " + next);
+            case XMLStreamReader.START_ELEMENT:
+                readStartElement(r, stack, secondPass, parallelPass);
+                break;
+            case XMLStreamReader.END_ELEMENT:
+                readEndElement(r, stack);
+                break;
+            case XMLStreamReader.PROCESSING_INSTRUCTION:
+                Consumer<Figure> processingInstruction = readProcessingInstruction(r, stack, secondPass);
+                if (processingInstruction != null) {
+                    processingInstructions.add(processingInstruction);
+                }
+                break;
+            case XMLStreamReader.CHARACTERS:
+            case XMLStreamReader.ENTITY_DECLARATION:
+            case XMLStreamReader.NOTATION_DECLARATION:
+            case XMLStreamReader.NAMESPACE:
+            case XMLStreamReader.CDATA:
+            case XMLStreamReader.DTD:
+            case XMLStreamReader.ATTRIBUTE:
+            case XMLStreamReader.ENTITY_REFERENCE:
+            case XMLStreamReader.END_DOCUMENT:
+            case XMLStreamReader.START_DOCUMENT:
+            case XMLStreamReader.SPACE:
+            case XMLStreamReader.COMMENT:
+                break;
+            default:
+                throw new IOException("unsupported XMLStream event: " + next);
         }
 
         if (parallelPass.size() > 1_000) {

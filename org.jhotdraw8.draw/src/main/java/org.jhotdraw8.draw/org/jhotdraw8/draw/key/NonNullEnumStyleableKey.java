@@ -23,17 +23,18 @@ public class NonNullEnumStyleableKey<T extends Enum<T>> extends NonNullObjectSty
      * Creates a new instance with the specified name, enum class, mask and
      * default value.
      *
-     * @param xmlName         The XML name of the key.
+     * @param name         The XML name of the key.
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public NonNullEnumStyleableKey(String xmlName, Class<T> clazz, T defaultValue) {
-        super(xmlName, clazz, new KebabCaseEnumCssConverter<>(clazz, false), defaultValue);
+    public NonNullEnumStyleableKey(String name, Class<T> clazz, T defaultValue) {
+        super(name, clazz, new KebabCaseEnumCssConverter<>(clazz, false), defaultValue);
     }
+
     /**
      * Creates a new instance with {@link KebabCaseEnumCssConverter}.
      *
-     * @param xmlName         The XML name of the key.
+     * @param xmlName      The XML name of the key.
      * @param cssName      The CSS name of the key.
      * @param clazz        The enum class.
      * @param defaultValue The default value.
@@ -41,10 +42,11 @@ public class NonNullEnumStyleableKey<T extends Enum<T>> extends NonNullObjectSty
     public NonNullEnumStyleableKey(String xmlName, String cssName, Class<T> clazz, T defaultValue) {
         super(xmlName, cssName, clazz, new KebabCaseEnumCssConverter<>(clazz, false), defaultValue);
     }
+
     /**
      * Creates a new instance.
      *
-     * @param xmlName         The XML name of the key.
+     * @param xmlName      The XML name of the key.
      * @param cssName      The CSS name of the key.
      * @param clazz        The enum class.
      * @param converter    The CSS converter
@@ -53,6 +55,6 @@ public class NonNullEnumStyleableKey<T extends Enum<T>> extends NonNullObjectSty
     public NonNullEnumStyleableKey(String xmlName, String cssName, Class<T> clazz,
                                    Converter<T> converter,
                                    T defaultValue) {
-        super(xmlName,cssName, clazz, converter, defaultValue);
+        super(xmlName, cssName, clazz, converter, defaultValue);
     }
 }

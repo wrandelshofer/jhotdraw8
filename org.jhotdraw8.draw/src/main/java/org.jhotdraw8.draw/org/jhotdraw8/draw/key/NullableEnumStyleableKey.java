@@ -32,19 +32,19 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends NullableObjectS
      * Creates a new instance with the specified name, enum class, mask and
      * default value.
      *
-     * @param xmlName         The name of the key.
+     * @param name         The name of the key.
      * @param clazz        The enum class.
      * @param defaultValue The default value.
      */
-    public NullableEnumStyleableKey(String xmlName, Class<T> clazz, @Nullable T defaultValue) {
-        super(xmlName, clazz, new KebabCaseEnumCssConverter<>(clazz, true), defaultValue);
+    public NullableEnumStyleableKey(String name, Class<T> clazz, @Nullable T defaultValue) {
+        super(name, clazz, new KebabCaseEnumCssConverter<>(clazz, true), defaultValue);
     }
 
     /**
      * Creates a new instance with the specified name, enum class, mask and
      * default value.
      *
-     * @param xmlName         The XML name of the key.
+     * @param xmlName      The XML name of the key.
      * @param cssName      The CSS name of the key.
      * @param clazz        The enum class.
      * @param converter    The CSS converter
@@ -52,7 +52,7 @@ public class NullableEnumStyleableKey<T extends Enum<T>> extends NullableObjectS
      */
     public NullableEnumStyleableKey(String xmlName, String cssName, Class<T> clazz,
                                     Converter<T> converter,
-                            @Nullable T defaultValue) {
-        super(xmlName,cssName, clazz, converter, defaultValue);
+                                    @Nullable T defaultValue) {
+        super(xmlName, cssName, clazz, converter, defaultValue);
     }
 }
