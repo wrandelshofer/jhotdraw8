@@ -37,7 +37,6 @@ public interface ReadableSequencedCollection<E> extends ReadableCollection<E> {
         return readableReversed().iterator().next();
     }
 
-
     /**
      * Returns a reversed-order view of this collection.
      * Changes to the underlying collection are visible in the reversed view.

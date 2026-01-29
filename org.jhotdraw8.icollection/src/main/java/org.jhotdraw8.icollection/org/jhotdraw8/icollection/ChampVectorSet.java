@@ -116,9 +116,7 @@ import java.util.Spliterators;
  * @param <E> the element type
  */
 @SuppressWarnings("exports")
-public class ChampVectorSet<E>
-
-        implements Serializable, PersistentSequencedSet<E> {
+public class ChampVectorSet<E> implements Serializable, PersistentSequencedSet<E> {
     private static final ChampVectorSet<?> EMPTY = new ChampVectorSet<>(
             BitmapIndexedNode.emptyNode(), VectorList.of(), 0, 0);
     @Serial
@@ -175,7 +173,7 @@ public class ChampVectorSet<E>
 
     private ChampVectorSet<E> newInstance(BitmapIndexedNode<SequencedElement<E>> root,
                                           VectorList<Object> vector,
-                                                   int size, int offset) {
+                                          int size, int offset) {
         return new ChampVectorSet<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
@@ -240,7 +238,7 @@ public class ChampVectorSet<E>
     @Override
     @SuppressWarnings({"unchecked"})
     public ChampVectorSet<E> addAll(Iterable<? extends E> c) {
-        if(isEmpty()&&c instanceof ChampVectorSet<? extends E> s){
+        if (isEmpty() && c instanceof ChampVectorSet<? extends E> s) {
             return (ChampVectorSet<E>) s;
         }
         var m = toMutable();
@@ -282,7 +280,7 @@ public class ChampVectorSet<E>
     }
 
     private ChampVectorSet<E> addLast(@Nullable E e,
-                                               boolean moveToLast) {
+                                      boolean moveToLast) {
         var details = new ChangeEvent<SequencedElement<E>>();
         var newElem = new SequencedElement<>(e, vector.size() - offset);
         var newRoot = root.put(null, newElem,
