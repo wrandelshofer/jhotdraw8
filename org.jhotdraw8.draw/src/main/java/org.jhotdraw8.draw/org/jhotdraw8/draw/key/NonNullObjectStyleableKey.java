@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 import org.jhotdraw8.icollection.VectorList;
@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  *
  * @param <T> the value type
  */
-public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<T>,
+public class NonNullObjectStyleableKey<T> extends AbstractReadableStyleableKey<T> implements WritableStyleableMapAccessor<T>,
         NonNullKey<T> {
     private final PersistentList<String> examples;
 
@@ -31,7 +31,7 @@ public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T
      * @param defaultValue The default value.
      */
     public NonNullObjectStyleableKey(String name, Type type, Converter<T> converter, T defaultValue) {
-        this(name, ReadOnlyStyleableMapAccessor.toCssName(name), type, converter, defaultValue);
+        this(name, ReadableStyleableMapAccessor.toCssName(name), type, converter, defaultValue);
     }
 
     /**
@@ -57,7 +57,7 @@ public class NonNullObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T
      * @param examples     Examples
      */
     public NonNullObjectStyleableKey(String name, Type type, Converter<T> converter, T defaultValue, PersistentList<String> examples) {
-        super(name, ReadOnlyStyleableMapAccessor.toCssName(name), type, converter, defaultValue);
+        super(name, ReadableStyleableMapAccessor.toCssName(name), type, converter, defaultValue);
         this.examples = examples;
     }
 

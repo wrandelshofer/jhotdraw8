@@ -28,7 +28,7 @@ public interface ReadableSequencedSet<E> extends ReadableSet<E>, ReadableSequenc
      *
      * @return a reversed-order view of this set
      */
-    ReadableSequencedSet<E> readOnlyReversed();
+    ReadableSequencedSet<E> readableReversed();
 
     @Override
     default SequencedSet<E> asSet() {

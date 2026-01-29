@@ -18,10 +18,6 @@ import java.util.stream.StreamSupport;
  * A readable interface to a collection.
  * <p>
  * A collection represents a group of objects, known as its elements.
- * <p>
- * This interface does not guarantee 'readable', it actually guarantees
- * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <E> the element type
  */

@@ -60,7 +60,7 @@ public class ReadableSequencedCollectionFacade<E> extends ReadableCollectionFaca
     }
 
     @Override
-    public ReadableSequencedCollection<E> readOnlyReversed() {
+    public ReadableSequencedCollection<E> readableReversed() {
         return new ReadableSequencedCollectionFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

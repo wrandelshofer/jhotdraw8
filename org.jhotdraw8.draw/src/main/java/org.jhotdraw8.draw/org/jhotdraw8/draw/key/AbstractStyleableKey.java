@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
 import org.jspecify.annotations.Nullable;
 
@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
  *
  * @param <T> the value type
  */
-public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
+public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements ReadableStyleableMapAccessor<T> {
 
     private static final long serialVersionUID = 1L;
     private final String cssName;
@@ -31,7 +31,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements 
      * @param defaultValue The default value.
      */
     public AbstractStyleableKey(String name, Type type, @Nullable T defaultValue) {
-        this(null, name, ReadOnlyStyleableMapAccessor.toCssName(name), type, defaultValue == null, defaultValue);
+        this(null, name, ReadableStyleableMapAccessor.toCssName(name), type, defaultValue == null, defaultValue);
     }
 
     /**
@@ -45,7 +45,7 @@ public abstract class AbstractStyleableKey<T> extends AbstractKey<T> implements 
      * @param defaultValue The default value.
      */
     public AbstractStyleableKey(@Nullable String namespace, String name, Type type, boolean isNullable, @Nullable T defaultValue) {
-        this(namespace, name, ReadOnlyStyleableMapAccessor.toCssName(name), type, isNullable, defaultValue);
+        this(namespace, name, ReadableStyleableMapAccessor.toCssName(name), type, isNullable, defaultValue);
     }
 
     /**

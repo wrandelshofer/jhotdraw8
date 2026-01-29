@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.css.converter.BooleanCssConverter;
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
 
@@ -19,15 +19,15 @@ public class NonNullBooleanStyleableKey extends NonNullObjectStyleableKey<Boolea
 
 
     public NonNullBooleanStyleableKey(String key) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), false);
+        this(key, ReadableStyleableMapAccessor.toCssName(key), false);
     }
 
     public NonNullBooleanStyleableKey(String key, Boolean defaultValue) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), defaultValue);
+        this(key, ReadableStyleableMapAccessor.toCssName(key), defaultValue);
     }
 
     public NonNullBooleanStyleableKey(String key, String cssName) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), false);
+        this(key, ReadableStyleableMapAccessor.toCssName(key), false);
     }
 
     public NonNullBooleanStyleableKey(String key, String cssName, Boolean defaultValue) {

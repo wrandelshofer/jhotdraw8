@@ -56,7 +56,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
     }
 
     @Override
-    public ReadableSequencedCollection<E> readOnlyReversed() {
+    public ReadableSequencedCollection<E> readableReversed() {
         return new ReadableListFacade<>(
                 () -> backingList.size(),
                 index -> get(backingList.size() - 1 - index),
@@ -97,7 +97,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
     }
 
     @Override
-    public ReadableList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadableList<E> readableSubList(int fromIndex, int toIndex) {
         int length = size();
         Objects.checkFromToIndex(fromIndex, toIndex, length);
         return new ReadableListFacade<>(
@@ -119,7 +119,7 @@ public class MutableListFacade<E> extends AbstractList<E> implements ReadableLis
 
 
     public Iterator<E> reverseIterator() {
-        Iterator<E> it = new MyIterator<>(backingList.readOnlyReversed().iterator());
+        Iterator<E> it = new MyIterator<>(backingList.readableReversed().iterator());
         return new FailFastIterator<>(it, () -> this.modCount);
     }
 

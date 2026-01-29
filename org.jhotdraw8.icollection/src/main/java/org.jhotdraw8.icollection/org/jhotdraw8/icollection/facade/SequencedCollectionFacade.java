@@ -32,7 +32,7 @@ public class SequencedCollectionFacade<E> extends CollectionFacade<E> implements
     private final Supplier<Iterator<E>> reverseIteratorFunction;
 
     public SequencedCollectionFacade(ReadableSequencedCollection<E> backingCollection) {
-        this(backingCollection::iterator, () -> backingCollection.readOnlyReversed().iterator(), backingCollection::size,
+        this(backingCollection::iterator, () -> backingCollection.readableReversed().iterator(), backingCollection::size,
                 backingCollection::contains, null, null, null, null, null, null, null);
     }
 

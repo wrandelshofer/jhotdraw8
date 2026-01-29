@@ -5,11 +5,11 @@
 
 package org.jhotdraw8.fxbase.beans;
 
-import org.jspecify.annotations.Nullable;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullMapAccessor;
+import org.jspecify.annotations.Nullable;
 
-public interface ReadOnlyPropertyBean {
+public interface ReadablePropertyBean {
     /**
      * Gets a property value.
      *

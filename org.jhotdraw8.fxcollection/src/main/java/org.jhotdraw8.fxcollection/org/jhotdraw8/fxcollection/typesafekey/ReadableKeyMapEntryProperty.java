@@ -16,10 +16,10 @@ import org.jspecify.annotations.Nullable;
  *
  * @param <V> the value type
  */
-public class ReadOnlyKeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
+public class ReadableKeyMapEntryProperty<V> extends MapEntryProperty<Key<?>, Object, V> {
     private final MapAccessor<V> accessor;
 
-    public ReadOnlyKeyMapEntryProperty(ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
+    public ReadableKeyMapEntryProperty(ObservableMap<Key<?>, Object> map, MapAccessor<V> key) {
         super(map, (key instanceof Key<?>) ? (Key<?>) key : null, key.getRawValueType());
         this.accessor = key;
     }

@@ -171,7 +171,7 @@ public interface PersistentMap<K, V> extends ReadableMap<K, V> {
             return clear();
         }
         var s = this;
-        for (var e : readOnlyKeySet()) {
+        for (var e : readableKeySet()) {
             if (!cc.contains(e)) {
                 s = s.remove(e);
             }

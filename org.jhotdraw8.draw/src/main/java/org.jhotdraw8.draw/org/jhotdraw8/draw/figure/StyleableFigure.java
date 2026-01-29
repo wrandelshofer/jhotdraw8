@@ -8,7 +8,7 @@ import javafx.beans.property.ReadOnlyProperty;
 import javafx.scene.Node;
 import org.jhotdraw8.css.converter.StringOrIdentCssConverter;
 import org.jhotdraw8.draw.key.NullableObjectStyleableKey;
-import org.jhotdraw8.draw.key.StringReadOnlyStyleableKey;
+import org.jhotdraw8.draw.key.StringReadableStyleableKey;
 import org.jhotdraw8.draw.key.WordSetKey;
 import org.jhotdraw8.draw.render.RenderContext;
 import org.jhotdraw8.draw.render.RenderingIntent;
@@ -50,7 +50,7 @@ public interface StyleableFigure extends Figure {
      * <p>
      * Default value: {@code null}.
      */
-    StringReadOnlyStyleableKey STYLE = new StringReadOnlyStyleableKey("style");
+    StringReadableStyleableKey STYLE = new StringReadableStyleableKey("style");
 
     /**
      * We store the type selector of the figure on the node that is used

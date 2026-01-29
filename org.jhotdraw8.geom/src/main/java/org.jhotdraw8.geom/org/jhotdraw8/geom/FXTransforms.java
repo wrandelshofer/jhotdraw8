@@ -258,14 +258,14 @@ public class FXTransforms {
     }
 
     public static Point2D inverseTransform(ReadableSequencedCollection<Transform> txs, Point2D b) {
-        for (Transform tx : txs.readOnlyReversed()) {
+        for (Transform tx : txs.readableReversed()) {
             b = inverseTransform(tx, b);
         }
         return b;
     }
 
     public static Point2D inverseDeltaTransform(ReadableSequencedCollection<Transform> txs, Point2D b) {
-        for (Transform tx : txs.readOnlyReversed()) {
+        for (Transform tx : txs.readableReversed()) {
             b = inverseDeltaTransform(tx, b);
         }
         return b;

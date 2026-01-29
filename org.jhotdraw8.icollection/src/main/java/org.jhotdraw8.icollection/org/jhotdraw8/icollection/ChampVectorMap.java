@@ -170,7 +170,7 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
 
     private ChampVectorMap<K, V> newInstance(BitmapIndexedNode<SequencedEntry<K, V>> root,
                                              VectorList<Object> vector,
-                                                      int size, int offset) {
+                                             int size, int offset) {
         return new ChampVectorMap<>(new PrivateData(new OpaqueRecord<>(root, vector, size, offset)));
     }
 
@@ -383,7 +383,7 @@ public class ChampVectorMap<K, V> implements PersistentSequencedMap<K, V>, Seria
     }
 
     @Override
-    public ReadableSequencedMap<K, V> readOnlyReversed() {
+    public ReadableSequencedMap<K, V> readableReversed() {
         return new ReadableSequencedMapFacade<>(
                 this::reverseIterator,
                 this::iterator,

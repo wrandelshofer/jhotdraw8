@@ -394,7 +394,7 @@ public class MutableChampVectorMap<K, V> extends AbstractMutableChampMap<K, V, S
     }
 
     @Override
-    public ReadableSequencedMap<K, V> readOnlyReversed() {
+    public ReadableSequencedMap<K, V> readableReversed() {
         return new ReadableSequencedMapFacade<>(
                 this::iterator,
                 this::reverseIterator,

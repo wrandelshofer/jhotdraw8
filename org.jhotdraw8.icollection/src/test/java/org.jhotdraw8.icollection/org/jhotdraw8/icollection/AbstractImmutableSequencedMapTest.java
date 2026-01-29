@@ -209,14 +209,14 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
 
     protected <K, V> void assertEqualSequence(Collection<Map.Entry<K, V>> expected, PersistentSequencedMap<K, V> actual, String message) {
         ArrayList<Map.Entry<K, V>> expectedList = new ArrayList<>(expected);
-        ArrayList<Map.Entry<K, V>> actualList = new ArrayList<>(actual.readOnlyEntrySet().asSet());
+        ArrayList<Map.Entry<K, V>> actualList = new ArrayList<>(actual.readableEntrySet().asSet());
         assertEquals(expectedList, actualList, message);
 
         if (!expected.isEmpty()) {
             assertEquals(expectedList.get(0), actual.firstEntry(), message);
-            assertEquals(expectedList.get(0), actual.readOnlyEntrySet().iterator().next(), message);
+            assertEquals(expectedList.get(0), actual.readableEntrySet().iterator().next(), message);
             assertEquals(expectedList.get(expectedList.size() - 1), actual.lastEntry(), message);
-            assertEquals(expectedList.get(expectedList.size() - 1), actual.readOnlyReversed().readOnlyEntrySet().iterator().next(), message);
+            assertEquals(expectedList.get(expectedList.size() - 1), actual.readableReversed().readableEntrySet().iterator().next(), message);
         }
 
         LinkedHashMap<Object, Object> x = new LinkedHashMap<>();
@@ -234,11 +234,11 @@ public abstract class AbstractImmutableSequencedMapTest extends AbstractPersiste
         assertEquals(Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED,
                 (Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.spliterator().characteristics());
         assertEquals(Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED,
-                (Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyKeySet().spliterator().characteristics());
+                (Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readableKeySet().spliterator().characteristics());
         assertEquals(Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED,
-                (Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyEntrySet().spliterator().characteristics());
+                (Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readableEntrySet().spliterator().characteristics());
         assertEquals(Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.SIZED,
-                (Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.SIZED) & instance.readOnlyValues().spliterator().characteristics());
+                (Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.SIZED) & instance.readableValues().spliterator().characteristics());
     }
 
 

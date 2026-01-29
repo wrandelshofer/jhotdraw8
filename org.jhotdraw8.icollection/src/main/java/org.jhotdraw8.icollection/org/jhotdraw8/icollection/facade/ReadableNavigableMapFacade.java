@@ -95,7 +95,7 @@ public class ReadableNavigableMapFacade<K, V> extends ReadableMapFacade<K, V>
     }
 
     @Override
-    public ReadableNavigableMap<K, V> readOnlyReversed() {
+    public ReadableNavigableMap<K, V> readableReversed() {
         return new ReadableNavigableMapFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

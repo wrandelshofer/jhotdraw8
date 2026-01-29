@@ -65,7 +65,7 @@ public class ReadableSortedSetFacade<E> extends ReadableSetFacade<E>
     }
 
     @Override
-    public ReadableSortedSet<E> readOnlyReversed() {
+    public ReadableSortedSet<E> readableReversed() {
         return new ReadableSortedSetFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

@@ -12,7 +12,7 @@ import org.jhotdraw8.icollection.persistent.PersistentList;
  *
  * @param <T> The value type.
  */
-public interface WritableStyleableMapAccessor<T> extends ReadOnlyStyleableMapAccessor<T> {
+public interface WritableStyleableMapAccessor<T> extends ReadableStyleableMapAccessor<T> {
 
     long serialVersionUID = 1L;
 

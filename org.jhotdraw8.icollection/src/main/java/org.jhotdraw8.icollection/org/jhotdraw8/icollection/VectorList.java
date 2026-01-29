@@ -236,8 +236,8 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     public VectorList<E> addAll(int index, Iterable<? extends E> c) {
         Objects.requireNonNull(c, "c is null");
         if (index >= 0 && index <= size()) {
-            final VectorList<E> begin = readOnlySubList(0, index).addAll(c);
-            final VectorList<E> end = readOnlySubList(index, size());
+            final VectorList<E> begin = this.readableSubList(0, index).addAll(c);
+            final VectorList<E> end = this.readableSubList(index, size());
             return begin.addAll(end);
         } else {
             throw new IndexOutOfBoundsException("addAll(" + index + ", c) on Vector of size " + size());
@@ -245,7 +245,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     }
 
     @Override
-    public ReadableSequencedCollection<E> readOnlyReversed() {
+    public ReadableSequencedCollection<E> readableReversed() {
         return new ReadableListFacade<>(
                 this::size,
                 index -> get(size() - 1 - index),
@@ -253,7 +253,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     }
 
     public VectorList<E> reverse() {
-        return size() < 2 ? this : VectorList.copyOf(readOnlyReversed());
+        return size() < 2 ? this : VectorList.copyOf(readableReversed());
     }
 
     @Override
@@ -356,7 +356,7 @@ public class VectorList<E> implements PersistentList<E>, Serializable {
     }
 
     @Override
-    public VectorList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public VectorList<E> readableSubList(int fromIndex, int toIndex) {
         Objects.checkIndex(fromIndex, toIndex + 1);
         Objects.checkIndex(toIndex, size() + 1);
         BitMappedTrie<E> newRoot = this.trie;

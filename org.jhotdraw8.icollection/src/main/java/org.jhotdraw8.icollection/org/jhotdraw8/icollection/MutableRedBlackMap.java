@@ -181,7 +181,7 @@ public class MutableRedBlackMap<K, V> extends AbstractMap<K, V> implements Navig
     }
 
     @Override
-    public ReadableSequencedMap<K, V> readOnlyReversed() {
+    public ReadableSequencedMap<K, V> readableReversed() {
         return new ReadableSequencedMapFacade<>(
                 this::iterator,
                 this::reverseIterator,

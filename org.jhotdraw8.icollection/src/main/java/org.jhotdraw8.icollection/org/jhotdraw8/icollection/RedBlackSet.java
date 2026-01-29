@@ -268,7 +268,7 @@ public class RedBlackSet<E> implements PersistentNavigableSet<E>, Serializable {
     }
 
     @Override
-    public ReadableSequencedSet<E> readOnlyReversed() {
+    public ReadableSequencedSet<E> readableReversed() {
         return new ReadableSequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,

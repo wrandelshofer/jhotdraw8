@@ -59,7 +59,7 @@ public class ReadableSortedMapFacade<K, V> extends ReadableMapFacade<K, V>
     }
 
     @Override
-    public ReadableSortedMap<K, V> readOnlyReversed() {
+    public ReadableSortedMap<K, V> readableReversed() {
         return new ReadableSortedMapFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

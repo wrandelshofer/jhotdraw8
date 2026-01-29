@@ -4,7 +4,7 @@
  */
 package org.jhotdraw8.draw.key;
 
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
@@ -78,7 +78,7 @@ public abstract class AbstractStyleableMapAccessor<T>
         this.defaultValue = defaultValue;
 
         this.subAccessors = ChampVectorSet.of(subAccessors);
-        cssName = ReadOnlyStyleableMapAccessor.toCssName(name);
+        cssName = ReadableStyleableMapAccessor.toCssName(name);
     }
 
     @Override

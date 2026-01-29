@@ -17,7 +17,7 @@ import org.jhotdraw8.css.parser.ListCssTokenizer;
 import org.jhotdraw8.css.parser.StreamCssTokenizer;
 import org.jhotdraw8.css.value.QualifiedName;
 import org.jhotdraw8.draw.figure.Figure;
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.CompositeMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
@@ -49,12 +49,12 @@ import java.util.stream.Collectors;
 public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     public static final String JAVA_CLASS_NAMESPACE = "http://java.net";
     private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<WritableStyleableMapAccessor<Object>>>> figureToMetaMap = new ConcurrentHashMap<>();
-    private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Class<? extends Figure>, Map<QualifiedName, List<ReadableStyleableMapAccessor<Object>>>> figureToReadOnlyMetaMap = new ConcurrentHashMap<>();
     /**
      * Maps an attribute name to a key.
      */
     private final Map<Class<?>, Map<QualifiedName, WritableStyleableMapAccessor<?>>> nameToKeyMap = new ConcurrentHashMap<>();
-    private final Map<Class<?>, Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
+    private final Map<Class<?>, Map<QualifiedName, ReadableStyleableMapAccessor<?>>> nameToReadableKeyMap = new ConcurrentHashMap<>();
 
     public FigureSelectorModel() {
     }
@@ -67,7 +67,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     @Override
     public boolean attributeValueContainsWord(Figure element, @Nullable String namespacePattern, String attributeName, String word) {
-        ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespacePattern, attributeName);
+        ReadableStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespacePattern, attributeName);
         if (k == null) {
             return false;
         }
@@ -122,11 +122,11 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return mm.get(new QualifiedName(namespace, element.getClass() + "$" + attributeName));
     }
 
-    private ReadOnlyStyleableMapAccessor<?> findReadableKey(Figure element, @Nullable String namespacePattern, String attributeName) {
-        Map<QualifiedName, ReadOnlyStyleableMapAccessor<?>> mm = nameToReadableKeyMap.computeIfAbsent(element.getClass(), k -> {
-            SequencedMap<QualifiedName, ReadOnlyStyleableMapAccessor<?>> m = new LinkedHashMap<>();
+    private ReadableStyleableMapAccessor<?> findReadableKey(Figure element, @Nullable String namespacePattern, String attributeName) {
+        Map<QualifiedName, ReadableStyleableMapAccessor<?>> mm = nameToReadableKeyMap.computeIfAbsent(element.getClass(), k -> {
+            SequencedMap<QualifiedName, ReadableStyleableMapAccessor<?>> m = new LinkedHashMap<>();
             for (MapAccessor<?> kk : element.getSupportedKeys()) {
-                if (kk instanceof ReadOnlyStyleableMapAccessor<?> sk) {
+                if (kk instanceof ReadableStyleableMapAccessor<?> sk) {
                     String cssNamespace = sk.getCssNamespace();
                     m.put(new QualifiedName(cssNamespace, element.getClass() + "$" + sk.getCssName()), sk);
                     if (cssNamespace != null) {
@@ -146,7 +146,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     @Override
     public @Nullable List<CssToken> getAttribute(Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, String attributeName) {
-        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
+        ReadableStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {
             return null;
         }
@@ -190,7 +190,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
 
     @Override
     public @Nullable String getAttributeAsString(Figure element, @Nullable StyleOrigin origin, @Nullable String namespacePattern, String attributeName) {
-        ReadOnlyStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
+        ReadableStyleableMapAccessor<?> key = findReadableKey(element, namespacePattern, attributeName);
         if (key == null) {
             return null;
         }
@@ -325,7 +325,7 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
     }
 
     protected @Nullable String getReadOnlyAttributeValueAsString(Figure element, @Nullable String namespace, String attributeName) {
-        ReadOnlyStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
+        ReadableStyleableMapAccessor<Object> k = getReadableAttributeAccessor(element, namespace, attributeName);
         if (k == null) {
             return null;
         }
@@ -337,21 +337,21 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
         return stringValue;
     }
 
-    protected @Nullable ReadOnlyStyleableMapAccessor<Object> getReadableAttributeAccessor(Figure element, @Nullable String namespace, String attributeName) {
+    protected @Nullable ReadableStyleableMapAccessor<Object> getReadableAttributeAccessor(Figure element, @Nullable String namespace, String attributeName) {
         @SuppressWarnings("unchecked")
-        ReadOnlyStyleableMapAccessor<Object> k = (ReadOnlyStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
+        ReadableStyleableMapAccessor<Object> k = (ReadableStyleableMapAccessor<Object>) findReadableKey(element, namespace, attributeName);
         return k;
     }
 
-    private Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> getReadableMetaMap(Figure elem) {
+    private Map<QualifiedName, List<ReadableStyleableMapAccessor<Object>>> getReadableMetaMap(Figure elem) {
         return figureToReadOnlyMetaMap.computeIfAbsent(elem.getClass(), klass -> {
-            Map<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
+            Map<QualifiedName, List<ReadableStyleableMapAccessor<Object>>> metaMap = new HashMap<>();
 
-            Function<QualifiedName, List<ReadOnlyStyleableMapAccessor<Object>>> arrayListSupplier = key -> new ArrayList<>();
+            Function<QualifiedName, List<ReadableStyleableMapAccessor<Object>>> arrayListSupplier = key -> new ArrayList<>();
             for (MapAccessor<?> k : elem.getSupportedKeys()) {
-                if (k instanceof ReadOnlyStyleableMapAccessor) {
+                if (k instanceof ReadableStyleableMapAccessor) {
                     @SuppressWarnings("unchecked")
-                    ReadOnlyStyleableMapAccessor<Object> sk = (ReadOnlyStyleableMapAccessor<Object>) k;
+                    ReadableStyleableMapAccessor<Object> sk = (ReadableStyleableMapAccessor<Object>) k;
                     metaMap.computeIfAbsent(new QualifiedName(sk.getCssNamespace(), sk.getCssName()), arrayListSupplier).add(sk);
                     if (sk.getCssNamespace() != null) {
                         // all names can be accessed without specificying a namespace
@@ -448,8 +448,8 @@ public class FigureSelectorModel extends AbstractSelectorModel<Figure> {
                 switch (token.getType()) {
                     case CssTokenType.TT_IDENT:
                         if ("initial".equals(token.getStringValue())
-                            || "revert".equals(token.getStringValue())
-                            || "unset".equals(token.getStringValue())) {
+                                || "revert".equals(token.getStringValue())
+                                || "unset".equals(token.getStringValue())) {
                             isInitial = true;
                         }
                         break;

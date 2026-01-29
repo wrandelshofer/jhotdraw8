@@ -5,7 +5,7 @@
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 import org.jhotdraw8.icollection.VectorList;
 import org.jhotdraw8.icollection.persistent.PersistentList;
@@ -18,7 +18,7 @@ import java.lang.reflect.Type;
  *
  * @param <T> the value type
  */
-public class NullableObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<T> implements WritableStyleableMapAccessor<T> {
+public class NullableObjectStyleableKey<T> extends AbstractReadableStyleableKey<T> implements WritableStyleableMapAccessor<T> {
     private final PersistentList<String> examples;
 
     /**
@@ -41,7 +41,7 @@ public class NullableObjectStyleableKey<T> extends AbstractReadOnlyStyleableKey<
      * @param defaultValue The default value.
      */
     public NullableObjectStyleableKey(String name, Type type, Converter<T> converter, @Nullable T defaultValue) {
-        this(name, ReadOnlyStyleableMapAccessor.toCssName(name), type, converter, defaultValue);
+        this(name, ReadableStyleableMapAccessor.toCssName(name), type, converter, defaultValue);
     }
 
     /**

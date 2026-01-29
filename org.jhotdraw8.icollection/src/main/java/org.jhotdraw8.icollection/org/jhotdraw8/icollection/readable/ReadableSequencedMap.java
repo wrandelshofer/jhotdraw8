@@ -37,7 +37,7 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
      *
      * @return a reversed-order view of this map
      */
-    ReadableSequencedMap<K, V> readOnlyReversed();
+    ReadableSequencedMap<K, V> readableReversed();
 
     /**
      * Gets the first entry in this map or {@code null} if this map is empty.
@@ -46,7 +46,7 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
      * @throws NoSuchElementException if the map is empty
      */
     default Map.@Nullable Entry<K, V> firstEntry() {
-        return isEmpty() ? null : readOnlyEntrySet().iterator().next();
+        return isEmpty() ? null : readableEntrySet().iterator().next();
     }
 
     /**
@@ -56,7 +56,7 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
      * @throws NoSuchElementException if the map is empty
      */
     default Map.@Nullable Entry<K, V> lastEntry() {
-        return isEmpty() ? null : readOnlyReversed().readOnlyEntrySet().iterator().next();
+        return isEmpty() ? null : readableReversed().readableEntrySet().iterator().next();
     }
 
 
@@ -66,10 +66,10 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
      * @return a {@link ReadableSequencedSet} view of the entries
      */
     @Override
-    default ReadableSequencedSet<Map.Entry<K, V>> readOnlyEntrySet() {
+    default ReadableSequencedSet<Map.Entry<K, V>> readableEntrySet() {
         return new ReadableSequencedSetFacade<>(
                 this::iterator,
-                () -> readOnlyReversed().readOnlyEntrySet().iterator(),
+                () -> readableReversed().readableEntrySet().iterator(),
                 this::size,
                 this::containsEntry,
                 this::firstEntry,
@@ -86,16 +86,17 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
     default int characteristics() {
         return Spliterator.ORDERED | Spliterator.SIZED | Spliterator.DISTINCT;
     }
+
     /**
      * Returns a {@link ReadableSequencedSet} view of the keys contained in this map.
      *
      * @return a {@link ReadableSequencedSet} view of the keys
      */
     @Override
-    default ReadableSequencedSet<K> readOnlyKeySet() {
+    default ReadableSequencedSet<K> readableKeySet() {
         return new ReadableSequencedSetFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getKey),
-                () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getKey),
+                () -> new MappedIterator<>(readableReversed().readableEntrySet().iterator(), Map.Entry::getKey),
                 this::size,
                 this::containsKey,
                 () -> {
@@ -122,10 +123,10 @@ public interface ReadableSequencedMap<K, V> extends ReadableMap<K, V> {
      * @return a {@link ReadableSequencedCollection} view of the values
      */
     @Override
-    default ReadableSequencedCollection<V> readOnlyValues() {
+    default ReadableSequencedCollection<V> readableValues() {
         return new ReadableSequencedCollectionFacade<>(
                 () -> new MappedIterator<>(iterator(), Map.Entry::getValue),
-                () -> new MappedIterator<>(readOnlyReversed().readOnlyEntrySet().iterator(), Map.Entry::getValue),
+                () -> new MappedIterator<>(readableReversed().readableEntrySet().iterator(), Map.Entry::getValue),
                 this::size,
                 this::containsValue,
                 () -> {

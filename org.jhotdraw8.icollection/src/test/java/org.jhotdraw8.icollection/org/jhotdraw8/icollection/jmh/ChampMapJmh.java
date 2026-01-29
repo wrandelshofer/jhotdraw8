@@ -66,7 +66,7 @@ public class ChampMapJmh {
     @Benchmark
     public int mIterate() {
         int sum = 0;
-        for (Key k : mapA.readOnlyKeySet()) {
+        for (Key k : mapA.readableKeySet()) {
             sum += k.value;
         }
         return sum;

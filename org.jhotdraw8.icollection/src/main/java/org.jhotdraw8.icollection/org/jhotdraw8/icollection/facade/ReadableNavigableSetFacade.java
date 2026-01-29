@@ -100,7 +100,7 @@ public class ReadableNavigableSetFacade<E> extends ReadableSetFacade<E>
     }
 
     @Override
-    public ReadableNavigableSet<E> readOnlyReversed() {
+    public ReadableNavigableSet<E> readableReversed() {
         return new ReadableNavigableSetFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

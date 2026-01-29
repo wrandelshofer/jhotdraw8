@@ -17,7 +17,7 @@ import java.lang.reflect.Type;
  *
  * @param <T> the element type of the set
  */
-public class NonNullSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentSequencedSet<T>>
+public class NonNullSetStyleableKey<T> extends AbstractReadableStyleableKey<PersistentSequencedSet<T>>
         implements WritableStyleableMapAccessor<PersistentSequencedSet<T>>,
         NonNullKey<PersistentSequencedSet<T>> {
 

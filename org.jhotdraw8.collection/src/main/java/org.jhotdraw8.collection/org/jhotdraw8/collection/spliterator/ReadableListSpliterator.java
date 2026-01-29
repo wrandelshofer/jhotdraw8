@@ -2,7 +2,7 @@
  * @(#)ReadOnlyListSpliterator.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
-package org.jhotdraw8.icollection.impl.iteration;
+package org.jhotdraw8.collection.spliterator;
 
 import org.jhotdraw8.icollection.readable.ReadableList;
 import org.jspecify.annotations.Nullable;
@@ -20,16 +20,16 @@ import java.util.function.Consumer;
  *
  * @param <E> the element type
  */
-public class ReadOnlyListSpliterator<E> extends AbstractListIteratorSpliterator<E> {
+public class ReadableListSpliterator<E> extends AbstractListIteratorSpliterator<E> {
     private final ReadableList<E> list;
     private int index;
     private final int size;
 
-    public ReadOnlyListSpliterator(ReadableList<E> list) {
+    public ReadableListSpliterator(ReadableList<E> list) {
         this(list, 0, list.size());
     }
 
-    public ReadOnlyListSpliterator(ReadableList<E> list, int index, int size) {
+    public ReadableListSpliterator(ReadableList<E> list, int index, int size) {
         this.list = list;
         this.size = size;
         this.index = index;
@@ -84,7 +84,7 @@ public class ReadOnlyListSpliterator<E> extends AbstractListIteratorSpliterator<
         int lo = index, mid = (lo + getSize()) >>> 1;
         return (lo >= mid)
                 ? null
-                : new ReadOnlyListSpliterator<>(list, lo, index = mid);
+                : new ReadableListSpliterator<>(list, lo, index = mid);
     }
 
     @Override

@@ -410,12 +410,12 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void readOnlyReversedOfReadOnlyReversedShouldHaveSameSequence(SetData data) throws Exception {
+    public void readableReversedOfReadOnlyReversedShouldHaveSameSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         if (instance instanceof ReadableSequencedSet<?>) {
-            ReadableSequencedSet<Key> readOnlyInstance = (ReadableSequencedSet<Key>) instance;
+            ReadableSequencedSet<Key> readableInstance = (ReadableSequencedSet<Key>) instance;
             List<Key> expected = new ArrayList<>(data.a().asSet());
-            ArrayList<Key> actual = new ArrayList<>(readOnlyInstance.readOnlyReversed().readOnlyReversed().asSet());
+            ArrayList<Key> actual = new ArrayList<>(readableInstance.readableReversed().readableReversed().asSet());
             assertEquals(expected, actual);
         }
     }
@@ -423,13 +423,13 @@ public abstract class AbstractSequencedSetTest extends AbstractSetTest {
     @SuppressWarnings("unchecked")
     @ParameterizedTest
     @MethodSource("dataProvider")
-    public void readOnlyReversedShouldHaveReversedSequence(SetData data) throws Exception {
+    public void readableReversedShouldHaveReversedSequence(SetData data) throws Exception {
         SequencedSet<Key> instance = newInstance(data.a());
         if (instance instanceof ReadableSequencedSet<?>) {
-            ReadableSequencedSet<Key> readOnlyInstance = (ReadableSequencedSet<Key>) instance;
+            ReadableSequencedSet<Key> readableInstance = (ReadableSequencedSet<Key>) instance;
             List<Key> expected = new ArrayList<>(data.a().asSet());
             Collections.reverse(expected);
-            ArrayList<Key> actual = new ArrayList<>(readOnlyInstance.readOnlyReversed().asSet());
+            ArrayList<Key> actual = new ArrayList<>(readableInstance.readableReversed().asSet());
             assertEquals(expected, actual);
         }
     }

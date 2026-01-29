@@ -38,11 +38,11 @@ public abstract class AbstractImmutableSortedMapTest extends AbstractPersistentM
     public void spliteratorShouldHaveSequencedMapCharacteristics() throws Exception {
         PersistentSortedMap<Key, Key> instance = newInstance();
 
-        assertEquals(Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyKeySet().spliterator().characteristics());
-        assertEquals(Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyEntrySet().spliterator().characteristics());
-        assertEquals(Spliterator.ORDERED | Spliterator.SIZED, (Spliterator.SORTED | Spliterator.ORDERED | Spliterator.SIZED) & instance.readOnlyValues().spliterator().characteristics());
-        assertNull(instance.readOnlyEntrySet().spliterator().getComparator());
-        assertNull(instance.readOnlyKeySet().spliterator().getComparator());
+        assertEquals(Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readableKeySet().spliterator().characteristics());
+        assertEquals(Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED, (Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readableEntrySet().spliterator().characteristics());
+        assertEquals(Spliterator.ORDERED | Spliterator.SIZED, (Spliterator.SORTED | Spliterator.ORDERED | Spliterator.SIZED) & instance.readableValues().spliterator().characteristics());
+        assertNull(instance.readableEntrySet().spliterator().getComparator());
+        assertNull(instance.readableKeySet().spliterator().getComparator());
         //assertNull(instance.values().spliterator().getComparator());
     }
 }

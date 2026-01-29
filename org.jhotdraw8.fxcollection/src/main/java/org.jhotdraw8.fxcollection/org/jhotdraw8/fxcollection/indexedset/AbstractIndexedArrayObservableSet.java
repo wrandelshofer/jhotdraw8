@@ -821,7 +821,7 @@ public abstract class AbstractIndexedArrayObservableSet<E> extends ObservableLis
     }
 
     @Override
-    public ReadableSequencedSet<E> readOnlyReversed() {
+    public ReadableSequencedSet<E> readableReversed() {
         return new ReadableSequencedSetFacade<>(
                 () -> new ReverseListSpliterator<>(this, 0, size),
                 this::iterator,

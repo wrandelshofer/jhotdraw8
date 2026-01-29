@@ -374,8 +374,8 @@ public class BezierPath extends VectorList<BezierNode> implements Shape {
     }
 
     @Override
-    public BezierPath readOnlySubList(int fromIndex, int toIndex) {
-        return (BezierPath) super.readOnlySubList(fromIndex, toIndex);
+    public BezierPath readableSubList(int fromIndex, int toIndex) {
+        return (BezierPath) super.readableSubList(fromIndex, toIndex);
     }
 
     @Override

@@ -49,8 +49,8 @@ public class SequencedMapFacade<K, V> extends MapFacade<K, V> implements Sequenc
         this.putLastFunction = (k, v) -> {
             throw new UnsupportedOperationException();
         };
-        this.reverseIteratorFunction = () -> m.readOnlyReversed().iterator();
-        this.reverseSpliteratorFunction = () -> m.readOnlyReversed().spliterator();
+        this.reverseIteratorFunction = () -> m.readableReversed().iterator();
+        this.reverseSpliteratorFunction = () -> m.readableReversed().spliterator();
     }
 
     public SequencedMapFacade(SequencedMap<K, V> m) {

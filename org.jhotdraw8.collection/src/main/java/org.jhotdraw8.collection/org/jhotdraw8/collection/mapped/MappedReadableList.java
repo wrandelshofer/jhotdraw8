@@ -94,7 +94,7 @@ public final class MappedReadableList<E, F> extends AbstractReadableList<E> {
     }
 
     @Override
-    public ReadableSequencedCollection<E> readOnlyReversed() {
+    public ReadableSequencedCollection<E> readableReversed() {
         return new ReadableSequencedCollectionFacade<>(
                 this::reverseIterator,
                 this::iterator,
@@ -117,7 +117,7 @@ public final class MappedReadableList<E, F> extends AbstractReadableList<E> {
     }
 
     @Override
-    public ReadableList<E> readOnlySubList(int fromIndex, int toIndex) {
-        return new MappedReadableList<>(backingList.readOnlySubList(fromIndex, toIndex), mapf);
+    public ReadableList<E> readableSubList(int fromIndex, int toIndex) {
+        return new MappedReadableList<>(backingList.readableSubList(fromIndex, toIndex), mapf);
     }
 }

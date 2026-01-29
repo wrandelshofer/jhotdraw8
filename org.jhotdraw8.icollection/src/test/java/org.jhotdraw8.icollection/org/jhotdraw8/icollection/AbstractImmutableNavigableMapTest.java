@@ -40,16 +40,16 @@ public abstract class AbstractImmutableNavigableMapTest extends AbstractImmutabl
 
         assertEquals(Spliterator.IMMUTABLE | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED,
                 (Spliterator.IMMUTABLE | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED)
-                        & instance.readOnlyKeySet().spliterator().characteristics());
+                        & instance.readableKeySet().spliterator().characteristics());
         assertEquals(Spliterator.IMMUTABLE | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED,
                 (Spliterator.IMMUTABLE | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED)
                         & instance.spliterator().characteristics());
         assertEquals(Spliterator.IMMUTABLE | Spliterator.NONNULL | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED,
                 (Spliterator.IMMUTABLE | Spliterator.NONNULL | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.DISTINCT | Spliterator.SIZED)
-                        & instance.readOnlyEntrySet().spliterator().characteristics());
+                        & instance.readableEntrySet().spliterator().characteristics());
         assertEquals(Spliterator.IMMUTABLE | Spliterator.ORDERED | Spliterator.SIZED,
-                (Spliterator.IMMUTABLE | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.SIZED) & instance.readOnlyValues().spliterator().characteristics());
-        assertNull(instance.readOnlyEntrySet().spliterator().getComparator());
-        assertNull(instance.readOnlyKeySet().spliterator().getComparator());
+                (Spliterator.IMMUTABLE | Spliterator.SORTED | Spliterator.ORDERED | Spliterator.SIZED) & instance.readableValues().spliterator().characteristics());
+        assertNull(instance.readableEntrySet().spliterator().getComparator());
+        assertNull(instance.readableKeySet().spliterator().getComparator());
     }
 }

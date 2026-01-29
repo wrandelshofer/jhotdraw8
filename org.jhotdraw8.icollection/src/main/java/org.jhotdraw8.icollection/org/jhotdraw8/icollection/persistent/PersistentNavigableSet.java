@@ -66,7 +66,7 @@ public interface PersistentNavigableSet<E> extends ReadableNavigableSet<E>, Pers
         if (size() < 2) {
             return this;
         }
-        return this.<E>empty().addAll(readOnlyReversed());
+        return this.<E>empty().addAll(readableReversed());
     }
     
 }

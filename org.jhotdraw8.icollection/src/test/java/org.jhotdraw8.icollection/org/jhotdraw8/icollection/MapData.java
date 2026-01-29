@@ -44,8 +44,8 @@ public final class MapData {
 
         LinkedHashMap<Key, Value> someAPlusSomeB = new LinkedHashMap<>();
         ArrayList<Map.Entry<Key, Value>> aPlusB = new ArrayList<>(a.size() + b.size());
-        aPlusB.addAll(a.readOnlyEntrySet().asSet());
-        aPlusB.addAll(b.readOnlyEntrySet().asSet());
+        aPlusB.addAll(a.readableEntrySet().asSet());
+        aPlusB.addAll(b.readableEntrySet().asSet());
         aPlusB.subList(a.size() / 2, a.size() + (b.size() + 1) / 2)
                 .iterator().forEachRemaining(e -> someAPlusSomeB.put(e.getKey(), e.getValue()));
         this.someAPlusSomeB = new ReadableMapFacade<>(someAPlusSomeB);

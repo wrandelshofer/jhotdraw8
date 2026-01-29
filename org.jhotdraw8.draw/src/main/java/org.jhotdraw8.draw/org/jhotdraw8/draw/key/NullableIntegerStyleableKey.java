@@ -6,7 +6,7 @@ package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.css.converter.CssConverter;
 import org.jhotdraw8.css.converter.IntegerCssConverter;
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxbase.styleable.WritableStyleableMapAccessor;
 
 /**
@@ -17,7 +17,7 @@ public class NullableIntegerStyleableKey extends NullableObjectStyleableKey<Inte
 
 
     public NullableIntegerStyleableKey(String name) {
-        this(name, ReadOnlyStyleableMapAccessor.toCssName(name));
+        this(name, ReadableStyleableMapAccessor.toCssName(name));
     }
 
     public NullableIntegerStyleableKey(String xmlName, String cssName) {
@@ -25,7 +25,7 @@ public class NullableIntegerStyleableKey extends NullableObjectStyleableKey<Inte
     }
 
     public NullableIntegerStyleableKey(String xmlName, String cssName, CssConverter<Integer> converter) {
-        super(xmlName, cssName, Integer.class,converter,null);
+        super(xmlName, cssName, Integer.class, converter, null);
     }
 
 

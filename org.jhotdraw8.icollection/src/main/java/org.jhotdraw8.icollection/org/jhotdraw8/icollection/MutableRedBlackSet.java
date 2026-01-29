@@ -264,7 +264,7 @@ public class MutableRedBlackSet<E> extends AbstractSet<E> implements NavigableSe
     }
 
     @Override
-    public ReadableSequencedSet<E> readOnlyReversed() {
+    public ReadableSequencedSet<E> readableReversed() {
         return new ReadableSequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,

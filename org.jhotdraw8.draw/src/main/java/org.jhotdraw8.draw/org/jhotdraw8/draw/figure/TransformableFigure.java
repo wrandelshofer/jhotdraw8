@@ -184,7 +184,7 @@ public interface TransformableFigure extends TransformCachingFigure, Figure {
         PersistentList<Transform> list = styled ? getStyledNonNull(TRANSFORMS) : getNonNull(TRANSFORMS);
         Transform t = null;
         try {
-            for (Transform tx : list.readOnlyReversed()) {
+            for (Transform tx : list.readableReversed()) {
                 t = FXTransforms.concat(t, tx.createInverse());
             }
         } catch (NonInvertibleTransformException e) {

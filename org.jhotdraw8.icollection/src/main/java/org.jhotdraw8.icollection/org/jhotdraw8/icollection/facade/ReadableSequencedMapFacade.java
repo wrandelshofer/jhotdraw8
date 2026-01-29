@@ -58,7 +58,7 @@ public class ReadableSequencedMapFacade<K, V> extends ReadableMapFacade<K, V>
     }
 
     @Override
-    public ReadableSequencedMap<K, V> readOnlyReversed() {
+    public ReadableSequencedMap<K, V> readableReversed() {
         return new ReadableSequencedMapFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

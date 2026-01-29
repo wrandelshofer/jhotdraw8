@@ -13,10 +13,6 @@ import java.util.Spliterator;
 
 /**
  * A readable interface to a set. A set is a collection that contains no duplicate elements.
- * <p>
- * This interface does not guarantee 'readable', it actually guarantees
- * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <E> the element type
  */

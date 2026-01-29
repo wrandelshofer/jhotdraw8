@@ -1,22 +1,22 @@
 /*
- * @(#)AbstractReadOnlyStyleableKey.java
+ * @(#)AbstractReadableStyleableKey.java
  * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
  */
 package org.jhotdraw8.draw.key;
 
 import org.jhotdraw8.base.converter.Converter;
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.AbstractKey;
 import org.jspecify.annotations.Nullable;
 
 import java.lang.reflect.Type;
 
 /**
- * AbstractReadOnlyStyleableKey.
+ * AbstractReadableStyleableKey.
  *
  * @param <T> the value type
  */
-public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> implements ReadOnlyStyleableMapAccessor<T> {
+public abstract class AbstractReadableStyleableKey<T> extends AbstractKey<T> implements ReadableStyleableMapAccessor<T> {
     private final String cssName;
 
 
@@ -30,7 +30,7 @@ public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> imp
      * @param clazz     The type of the value.
      * @param converter the converter
      */
-    public AbstractReadOnlyStyleableKey(String key, Type clazz, Converter<T> converter) {
+    public AbstractReadableStyleableKey(String key, Type clazz, Converter<T> converter) {
         this(key, clazz, converter, null);
     }
 
@@ -44,23 +44,23 @@ public abstract class AbstractReadOnlyStyleableKey<T> extends AbstractKey<T> imp
      * @param converter    the converter
      * @param defaultValue The default value.
      */
-    public AbstractReadOnlyStyleableKey(String key, Type clazz,
+    public AbstractReadableStyleableKey(String key, Type clazz,
                                         Converter<T> converter,
                                         @Nullable T defaultValue) {
-        this(key, ReadOnlyStyleableMapAccessor.toCssName(key), clazz, converter, defaultValue);
+        this(key, ReadableStyleableMapAccessor.toCssName(key), clazz, converter, defaultValue);
 
     }
 
     /**
      * Creates a new key.
      *
-     * @param name the model name of the key
-     * @param cssName the CSS name of the key
-     * @param clazz the type of the value
-     * @param converter the CSS converter for the value
+     * @param name         the model name of the key
+     * @param cssName      the CSS name of the key
+     * @param clazz        the type of the value
+     * @param converter    the CSS converter for the value
      * @param defaultValue the default value
      */
-    public AbstractReadOnlyStyleableKey(String name, String cssName, Type clazz,
+    public AbstractReadableStyleableKey(String name, String cssName, Type clazz,
                                         Converter<T> converter,
                                         @Nullable T defaultValue) {
         super(name, clazz, defaultValue == null, defaultValue);

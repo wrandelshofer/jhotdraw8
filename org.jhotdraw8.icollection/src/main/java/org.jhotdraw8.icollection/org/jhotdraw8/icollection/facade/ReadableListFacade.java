@@ -22,12 +22,12 @@ import java.util.function.Supplier;
 public class ReadableListFacade<E> extends AbstractReadableList<E> {
     private final IntSupplier sizeFunction;
     private final IntFunction<E> getFunction;
-    private final Supplier<ReadableSequencedCollection<E>> readOnlyReversedFunction;
+    private final Supplier<ReadableSequencedCollection<E>> readableReversedFunction;
 
     public ReadableListFacade(List<E> backingList) {
         this.sizeFunction = backingList::size;
         this.getFunction = backingList::get;
-        this.readOnlyReversedFunction = () -> new ReadableListFacade<>(
+        this.readableReversedFunction = () -> new ReadableListFacade<>(
                 sizeFunction,
                 index -> getFunction.apply(sizeFunction.getAsInt() - index),
                 () -> this);
@@ -36,16 +36,16 @@ public class ReadableListFacade<E> extends AbstractReadableList<E> {
     public ReadableListFacade(IntSupplier sizeFunction, IntFunction<E> getFunction) {
         this.sizeFunction = sizeFunction;
         this.getFunction = getFunction;
-        this.readOnlyReversedFunction = () -> new ReadableListFacade<>(
+        this.readableReversedFunction = () -> new ReadableListFacade<>(
                 sizeFunction,
                 index -> getFunction.apply(sizeFunction.getAsInt() - index),
                 () -> this);
     }
 
-    public ReadableListFacade(IntSupplier sizeFunction, IntFunction<E> getFunction, Supplier<ReadableSequencedCollection<E>> readOnlyReversedFunction) {
+    public ReadableListFacade(IntSupplier sizeFunction, IntFunction<E> getFunction, Supplier<ReadableSequencedCollection<E>> readableReversedFunction) {
         this.sizeFunction = sizeFunction;
         this.getFunction = getFunction;
-        this.readOnlyReversedFunction = readOnlyReversedFunction;
+        this.readableReversedFunction = readableReversedFunction;
     }
 
     @Override
@@ -54,18 +54,18 @@ public class ReadableListFacade<E> extends AbstractReadableList<E> {
     }
 
     @Override
-    public ReadableSequencedCollection<E> readOnlyReversed() {
-        return readOnlyReversedFunction.get();
+    public ReadableSequencedCollection<E> readableReversed() {
+        return readableReversedFunction.get();
     }
 
     @Override
-    public ReadableList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadableList<E> readableSubList(int fromIndex, int toIndex) {
         int length = size();
         Objects.checkFromToIndex(fromIndex, toIndex, length);
         return new ReadableListFacade<>(
                 () -> toIndex - fromIndex,
                 i -> getFunction.apply(i - fromIndex),
-                readOnlyReversedFunction);
+                readableReversedFunction);
     }
 
     @Override

@@ -147,7 +147,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
      * <p>
      * This operation may be implemented in O(N).
      * <p>
-     * Use {@link #readOnlyReversed()} if you only
+     * Use {@link #readableReversed()} if you only
      * need to iterate in the reversed sequence over this list.
      *
      * @return a reversed copy of this list.
@@ -174,7 +174,7 @@ public interface PersistentList<E> extends ReadableList<E>, PersistentSequencedC
      * a different list instance with the element changed
      */
     @Override
-    PersistentList<E> readOnlySubList(int fromIndex, int toIndex);
+    PersistentList<E> readableSubList(int fromIndex, int toIndex);
 
     /**
      * Returns a mutable copy of this list.

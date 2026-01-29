@@ -6,7 +6,7 @@ package org.jhotdraw8.icollection.readable;
 
 import org.jhotdraw8.icollection.facade.ListFacade;
 import org.jhotdraw8.icollection.facade.ReadableListFacade;
-import org.jhotdraw8.icollection.impl.iteration.ReadOnlyListSpliterator;
+import org.jhotdraw8.icollection.impl.iteration.ReadableListSpliterator;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Iterator;
@@ -22,10 +22,6 @@ import java.util.Spliterator;
  * Note: To compare a ReadableList to a {@link List}, you must either
  * wrap the ReadableList into a List using {@link ListFacade},
  * or wrap the List into a ReadableList using {@link ReadableListFacade}.
- * <p>
- * This interface does not guarantee 'readable', it actually guarantees
- * 'readable'. We use the prefix 'ReadOnly' because this is the naming
- * convention in JavaFX for interfaces that provide read methods but no write methods.
  *
  * @param <E> the element type
  */
@@ -110,7 +106,7 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
      */
     @Override
     default Iterator<E> iterator() {
-        return new ReadOnlyListSpliterator<>(this);
+        return new ReadableListSpliterator<>(this);
     }
 
     /**
@@ -120,7 +116,7 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
      */
     @Override
     default Spliterator<E> spliterator() {
-        return new ReadOnlyListSpliterator<>(this);
+        return new ReadableListSpliterator<>(this);
     }
 
     /**
@@ -129,7 +125,7 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
      * @return a list iterator.
      */
     default ListIterator<E> listIterator() {
-        return new ReadOnlyListSpliterator<>(this);
+        return new ReadableListSpliterator<>(this);
     }
 
     /**
@@ -140,7 +136,7 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
      * @return a list iterator.
      */
     default ListIterator<E> listIterator(int index) {
-        return new ReadOnlyListSpliterator<>(this, index, size());
+        return new ReadableListSpliterator<>(this, index, size());
     }
 
     /**
@@ -160,7 +156,7 @@ public interface ReadableList<E> extends ReadableSequencedCollection<E> {
      * @param toIndex   the to index (exclusive)
      * @return the sub list
      */
-    ReadableList<E> readOnlySubList(int fromIndex, int toIndex);
+    ReadableList<E> readableSubList(int fromIndex, int toIndex);
 
     /**
      * Returns the index of the first occurrence of the specified element

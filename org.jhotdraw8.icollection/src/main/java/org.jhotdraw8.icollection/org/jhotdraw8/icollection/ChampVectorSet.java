@@ -366,7 +366,7 @@ public class ChampVectorSet<E>
     }
 
     @Override
-    public ReadableSequencedSet<E> readOnlyReversed() {
+    public ReadableSequencedSet<E> readableReversed() {
         return new ReadableSequencedSetFacade<>(
                 this::reverseIterator,
                 this::iterator,

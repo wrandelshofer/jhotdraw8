@@ -17,7 +17,7 @@ import org.jspecify.annotations.Nullable;
  *
  * @param <T> The value type.
  */
-public interface ReadOnlyStyleableMapAccessor<T> extends MapAccessor<T> {
+public interface ReadableStyleableMapAccessor<T> extends MapAccessor<T> {
 
     long serialVersionUID = 1L;
 

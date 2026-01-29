@@ -229,7 +229,7 @@ public class RotateHandle extends AbstractHandle {
         Transform t = null;
         t = FXTransforms.concat(t, invTranslate);
         t = FXTransforms.concat(t, invScale);
-        for (Transform tt : o.getNonNull(TRANSFORMS).readOnlyReversed()) {
+        for (Transform tt : o.getNonNull(TRANSFORMS).readableReversed()) {
             try {
                 t = FXTransforms.concat(t, tt.createInverse());
             } catch (NonInvertibleTransformException e) {

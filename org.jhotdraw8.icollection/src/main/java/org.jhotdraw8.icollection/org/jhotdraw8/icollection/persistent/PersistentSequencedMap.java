@@ -104,7 +104,7 @@ public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, Reada
      * <p>
      * This operation may be implemented in O(N).
      * <p>
-     * Use {@link #readOnlyReversed()} if you only
+     * Use {@link #readableReversed()} if you only
      * need to iterate in the reversed sequence over this set.
      *
      * @return a reversed copy of this set.
@@ -113,6 +113,6 @@ public interface PersistentSequencedMap<K, V> extends PersistentMap<K, V>, Reada
         if (size() < 2) {
             return this;
         }
-        return clear().putAll(readOnlyReversed());
+        return clear().putAll(readableReversed());
     }
 }

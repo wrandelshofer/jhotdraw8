@@ -82,7 +82,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public ReadableSequencedCollection<E> readOnlyReversed() {
+    public ReadableSequencedCollection<E> readableReversed() {
         return new ReadableListFacade<>(
                 this::size,
                 index -> get(root.length - 1 - index),
@@ -121,7 +121,7 @@ public class MutableVectorList<E> extends AbstractList<E> implements Serializabl
     }
 
     @Override
-    public ReadableList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ReadableList<E> readableSubList(int fromIndex, int toIndex) {
         return new ReadableListFacade<>(() -> toIndex - fromIndex, i -> get(i - fromIndex));
     }
 

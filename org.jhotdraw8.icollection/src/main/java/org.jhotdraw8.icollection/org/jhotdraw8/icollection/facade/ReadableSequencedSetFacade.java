@@ -26,7 +26,7 @@ public class ReadableSequencedSetFacade<E> extends ReadableSetFacade<E>
     final Supplier<Iterator<E>> reverseIteratorFunction;
 
     public ReadableSequencedSetFacade(ReadableSequencedSet<E> backingSet) {
-        this(backingSet::iterator, () -> backingSet.readOnlyReversed().iterator(), backingSet::size,
+        this(backingSet::iterator, () -> backingSet.readableReversed().iterator(), backingSet::size,
                 backingSet::contains, backingSet::getFirst, backingSet::getLast, Spliterator.SIZED | Spliterator.DISTINCT);
     }
 
@@ -59,7 +59,7 @@ public class ReadableSequencedSetFacade<E> extends ReadableSetFacade<E>
     }
 
     @Override
-    public ReadableSequencedSet<E> readOnlyReversed() {
+    public ReadableSequencedSet<E> readableReversed() {
         return new ReadableSequencedSetFacade<>(
                 reverseIteratorFunction,
                 iteratorFunction,

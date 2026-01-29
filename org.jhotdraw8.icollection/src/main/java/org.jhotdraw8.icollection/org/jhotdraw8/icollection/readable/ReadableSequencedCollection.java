@@ -34,7 +34,7 @@ public interface ReadableSequencedCollection<E> extends ReadableCollection<E> {
      * @throws java.util.NoSuchElementException if the collection is empty
      */
     default E getLast() {
-        return readOnlyReversed().iterator().next();
+        return readableReversed().iterator().next();
     }
 
 
@@ -44,7 +44,7 @@ public interface ReadableSequencedCollection<E> extends ReadableCollection<E> {
      *
      * @return a reversed-order view of this collection
      */
-    ReadableSequencedCollection<E> readOnlyReversed();
+    ReadableSequencedCollection<E> readableReversed();
 
     @Override
     default SequencedCollection<E> asCollection() {

@@ -78,20 +78,20 @@ public abstract class AbstractPersistentMapTest {
 
     protected <K, V> void assertEqualMap(Map<K, V> expected, PersistentMap<K, V> actual) {
         assertEquals(new LinkedHashSet<>(expected.values()),
-                new LinkedHashSet<>(actual.readOnlyValues().asCollection()));
+                new LinkedHashSet<>(actual.readableValues().asCollection()));
         assertEquals(expected.size(), actual.size());
         assertEquals(expected.isEmpty(), actual.isEmpty());
         assertEquals(expected.hashCode(), actual.hashCode());
         assertEquals(expected, actual.asMap());
         assertEquals(actual.asMap(), expected);
-        assertEquals(expected.entrySet(), actual.readOnlyEntrySet().asSet());
-        assertEquals(expected.keySet(), actual.readOnlyKeySet().asSet());
+        assertEquals(expected.entrySet(), actual.readableEntrySet().asSet());
+        assertEquals(expected.keySet(), actual.readableKeySet().asSet());
     }
 
     protected <K, V> void assertNotEqualMap(Map<K, V> expected, PersistentMap<K, V> actual) {
         assertNotEquals(expected, actual);
         assertNotEquals(actual, expected);
-        assertNotEquals(expected.entrySet(), actual.readOnlyEntrySet().asSet());
+        assertNotEquals(expected.entrySet(), actual.readableEntrySet().asSet());
     }
 
     @Test
@@ -126,7 +126,7 @@ public abstract class AbstractPersistentMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void newInstanceIterableArgShouldBeEqualToArg(MapData data) {
-        PersistentMap<Key, Value> actual = newInstance(data.a().readOnlyEntrySet());
+        PersistentMap<Key, Value> actual = newInstance(data.a().readableEntrySet());
         assertEqualMap(data.a(), actual);
     }
 
@@ -164,10 +164,10 @@ public abstract class AbstractPersistentMapTest {
     @MethodSource("dataProvider")
     public void containsKeyShouldYieldExpectedValue(MapData data) {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        for (Key k : data.a().readOnlyKeySet()) {
+        for (Key k : data.a().readableKeySet()) {
             assertTrue(instance.containsKey(k));
         }
-        for (Key k : data.c().readOnlyKeySet()) {
+        for (Key k : data.c().readableKeySet()) {
             assertFalse(instance.containsKey(k));
         }
         try {
@@ -181,27 +181,27 @@ public abstract class AbstractPersistentMapTest {
     @MethodSource("dataProvider")
     public void readOnlyEntrySetContainsShouldYieldExpectedValue(MapData data) {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        for (Map.Entry<Key, Value> e : data.a().readOnlyEntrySet()) {
-            assertTrue(instance.readOnlyEntrySet().contains(e));
+        for (Map.Entry<Key, Value> e : data.a().readableEntrySet()) {
+            assertTrue(instance.readableEntrySet().contains(e));
         }
-        for (Map.Entry<Key, Value> e : data.b().readOnlyEntrySet()) {
-            assertFalse(instance.readOnlyEntrySet().contains(e));
+        for (Map.Entry<Key, Value> e : data.b().readableEntrySet()) {
+            assertFalse(instance.readableEntrySet().contains(e));
         }
-        for (Map.Entry<Key, Value> e : data.c().readOnlyEntrySet()) {
-            assertFalse(instance.readOnlyEntrySet().contains(e));
+        for (Map.Entry<Key, Value> e : data.c().readableEntrySet()) {
+            assertFalse(instance.readableEntrySet().contains(e));
         }
-        assertFalse(instance.readOnlyEntrySet().contains(new Object()));
+        assertFalse(instance.readableEntrySet().contains(new Object()));
     }
 
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void iteratorRemoveShouldThrowException(MapData data) {
         PersistentMap<Key, Value> instance = newInstance(data.a());
-        Iterator<Key> i = instance.readOnlyKeySet().iterator();
+        Iterator<Key> i = instance.readableKeySet().iterator();
         assertThrows(Exception.class, i::remove);
-        Iterator<Value> k = instance.readOnlyValues().iterator();
+        Iterator<Value> k = instance.readableValues().iterator();
         assertThrows(Exception.class, k::remove);
-        Iterator<Map.Entry<Key, Value>> j = instance.readOnlyEntrySet().iterator();
+        Iterator<Map.Entry<Key, Value>> j = instance.readableEntrySet().iterator();
         assertThrows(Exception.class, j::remove);
     }
 
@@ -231,11 +231,11 @@ public abstract class AbstractPersistentMapTest {
         assertEquals(Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED,
                 (Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.spliterator().characteristics());
         assertEquals(Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED,
-                (Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyKeySet().spliterator().characteristics());
+                (Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readableKeySet().spliterator().characteristics());
         assertEquals(Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED,
-                (Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readOnlyEntrySet().spliterator().characteristics());
+                (Spliterator.NONNULL | Spliterator.IMMUTABLE | Spliterator.DISTINCT | Spliterator.SIZED) & instance.readableEntrySet().spliterator().characteristics());
         assertEquals(Spliterator.IMMUTABLE | Spliterator.SIZED,
-                (Spliterator.IMMUTABLE | Spliterator.SIZED) & instance.readOnlyValues().spliterator().characteristics());
+                (Spliterator.IMMUTABLE | Spliterator.SIZED) & instance.readableValues().spliterator().characteristics());
     }
 
     @ParameterizedTest
@@ -323,7 +323,7 @@ public abstract class AbstractPersistentMapTest {
     @MethodSource("dataProvider")
     public void entrySetContainsExpectedEntries(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
-        ReadableSet<Map.Entry<Key, Value>> entrySet = instance.readOnlyEntrySet();
+        ReadableSet<Map.Entry<Key, Value>> entrySet = instance.readableEntrySet();
         for (Map.Entry<Key, Value> e : data.a) {
             assertTrue(entrySet.contains(e));
         }
@@ -333,12 +333,12 @@ public abstract class AbstractPersistentMapTest {
         for (Map.Entry<Key, Value> e : data.c) {
             assertFalse(entrySet.contains(e));
         }
-        assertTrue(entrySet.containsAll(data.a.readOnlyEntrySet().asSet()));
-        assertFalse(entrySet.containsAll(data.b.readOnlyEntrySet().asSet()));
-        assertFalse(entrySet.containsAll(data.c.readOnlyEntrySet().asSet()));
-        LinkedHashSet<Map.Entry<Key, Value>> abc = new LinkedHashSet<>(data.a.readOnlyEntrySet().asSet());
-        abc.addAll(data.b.readOnlyEntrySet().asSet());
-        abc.addAll(data.c.readOnlyEntrySet().asSet());
+        assertTrue(entrySet.containsAll(data.a.readableEntrySet().asSet()));
+        assertFalse(entrySet.containsAll(data.b.readableEntrySet().asSet()));
+        assertFalse(entrySet.containsAll(data.c.readableEntrySet().asSet()));
+        LinkedHashSet<Map.Entry<Key, Value>> abc = new LinkedHashSet<>(data.a.readableEntrySet().asSet());
+        abc.addAll(data.b.readableEntrySet().asSet());
+        abc.addAll(data.c.readableEntrySet().asSet());
         assertFalse(entrySet.containsAll(abc));
     }
 
@@ -348,8 +348,8 @@ public abstract class AbstractPersistentMapTest {
         PersistentMap<Key, Value> instance = newInstance(data.a);
         List<Map.Entry<Key, Value>> actualList = new ArrayList<>();
         LinkedHashMap<Key, Value> actualMap = new LinkedHashMap<>();
-        instance.readOnlyEntrySet().iterator().forEachRemaining(actualList::add);
-        instance.readOnlyEntrySet().iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
+        instance.readableEntrySet().iterator().forEachRemaining(actualList::add);
+        instance.readableEntrySet().iterator().forEachRemaining(e -> actualMap.put(e.getKey(), e.getValue()));
         assertEquals(data.a.size(), actualList.size());
         assertEqualMap(data.a, newInstance(actualMap));
     }
@@ -438,8 +438,8 @@ public abstract class AbstractPersistentMapTest {
     @ParameterizedTest
     @MethodSource("dataProvider")
     public void copyPutAllWithSomeNewKeyShouldReturnNewInstance(MapData data) throws Exception {
-        ArrayList<Map.Entry<Key, Value>> listB = new ArrayList<>(data.b.readOnlyEntrySet().asSet());
-        ArrayList<Map.Entry<Key, Value>> listC = new ArrayList<>(data.c.readOnlyEntrySet().asSet());
+        ArrayList<Map.Entry<Key, Value>> listB = new ArrayList<>(data.b.readableEntrySet().asSet());
+        ArrayList<Map.Entry<Key, Value>> listC = new ArrayList<>(data.c.readableEntrySet().asSet());
         SequencedMap<Key, Value> m = new LinkedHashMap<>(data.a.asMap());
         for (Map.Entry<Key, Value> entry : listB.subList(0, listB.size() / 2)) {
             m.put(entry.getKey(), entry.getValue());
@@ -525,7 +525,7 @@ public abstract class AbstractPersistentMapTest {
     @MethodSource("dataProvider")
     public void copyRemoveAllOfEmptyMapShouldReturnThis(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance();
-        assertSame(instance, instance.removeAll(data.a.readOnlyKeySet().asSet()));
+        assertSame(instance, instance.removeAll(data.a.readableKeySet().asSet()));
         assertEqualMap(Collections.emptyMap(), instance);
     }
 
@@ -541,7 +541,7 @@ public abstract class AbstractPersistentMapTest {
     @MethodSource("dataProvider")
     public void copyRemoveAllWithContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
-        PersistentMap<Key, Value> instance2 = instance.removeAll(data.a.readOnlyKeySet().asSet());
+        PersistentMap<Key, Value> instance2 = instance.removeAll(data.a.readableKeySet().asSet());
         assertNotSame(instance, instance2);
         assertEqualMap(data.a, instance);
         assertEqualMap(Collections.emptyMap(), instance2);
@@ -551,11 +551,11 @@ public abstract class AbstractPersistentMapTest {
     @MethodSource("dataProvider")
     public void copyRemoveAllWithSomeContainedKeyShouldReturnNewInstance(MapData data) throws Exception {
         PersistentMap<Key, Value> instance = newInstance(data.a);
-        PersistentMap<Key, Value> instance2 = instance.removeAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
+        PersistentMap<Key, Value> instance2 = instance.removeAll(data.someAPlusSomeB().readableKeySet().asSet());
         assertNotSame(instance, instance2);
         LinkedHashMap<Key, Value> expected = new LinkedHashMap<>(data.a.asMap());
         assertEqualMap(expected, instance);
-        expected.keySet().removeAll(data.someAPlusSomeB().readOnlyKeySet().asSet());
+        expected.keySet().removeAll(data.someAPlusSomeB().readableKeySet().asSet());
         assertEqualMap(expected, instance2);
     }
 
@@ -576,12 +576,12 @@ public abstract class AbstractPersistentMapTest {
     @Test
     public void spliteratorShouldSupportNullKeyNullValue() throws Exception {
         PersistentMap<Key, Value> instance = newInstance();
-        assertEquals(instance.readOnlyEntrySet().spliterator().characteristics() & Spliterator.NONNULL, Spliterator.NONNULL, "entrySet should be non-null");
+        assertEquals(instance.readableEntrySet().spliterator().characteristics() & Spliterator.NONNULL, Spliterator.NONNULL, "entrySet should be non-null");
         if (supportsNullKeys()) {
-            assertEquals(instance.readOnlyKeySet().spliterator().characteristics() & Spliterator.NONNULL, 0, "keySet should be nullable");
+            assertEquals(instance.readableKeySet().spliterator().characteristics() & Spliterator.NONNULL, 0, "keySet should be nullable");
         } else {
-            assertEquals(instance.readOnlyKeySet().spliterator().characteristics() & Spliterator.NONNULL, Spliterator.NONNULL, "keySet should not be nullable");
+            assertEquals(instance.readableKeySet().spliterator().characteristics() & Spliterator.NONNULL, Spliterator.NONNULL, "keySet should not be nullable");
         }
-        assertEquals(instance.readOnlyValues().spliterator().characteristics() & Spliterator.NONNULL, 0, "valueSet should be nullable");
+        assertEquals(instance.readableValues().spliterator().characteristics() & Spliterator.NONNULL, 0, "valueSet should be nullable");
     }
 }

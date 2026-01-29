@@ -342,7 +342,7 @@ public class MutableChampVectorSet<E> extends AbstractMutableChampSet<E, Sequenc
     }
 
     @Override
-    public ReadableSequencedSet<E> readOnlyReversed() {
+    public ReadableSequencedSet<E> readableReversed() {
         return new ReadableSequencedSetFacade<>(this.reversed());
     }
 

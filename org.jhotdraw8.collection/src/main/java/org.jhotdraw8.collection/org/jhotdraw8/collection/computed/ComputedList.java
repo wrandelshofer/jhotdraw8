@@ -94,13 +94,13 @@ public class ComputedList<E> extends AbstractReadableList<E> {
 
 
     @Override
-    public ComputedList<E> readOnlySubList(int fromIndex, int toIndex) {
+    public ComputedList<E> readableSubList(int fromIndex, int toIndex) {
         checkFromToIndex(fromIndex, toIndex, size);
         return new ComputedList<>(offset(fromIndex), offset(toIndex), function, descending);
     }
 
     @Override
-    public ComputedList<E> readOnlyReversed() {
+    public ComputedList<E> readableReversed() {
         return new ComputedList<>(from, to, function, !descending);
     }
 }

@@ -260,7 +260,7 @@ public class RedBlackMap<K, V> implements PersistentNavigableMap<K, V>, Serializ
     }
 
     @Override
-    public ReadableSequencedMap<K, V> readOnlyReversed() {
+    public ReadableSequencedMap<K, V> readableReversed() {
         return new ReadableSequencedMapFacade<>(
                 this::reverseIterator,
                 this::iterator,

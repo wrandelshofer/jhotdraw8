@@ -111,7 +111,7 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @return a readable view
      */
-    default ReadableSet<Map.Entry<K, V>> readOnlyEntrySet() {
+    default ReadableSet<Map.Entry<K, V>> readableEntrySet() {
         return new ReadableSetFacade<>(
                 this::iterator,
                 this::size,
@@ -125,7 +125,7 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @return a readable view
      */
-    default ReadableSet<K> readOnlyKeySet() {
+    default ReadableSet<K> readableKeySet() {
         return new ReadableSetFacade<>(
                 () -> new MappedIterator<>(ReadableMap.this.iterator(), Map.Entry::getKey),
                 this::size,
@@ -139,7 +139,7 @@ public interface ReadableMap<K, V> extends Iterable<Map.Entry<K, V>> {
      *
      * @return a readable view
      */
-    default ReadableCollection<V> readOnlyValues() {
+    default ReadableCollection<V> readableValues() {
         return new ReadableCollectionFacade<>(
                 () -> new MappedIterator<>(ReadableMap.this.iterator(), Map.Entry::getValue),
                 this::size,

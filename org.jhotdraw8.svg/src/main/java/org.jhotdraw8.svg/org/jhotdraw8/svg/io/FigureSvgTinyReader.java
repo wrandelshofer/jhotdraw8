@@ -21,7 +21,7 @@ import org.jhotdraw8.css.value.Paintable;
 import org.jhotdraw8.draw.figure.Figure;
 import org.jhotdraw8.draw.figure.StyleableFigure;
 import org.jhotdraw8.draw.render.SimpleRenderContext;
-import org.jhotdraw8.fxbase.styleable.ReadOnlyStyleableMapAccessor;
+import org.jhotdraw8.fxbase.styleable.ReadableStyleableMapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.Key;
 import org.jhotdraw8.fxcollection.typesafekey.MapAccessor;
 import org.jhotdraw8.fxcollection.typesafekey.NonNullKey;
@@ -154,7 +154,7 @@ public class FigureSvgTinyReader {
             }
             mutableAccessorMap.put(elem, m);
             for (MapAccessor<?> acc : m.values()) {
-                if (acc instanceof ReadOnlyStyleableMapAccessor<?> rosma) {
+                if (acc instanceof ReadableStyleableMapAccessor<?> rosma) {
                     mutableConverterMap.put(acc.getValueType(), rosma.getCssConverter());
                 }
             }
@@ -369,7 +369,7 @@ public class FigureSvgTinyReader {
                     if (m != null) {
                         ctx.secondPass.add(() -> {
                             @SuppressWarnings("unchecked") MapAccessor<Object> mapAccessor = (MapAccessor<Object>) m.get(localName);
-                            if (mapAccessor instanceof ReadOnlyStyleableMapAccessor<?> rosma) {
+                            if (mapAccessor instanceof ReadableStyleableMapAccessor<?> rosma) {
                                 Converter<?> converter = converterMap.get(rosma.getValueType());
                                 if (converter == null) {
                                     Location location = r.getLocation();

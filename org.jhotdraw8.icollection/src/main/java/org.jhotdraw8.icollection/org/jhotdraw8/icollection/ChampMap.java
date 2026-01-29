@@ -304,7 +304,7 @@ public class ChampMap<K, V>
     }
 
     @Override
-    public ReadableSet<K> readOnlyKeySet() {
+    public ReadableSet<K> readableKeySet() {
         return new ReadableSetFacade<>(
                 () -> new MappedIterator<>(new EntryIterator<>(root, null, null), Map.Entry::getKey),
                 this::size,

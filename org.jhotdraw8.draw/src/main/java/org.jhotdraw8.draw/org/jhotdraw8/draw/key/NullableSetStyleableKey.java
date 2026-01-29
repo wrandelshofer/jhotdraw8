@@ -19,7 +19,7 @@ import java.lang.reflect.Type;
  *
  * @param <T> the element type of the set
  */
-public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<PersistentSequencedSet<T>>
+public class NullableSetStyleableKey<T> extends AbstractReadableStyleableKey<PersistentSequencedSet<T>>
         implements WritableStyleableMapAccessor<PersistentSequencedSet<T>>,
         NullableKey<PersistentSequencedSet<T>> {
 
@@ -28,7 +28,7 @@ public class NullableSetStyleableKey<T> extends AbstractReadOnlyStyleableKey<Per
      * Creates a new instance with the specified name and with an empty list as the
      * default value.
      *
-     * @param name      The name of the key.
+     * @param name             The name of the key.
      * @param elementType      the class of the type
      * @param elementConverter String converter for a list element
      */
