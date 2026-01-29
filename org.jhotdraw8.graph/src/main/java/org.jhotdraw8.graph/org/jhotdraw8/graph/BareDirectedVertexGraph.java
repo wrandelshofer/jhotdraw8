@@ -12,6 +12,9 @@ import java.util.Set;
  * <p>
  * A directed graph is a tuple {@code G = (V, A)} where {@code V} is a set of
  * vertices and {@code A} is a set or bag of arrows.
+ * <p>
+ * This interface ony provides access to the vertices {@code V} of a graph.
+ * Use the interface {@link BareDirectedGraph} if you also need access to the arrows {@code A} of a graph.
  *
  * @param <V> the vertex data type
  */
