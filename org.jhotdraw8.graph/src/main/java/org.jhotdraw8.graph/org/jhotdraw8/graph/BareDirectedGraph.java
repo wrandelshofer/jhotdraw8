@@ -7,18 +7,19 @@ package org.jhotdraw8.graph;
 import org.jspecify.annotations.Nullable;
 
 /**
- * A minimalistic read-only interface to a directed graph.
+ * Provides minimalistic (bare) read-access to a directed graph.
  * <p>
- * A directed graph is a tuple {@code G = (V, A)} where {@code V} is a set of
- * vertices and {@code A} is a set or bag of arrows.
+ * A directed graph is a tuple {@code G = (V, A)}
+ * <br>where {@code V} is a set of vertices {@code { v[0], ..., v[n-1] }}
+ * <br>and {@code A} is a bag of ordered pairs {@code { (v[i], v[j]), ... } }.
  * <p>
- * This facade supports a data object for each arrow. The type of the arrow data
- * object is provided by the type parameter {@literal <A>}.
+ * This interface supports arbitrary data types {@literal <V>} and {@literal <A>}
+ * for the vertices and arrows of the graph.
  * <p>
- * Users of this interface may define {@literal <A>} as a tuple
- * {@code (v_i, v_j)} but are not required to do so, because this interface
- * provides methods for accessing the next vertex of a given vertex without
- * having to deal with the arrow object.
+ * The type {@literal <A>} can be used to store data about an arrow.
+ * You may define {@literal <A>} as an ordered pair {@code (v[i], v[j])},
+ * but you are not required to do so, because implementations of this interface
+ * do not need to access the content of {@literal <A>}.
  *
  * @param <V> the vertex data type
  * @param <A> the arrow data type

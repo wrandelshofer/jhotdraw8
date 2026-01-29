@@ -8,13 +8,16 @@ package org.jhotdraw8.graph;
 import java.util.Set;
 
 /**
- * Provides a minimal read-only interface to a directed graph.
+ * Provides minimalistic (bare) read-access to a directed graph.
  * <p>
- * A directed graph is a tuple {@code G = (V, A)} where {@code V} is a set of
- * vertices and {@code A} is a set or bag of arrows.
+ * A directed graph is a tuple {@code G = (V, A)}
+ * <br>where {@code V} is a set of vertices {@code { v[0], ..., v[n-1] }}
+ * <br>and {@code A} is a bag of ordered pairs {@code { (v[i], v[j]), ... } }.
  * <p>
- * This interface ony provides access to the vertices {@code V} of a graph.
- * Use the interface {@link BareDirectedGraph} if you also need access to the arrows {@code A} of a graph.
+ * This interface supports an arbitrary data type {@literal <V>} for the vertices of the graph.
+ * <p>
+ * Use the interface {@link BareDirectedGraph} if you also need support for
+ * the arrow data type {@literal <A>} of a graph.
  *
  * @param <V> the vertex data type
  */
