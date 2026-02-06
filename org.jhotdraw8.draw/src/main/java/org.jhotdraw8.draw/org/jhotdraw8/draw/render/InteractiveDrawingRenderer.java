@@ -19,6 +19,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.transform.NonInvertibleTransformException;
 import javafx.scene.transform.Transform;
 import org.jhotdraw8.base.event.Listener;
@@ -89,12 +90,27 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final ObjectProperty<DrawingEditor> editor = new SimpleObjectProperty<>(this, DrawingView.EDITOR_PROPERTY, null);
     private final Listener<TreeModelEvent<Figure>> treeModelListener = this::onTreeModelEvent;
     private final NodeFinder nodeFinder = new NodeFinder();
+    private final Runnable pulseListener = this::onPulse;
 
     public InteractiveDrawingRenderer() {
         drawingPane.setManaged(true);
         model.addListener(this::onDrawingModelChanged);
         clipBounds.addListener(this::onClipBoundsChanged);
         zoomFactorProperty().addListener(this::onClipBoundsChanged);
+        drawingPane.sceneProperty().addListener(this::onSceneChanged);
+    }
+
+    private void onSceneChanged(Observable observable, @Nullable Scene oldScene, @Nullable Scene newScene) {
+        if (oldScene != null) {
+            oldScene.removePreLayoutPulseListener(pulseListener);
+        }
+        if (newScene != null) {
+            newScene.addPreLayoutPulseListener(pulseListener);
+        }
+    }
+
+    private void onPulse() {
+        paintImmediately();
     }
 
     public ObjectProperty<Bounds> clipBoundsProperty() {
@@ -627,7 +643,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     public void repaint() {
-        drawingPane.requestLayout();
+        // This is a no-op, we repaint on every pulse
     }
 
     /**
