@@ -344,9 +344,6 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
             fill = getDefaultableStyled(COLOR_KEY);
         }
         shape.setFill(Paintable.getPaint(fill));
-
-        double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
-        shape.setOpacity(fillOpacity);
     }
 
     /**
@@ -364,8 +361,6 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
 
         CssSize sw = getDefaultableStyledNonNull(STROKE_WIDTH_KEY);
         shape.setStrokeWidth(sw.getConvertedValue(ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY)));
-
-        shape.setOpacity(getDefaultableStyledNonNull(STROKE_OPACITY_KEY));
 
         SvgShapeRendering shapeRendering = getDefaultableStyled(SHAPE_RENDERING_KEY);
         if (shapeRendering == SvgShapeRendering.CRISP_EDGES) {
