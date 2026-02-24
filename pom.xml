@@ -65,7 +65,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <project.build.outputTimestamp>${git.commit.time}</project.build.outputTimestamp>
-        <revision>0.5</revision>
+        <revision>0.5.1</revision>
     </properties>
 
     <build>
