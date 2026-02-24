@@ -62,15 +62,9 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     /**
      * This is the root node of the interactive drawing renderer.
      * <p>
-     * This node must have its{@code managed} property set to true, so that its {@code layoutChildren}
-     * method is called by the parent node.
+     * This node must have its {@code managed} property set to false, for performance.
      */
-    private final Group drawingPane = new Group() {
-        @Override
-        protected void layoutChildren() {
-            paint();
-        }
-    };
+    private final Group drawingPane = new Group();
     private final ObjectProperty<Bounds> clipBounds = new SimpleObjectProperty<>(this, "clipBounds",
             new BoundingBox(0, 0, 800, 600));
 
@@ -93,7 +87,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     private final Runnable pulseListener = this::onPulse;
 
     public InteractiveDrawingRenderer() {
-        drawingPane.setManaged(true);
+        drawingPane.setManaged(false);
         model.addListener(this::onDrawingModelChanged);
         clipBounds.addListener(this::onClipBoundsChanged);
         zoomFactorProperty().addListener(this::onClipBoundsChanged);
@@ -110,7 +104,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private void onPulse() {
-        paintImmediately();
+        paint();
     }
 
     public ObjectProperty<Bounds> clipBoundsProperty() {
@@ -602,6 +596,10 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     private void paint() {
+        if (dirtyFigureNodes.isEmpty()) {
+            return;
+        }
+
         updateRenderContext();
 
         // A call to validate() may reveal new dirty nodes, and so may
