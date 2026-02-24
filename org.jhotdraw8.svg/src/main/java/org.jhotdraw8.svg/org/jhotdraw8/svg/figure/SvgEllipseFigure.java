@@ -6,12 +6,11 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Ellipse;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -45,13 +44,9 @@ public class SvgEllipseFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Group g = new Group();
-        Ellipse n0 = new Ellipse();
-        Ellipse n1 = new Ellipse();
-        n0.setManaged(false);
-        n1.setManaged(false);
-        g.getChildren().addAll(n0, n1);
-        return g;
+        Ellipse ellipse = new Ellipse();
+        ellipse.setManaged(false);
+        return ellipse;
     }
 
     @Override
@@ -110,35 +105,28 @@ public class SvgEllipseFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Group g = (Group) node;
+        Ellipse ellipse = (Ellipse) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double rx = getStyledNonNull(RX).getConvertedValue(unit);
         double ry = getStyledNonNull(RY).getConvertedValue(unit);
         if (rx <= 0 || ry <= 0) {
-            g.setVisible(false);
+            ellipse.setVisible(false);
             return;
         }
-        Ellipse n0 = (Ellipse) g.getChildren().get(0);
-        Ellipse n1 = (Ellipse) g.getChildren().get(1);
 
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
         applySvgDefaultableCompositingProperties(ctx, node);
-        applySvgShapeProperties(ctx, n0, n1);
+        applySvgShapeProperties(ctx, ellipse);
 
         double cx = getStyledNonNull(CX).getConvertedValue(unit);
         double cy = getStyledNonNull(CY).getConvertedValue(unit);
-        n0.setCenterX(cx);
-        n0.setCenterY(cy);
-        n0.setRadiusX(rx);
-        n0.setRadiusY(ry);
-        n0.applyCss();
-        n1.setCenterX(cx);
-        n1.setCenterY(cy);
-        n1.setRadiusX(rx);
-        n1.setRadiusY(ry);
-        n1.applyCss();
+        ellipse.setCenterX(cx);
+        ellipse.setCenterY(cy);
+        ellipse.setRadiusX(rx);
+        ellipse.setRadiusY(ry);
+        ellipse.applyCss();
     }
 
     @Override

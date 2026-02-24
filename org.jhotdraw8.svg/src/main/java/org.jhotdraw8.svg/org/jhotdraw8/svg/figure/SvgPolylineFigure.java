@@ -7,13 +7,12 @@ package org.jhotdraw8.svg.figure;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Polyline;
 import javafx.scene.transform.Transform;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -30,7 +29,6 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Path2D;
 import java.awt.geom.PathIterator;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 
@@ -49,13 +47,9 @@ public class SvgPolylineFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Group g = new Group();
-        Polyline n0 = new Polyline();
-        Polyline n1 = new Polyline();
-        n0.setManaged(false);
-        n1.setManaged(false);
-        g.getChildren().addAll(n0, n1);
-        return g;
+        Polyline polyline = new Polyline();
+        polyline.setManaged(false);
+        return polyline;
     }
 
     @Override
@@ -127,23 +121,20 @@ public class SvgPolylineFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Group g = (Group) node;
+        Polyline polyline = (Polyline) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         PersistentList<Double> points = get(POINTS);
         if (points == null || points.isEmpty() || points.size() % 2 == 1) {
-            g.setVisible(false);
+            polyline.setVisible(false);
             return;
         }
-        Polyline n0 = (Polyline) g.getChildren().get(0);
-        Polyline n1 = (Polyline) g.getChildren().get(1);
 
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
         applySvgDefaultableCompositingProperties(ctx, node);
-        applySvgShapeProperties(ctx, n0, n1);
-        n0.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
-        n1.getPoints().setAll(points == null ? Collections.emptyList() : points.asList());
+        applySvgShapeProperties(ctx, polyline);
+        polyline.getPoints().setAll(points.asList());
 
 
     }

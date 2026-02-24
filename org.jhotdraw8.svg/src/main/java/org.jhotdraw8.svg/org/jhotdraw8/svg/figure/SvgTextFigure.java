@@ -8,16 +8,15 @@ import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.text.TextBoundsType;
-import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -74,16 +73,8 @@ public class SvgTextFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext drawingView) {
-        Group g = new Group();
-        g.setManaged(false);
-        g.setAutoSizeChildren(false);
-        Text n0 = new Text();
-        n0.setManaged(false);
-        Text n1 = new Text();
-        n1.setManaged(false);
-        g.getProperties().put("fillNode", n0);
-        g.getProperties().put("strokeNode", n1);
-        return g;
+        Text text = new Text();
+        return text;
     }
 
 
@@ -197,29 +188,17 @@ public class SvgTextFigure extends AbstractLeafFigure
         set(Y, y.add(delta.getY()));
     }
 
-    protected void updateGroupNode(RenderContext ctx, Group node) {
+    protected void updateGroupNode(RenderContext ctx, Node node) {
         applySvgDefaultableCompositingProperties(ctx, node);
 
     }
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Group g = (Group) node;
-        Text n0 = (Text) g.getProperties().get("fillNode");
-        Text n1 = (Text) g.getProperties().get("strokeNode");
-
+        Text g = (Text) node;
         updateGroupNode(ctx, g);
-        updateTextNode(ctx, n0);
-        updateTextNode(ctx, n1);
-        applySvgShapeProperties(ctx, n0, n1);
-
-        g.getChildren().clear();
-        if (n0.getFill() != null) {
-            g.getChildren().add(n0);
-        }
-        if (n1.getStroke() != null) {
-            g.getChildren().add(n1);
-        }
+        updateTextNode(ctx, g);
+        applySvgShapeProperties(ctx, g);
     }
 
     protected void updateTextNode(RenderContext ctx, Text tn) {

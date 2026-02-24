@@ -13,17 +13,17 @@ import javafx.scene.shape.Shape;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.shape.StrokeLineJoin;
 import javafx.scene.shape.StrokeType;
+import org.jhotdraw8.css.converter.ColorCssConverter;
 import org.jhotdraw8.css.converter.DoubleCssConverter;
 import org.jhotdraw8.css.converter.KebabCaseEnumCssConverter;
 import org.jhotdraw8.css.converter.ListCssConverter;
 import org.jhotdraw8.css.converter.MappedCssConverter;
 import org.jhotdraw8.css.converter.PercentageCssConverter;
 import org.jhotdraw8.css.converter.SizeCssConverter;
+import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.CssDefaultableValue;
 import org.jhotdraw8.css.value.CssDefaulting;
 import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.converter.ColorCssConverter;
-import org.jhotdraw8.css.value.CssColor;
 import org.jhotdraw8.css.value.NamedCssColor;
 import org.jhotdraw8.css.value.Paintable;
 import org.jhotdraw8.draw.figure.DefaultableFigure;
@@ -397,22 +397,10 @@ public interface SvgDefaultableFigure extends DefaultableFigure {
 
     }
 
-    default void applySvgShapeProperties(RenderContext ctx, Shape fillShape, Shape strokeShape) {
-        double strokeOpacity = getDefaultableStyledNonNull(STROKE_OPACITY_KEY);
-        double fillOpacity = getDefaultableStyledNonNull(FILL_OPACITY_KEY);
-        if (strokeOpacity == fillOpacity) {
-            applySvgDefaultableFillProperties(ctx, fillShape);
-            applySvgDefaultableStrokeProperties(ctx, fillShape);
-            fillShape.setVisible(true);
-            strokeShape.setVisible(false);
-        } else {
-            fillShape.setStroke(null);
-            strokeShape.setFill(null);
-            applySvgDefaultableFillProperties(ctx, fillShape);
-            applySvgDefaultableStrokeProperties(ctx, strokeShape);
-            fillShape.setVisible(true);
-            strokeShape.setVisible(true);
-        }
+    default void applySvgShapeProperties(RenderContext ctx, Shape shape) {
+        applySvgDefaultableFillProperties(ctx, shape);
+        applySvgDefaultableStrokeProperties(ctx, shape);
+        shape.setVisible(true);
     }
 
     /**

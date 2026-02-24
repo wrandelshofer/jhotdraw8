@@ -6,12 +6,11 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Circle;
+import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.UnitConverter;
-import org.jhotdraw8.css.value.CssRectangle2D;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -48,13 +47,9 @@ public class SvgCircleFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Group g = new Group();
-        Circle n0 = new Circle();
-        Circle n1 = new Circle();
-        n0.setManaged(false);
-        n1.setManaged(false);
-        g.getChildren().addAll(n0, n1);
-        return g;
+        Circle circle = new Circle();
+        circle.setManaged(false);
+        return circle;
     }
 
 
@@ -108,33 +103,26 @@ public class SvgCircleFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Group g = (Group) node;
+        Circle circle = (Circle) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double r = getStyledNonNull(R).getConvertedValue(unit);
         if (r <= 0) {
             // r==0 disables rendering
-            g.setVisible(false);
+            circle.setVisible(false);
             return;
         }
-        Circle n0 = (Circle) g.getChildren().get(0);
-        Circle n1 = (Circle) g.getChildren().get(1);
-
-        applyHideableFigureProperties(ctx, g);
-        applyStyleableFigureProperties(ctx, g);
-        applyTransformableFigureProperties(ctx, g);
-        applySvgDefaultableCompositingProperties(ctx, g);
-        applySvgShapeProperties(ctx, n0, n1);
+        applyHideableFigureProperties(ctx, circle);
+        applyStyleableFigureProperties(ctx, circle);
+        applyTransformableFigureProperties(ctx, circle);
+        applySvgDefaultableCompositingProperties(ctx, circle);
+        applySvgShapeProperties(ctx, circle);
 
         double cx = getStyledNonNull(CX).getConvertedValue(unit);
         double cy = getStyledNonNull(CY).getConvertedValue(unit);
-        n0.setCenterX(cx);
-        n0.setCenterY(cy);
-        n0.setRadius(r);
-        n0.applyCss();
-        n1.setCenterX(cx);
-        n1.setCenterY(cy);
-        n1.setRadius(r);
-        n1.applyCss();
+        circle.setCenterX(cx);
+        circle.setCenterY(cy);
+        circle.setRadius(r);
+        circle.applyCss();
     }
 
     @Override

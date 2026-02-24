@@ -6,7 +6,6 @@ package org.jhotdraw8.svg.figure;
 
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.ArcTo;
 import javafx.scene.shape.ClosePath;
@@ -15,10 +14,10 @@ import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
 import javafx.scene.shape.PathElement;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.css.value.CssSize;
-import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.css.value.CssPoint2D;
 import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssSize;
+import org.jhotdraw8.css.value.UnitConverter;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -59,15 +58,11 @@ public class SvgRectFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Group g = new Group();
+        Path path = new Path();
         // We cannot use a Rectangle here, because JavaFX does not draw
         // a Rectangle with the same algorithm that SVG uses.
-        Path n0 = new Path();
-        Path n1 = new Path();
-        n0.setManaged(false);
-        n1.setManaged(false);
-        g.getChildren().addAll(n0, n1);
-        return g;
+        path.setManaged(false);
+        return path;
     }
 
     private Point2D getRxRy(RenderContext ctx) {
@@ -148,22 +143,20 @@ public class SvgRectFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Group g = (Group) node;
+        Path path = (Path) node;
         UnitConverter unit = ctx.getNonNull(RenderContext.UNIT_CONVERTER_KEY);
         double width = getNonNull(WIDTH).getConvertedValue(unit);
         double height = getNonNull(HEIGHT).getConvertedValue(unit);
         if (width <= 0 || height <= 0) {
-            g.setVisible(false);
+            path.setVisible(false);
             return;
         }
-        Path n0 = (Path) g.getChildren().get(0);
-        Path n1 = (Path) g.getChildren().get(1);
 
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
         applySvgDefaultableCompositingProperties(ctx, node);
-        applySvgShapeProperties(ctx, n0, n1);
+        applySvgShapeProperties(ctx, path);
 
         double x = getNonNull(X).getConvertedValue(unit);
         double y = getNonNull(Y).getConvertedValue(unit);
@@ -193,12 +186,9 @@ public class SvgRectFigure extends AbstractLeafFigure
             l.add(new LineTo(x, y + height));
             l.add(new ClosePath());
         }
-        n0.getElements().setAll(l);
-        n1.getElements().setAll(l);
+        path.getElements().setAll(l);
 
-        n0.applyCss();
-        n1.applyCss();
-
+        path.applyCss();
     }
 
     @Override

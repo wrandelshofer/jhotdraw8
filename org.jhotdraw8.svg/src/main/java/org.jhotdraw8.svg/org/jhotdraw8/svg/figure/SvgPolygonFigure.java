@@ -7,12 +7,11 @@ package org.jhotdraw8.svg.figure;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Transform;
-import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.css.value.CssRectangle2D;
+import org.jhotdraw8.css.value.CssSize;
 import org.jhotdraw8.draw.figure.AbstractLeafFigure;
 import org.jhotdraw8.draw.figure.HideableFigure;
 import org.jhotdraw8.draw.figure.LockableFigure;
@@ -47,13 +46,9 @@ public class SvgPolygonFigure extends AbstractLeafFigure
 
     @Override
     public Node createNode(RenderContext ctx) {
-        Group g = new Group();
-        Polygon n0 = new Polygon();
-        Polygon n1 = new Polygon();
-        n0.setManaged(false);
-        n1.setManaged(false);
-        g.getChildren().addAll(n0, n1);
-        return g;
+        Polygon polygon = new Polygon();
+        polygon.setManaged(false);
+        return polygon;
     }
 
     @Override
@@ -125,22 +120,19 @@ public class SvgPolygonFigure extends AbstractLeafFigure
 
     @Override
     public void updateNode(RenderContext ctx, Node node) {
-        Group g = (Group) node;
+        Polygon polygon = (Polygon) node;
         PersistentList<Double> points = get(POINTS);
         if (points == null || points.isEmpty() || points.size() % 2 == 1) {
-            g.setVisible(false);
+            polygon.setVisible(false);
             return;
         }
-        Polygon n0 = (Polygon) g.getChildren().get(0);
-        Polygon n1 = (Polygon) g.getChildren().get(1);
 
         applyHideableFigureProperties(ctx, node);
         applyStyleableFigureProperties(ctx, node);
         applyTransformableFigureProperties(ctx, node);
         applySvgDefaultableCompositingProperties(ctx, node);
-        applySvgShapeProperties(ctx, n0, n1);
-        n0.getPoints().setAll(points.asList());
-        n1.getPoints().setAll(points.asList());
+        applySvgShapeProperties(ctx, polygon);
+        polygon.getPoints().setAll(points.asList());
     }
 
     @Override
