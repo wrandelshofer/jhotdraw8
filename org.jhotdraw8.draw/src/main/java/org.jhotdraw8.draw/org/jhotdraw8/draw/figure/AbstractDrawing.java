@@ -33,6 +33,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * DrawingFigure.
@@ -150,15 +151,17 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
     public void updateNode(RenderContext ctx, Node n) {
         Pane g = (Pane) n;
         Bounds bounds = getLayoutBounds();
-        g.setPrefWidth(bounds.getWidth());
-        g.setPrefHeight(bounds.getHeight());
-        g.resizeRelocate(
-                bounds.getMinX(),
-                bounds.getMinY(),
-                bounds.getWidth(),
-                bounds.getHeight());
+        if (!bounds.equals(g.getLayoutBounds())) {
+            g.setPrefWidth(bounds.getWidth());
+            g.setPrefHeight(bounds.getHeight());
+            g.resizeRelocate(
+                    bounds.getMinX(),
+                    bounds.getMinY(),
+                    bounds.getWidth(),
+                    bounds.getHeight());
+            g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
+        }
         updateBackground(ctx, g);
-        g.setClip(new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
 
         Group gg = (Group) g.getChildren().getFirst();
 
@@ -177,6 +180,10 @@ public abstract class AbstractDrawing extends AbstractCompositeFigure
         Paint paint = Paintable.getPaint(getStyled(BACKGROUND));
         if ((paint instanceof Color) && ((Color) paint).getOpacity() == 0) {
             paint = null;
+        }
+        Background bg = g.getBackground();
+        if (paint == null && bg == null || paint != null && bg != null && Objects.equals(bg.getFills().getFirst().getFill(), paint)) {
+            return;
         }
         g.setBackground(paint == null ? null : new Background(new BackgroundFill(
                 paint, CornerRadii.EMPTY, Insets.EMPTY)));

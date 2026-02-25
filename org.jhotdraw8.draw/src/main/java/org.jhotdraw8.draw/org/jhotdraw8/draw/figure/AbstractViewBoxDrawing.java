@@ -48,8 +48,12 @@ public abstract class AbstractViewBoxDrawing extends AbstractDrawing implements 
         final double y = getStyledNonNull(VIEW_BOX_Y).getConvertedValue(unitConverter);
 
         Group gg = (Group) ((Pane) n).getChildrenUnmodifiable().getFirst();
-        gg.setTranslateX(-x);
-        gg.setTranslateY(-y);
+        if (gg.getTranslateX() != -x) {
+            gg.setTranslateX(-x);
+        }
+        if (gg.getTranslateY() != -y) {
+            gg.setTranslateY(-y);
+        }
     }
 
 }
