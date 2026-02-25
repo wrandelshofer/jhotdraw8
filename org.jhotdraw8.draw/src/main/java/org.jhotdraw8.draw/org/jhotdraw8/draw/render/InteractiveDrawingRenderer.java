@@ -5,6 +5,7 @@
 
 package org.jhotdraw8.draw.render;
 
+import javafx.application.Platform;
 import javafx.beans.Observable;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -641,7 +642,7 @@ public class InteractiveDrawingRenderer extends AbstractPropertyBean {
     }
 
     public void repaint() {
-        // This is a no-op, we repaint on every pulse
+        Platform.requestNextPulse();
     }
 
     /**
