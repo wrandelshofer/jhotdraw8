@@ -568,7 +568,7 @@ public abstract class AbstractStyleAttributesInspector<E> {
             }
         };
         textArea.addEventHandler(KeyEvent.KEY_PRESSED, eventHandler);
-
+        textArea.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onTextAreaClicked);
 
         switch (prefs.get("shownValues", "user")) {
             case "author":
