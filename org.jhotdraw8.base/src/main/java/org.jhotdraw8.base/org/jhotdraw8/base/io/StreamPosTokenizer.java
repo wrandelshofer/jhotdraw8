@@ -67,6 +67,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     private char[] starSlash = new char[]{'*', '/'};
 
     private final byte[] ctype = new byte[256];
+    private static final byte CT_ORDINARY = 0;
     private static final byte CT_WHITESPACE = 1;
     private static final byte CT_DIGIT = 2;
     private static final byte CT_ALPHA = 4;
@@ -295,7 +296,7 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
      */
     public void ordinaryChar(int ch) {
         if (ch >= 0 && ch < ctype.length) {
-            ctype[ch] = 0;
+            ctype[ch] = CT_ORDINARY;
         }
     }
 
@@ -1111,26 +1112,26 @@ public class StreamPosTokenizer /*extends StreamTokenizer*/ {
     public String toString() {
         String ret;
         switch (ttype) {
-        case TT_EOF:
-            ret = "EOF";
-            break;
-        case TT_EOL:
-            ret = "EOL";
-            break;
-        case TT_WORD:
-            ret = sval;
-            break;
-        case TT_NUMBER:
-            ret = "n=" + nval;
-            break;
-        case TT_NOTHING:
-            ret = "NOTHING";
-            break;
-        default: {
-            char[] s = new char[]{(char) ttype};
-            ret = new String(s);
-            break;
-        }
+            case TT_EOF:
+                ret = "EOF";
+                break;
+            case TT_EOL:
+                ret = "EOL";
+                break;
+            case TT_WORD:
+                ret = sval;
+                break;
+            case TT_NUMBER:
+                ret = "n=" + nval;
+                break;
+            case TT_NOTHING:
+                ret = "NOTHING";
+                break;
+            default: {
+                char[] s = new char[]{(char) ttype};
+                ret = new String(s);
+                break;
+            }
         }
         return "`" + ret + "`, line " + lineno;
     }

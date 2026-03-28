@@ -162,23 +162,8 @@ public class FXPreciseRotate extends Rotate {
 
             // 2D case
             double angle = getAngle();
-            if (angle == 180 || angle == -180) {
-                cos = -1.0;
-                sin = 0.0;
-            } else if (angle == 90) {
-                cos = 0.0;
-                sin = 1;
-            } else if (angle == -90 || angle == 270) {
-                cos = 0.0;
-                sin = -1;
-            } else {
-                return new Matrix(super.getMxx(),
-                        super.getMxy(),
-                        super.getTx(),
-                        super.getMyx(),
-                        super.getMyy(),
-                        super.getTy());
-            }
+            cos = Angles.cosDegrees(angle);
+            sin = Angles.sinDegrees(angle);
 
             mxx = cos;
             mxy = -sin;
