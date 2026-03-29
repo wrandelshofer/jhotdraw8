@@ -1,20 +1,25 @@
 /*
  * @(#)CieRgbColorSpace.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2025 Werner Randelshofer, Switzerland. MIT License.
  */
 
 package org.jhotdraw8.color;
 
 import javafx.geometry.Point2D;
 
-/**
- * Linear CIE RGB Color Space.
- * <dl>
- *     <dt>Wikipedia: CIE 1931 color space</dt>
- *     <dd><a href="https://en.wikipedia.org/wiki/CIE_1931_color_space">wikipedia</a></dd>
- * </dl>
- */
+/// Linear CIE RGB Color Space.
+///
+/// Wikipedia: CIE 1931 color space
+/// : [wikipedia](https://en.wikipedia.org/wiki/CIE_1931_color_space)
+///
 public class CieRgbColorSpace extends ParametricLinearRgbColorSpace {
+    public static CieRgbColorSpace getInstance() {
+        class Holder {
+            private static final CieRgbColorSpace INSTANCE = new CieRgbColorSpace();
+        }
+        return Holder.INSTANCE;
+    }
+
 
     public CieRgbColorSpace() {
         super("Linear CIE RGB", new Point2D(0.73474284, 0.26525716),

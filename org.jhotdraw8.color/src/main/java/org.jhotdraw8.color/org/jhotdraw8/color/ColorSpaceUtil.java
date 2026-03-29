@@ -1,6 +1,6 @@
 /*
  * @(#)ColorSpaceUtil.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2025 Werner Randelshofer, Switzerland. MIT License.
  */
 package org.jhotdraw8.color;
 
@@ -10,30 +10,21 @@ import java.awt.color.ICC_Profile;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
-/**
- * A utility class for {@code ColorSpace} objects.
- *
- */
+/// A utility class for `ColorSpace` objects.
 public class ColorSpaceUtil {
 
-    /**
-     * Don't let anyone instantiate this class.
-     */
+    /// Don't let anyone instantiate this class.
     private ColorSpaceUtil() {
     }
 
 
-    /**
-     * Returns the name of the color space. If the color space is an
-     * {@code ICC_ColorSpace} the name is retrieved from the "desc" data element
-     * of the color profile.
-     *
-     * @param a A ColorSpace.
-     * @return The name.
-     */
+    /// Returns the name of the color space. If the color space is an
+    /// `ICC_ColorSpace` the name is retrieved from the "desc" data element
+    /// of the color profile.
+    ///
+    /// @param a A ColorSpace.
+    /// @return The name.
     public static String getName(ColorSpace a) {
         if (a instanceof NamedColorSpace) {
             return ((NamedColorSpace) a).getName();
@@ -61,7 +52,7 @@ public class ColorSpaceUtil {
                     return buf.toString();
                 } catch (IOException e) {
                     // fall back
-                    Logger.getLogger(ColorSpaceUtil.class.getName()).log(Level.WARNING, "Unexpected Exception " + e.getMessage(), e);
+
 
                 }
             }

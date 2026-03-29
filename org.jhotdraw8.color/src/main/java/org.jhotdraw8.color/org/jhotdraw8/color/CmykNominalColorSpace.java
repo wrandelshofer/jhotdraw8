@@ -1,6 +1,6 @@
 /*
  * @(#)CmykNominalColorSpace.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2025 Werner Randelshofer, Switzerland. MIT License.
  */
 package org.jhotdraw8.color;
 
@@ -8,18 +8,22 @@ package org.jhotdraw8.color;
 import java.awt.color.ColorSpace;
 import java.io.Serial;
 
-/**
- * A {@code ColorSpace} for CMYK color components (cyan, magenta, yellow, black) with
- * nominally converted color components from/to an RGB color model.
- * <p>
- * This model may not be very useful. It assumes that the color components
- * perfectly absorb the desired wavelengths.
- *
- */
+/// A `ColorSpace` for CMYK color components (cyan, magenta, yellow, black) with
+/// nominally converted color components from/to an RGB color model.
+///
+/// This model may not be very useful. It assumes that the color components
+/// perfectly absorb the desired wavelengths.
 public class CmykNominalColorSpace extends AbstractNamedColorSpace {
+    public static CmykNominalColorSpace getInstance() {
+        class Holder {
+            private static final CmykNominalColorSpace INSTANCE = new CmykNominalColorSpace();
+        }
+        return Holder.INSTANCE;
+    }
+
+
     @Serial
     private static final long serialVersionUID = 1L;
-
 
 
     public CmykNominalColorSpace() {

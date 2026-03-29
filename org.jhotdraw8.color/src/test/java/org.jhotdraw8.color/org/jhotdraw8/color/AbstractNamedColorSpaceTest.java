@@ -75,8 +75,8 @@ public abstract class AbstractNamedColorSpaceTest {
         if (!(getInstance() instanceof ParametricNonLinearRgbColorSpace cs)) {
             return;
         }
-        FloatFunction toLinear = cs.getToLinear();
-        FloatFunction fromLinear = cs.getFromLinear();
+        FloatFunction toLinear = cs.getToneMapper()::toLinear;
+        FloatFunction fromLinear = cs.getToneMapper()::fromLinear;
 
         // should biject with values in range
         for (int i = 0; i < 256; i++) {
@@ -256,13 +256,14 @@ public abstract class AbstractNamedColorSpaceTest {
         float[] referenceXyz = referenceCs.toCIEXYZ(referenceComponent);
 
         NamedColorSpace instance = getInstance();
-        float[] actualComponent = instance.fromRGB(inputRgb);
-        float[] actualXYZ = instance.toCIEXYZ(actualComponent);
+        float[] actualComponent = instance.fromRGB(inputRgb, new float[instance.getNumComponents()]);
+        float[] actualXYZ = instance.toCIEXYZ(actualComponent, new float[3]);
+        actualXYZ = Arrays.copyOf(actualXYZ, 3);
         assertArrayEquals(referenceXyz, actualXYZ, EPSILON_EXPECTED_XYZ, name + " rgb->component->XYZ");
 
         // check round-trip error
-        float[] roundtripComponent = instance.fromCIEXYZ(actualXYZ);
-        float[] roundtripRgb = instance.toRGB(roundtripComponent);
+        float[] roundtripComponent = instance.fromCIEXYZ(actualXYZ, new float[instance.getNumComponents()]);
+        float[] roundtripRgb = instance.toRGB(roundtripComponent, new float[3]);
         int type = instance.getType();
         if (type != ColorSpace.TYPE_HSV
                 && type != ColorSpace.TYPE_HLS

@@ -1,6 +1,6 @@
 /*
  * @(#)ParametricXyzColorSpace.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2025 Werner Randelshofer, Switzerland. MIT License.
  */
 
 package org.jhotdraw8.color;
@@ -9,9 +9,7 @@ import org.jhotdraw8.color.math.Matrix3;
 
 import java.awt.color.ColorSpace;
 
-/**
- * An XYZ color space with a linear transformation matrix from/to XYZ D50.
- */
+/// An XYZ color space with a linear transformation matrix from/to XYZ D50.
 public class ParametricXyzColorSpace extends AbstractNamedColorSpace {
     private final static SrgbColorSpace SRGB_COLOR_SPACE = new SrgbColorSpace();
 

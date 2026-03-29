@@ -1,31 +1,26 @@
 /*
  * @(#)ParametricNonLinearRgbColorSpace.java
- * Copyright © 2023 The authors and contributors of JHotDraw. MIT License.
+ * Copyright © 2025 Werner Randelshofer, Switzerland. MIT License.
  */
 
 package org.jhotdraw8.color;
 
-import org.jhotdraw8.color.math.FloatFunction;
+import org.jhotdraw8.color.trc.ToneMapper;
 
 import java.awt.color.ColorSpace;
 
-/**
- * Adds a non-linear transfer function to a linear {@code RGB} color space.
- */
+/// Adds a non-linear transfer function to a linear `RGB` color space.
 public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
-    private final FloatFunction fromLinear;
     private final NamedColorSpace linearCS;
     private final String name;
-    private final FloatFunction toLinear;
+    private final ToneMapper toneMapper;
 
     public ParametricNonLinearRgbColorSpace(String name, NamedColorSpace linearCS,
-                                            FloatFunction toLinear,
-                                            FloatFunction fromLinear) {
+                                            ToneMapper toneMapper) {
         super(ColorSpace.TYPE_RGB, 3);
         this.linearCS = linearCS;
         this.name = name;
-        this.toLinear = toLinear;
-        this.fromLinear = fromLinear;
+        this.toneMapper = toneMapper;
     }
 
     @Override
@@ -33,11 +28,8 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
         return fromLinear(linearCS.fromCIEXYZ(xyz, colorvalue), colorvalue);
     }
 
-    protected float[] fromLinear(float[] linear, float[] corrected) {
-        corrected[0] = fromLinear.apply(linear[0]);
-        corrected[1] = fromLinear.apply(linear[1]);
-        corrected[2] = fromLinear.apply(linear[2]);
-        return corrected;
+    protected float[] fromLinear(float[] linear, float[] curved) {
+        return toneMapper.fromLinear(linear, curved);
     }
 
     @Override
@@ -45,9 +37,6 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
         return fromLinear(linearCS.fromRGB(rgb, colorvalue), colorvalue);
     }
 
-    public FloatFunction getFromLinear() {
-        return fromLinear;
-    }
 
     public NamedColorSpace getLinearColorSpace() {
         return linearCS;
@@ -58,20 +47,18 @@ public class ParametricNonLinearRgbColorSpace extends AbstractNamedColorSpace {
         return name;
     }
 
-    public FloatFunction getToLinear() {
-        return toLinear;
-    }
 
     @Override
     public float[] toCIEXYZ(float[] colorvalue, float[] xyz) {
         return linearCS.toCIEXYZ(toLinear(colorvalue, xyz), xyz);
     }
 
-    protected float[] toLinear(float[] corrected, float[] linear) {
-        linear[0] = toLinear.apply(corrected[0]);
-        linear[1] = toLinear.apply(corrected[1]);
-        linear[2] = toLinear.apply(corrected[2]);
-        return linear;
+    protected float[] toLinear(float[] curved, float[] linear) {
+        return toneMapper.toLinear(curved, linear);
+    }
+
+    public ToneMapper getToneMapper() {
+        return toneMapper;
     }
 
     @Override
