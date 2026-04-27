@@ -26,10 +26,10 @@ import java.util.function.BiFunction;
 /// </dl>
 ///
 /// This class has been derived from 'vavr' RedBlackTree.java.
-/// <dl>
-///     <dt>RedBlackTree.java. Copyright 2023 (c) vavr. MIT License.</dt>
-///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java">github.com</a></dd>
-/// </dl>
+///
+/// [vavr RedBlackTree.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/RedBlackTree.java)
+/// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
+///
 ///
 /// @param <K> the key type
 /// @param <V> the value type

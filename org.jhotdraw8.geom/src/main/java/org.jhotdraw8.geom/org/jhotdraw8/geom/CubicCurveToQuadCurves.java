@@ -7,15 +7,11 @@ import java.awt.geom.CubicCurve2D;
 /// Approximates a cubic Bézier curve with quadratic Bézier curves.
 ///
 /// References:
-/// <dl>
-///     <dt>Proc. ACM Comput. Graph. Interact. Tech., Vol. 3, No. 2, Article 16. Publication date: August 2020.
-///     Quadratic Approximation of Cubic Curves.
-///     NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
-///     Copyright 2020 held by the owner/author(s). Publication rights licensed to ACM.
-///     </dt>
-///     <dd><a href="https://ttnghia.github.io/pdf/QuadraticApproximation.pdf">ttnghia.github.io</a>
-///     </dd>
-/// </dl>
+///
+/// Proc. ACM Comput. Graph. Interact. Tech., Vol. 3, No. 2, Article 16. Publication date: August 2020.
+/// Quadratic Approximation of Cubic Curves.
+/// NGHIA TRUONG, University of Utah, CEM YUKSEL, University of Utah, LARRY SEILER, Facebook Reality Labs.
+/// [ttnghia.github.io](https://ttnghia.github.io/pdf/QuadraticApproximation.pdf)
 public class CubicCurveToQuadCurves {
     /// Approximates a cubic curve with up to 8 quadratic curves.
     ///

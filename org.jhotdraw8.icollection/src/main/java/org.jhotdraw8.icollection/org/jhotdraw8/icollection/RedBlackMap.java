@@ -29,10 +29,9 @@ import java.util.Spliterator;
 ///
 /// For a similar design, see 'TreeMap.java' in vavr. The internal data structure of
 /// this class is licensed from vavr.
-/// <dl>
-///     <dt>TreeMap.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
-///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeMap.java">github.com</a></dd>
-/// </dl>
+///
+/// [vavr TreeMap.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/TreeMap.java)
+/// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
 ///
 /// @param <K> the key type
 /// @param <V> the value type

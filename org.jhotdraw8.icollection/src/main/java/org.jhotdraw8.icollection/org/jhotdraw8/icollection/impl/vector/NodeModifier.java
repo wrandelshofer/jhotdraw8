@@ -12,10 +12,10 @@ import static org.jhotdraw8.icollection.impl.vector.ArrayType.obj;
 /// References:
 ///
 /// This class has been derived from 'vavr' BitMappedTrie.java.
-/// <dl>
-///     <dt>Vector.java. Copyright 2023 (c) vavr. <a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE">MIT License</a>.</dt>
-///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/BitMappedTrie.java">github.com</a></dd>
-/// </dl>
+///
+/// [vavr BitMappedTrie.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/collection/BitMappedTrie.java)
+/// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
+///
 @FunctionalInterface
 interface NodeModifier {
     Object apply(Object array, int index);

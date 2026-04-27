@@ -4,10 +4,10 @@ package org.jhotdraw8.icollection.impl.redblack;
 /// Unlike an array or list, a tuple can hold objects with different types, but they are also persistent.
 ///
 /// This class has been derived from 'vavr' Tuple.java.
-/// <dl>
-///     <dt>Tuple.java. Copyright 2023 (c) vavr. MIT License.</dt>
-///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src-gen/main/java/io/vavr/Tuple.java">github.com</a></dd>
-/// </dl>
+///
+/// [vavr Tuple.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src-gen/main/java/io/vavr/Tuple.java)
+/// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
+///
 public interface Tuple {
 
 

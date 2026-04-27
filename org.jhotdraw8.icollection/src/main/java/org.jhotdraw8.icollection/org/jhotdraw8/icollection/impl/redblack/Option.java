@@ -18,10 +18,10 @@ import java.util.Set;
 /// Instances of Option are either an instance of [Some] or of [None].
 ///
 /// This class has been derived from 'vavr' Option.java.
-/// <dl>
-///     <dt>Option.java. Copyright 2023 (c) vavr. MIT License.</dt>
-///     <dd><a href="https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/control/Option.java">github.com</a></dd>
-/// </dl>
+///
+/// [vavr Option.java](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/src/main/java/io/vavr/control/Option.java)
+/// [vavr MIT-License](https://github.com/vavr-io/vavr/blob/26181f14b9629ceb729a73795d3854363c7dce0e/LICENSE)
+///
 ///
 /// @param <T> The type of the optional value.
 public interface Option<T> extends ReadableCollection<T> {
